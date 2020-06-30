@@ -575,10 +575,105 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">12.4.2</span> <code>forcats</code>パッケージについて</h3>
 <p>実はfactor型への変換や、順番に変更などは全てR内蔵の<code>factor()</code>関数で対応可能ですが、ここでは<code>forcats</code>パッケージが提供している<code>fct_*()</code>関数を使用します。<code>forcats</code>パッケージは<code>tidyverse</code>を読み込む際、自動的に読み込まれるため、既に<code>tidyverse</code>を読み込んでいる場合、別途のコードは要りません。</p>
 <p><strong><code>fct_relevel()</code>: 水準の順番を変更する</strong></p>
-<p><strong><code>fct_recode()</code>: 水準の順番とラベルを変更する</strong></p>
+<p><code>Score_df_f1</code>の<code>f1</code>は<code>Score</code>が高い順になっています。これを50音順に変更する際、<code>fct_relevel()</code>関数を使います。</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="visualization.html#cb18-1"></a><span class="co"># 新しい変数名と元となる変数名が一致すると上書きになる</span></span>
+<span id="cb18-2"><a href="visualization.html#cb18-2"></a>データフレーム名 <span class="op">%&gt;%</span></span>
+<span id="cb18-3"><a href="visualization.html#cb18-3"></a><span class="st">  </span><span class="kw">mutate</span>(新しい変数名 =<span class="st"> </span><span class="kw">fct_releve</span>(元となる変数名, </span>
+<span id="cb18-4"><a href="visualization.html#cb18-4"></a>                                    <span class="st">&quot;水準1&quot;</span>, <span class="st">&quot;水準2&quot;</span>, <span class="st">&quot;水準3&quot;</span>, ...))</span></code></pre></div>
+<p>ここでは、<code>Pref</code>変数を再調整した<code>Pref2</code>変数を作ってみましょう。</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="visualization.html#cb19-1"></a>Score_df_f1 &lt;-<span class="st"> </span>Score_df_f1 <span class="op">%&gt;%</span></span>
+<span id="cb19-2"><a href="visualization.html#cb19-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Pref2 =</span> <span class="kw">fct_relevel</span>(Pref, <span class="st">&quot;大阪府&quot;</span>, <span class="st">&quot;神奈川県&quot;</span>, <span class="st">&quot;京都府&quot;</span>, </span>
+<span id="cb19-3"><a href="visualization.html#cb19-3"></a>                             <span class="st">&quot;埼玉県&quot;</span>, <span class="st">&quot;千葉県&quot;</span>, <span class="st">&quot;東京都&quot;</span>, </span>
+<span id="cb19-4"><a href="visualization.html#cb19-4"></a>                             <span class="st">&quot;奈良県&quot;</span>, <span class="st">&quot;兵庫県&quot;</span>, <span class="st">&quot;和歌山県&quot;</span>))</span>
+<span id="cb19-5"><a href="visualization.html#cb19-5"></a></span>
+<span id="cb19-6"><a href="visualization.html#cb19-6"></a>Score_df_f1</span></code></pre></div>
+<pre><code>## # A tibble: 9 x 4
+##   Pref     Score Kanto  Pref2   
+##   &lt;fct&gt;    &lt;dbl&gt; &lt;fct&gt;  &lt;fct&gt;   
+## 1 京都府    3.68 その他 京都府  
+## 2 埼玉県    3.64 関東   埼玉県  
+## 3 神奈川県  3.53 関東   神奈川県
+## 4 千葉県    3.72 関東   千葉県  
+## 5 大阪府    3.77 その他 大阪府  
+## 6 東京都    3.67 関東   東京都  
+## 7 奈良県    3.85 その他 奈良県  
+## 8 兵庫県    3.54 その他 兵庫県  
+## 9 和歌山県  3.97 その他 和歌山県</code></pre>
+<p>一見、<code>Pref</code>と<code>Pref2</code>変数は同じように見えますが、水準はどうなっているでしょうか。</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="visualization.html#cb21-1"></a><span class="kw">levels</span>(Score_df_f1<span class="op">$</span>Pref)  <span class="co"># Prefの水準</span></span></code></pre></div>
+<pre><code>## [1] &quot;和歌山県&quot; &quot;奈良県&quot;   &quot;大阪府&quot;   &quot;千葉県&quot;   &quot;京都府&quot;   &quot;東京都&quot;   &quot;埼玉県&quot;   &quot;兵庫県&quot;  
+## [9] &quot;神奈川県&quot;</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="visualization.html#cb23-1"></a><span class="kw">levels</span>(Score_df_f1<span class="op">$</span>Pref2) <span class="co"># Pref2の水準</span></span></code></pre></div>
+<pre><code>## [1] &quot;大阪府&quot;   &quot;神奈川県&quot; &quot;京都府&quot;   &quot;埼玉県&quot;   &quot;千葉県&quot;   &quot;東京都&quot;   &quot;奈良県&quot;   &quot;兵庫県&quot;  
+## [9] &quot;和歌山県&quot;</code></pre>
+<p>問題なく50音順になっていることが分かります。他にも<code>fct_relevel()</code>には全ての水準名を指定する必要がありません。一部の水準名も可能です。たとえば、「関東が関西の先に来るなんでけしからん！」と思う読者もいるでしょう。この場合、関西の府県名を入れると、指定した水準が最初に位置するようになります。</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="visualization.html#cb25-1"></a>Score_df_f1 &lt;-<span class="st"> </span>Score_df_f1 <span class="op">%&gt;%</span></span>
+<span id="cb25-2"><a href="visualization.html#cb25-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Pref3 =</span> <span class="kw">fct_relevel</span>(Pref, <span class="st">&quot;京都府&quot;</span>, <span class="st">&quot;大阪府&quot;</span>,</span>
+<span id="cb25-3"><a href="visualization.html#cb25-3"></a>                             <span class="st">&quot;兵庫県&quot;</span>, <span class="st">&quot;奈良県&quot;</span>, <span class="st">&quot;和歌山県&quot;</span>))</span>
+<span id="cb25-4"><a href="visualization.html#cb25-4"></a></span>
+<span id="cb25-5"><a href="visualization.html#cb25-5"></a><span class="kw">levels</span>(Score_df_f1<span class="op">$</span>Pref3) <span class="co"># Pref3の水準</span></span></code></pre></div>
+<pre><code>## [1] &quot;京都府&quot;   &quot;大阪府&quot;   &quot;兵庫県&quot;   &quot;奈良県&quot;   &quot;和歌山県&quot; &quot;千葉県&quot;   &quot;東京都&quot;   &quot;埼玉県&quot;  
+## [9] &quot;神奈川県&quot;</code></pre>
+<p>一部の水準名のみを指定するとその水準が最初に移動されますが、<code>after</code>引数を指定すると、位置を調整することも可能です。<code>after = 2</code>の場合、元となる変数の1、3番目の水準は維持され、3番目以降に指定した水準、それに続いて指定されていない水準の順番になります。<code>Pref</code>は和歌山、奈良、大阪の順ですが、ここで京都と東京を、奈良と大阪の間に移動するなら、</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="visualization.html#cb27-1"></a>Score_df_f1 &lt;-<span class="st"> </span>Score_df_f1 <span class="op">%&gt;%</span></span>
+<span id="cb27-2"><a href="visualization.html#cb27-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Pref4 =</span> <span class="kw">fct_relevel</span>(Pref, <span class="st">&quot;京都府&quot;</span>, <span class="st">&quot;東京都&quot;</span>, <span class="dt">after =</span> <span class="dv">2</span>))</span>
+<span id="cb27-3"><a href="visualization.html#cb27-3"></a></span>
+<span id="cb27-4"><a href="visualization.html#cb27-4"></a><span class="kw">levels</span>(Score_df_f1<span class="op">$</span>Pref4) <span class="co"># Pref4の水準</span></span></code></pre></div>
+<pre><code>## [1] &quot;和歌山県&quot; &quot;奈良県&quot;   &quot;京都府&quot;   &quot;東京都&quot;   &quot;大阪府&quot;   &quot;千葉県&quot;   &quot;埼玉県&quot;   &quot;兵庫県&quot;  
+## [9] &quot;神奈川県&quot;</code></pre>
+<p>のように書きます。<code>after</code>を指定しない場合のデフォルト値は0であるため、最初に移動します。</p>
+<p><strong><code>fct_recode()</code>: 水準のラベルを変更する</strong></p>
+<p><code>fct_recode()</code>は水準のラベルを変更する時に使う関数で、以下のように使います。</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="visualization.html#cb29-1"></a><span class="co"># 新しい変数名と元となる変数名が一致すると上書きになる</span></span>
+<span id="cb29-2"><a href="visualization.html#cb29-2"></a>データフレーム名 <span class="op">%&gt;%</span></span>
+<span id="cb29-3"><a href="visualization.html#cb29-3"></a><span class="st">  </span><span class="kw">mutate</span>(新しい変数名 =<span class="st"> </span><span class="kw">fct_recode</span>(元となる変数名, </span>
+<span id="cb29-4"><a href="visualization.html#cb29-4"></a>                                   新しいラベル1 =<span class="st"> &quot;既存のラベル1&quot;</span>,</span>
+<span id="cb29-5"><a href="visualization.html#cb29-5"></a>                                   新しいラベル2 =<span class="st"> &quot;既存のラベル2&quot;</span>,</span>
+<span id="cb29-6"><a href="visualization.html#cb29-6"></a>                                   新しいラベル3 =<span class="st"> &quot;既存のラベル3&quot;</span>,</span>
+<span id="cb29-7"><a href="visualization.html#cb29-7"></a>                                   ...))</span></code></pre></div>
+<p>注意点としては新しいラベルは<code>"</code>で囲まず、既存のラベルは<code>"</code>で囲む点です。それでは、<code>Pref</code>のラベルをローマ字に変更してみましょう。</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="visualization.html#cb30-1"></a>Score_df_f1 &lt;-<span class="st"> </span>Score_df_f1 <span class="op">%&gt;%</span></span>
+<span id="cb30-2"><a href="visualization.html#cb30-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Pref5 =</span> <span class="kw">fct_recode</span>(Pref,</span>
+<span id="cb30-3"><a href="visualization.html#cb30-3"></a>                            <span class="dt">Saitama  =</span> <span class="st">&quot;埼玉県&quot;</span>,</span>
+<span id="cb30-4"><a href="visualization.html#cb30-4"></a>                            <span class="dt">Wakayama =</span> <span class="st">&quot;和歌山県&quot;</span>,</span>
+<span id="cb30-5"><a href="visualization.html#cb30-5"></a>                            <span class="dt">Kyoto    =</span> <span class="st">&quot;京都府&quot;</span>,</span>
+<span id="cb30-6"><a href="visualization.html#cb30-6"></a>                            <span class="dt">Osaka    =</span> <span class="st">&quot;大阪府&quot;</span>,</span>
+<span id="cb30-7"><a href="visualization.html#cb30-7"></a>                            <span class="dt">Tokyo    =</span> <span class="st">&quot;東京都&quot;</span>,</span>
+<span id="cb30-8"><a href="visualization.html#cb30-8"></a>                            <span class="dt">Nara     =</span> <span class="st">&quot;奈良県&quot;</span>,</span>
+<span id="cb30-9"><a href="visualization.html#cb30-9"></a>                            <span class="dt">Kanagawa =</span> <span class="st">&quot;神奈川県&quot;</span>,</span>
+<span id="cb30-10"><a href="visualization.html#cb30-10"></a>                            <span class="dt">Hyogo    =</span> <span class="st">&quot;兵庫県&quot;</span>,</span>
+<span id="cb30-11"><a href="visualization.html#cb30-11"></a>                            <span class="dt">Chiba    =</span> <span class="st">&quot;千葉県&quot;</span>))</span>
+<span id="cb30-12"><a href="visualization.html#cb30-12"></a></span>
+<span id="cb30-13"><a href="visualization.html#cb30-13"></a>Score_df_f1</span></code></pre></div>
+<pre><code>## # A tibble: 9 x 7
+##   Pref     Score Kanto  Pref2    Pref3    Pref4    Pref5   
+##   &lt;fct&gt;    &lt;dbl&gt; &lt;fct&gt;  &lt;fct&gt;    &lt;fct&gt;    &lt;fct&gt;    &lt;fct&gt;   
+## 1 京都府    3.68 その他 京都府   京都府   京都府   Kyoto   
+## 2 埼玉県    3.64 関東   埼玉県   埼玉県   埼玉県   Saitama 
+## 3 神奈川県  3.53 関東   神奈川県 神奈川県 神奈川県 Kanagawa
+## 4 千葉県    3.72 関東   千葉県   千葉県   千葉県   Chiba   
+## 5 大阪府    3.77 その他 大阪府   大阪府   大阪府   Osaka   
+## 6 東京都    3.67 関東   東京都   東京都   東京都   Tokyo   
+## 7 奈良県    3.85 その他 奈良県   奈良県   奈良県   Nara    
+## 8 兵庫県    3.54 その他 兵庫県   兵庫県   兵庫県   Hyogo   
+## 9 和歌山県  3.97 その他 和歌山県 和歌山県 和歌山県 Wakayama</code></pre>
+<p><code>fct_recode()</code>の中に指定する水準の順番は無視されます。つまり、水準の順番はそのまま維持されるため、好きな順番で結構です。また、全ての水準を指定せず、一部のみ変更することも可能です。それでは<code>Pref5</code>の順番が<code>Pref</code>の順番と同じかを確認してみましょう。</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="visualization.html#cb32-1"></a><span class="kw">levels</span>(Score_df_f1<span class="op">$</span>Pref)  <span class="co"># Prefの水準</span></span></code></pre></div>
+<pre><code>## [1] &quot;和歌山県&quot; &quot;奈良県&quot;   &quot;大阪府&quot;   &quot;千葉県&quot;   &quot;京都府&quot;   &quot;東京都&quot;   &quot;埼玉県&quot;   &quot;兵庫県&quot;  
+## [9] &quot;神奈川県&quot;</code></pre>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="visualization.html#cb34-1"></a><span class="kw">levels</span>(Score_df_f1<span class="op">$</span>Pref5) <span class="co"># Pref5の水準</span></span></code></pre></div>
+<pre><code>## [1] &quot;Wakayama&quot; &quot;Nara&quot;     &quot;Osaka&quot;    &quot;Chiba&quot;    &quot;Kyoto&quot;    &quot;Tokyo&quot;    &quot;Saitama&quot;  &quot;Hyogo&quot;   
+## [9] &quot;Kanagawa&quot;</code></pre>
+<p><strong><code>fct_rev()</code>: 水準の順番を逆転させる</strong></p>
+<p>水準の順番を逆転することは非常によくあります。たとえば、グラフの読みやすさのために、左右または上下を反転するケースがあります。既に何回も強調しましたように、名目変数は基本的にfactor型にすべきであり、ここで<code>fct_rev()</code>関数が非常に便利です。たとえば、<code>Pref2</code>の水準は50音順でありますが、これを逆転し、<code>Pref6</code>という名の列として追加してみましょう。</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="visualization.html#cb36-1"></a>Score_df_f1 &lt;-<span class="st"> </span>Score_df_f1 <span class="op">%&gt;%</span></span>
+<span id="cb36-2"><a href="visualization.html#cb36-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Pref6 =</span> <span class="kw">fct_rev</span>(Pref2))</span>
+<span id="cb36-3"><a href="visualization.html#cb36-3"></a></span>
+<span id="cb36-4"><a href="visualization.html#cb36-4"></a><span class="kw">levels</span>(Score_df_f1<span class="op">$</span>Pref6)</span></code></pre></div>
+<pre><code>## [1] &quot;和歌山県&quot; &quot;兵庫県&quot;   &quot;奈良県&quot;   &quot;東京都&quot;   &quot;千葉県&quot;   &quot;埼玉県&quot;   &quot;京都府&quot;   &quot;神奈川県&quot;
+## [9] &quot;大阪府&quot;</code></pre>
 <p><strong><code>fct_infreq()</code>: 頻度順に順番を変更する</strong></p>
 <p><strong><code>fct_inorder()</code>: データ内の出現順番に順番を変更する</strong></p>
-<p><strong><code>fct_rev()</code>: 水準の順番を逆転させる</strong></p>
 <p><strong><code>fct_shift()</code>: 水準の順番をずらす</strong></p>
 <p><strong><code>fct_shuffle()</code>: 水準の順番をランダム化する</strong></p>
 <p><strong><code>fct_reorder()</code>: 別の1変数の値を基準に水準の順番を変更する</strong></p>
@@ -592,158 +687,158 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="visual-barplot" class="section level2">
 <h2><span class="header-section-number">12.5</span> 棒グラフ</h2>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="visualization.html#cb18-1"></a><span class="kw">library</span>(tidyverse)</span>
-<span id="cb18-2"><a href="visualization.html#cb18-2"></a>df &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;Data/Ramen.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="visualization.html#cb38-1"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb38-2"><a href="visualization.html#cb38-2"></a>df &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;Data/Ramen.csv&quot;</span>)</span></code></pre></div>
 <div id="ケース数の棒グラフ" class="section level3">
 <h3><span class="header-section-number">12.5.1</span> ケース数の棒グラフ</h3>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="visualization.html#cb19-1"></a>df <span class="op">%&gt;%</span></span>
-<span id="cb19-2"><a href="visualization.html#cb19-2"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Pref)) <span class="op">+</span></span>
-<span id="cb19-3"><a href="visualization.html#cb19-3"></a><span class="st">    </span><span class="kw">geom_bar</span>()</span></code></pre></div>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="visualization.html#cb20-1"></a>df <span class="op">%&gt;%</span></span>
-<span id="cb20-2"><a href="visualization.html#cb20-2"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Pref)) <span class="op">+</span></span>
-<span id="cb20-3"><a href="visualization.html#cb20-3"></a><span class="st">    </span><span class="kw">geom_bar</span>() <span class="op">+</span></span>
-<span id="cb20-4"><a href="visualization.html#cb20-4"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;都府県&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;店舗数&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="visualization.html#cb21-1"></a>df <span class="op">%&gt;%</span></span>
-<span id="cb21-2"><a href="visualization.html#cb21-2"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Pref)) <span class="op">+</span></span>
-<span id="cb21-3"><a href="visualization.html#cb21-3"></a><span class="st">    </span><span class="kw">geom_bar</span>() <span class="op">+</span></span>
-<span id="cb21-4"><a href="visualization.html#cb21-4"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;都府県&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;店舗数&quot;</span>) <span class="op">+</span></span>
-<span id="cb21-5"><a href="visualization.html#cb21-5"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="visualization.html#cb22-1"></a>df <span class="op">%&gt;%</span></span>
-<span id="cb22-2"><a href="visualization.html#cb22-2"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">Pref =</span> <span class="kw">factor</span>(Pref, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;東京都&quot;</span>, <span class="st">&quot;神奈川県&quot;</span>, <span class="st">&quot;千葉県&quot;</span>,</span>
-<span id="cb22-3"><a href="visualization.html#cb22-3"></a>                                          <span class="st">&quot;埼玉県&quot;</span>, <span class="st">&quot;大阪府&quot;</span>, <span class="st">&quot;京都府&quot;</span>,</span>
-<span id="cb22-4"><a href="visualization.html#cb22-4"></a>                                          <span class="st">&quot;兵庫県&quot;</span>, <span class="st">&quot;奈良県&quot;</span>, <span class="st">&quot;和歌山県&quot;</span>))) <span class="op">%&gt;%</span></span>
-<span id="cb22-5"><a href="visualization.html#cb22-5"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Pref)) <span class="op">+</span></span>
-<span id="cb22-6"><a href="visualization.html#cb22-6"></a><span class="st">    </span><span class="kw">geom_bar</span>() <span class="op">+</span></span>
-<span id="cb22-7"><a href="visualization.html#cb22-7"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;都府県&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;店舗数&quot;</span>) <span class="op">+</span></span>
-<span id="cb22-8"><a href="visualization.html#cb22-8"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="visualization.html#cb39-1"></a>df <span class="op">%&gt;%</span></span>
+<span id="cb39-2"><a href="visualization.html#cb39-2"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Pref)) <span class="op">+</span></span>
+<span id="cb39-3"><a href="visualization.html#cb39-3"></a><span class="st">    </span><span class="kw">geom_bar</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="visualization.html#cb40-1"></a>df <span class="op">%&gt;%</span></span>
+<span id="cb40-2"><a href="visualization.html#cb40-2"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Pref)) <span class="op">+</span></span>
+<span id="cb40-3"><a href="visualization.html#cb40-3"></a><span class="st">    </span><span class="kw">geom_bar</span>() <span class="op">+</span></span>
+<span id="cb40-4"><a href="visualization.html#cb40-4"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;都府県&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;店舗数&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="visualization.html#cb41-1"></a>df <span class="op">%&gt;%</span></span>
+<span id="cb41-2"><a href="visualization.html#cb41-2"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Pref)) <span class="op">+</span></span>
+<span id="cb41-3"><a href="visualization.html#cb41-3"></a><span class="st">    </span><span class="kw">geom_bar</span>() <span class="op">+</span></span>
+<span id="cb41-4"><a href="visualization.html#cb41-4"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;都府県&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;店舗数&quot;</span>) <span class="op">+</span></span>
+<span id="cb41-5"><a href="visualization.html#cb41-5"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="visualization.html#cb42-1"></a>df <span class="op">%&gt;%</span></span>
+<span id="cb42-2"><a href="visualization.html#cb42-2"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">Pref =</span> <span class="kw">factor</span>(Pref, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;東京都&quot;</span>, <span class="st">&quot;神奈川県&quot;</span>, <span class="st">&quot;千葉県&quot;</span>,</span>
+<span id="cb42-3"><a href="visualization.html#cb42-3"></a>                                          <span class="st">&quot;埼玉県&quot;</span>, <span class="st">&quot;大阪府&quot;</span>, <span class="st">&quot;京都府&quot;</span>,</span>
+<span id="cb42-4"><a href="visualization.html#cb42-4"></a>                                          <span class="st">&quot;兵庫県&quot;</span>, <span class="st">&quot;奈良県&quot;</span>, <span class="st">&quot;和歌山県&quot;</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb42-5"><a href="visualization.html#cb42-5"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Pref)) <span class="op">+</span></span>
+<span id="cb42-6"><a href="visualization.html#cb42-6"></a><span class="st">    </span><span class="kw">geom_bar</span>() <span class="op">+</span></span>
+<span id="cb42-7"><a href="visualization.html#cb42-7"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;都府県&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;店舗数&quot;</span>) <span class="op">+</span></span>
+<span id="cb42-8"><a href="visualization.html#cb42-8"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
 </div>
 <div id="記述統計量のグラフ" class="section level3">
 <h3><span class="header-section-number">12.5.2</span> 記述統計量のグラフ</h3>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="visualization.html#cb23-1"></a>df <span class="op">%&gt;%</span></span>
-<span id="cb23-2"><a href="visualization.html#cb23-2"></a><span class="st">    </span><span class="kw">group_by</span>(Pref) <span class="op">%&gt;%</span></span>
-<span id="cb23-3"><a href="visualization.html#cb23-3"></a><span class="st">    </span><span class="kw">summarise</span>(<span class="dt">Score   =</span> <span class="kw">mean</span>(Score, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</span>
-<span id="cb23-4"><a href="visualization.html#cb23-4"></a>              <span class="dt">.groups =</span> <span class="st">&quot;drop&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb23-5"><a href="visualization.html#cb23-5"></a><span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb23-6"><a href="visualization.html#cb23-6"></a><span class="st">    </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Pref, <span class="dt">y =</span> Score), <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="op">+</span></span>
-<span id="cb23-7"><a href="visualization.html#cb23-7"></a><span class="st">    </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>)) <span class="op">+</span></span>
-<span id="cb23-8"><a href="visualization.html#cb23-8"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;都府県&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;口コミ評価の平均値 (1~5)&quot;</span>) <span class="op">+</span></span>
-<span id="cb23-9"><a href="visualization.html#cb23-9"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="visualization.html#cb24-1"></a>df <span class="op">%&gt;%</span></span>
-<span id="cb24-2"><a href="visualization.html#cb24-2"></a><span class="st">    </span><span class="kw">group_by</span>(Pref) <span class="op">%&gt;%</span></span>
-<span id="cb24-3"><a href="visualization.html#cb24-3"></a><span class="st">    </span><span class="kw">summarise</span>(<span class="dt">Score   =</span> <span class="kw">mean</span>(Score, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</span>
-<span id="cb24-4"><a href="visualization.html#cb24-4"></a>              <span class="dt">.groups =</span> <span class="st">&quot;drop&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb24-5"><a href="visualization.html#cb24-5"></a><span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb24-6"><a href="visualization.html#cb24-6"></a><span class="st">    </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Pref, <span class="dt">y =</span> Score), <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="op">+</span></span>
-<span id="cb24-7"><a href="visualization.html#cb24-7"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;都府県&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;口コミ評価の平均値 (1~5)&quot;</span>) <span class="op">+</span></span>
-<span id="cb24-8"><a href="visualization.html#cb24-8"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="visualization.html#cb25-1"></a>df <span class="op">%&gt;%</span></span>
-<span id="cb25-2"><a href="visualization.html#cb25-2"></a><span class="st">    </span><span class="kw">group_by</span>(Pref) <span class="op">%&gt;%</span></span>
-<span id="cb25-3"><a href="visualization.html#cb25-3"></a><span class="st">    </span><span class="kw">summarise</span>(<span class="dt">Score   =</span> <span class="kw">mean</span>(Score, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</span>
-<span id="cb25-4"><a href="visualization.html#cb25-4"></a>              <span class="dt">.groups =</span> <span class="st">&quot;drop&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb25-5"><a href="visualization.html#cb25-5"></a><span class="st">    </span><span class="kw">arrange</span>(<span class="kw">desc</span>(Score)) <span class="op">%&gt;%</span></span>
-<span id="cb25-6"><a href="visualization.html#cb25-6"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">Pref =</span> <span class="kw">fct_inorder</span>(Pref)) <span class="op">%&gt;%</span></span>
-<span id="cb25-7"><a href="visualization.html#cb25-7"></a><span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb25-8"><a href="visualization.html#cb25-8"></a><span class="st">    </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Pref, <span class="dt">y =</span> Score), <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="op">+</span></span>
-<span id="cb25-9"><a href="visualization.html#cb25-9"></a><span class="st">    </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>)) <span class="op">+</span></span>
-<span id="cb25-10"><a href="visualization.html#cb25-10"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;都府県&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;口コミ評価の平均値 (1~5)&quot;</span>) <span class="op">+</span></span>
-<span id="cb25-11"><a href="visualization.html#cb25-11"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="visualization.html#cb26-1"></a>df <span class="op">%&gt;%</span></span>
-<span id="cb26-2"><a href="visualization.html#cb26-2"></a><span class="st">    </span><span class="kw">group_by</span>(Pref) <span class="op">%&gt;%</span></span>
-<span id="cb26-3"><a href="visualization.html#cb26-3"></a><span class="st">    </span><span class="kw">summarise</span>(<span class="dt">ScoreN  =</span> <span class="kw">sum</span>(ScoreN),</span>
-<span id="cb26-4"><a href="visualization.html#cb26-4"></a>              <span class="dt">.groups =</span> <span class="st">&quot;drop&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb26-5"><a href="visualization.html#cb26-5"></a><span class="st">    </span><span class="kw">arrange</span>(<span class="kw">desc</span>(ScoreN)) <span class="op">%&gt;%</span></span>
-<span id="cb26-6"><a href="visualization.html#cb26-6"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">Pref =</span> <span class="kw">fct_inorder</span>(Pref)) <span class="op">%&gt;%</span></span>
-<span id="cb26-7"><a href="visualization.html#cb26-7"></a><span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb26-8"><a href="visualization.html#cb26-8"></a><span class="st">    </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Pref, <span class="dt">y =</span> ScoreN), <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="op">+</span></span>
-<span id="cb26-9"><a href="visualization.html#cb26-9"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;都府県&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;口コミの合計&quot;</span>) <span class="op">+</span></span>
-<span id="cb26-10"><a href="visualization.html#cb26-10"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="visualization.html#cb43-1"></a>df <span class="op">%&gt;%</span></span>
+<span id="cb43-2"><a href="visualization.html#cb43-2"></a><span class="st">    </span><span class="kw">group_by</span>(Pref) <span class="op">%&gt;%</span></span>
+<span id="cb43-3"><a href="visualization.html#cb43-3"></a><span class="st">    </span><span class="kw">summarise</span>(<span class="dt">Score   =</span> <span class="kw">mean</span>(Score, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb43-4"><a href="visualization.html#cb43-4"></a>              <span class="dt">.groups =</span> <span class="st">&quot;drop&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb43-5"><a href="visualization.html#cb43-5"></a><span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb43-6"><a href="visualization.html#cb43-6"></a><span class="st">    </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Pref, <span class="dt">y =</span> Score), <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="op">+</span></span>
+<span id="cb43-7"><a href="visualization.html#cb43-7"></a><span class="st">    </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>)) <span class="op">+</span></span>
+<span id="cb43-8"><a href="visualization.html#cb43-8"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;都府県&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;口コミ評価の平均値 (1~5)&quot;</span>) <span class="op">+</span></span>
+<span id="cb43-9"><a href="visualization.html#cb43-9"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="visualization.html#cb44-1"></a>df <span class="op">%&gt;%</span></span>
+<span id="cb44-2"><a href="visualization.html#cb44-2"></a><span class="st">    </span><span class="kw">group_by</span>(Pref) <span class="op">%&gt;%</span></span>
+<span id="cb44-3"><a href="visualization.html#cb44-3"></a><span class="st">    </span><span class="kw">summarise</span>(<span class="dt">Score   =</span> <span class="kw">mean</span>(Score, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb44-4"><a href="visualization.html#cb44-4"></a>              <span class="dt">.groups =</span> <span class="st">&quot;drop&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb44-5"><a href="visualization.html#cb44-5"></a><span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb44-6"><a href="visualization.html#cb44-6"></a><span class="st">    </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Pref, <span class="dt">y =</span> Score), <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="op">+</span></span>
+<span id="cb44-7"><a href="visualization.html#cb44-7"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;都府県&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;口コミ評価の平均値 (1~5)&quot;</span>) <span class="op">+</span></span>
+<span id="cb44-8"><a href="visualization.html#cb44-8"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="visualization.html#cb45-1"></a>df <span class="op">%&gt;%</span></span>
+<span id="cb45-2"><a href="visualization.html#cb45-2"></a><span class="st">    </span><span class="kw">group_by</span>(Pref) <span class="op">%&gt;%</span></span>
+<span id="cb45-3"><a href="visualization.html#cb45-3"></a><span class="st">    </span><span class="kw">summarise</span>(<span class="dt">Score   =</span> <span class="kw">mean</span>(Score, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb45-4"><a href="visualization.html#cb45-4"></a>              <span class="dt">.groups =</span> <span class="st">&quot;drop&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb45-5"><a href="visualization.html#cb45-5"></a><span class="st">    </span><span class="kw">arrange</span>(<span class="kw">desc</span>(Score)) <span class="op">%&gt;%</span></span>
+<span id="cb45-6"><a href="visualization.html#cb45-6"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">Pref =</span> <span class="kw">fct_inorder</span>(Pref)) <span class="op">%&gt;%</span></span>
+<span id="cb45-7"><a href="visualization.html#cb45-7"></a><span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb45-8"><a href="visualization.html#cb45-8"></a><span class="st">    </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Pref, <span class="dt">y =</span> Score), <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="op">+</span></span>
+<span id="cb45-9"><a href="visualization.html#cb45-9"></a><span class="st">    </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>)) <span class="op">+</span></span>
+<span id="cb45-10"><a href="visualization.html#cb45-10"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;都府県&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;口コミ評価の平均値 (1~5)&quot;</span>) <span class="op">+</span></span>
+<span id="cb45-11"><a href="visualization.html#cb45-11"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="visualization.html#cb46-1"></a>df <span class="op">%&gt;%</span></span>
+<span id="cb46-2"><a href="visualization.html#cb46-2"></a><span class="st">    </span><span class="kw">group_by</span>(Pref) <span class="op">%&gt;%</span></span>
+<span id="cb46-3"><a href="visualization.html#cb46-3"></a><span class="st">    </span><span class="kw">summarise</span>(<span class="dt">ScoreN  =</span> <span class="kw">sum</span>(ScoreN),</span>
+<span id="cb46-4"><a href="visualization.html#cb46-4"></a>              <span class="dt">.groups =</span> <span class="st">&quot;drop&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb46-5"><a href="visualization.html#cb46-5"></a><span class="st">    </span><span class="kw">arrange</span>(<span class="kw">desc</span>(ScoreN)) <span class="op">%&gt;%</span></span>
+<span id="cb46-6"><a href="visualization.html#cb46-6"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">Pref =</span> <span class="kw">fct_inorder</span>(Pref)) <span class="op">%&gt;%</span></span>
+<span id="cb46-7"><a href="visualization.html#cb46-7"></a><span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb46-8"><a href="visualization.html#cb46-8"></a><span class="st">    </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Pref, <span class="dt">y =</span> ScoreN), <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="op">+</span></span>
+<span id="cb46-9"><a href="visualization.html#cb46-9"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;都府県&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;口コミの合計&quot;</span>) <span class="op">+</span></span>
+<span id="cb46-10"><a href="visualization.html#cb46-10"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
 <hr />
 </div>
 </div>
 <div id="visual-histogram" class="section level2">
 <h2><span class="header-section-number">12.6</span> ヒストグラム</h2>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="visualization.html#cb27-1"></a>df <span class="op">%&gt;%</span></span>
-<span id="cb27-2"><a href="visualization.html#cb27-2"></a><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Walk)) <span class="op">%&gt;%</span></span>
-<span id="cb27-3"><a href="visualization.html#cb27-3"></a><span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb27-4"><a href="visualization.html#cb27-4"></a><span class="st">    </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Walk)) <span class="op">+</span></span>
-<span id="cb27-5"><a href="visualization.html#cb27-5"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;最寄りの駅からの徒歩距離 (分)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;店舗数&quot;</span>) <span class="op">+</span></span>
-<span id="cb27-6"><a href="visualization.html#cb27-6"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="visualization.html#cb28-1"></a>df <span class="op">%&gt;%</span></span>
-<span id="cb28-2"><a href="visualization.html#cb28-2"></a><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Walk)) <span class="op">%&gt;%</span></span>
-<span id="cb28-3"><a href="visualization.html#cb28-3"></a><span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb28-4"><a href="visualization.html#cb28-4"></a><span class="st">    </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Walk), <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span></span>
-<span id="cb28-5"><a href="visualization.html#cb28-5"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;最寄りの駅からの徒歩距離 (分)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;店舗数&quot;</span>) <span class="op">+</span></span>
-<span id="cb28-6"><a href="visualization.html#cb28-6"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="visualization.html#cb47-1"></a>df <span class="op">%&gt;%</span></span>
+<span id="cb47-2"><a href="visualization.html#cb47-2"></a><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Walk)) <span class="op">%&gt;%</span></span>
+<span id="cb47-3"><a href="visualization.html#cb47-3"></a><span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb47-4"><a href="visualization.html#cb47-4"></a><span class="st">    </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Walk)) <span class="op">+</span></span>
+<span id="cb47-5"><a href="visualization.html#cb47-5"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;最寄りの駅からの徒歩距離 (分)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;店舗数&quot;</span>) <span class="op">+</span></span>
+<span id="cb47-6"><a href="visualization.html#cb47-6"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="visualization.html#cb48-1"></a>df <span class="op">%&gt;%</span></span>
+<span id="cb48-2"><a href="visualization.html#cb48-2"></a><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Walk)) <span class="op">%&gt;%</span></span>
+<span id="cb48-3"><a href="visualization.html#cb48-3"></a><span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb48-4"><a href="visualization.html#cb48-4"></a><span class="st">    </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Walk), <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span></span>
+<span id="cb48-5"><a href="visualization.html#cb48-5"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;最寄りの駅からの徒歩距離 (分)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;店舗数&quot;</span>) <span class="op">+</span></span>
+<span id="cb48-6"><a href="visualization.html#cb48-6"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
 <p><strong>ヒストグラムの棒の幅を調整したい</strong></p>
 <p><code>bins</code>と<code>binwidth</code>引数</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="visualization.html#cb29-1"></a>df <span class="op">%&gt;%</span></span>
-<span id="cb29-2"><a href="visualization.html#cb29-2"></a><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Walk)) <span class="op">%&gt;%</span></span>
-<span id="cb29-3"><a href="visualization.html#cb29-3"></a><span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb29-4"><a href="visualization.html#cb29-4"></a><span class="st">    </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Walk), <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;black&quot;</span>, </span>
-<span id="cb29-5"><a href="visualization.html#cb29-5"></a>                   <span class="dt">binwidth =</span> <span class="fl">2.5</span>) <span class="op">+</span></span>
-<span id="cb29-6"><a href="visualization.html#cb29-6"></a><span class="st">    </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">35</span>)) <span class="op">+</span></span>
-<span id="cb29-7"><a href="visualization.html#cb29-7"></a><span class="st">    </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">35</span>, <span class="dv">5</span>), <span class="dt">labels =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">35</span>, <span class="dv">5</span>)) <span class="op">+</span></span>
-<span id="cb29-8"><a href="visualization.html#cb29-8"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;最寄りの駅からの徒歩距離 (分)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;店舗数&quot;</span>) <span class="op">+</span></span>
-<span id="cb29-9"><a href="visualization.html#cb29-9"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="visualization.html#cb49-1"></a>df <span class="op">%&gt;%</span></span>
+<span id="cb49-2"><a href="visualization.html#cb49-2"></a><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Walk)) <span class="op">%&gt;%</span></span>
+<span id="cb49-3"><a href="visualization.html#cb49-3"></a><span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb49-4"><a href="visualization.html#cb49-4"></a><span class="st">    </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Walk), <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;black&quot;</span>, </span>
+<span id="cb49-5"><a href="visualization.html#cb49-5"></a>                   <span class="dt">binwidth =</span> <span class="fl">2.5</span>) <span class="op">+</span></span>
+<span id="cb49-6"><a href="visualization.html#cb49-6"></a><span class="st">    </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">35</span>)) <span class="op">+</span></span>
+<span id="cb49-7"><a href="visualization.html#cb49-7"></a><span class="st">    </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">35</span>, <span class="dv">5</span>), <span class="dt">labels =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">35</span>, <span class="dv">5</span>)) <span class="op">+</span></span>
+<span id="cb49-8"><a href="visualization.html#cb49-8"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;最寄りの駅からの徒歩距離 (分)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;店舗数&quot;</span>) <span class="op">+</span></span>
+<span id="cb49-9"><a href="visualization.html#cb49-9"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
 <hr />
 </div>
 <div id="visual-scatter" class="section level2">
 <h2><span class="header-section-number">12.7</span> 散布図</h2>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="visualization.html#cb30-1"></a>df <span class="op">%&gt;%</span></span>
-<span id="cb30-2"><a href="visualization.html#cb30-2"></a><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Walk)) <span class="op">%&gt;%</span></span>
-<span id="cb30-3"><a href="visualization.html#cb30-3"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Walk, <span class="dt">y =</span> ScoreN)) <span class="op">+</span></span>
-<span id="cb30-4"><a href="visualization.html#cb30-4"></a><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb30-5"><a href="visualization.html#cb30-5"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;最寄りの駅からの徒歩距離 (分)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;口コミ数&quot;</span>) <span class="op">+</span></span>
-<span id="cb30-6"><a href="visualization.html#cb30-6"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="visualization.html#cb31-1"></a>df <span class="op">%&gt;%</span></span>
-<span id="cb31-2"><a href="visualization.html#cb31-2"></a><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Budget), <span class="op">!</span><span class="kw">is.na</span>(Score)) <span class="op">%&gt;%</span></span>
-<span id="cb31-3"><a href="visualization.html#cb31-3"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Budget, <span class="dt">y =</span> Score)) <span class="op">+</span></span>
-<span id="cb31-4"><a href="visualization.html#cb31-4"></a><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb31-5"><a href="visualization.html#cb31-5"></a><span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="op">+</span></span>
-<span id="cb31-6"><a href="visualization.html#cb31-6"></a><span class="st">    </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>)) <span class="op">+</span></span>
-<span id="cb31-7"><a href="visualization.html#cb31-7"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;平均予算 (円)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;口コミ評価&quot;</span>) <span class="op">+</span></span>
-<span id="cb31-8"><a href="visualization.html#cb31-8"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="visualization.html#cb32-1"></a>df <span class="op">%&gt;%</span></span>
-<span id="cb32-2"><a href="visualization.html#cb32-2"></a><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Walk)) <span class="op">%&gt;%</span></span>
-<span id="cb32-3"><a href="visualization.html#cb32-3"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Walk, <span class="dt">y =</span> ScoreN)) <span class="op">+</span></span>
-<span id="cb32-4"><a href="visualization.html#cb32-4"></a><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb32-5"><a href="visualization.html#cb32-5"></a><span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="op">+</span></span>
-<span id="cb32-6"><a href="visualization.html#cb32-6"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;最寄りの駅からの徒歩距離 (分)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;口コミ数&quot;</span>) <span class="op">+</span></span>
-<span id="cb32-7"><a href="visualization.html#cb32-7"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="visualization.html#cb33-1"></a>df <span class="op">%&gt;%</span></span>
-<span id="cb33-2"><a href="visualization.html#cb33-2"></a><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Walk)) <span class="op">%&gt;%</span></span>
-<span id="cb33-3"><a href="visualization.html#cb33-3"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">EW =</span> <span class="kw">recode</span>(Pref, <span class="dt">.default =</span> <span class="st">&quot;関西&quot;</span>,</span>
-<span id="cb33-4"><a href="visualization.html#cb33-4"></a>                       <span class="st">&quot;東京都&quot;</span> =<span class="st"> &quot;関東&quot;</span>, <span class="st">&quot;神奈川県&quot;</span> =<span class="st"> &quot;関東&quot;</span>,</span>
-<span id="cb33-5"><a href="visualization.html#cb33-5"></a>                       <span class="st">&quot;千葉県&quot;</span> =<span class="st"> &quot;関東&quot;</span>, <span class="st">&quot;埼玉県&quot;</span>   =<span class="st"> &quot;関東&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb33-6"><a href="visualization.html#cb33-6"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Walk, <span class="dt">y =</span> ScoreN, <span class="dt">color =</span> EW)) <span class="op">+</span></span>
-<span id="cb33-7"><a href="visualization.html#cb33-7"></a><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb33-8"><a href="visualization.html#cb33-8"></a><span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;loess&quot;</span>) <span class="op">+</span></span>
-<span id="cb33-9"><a href="visualization.html#cb33-9"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;最寄りの駅からの徒歩距離 (分)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;口コミ数&quot;</span>,</span>
-<span id="cb33-10"><a href="visualization.html#cb33-10"></a>         <span class="dt">color =</span> <span class="st">&quot;地域&quot;</span>) <span class="op">+</span></span>
-<span id="cb33-11"><a href="visualization.html#cb33-11"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="visualization.html#cb34-1"></a>df <span class="op">%&gt;%</span></span>
-<span id="cb34-2"><a href="visualization.html#cb34-2"></a><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Budget), <span class="op">!</span><span class="kw">is.na</span>(Score)) <span class="op">%&gt;%</span></span>
-<span id="cb34-3"><a href="visualization.html#cb34-3"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">EW =</span> <span class="kw">recode</span>(Pref, <span class="dt">.default =</span> <span class="st">&quot;関西&quot;</span>,</span>
-<span id="cb34-4"><a href="visualization.html#cb34-4"></a>                       <span class="st">&quot;東京都&quot;</span> =<span class="st"> &quot;関東&quot;</span>, <span class="st">&quot;神奈川県&quot;</span> =<span class="st"> &quot;関東&quot;</span>,</span>
-<span id="cb34-5"><a href="visualization.html#cb34-5"></a>                       <span class="st">&quot;千葉県&quot;</span> =<span class="st"> &quot;関東&quot;</span>, <span class="st">&quot;埼玉県&quot;</span>   =<span class="st"> &quot;関東&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb34-6"><a href="visualization.html#cb34-6"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Budget, <span class="dt">y =</span> Score, <span class="dt">color =</span> EW)) <span class="op">+</span></span>
-<span id="cb34-7"><a href="visualization.html#cb34-7"></a><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb34-8"><a href="visualization.html#cb34-8"></a><span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="op">+</span></span>
-<span id="cb34-9"><a href="visualization.html#cb34-9"></a><span class="st">    </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>)) <span class="op">+</span></span>
-<span id="cb34-10"><a href="visualization.html#cb34-10"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;平均予算 (円)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;口コミ評価&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;地域&quot;</span>) <span class="op">+</span></span>
-<span id="cb34-11"><a href="visualization.html#cb34-11"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="visualization.html#cb35-1"></a>df <span class="op">%&gt;%</span></span>
-<span id="cb35-2"><a href="visualization.html#cb35-2"></a><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Budget), <span class="op">!</span><span class="kw">is.na</span>(Score)) <span class="op">%&gt;%</span></span>
-<span id="cb35-3"><a href="visualization.html#cb35-3"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">EW =</span> <span class="kw">recode</span>(Pref, <span class="dt">.default =</span> <span class="st">&quot;関西&quot;</span>,</span>
-<span id="cb35-4"><a href="visualization.html#cb35-4"></a>                       <span class="st">&quot;東京都&quot;</span> =<span class="st"> &quot;関東&quot;</span>, <span class="st">&quot;神奈川県&quot;</span> =<span class="st"> &quot;関東&quot;</span>,</span>
-<span id="cb35-5"><a href="visualization.html#cb35-5"></a>                       <span class="st">&quot;千葉県&quot;</span> =<span class="st"> &quot;関東&quot;</span>, <span class="st">&quot;埼玉県&quot;</span>   =<span class="st"> &quot;関東&quot;</span>),</span>
-<span id="cb35-6"><a href="visualization.html#cb35-6"></a>           <span class="dt">EW =</span> <span class="kw">factor</span>(EW, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;関東&quot;</span>, <span class="st">&quot;関西&quot;</span>))) <span class="op">%&gt;%</span></span>
-<span id="cb35-7"><a href="visualization.html#cb35-7"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Budget, <span class="dt">y =</span> Score)) <span class="op">+</span></span>
-<span id="cb35-8"><a href="visualization.html#cb35-8"></a><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb35-9"><a href="visualization.html#cb35-9"></a><span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="op">+</span></span>
-<span id="cb35-10"><a href="visualization.html#cb35-10"></a><span class="st">    </span><span class="kw">facet_wrap</span>(.<span class="op">~</span><span class="st"> </span>EW, <span class="dt">scales =</span> <span class="st">&quot;free_x&quot;</span>) <span class="op">+</span></span>
-<span id="cb35-11"><a href="visualization.html#cb35-11"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;平均予算 (円)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;口コミ評価&quot;</span>) <span class="op">+</span></span>
-<span id="cb35-12"><a href="visualization.html#cb35-12"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="visualization.html#cb50-1"></a>df <span class="op">%&gt;%</span></span>
+<span id="cb50-2"><a href="visualization.html#cb50-2"></a><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Walk)) <span class="op">%&gt;%</span></span>
+<span id="cb50-3"><a href="visualization.html#cb50-3"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Walk, <span class="dt">y =</span> ScoreN)) <span class="op">+</span></span>
+<span id="cb50-4"><a href="visualization.html#cb50-4"></a><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb50-5"><a href="visualization.html#cb50-5"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;最寄りの駅からの徒歩距離 (分)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;口コミ数&quot;</span>) <span class="op">+</span></span>
+<span id="cb50-6"><a href="visualization.html#cb50-6"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="visualization.html#cb51-1"></a>df <span class="op">%&gt;%</span></span>
+<span id="cb51-2"><a href="visualization.html#cb51-2"></a><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Budget), <span class="op">!</span><span class="kw">is.na</span>(Score)) <span class="op">%&gt;%</span></span>
+<span id="cb51-3"><a href="visualization.html#cb51-3"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Budget, <span class="dt">y =</span> Score)) <span class="op">+</span></span>
+<span id="cb51-4"><a href="visualization.html#cb51-4"></a><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb51-5"><a href="visualization.html#cb51-5"></a><span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="op">+</span></span>
+<span id="cb51-6"><a href="visualization.html#cb51-6"></a><span class="st">    </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>)) <span class="op">+</span></span>
+<span id="cb51-7"><a href="visualization.html#cb51-7"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;平均予算 (円)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;口コミ評価&quot;</span>) <span class="op">+</span></span>
+<span id="cb51-8"><a href="visualization.html#cb51-8"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="visualization.html#cb52-1"></a>df <span class="op">%&gt;%</span></span>
+<span id="cb52-2"><a href="visualization.html#cb52-2"></a><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Walk)) <span class="op">%&gt;%</span></span>
+<span id="cb52-3"><a href="visualization.html#cb52-3"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Walk, <span class="dt">y =</span> ScoreN)) <span class="op">+</span></span>
+<span id="cb52-4"><a href="visualization.html#cb52-4"></a><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb52-5"><a href="visualization.html#cb52-5"></a><span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="op">+</span></span>
+<span id="cb52-6"><a href="visualization.html#cb52-6"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;最寄りの駅からの徒歩距離 (分)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;口コミ数&quot;</span>) <span class="op">+</span></span>
+<span id="cb52-7"><a href="visualization.html#cb52-7"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="visualization.html#cb53-1"></a>df <span class="op">%&gt;%</span></span>
+<span id="cb53-2"><a href="visualization.html#cb53-2"></a><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Walk)) <span class="op">%&gt;%</span></span>
+<span id="cb53-3"><a href="visualization.html#cb53-3"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">EW =</span> <span class="kw">recode</span>(Pref, <span class="dt">.default =</span> <span class="st">&quot;関西&quot;</span>,</span>
+<span id="cb53-4"><a href="visualization.html#cb53-4"></a>                       <span class="st">&quot;東京都&quot;</span> =<span class="st"> &quot;関東&quot;</span>, <span class="st">&quot;神奈川県&quot;</span> =<span class="st"> &quot;関東&quot;</span>,</span>
+<span id="cb53-5"><a href="visualization.html#cb53-5"></a>                       <span class="st">&quot;千葉県&quot;</span> =<span class="st"> &quot;関東&quot;</span>, <span class="st">&quot;埼玉県&quot;</span>   =<span class="st"> &quot;関東&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb53-6"><a href="visualization.html#cb53-6"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Walk, <span class="dt">y =</span> ScoreN, <span class="dt">color =</span> EW)) <span class="op">+</span></span>
+<span id="cb53-7"><a href="visualization.html#cb53-7"></a><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb53-8"><a href="visualization.html#cb53-8"></a><span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;loess&quot;</span>) <span class="op">+</span></span>
+<span id="cb53-9"><a href="visualization.html#cb53-9"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;最寄りの駅からの徒歩距離 (分)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;口コミ数&quot;</span>,</span>
+<span id="cb53-10"><a href="visualization.html#cb53-10"></a>         <span class="dt">color =</span> <span class="st">&quot;地域&quot;</span>) <span class="op">+</span></span>
+<span id="cb53-11"><a href="visualization.html#cb53-11"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="visualization.html#cb54-1"></a>df <span class="op">%&gt;%</span></span>
+<span id="cb54-2"><a href="visualization.html#cb54-2"></a><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Budget), <span class="op">!</span><span class="kw">is.na</span>(Score)) <span class="op">%&gt;%</span></span>
+<span id="cb54-3"><a href="visualization.html#cb54-3"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">EW =</span> <span class="kw">recode</span>(Pref, <span class="dt">.default =</span> <span class="st">&quot;関西&quot;</span>,</span>
+<span id="cb54-4"><a href="visualization.html#cb54-4"></a>                       <span class="st">&quot;東京都&quot;</span> =<span class="st"> &quot;関東&quot;</span>, <span class="st">&quot;神奈川県&quot;</span> =<span class="st"> &quot;関東&quot;</span>,</span>
+<span id="cb54-5"><a href="visualization.html#cb54-5"></a>                       <span class="st">&quot;千葉県&quot;</span> =<span class="st"> &quot;関東&quot;</span>, <span class="st">&quot;埼玉県&quot;</span>   =<span class="st"> &quot;関東&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb54-6"><a href="visualization.html#cb54-6"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Budget, <span class="dt">y =</span> Score, <span class="dt">color =</span> EW)) <span class="op">+</span></span>
+<span id="cb54-7"><a href="visualization.html#cb54-7"></a><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb54-8"><a href="visualization.html#cb54-8"></a><span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="op">+</span></span>
+<span id="cb54-9"><a href="visualization.html#cb54-9"></a><span class="st">    </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>)) <span class="op">+</span></span>
+<span id="cb54-10"><a href="visualization.html#cb54-10"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;平均予算 (円)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;口コミ評価&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;地域&quot;</span>) <span class="op">+</span></span>
+<span id="cb54-11"><a href="visualization.html#cb54-11"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="visualization.html#cb55-1"></a>df <span class="op">%&gt;%</span></span>
+<span id="cb55-2"><a href="visualization.html#cb55-2"></a><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Budget), <span class="op">!</span><span class="kw">is.na</span>(Score)) <span class="op">%&gt;%</span></span>
+<span id="cb55-3"><a href="visualization.html#cb55-3"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">EW =</span> <span class="kw">recode</span>(Pref, <span class="dt">.default =</span> <span class="st">&quot;関西&quot;</span>,</span>
+<span id="cb55-4"><a href="visualization.html#cb55-4"></a>                       <span class="st">&quot;東京都&quot;</span> =<span class="st"> &quot;関東&quot;</span>, <span class="st">&quot;神奈川県&quot;</span> =<span class="st"> &quot;関東&quot;</span>,</span>
+<span id="cb55-5"><a href="visualization.html#cb55-5"></a>                       <span class="st">&quot;千葉県&quot;</span> =<span class="st"> &quot;関東&quot;</span>, <span class="st">&quot;埼玉県&quot;</span>   =<span class="st"> &quot;関東&quot;</span>),</span>
+<span id="cb55-6"><a href="visualization.html#cb55-6"></a>           <span class="dt">EW =</span> <span class="kw">factor</span>(EW, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;関東&quot;</span>, <span class="st">&quot;関西&quot;</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb55-7"><a href="visualization.html#cb55-7"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Budget, <span class="dt">y =</span> Score)) <span class="op">+</span></span>
+<span id="cb55-8"><a href="visualization.html#cb55-8"></a><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb55-9"><a href="visualization.html#cb55-9"></a><span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="op">+</span></span>
+<span id="cb55-10"><a href="visualization.html#cb55-10"></a><span class="st">    </span><span class="kw">facet_wrap</span>(.<span class="op">~</span><span class="st"> </span>EW, <span class="dt">scales =</span> <span class="st">&quot;free_x&quot;</span>) <span class="op">+</span></span>
+<span id="cb55-11"><a href="visualization.html#cb55-11"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;平均予算 (円)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;口コミ評価&quot;</span>) <span class="op">+</span></span>
+<span id="cb55-12"><a href="visualization.html#cb55-12"></a><span class="st">    </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
 <hr />
 </div>
 <div id="visual-customize" class="section level2">
