@@ -272,7 +272,12 @@
 <li class="chapter" data-level="12.3" data-path="factor.html"><a href="factor.html#factor-excersie"><i class="fa fa-check"></i><b>12.3</b> 練習問題</a></li>
 </ul></li>
 <li class="chapter" data-level="13" data-path="tidydata.html"><a href="tidydata.html"><i class="fa fa-check"></i><b>13</b> 整然データ構造</a><ul>
-<li class="chapter" data-level="13.1" data-path="tidydata.html"><a href="tidydata.html#tidydata-intro"><i class="fa fa-check"></i><b>13.1</b> 整然データ (tidy data)とは</a></li>
+<li class="chapter" data-level="13.1" data-path="tidydata.html"><a href="tidydata.html#tidydata-intro"><i class="fa fa-check"></i><b>13.1</b> 整然データ (tidy data)とは</a><ul>
+<li class="chapter" data-level="13.1.1" data-path="tidydata.html"><a href="tidydata.html#つの列は1つの変数を表す"><i class="fa fa-check"></i><b>13.1.1</b> 1つの列は、1つの変数を表す</a></li>
+<li class="chapter" data-level="13.1.2" data-path="tidydata.html"><a href="tidydata.html#つの行は1つの観測を表す"><i class="fa fa-check"></i><b>13.1.2</b> 1つの行は、1つの観測を表す</a></li>
+<li class="chapter" data-level="13.1.3" data-path="tidydata.html"><a href="tidydata.html#つのセルは1つの値を表す"><i class="fa fa-check"></i><b>13.1.3</b> 1つのセルは、1つの値を表す</a></li>
+<li class="chapter" data-level="13.1.4" data-path="tidydata.html"><a href="tidydata.html#つの表は1つの観測単位をもつ"><i class="fa fa-check"></i><b>13.1.4</b> 1つの表は、1つの観測単位をもつ</a></li>
+</ul></li>
 <li class="chapter" data-level="13.2" data-path="tidydata.html"><a href="tidydata.html#tidydata-gather"><i class="fa fa-check"></i><b>13.2</b> Wide型からLong型へ</a></li>
 <li class="chapter" data-level="13.3" data-path="tidydata.html"><a href="tidydata.html#tidydata-spread"><i class="fa fa-check"></i><b>13.3</b> Long型からWide型へ</a></li>
 <li class="chapter" data-level="13.4" data-path="tidydata.html"><a href="tidydata.html#tidydata-separate"><i class="fa fa-check"></i><b>13.4</b> 列の分割</a></li>
@@ -337,7 +342,7 @@
 <h2><span class="header-section-number">13.1</span> 整然データ (tidy data)とは</h2>
 <p>分析や作図に適したデータの形は整然データ、または簡潔データ (tidy data)と呼ばれます。整然データの概念はtidyverse世界の産みの親であるHadely Wickham先生が提唱した概念であり、詳細はHadley先生が2014年に発表した論文<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>を参照してください。</p>
 <p>整然データは目指す到達点は非常に単純です。それは「データの構造 (structure)と意味 (semantic)を一致させる」ことです。そして、この「意味」を出来る限り小さい単位で分解します。</p>
-<p>例えば、3人の被験者が投薬の前後に測った数学成績があるとします。投薬前の成績は<code>"Control"</code>、投薬後の状況を<code>"Treatment"</code>とします。これをまとめた表が表<a href="tidydata.html#tab:messy-data1">13.1</a>です。</p>
+<p>例えば、3人で構成されたあるクラス内の被験者が投薬の前後に測った数学成績があるとします。投薬前の成績は<code>"Control"</code>、投薬後の状況を<code>"Treatment"</code>とします。これをまとめたのが表<a href="tidydata.html#tab:messy-data1">13.1</a>です。</p>
 <table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:messy-data1">表 13.1: </span>Messy Dataの例 (1)
@@ -364,7 +369,7 @@ Hadley
 90
 </td>
 <td style="text-align:right;">
-95
+90
 </td>
 </tr>
 <tr>
@@ -432,7 +437,7 @@ Control
 Treatment
 </td>
 <td style="text-align:right;">
-95
+90
 </td>
 <td style="text-align:right;">
 25
@@ -456,7 +461,7 @@ Treatment
 <li><code>Treat</code>: 投薬有無</li>
 <li><code>Math_Score</code>: 数学成績</li>
 </ol>
-<p>これに則って表に直したのが表<a href="tidydata.html#tab:tidydata1">13.3</a>です。</p>
+<p><code>Treat</code>は投薬前なら<code>"Control"</code>の値を、投薬後なら<code>"Treatment"</code>の値が入ります。<code>Math_Socre</code>には数学成績が入ります。これに則って表に直したのが表<a href="tidydata.html#tab:tidydata1">13.3</a>です。</p>
 <table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:tidydata1">表 13.3: </span>整然データの例
@@ -491,79 +496,7 @@ Control
 Hadley
 </td>
 <td style="text-align:left;">
-Treat
-</td>
-<td style="text-align:right;">
-95
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Song
-</td>
-<td style="text-align:left;">
-Control
-</td>
-<td style="text-align:right;">
-80
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Song
-</td>
-<td style="text-align:left;">
-Treat
-</td>
-<td style="text-align:right;">
-25
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Yanai
-</td>
-<td style="text-align:left;">
-Control
-</td>
-<td style="text-align:right;">
-100
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Yanai
-</td>
-<td style="text-align:left;">
-Treat
-</td>
-<td style="text-align:right;">
-95
-</td>
-</tr>
-</tbody>
-</table>
-<table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;text-align: center;">
-Name
-</th>
-<th style="text-align:left;text-align: center;">
-Treat
-</th>
-<th style="text-align:right;text-align: center;">
-Math_Score
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-Hadley
-</td>
-<td style="text-align:left;">
-Control
+Treatment
 </td>
 <td style="text-align:right;">
 90
@@ -571,17 +504,6 @@ Control
 </tr>
 <tr>
 <td style="text-align:left;">
-Hadley
-</td>
-<td style="text-align:left;">
-Treat
-</td>
-<td style="text-align:right;">
-95
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
 Song
 </td>
 <td style="text-align:left;">
@@ -596,7 +518,7 @@ Control
 Song
 </td>
 <td style="text-align:left;">
-Treat
+Treatment
 </td>
 <td style="text-align:right;">
 25
@@ -618,7 +540,7 @@ Control
 Yanai
 </td>
 <td style="text-align:left;">
-Treat
+Treatment
 </td>
 <td style="text-align:right;">
 95
@@ -626,6 +548,138 @@ Treat
 </tr>
 </tbody>
 </table>
+<p>表が長くなりましたが、これなら一つの列に2つ以上の情報が含まれることはありません。この場合、表<a href="tidydata.html#tab:messy-data1">13.1</a>と表<a href="tidydata.html#tab:messy-data2">13.2</a>のように、行と列を転置することができるでしょうか。</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:transdata">表 13.4: </span>表<a href="tidydata.html#tab:tidydata1">13.3</a>を転置した場合
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;text-align: center;">
+Name
+</th>
+<th style="text-align:left;text-align: center;">
+Hadley
+</th>
+<th style="text-align:left;text-align: center;">
+Hadley
+</th>
+<th style="text-align:left;text-align: center;">
+Song
+</th>
+<th style="text-align:left;text-align: center;">
+Song
+</th>
+<th style="text-align:left;text-align: center;">
+Yanai
+</th>
+<th style="text-align:left;text-align: center;">
+Yanai
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Treat
+</td>
+<td style="text-align:left;">
+Control
+</td>
+<td style="text-align:left;">
+Treatment
+</td>
+<td style="text-align:left;">
+Control
+</td>
+<td style="text-align:left;">
+Treatment
+</td>
+<td style="text-align:left;">
+Control
+</td>
+<td style="text-align:left;">
+Treatment
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Math_Score
+</td>
+<td style="text-align:left;">
+90
+</td>
+<td style="text-align:left;">
+90
+</td>
+<td style="text-align:left;">
+80
+</td>
+<td style="text-align:left;">
+25
+</td>
+<td style="text-align:left;">
+100
+</td>
+<td style="text-align:left;">
+95
+</td>
+</tr>
+</tbody>
+</table>
+<p>その結果が表<a href="tidydata.html#tab:transdata">13.4</a>ですが、いかがでしょうか。まず、列名が重複している時点でアウトですし、人間が見ても非常に分かりにくい表になりました。また、一つの列に異なるデータ (この場合、character型とnumeirc型)が混在しています。パソコンから見てはわけのわからないデータになったわけです。</p>
+<p>ここまで来たら整然データのイメージはある程度掴めたかも知れません。具体的に整然データとは次の4つの条件を満たすデータです<span class="citation">(Wickham, <a href="#ref-Wickham:2014" role="doc-biblioref">2014</a>)</span>。</p>
+<ol style="list-style-type: decimal">
+<li>1つの列は、1つの変数を表す。</li>
+<li>1つの行は、1つの観測を表す。</li>
+<li>1つのセル（特定の列の特定の行）は、1つの値を表す。</li>
+<li>1つの表は、1つの観測単位 (unit of observation)をもつ（異なる観測単位が混ざっていない）。</li>
+</ol>
+<p>以下でも、表<a href="tidydata.html#tab:messy-data1">13.1</a>と表<a href="tidydata.html#tab:tidydata1">13.3</a>を対比しながら、以上の4条件をより詳しく説明します。</p>
+<div id="つの列は1つの変数を表す" class="section level3">
+<h3><span class="header-section-number">13.1.1</span> 1つの列は、1つの変数を表す</h3>
+<p>表<a href="tidydata.html#tab:messy-data1">13.1</a>と表<a href="tidydata.html#tab:tidydata1">13.3</a>に含まれる情報は以下の3つで共通しています。</p>
+<ol style="list-style-type: decimal">
+<li>被験者名</li>
+<li>投薬有無</li>
+<li>数学成績</li>
+</ol>
+<p>これらの情報がそれぞれデータの変数になるわけですが、整然データは一つの列が一つの変数を表します。</p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-2"></span>
+<img src="Figures/Tidydata/TidyData1.png" alt="1つの列は、1つの変数を表す" width="100%" />
+<p class="caption">
+図 13.1: 1つの列は、1つの変数を表す
+</p>
+</div>
+</div>
+<div id="つの行は1つの観測を表す" class="section level3">
+<h3><span class="header-section-number">13.1.2</span> 1つの行は、1つの観測を表す</h3>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-3"></span>
+<img src="Figures/Tidydata/TidyData2.png" alt="1つの行は、1つの観測を表す" width="100%" />
+<p class="caption">
+図 13.2: 1つの行は、1つの観測を表す
+</p>
+</div>
+</div>
+<div id="つのセルは1つの値を表す" class="section level3">
+<h3><span class="header-section-number">13.1.3</span> 1つのセルは、1つの値を表す</h3>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-4"></span>
+<img src="Figures/Tidydata/TidyData3.png" alt="1つのセルは、1つの値を表す" width="50%" />
+<p class="caption">
+図 13.3: 1つのセルは、1つの値を表す
+</p>
+</div>
+</div>
+<div id="つの表は1つの観測単位をもつ" class="section level3">
+<h3><span class="header-section-number">13.1.4</span> 1つの表は、1つの観測単位をもつ</h3>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-5"></span>
+<img src="Figures/Tidydata/TidyData4.png" alt="1つの表は、1つの観測単位をもつ" width="65%" />
+<p class="caption">
+図 13.4: 1つの表は、1つの観測単位をもつ
+</p>
+</div>
+<hr />
+</div>
 </div>
 <div id="tidydata-gather" class="section level2">
 <h2><span class="header-section-number">13.2</span> Wide型からLong型へ</h2>
@@ -636,6 +690,12 @@ Treat
 <div id="tidydata-separate" class="section level2">
 <h2><span class="header-section-number">13.4</span> 列の分割</h2>
 
+</div>
+</div>
+<h3> 参考資料</h3>
+<div id="refs" class="references">
+<div id="ref-Wickham:2014">
+<p>Wickham Hadley. (2014). Tidy data. <em>Journal of Statistical Software</em>, <em>59</em>(10).</p>
 </div>
 </div>
 <div class="footnotes">
