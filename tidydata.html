@@ -61,6 +61,8 @@
   gtag('set', {'user_id': 'USER_ID'}); 
 </script>
 
+<meta name="google-site-verification" content="QJouPRaPKBPU1jDp6VaBuFbVV5imTI-Aazl_ScJwVgU" />
+
 
 <style type="text/css">
 code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -404,7 +406,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>本章ではグラフの作成に適した形へデータを整形することについて学習します。ただし、これはグラフに限られた話ではありません。作図に適したデータは分析にも適します。</p>
 <div id="tidydata-intro" class="section level2">
 <h2><span class="header-section-number">13.1</span> 整然データ (tidy data)とは</h2>
-<p>分析や作図に適したデータの形は整然データ、または簡潔データ (tidy data)と呼ばれます。整然データの概念はtidyverse世界の産みの親であるHadely Wickham先生が提唱した概念であり、詳細はHadley先生が2014年に発表した論文<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>を参照してください。</p>
+<p>分析や作図に適したデータの形は整然データ、または簡潔データ (tidy data)と呼ばれます。整然データの概念はtidyverse世界の産みの親であるHadely Wickham先生が提唱した概念であり、詳細はHadley先生が2014年に発表した論文<a href="#fn61" class="footnote-ref" id="fnref61"><sup>61</sup></a>を参照してください。</p>
 <p>整然データは目指す到達点は非常に単純です。それは「データの構造 (structure)と意味 (semantic)を一致させる」ことです。そして、この「意味」を出来る限り小さい単位で分解します。</p>
 <p>例えば、3人で構成されたあるクラス内の被験者が投薬の前後に測った数学成績があるとします。投薬前の成績は<code>"Control"</code>、投薬後の状況を<code>"Treatment"</code>とします。これをまとめたのが表<a href="tidydata.html#tab:messy-data1">13.1</a>です。</p>
 <table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -1231,16 +1233,16 @@ Stock
 <p>以下では「1列1変数」の条件を満たすデータの作成に便利な<code>pivot_longer()</code>と<code>pivot_wider()</code>関数について解説します。この関数群はおなじみの<code>dplyr</code>でなく、<code>tidyr</code>パッケージが提供している関数ですが、どれも<code>tidyverse</code>パッケージ群に含まれているため、<code>tidyverse</code>パッケージを読み込むだけで十分です。本節では<code>pivot_longer()</code>を、次節では<code>pivot_wider()</code>を取り上げます。</p>
 <p>まず、<code>pivot_longer()</code>ですが、この関数は比較的に新しい関数であり、これまでは<code>tidyr</code>の<code>gather()</code>関数が使われてきました。しかし、<code>gahter()</code>関数は将来、なくなる予定の関数であり、今から<code>tidyr</code>を学習する方は<code>pivot_*()</code>関数群に慣れておきましょう。</p>
 <p>まずは<code>tidyverse</code>パッケージを読み込みます。</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="tidydata.html#cb1-1"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
+<div class="sourceCode" id="cb1125"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1125-1"><a href="tidydata.html#cb1125-1"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
 <p>今回は様々な形のデータを変形する作業をするので、あるデータセットを使うよりも、架空の簡単なデータを使います。</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2-1"><a href="tidydata.html#cb2-1"></a>df1 &lt;-<span class="st"> </span><span class="kw">tibble</span>(</span>
-<span id="cb2-2"><a href="tidydata.html#cb2-2"></a>  <span class="dt">Name      =</span> <span class="kw">c</span>(<span class="st">&quot;Hadley&quot;</span>, <span class="st">&quot;Song&quot;</span>, <span class="st">&quot;Yanai&quot;</span>),</span>
-<span id="cb2-3"><a href="tidydata.html#cb2-3"></a>  <span class="dt">Control   =</span> <span class="kw">c</span>(<span class="dv">90</span>, <span class="dv">80</span>, <span class="dv">100</span>),</span>
-<span id="cb2-4"><a href="tidydata.html#cb2-4"></a>  <span class="dt">Treatment =</span> <span class="kw">c</span>(<span class="dv">90</span>, <span class="dv">25</span>, <span class="dv">95</span>),</span>
-<span id="cb2-5"><a href="tidydata.html#cb2-5"></a>  <span class="dt">Gender    =</span> <span class="kw">c</span>(<span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Female&quot;</span>)</span>
-<span id="cb2-6"><a href="tidydata.html#cb2-6"></a>)</span>
-<span id="cb2-7"><a href="tidydata.html#cb2-7"></a></span>
-<span id="cb2-8"><a href="tidydata.html#cb2-8"></a>df1</span></code></pre></div>
+<div class="sourceCode" id="cb1126"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1126-1"><a href="tidydata.html#cb1126-1"></a>df1 &lt;-<span class="st"> </span><span class="kw">tibble</span>(</span>
+<span id="cb1126-2"><a href="tidydata.html#cb1126-2"></a>  <span class="dt">Name      =</span> <span class="kw">c</span>(<span class="st">&quot;Hadley&quot;</span>, <span class="st">&quot;Song&quot;</span>, <span class="st">&quot;Yanai&quot;</span>),</span>
+<span id="cb1126-3"><a href="tidydata.html#cb1126-3"></a>  <span class="dt">Control   =</span> <span class="kw">c</span>(<span class="dv">90</span>, <span class="dv">80</span>, <span class="dv">100</span>),</span>
+<span id="cb1126-4"><a href="tidydata.html#cb1126-4"></a>  <span class="dt">Treatment =</span> <span class="kw">c</span>(<span class="dv">90</span>, <span class="dv">25</span>, <span class="dv">95</span>),</span>
+<span id="cb1126-5"><a href="tidydata.html#cb1126-5"></a>  <span class="dt">Gender    =</span> <span class="kw">c</span>(<span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Female&quot;</span>)</span>
+<span id="cb1126-6"><a href="tidydata.html#cb1126-6"></a>)</span>
+<span id="cb1126-7"><a href="tidydata.html#cb1126-7"></a></span>
+<span id="cb1126-8"><a href="tidydata.html#cb1126-8"></a>df1</span></code></pre></div>
 <pre><code>## # A tibble: 3 x 4
 ##   Name   Control Treatment Gender
 ##   &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt; 
@@ -1258,21 +1260,21 @@ Stock
 ## 5 Yanai  Female Control          100
 ## 6 Yanai  Female Treatment         95</code></pre>
 <p><code>Treat</code>変数が作成され、元々は変数名であった<code>"Control"</code>と<code>"Treatment"</code>が値として格納されます。この変数をキー変数と呼びます。そして、キー変数の値に応じた数学成績が<code>Math_Score</code>という変数でまとめられました。この変数を値変数と呼びます。</p>
-<p>「1列1変数」を満たさなかった最初のデータは「Wide型データ」、これを満たすようなデータは「Long型データ」と呼ばれます。これは相対的に最初のデータが横に広いから名付けた名前であって、「Wide型=雑然データ」もしくは「Long型=雑然データ」ではないことに注意してください<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>。</p>
+<p>「1列1変数」を満たさなかった最初のデータは「Wide型データ」、これを満たすようなデータは「Long型データ」と呼ばれます。これは相対的に最初のデータが横に広いから名付けた名前であって、「Wide型=雑然データ」もしくは「Long型=雑然データ」ではないことに注意してください<a href="#fn62" class="footnote-ref" id="fnref62"><sup>62</sup></a>。</p>
 <p>Wide型データをLong型へ変換する関数が<code>pivot_longer()</code>であり、基本的な使い方は以下の通りです。</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb5-1"><a href="tidydata.html#cb5-1"></a><span class="co"># pivot_longer()の使い方</span></span>
-<span id="cb5-2"><a href="tidydata.html#cb5-2"></a>データ名 <span class="op">%&gt;%</span></span>
-<span id="cb5-3"><a href="tidydata.html#cb5-3"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols      =</span> <span class="kw">c</span>(まとめる変数1, まとめる変数2, ...),</span>
-<span id="cb5-4"><a href="tidydata.html#cb5-4"></a>               <span class="dt">names_to  =</span> <span class="st">&quot;キー変数名&quot;</span>,</span>
-<span id="cb5-5"><a href="tidydata.html#cb5-5"></a>               <span class="dt">values_to =</span> <span class="st">&quot;値変数名&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1129"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1129-1"><a href="tidydata.html#cb1129-1"></a><span class="co"># pivot_longer()の使い方</span></span>
+<span id="cb1129-2"><a href="tidydata.html#cb1129-2"></a>データ名 <span class="op">%&gt;%</span></span>
+<span id="cb1129-3"><a href="tidydata.html#cb1129-3"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols      =</span> <span class="kw">c</span>(まとめる変数1, まとめる変数2, ...),</span>
+<span id="cb1129-4"><a href="tidydata.html#cb1129-4"></a>               <span class="dt">names_to  =</span> <span class="st">&quot;キー変数名&quot;</span>,</span>
+<span id="cb1129-5"><a href="tidydata.html#cb1129-5"></a>               <span class="dt">values_to =</span> <span class="st">&quot;値変数名&quot;</span>)</span></code></pre></div>
 <p>ここでは同じ変数が<code>Control</code>と<code>Treatment</code>変数で分けられているため、まとめる変数はこの2つであり、<code>cols = c(Control, Treatment)</code>と指定します。<code>Control</code>と<code>Treatment</code>は<code>"</code>で囲んでも、囲まなくても同じです。また、<code>dplyr</code>の<code>select()</code>関数で使える変数選択の関数 (<code>starts_with()</code>、<code>where()</code>など)や<code>:</code>演算子も使用可能です。また、<code>cols</code>引数は<code>pivot_longer()</code>の第2引数であるため、<code>cols =</code>は省略可能です（第一引数はパイプにより既に渡されています）。</p>
 <p><code>names_to</code>と<code>values_to</code>引数はそれぞれキー変数名と値変数名を指定する引数で、ここは必ず<code>"</code>で囲んでください。この<code>df1</code>をLong型へ変換し、<code>df1_L</code>と名付けるコードが以下のコードです。</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb6-1"><a href="tidydata.html#cb6-1"></a>df1_L &lt;-<span class="st"> </span>df1 <span class="op">%&gt;%</span></span>
-<span id="cb6-2"><a href="tidydata.html#cb6-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(Control<span class="op">:</span>Treatment,</span>
-<span id="cb6-3"><a href="tidydata.html#cb6-3"></a>               <span class="dt">names_to  =</span> <span class="st">&quot;Treat&quot;</span>,</span>
-<span id="cb6-4"><a href="tidydata.html#cb6-4"></a>               <span class="dt">values_to =</span> <span class="st">&quot;Math_Score&quot;</span>)</span>
-<span id="cb6-5"><a href="tidydata.html#cb6-5"></a></span>
-<span id="cb6-6"><a href="tidydata.html#cb6-6"></a>df1_L</span></code></pre></div>
+<div class="sourceCode" id="cb1130"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1130-1"><a href="tidydata.html#cb1130-1"></a>df1_L &lt;-<span class="st"> </span>df1 <span class="op">%&gt;%</span></span>
+<span id="cb1130-2"><a href="tidydata.html#cb1130-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(Control<span class="op">:</span>Treatment,</span>
+<span id="cb1130-3"><a href="tidydata.html#cb1130-3"></a>               <span class="dt">names_to  =</span> <span class="st">&quot;Treat&quot;</span>,</span>
+<span id="cb1130-4"><a href="tidydata.html#cb1130-4"></a>               <span class="dt">values_to =</span> <span class="st">&quot;Math_Score&quot;</span>)</span>
+<span id="cb1130-5"><a href="tidydata.html#cb1130-5"></a></span>
+<span id="cb1130-6"><a href="tidydata.html#cb1130-6"></a>df1_L</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 4
 ##   Name   Gender Treat     Math_Score
 ##   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;          &lt;dbl&gt;
@@ -1284,14 +1286,14 @@ Stock
 ## 6 Yanai  Female Treatment         95</code></pre>
 <p>これだけでも<code>pivot_longer()</code>関数を使ってWide型からLong型への変換は問題なくできますが、以下ではもうちょっと踏み込んだ使い方について解説します。「ここまでで十分だよ」という方は、ここを飛ばしても構いません。</p>
 <p>今回の実習データ<code>df3</code>は3人の体重を3日間に渡って計測したものです。ただし、ドジっ子のSongは2日目にうっかり測るのを忘れており、欠損値となっています。</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb8-1"><a href="tidydata.html#cb8-1"></a>df2 &lt;-<span class="st"> </span><span class="kw">tibble</span>(</span>
-<span id="cb8-2"><a href="tidydata.html#cb8-2"></a>  <span class="dt">Name =</span> <span class="kw">c</span>(<span class="st">&quot;Hadley&quot;</span>, <span class="st">&quot;Song&quot;</span>, <span class="st">&quot;Yanai&quot;</span>),</span>
-<span id="cb8-3"><a href="tidydata.html#cb8-3"></a>  <span class="dt">Day1 =</span> <span class="kw">c</span>(<span class="dv">75</span>, <span class="dv">120</span>, <span class="dv">70</span>),</span>
-<span id="cb8-4"><a href="tidydata.html#cb8-4"></a>  <span class="dt">Day2 =</span> <span class="kw">c</span>(<span class="dv">73</span>,  <span class="ot">NA</span>, <span class="dv">69</span>),</span>
-<span id="cb8-5"><a href="tidydata.html#cb8-5"></a>  <span class="dt">Day3 =</span> <span class="kw">c</span>(<span class="dv">71</span>, <span class="dv">140</span>, <span class="dv">71</span>)</span>
-<span id="cb8-6"><a href="tidydata.html#cb8-6"></a>)</span>
-<span id="cb8-7"><a href="tidydata.html#cb8-7"></a></span>
-<span id="cb8-8"><a href="tidydata.html#cb8-8"></a>df2</span></code></pre></div>
+<div class="sourceCode" id="cb1132"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1132-1"><a href="tidydata.html#cb1132-1"></a>df2 &lt;-<span class="st"> </span><span class="kw">tibble</span>(</span>
+<span id="cb1132-2"><a href="tidydata.html#cb1132-2"></a>  <span class="dt">Name =</span> <span class="kw">c</span>(<span class="st">&quot;Hadley&quot;</span>, <span class="st">&quot;Song&quot;</span>, <span class="st">&quot;Yanai&quot;</span>),</span>
+<span id="cb1132-3"><a href="tidydata.html#cb1132-3"></a>  <span class="dt">Day1 =</span> <span class="kw">c</span>(<span class="dv">75</span>, <span class="dv">120</span>, <span class="dv">70</span>),</span>
+<span id="cb1132-4"><a href="tidydata.html#cb1132-4"></a>  <span class="dt">Day2 =</span> <span class="kw">c</span>(<span class="dv">73</span>,  <span class="ot">NA</span>, <span class="dv">69</span>),</span>
+<span id="cb1132-5"><a href="tidydata.html#cb1132-5"></a>  <span class="dt">Day3 =</span> <span class="kw">c</span>(<span class="dv">71</span>, <span class="dv">140</span>, <span class="dv">71</span>)</span>
+<span id="cb1132-6"><a href="tidydata.html#cb1132-6"></a>)</span>
+<span id="cb1132-7"><a href="tidydata.html#cb1132-7"></a></span>
+<span id="cb1132-8"><a href="tidydata.html#cb1132-8"></a>df2</span></code></pre></div>
 <pre><code>## # A tibble: 3 x 4
 ##   Name    Day1  Day2  Day3
 ##   &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -1299,12 +1301,12 @@ Stock
 ## 2 Song     120    NA   140
 ## 3 Yanai     70    69    71</code></pre>
 <p>まず、これをこれまでのやり方でLong型へ変形し、<code>df2_L</code>と名付けます。</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb10-1"><a href="tidydata.html#cb10-1"></a>df2_L &lt;-<span class="st"> </span>df2 <span class="op">%&gt;%</span></span>
-<span id="cb10-2"><a href="tidydata.html#cb10-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Day&quot;</span>),</span>
-<span id="cb10-3"><a href="tidydata.html#cb10-3"></a>               <span class="dt">names_to  =</span> <span class="st">&quot;Day&quot;</span>,</span>
-<span id="cb10-4"><a href="tidydata.html#cb10-4"></a>               <span class="dt">values_to =</span> <span class="st">&quot;Weight&quot;</span>)</span>
-<span id="cb10-5"><a href="tidydata.html#cb10-5"></a></span>
-<span id="cb10-6"><a href="tidydata.html#cb10-6"></a>df2_L</span></code></pre></div>
+<div class="sourceCode" id="cb1134"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1134-1"><a href="tidydata.html#cb1134-1"></a>df2_L &lt;-<span class="st"> </span>df2 <span class="op">%&gt;%</span></span>
+<span id="cb1134-2"><a href="tidydata.html#cb1134-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Day&quot;</span>),</span>
+<span id="cb1134-3"><a href="tidydata.html#cb1134-3"></a>               <span class="dt">names_to  =</span> <span class="st">&quot;Day&quot;</span>,</span>
+<span id="cb1134-4"><a href="tidydata.html#cb1134-4"></a>               <span class="dt">values_to =</span> <span class="st">&quot;Weight&quot;</span>)</span>
+<span id="cb1134-5"><a href="tidydata.html#cb1134-5"></a></span>
+<span id="cb1134-6"><a href="tidydata.html#cb1134-6"></a>df2_L</span></code></pre></div>
 <pre><code>## # A tibble: 9 x 3
 ##   Name   Day   Weight
 ##   &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt;
@@ -1322,14 +1324,14 @@ Stock
 <li><code>Weight</code>が欠損している行を除去する</li>
 <li><code>Day</code>の値から<code>"Day"</code>を除去し、numeric型にする</li>
 </ol>
-<p>以上の作業を行うには、<code>dplyr</code>が便利でしょう。ちなみに<code>str_remove()</code>関数が初めて登場しましたが、これについては第<a href="string.html#string">16</a>章で詳細に解説します。簡単に説明しますと、<code>str_remove("X123", "X")</code>は<code>"X123"</code>から<code>"X"</code>を除去し、<code>"123"</code>のみ残す関すです。残された値が数字のみであってもデータ型はcharacter型なので、もう一回、numeric型に変換する必要があります<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>。<code>dplyr</code>を使ったコードは以下の通りです。</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb12-1"><a href="tidydata.html#cb12-1"></a><span class="co"># 1. WeightがNAのケースを除去</span></span>
-<span id="cb12-2"><a href="tidydata.html#cb12-2"></a><span class="co"># 2. Day変数の値から&quot;Day&quot;を除去</span></span>
-<span id="cb12-3"><a href="tidydata.html#cb12-3"></a><span class="co"># 3. Day変数をnumeric型へ変換</span></span>
-<span id="cb12-4"><a href="tidydata.html#cb12-4"></a>df2_L <span class="op">%&gt;%</span></span>
-<span id="cb12-5"><a href="tidydata.html#cb12-5"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Weight)) <span class="op">%&gt;%</span><span class="st">           </span><span class="co"># 1</span></span>
-<span id="cb12-6"><a href="tidydata.html#cb12-6"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Day =</span> <span class="kw">str_remove</span>(Day, <span class="st">&quot;Day&quot;</span>), <span class="co"># 2</span></span>
-<span id="cb12-7"><a href="tidydata.html#cb12-7"></a>         <span class="dt">Day =</span> <span class="kw">as.numeric</span>(Day))        <span class="co"># 3</span></span></code></pre></div>
+<p>以上の作業を行うには、<code>dplyr</code>が便利でしょう。ちなみに<code>str_remove()</code>関数が初めて登場しましたが、これについては第<a href="string.html#string">16</a>章で詳細に解説します。簡単に説明しますと、<code>str_remove("X123", "X")</code>は<code>"X123"</code>から<code>"X"</code>を除去し、<code>"123"</code>のみ残す関すです。残された値が数字のみであってもデータ型はcharacter型なので、もう一回、numeric型に変換する必要があります<a href="#fn63" class="footnote-ref" id="fnref63"><sup>63</sup></a>。<code>dplyr</code>を使ったコードは以下の通りです。</p>
+<div class="sourceCode" id="cb1136"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1136-1"><a href="tidydata.html#cb1136-1"></a><span class="co"># 1. WeightがNAのケースを除去</span></span>
+<span id="cb1136-2"><a href="tidydata.html#cb1136-2"></a><span class="co"># 2. Day変数の値から&quot;Day&quot;を除去</span></span>
+<span id="cb1136-3"><a href="tidydata.html#cb1136-3"></a><span class="co"># 3. Day変数をnumeric型へ変換</span></span>
+<span id="cb1136-4"><a href="tidydata.html#cb1136-4"></a>df2_L <span class="op">%&gt;%</span></span>
+<span id="cb1136-5"><a href="tidydata.html#cb1136-5"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Weight)) <span class="op">%&gt;%</span><span class="st">           </span><span class="co"># 1</span></span>
+<span id="cb1136-6"><a href="tidydata.html#cb1136-6"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Day =</span> <span class="kw">str_remove</span>(Day, <span class="st">&quot;Day&quot;</span>), <span class="co"># 2</span></span>
+<span id="cb1136-7"><a href="tidydata.html#cb1136-7"></a>         <span class="dt">Day =</span> <span class="kw">as.numeric</span>(Day))        <span class="co"># 3</span></span></code></pre></div>
 <pre><code>## # A tibble: 8 x 3
 ##   Name     Day Weight
 ##   &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt;
@@ -1342,12 +1344,12 @@ Stock
 ## 7 Yanai      2     69
 ## 8 Yanai      3     71</code></pre>
 <p>実はこの作業、<code>pivot_longer()</code>内で行うことも可能です。たとえば、<code>values_to</code>で指定した変数の値が欠損しているケースを除去するには<code>values_drop_na</code>引数を<code>TRUE</code>に指定するだけです。</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb14-1"><a href="tidydata.html#cb14-1"></a><span class="co"># Weight変数がNAのケースを除去する</span></span>
-<span id="cb14-2"><a href="tidydata.html#cb14-2"></a>df2 <span class="op">%&gt;%</span></span>
-<span id="cb14-3"><a href="tidydata.html#cb14-3"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Day&quot;</span>),</span>
-<span id="cb14-4"><a href="tidydata.html#cb14-4"></a>               <span class="dt">names_to       =</span> <span class="st">&quot;Day&quot;</span>,</span>
-<span id="cb14-5"><a href="tidydata.html#cb14-5"></a>               <span class="dt">values_to      =</span> <span class="st">&quot;Weight&quot;</span>,</span>
-<span id="cb14-6"><a href="tidydata.html#cb14-6"></a>               <span class="dt">values_drop_na =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1138"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1138-1"><a href="tidydata.html#cb1138-1"></a><span class="co"># Weight変数がNAのケースを除去する</span></span>
+<span id="cb1138-2"><a href="tidydata.html#cb1138-2"></a>df2 <span class="op">%&gt;%</span></span>
+<span id="cb1138-3"><a href="tidydata.html#cb1138-3"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Day&quot;</span>),</span>
+<span id="cb1138-4"><a href="tidydata.html#cb1138-4"></a>               <span class="dt">names_to       =</span> <span class="st">&quot;Day&quot;</span>,</span>
+<span id="cb1138-5"><a href="tidydata.html#cb1138-5"></a>               <span class="dt">values_to      =</span> <span class="st">&quot;Weight&quot;</span>,</span>
+<span id="cb1138-6"><a href="tidydata.html#cb1138-6"></a>               <span class="dt">values_drop_na =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 8 x 3
 ##   Name   Day   Weight
 ##   &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt;
@@ -1359,16 +1361,16 @@ Stock
 ## 6 Yanai  Day1      70
 ## 7 Yanai  Day2      69
 ## 8 Yanai  Day3      71</code></pre>
-<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb16-1"><a href="tidydata.html#cb16-1"></a><span class="co"># 1. Day変数の値から&quot;Day&quot;を除去する</span></span>
-<span id="cb16-2"><a href="tidydata.html#cb16-2"></a><span class="co"># 2. Day変数をinteger型に変換</span></span>
-<span id="cb16-3"><a href="tidydata.html#cb16-3"></a><span class="co"># 3. Weight変数がNAのケースを除去する</span></span>
-<span id="cb16-4"><a href="tidydata.html#cb16-4"></a>df2 <span class="op">%&gt;%</span></span>
-<span id="cb16-5"><a href="tidydata.html#cb16-5"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Day&quot;</span>),</span>
-<span id="cb16-6"><a href="tidydata.html#cb16-6"></a>               <span class="dt">names_to        =</span> <span class="st">&quot;Day&quot;</span>,</span>
-<span id="cb16-7"><a href="tidydata.html#cb16-7"></a>               <span class="dt">names_prefix    =</span> <span class="st">&quot;Day&quot;</span>,                  <span class="co"># 1</span></span>
-<span id="cb16-8"><a href="tidydata.html#cb16-8"></a>               <span class="dt">names_transform =</span> <span class="kw">list</span>(<span class="dt">Day =</span> as.numeric), <span class="co"># 2</span></span>
-<span id="cb16-9"><a href="tidydata.html#cb16-9"></a>               <span class="dt">values_to       =</span> <span class="st">&quot;Weight&quot;</span>,</span>
-<span id="cb16-10"><a href="tidydata.html#cb16-10"></a>               <span class="dt">values_drop_na  =</span> <span class="ot">TRUE</span>)                   <span class="co"># 3</span></span></code></pre></div>
+<div class="sourceCode" id="cb1140"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1140-1"><a href="tidydata.html#cb1140-1"></a><span class="co"># 1. Day変数の値から&quot;Day&quot;を除去する</span></span>
+<span id="cb1140-2"><a href="tidydata.html#cb1140-2"></a><span class="co"># 2. Day変数をinteger型に変換</span></span>
+<span id="cb1140-3"><a href="tidydata.html#cb1140-3"></a><span class="co"># 3. Weight変数がNAのケースを除去する</span></span>
+<span id="cb1140-4"><a href="tidydata.html#cb1140-4"></a>df2 <span class="op">%&gt;%</span></span>
+<span id="cb1140-5"><a href="tidydata.html#cb1140-5"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Day&quot;</span>),</span>
+<span id="cb1140-6"><a href="tidydata.html#cb1140-6"></a>               <span class="dt">names_to        =</span> <span class="st">&quot;Day&quot;</span>,</span>
+<span id="cb1140-7"><a href="tidydata.html#cb1140-7"></a>               <span class="dt">names_prefix    =</span> <span class="st">&quot;Day&quot;</span>,                  <span class="co"># 1</span></span>
+<span id="cb1140-8"><a href="tidydata.html#cb1140-8"></a>               <span class="dt">names_transform =</span> <span class="kw">list</span>(<span class="dt">Day =</span> as.numeric), <span class="co"># 2</span></span>
+<span id="cb1140-9"><a href="tidydata.html#cb1140-9"></a>               <span class="dt">values_to       =</span> <span class="st">&quot;Weight&quot;</span>,</span>
+<span id="cb1140-10"><a href="tidydata.html#cb1140-10"></a>               <span class="dt">values_drop_na  =</span> <span class="ot">TRUE</span>)                   <span class="co"># 3</span></span></code></pre></div>
 <pre><code>## # A tibble: 8 x 3
 ##   Name     Day Weight
 ##   &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt;
@@ -1380,6 +1382,7 @@ Stock
 ## 6 Yanai      1     70
 ## 7 Yanai      2     69
 ## 8 Yanai      3     71</code></pre>
+<p>他にも<code>pivot_longer()</code>は様々な引数に対応しており、詳細は<code>?pivot_longer</code>や<a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">レファレンスページ</a>を参照してください。</p>
 </div>
 <div id="tidydata-spread" class="section level2">
 <h2><span class="header-section-number">13.3</span> Long型からWide型へ</h2>
@@ -1401,10 +1404,10 @@ Stock
 </div>
 <div class="footnotes">
 <hr />
-<ol start="1">
-<li id="fn1"><p><a href="https://www.jstatsoft.org/article/view/v059i10">Wickham, Hadley. 2014. “Tidy data.” <em>Journal of Statistical Software.</em> 59 (10)</a><a href="tidydata.html#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p>たとえば、表<a href="tidydata.html#tab:blood-pressure">13.5</a>は右の方がLong型データですが、整然データはWide型である左の方ですね。<a href="tidydata.html#fnref2" class="footnote-back">↩︎</a></p></li>
-<li id="fn3"><p>実は<code>parse_number()</code>を使えばもっと簡単ですが、これについては後ほど解説します。<a href="tidydata.html#fnref3" class="footnote-back">↩︎</a></p></li>
+<ol start="61">
+<li id="fn61"><p><a href="https://www.jstatsoft.org/article/view/v059i10">Wickham, Hadley. 2014. “Tidy data.” <em>Journal of Statistical Software.</em> 59 (10)</a><a href="tidydata.html#fnref61" class="footnote-back">↩︎</a></p></li>
+<li id="fn62"><p>たとえば、表<a href="tidydata.html#tab:blood-pressure">13.5</a>は右の方がLong型データですが、整然データはWide型である左の方ですね。<a href="tidydata.html#fnref62" class="footnote-back">↩︎</a></p></li>
+<li id="fn63"><p>実は<code>parse_number()</code>を使えばもっと簡単ですが、これについては後ほど解説します。<a href="tidydata.html#fnref63" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 <div id="disqus_thread"></div>
