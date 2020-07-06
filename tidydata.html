@@ -62,6 +62,70 @@
 </script>
 
 
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 <link rel="stylesheet" href="HTML/style.css" type="text/css" />
 </head>
@@ -280,7 +344,7 @@
 </ul></li>
 <li class="chapter" data-level="13.2" data-path="tidydata.html"><a href="tidydata.html#tidydata-gather"><i class="fa fa-check"></i><b>13.2</b> Wide型からLong型へ</a></li>
 <li class="chapter" data-level="13.3" data-path="tidydata.html"><a href="tidydata.html#tidydata-spread"><i class="fa fa-check"></i><b>13.3</b> Long型からWide型へ</a></li>
-<li class="chapter" data-level="13.4" data-path="tidydata.html"><a href="tidydata.html#tidydata-separate"><i class="fa fa-check"></i><b>13.4</b> 列の分割</a></li>
+<li class="chapter" data-level="13.4" data-path="tidydata.html"><a href="tidydata.html#tidydata-separate"><i class="fa fa-check"></i><b>13.4</b> 列の操作</a></li>
 </ul></li>
 <li class="chapter" data-level="14" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>14</b> 可視化</a><ul>
 <li class="chapter" data-level="14.1" data-path="visualization.html"><a href="visualization.html#visual-packages"><i class="fa fa-check"></i><b>14.1</b> 可視化のためのパッケージ</a></li>
@@ -644,51 +708,688 @@ Math_Score
 <li>投薬有無</li>
 <li>数学成績</li>
 </ol>
-<p>これらの情報がそれぞれデータの変数になるわけですが、整然データは一つの列が一つの変数を表します。</p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-2"></span>
+<p>これらの情報がそれぞれデータの変数になるわけですが、整然データは一つの列が一つの変数を表します。それではまず、表<a href="tidydata.html#tab:messy-data1">13.1</a> (図<a href="tidydata.html#fig:messy-data7">13.1</a>の左)から考えてみましょう。この図には3つの情報が全て含まれています。しかし、数学成績は2列に渡って格納されており、「1列1変数」の条件を満たしておりません。一方、表<a href="tidydata.html#tab:tidydata1">13.3</a> (図<a href="tidydata.html#fig:messy-data7">13.1</a>の右)は投薬前後を表す<code>Treat</code>変数を作成し、その値に応じた数学成績が格納されており、「1列1変数」の条件を満たしています。</p>
+<div class="figure" style="text-align: center"><span id="fig:messy-data7"></span>
 <img src="Figures/Tidydata/TidyData1.png" alt="1つの列は、1つの変数を表す" width="100%" />
 <p class="caption">
 図 13.1: 1つの列は、1つの変数を表す
 </p>
 </div>
+<p>「1列1変数」は整然データの最も基本となる条件であり、整然データ作成の出発点とも言えます。</p>
 </div>
 <div id="つの行は1つの観測を表す" class="section level3">
 <h3><span class="header-section-number">13.1.2</span> 1つの行は、1つの観測を表す</h3>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-3"></span>
+<p>図<a href="tidydata.html#fig:messy-data6">13.2</a>の左は一行当たり、いくつの観察が含まれているでしょうか。そのためにはこのデータが何を観察しているかを考える必要があります。このデータは投薬<strong>前後</strong>の数学成績を観察し、量的に測定したものです。つまり、同じ人に対して2回観察を行ったことになります。したがって、投薬前の数学成績と投薬後の数学成績は別の観察であり、図<a href="tidydata.html#fig:messy-data6">13.2</a>の左は3行の表ですが、実は6回分の観察が含まれていることになります。1行に2つの観察が載っていることですね。</p>
+<div class="figure" style="text-align: center"><span id="fig:messy-data6"></span>
 <img src="Figures/Tidydata/TidyData2.png" alt="1つの行は、1つの観測を表す" width="100%" />
 <p class="caption">
 図 13.2: 1つの行は、1つの観測を表す
 </p>
 </div>
+<p>一方、図<a href="tidydata.html#fig:messy-data6">13.2</a>の右は6行のデータであり、観察回数とデータの行数が一致しています。つまり、1行に1観察となります。</p>
+<p>今回は数学成績しか測っていたいので、簡単な例ですが、実際のデータには曖昧な部分があります。たとえば、投薬によって血圧が変化する可能性があるため、最高血圧もまた投薬前後に測定したとします。それが表<a href="tidydata.html#tab:blood-pressure">13.5</a>の左です。</p>
+<table class="kable_wrapper table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:blood-pressure">表 13.5: </span>1行1観察の例
+</caption>
+<tbody>
+<tr>
+<td>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+Name
+</th>
+<th style="text-align:left;">
+Treat
+</th>
+<th style="text-align:right;">
+Math
+</th>
+<th style="text-align:right;">
+Blood
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Hadley
+</td>
+<td style="text-align:left;">
+Control
+</td>
+<td style="text-align:right;">
+90
+</td>
+<td style="text-align:right;">
+110
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hadley
+</td>
+<td style="text-align:left;">
+Treatment
+</td>
+<td style="text-align:right;">
+90
+</td>
+<td style="text-align:right;">
+115
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Song
+</td>
+<td style="text-align:left;">
+Control
+</td>
+<td style="text-align:right;">
+80
+</td>
+<td style="text-align:right;">
+95
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Song
+</td>
+<td style="text-align:left;">
+Treatment
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+110
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Yanai
+</td>
+<td style="text-align:left;">
+Control
+</td>
+<td style="text-align:right;">
+100
+</td>
+<td style="text-align:right;">
+100
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Yanai
+</td>
+<td style="text-align:left;">
+Treatment
+</td>
+<td style="text-align:right;">
+95
+</td>
+<td style="text-align:right;">
+95
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+Name
+</th>
+<th style="text-align:left;">
+Treat
+</th>
+<th style="text-align:left;">
+Type
+</th>
+<th style="text-align:right;">
+Value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Hadley
+</td>
+<td style="text-align:left;">
+Control
+</td>
+<td style="text-align:left;">
+Math
+</td>
+<td style="text-align:right;">
+90
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hadley
+</td>
+<td style="text-align:left;">
+Control
+</td>
+<td style="text-align:left;">
+Blood
+</td>
+<td style="text-align:right;">
+110
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hadley
+</td>
+<td style="text-align:left;">
+Treatment
+</td>
+<td style="text-align:left;">
+Math
+</td>
+<td style="text-align:right;">
+90
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hadley
+</td>
+<td style="text-align:left;">
+Treatment
+</td>
+<td style="text-align:left;">
+Blood
+</td>
+<td style="text-align:right;">
+115
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Song
+</td>
+<td style="text-align:left;">
+Control
+</td>
+<td style="text-align:left;">
+Math
+</td>
+<td style="text-align:right;">
+80
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Song
+</td>
+<td style="text-align:left;">
+Control
+</td>
+<td style="text-align:left;">
+Blood
+</td>
+<td style="text-align:right;">
+95
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Song
+</td>
+<td style="text-align:left;">
+Treatment
+</td>
+<td style="text-align:left;">
+Math
+</td>
+<td style="text-align:right;">
+25
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Song
+</td>
+<td style="text-align:left;">
+Treatment
+</td>
+<td style="text-align:left;">
+Blood
+</td>
+<td style="text-align:right;">
+110
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Yanai
+</td>
+<td style="text-align:left;">
+Control
+</td>
+<td style="text-align:left;">
+Math
+</td>
+<td style="text-align:right;">
+100
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Yanai
+</td>
+<td style="text-align:left;">
+Control
+</td>
+<td style="text-align:left;">
+Blood
+</td>
+<td style="text-align:right;">
+100
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Yanai
+</td>
+<td style="text-align:left;">
+Treatment
+</td>
+<td style="text-align:left;">
+Math
+</td>
+<td style="text-align:right;">
+95
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Yanai
+</td>
+<td style="text-align:left;">
+Treatment
+</td>
+<td style="text-align:left;">
+Blood
+</td>
+<td style="text-align:right;">
+95
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<p>3人に投薬前後に数学成績と最高血圧を測定した場合の観察回数は何回でしょう。3人 <span class="math inline">\(\times\)</span> 2時点 <span class="math inline">\(\times\)</span> 2指標の測定だから12回の測定でしょうか。ならば、表<a href="tidydata.html#tab:blood-pressure">13.5</a>の右が整然データでしょう。しかし、この場合、1列1変数という条件が満たされなくなります。<code>Value</code>列には数学成績と血圧が混在しており、2つの変数になります。ならば、どれも整然データではないということでしょうか。実は整然データは表<a href="tidydata.html#tab:blood-pressure">13.5</a>の左です。なぜなら、「1観察=1値」ではないからです。データにおける観察とは観察単位ごとに測定された<strong>値の集合</strong>です。観察対象とは人や自治体、企業、国などだけでなく、時間も含まれます。たとえば、人の特徴 (性別、身長、所得、政治関心など)を測定しもの、ある日の特徴 (気温、株価など)を測定したもの全てが観察です。むろん、人 <span class="math inline">\(\times\)</span> 時間のような組み合わせが観察単位ともなり得ます。この一つ一つの観察単位から得られた値の集合が観察です。表<a href="tidydata.html#tab:blood-pressure">13.5</a>の分析単位は「人 <span class="math inline">\(\times\)</span> 時間」です。成績や最高血圧は分析単位が持つ特徴や性質であって、分析単位ではありません。</p>
 </div>
 <div id="つのセルは1つの値を表す" class="section level3">
 <h3><span class="header-section-number">13.1.3</span> 1つのセルは、1つの値を表す</h3>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-4"></span>
+<p>この条件に反するケースはあまりないかも知れません。たとえば、「Hadleyは処置前後の数学成績が同じだし、一行にまとめよう」という意味で図<a href="tidydata.html#fig:messy-data5">13.3</a>の左のような表を作る方もいるかも知れませんが、あまりいないでしょう。</p>
+<div class="figure" style="text-align: center"><span id="fig:messy-data5"></span>
 <img src="Figures/Tidydata/TidyData3.png" alt="1つのセルは、1つの値を表す" width="50%" />
 <p class="caption">
 図 13.3: 1つのセルは、1つの値を表す
 </p>
 </div>
+<p>図<a href="tidydata.html#fig:messy-data5">13.3</a>の例は「1セル1値」の条件に明らかに反します。しかし、基準が曖昧な変数もあり、その一つが日付です。</p>
+<table class="kable_wrapper table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:date-table">表 13.6: </span>日付の扱い方
+</caption>
+<tbody>
+<tr>
+<td>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+Date
+</th>
+<th style="text-align:right;">
+Stock
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+2020/06/29
+</td>
+<td style="text-align:right;">
+100
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2020/06/30
+</td>
+<td style="text-align:right;">
+105
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2020/07/01
+</td>
+<td style="text-align:right;">
+110
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2020/07/02
+</td>
+<td style="text-align:right;">
+85
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2020/07/03
+</td>
+<td style="text-align:right;">
+90
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr>
+<th style="text-align:right;">
+Year
+</th>
+<th style="text-align:right;">
+Month
+</th>
+<th style="text-align:right;">
+Date
+</th>
+<th style="text-align:right;">
+Stock
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+2020
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+29
+</td>
+<td style="text-align:right;">
+100
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2020
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+105
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2020
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+110
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2020
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+85
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2020
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+90
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<p>表<a href="tidydata.html#tab:date-table">13.6</a>の左側の表はどうでしょうか。5日間の株価を記録した架空のデータですが、たしかに<code>Date</code>列には日付が1つずつ、<code>Stock</code>には株価の値が1つずつ格納されています。しかし、解釈によっては「<code>Date</code>に年、月、日といった3つの値が含まれているぞ」と見ることもできます。この解釈に基づく場合、表<a href="tidydata.html#tab:date-table">13.6</a>の右側の表が整然データとなり、左側は雑然データとなります。このケースは第一条件であった「一列一変数」とも関係します。なぜなら、<code>Date</code>という列が年・月・日といった3変数で構成されているとも解釈できるからです。</p>
+<p>分析によっては左側のような表でも全く問題ないケースもあります。時系列分析でトレンド変数のみ必要ならこれでも十分に整然データと呼べます。しかし、季節変動などの要素も考慮するならば、左側は雑然データになります。データとしての使い勝手は右側の方が優れているのは確かです。</p>
+<p>データを出来る限り細かく分解するほど情報量が豊かになりますが、それにも限度はあるでしょう。たとえば、「<code>Year</code>は実は世紀の情報も含まれているのでは…?」という解釈もできますが、これを反映してデータ整形を行うか否かは分析の目的と分析モデルによって異なります。この意味で、明らかな雑然データはあり得ますが、明らかな整然データは存在しないでしょう。どちらかといえば、整然さの度合いがあり、「これなら十分に整然データと言えないだろうか」と判断できれば十分ではないかと筆者 (Song)は考えます。</p>
 </div>
 <div id="つの表は1つの観測単位をもつ" class="section level3">
 <h3><span class="header-section-number">13.1.4</span> 1つの表は、1つの観測単位をもつ</h3>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-5"></span>
-<img src="Figures/Tidydata/TidyData4.png" alt="1つの表は、1つの観測単位をもつ" width="65%" />
+<p><a href="https://www.e-stat.go.jp">e-stat</a>などから<a href="https://www.e-stat.go.jp/stat-search/database?page=1&amp;toukei=00200521&amp;tstat=000001080615">国勢調査データ</a>をダウンロードした経験はあるでしょうか。以下の図<a href="tidydata.html#fig:messy-data3">13.4</a>は2015年度国勢調査データの一部です。</p>
+<div class="figure" style="text-align: center"><span id="fig:messy-data3"></span>
+<img src="Figures/Tidydata/MessyData4.png" alt="国勢調査データ" width="100%" />
 <p class="caption">
-図 13.4: 1つの表は、1つの観測単位をもつ
+図 13.4: 国勢調査データ
 </p>
 </div>
+<p>このデータの観察単位はなんでしょうか。データのの1行目は全国の人口を表しています。つまり、単位は国となります。しかし、2行目は北海道の人口です。この場合の観測単位は都道府県となります。つづいて、3行目は札幌市なので単位は市区町村になります。4行目は札幌市中央区、つまり観測単位が行政区になっています。そして14行目は函館市でまた単位は市区町村に戻っています。実際、会社や政府が作成するデータには図<a href="tidydata.html#fig:messy-data3">13.4</a>や図<a href="tidydata.html#fig:messy-data4">13.5</a>のようなものが多いです。とりわけ、図<a href="tidydata.html#fig:messy-data4">13.5</a>のように、最後の行に「合計」などが表記されている場合が多いです。</p>
+<div class="figure" style="text-align: center"><span id="fig:messy-data4"></span>
+<img src="Figures/Tidydata/TidyData4.png" alt="1つの表は、1つの観測単位をもつ" width="65%" />
+<p class="caption">
+図 13.5: 1つの表は、1つの観測単位をもつ
+</p>
+</div>
+<p>このような表・データを作成することが悪いことではありません。むしろ、「読む」ための表ならこのような書き方が一般的でしょう。しかし、「分析」のためのデータは観察の単位を統一する必要があります。</p>
 <hr />
 </div>
 </div>
 <div id="tidydata-gather" class="section level2">
 <h2><span class="header-section-number">13.2</span> Wide型からLong型へ</h2>
+<p>以下では「1列1変数」の条件を満たすデータの作成に便利な<code>pivot_longer()</code>と<code>pivot_wider()</code>関数について解説します。この関数群はおなじみの<code>dplyr</code>でなく、<code>tidyr</code>パッケージが提供している関数ですが、どれも<code>tidyverse</code>パッケージ群に含まれているため、<code>tidyverse</code>パッケージを読み込むだけで十分です。本節では<code>pivot_longer()</code>を、次節では<code>pivot_wider()</code>を取り上げます。</p>
+<p>まず、<code>pivot_longer()</code>ですが、この関数は比較的に新しい関数であり、これまでは<code>tidyr</code>の<code>gather()</code>関数が使われてきました。しかし、<code>gahter()</code>関数は将来、なくなる予定の関数であり、今から<code>tidyr</code>を学習する方は<code>pivot_*()</code>関数群に慣れておきましょう。</p>
+<p>まずは<code>tidyverse</code>パッケージを読み込みます。</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="tidydata.html#cb1-1"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
+<p>今回は様々な形のデータを変形する作業をするので、あるデータセットを使うよりも、架空の簡単なデータを使います。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2-1"><a href="tidydata.html#cb2-1"></a>df1 &lt;-<span class="st"> </span><span class="kw">tibble</span>(</span>
+<span id="cb2-2"><a href="tidydata.html#cb2-2"></a>  <span class="dt">Name      =</span> <span class="kw">c</span>(<span class="st">&quot;Hadley&quot;</span>, <span class="st">&quot;Song&quot;</span>, <span class="st">&quot;Yanai&quot;</span>),</span>
+<span id="cb2-3"><a href="tidydata.html#cb2-3"></a>  <span class="dt">Control   =</span> <span class="kw">c</span>(<span class="dv">90</span>, <span class="dv">80</span>, <span class="dv">100</span>),</span>
+<span id="cb2-4"><a href="tidydata.html#cb2-4"></a>  <span class="dt">Treatment =</span> <span class="kw">c</span>(<span class="dv">90</span>, <span class="dv">25</span>, <span class="dv">95</span>),</span>
+<span id="cb2-5"><a href="tidydata.html#cb2-5"></a>  <span class="dt">Gender    =</span> <span class="kw">c</span>(<span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Female&quot;</span>)</span>
+<span id="cb2-6"><a href="tidydata.html#cb2-6"></a>)</span>
+<span id="cb2-7"><a href="tidydata.html#cb2-7"></a></span>
+<span id="cb2-8"><a href="tidydata.html#cb2-8"></a>df1</span></code></pre></div>
+<pre><code>## # A tibble: 3 x 4
+##   Name   Control Treatment Gender
+##   &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt; 
+## 1 Hadley      90        90 Male  
+## 2 Song        80        25 Female
+## 3 Yanai      100        95 Female</code></pre>
+<p>このデータは既に指摘した通り「1列1変数」の条件を満たしております。この条件を満たすデータは以下のような形となります。</p>
+<pre><code>## # A tibble: 6 x 4
+##   Name   Gender Treat     Math_Score
+##   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;          &lt;dbl&gt;
+## 1 Hadley Male   Control           90
+## 2 Hadley Male   Treatment         90
+## 3 Song   Female Control           80
+## 4 Song   Female Treatment         25
+## 5 Yanai  Female Control          100
+## 6 Yanai  Female Treatment         95</code></pre>
+<p><code>Treat</code>変数が作成され、元々は変数名であった<code>"Control"</code>と<code>"Treatment"</code>が値として格納されます。この変数をキー変数と呼びます。そして、キー変数の値に応じた数学成績が<code>Math_Score</code>という変数でまとめられました。この変数を値変数と呼びます。</p>
+<p>「1列1変数」を満たさなかった最初のデータは「Wide型データ」、これを満たすようなデータは「Long型データ」と呼ばれます。これは相対的に最初のデータが横に広いから名付けた名前であって、「Wide型=雑然データ」もしくは「Long型=雑然データ」ではないことに注意してください<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>。</p>
+<p>Wide型データをLong型へ変換する関数が<code>pivot_longer()</code>であり、基本的な使い方は以下の通りです。</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb5-1"><a href="tidydata.html#cb5-1"></a><span class="co"># pivot_longer()の使い方</span></span>
+<span id="cb5-2"><a href="tidydata.html#cb5-2"></a>データ名 <span class="op">%&gt;%</span></span>
+<span id="cb5-3"><a href="tidydata.html#cb5-3"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols      =</span> <span class="kw">c</span>(まとめる変数1, まとめる変数2, ...),</span>
+<span id="cb5-4"><a href="tidydata.html#cb5-4"></a>               <span class="dt">names_to  =</span> <span class="st">&quot;キー変数名&quot;</span>,</span>
+<span id="cb5-5"><a href="tidydata.html#cb5-5"></a>               <span class="dt">values_to =</span> <span class="st">&quot;値変数名&quot;</span>)</span></code></pre></div>
+<p>ここでは同じ変数が<code>Control</code>と<code>Treatment</code>変数で分けられているため、まとめる変数はこの2つであり、<code>cols = c(Control, Treatment)</code>と指定します。<code>Control</code>と<code>Treatment</code>は<code>"</code>で囲んでも、囲まなくても同じです。また、<code>dplyr</code>の<code>select()</code>関数で使える変数選択の関数 (<code>starts_with()</code>、<code>where()</code>など)や<code>:</code>演算子も使用可能です。また、<code>cols</code>引数は<code>pivot_longer()</code>の第2引数であるため、<code>cols =</code>は省略可能です（第一引数はパイプにより既に渡されています）。</p>
+<p><code>names_to</code>と<code>values_to</code>引数はそれぞれキー変数名と値変数名を指定する引数で、ここは必ず<code>"</code>で囲んでください。この<code>df1</code>をLong型へ変換し、<code>df1_L</code>と名付けるコードが以下のコードです。</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb6-1"><a href="tidydata.html#cb6-1"></a>df1_L &lt;-<span class="st"> </span>df1 <span class="op">%&gt;%</span></span>
+<span id="cb6-2"><a href="tidydata.html#cb6-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(Control<span class="op">:</span>Treatment,</span>
+<span id="cb6-3"><a href="tidydata.html#cb6-3"></a>               <span class="dt">names_to  =</span> <span class="st">&quot;Treat&quot;</span>,</span>
+<span id="cb6-4"><a href="tidydata.html#cb6-4"></a>               <span class="dt">values_to =</span> <span class="st">&quot;Math_Score&quot;</span>)</span>
+<span id="cb6-5"><a href="tidydata.html#cb6-5"></a></span>
+<span id="cb6-6"><a href="tidydata.html#cb6-6"></a>df1_L</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 4
+##   Name   Gender Treat     Math_Score
+##   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;          &lt;dbl&gt;
+## 1 Hadley Male   Control           90
+## 2 Hadley Male   Treatment         90
+## 3 Song   Female Control           80
+## 4 Song   Female Treatment         25
+## 5 Yanai  Female Control          100
+## 6 Yanai  Female Treatment         95</code></pre>
+<p>これだけでも<code>pivot_longer()</code>関数を使ってWide型からLong型への変換は問題なくできますが、以下ではもうちょっと踏み込んだ使い方について解説します。「ここまでで十分だよ」という方は、ここを飛ばしても構いません。</p>
+<p>今回の実習データ<code>df3</code>は3人の体重を3日間に渡って計測したものです。ただし、ドジっ子のSongは2日目にうっかり測るのを忘れており、欠損値となっています。</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb8-1"><a href="tidydata.html#cb8-1"></a>df2 &lt;-<span class="st"> </span><span class="kw">tibble</span>(</span>
+<span id="cb8-2"><a href="tidydata.html#cb8-2"></a>  <span class="dt">Name =</span> <span class="kw">c</span>(<span class="st">&quot;Hadley&quot;</span>, <span class="st">&quot;Song&quot;</span>, <span class="st">&quot;Yanai&quot;</span>),</span>
+<span id="cb8-3"><a href="tidydata.html#cb8-3"></a>  <span class="dt">Day1 =</span> <span class="kw">c</span>(<span class="dv">75</span>, <span class="dv">120</span>, <span class="dv">70</span>),</span>
+<span id="cb8-4"><a href="tidydata.html#cb8-4"></a>  <span class="dt">Day2 =</span> <span class="kw">c</span>(<span class="dv">73</span>,  <span class="ot">NA</span>, <span class="dv">69</span>),</span>
+<span id="cb8-5"><a href="tidydata.html#cb8-5"></a>  <span class="dt">Day3 =</span> <span class="kw">c</span>(<span class="dv">71</span>, <span class="dv">140</span>, <span class="dv">71</span>)</span>
+<span id="cb8-6"><a href="tidydata.html#cb8-6"></a>)</span>
+<span id="cb8-7"><a href="tidydata.html#cb8-7"></a></span>
+<span id="cb8-8"><a href="tidydata.html#cb8-8"></a>df2</span></code></pre></div>
+<pre><code>## # A tibble: 3 x 4
+##   Name    Day1  Day2  Day3
+##   &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 Hadley    75    73    71
+## 2 Song     120    NA   140
+## 3 Yanai     70    69    71</code></pre>
+<p>まず、これをこれまでのやり方でLong型へ変形し、<code>df2_L</code>と名付けます。</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb10-1"><a href="tidydata.html#cb10-1"></a>df2_L &lt;-<span class="st"> </span>df2 <span class="op">%&gt;%</span></span>
+<span id="cb10-2"><a href="tidydata.html#cb10-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Day&quot;</span>),</span>
+<span id="cb10-3"><a href="tidydata.html#cb10-3"></a>               <span class="dt">names_to  =</span> <span class="st">&quot;Day&quot;</span>,</span>
+<span id="cb10-4"><a href="tidydata.html#cb10-4"></a>               <span class="dt">values_to =</span> <span class="st">&quot;Weight&quot;</span>)</span>
+<span id="cb10-5"><a href="tidydata.html#cb10-5"></a></span>
+<span id="cb10-6"><a href="tidydata.html#cb10-6"></a>df2_L</span></code></pre></div>
+<pre><code>## # A tibble: 9 x 3
+##   Name   Day   Weight
+##   &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt;
+## 1 Hadley Day1      75
+## 2 Hadley Day2      73
+## 3 Hadley Day3      71
+## 4 Song   Day1     120
+## 5 Song   Day2      NA
+## 6 Song   Day3     140
+## 7 Yanai  Day1      70
+## 8 Yanai  Day2      69
+## 9 Yanai  Day3      71</code></pre>
+<p>これでも問題ないかも知れませんが、以下のような操作を追加に行うとします。</p>
+<ol style="list-style-type: decimal">
+<li><code>Weight</code>が欠損している行を除去する</li>
+<li><code>Day</code>の値から<code>"Day"</code>を除去し、numeric型にする</li>
+</ol>
+<p>以上の作業を行うには、<code>dplyr</code>が便利でしょう。ちなみに<code>str_remove()</code>関数が初めて登場しましたが、これについては第<a href="string.html#string">16</a>章で詳細に解説します。簡単に説明しますと、<code>str_remove("X123", "X")</code>は<code>"X123"</code>から<code>"X"</code>を除去し、<code>"123"</code>のみ残す関すです。残された値が数字のみであってもデータ型はcharacter型なので、もう一回、numeric型に変換する必要があります<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>。<code>dplyr</code>を使ったコードは以下の通りです。</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb12-1"><a href="tidydata.html#cb12-1"></a><span class="co"># 1. WeightがNAのケースを除去</span></span>
+<span id="cb12-2"><a href="tidydata.html#cb12-2"></a><span class="co"># 2. Day変数の値から&quot;Day&quot;を除去</span></span>
+<span id="cb12-3"><a href="tidydata.html#cb12-3"></a><span class="co"># 3. Day変数をnumeric型へ変換</span></span>
+<span id="cb12-4"><a href="tidydata.html#cb12-4"></a>df2_L <span class="op">%&gt;%</span></span>
+<span id="cb12-5"><a href="tidydata.html#cb12-5"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Weight)) <span class="op">%&gt;%</span><span class="st">           </span><span class="co"># 1</span></span>
+<span id="cb12-6"><a href="tidydata.html#cb12-6"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Day =</span> <span class="kw">str_remove</span>(Day, <span class="st">&quot;Day&quot;</span>), <span class="co"># 2</span></span>
+<span id="cb12-7"><a href="tidydata.html#cb12-7"></a>         <span class="dt">Day =</span> <span class="kw">as.numeric</span>(Day))        <span class="co"># 3</span></span></code></pre></div>
+<pre><code>## # A tibble: 8 x 3
+##   Name     Day Weight
+##   &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 Hadley     1     75
+## 2 Hadley     2     73
+## 3 Hadley     3     71
+## 4 Song       1    120
+## 5 Song       3    140
+## 6 Yanai      1     70
+## 7 Yanai      2     69
+## 8 Yanai      3     71</code></pre>
+<p>実はこの作業、<code>pivot_longer()</code>内で行うことも可能です。たとえば、<code>values_to</code>で指定した変数の値が欠損しているケースを除去するには<code>values_drop_na</code>引数を<code>TRUE</code>に指定するだけです。</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb14-1"><a href="tidydata.html#cb14-1"></a><span class="co"># Weight変数がNAのケースを除去する</span></span>
+<span id="cb14-2"><a href="tidydata.html#cb14-2"></a>df2 <span class="op">%&gt;%</span></span>
+<span id="cb14-3"><a href="tidydata.html#cb14-3"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Day&quot;</span>),</span>
+<span id="cb14-4"><a href="tidydata.html#cb14-4"></a>               <span class="dt">names_to       =</span> <span class="st">&quot;Day&quot;</span>,</span>
+<span id="cb14-5"><a href="tidydata.html#cb14-5"></a>               <span class="dt">values_to      =</span> <span class="st">&quot;Weight&quot;</span>,</span>
+<span id="cb14-6"><a href="tidydata.html#cb14-6"></a>               <span class="dt">values_drop_na =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 8 x 3
+##   Name   Day   Weight
+##   &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt;
+## 1 Hadley Day1      75
+## 2 Hadley Day2      73
+## 3 Hadley Day3      71
+## 4 Song   Day1     120
+## 5 Song   Day3     140
+## 6 Yanai  Day1      70
+## 7 Yanai  Day2      69
+## 8 Yanai  Day3      71</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb16-1"><a href="tidydata.html#cb16-1"></a><span class="co"># 1. Day変数の値から&quot;Day&quot;を除去する</span></span>
+<span id="cb16-2"><a href="tidydata.html#cb16-2"></a><span class="co"># 2. Day変数をinteger型に変換</span></span>
+<span id="cb16-3"><a href="tidydata.html#cb16-3"></a><span class="co"># 3. Weight変数がNAのケースを除去する</span></span>
+<span id="cb16-4"><a href="tidydata.html#cb16-4"></a>df2 <span class="op">%&gt;%</span></span>
+<span id="cb16-5"><a href="tidydata.html#cb16-5"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Day&quot;</span>),</span>
+<span id="cb16-6"><a href="tidydata.html#cb16-6"></a>               <span class="dt">names_to        =</span> <span class="st">&quot;Day&quot;</span>,</span>
+<span id="cb16-7"><a href="tidydata.html#cb16-7"></a>               <span class="dt">names_prefix    =</span> <span class="st">&quot;Day&quot;</span>,                  <span class="co"># 1</span></span>
+<span id="cb16-8"><a href="tidydata.html#cb16-8"></a>               <span class="dt">names_transform =</span> <span class="kw">list</span>(<span class="dt">Day =</span> as.numeric), <span class="co"># 2</span></span>
+<span id="cb16-9"><a href="tidydata.html#cb16-9"></a>               <span class="dt">values_to       =</span> <span class="st">&quot;Weight&quot;</span>,</span>
+<span id="cb16-10"><a href="tidydata.html#cb16-10"></a>               <span class="dt">values_drop_na  =</span> <span class="ot">TRUE</span>)                   <span class="co"># 3</span></span></code></pre></div>
+<pre><code>## # A tibble: 8 x 3
+##   Name     Day Weight
+##   &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 Hadley     1     75
+## 2 Hadley     2     73
+## 3 Hadley     3     71
+## 4 Song       1    120
+## 5 Song       3    140
+## 6 Yanai      1     70
+## 7 Yanai      2     69
+## 8 Yanai      3     71</code></pre>
 </div>
 <div id="tidydata-spread" class="section level2">
 <h2><span class="header-section-number">13.3</span> Long型からWide型へ</h2>
+<p><code>pivot_wider()</code></p>
+<p><code>spread()</code>は旧版</p>
 </div>
 <div id="tidydata-separate" class="section level2">
-<h2><span class="header-section-number">13.4</span> 列の分割</h2>
+<h2><span class="header-section-number">13.4</span> 列の操作</h2>
+<p><code>separate()</code></p>
+<p><code>parse_number()</code></p>
 
 </div>
 </div>
@@ -702,6 +1403,8 @@ Math_Score
 <hr />
 <ol start="1">
 <li id="fn1"><p><a href="https://www.jstatsoft.org/article/view/v059i10">Wickham, Hadley. 2014. “Tidy data.” <em>Journal of Statistical Software.</em> 59 (10)</a><a href="tidydata.html#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>たとえば、表<a href="tidydata.html#tab:blood-pressure">13.5</a>は右の方がLong型データですが、整然データはWide型である左の方ですね。<a href="tidydata.html#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>実は<code>parse_number()</code>を使えばもっと簡単ですが、これについては後ほど解説します。<a href="tidydata.html#fnref3" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 <div id="disqus_thread"></div>
