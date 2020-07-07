@@ -1384,16 +1384,604 @@ Stock
 ## 7 Yanai      2     69
 ## 8 Yanai      3     71</code></pre>
 <p>これでWide型をLong型が変換され、整然でありながら、より見栄の良いデータが出来上がりました。他にも<code>pivot_longer()</code>は様々な引数に対応しており、詳細は<code>?pivot_longer</code>や<a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">レファレンスページ</a>を参照してください。</p>
+<hr />
 </div>
 <div id="tidydata-spread" class="section level2">
 <h2><span class="header-section-number">13.3</span> Long型からWide型へ</h2>
-<p><code>pivot_wider()</code></p>
-<p><code>spread()</code>は旧版</p>
+<p>ご存知の通り、「Long型データ=整然データ」ではありません。実際、表<a href="tidydata.html#tab:blood-pressure">13.5</a>の右はLong型データですが、1列に2つの変数が含まれており、整然データとは言えません。このようなデータはいくらでもあります。とりわけ、「分析」のためじゃなく、「読む」ための表の場合において多く発見されます。</p>
+<table class="kable_wrapper table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:wider1">表 13.7: </span>Long型データの例
+</caption>
+<tbody>
+<tr>
+<td>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+都道府県
+</th>
+<th style="text-align:left;">
+区分
+</th>
+<th style="text-align:right;">
+人口
+</th>
+<th style="text-align:right;">
+面積
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+北海道
+</td>
+<td style="text-align:left;">
+総人口
+</td>
+<td style="text-align:right;">
+5381733
+</td>
+<td style="text-align:right;">
+83424.31
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+外国人
+</td>
+<td style="text-align:right;">
+21676
+</td>
+<td style="text-align:right;">
+83424.31
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+青森県
+</td>
+<td style="text-align:left;">
+総人口
+</td>
+<td style="text-align:right;">
+1308265
+</td>
+<td style="text-align:right;">
+9645.59
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+外国人
+</td>
+<td style="text-align:right;">
+3447
+</td>
+<td style="text-align:right;">
+9645.59
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+岩手県
+</td>
+<td style="text-align:left;">
+総人口
+</td>
+<td style="text-align:right;">
+1279594
+</td>
+<td style="text-align:right;">
+15275.01
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+外国人
+</td>
+<td style="text-align:right;">
+5017
+</td>
+<td style="text-align:right;">
+15275.01
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+宮城県
+</td>
+<td style="text-align:left;">
+総人口
+</td>
+<td style="text-align:right;">
+2333899
+</td>
+<td style="text-align:right;">
+7282.22
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+外国人
+</td>
+<td style="text-align:right;">
+13989
+</td>
+<td style="text-align:right;">
+7282.22
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+都道府県
+</th>
+<th style="text-align:right;">
+総人口
+</th>
+<th style="text-align:right;">
+外国人
+</th>
+<th style="text-align:right;">
+面積
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+北海道
+</td>
+<td style="text-align:right;">
+5381733
+</td>
+<td style="text-align:right;">
+21676
+</td>
+<td style="text-align:right;">
+83424.31
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+青森県
+</td>
+<td style="text-align:right;">
+1308265
+</td>
+<td style="text-align:right;">
+3447
+</td>
+<td style="text-align:right;">
+9645.59
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+岩手県
+</td>
+<td style="text-align:right;">
+1279594
+</td>
+<td style="text-align:right;">
+5017
+</td>
+<td style="text-align:right;">
+15275.01
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+宮城県
+</td>
+<td style="text-align:right;">
+2333899
+</td>
+<td style="text-align:right;">
+13989
+</td>
+<td style="text-align:right;">
+7282.22
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<p>変数名が日本語になっていますが、これは「読むための表」を読み込むことを仮定しています。このように変数名として日本語は使えますが、自分でデータセットを作成する際、変数名はローマ字にすることを強く推奨します。</p>
+<p>表<a href="tidydata.html#tab:wider1">13.7</a>の左の場合、<code>人口</code>列に総人口と外国人人口といった2つの変数の値が格納されているため、整然データではありません。これを整然データにしたものが右の表です。本節ではLong型データをWide型データへ変換する<code>pivot_wider()</code>関数を紹介します。この関数は同じく<code>tidyr</code>が提供している<code>spread()</code>関数とほぼ同じ関数ですが、今は<code>pivot_wider()</code>の使用が推奨されており、<code>spread()</code>はいずれか<code>tidyr</code>から外される予定です。</p>
+<p>まずは、実習用データを読み込みます。</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb18-1"><a href="tidydata.html#cb18-1"></a>df3 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;Data/Population2015.csv&quot;</span>)</span></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   都道府県 = col_character(),
+##   区分 = col_character(),
+##   人口 = col_double(),
+##   面積 = col_double()
+## )</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb20-1"><a href="tidydata.html#cb20-1"></a>df3</span></code></pre></div>
+<pre><code>## # A tibble: 94 x 4
+##    都道府県 区分      人口   面積
+##    &lt;chr&gt;    &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;
+##  1 北海道   総人口 5381733 83424.
+##  2 &lt;NA&gt;     外国人   21676 83424.
+##  3 青森県   総人口 1308265  9646.
+##  4 &lt;NA&gt;     外国人    3447  9646.
+##  5 岩手県   総人口 1279594 15275.
+##  6 &lt;NA&gt;     外国人    5017 15275.
+##  7 宮城県   総人口 2333899  7282.
+##  8 &lt;NA&gt;     外国人   13989  7282.
+##  9 秋田県   総人口 1023119 11638.
+## 10 &lt;NA&gt;     外国人    2914 11638.
+## # … with 84 more rows</code></pre>
+<p>このデータは2015年国勢調査から抜粋したデータであり、各変数の詳細は以下の通りです。</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;text-align: center;">
+変数名
+</th>
+<th style="text-align:left;text-align: center;">
+説明
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>都道府県</code>
+</td>
+<td style="text-align:left;">
+都道府県名
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>区分</code>
+</td>
+<td style="text-align:left;">
+総人口/外国人人口の区分
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>人口</code>
+</td>
+<td style="text-align:left;">
+人口 (人)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>面積</code>
+</td>
+<td style="text-align:left;">
+面積 (km<span class="math inline">\(^2\)</span>)
+</td>
+</tr>
+</tbody>
+</table>
+<p>まずは変数名が日本語になっているので、<code>rename()</code>関数を使ってそれぞれ<code>Pref</code>、<code>Type</code>、<code>Population</code>、<code>Area</code>に変更します。</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb22-1"><a href="tidydata.html#cb22-1"></a>df3 &lt;-<span class="st"> </span>df3 <span class="op">%&gt;%</span></span>
+<span id="cb22-2"><a href="tidydata.html#cb22-2"></a><span class="st">  </span><span class="kw">rename</span>(<span class="st">&quot;Pref&quot;</span> =<span class="st"> </span>都道府県, <span class="st">&quot;Type&quot;</span> =<span class="st"> </span>区分, <span class="st">&quot;Population&quot;</span> =<span class="st"> </span>人口, <span class="st">&quot;Area&quot;</span> =<span class="st"> </span>面積)</span>
+<span id="cb22-3"><a href="tidydata.html#cb22-3"></a></span>
+<span id="cb22-4"><a href="tidydata.html#cb22-4"></a>df3</span></code></pre></div>
+<pre><code>## # A tibble: 94 x 4
+##    Pref   Type   Population   Area
+##    &lt;chr&gt;  &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;
+##  1 北海道 総人口    5381733 83424.
+##  2 &lt;NA&gt;   外国人      21676 83424.
+##  3 青森県 総人口    1308265  9646.
+##  4 &lt;NA&gt;   外国人       3447  9646.
+##  5 岩手県 総人口    1279594 15275.
+##  6 &lt;NA&gt;   外国人       5017 15275.
+##  7 宮城県 総人口    2333899  7282.
+##  8 &lt;NA&gt;   外国人      13989  7282.
+##  9 秋田県 総人口    1023119 11638.
+## 10 &lt;NA&gt;   外国人       2914 11638.
+## # … with 84 more rows</code></pre>
+<p>次は、<code>Pref</code>列の欠損値を埋めましょう。ここの欠損値は、当該セルの一つ上のセルの値で埋まりますが、これは<code>fill()</code>関数で簡単に処理できます。欠損値を埋めたい変数名を<code>fill()</code>の引数として渡すだけです。</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="tidydata.html#cb24-1"></a>df3 &lt;-<span class="st"> </span>df3 <span class="op">%&gt;%</span></span>
+<span id="cb24-2"><a href="tidydata.html#cb24-2"></a><span class="st">  </span><span class="kw">fill</span>(Pref)</span>
+<span id="cb24-3"><a href="tidydata.html#cb24-3"></a></span>
+<span id="cb24-4"><a href="tidydata.html#cb24-4"></a>df3</span></code></pre></div>
+<pre><code>## # A tibble: 94 x 4
+##    Pref   Type   Population   Area
+##    &lt;chr&gt;  &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;
+##  1 北海道 総人口    5381733 83424.
+##  2 北海道 外国人      21676 83424.
+##  3 青森県 総人口    1308265  9646.
+##  4 青森県 外国人       3447  9646.
+##  5 岩手県 総人口    1279594 15275.
+##  6 岩手県 外国人       5017 15275.
+##  7 宮城県 総人口    2333899  7282.
+##  8 宮城県 外国人      13989  7282.
+##  9 秋田県 総人口    1023119 11638.
+## 10 秋田県 外国人       2914 11638.
+## # … with 84 more rows</code></pre>
+<p>そして、いよいよ<code>pivot_wider()</code>関数の出番ですが、基本的に使い方は以下の通りです。</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb26-1"><a href="tidydata.html#cb26-1"></a><span class="co"># pivot_wider()の使い方</span></span>
+<span id="cb26-2"><a href="tidydata.html#cb26-2"></a>データ名 <span class="op">%&gt;%</span></span>
+<span id="cb26-3"><a href="tidydata.html#cb26-3"></a><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">names_from  =</span> キー変数名,</span>
+<span id="cb26-4"><a href="tidydata.html#cb26-4"></a>              <span class="dt">values_from =</span> 値変数名)</span></code></pre></div>
+<p>まず、キー変数名は列として展開する変数名であり、ここでは<code>Type</code>になります。そして、値変数名は展開される値の変数であり、ここでは<code>Population</code>になります。つまり、「<code>Population</code>を<code>Type</code>ごとに分けて別の列にする」ことになります。また、<code>values_from</code>引数は長さ2以上のベクトルを指定することで、複数の値変数を指定することも可能です。たとえば、<code>df3</code>に<code>Income</code>という平均所得を表す列があり、これらも総人口と外国人それぞれ異なる値を持っているとしたら、<code>values_from = c(Population, Income)</code>のように複数の値変数を指定することが出来ます。今回は値変数が1つのみですが、早速やってみましょう。</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb27-1"><a href="tidydata.html#cb27-1"></a>df3_W &lt;-<span class="st"> </span>df3 <span class="op">%&gt;%</span></span>
+<span id="cb27-2"><a href="tidydata.html#cb27-2"></a><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">names_from  =</span> Type,</span>
+<span id="cb27-3"><a href="tidydata.html#cb27-3"></a>              <span class="dt">values_from =</span> Population)</span>
+<span id="cb27-4"><a href="tidydata.html#cb27-4"></a></span>
+<span id="cb27-5"><a href="tidydata.html#cb27-5"></a>df3_W</span></code></pre></div>
+<pre><code>## # A tibble: 47 x 4
+##    Pref     Area  総人口 外国人
+##    &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+##  1 北海道 83424. 5381733  21676
+##  2 青森県  9646. 1308265   3447
+##  3 岩手県 15275. 1279594   5017
+##  4 宮城県  7282. 2333899  13989
+##  5 秋田県 11638. 1023119   2914
+##  6 山形県  9323. 1123891   5503
+##  7 福島県 13784. 1914039   8725
+##  8 茨城県  6097. 2916976  41310
+##  9 栃木県  6408. 1974255  26494
+## 10 群馬県  6362. 1973115  37126
+## # … with 37 more rows</code></pre>
+<p>また、日本語の変数名が出来てしまったので、それぞれ<code>Total</code>と<code>Foreigner</code>に変更し、<code>relocate()</code>関数を使って<code>Area</code>を最後の列に移動します。</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb29-1"><a href="tidydata.html#cb29-1"></a>df3_W &lt;-<span class="st"> </span>df3_W <span class="op">%&gt;%</span></span>
+<span id="cb29-2"><a href="tidydata.html#cb29-2"></a><span class="st">  </span><span class="kw">rename</span>(<span class="st">&quot;Total&quot;</span>     =<span class="st"> </span>総人口,</span>
+<span id="cb29-3"><a href="tidydata.html#cb29-3"></a>         <span class="st">&quot;Foreigner&quot;</span> =<span class="st"> </span>外国人) <span class="op">%&gt;%</span></span>
+<span id="cb29-4"><a href="tidydata.html#cb29-4"></a><span class="st">  </span><span class="kw">relocate</span>(Area, <span class="dt">.after =</span> <span class="kw">last_col</span>())</span>
+<span id="cb29-5"><a href="tidydata.html#cb29-5"></a></span>
+<span id="cb29-6"><a href="tidydata.html#cb29-6"></a>df3_W</span></code></pre></div>
+<pre><code>## # A tibble: 47 x 4
+##    Pref     Total Foreigner   Area
+##    &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;
+##  1 北海道 5381733     21676 83424.
+##  2 青森県 1308265      3447  9646.
+##  3 岩手県 1279594      5017 15275.
+##  4 宮城県 2333899     13989  7282.
+##  5 秋田県 1023119      2914 11638.
+##  6 山形県 1123891      5503  9323.
+##  7 福島県 1914039      8725 13784.
+##  8 茨城県 2916976     41310  6097.
+##  9 栃木県 1974255     26494  6408.
+## 10 群馬県 1973115     37126  6362.
+## # … with 37 more rows</code></pre>
+<p>これで整然データの出来上がりです。</p>
+<p>この<code>pivot_wider()</code>関数は<code>pivot_longer()</code>関数同様、様々な引数を提供しておりますが、主に使う機能は以上です。他には<code>pivot_wider()</code>によって出来た欠損値を埋める引数である<code>values_fill</code>があり、デフォルト値は<code>NULL</code>です。ここに<code>0</code>や<code>"Missing"</code>などの長さ1のベクトルを指定すれば、指定した値で欠損値が埋まります。</p>
+<p><code>pivot_wider()</code>関数の詳細は<code>?pivot_wider</code>もしくは、<a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">レファレンスページ</a>を参照してください。</p>
 </div>
 <div id="tidydata-separate" class="section level2">
 <h2><span class="header-section-number">13.4</span> 列の操作</h2>
-<p><code>separate()</code></p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="tidydata.html#cb31-1"></a>df4 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;Data/COVID19_JK.csv&quot;</span>)</span></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   ID = col_double(),
+##   Date = col_character(),
+##   Week = col_character(),
+##   Confirmed_Japan = col_character(),
+##   Confirmed_Korea = col_character()
+## )</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="tidydata.html#cb33-1"></a>df4</span></code></pre></div>
+<pre><code>## # A tibble: 172 x 5
+##       ID Date      Week  Confirmed_Japan Confirmed_Korea
+##    &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;           &lt;chr&gt;          
+##  1     1 2020/1/16 木    1人             0人            
+##  2     2 2020/1/17 金    0人             0人            
+##  3     3 2020/1/18 土    0人             0人            
+##  4     4 2020/1/19 日    0人             0人            
+##  5     5 2020/1/20 月    0人             0人            
+##  6     6 2020/1/21 火    0人             0人            
+##  7     7 2020/1/22 水    0人             0人            
+##  8     8 2020/1/23 木    0人             0人            
+##  9     9 2020/1/24 金    2人             0人            
+## 10    10 2020/1/25 土    0人             0人            
+## # … with 162 more rows</code></pre>
+<p>Wikipedia (<a href="https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Japan">日本</a> / <a href="https://en.wikipedia.org/wiki/COVID-19_pandemic_in_South_Korea">韓国</a>)から収集</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;text-align: center;">
+変数名
+</th>
+<th style="text-align:left;text-align: center;">
+説明
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<code>ID</code>
+</td>
+<td style="text-align:left;">
+ケースID
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>Date</code>
+</td>
+<td style="text-align:left;">
+年月日
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>Week</code>
+</td>
+<td style="text-align:left;">
+曜日
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>Confirmed_Japan</code>
+</td>
+<td style="text-align:left;">
+新規感染者数 (日本)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<code>Confirmed_Korea</code>
+</td>
+<td style="text-align:left;">
+新規感染者数 (韓国)
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="tidydata.html#cb35-1"></a>df4_L &lt;-<span class="st"> </span>df4 <span class="op">%&gt;%</span></span>
+<span id="cb35-2"><a href="tidydata.html#cb35-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">cols         =</span> <span class="kw">starts_with</span>(<span class="st">&quot;Confirmed&quot;</span>), </span>
+<span id="cb35-3"><a href="tidydata.html#cb35-3"></a>               <span class="dt">names_to     =</span> <span class="st">&quot;Country&quot;</span>,</span>
+<span id="cb35-4"><a href="tidydata.html#cb35-4"></a>               <span class="dt">names_prefix =</span> <span class="st">&quot;Confirmed_&quot;</span>,</span>
+<span id="cb35-5"><a href="tidydata.html#cb35-5"></a>               <span class="dt">values_to    =</span> <span class="st">&quot;Confirmed&quot;</span>)</span></code></pre></div>
 <p><code>parse_number()</code></p>
+<p>似たようなものとして<code>parse_character()</code></p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb36-1"><a href="tidydata.html#cb36-1"></a>データ名 <span class="op">%&gt;%</span></span>
+<span id="cb36-2"><a href="tidydata.html#cb36-2"></a><span class="st">  </span><span class="kw">mutate</span>(新しい変数名 =<span class="st"> </span><span class="kw">parse_number</span>(数値のみ抽出する変数名))</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb37-1"><a href="tidydata.html#cb37-1"></a>df4_S &lt;-<span class="st"> </span>df4_L <span class="op">%&gt;%</span></span>
+<span id="cb37-2"><a href="tidydata.html#cb37-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Confirmed =</span> <span class="kw">parse_number</span>(Confirmed))</span>
+<span id="cb37-3"><a href="tidydata.html#cb37-3"></a></span>
+<span id="cb37-4"><a href="tidydata.html#cb37-4"></a>df4_S</span></code></pre></div>
+<pre><code>## # A tibble: 344 x 5
+##       ID Date      Week  Country Confirmed
+##    &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt;
+##  1     1 2020/1/16 木    Japan           1
+##  2     1 2020/1/16 木    Korea           0
+##  3     2 2020/1/17 金    Japan           0
+##  4     2 2020/1/17 金    Korea           0
+##  5     3 2020/1/18 土    Japan           0
+##  6     3 2020/1/18 土    Korea           0
+##  7     4 2020/1/19 日    Japan           0
+##  8     4 2020/1/19 日    Korea           0
+##  9     5 2020/1/20 月    Japan           0
+## 10     5 2020/1/20 月    Korea           0
+## # … with 334 more rows</code></pre>
+<div class="sourceCode" id="cb39"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb39-1"><a href="tidydata.html#cb39-1"></a>df4_S &lt;-<span class="st"> </span>df4_S <span class="op">%&gt;%</span></span>
+<span id="cb39-2"><a href="tidydata.html#cb39-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Week =</span> <span class="kw">factor</span>(Week, </span>
+<span id="cb39-3"><a href="tidydata.html#cb39-3"></a>                       <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;月&quot;</span>, <span class="st">&quot;火&quot;</span>, <span class="st">&quot;水&quot;</span>, <span class="st">&quot;木&quot;</span>, <span class="st">&quot;金&quot;</span>, <span class="st">&quot;土&quot;</span>, <span class="st">&quot;日&quot;</span>)))</span>
+<span id="cb39-4"><a href="tidydata.html#cb39-4"></a></span>
+<span id="cb39-5"><a href="tidydata.html#cb39-5"></a>df4_S_Summary1 &lt;-<span class="st"> </span>df4_S <span class="op">%&gt;%</span></span>
+<span id="cb39-6"><a href="tidydata.html#cb39-6"></a><span class="st">  </span><span class="kw">group_by</span>(Country, Week) <span class="op">%&gt;%</span></span>
+<span id="cb39-7"><a href="tidydata.html#cb39-7"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">Sum     =</span> <span class="kw">sum</span>(Confirmed),</span>
+<span id="cb39-8"><a href="tidydata.html#cb39-8"></a>            <span class="dt">Mean    =</span> <span class="kw">mean</span>(Confirmed),</span>
+<span id="cb39-9"><a href="tidydata.html#cb39-9"></a>            <span class="dt">SD      =</span> <span class="kw">sd</span>(Confirmed),</span>
+<span id="cb39-10"><a href="tidydata.html#cb39-10"></a>            <span class="dt">.groups =</span> <span class="st">&quot;drop&quot;</span>)</span>
+<span id="cb39-11"><a href="tidydata.html#cb39-11"></a></span>
+<span id="cb39-12"><a href="tidydata.html#cb39-12"></a>df4_S_Summary1</span></code></pre></div>
+<pre><code>## # A tibble: 14 x 5
+##    Country Week    Sum  Mean    SD
+##    &lt;chr&gt;   &lt;fct&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 Japan   月     2540 106.   156.
+##  2 Japan   火     2093  87.2  111.
+##  3 Japan   水     2531 105.   133.
+##  4 Japan   木     2704 108.   151.
+##  5 Japan   金     3083 123.   172.
+##  6 Japan   土     3327 133.   189.
+##  7 Japan   日     3244 130.   179.
+##  8 Korea   月     1605  66.9  126.
+##  9 Korea   火     1640  68.3  111.
+## 10 Korea   水     1623  67.6  102.
+## 11 Korea   木     1877  75.1  135.
+## 12 Korea   金     2092  83.7  141.
+## 13 Korea   土     2193  87.7  172.
+## 14 Korea   日     2080  83.2  212.</code></pre>
+<div class="sourceCode" id="cb41"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb41-1"><a href="tidydata.html#cb41-1"></a>df4_S_Summary1 <span class="op">%&gt;%</span></span>
+<span id="cb41-2"><a href="tidydata.html#cb41-2"></a><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">names_from  =</span> Country,</span>
+<span id="cb41-3"><a href="tidydata.html#cb41-3"></a>              <span class="dt">values_from =</span> Sum<span class="op">:</span>SD)</span></code></pre></div>
+<pre><code>## # A tibble: 7 x 7
+##   Week  Sum_Japan Sum_Korea Mean_Japan Mean_Korea SD_Japan SD_Korea
+##   &lt;fct&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1 月         2540      1605      106.        66.9     156.     126.
+## 2 火         2093      1640       87.2       68.3     111.     111.
+## 3 水         2531      1623      105.        67.6     133.     102.
+## 4 木         2704      1877      108.        75.1     151.     135.
+## 5 金         3083      2092      123.        83.7     172.     141.
+## 6 土         3327      2193      133.        87.7     189.     172.
+## 7 日         3244      2080      130.        83.2     179.     212.</code></pre>
+<p><code>separate()</code></p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb43-1"><a href="tidydata.html#cb43-1"></a>データ名 <span class="op">%&gt;%</span></span>
+<span id="cb43-2"><a href="tidydata.html#cb43-2"></a><span class="st">  </span><span class="kw">separate</span>(<span class="dt">cols =</span> 分割する変数名</span>
+<span id="cb43-3"><a href="tidydata.html#cb43-3"></a>           <span class="dt">into =</span> 分割後の変数名,</span>
+<span id="cb43-4"><a href="tidydata.html#cb43-4"></a>           <span class="dt">sep  =</span> <span class="st">&quot;分割する基準&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb44-1"><a href="tidydata.html#cb44-1"></a>df4_S &lt;-<span class="st"> </span>df4_S <span class="op">%&gt;%</span></span>
+<span id="cb44-2"><a href="tidydata.html#cb44-2"></a><span class="st">  </span><span class="kw">separate</span>(<span class="dt">col =</span> Date, <span class="dt">into =</span> <span class="kw">c</span>(<span class="st">&quot;Year&quot;</span>, <span class="st">&quot;Month&quot;</span>, <span class="st">&quot;Day&quot;</span>), <span class="dt">sep =</span> <span class="st">&quot;/&quot;</span>)</span>
+<span id="cb44-3"><a href="tidydata.html#cb44-3"></a></span>
+<span id="cb44-4"><a href="tidydata.html#cb44-4"></a>df4_S</span></code></pre></div>
+<pre><code>## # A tibble: 344 x 7
+##       ID Year  Month Day   Week  Country Confirmed
+##    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;fct&gt; &lt;chr&gt;       &lt;dbl&gt;
+##  1     1 2020  1     16    木    Japan           1
+##  2     1 2020  1     16    木    Korea           0
+##  3     2 2020  1     17    金    Japan           0
+##  4     2 2020  1     17    金    Korea           0
+##  5     3 2020  1     18    土    Japan           0
+##  6     3 2020  1     18    土    Korea           0
+##  7     4 2020  1     19    日    Japan           0
+##  8     4 2020  1     19    日    Korea           0
+##  9     5 2020  1     20    月    Japan           0
+## 10     5 2020  1     20    月    Korea           0
+## # … with 334 more rows</code></pre>
+<div class="sourceCode" id="cb46"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb46-1"><a href="tidydata.html#cb46-1"></a>df4_S_Summary2 &lt;-<span class="st"> </span>df4_S <span class="op">%&gt;%</span></span>
+<span id="cb46-2"><a href="tidydata.html#cb46-2"></a><span class="st">  </span><span class="kw">group_by</span>(Country, Month) <span class="op">%&gt;%</span></span>
+<span id="cb46-3"><a href="tidydata.html#cb46-3"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">Sum     =</span> <span class="kw">sum</span>(Confirmed),</span>
+<span id="cb46-4"><a href="tidydata.html#cb46-4"></a>            <span class="dt">Mean    =</span> <span class="kw">mean</span>(Confirmed),</span>
+<span id="cb46-5"><a href="tidydata.html#cb46-5"></a>            <span class="dt">SD      =</span> <span class="kw">sd</span>(Confirmed),</span>
+<span id="cb46-6"><a href="tidydata.html#cb46-6"></a>            <span class="dt">.groups =</span> <span class="st">&quot;drop&quot;</span>)</span>
+<span id="cb46-7"><a href="tidydata.html#cb46-7"></a></span>
+<span id="cb46-8"><a href="tidydata.html#cb46-8"></a>df4_S_Summary2</span></code></pre></div>
+<pre><code>## # A tibble: 14 x 5
+##    Country Month   Sum   Mean     SD
+##    &lt;chr&gt;   &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+##  1 Japan   1        17   1.06   1.34
+##  2 Japan   2       213   7.34   7.81
+##  3 Japan   3      1723  55.6   42.4 
+##  4 Japan   4     12135 404.   146.  
+##  5 Japan   5      2763  89.1   73.0 
+##  6 Japan   6      1742  58.1   23.0 
+##  7 Japan   7       929 186.    45.1 
+##  8 Korea   1         0   0      0   
+##  9 Korea   2      3120 108.   203.  
+## 10 Korea   3      6737 217.   222.  
+## 11 Korea   4       887  29.6   26.6 
+## 12 Korea   5       729  23.5   16.2 
+## 13 Korea   6      1348  44.9   10.4 
+## 14 Korea   7       289  57.8    6.61</code></pre>
+<div class="sourceCode" id="cb48"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb48-1"><a href="tidydata.html#cb48-1"></a>df4_S_Summary2 <span class="op">%&gt;%</span></span>
+<span id="cb48-2"><a href="tidydata.html#cb48-2"></a><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">names_from  =</span> Country,</span>
+<span id="cb48-3"><a href="tidydata.html#cb48-3"></a>              <span class="dt">values_from =</span> Sum<span class="op">:</span>SD) <span class="op">%&gt;%</span></span>
+<span id="cb48-4"><a href="tidydata.html#cb48-4"></a><span class="st">  </span><span class="kw">relocate</span>(Month, <span class="kw">ends_with</span>(<span class="st">&quot;Japan&quot;</span>), <span class="kw">ends_with</span>(<span class="st">&quot;Korea&quot;</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 7 x 7
+##   Month Sum_Japan Mean_Japan SD_Japan Sum_Korea Mean_Korea SD_Korea
+##   &lt;chr&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;
+## 1 1            17       1.06     1.34         0        0       0   
+## 2 2           213       7.34     7.81      3120      108.    203.  
+## 3 3          1723      55.6     42.4       6737      217.    222.  
+## 4 4         12135     404.     146.         887       29.6    26.6 
+## 5 5          2763      89.1     73.0        729       23.5    16.2 
+## 6 6          1742      58.1     23.0       1348       44.9    10.4 
+## 7 7           929     186.      45.1        289       57.8     6.61</code></pre>
+<p><code>sep</code>引数はnumeric型でも可能。</p>
+<p><code>remove = FALSE</code>の場合、元の変数 (ここでは<code>Date</code>)は残る</p>
+<p><code>convert = TRUE</code>の場合、適切なデータ型へ変換する。デフォルトは<code>FALSE</code>であり、この場合、character型として分割される。</p>
 
 </div>
 </div>
