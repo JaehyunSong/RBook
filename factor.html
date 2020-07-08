@@ -603,26 +603,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 9 和歌山県  3.97 その他 和歌山県</code></pre>
 <p>一見、<code>Pref</code>と<code>Pref2</code>変数は同じように見えますが、水準はどうなっているでしょうか。</p>
 <div class="sourceCode" id="cb1030"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1030-1"><a href="factor.html#cb1030-1"></a><span class="kw">levels</span>(Score_df_f1<span class="op">$</span>Pref)  <span class="co"># Prefの水準</span></span></code></pre></div>
-<pre><code>## [1] &quot;和歌山県&quot; &quot;奈良県&quot;   &quot;大阪府&quot;   &quot;千葉県&quot;   &quot;京都府&quot;   &quot;東京都&quot;   &quot;埼玉県&quot;   &quot;兵庫県&quot;  
-## [9] &quot;神奈川県&quot;</code></pre>
+<pre><code>## [1] &quot;和歌山県&quot; &quot;奈良県&quot;   &quot;大阪府&quot;   &quot;千葉県&quot;   &quot;京都府&quot;   &quot;東京都&quot;   &quot;埼玉県&quot;  
+## [8] &quot;兵庫県&quot;   &quot;神奈川県&quot;</code></pre>
 <div class="sourceCode" id="cb1032"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1032-1"><a href="factor.html#cb1032-1"></a><span class="kw">levels</span>(Score_df_f1<span class="op">$</span>Pref2) <span class="co"># Pref2の水準</span></span></code></pre></div>
-<pre><code>## [1] &quot;大阪府&quot;   &quot;神奈川県&quot; &quot;京都府&quot;   &quot;埼玉県&quot;   &quot;千葉県&quot;   &quot;東京都&quot;   &quot;奈良県&quot;   &quot;兵庫県&quot;  
-## [9] &quot;和歌山県&quot;</code></pre>
+<pre><code>## [1] &quot;大阪府&quot;   &quot;神奈川県&quot; &quot;京都府&quot;   &quot;埼玉県&quot;   &quot;千葉県&quot;   &quot;東京都&quot;   &quot;奈良県&quot;  
+## [8] &quot;兵庫県&quot;   &quot;和歌山県&quot;</code></pre>
 <p>問題なく50音順になっていることが分かります。他にも<code>fct_relevel()</code>には全ての水準名を指定する必要がありません。一部の水準名も可能です。たとえば、「関東が関西の先に来るなんでけしからん！」と思う読者もいるでしょう。この場合、関西の府県名を入れると、指定した水準が最初に位置するようになります。</p>
 <div class="sourceCode" id="cb1034"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1034-1"><a href="factor.html#cb1034-1"></a>Score_df_f1 &lt;-<span class="st"> </span>Score_df_f1 <span class="op">%&gt;%</span></span>
 <span id="cb1034-2"><a href="factor.html#cb1034-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Pref3 =</span> <span class="kw">fct_relevel</span>(Pref, <span class="st">&quot;京都府&quot;</span>, <span class="st">&quot;大阪府&quot;</span>,</span>
 <span id="cb1034-3"><a href="factor.html#cb1034-3"></a>                             <span class="st">&quot;兵庫県&quot;</span>, <span class="st">&quot;奈良県&quot;</span>, <span class="st">&quot;和歌山県&quot;</span>))</span>
 <span id="cb1034-4"><a href="factor.html#cb1034-4"></a></span>
 <span id="cb1034-5"><a href="factor.html#cb1034-5"></a><span class="kw">levels</span>(Score_df_f1<span class="op">$</span>Pref3) <span class="co"># Pref3の水準</span></span></code></pre></div>
-<pre><code>## [1] &quot;京都府&quot;   &quot;大阪府&quot;   &quot;兵庫県&quot;   &quot;奈良県&quot;   &quot;和歌山県&quot; &quot;千葉県&quot;   &quot;東京都&quot;   &quot;埼玉県&quot;  
-## [9] &quot;神奈川県&quot;</code></pre>
+<pre><code>## [1] &quot;京都府&quot;   &quot;大阪府&quot;   &quot;兵庫県&quot;   &quot;奈良県&quot;   &quot;和歌山県&quot; &quot;千葉県&quot;   &quot;東京都&quot;  
+## [8] &quot;埼玉県&quot;   &quot;神奈川県&quot;</code></pre>
 <p>一部の水準名のみを指定するとその水準が最初に移動されますが、<code>after</code>引数を指定すると、位置を調整することも可能です。<code>after = 2</code>の場合、元となる変数の1、3番目の水準は維持され、3番目以降に指定した水準、それに続いて指定されていない水準の順番になります。<code>Pref</code>は和歌山、奈良、大阪の順ですが、ここで京都と東京を、奈良と大阪の間に移動するなら、</p>
 <div class="sourceCode" id="cb1036"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1036-1"><a href="factor.html#cb1036-1"></a>Score_df_f1 &lt;-<span class="st"> </span>Score_df_f1 <span class="op">%&gt;%</span></span>
 <span id="cb1036-2"><a href="factor.html#cb1036-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Pref4 =</span> <span class="kw">fct_relevel</span>(Pref, <span class="st">&quot;京都府&quot;</span>, <span class="st">&quot;東京都&quot;</span>, <span class="dt">after =</span> <span class="dv">2</span>))</span>
 <span id="cb1036-3"><a href="factor.html#cb1036-3"></a></span>
 <span id="cb1036-4"><a href="factor.html#cb1036-4"></a><span class="kw">levels</span>(Score_df_f1<span class="op">$</span>Pref4) <span class="co"># Pref4の水準</span></span></code></pre></div>
-<pre><code>## [1] &quot;和歌山県&quot; &quot;奈良県&quot;   &quot;京都府&quot;   &quot;東京都&quot;   &quot;大阪府&quot;   &quot;千葉県&quot;   &quot;埼玉県&quot;   &quot;兵庫県&quot;  
-## [9] &quot;神奈川県&quot;</code></pre>
+<pre><code>## [1] &quot;和歌山県&quot; &quot;奈良県&quot;   &quot;京都府&quot;   &quot;東京都&quot;   &quot;大阪府&quot;   &quot;千葉県&quot;   &quot;埼玉県&quot;  
+## [8] &quot;兵庫県&quot;   &quot;神奈川県&quot;</code></pre>
 <p>のように書きます。<code>after</code>を指定しない場合のデフォルト値は0であるため、最初に移動します。</p>
 </div>
 <div id="fct_recode-水準のラベルを変更する" class="section level3">
@@ -663,11 +663,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 9 和歌山県  3.97 その他 和歌山県 和歌山県 和歌山県 Wakayama</code></pre>
 <p><code>fct_recode()</code>の中に指定する水準の順番は無視されます。つまり、水準の順番はそのまま維持されるため、好きな順番で結構です。また、全ての水準を指定せず、一部のみ変更することも可能です。それでは<code>Pref5</code>の順番が<code>Pref</code>の順番と同じかを確認してみましょう。</p>
 <div class="sourceCode" id="cb1041"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1041-1"><a href="factor.html#cb1041-1"></a><span class="kw">levels</span>(Score_df_f1<span class="op">$</span>Pref)  <span class="co"># Prefの水準</span></span></code></pre></div>
-<pre><code>## [1] &quot;和歌山県&quot; &quot;奈良県&quot;   &quot;大阪府&quot;   &quot;千葉県&quot;   &quot;京都府&quot;   &quot;東京都&quot;   &quot;埼玉県&quot;   &quot;兵庫県&quot;  
-## [9] &quot;神奈川県&quot;</code></pre>
+<pre><code>## [1] &quot;和歌山県&quot; &quot;奈良県&quot;   &quot;大阪府&quot;   &quot;千葉県&quot;   &quot;京都府&quot;   &quot;東京都&quot;   &quot;埼玉県&quot;  
+## [8] &quot;兵庫県&quot;   &quot;神奈川県&quot;</code></pre>
 <div class="sourceCode" id="cb1043"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1043-1"><a href="factor.html#cb1043-1"></a><span class="kw">levels</span>(Score_df_f1<span class="op">$</span>Pref5) <span class="co"># Pref5の水準</span></span></code></pre></div>
-<pre><code>## [1] &quot;Wakayama&quot; &quot;Nara&quot;     &quot;Osaka&quot;    &quot;Chiba&quot;    &quot;Kyoto&quot;    &quot;Tokyo&quot;    &quot;Saitama&quot;  &quot;Hyogo&quot;   
-## [9] &quot;Kanagawa&quot;</code></pre>
+<pre><code>## [1] &quot;Wakayama&quot; &quot;Nara&quot;     &quot;Osaka&quot;    &quot;Chiba&quot;    &quot;Kyoto&quot;    &quot;Tokyo&quot;    &quot;Saitama&quot; 
+## [8] &quot;Hyogo&quot;    &quot;Kanagawa&quot;</code></pre>
 </div>
 <div id="fct_rev-水準の順番を反転させる" class="section level3">
 <h3><span class="header-section-number">12.2.3</span> <code>fct_rev()</code>: 水準の順番を反転させる</h3>
@@ -676,8 +676,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1045-2"><a href="factor.html#cb1045-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Pref6 =</span> <span class="kw">fct_rev</span>(Pref2))</span>
 <span id="cb1045-3"><a href="factor.html#cb1045-3"></a></span>
 <span id="cb1045-4"><a href="factor.html#cb1045-4"></a><span class="kw">levels</span>(Score_df_f1<span class="op">$</span>Pref6)</span></code></pre></div>
-<pre><code>## [1] &quot;和歌山県&quot; &quot;兵庫県&quot;   &quot;奈良県&quot;   &quot;東京都&quot;   &quot;千葉県&quot;   &quot;埼玉県&quot;   &quot;京都府&quot;   &quot;神奈川県&quot;
-## [9] &quot;大阪府&quot;</code></pre>
+<pre><code>## [1] &quot;和歌山県&quot; &quot;兵庫県&quot;   &quot;奈良県&quot;   &quot;東京都&quot;   &quot;千葉県&quot;   &quot;埼玉県&quot;   &quot;京都府&quot;  
+## [8] &quot;神奈川県&quot; &quot;大阪府&quot;</code></pre>
 <p>関数一つで水準の順番が反転されました。</p>
 </div>
 <div id="fct_infreq-頻度順に順番を変更する" class="section level3">
@@ -696,8 +696,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1050-3"><a href="factor.html#cb1050-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Pref =</span> <span class="kw">fct_infreq</span>(Pref))</span>
 <span id="cb1050-4"><a href="factor.html#cb1050-4"></a></span>
 <span id="cb1050-5"><a href="factor.html#cb1050-5"></a><span class="kw">levels</span>(df2<span class="op">$</span>Pref) <span class="co"># df2のPref変数の水準を出力</span></span></code></pre></div>
-<pre><code>## [1] &quot;東京都&quot;   &quot;神奈川県&quot; &quot;大阪府&quot;   &quot;埼玉県&quot;   &quot;千葉県&quot;   &quot;兵庫県&quot;   &quot;京都府&quot;   &quot;奈良県&quot;  
-## [9] &quot;和歌山県&quot;</code></pre>
+<pre><code>## [1] &quot;東京都&quot;   &quot;神奈川県&quot; &quot;大阪府&quot;   &quot;埼玉県&quot;   &quot;千葉県&quot;   &quot;兵庫県&quot;   &quot;京都府&quot;  
+## [8] &quot;奈良県&quot;   &quot;和歌山県&quot;</code></pre>
 <p><code>"東京都"</code>、<code>"神奈川県"</code>、<code>"大阪府"</code>、…の順で水準の順番が調整され、これは<code>table(df$Pref2)</code>の順位とも一致します。</p>
 </div>
 <div id="fct_inorder-データ内の出現順番に順番を変更する" class="section level3">
@@ -710,8 +710,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1052-4"><a href="factor.html#cb1052-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Pref =</span> <span class="kw">fct_inorder</span>(Pref))</span>
 <span id="cb1052-5"><a href="factor.html#cb1052-5"></a></span>
 <span id="cb1052-6"><a href="factor.html#cb1052-6"></a><span class="kw">levels</span>(df3<span class="op">$</span>Pref)</span></code></pre></div>
-<pre><code>## [1] &quot;東京都&quot;   &quot;神奈川県&quot; &quot;千葉県&quot;   &quot;埼玉県&quot;   &quot;大阪府&quot;   &quot;京都府&quot;   &quot;兵庫県&quot;   &quot;奈良県&quot;  
-## [9] &quot;和歌山県&quot;</code></pre>
+<pre><code>## [1] &quot;東京都&quot;   &quot;神奈川県&quot; &quot;千葉県&quot;   &quot;埼玉県&quot;   &quot;大阪府&quot;   &quot;京都府&quot;   &quot;兵庫県&quot;  
+## [8] &quot;奈良県&quot;   &quot;和歌山県&quot;</code></pre>
 </div>
 <div id="fct_shift-水準の順番をずらす" class="section level3">
 <h3><span class="header-section-number">12.2.6</span> <code>fct_shift()</code>: 水準の順番をずらす</h3>
@@ -948,14 +948,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 8 兵庫県    3.54 兵庫県   兵庫県   兵庫県  
 ## 9 和歌山県  3.97 和歌山県 和歌山県 和歌山県</code></pre>
 <div class="sourceCode" id="cb1065"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1065-1"><a href="factor.html#cb1065-1"></a><span class="kw">levels</span>(Score_df<span class="op">$</span>Pref2)</span></code></pre></div>
-<pre><code>## [1] &quot;千葉県&quot;   &quot;和歌山県&quot; &quot;大阪府&quot;   &quot;兵庫県&quot;   &quot;神奈川県&quot; &quot;東京都&quot;   &quot;奈良県&quot;   &quot;京都府&quot;  
-## [9] &quot;埼玉県&quot;</code></pre>
+<pre><code>## [1] &quot;千葉県&quot;   &quot;和歌山県&quot; &quot;大阪府&quot;   &quot;兵庫県&quot;   &quot;神奈川県&quot; &quot;東京都&quot;   &quot;奈良県&quot;  
+## [8] &quot;京都府&quot;   &quot;埼玉県&quot;</code></pre>
 <div class="sourceCode" id="cb1067"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1067-1"><a href="factor.html#cb1067-1"></a><span class="kw">levels</span>(Score_df<span class="op">$</span>Pref3)</span></code></pre></div>
-<pre><code>## [1] &quot;大阪府&quot;   &quot;埼玉県&quot;   &quot;東京都&quot;   &quot;神奈川県&quot; &quot;千葉県&quot;   &quot;和歌山県&quot; &quot;奈良県&quot;   &quot;京都府&quot;  
-## [9] &quot;兵庫県&quot;</code></pre>
+<pre><code>## [1] &quot;大阪府&quot;   &quot;埼玉県&quot;   &quot;東京都&quot;   &quot;神奈川県&quot; &quot;千葉県&quot;   &quot;和歌山県&quot; &quot;奈良県&quot;  
+## [8] &quot;京都府&quot;   &quot;兵庫県&quot;</code></pre>
 <div class="sourceCode" id="cb1069"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1069-1"><a href="factor.html#cb1069-1"></a><span class="kw">levels</span>(Score_df<span class="op">$</span>Pref4)</span></code></pre></div>
-<pre><code>## [1] &quot;神奈川県&quot; &quot;東京都&quot;   &quot;千葉県&quot;   &quot;埼玉県&quot;   &quot;和歌山県&quot; &quot;兵庫県&quot;   &quot;京都府&quot;   &quot;大阪府&quot;  
-## [9] &quot;奈良県&quot;</code></pre>
+<pre><code>## [1] &quot;神奈川県&quot; &quot;東京都&quot;   &quot;千葉県&quot;   &quot;埼玉県&quot;   &quot;和歌山県&quot; &quot;兵庫県&quot;   &quot;京都府&quot;  
+## [8] &quot;大阪府&quot;   &quot;奈良県&quot;</code></pre>
 <p><code>Pref</code>から<code>Pref4</code>まで同じように見えますが、水準の順番が異なります (<code>Pref</code>はcharacter型だから水準がありません)。</p>
 </div>
 <div id="fct_reorder-別の1変数の値を基準に水準の順番を変更する" class="section level3">
@@ -969,8 +969,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1072-2"><a href="factor.html#cb1072-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Pref_R =</span> <span class="kw">fct_reorder</span>(Pref, Budget, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
 <span id="cb1072-3"><a href="factor.html#cb1072-3"></a></span>
 <span id="cb1072-4"><a href="factor.html#cb1072-4"></a><span class="kw">levels</span>(df<span class="op">$</span>Pref_R)</span></code></pre></div>
-<pre><code>## [1] &quot;千葉県&quot;   &quot;埼玉県&quot;   &quot;奈良県&quot;   &quot;兵庫県&quot;   &quot;大阪府&quot;   &quot;神奈川県&quot; &quot;和歌山県&quot; &quot;東京都&quot;  
-## [9] &quot;京都府&quot;</code></pre>
+<pre><code>## [1] &quot;千葉県&quot;   &quot;埼玉県&quot;   &quot;奈良県&quot;   &quot;兵庫県&quot;   &quot;大阪府&quot;   &quot;神奈川県&quot; &quot;和歌山県&quot;
+## [8] &quot;東京都&quot;   &quot;京都府&quot;</code></pre>
 <p><code>Pref_R</code>の水準は千葉県、埼玉県、奈良県、…の順ですが、本当にそうでしょうか。<code>group_by()</code>と<code>summarise()</code>などを使って確認してみましょう。</p>
 <div class="sourceCode" id="cb1074"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1074-1"><a href="factor.html#cb1074-1"></a>df <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb1074-2"><a href="factor.html#cb1074-2"></a><span class="st">  </span><span class="kw">group_by</span>(Pref) <span class="op">%&gt;%</span></span>
@@ -995,8 +995,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1076-2"><a href="factor.html#cb1076-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Pref_R2 =</span> <span class="kw">fct_reorder</span>(Pref, Score, median, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>, <span class="dt">.desc =</span> <span class="ot">TRUE</span>))</span>
 <span id="cb1076-3"><a href="factor.html#cb1076-3"></a></span>
 <span id="cb1076-4"><a href="factor.html#cb1076-4"></a><span class="kw">levels</span>(df<span class="op">$</span>Pref_R2)</span></code></pre></div>
-<pre><code>## [1] &quot;和歌山県&quot; &quot;奈良県&quot;   &quot;千葉県&quot;   &quot;大阪府&quot;   &quot;東京都&quot;   &quot;埼玉県&quot;   &quot;京都府&quot;   &quot;神奈川県&quot;
-## [9] &quot;兵庫県&quot;</code></pre>
+<pre><code>## [1] &quot;和歌山県&quot; &quot;奈良県&quot;   &quot;千葉県&quot;   &quot;大阪府&quot;   &quot;東京都&quot;   &quot;埼玉県&quot;   &quot;京都府&quot;  
+## [8] &quot;神奈川県&quot; &quot;兵庫県&quot;</code></pre>
 <p>変わったのは<code>mean</code>の代わりに<code>median</code>を使ったこと、そして<code>.desc</code>引数が追加された点です。<code>fct_reorder()</code>には<code>.desc = FALSE</code>がデフォルトとして指定されており、省略した場合は昇順でfactorの水準が決まります。ここで<code>.desc = TRUE</code>を指定すると、降順となります。実際、<code>Score</code>の中央値順になっているかを確認してみましょう。</p>
 <div class="sourceCode" id="cb1078"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1078-1"><a href="factor.html#cb1078-1"></a>df <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb1078-2"><a href="factor.html#cb1078-2"></a><span class="st">  </span><span class="kw">group_by</span>(Pref) <span class="op">%&gt;%</span></span>
@@ -1147,18 +1147,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1098-8"><a href="factor.html#cb1098-8"></a></span>
 <span id="cb1098-9"><a href="factor.html#cb1098-9"></a>df4</span></code></pre></div>
 <pre><code>## # A tibble: 10 x 5
-##       ID Q1                        Q1_R                      Q1_R2           Q1_R3          
-##    &lt;int&gt; &lt;fct&gt;                     &lt;fct&gt;                     &lt;fct&gt;           &lt;fct&gt;          
-##  1     1 そう思う                  そう思う                  そう思う        そう思う       
-##  2     2 そう思わない              そう思わない              そう思わない    そう思わない   
-##  3     3 どちらとも言えない        どちらとも言えない        どちらとも言えない… どちらとも言えない…
-##  4     4 どちらかと言えばそう思う  どちらかと言えばそう思う  そう思う        そう思う       
-##  5     5 答えたくない              答えたくない              答えたくない    答えたくない   
-##  6     6 どちらかと言えばそう思う  どちらかと言えばそう思う  そう思う        そう思う       
+##       ID Q1                       Q1_R                    Q1_R2           Q1_R3          
+##    &lt;int&gt; &lt;fct&gt;                    &lt;fct&gt;                   &lt;fct&gt;           &lt;fct&gt;          
+##  1     1 そう思う                 そう思う                そう思う        そう思う       
+##  2     2 そう思わない             そう思わない            そう思わない    そう思わない   
+##  3     3 どちらとも言えない       どちらとも言えない      どちらとも言えない… どちらとも言えない…
+##  4     4 どちらかと言えばそう思う どちらかと言えばそう思う… そう思う        そう思う       
+##  5     5 答えたくない             答えたくない            答えたくない    答えたくない   
+##  6     6 どちらかと言えばそう思う どちらかと言えばそう思う… そう思う        そう思う       
 ##  7     7 どちらかと言えばそう思わない… どちらかと言えばそう思わない… そう思わない    そう思わない   
-##  8     8 答えたくない              答えたくない              答えたくない    答えたくない   
-##  9     9 そう思わない              そう思わない              そう思わない    そう思わない   
-## 10    10 そう思う                  そう思う                  そう思う        そう思う</code></pre>
+##  8     8 答えたくない             答えたくない            答えたくない    答えたくない   
+##  9     9 そう思わない             そう思わない            そう思わない    そう思わない   
+## 10    10 そう思う                 そう思う                そう思う        そう思う</code></pre>
 <div class="sourceCode" id="cb1100"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1100-1"><a href="factor.html#cb1100-1"></a><span class="kw">levels</span>(df4<span class="op">$</span>Q1_R3)</span></code></pre></div>
 <pre><code>## [1] &quot;そう思う&quot;           &quot;どちらとも言えない&quot; &quot;そう思わない&quot;       &quot;答えたくない&quot;</code></pre>
 <p><code>fct_recode()</code>の結果と同じ結果が得られました。元の水準数や、減らされる水準数などによっては書く手間があまり変わらないので、好きな方を使っても良いでしょう。</p>
@@ -1187,13 +1187,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 8 和歌山県  3.97</code></pre>
 <p>このように結果としては、奈良県のデータを除外したため空水準である奈良県は表示されませんが、<code>Pref</code>変数はどうでしょうか。</p>
 <div class="sourceCode" id="cb1104"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1104-1"><a href="factor.html#cb1104-1"></a><span class="kw">levels</span>(Score_df_f2<span class="op">$</span>Pref)</span></code></pre></div>
-<pre><code>## [1] &quot;東京都&quot;   &quot;神奈川県&quot; &quot;千葉県&quot;   &quot;埼玉県&quot;   &quot;大阪府&quot;   &quot;京都府&quot;   &quot;兵庫県&quot;   &quot;奈良県&quot;  
-## [9] &quot;和歌山県&quot;</code></pre>
+<pre><code>## [1] &quot;東京都&quot;   &quot;神奈川県&quot; &quot;千葉県&quot;   &quot;埼玉県&quot;   &quot;大阪府&quot;   &quot;京都府&quot;   &quot;兵庫県&quot;  
+## [8] &quot;奈良県&quot;   &quot;和歌山県&quot;</code></pre>
 <p>このように水準としては残っていることが分かります。使われていない水準が分析や可視化に影響を与えないケースもありますが、与えるケースもあります。これもこれまで勉強してきた<code>fct_*()</code>関数群で対応可能ですが、<code>fct_drop()</code>関数を使えば一発で終わります。実際にやってみましょう。</p>
 <div class="sourceCode" id="cb1106"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1106-1"><a href="factor.html#cb1106-1"></a>Score_df_f2 &lt;-<span class="st"> </span>Score_df_f2 <span class="op">%&gt;%</span></span>
 <span id="cb1106-2"><a href="factor.html#cb1106-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Pref =</span> <span class="kw">fct_drop</span>(Pref))</span></code></pre></div>
 <div class="sourceCode" id="cb1107"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1107-1"><a href="factor.html#cb1107-1"></a><span class="kw">levels</span>(Score_df_f2<span class="op">$</span>Pref)</span></code></pre></div>
-<pre><code>## [1] &quot;東京都&quot;   &quot;神奈川県&quot; &quot;千葉県&quot;   &quot;埼玉県&quot;   &quot;大阪府&quot;   &quot;京都府&quot;   &quot;兵庫県&quot;   &quot;和歌山県&quot;</code></pre>
+<pre><code>## [1] &quot;東京都&quot;   &quot;神奈川県&quot; &quot;千葉県&quot;   &quot;埼玉県&quot;   &quot;大阪府&quot;   &quot;京都府&quot;   &quot;兵庫県&quot;  
+## [8] &quot;和歌山県&quot;</code></pre>
 <p>水準から奈良県が消えました。同じ機能をする関数としてはR内蔵関数である<code>droplevels()</code>関数があり、使い方は<code>fct_drop()</code>と同じです。</p>
 </div>
 <div id="fct_expand-水準を追加する" class="section level3">
@@ -1203,8 +1204,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1109-2"><a href="factor.html#cb1109-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Pref =</span> <span class="kw">fct_expand</span>(Pref, <span class="st">&quot;滋賀県&quot;</span>))</span>
 <span id="cb1109-3"><a href="factor.html#cb1109-3"></a></span>
 <span id="cb1109-4"><a href="factor.html#cb1109-4"></a><span class="kw">levels</span>(df5<span class="op">$</span>Pref)</span></code></pre></div>
-<pre><code>##  [1] &quot;京都府&quot;   &quot;埼玉県&quot;   &quot;神奈川県&quot; &quot;千葉県&quot;   &quot;大阪府&quot;   &quot;東京都&quot;   &quot;奈良県&quot;   &quot;兵庫県&quot;  
-##  [9] &quot;和歌山県&quot; &quot;滋賀県&quot;</code></pre>
+<pre><code>##  [1] &quot;京都府&quot;   &quot;埼玉県&quot;   &quot;神奈川県&quot; &quot;千葉県&quot;   &quot;大阪府&quot;   &quot;東京都&quot;   &quot;奈良県&quot;  
+##  [8] &quot;兵庫県&quot;   &quot;和歌山県&quot; &quot;滋賀県&quot;</code></pre>
 <p><code>"滋賀県"</code>という新しい水準が出来ましたね。ただし、新しく追加された水準は最後の順番になりますので、修正が必要な場合は<code>fct_relevel()</code>などを使って適宜修正してください。</p>
 <p>新しく水準が追加されることによって、何かの変化はあるでしょうか。まずは都府県ごとに<code>Score</code>の平均値とケース数を計算してみましょう。</p>
 <div class="sourceCode" id="cb1111"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1111-1"><a href="factor.html#cb1111-1"></a>df5 <span class="op">%&gt;%</span></span>
@@ -1227,8 +1228,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>見た目は全く変わらず、滋賀県の行が新しく出来たわけでもありません。<code>dplyr</code>の<code>group_by()</code>の場合、空水準はグループ化の対象になりません。一方、多くのR内蔵関数はケースとして存在しなくても計算の対象となります。たとえば、ベクトル内のある値が何個格納されているか確認する<code>table()</code>関数の例を見てみましょう。</p>
 <div class="sourceCode" id="cb1113"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1113-1"><a href="factor.html#cb1113-1"></a><span class="kw">table</span>(df5<span class="op">$</span>Pref)</span></code></pre></div>
 <pre><code>## 
-##   京都府   埼玉県 神奈川県   千葉県   大阪府   東京都   奈良県   兵庫県 和歌山県   滋賀県 
-##      414     1000     1000     1000     1000     1000      147      591      140        0</code></pre>
+##   京都府   埼玉県 神奈川県   千葉県   大阪府   東京都   奈良県   兵庫県 和歌山県 
+##      414     1000     1000     1000     1000     1000      147      591      140 
+##   滋賀県 
+##        0</code></pre>
 <p><code>"滋賀県"</code>という列があり、合致するケースが0と表示されます。<code>group_by()</code>でも空の水準まで含めて出力する引数<code>.drop</code>があります。デフォルトは<code>TRUE</code>ですが、これを<code>FALSE</code>に指定してみます。</p>
 <div class="sourceCode" id="cb1115"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1115-1"><a href="factor.html#cb1115-1"></a>df5 <span class="op">%&gt;%</span></span>
 <span id="cb1115-2"><a href="factor.html#cb1115-2"></a><span class="st">  </span><span class="kw">group_by</span>(Pref, <span class="dt">.drop =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span></span>
