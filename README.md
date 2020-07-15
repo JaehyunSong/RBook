@@ -1,16 +1,18 @@
 # 私たちのR: ぼくらがかんがえたさいきょうのRほん
 R Not for Everyone: An Esoteric Guide.
 
----
-
-## Author
-
-* [Jaehyun Song](https://jaysong.net)
-* [Yuki Yanai](http://yukiyanai.com)
+[https://www.jaysong.net/RBook](https://www.jaysong.net/RBook)
 
 ---
 
-## 進捗状況 {#progress}
+## 著者
+
+* [Jaehyun Song](https://www.jaysong.net)
+* [Yuki Yanai](https://yukiyanai.github.io)
+
+---
+
+## 進捗状況
 
 章立ては未定。著者が書きたいものから書く予定。
 
