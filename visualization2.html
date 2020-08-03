@@ -461,7 +461,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="17.6" data-path="visualization2.html"><a href="visualization2.html#visual2-scatter"><i class="fa fa-check"></i><b>17.6</b> 散布図</a></li>
 <li class="chapter" data-level="17.7" data-path="visualization2.html"><a href="visualization2.html#visual2-line"><i class="fa fa-check"></i><b>17.7</b> 折れ線グラフ</a></li>
-<li class="chapter" data-level="17.8" data-path="visualization2.html"><a href="visualization2.html#visual2-excersie"><i class="fa fa-check"></i><b>17.8</b> 練習問題</a></li>
+<li class="chapter" data-level="17.8" data-path="visualization2.html"><a href="visualization2.html#まとめ"><i class="fa fa-check"></i><b>17.8</b> まとめ</a></li>
+<li class="chapter" data-level="17.9" data-path="visualization2.html"><a href="visualization2.html#visual2-excersie"><i class="fa fa-check"></i><b>17.9</b> 練習問題</a></li>
 </ul></li>
 <li class="chapter" data-level="18" data-path="visualization3.html"><a href="visualization3.html"><i class="fa fa-check"></i><b>18</b> 可視化[応用]</a>
 <ul>
@@ -1421,6 +1422,8 @@ ID
 </div>
 <div id="visual2-box" class="section level2" number="17.5">
 <h2><span class="header-section-number">17.5</span> 箱ひげ図</h2>
+<p>データの分布を示す際には、離散変数ならケース数 (度数)の棒グラフ、連続変数ならヒストグラムがよく使われますが、連続変数の場合、もう一つの方法があります。それが箱ひげ図です。箱ひげ図はヒストグラムより情報量がやや損なわれますが、データの中央値、四分位点（四分位範囲）、最小値と最大値の情報を素早く読み取れます。また、複数の変数、またはグループの分布を1つのプロットに示すにはヒストグラムより優れています。</p>
+<p>まずは人間開発指数の箱ひげ図を出してみます。使用する幾何オブジェクトは<code>geom_boxplot()</code>です。そして、指定するマッピング要素は<code>y</code>のみです。箱ひげ図から読み取れる情報は最小値・最大値、中央値、第1四分位点、第3四分位点ですが、これらの情報は縦軸として表現されます。それでは、とりあえず実際に作ってみましょう。</p>
 <div class="sourceCode" id="cb59"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb59-1"><a href="visualization2.html#cb59-1"></a>Country_df <span class="op">%&gt;%</span></span>
 <span id="cb59-2"><a href="visualization2.html#cb59-2"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(HDI_<span class="dv">2018</span>)) <span class="op">%&gt;%</span></span>
 <span id="cb59-3"><a href="visualization2.html#cb59-3"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
@@ -1428,6 +1431,9 @@ ID
 <span id="cb59-5"><a href="visualization2.html#cb59-5"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;人間開発指数 (2018)&quot;</span>) <span class="op">+</span></span>
 <span id="cb59-6"><a href="visualization2.html#cb59-6"></a><span class="st">  </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-42-1.png" width="768" /></p>
+<p>箱ひげ図の読み方は以下の通りです。</p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-43-1.png" width="768" /></p>
+<p>これで箱ひげ図は完成ですが、人間開発指数は0から1の相対を取るので、座標系の縦軸を調整してみましょう。座標系の操作は<code>coord_*()</code>関数群を使いますが、現在使っているのは直交座標系（デカルト座標系）ですので<code>coord_cartesian()</code>を使います。ここで縦軸の上限と下限を指定する引数が<code>ylim</code>であり、長さ2の数値型ベクトルが必要です。下限0、上限1ですので、<code>ylim = c(0, 1)</code>とします。</p>
 <div class="sourceCode" id="cb60"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb60-1"><a href="visualization2.html#cb60-1"></a>Country_df <span class="op">%&gt;%</span></span>
 <span id="cb60-2"><a href="visualization2.html#cb60-2"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(HDI_<span class="dv">2018</span>)) <span class="op">%&gt;%</span></span>
 <span id="cb60-3"><a href="visualization2.html#cb60-3"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
@@ -1435,7 +1441,9 @@ ID
 <span id="cb60-5"><a href="visualization2.html#cb60-5"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;人間開発指数 (2018)&quot;</span>) <span class="op">+</span></span>
 <span id="cb60-6"><a href="visualization2.html#cb60-6"></a><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="op">+</span></span>
 <span id="cb60-7"><a href="visualization2.html#cb60-7"></a><span class="st">  </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-43-1.png" width="768" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-44-1.png" width="768" /></p>
+<p>まだまだ改善の余地はありますが、それなりの箱ひげ図の出来上がりです。しかし、一変数の箱ひげ図はあまり使われません。変数が1つだけならヒストグラムの方がより情報量は豊富でしょう。情報量が豊富ということはヒストグラムから（完璧には無理ですが）箱ひげ図を作ることは可能である一方、その逆は不可能か非常に難しいことを意味します。</p>
+<p>ヒストグラムが力を発揮するのは複数の変数、または複数のグループごとの分布を比較する際です。先ほど、大陸ごとの人間開発指数の分布を確認するためにヒストグラムを5つのファセットで分割しました。箱ひげ図なら1つのグラフに5つの箱を並べるだけです。これは横軸を大陸 (<code>Continent</code>)にすることを意味します。先ほどのコードのマッピングに<code>x</code>引数を追加してみましょう。</p>
 <div class="sourceCode" id="cb61"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb61-1"><a href="visualization2.html#cb61-1"></a>Country_df <span class="op">%&gt;%</span></span>
 <span id="cb61-2"><a href="visualization2.html#cb61-2"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(HDI_<span class="dv">2018</span>)) <span class="op">%&gt;%</span></span>
 <span id="cb61-3"><a href="visualization2.html#cb61-3"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
@@ -1443,7 +1451,9 @@ ID
 <span id="cb61-5"><a href="visualization2.html#cb61-5"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;大陸&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;人間開発指数 (2018)&quot;</span>) <span class="op">+</span></span>
 <span id="cb61-6"><a href="visualization2.html#cb61-6"></a><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="op">+</span></span>
 <span id="cb61-7"><a href="visualization2.html#cb61-7"></a><span class="st">  </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-44-1.png" width="768" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-45-1.png" width="768" /></p>
+<p>いかがでしょうか。5大陸の分布を素早く確認することができました。ヨーロッパの場合、人間開発指数が高く、バラツキも小さいことが分かります。一方、アジアとアフリカはバラツキが非常に大きいですね。アメリカ大陸はバラツキは非常に小さいですが、極端に高い国や低い国が含まれています。このアメリカ大陸に3つの点がありますが、これは外れ値です。つまり、最小値より小さい、または最大値より大きいケースを表します。最小値より小さい、または最大値より大きいという表現に違和感を感じるかも知れません。実は一般的な箱ひげ図の最小値は「第1四分位点 - 1.5 <span class="math inline">\(\times\)</span> 四分位範囲」より大きい値の中での最小値です。同じく最大値は「第3四分位点 + 1.5 <span class="math inline">\(\times\)</span> 四分位範囲」より小さい値の中での最大値です。普通に分布している場合、ほとんどのケースは箱ひげ図の最小値と最大値の範囲内に収まりますが、極端に大きい値、小さい値が含まれる場合は箱ひげ図の最小値と最大値の範囲からはみ出る場合があります。</p>
+<p>また、複数の箱を並べる際、それぞれの箱に異なる色を付ける場合があります。これはデータ・インク比の観点から見れば非効率的ですが、可読性を落とすこともないのでさほど問題はないでしょう。先ほどの箱ひげ図の場合、大陸ごとに異なる色を付けるにはマッピング要素として<code>fill = Continent</code>を追加するだけです。この場合、色に関する凡例が自動的に出力されますが、既に横軸で大陸の情報が分かるため、この判例は不要でしょう。したがって、<code>aes()</code>の外側に<code>show.legned = FALSE</code>を付けます。これは当該幾何オブジェクトに関する凡例を表示させないことを意味します。</p>
 <div class="sourceCode" id="cb62"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb62-1"><a href="visualization2.html#cb62-1"></a>Country_df <span class="op">%&gt;%</span></span>
 <span id="cb62-2"><a href="visualization2.html#cb62-2"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(HDI_<span class="dv">2018</span>)) <span class="op">%&gt;%</span></span>
 <span id="cb62-3"><a href="visualization2.html#cb62-3"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
@@ -1452,7 +1462,8 @@ ID
 <span id="cb62-6"><a href="visualization2.html#cb62-6"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;大陸&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;人間開発指数 (2018)&quot;</span>) <span class="op">+</span></span>
 <span id="cb62-7"><a href="visualization2.html#cb62-7"></a><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="op">+</span></span>
 <span id="cb62-8"><a href="visualization2.html#cb62-8"></a><span class="st">  </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-45-1.png" width="768" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-46-1.png" width="768" /></p>
+<p>彩りどりでちょっとテンションが上がる箱ひげ図ができました。</p>
 <div id="個別のデータを表示する" class="section level3" number="17.5.1">
 <h3><span class="header-section-number">17.5.1</span> 個別のデータを表示する</h3>
 <div class="sourceCode" id="cb63"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb63-1"><a href="visualization2.html#cb63-1"></a>Country_df <span class="op">%&gt;%</span></span>
@@ -1465,7 +1476,7 @@ ID
 <span id="cb63-8"><a href="visualization2.html#cb63-8"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;大陸&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;人間開発指数 (2018)&quot;</span>) <span class="op">+</span></span>
 <span id="cb63-9"><a href="visualization2.html#cb63-9"></a><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="op">+</span></span>
 <span id="cb63-10"><a href="visualization2.html#cb63-10"></a><span class="st">  </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-46-1.png" width="768" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-47-1.png" width="768" /></p>
 <div class="sourceCode" id="cb64"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb64-1"><a href="visualization2.html#cb64-1"></a>Country_df <span class="op">%&gt;%</span></span>
 <span id="cb64-2"><a href="visualization2.html#cb64-2"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(HDI_<span class="dv">2018</span>)) <span class="op">%&gt;%</span></span>
 <span id="cb64-3"><a href="visualization2.html#cb64-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Continent, <span class="dt">y =</span> HDI_<span class="dv">2018</span>)) <span class="op">+</span></span>
@@ -1476,7 +1487,7 @@ ID
 <span id="cb64-8"><a href="visualization2.html#cb64-8"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;大陸&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;人間開発指数 (2018)&quot;</span>) <span class="op">+</span></span>
 <span id="cb64-9"><a href="visualization2.html#cb64-9"></a><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="op">+</span></span>
 <span id="cb64-10"><a href="visualization2.html#cb64-10"></a><span class="st">  </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-47-1.png" width="768" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-48-1.png" width="768" /></p>
 <div class="sourceCode" id="cb65"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb65-1"><a href="visualization2.html#cb65-1"></a>Country_df <span class="op">%&gt;%</span></span>
 <span id="cb65-2"><a href="visualization2.html#cb65-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Continent2 =</span> <span class="kw">factor</span>(Continent,</span>
 <span id="cb65-3"><a href="visualization2.html#cb65-3"></a>                             <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;Africa&quot;</span>, <span class="st">&quot;America&quot;</span>, <span class="st">&quot;Asia&quot;</span>,</span>
@@ -1493,7 +1504,7 @@ ID
 <span id="cb65-14"><a href="visualization2.html#cb65-14"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;大陸&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;人間開発指数 (2018)&quot;</span>) <span class="op">+</span></span>
 <span id="cb65-15"><a href="visualization2.html#cb65-15"></a><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="op">+</span></span>
 <span id="cb65-16"><a href="visualization2.html#cb65-16"></a><span class="st">  </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-48-1.png" width="768" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-49-1.png" width="768" /></p>
 </div>
 <div id="次元を追加する-2" class="section level3" number="17.5.2">
 <h3><span class="header-section-number">17.5.2</span> 次元を追加する</h3>
@@ -1519,7 +1530,7 @@ ID
 <span id="cb66-20"><a href="visualization2.html#cb66-20"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>Developed) <span class="op">+</span></span>
 <span id="cb66-21"><a href="visualization2.html#cb66-21"></a><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="op">+</span></span>
 <span id="cb66-22"><a href="visualization2.html#cb66-22"></a><span class="st">  </span><span class="kw">theme_gray</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-49-1.png" width="768" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-50-1.png" width="768" /></p>
 <hr />
 </div>
 </div>
@@ -1532,7 +1543,7 @@ ID
 <span id="cb67-4"><a href="visualization2.html#cb67-4"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;一人当たり購買力平価GDP (USD)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;人間開発指数&quot;</span>) <span class="op">+</span></span>
 <span id="cb67-5"><a href="visualization2.html#cb67-5"></a><span class="st">  </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning: Removed 11 rows containing missing values (geom_point).</code></pre>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-50-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-51-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>以下のメッセージが表示されますが、これは一人当たりGDP (購買力平価基準)または人間開発指数が欠損しているケースが11カ国あることを意味します。たとえば、教皇聖座 (Holy See; いわゆるバチカン)や西サハラ、ソマリアなどの国があります。</p>
 <pre><code>## Warning: Removed 11 rows containing missing values (geom_point).</code></pre>
 <p>どのようなケースが除外されたかは<code>dplyr::filter()</code>関数を使えば簡単に調べられます。</p>
@@ -1562,7 +1573,7 @@ ID
 <span id="cb72-5"><a href="visualization2.html#cb72-5"></a><span class="st">  </span><span class="kw">coord_trans</span>(<span class="dt">x =</span> <span class="st">&quot;log10&quot;</span>) <span class="op">+</span></span>
 <span id="cb72-6"><a href="visualization2.html#cb72-6"></a><span class="st">  </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning: Removed 11 rows containing missing values (geom_point).</code></pre>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-52-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-53-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>対数化してみたら、かなり綺麗な線形関係が確認できます。</p>
 <p>散布図の点は横軸の数値と縦軸の数値を持っています。2次元平面で表現できる散布図は少なくとも2つの情報を持つことになります。しかし、2次元平面であっても、3つ以上の情報、つまり3次元以上の情報を示すことが可能です。たとえば、点ごとに色を変更することもできます。OECD加盟国と非加盟国に異なる色を与えると、2次元平面上であっても、3つの情報を含む散布図が作れます。たとえば、国の面積に応じて点の大きさが変わる散布図を作成するなら<code>aes()</code>内に<code>size = Area</code>を追加するだけです。面積の単位は非常に大きいので、<code>Area</code>を100万で割った値を使います。</p>
 <div class="sourceCode" id="cb74"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb74-1"><a href="visualization2.html#cb74-1"></a>Country_df <span class="op">%&gt;%</span></span>
@@ -1573,7 +1584,7 @@ ID
 <span id="cb74-6"><a href="visualization2.html#cb74-6"></a>       <span class="dt">size =</span> <span class="st">&quot;面積 (100万km2)&quot;</span>) <span class="op">+</span></span>
 <span id="cb74-7"><a href="visualization2.html#cb74-7"></a><span class="st">  </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning: Removed 11 rows containing missing values (geom_point).</code></pre>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-53-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-54-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>一人当たりGDPが非常に高い国の多くは面積が小さい国が多いですね。</p>
 <p>以上のコードでは、<code>aes()</code>だけでなく、<code>labs()</code>内にも<code>size</code>引数を指定しました。これは凡例のタイトルを指定することです。グラフにおいて大きさの凡例が自動的に表示されますが、そのタイトルになります。指定しない場合は、変数名がタイトルになります。</p>
 <div class="sourceCode" id="cb76"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb76-1"><a href="visualization2.html#cb76-1"></a>Country_df <span class="op">%&gt;%</span></span>
@@ -1585,7 +1596,7 @@ ID
 <span id="cb76-7"><a href="visualization2.html#cb76-7"></a>       <span class="dt">size =</span> <span class="st">&quot;面積 (100万km2)&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;OECD加盟有無&quot;</span>) <span class="op">+</span></span>
 <span id="cb76-8"><a href="visualization2.html#cb76-8"></a><span class="st">  </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning: Removed 11 rows containing missing values (geom_point).</code></pre>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-54-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-55-1.png" width="768" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb78"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb78-1"><a href="visualization2.html#cb78-1"></a>Country_df <span class="op">%&gt;%</span></span>
 <span id="cb78-2"><a href="visualization2.html#cb78-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Area =</span> Area <span class="op">/</span><span class="st"> </span><span class="dv">1000000</span>,</span>
 <span id="cb78-3"><a href="visualization2.html#cb78-3"></a>         <span class="dt">OECD =</span> <span class="kw">factor</span>(OECD, <span class="dt">levels =</span> <span class="dv">0</span><span class="op">:</span><span class="dv">1</span>, </span>
@@ -1597,15 +1608,33 @@ ID
 <span id="cb78-9"><a href="visualization2.html#cb78-9"></a>       <span class="dt">size =</span> <span class="st">&quot;面積 (100万km2)&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;OECD加盟有無&quot;</span>) <span class="op">+</span></span>
 <span id="cb78-10"><a href="visualization2.html#cb78-10"></a><span class="st">  </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning: Removed 11 rows containing missing values (geom_point).</code></pre>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-55-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-56-1.png" width="768" style="display: block; margin: auto;" /></p>
 <hr />
 </div>
 <div id="visual2-line" class="section level2" number="17.7">
 <h2><span class="header-section-number">17.7</span> 折れ線グラフ</h2>
 <hr />
 </div>
-<div id="visual2-excersie" class="section level2" number="17.8">
-<h2><span class="header-section-number">17.8</span> 練習問題</h2>
+<div id="まとめ" class="section level2" number="17.8">
+<h2><span class="header-section-number">17.8</span> まとめ</h2>
+<p>以上の話をまとめると、データが与えられた場合、ある図を作成するためには少なくとも以下の情報が必要です。</p>
+<ol style="list-style-type: decimal">
+<li>どの幾何オブジェクトを使用するか</li>
+<li>その幾何オブジェクトに必要なマッピング要素は何か</li>
+</ol>
+<p>座標系や、スケール、ラベルの設定なども最終的には必要ですが、これらは設定しなくても<code>ggplot2</code>自動的に生成してくれます。しかし、幾何オブジェクトとマッピングは必須です。幾何オブジェクトはグーグルで「ggplot 棒グラフ」や「ggplot 等高線図」などで検索すれば、どのような幾何オブジェクトが必要化が分かります。問題はマッピングです。この幾何オブジェクトに使える引数は何か、そしてどの引数を<code>aes()</code>の中に入れるべきかなどはコンソールで<code>?geom_barplot</code>などで検索すれば分かります。</p>
+<p>筆者のオススメは以下のチートシートを印刷し、手元に置くことです。</p>
+<ul>
+<li><a href="https://rstudio.com/resources/cheatsheets/">ggplot2 cheatsheet</a></li>
+<li><a href="https://drive.google.com/file/d/1Dvul1p6TYH6gWJzZRwpE0YX1dO0hDF-b/view">ggplot2 aesthetics cheatsheet</a></li>
+</ul>
+<p>2番目の資料は非常に分かりやすい資料ですが、Google Drive経由で公開されているため、いつリンクが切れかが不明です。念の為に本ページにも資料を転載します。</p>
+<p><img src="figures/Visualization2/ggplot_aesthetics_cheatsheet.png" alt="ggplot2 aesthetics cheatsheet" /></p>
+<p>青い点は「ほとんど」のケースにおいて<code>aes()</code>の中に位置する引数です。ただし、<code>geom_bar()</code>と<code>geom_histogram()</code>は自動的に度数を計算してくれるため、<code>x</code>と<code>y</code>一方だけでも可能です。黄色い資格は<code>aes()</code>の中でも、外でも使うことが可能な引数です。<code>aes()</code>の中ならマッピング要素となるため、データの変数と対応させる必要があります。ピンク色のひし形四角形は必ず<code>aes()</code>の外に位置する引数です。</p>
+<hr />
+</div>
+<div id="visual2-excersie" class="section level2" number="17.9">
+<h2><span class="header-section-number">17.9</span> 練習問題</h2>
 <p><code>df</code>を用い、以下のような図を作成せよ。</p>
 
 </div>
