@@ -498,7 +498,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="22.3.12" data-path="rmarkdown.html"><a href="rmarkdown.html#コメント"><i class="fa fa-check"></i><b>22.3.12</b> コメント</a></li>
 <li class="chapter" data-level="22.3.13" data-path="rmarkdown.html"><a href="rmarkdown.html#コード"><i class="fa fa-check"></i><b>22.3.13</b> コード</a></li>
 </ul></li>
-<li class="chapter" data-level="22.4" data-path="rmarkdown.html"><a href="rmarkdown.html#rmarkdown-chunk"><i class="fa fa-check"></i><b>22.4</b> チャンクのオプション</a></li>
+<li class="chapter" data-level="22.4" data-path="rmarkdown.html"><a href="rmarkdown.html#rmarkdown-chunk"><i class="fa fa-check"></i><b>22.4</b> チャンクのオプション</a>
+<ul>
+<li class="chapter" data-level="22.4.1" data-path="rmarkdown.html"><a href="rmarkdown.html#チャンク名とチャンク間依存関係"><i class="fa fa-check"></i><b>22.4.1</b> チャンク名とチャンク間依存関係</a></li>
+<li class="chapter" data-level="22.4.2" data-path="rmarkdown.html"><a href="rmarkdown.html#コードまたは結果の表示非常時"><i class="fa fa-check"></i><b>22.4.2</b> コードまたは結果の表示/非常時</a></li>
+<li class="chapter" data-level="22.4.3" data-path="rmarkdown.html"><a href="rmarkdown.html#プロット"><i class="fa fa-check"></i><b>22.4.3</b> プロット</a></li>
+<li class="chapter" data-level="22.4.4" data-path="rmarkdown.html"><a href="rmarkdown.html#コードの見栄"><i class="fa fa-check"></i><b>22.4.4</b> コードの見栄</a></li>
+</ul></li>
 <li class="chapter" data-level="22.5" data-path="rmarkdown.html"><a href="rmarkdown.html#rmarkdown-header"><i class="fa fa-check"></i><b>22.5</b> ヘッダーのオプション</a>
 <ul>
 <li class="chapter" data-level="22.5.1" data-path="rmarkdown.html"><a href="rmarkdown.html#目次の追加"><i class="fa fa-check"></i><b>22.5.1</b> 目次の追加</a></li>
@@ -549,7 +555,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="とりあえずknit" class="section level2" number="22.2">
 <h2><span class="header-section-number">22.2</span> とりあえずKnit</h2>
 <p>　R Markdownについて説明する前に、とりあえずR Markdownというのがどういうものかを味見してみます。既に述べたようにR MarkdownにはRコードも含まれるため、事前にプロジェクトを生成してから進めることをおすすめします。</p>
-<p>　R Markdownファイルを生成するにはFile -&gt; New File -&gt; R Markdwon…を選択します。Title:とAuthor:には文書のタイトルと作成者を入力します。Default Output FormatはデフォルトはHTMLとなっていますが、このままにしておきましょう。ここでの設定はいつでも変更可能ですので、何も触らずにOKを押しても大丈夫です。</p>
+<p>　R Markdownファイルを生成するにはFile -&gt; New File -&gt; R Markdown…を選択します。Title:とAuthor:には文書のタイトルと作成者を入力します。Default Output FormatはデフォルトはHTMLとなっていますが、このままにしておきましょう。ここでの設定はいつでも変更可能ですので、何も触らずにOKを押しても大丈夫です。</p>
 <p>　OKを押したら自動的にR Markdownのサンプルファイルが生成されます。そしたらSourceペインの上段にある<img src = "figures/Markdown/Knit.png" height = "20pt">ボタン<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>をクリックしてみましょう。Viewerペインに何かの文章が生成されていることが分かります。これからの内容を進める前にSourceペインとViewerペインの中身をそれぞれ対応しながら、どのような関係があるのかを考えてみましょう。</p>
 <p>　R Markdownファイルは大きく3つの領域に分けることができます（図<a href="rmarkdown.html#fig:markdown-sample">22.1</a>）。まず、最初に<code>---</code>と<code>---</code>で囲まれた領域はヘッダー（Header）と呼ばれる領域です。ここでは題目、作成者情報の入力以外にも、文書全体に通じる設定を行います。これは第<a href="rmarkdown.html#rmarkdown-header">22.5</a>節で解説します。次はR Markdownの核心部であるチャンク（Chunk）です。チャンクは<code>```{r}</code>と<code>```</code>で囲まれた領域であり、Rコードが入る箇所です。チャンクに関しましては第<a href="rmarkdown.html#rmarkdown-grammar">22.3</a>節の後半と第<a href="rmarkdown.html#rmarkdown-chunk">22.4</a>節で解説します。その他の領域がマークダウン（Markdown）であり、文書に該当します。</p>
 <div class="figure" style="text-align: center"><span id="fig:markdown-sample"></span>
@@ -875,30 +881,31 @@ X = \begin{bmatrix}
 <p>　以上の内容まで抑えると、R Markdownを使って、簡単な文法のみで構造化された文書が作成できます。しかし、R Markdownの意義は文章とコード、結果が統合されることです。それでは文書にRコードを入れる方法について紹介します。</p>
 <p>　コードは<code>```{r}</code>と<code>```</code>の間に入力します。これだけです。これでコードと結果が同時に出力されます。たとえば、<code>print("Hello World!")</code>を走らすコードを入れてみます。</p>
 <p><strong>Input:</strong></p>
-<pre class="markdwon"><code>&quot;Hello World!&quot;を出力するコード
-```{r}
-print(&quot;Hello World!&quot;)
-```</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb18-1"><a href="rmarkdown.html#cb18-1"></a>&quot;Hello World!&quot;を出力するコード</span>
+<span id="cb18-2"><a href="rmarkdown.html#cb18-2"></a><span class="in">```{r}</span></span>
+<span id="cb18-3"><a href="rmarkdown.html#cb18-3"></a><span class="in">print(&quot;Hello World!&quot;)</span></span>
+<span id="cb18-4"><a href="rmarkdown.html#cb18-4"></a><span class="in">```</span></span></code></pre></div>
 <p><strong>Output:</strong></p>
 <p>“Hello World!”を出力するコード</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="rmarkdown.html#cb19-1"></a><span class="kw">print</span>(<span class="st">&quot;Hello World!&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;Hello World!&quot;</code></pre>
-<p>　<code>```{r}</code>と<code>```</code>で囲まれた範囲をR Markdownでは<strong>チャンク（Chunk）</strong>と呼びます。このチャンク内ではRと全く同じことが出来ます。パッケージやデータの読み込み、オブジェクトの生成、データハンドリング、可視化など、全てです。
+<p>　<code>```{r}</code>と<code>```</code>で囲まれた範囲をR Markdownでは<strong>チャンク（Chunk）</strong>と呼びます。このチャンク内ではRと全く同じことが出来ます。パッケージやデータの読み込み、オブジェクトの生成、データハンドリング、可視化など、全てです。</p>
+<p><strong>Input:</strong>
 　</p>
-<pre class="markdwon"><code>```{r}
-# パッケージの読み込み
-library(tidyverse)
-# R内蔵データセットのirisを使った可視化
-iris %&gt;%
-  mutate(Species2 = recode(Species,
-                           &quot;setosa&quot;     = &quot;セトナ&quot;,
-                           &quot;versicolor&quot; = &quot;バーシクル&quot;,
-                           &quot;virginica&quot;  = &quot;バージニカ&quot;)) %&gt;%
-  ggplot() +
-  geom_point(aes(x = Sepal.Length, y = Sepal.Width, color = Species2)) +
-  labs(x = &quot;萼片の長さ (cm)&quot;, y = &quot;萼片の幅 (cm)&quot;, color = &quot;品種&quot;) +
-  theme_minimal(base_family = &quot;HiraKakuProN-W3&quot;)
-```</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb21-1"><a href="rmarkdown.html#cb21-1"></a><span class="in">```{r}</span></span>
+<span id="cb21-2"><a href="rmarkdown.html#cb21-2"></a><span class="in"># パッケージの読み込み</span></span>
+<span id="cb21-3"><a href="rmarkdown.html#cb21-3"></a><span class="in">library(tidyverse)</span></span>
+<span id="cb21-4"><a href="rmarkdown.html#cb21-4"></a><span class="in"># R内蔵データセットのirisを使った可視化</span></span>
+<span id="cb21-5"><a href="rmarkdown.html#cb21-5"></a><span class="in">iris %&gt;%</span></span>
+<span id="cb21-6"><a href="rmarkdown.html#cb21-6"></a><span class="in">  mutate(Species2 = recode(Species,</span></span>
+<span id="cb21-7"><a href="rmarkdown.html#cb21-7"></a><span class="in">                           &quot;setosa&quot;     = &quot;セトナ&quot;,</span></span>
+<span id="cb21-8"><a href="rmarkdown.html#cb21-8"></a><span class="in">                           &quot;versicolor&quot; = &quot;バーシクル&quot;,</span></span>
+<span id="cb21-9"><a href="rmarkdown.html#cb21-9"></a><span class="in">                           &quot;virginica&quot;  = &quot;バージニカ&quot;)) %&gt;%</span></span>
+<span id="cb21-10"><a href="rmarkdown.html#cb21-10"></a><span class="in">  ggplot() +</span></span>
+<span id="cb21-11"><a href="rmarkdown.html#cb21-11"></a><span class="in">  geom_point(aes(x = Sepal.Length, y = Sepal.Width, color = Species2)) +</span></span>
+<span id="cb21-12"><a href="rmarkdown.html#cb21-12"></a><span class="in">  labs(x = &quot;萼片の長さ (cm)&quot;, y = &quot;萼片の幅 (cm)&quot;, color = &quot;品種&quot;) +</span></span>
+<span id="cb21-13"><a href="rmarkdown.html#cb21-13"></a><span class="in">  theme_minimal(base_family = &quot;HiraKakuProN-W3&quot;)</span></span>
+<span id="cb21-14"><a href="rmarkdown.html#cb21-14"></a><span class="in">```</span></span></code></pre></div>
 <p><strong>Output:</strong></p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="rmarkdown.html#cb22-1"></a><span class="co"># パッケージの読み込み</span></span>
 <span id="cb22-2"><a href="rmarkdown.html#cb22-2"></a><span class="kw">library</span>(tidyverse)</span>
@@ -914,11 +921,11 @@ iris %&gt;%
 <span id="cb22-12"><a href="rmarkdown.html#cb22-12"></a><span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <p>　他にも文中にRコードを埋め込むことも可能です。例えば、ベクトル<code>X &lt;- c(2, 3, 5, 7, 12)</code>があり、この平均値を文中で示したいとします。むろん、文中に「5.8」と書いても問題はありません。しかし、実は<code>X</code>の入力ミスが見つかり、実は<code>c(2, 3, 5, 7, 11)</code>になったらどうなるでしょうか。この「5.8」と書いた箇所を見つけて5.6と修正したいといけません。これは非常に面倒な作業であり、ミスも起こりやすいです。文中でRコードを入れるためには<code>`rコード`</code>のように入力します。</p>
-<pre class="markdwon"><code>```{r}
-X &lt;- c(2, 3, 5, 7, 11)
-```
-
-変数`X`の平均値は`r mean(X)`です。</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb23-1"><a href="rmarkdown.html#cb23-1"></a><span class="in">```{r}</span></span>
+<span id="cb23-2"><a href="rmarkdown.html#cb23-2"></a><span class="in">X &lt;- c(2, 3, 5, 7, 11)</span></span>
+<span id="cb23-3"><a href="rmarkdown.html#cb23-3"></a><span class="in">```</span></span>
+<span id="cb23-4"><a href="rmarkdown.html#cb23-4"></a></span>
+<span id="cb23-5"><a href="rmarkdown.html#cb23-5"></a>変数<span class="in">`X`</span>の平均値は<span class="in">`r mean(X)`</span>です。</span></code></pre></div>
 <p><strong>Output:</strong></p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="rmarkdown.html#cb24-1"></a>X &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">11</span>)</span></code></pre></div>
 <p>変数<code>X</code>の平均値は5.6です。</p>
@@ -928,17 +935,112 @@ X &lt;- c(2, 3, 5, 7, 11)
 </div>
 <div id="rmarkdown-chunk" class="section level2" number="22.4">
 <h2><span class="header-section-number">22.4</span> チャンクのオプション</h2>
+<p>　既に説明しましたとおり、R MakrdownはR + Markdownです。Rはチャンク、Markdownはチャンク外の部分に相当し、それぞれのカスタマイズが可能です。分析のコードと結果はチャンクにオプションを付けることで修正可能であり、文章の部分は次節で紹介するヘッダーで調整できます。ここではチャンクのオプションについて説明します。</p>
+<p>　チャンクは<code>```{r}</code>で始まりますが、実は<code>{r}</code>の箇所にオプションを追加することができます。具体的には<code>{r チャンク名, オプション1, オプション2, ...}</code>といった形です。まずはチャンク名について解説します。</p>
+<div id="チャンク名とチャンク間依存関係" class="section level3" number="22.4.1">
+<h3><span class="header-section-number">22.4.1</span> チャンク名とチャンク間依存関係</h3>
+<p>　チャンク名は<code>{r チャンク名}</code>で指定し、<code>r</code>と<code>チャンク名</code>の間には<code>,</code>が入りません。これはチャンクに名前をしていするオプションですが、多くの場合分析に影響を与えることはありません。このチャンク名が重要となるのは<code>cache</code>オプションを付ける場合です。</p>
+<p>　<code>cache</code>オプションは処理結果を保存しておくことを意味します。チャンク内のコードはKnitする度に計算されます。もし、演算にかなりの時間を費やすコードが含まれている場合、Knitの時間も長くなります。この場合、<code>cache = TRUE</code>オプションを付けておくと、最初のKnit時に結果をファイルとして保存し、次回からはその結果を読み込むだけとなります。時間が非常に節約できるため、よく使われるオプションの1つです。ただし、チャンク内のコードが修正された場合、Knit時にもう一回処理を行います。コードの実質的な内容が変わらなくても、つまり、スペースを1つ入れただけでも再計算となります。</p>
+<p>　ここで1つ問題が生じます。たとえば、以下のようなコードを考えてみてください。</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb25-1"><a href="rmarkdown.html#cb25-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-2"><a href="rmarkdown.html#cb25-2"></a><span class="in">X &lt;- c(2, 3, 5, 7, 10)</span></span>
+<span id="cb25-3"><a href="rmarkdown.html#cb25-3"></a><span class="in">```</span></span>
+<span id="cb25-4"><a href="rmarkdown.html#cb25-4"></a></span>
+<span id="cb25-5"><a href="rmarkdown.html#cb25-5"></a><span class="in">```{r, cache = TRUE}</span></span>
+<span id="cb25-6"><a href="rmarkdown.html#cb25-6"></a><span class="in">mean(X)</span></span>
+<span id="cb25-7"><a href="rmarkdown.html#cb25-7"></a><span class="in">```</span></span></code></pre></div>
+<p>　この構造に問題はありません。しかし、ここで<code>X</code>の5番目の要素を11に修正したとします。そしてもう一回Knitを行ったらどうなるでしょうか。正解は「何も変わらない」です。新しい<code>mean(X)</code>の結果は5.6のはずですが、5.4のままです。なぜなら、2番目のチャンクの結果は既に保存されており、コードも修正していないからです。もう一回強調しておきますが、<code>cahce = TRUE</code>の状態で当該チャンクが修正されない場合、結果は変わりません。</p>
+<p>　このようにあるチャンクの内容が他のチャンク内容に依存しているケースがあります。この場合、<code>dependson</code>オプションを使います。使い方は<code>dependson = "依存するチャンク名"</code>です。もし、1番目のチャンク名を<code>define_X</code>としたら、<code>dependson = "define_X"</code>とオプションを加えます。</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb26-1"><a href="rmarkdown.html#cb26-1"></a><span class="in">```{r define_X}</span></span>
+<span id="cb26-2"><a href="rmarkdown.html#cb26-2"></a><span class="in">X &lt;- c(2, 3, 5, 7, 10)</span></span>
+<span id="cb26-3"><a href="rmarkdown.html#cb26-3"></a><span class="in">```</span></span>
+<span id="cb26-4"><a href="rmarkdown.html#cb26-4"></a></span>
+<span id="cb26-5"><a href="rmarkdown.html#cb26-5"></a><span class="in">```{r, cache = TRUE, dependson = &quot;define_X&quot;}</span></span>
+<span id="cb26-6"><a href="rmarkdown.html#cb26-6"></a><span class="in">mean(X)</span></span>
+<span id="cb26-7"><a href="rmarkdown.html#cb26-7"></a><span class="in">```</span></span></code></pre></div>
+<p>　このようにチャンク名と<code>cache</code>、<code>dependson</code>オプションを組み合わせると、依存するチャンクの中身が変わったら、<code>cache = TRUE</code>でも再計算を行います。</p>
+</div>
+<div id="コードまたは結果の表示非常時" class="section level3" number="22.4.2">
+<h3><span class="header-section-number">22.4.2</span> コードまたは結果の表示/非常時</h3>
+<p>　次は「コードだけ見せたい」、「結果だけ見せたい」場合使うオプションを紹介します。これはあまり使わないかも知れませんが、本書のような技術書にはよく使う機能です。コードのみ出力し、計算を行わない場合は<code>eval = FALSE</code>オプションを、コードを見せず、結果のみ出力する場合は<code>echo = FALSE</code>を指定するだけです。</p>
+</div>
+<div id="プロット" class="section level3" number="22.4.3">
+<h3><span class="header-section-number">22.4.3</span> プロット</h3>
+<p>　既に見てきた通り、R Markdownは作図の結果も出力してくれます。そこで、図のサイズや解像度を変えることもできます。ここではプロットに関するいくつかのオプションを紹介します。</p>
+<ul>
+<li><code>fig.height</code>: 図の高さ。単位はインチ。デフォルト値は7</li>
+<li><code>fig.width</code>: 図の幅。単位はインチ。デフォルト値は7</li>
+<li><code>fig.align</code>: 図の位置。デフォルトは<code>"left"</code>。<code>"center"</code>の場合、中央揃え、<code>"right"</code>の場合は右揃えになる。</li>
+<li><code>fig.cap</code>: 図のキャプション</li>
+<li><code>dpi</code>: 図の解像度。デフォルトは72。出版用の図は一般的に300以上を使う</li>
+</ul>
+<p>　実際に高さ5インチ、幅7インチ、中央揃え、解像度72dpiの図を作成し、キャプションとして「<code>iris</code>データセットの可視化」を付けてみましょう。</p>
+<p><strong>Input:</strong>
+　</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb27-1"><a href="rmarkdown.html#cb27-1"></a>``<span class="in">`{r, fig.height = 5, fig.width = 7, fig.align = &quot;center&quot;, fig.cap = &quot;`</span>iris`データセットの可視化&quot;, dpi = 72}</span>
+<span id="cb27-2"><a href="rmarkdown.html#cb27-2"></a>iris %&gt;%</span>
+<span id="cb27-3"><a href="rmarkdown.html#cb27-3"></a>  mutate(Species2 = recode(Species,</span>
+<span id="cb27-4"><a href="rmarkdown.html#cb27-4"></a>                           &quot;setosa&quot;     = &quot;セトナ&quot;,</span>
+<span id="cb27-5"><a href="rmarkdown.html#cb27-5"></a>                           &quot;versicolor&quot; = &quot;バーシクル&quot;,</span>
+<span id="cb27-6"><a href="rmarkdown.html#cb27-6"></a>                           &quot;virginica&quot;  = &quot;バージニカ&quot;)) %&gt;%</span>
+<span id="cb27-7"><a href="rmarkdown.html#cb27-7"></a>  ggplot() +</span>
+<span id="cb27-8"><a href="rmarkdown.html#cb27-8"></a>  geom_point(aes(x = Sepal.Length, y = Sepal.Width, color = Species2)) +</span>
+<span id="cb27-9"><a href="rmarkdown.html#cb27-9"></a>  labs(x = &quot;萼片の長さ (cm)&quot;, y = &quot;萼片の幅 (cm)&quot;, color = &quot;品種&quot;) +</span>
+<span id="cb27-10"><a href="rmarkdown.html#cb27-10"></a>  theme_minimal(base_family = &quot;HiraKakuProN-W3&quot;)</span>
+<span id="cb27-11"><a href="rmarkdown.html#cb27-11"></a><span class="in">```</span></span></code></pre></div>
+<p><strong>Output:</strong></p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="rmarkdown.html#cb28-1"></a>iris <span class="op">%&gt;%</span></span>
+<span id="cb28-2"><a href="rmarkdown.html#cb28-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Species2 =</span> <span class="kw">recode</span>(Species,</span>
+<span id="cb28-3"><a href="rmarkdown.html#cb28-3"></a>                           <span class="st">&quot;setosa&quot;</span>     =<span class="st"> &quot;セトナ&quot;</span>,</span>
+<span id="cb28-4"><a href="rmarkdown.html#cb28-4"></a>                           <span class="st">&quot;versicolor&quot;</span> =<span class="st"> &quot;バーシクル&quot;</span>,</span>
+<span id="cb28-5"><a href="rmarkdown.html#cb28-5"></a>                           <span class="st">&quot;virginica&quot;</span>  =<span class="st"> &quot;バージニカ&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb28-6"><a href="rmarkdown.html#cb28-6"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb28-7"><a href="rmarkdown.html#cb28-7"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Sepal.Length, <span class="dt">y =</span> Sepal.Width, <span class="dt">color =</span> Species2)) <span class="op">+</span></span>
+<span id="cb28-8"><a href="rmarkdown.html#cb28-8"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;萼片の長さ (cm)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;萼片の幅 (cm)&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;品種&quot;</span>) <span class="op">+</span></span>
+<span id="cb28-9"><a href="rmarkdown.html#cb28-9"></a><span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-9"></span>
+<img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-9-1.png" alt="`iris`データセットの可視化" width="504" />
+<p class="caption">
+図 22.2: <code>iris</code>データセットの可視化
+</p>
+</div>
+</div>
+<div id="コードの見栄" class="section level3" number="22.4.4">
+<h3><span class="header-section-number">22.4.4</span> コードの見栄</h3>
+<p>　第<a href="programming.html#programming">10</a>章ではスクリプトの書き方を紹介しましたが、常にその書き方に則った書き方をしているとは限りません。自分だけが見るコードなら別に推奨されない書き方でも問題ないかも知れませんが、R Markdownの結果は他人と共有するケースが多いため、読みやすいコードを書くのも大事です。ここで便利なオプションが<code>tidy</code>オプションです。<code>tidy = TRUE</code>を加えると、自動的にコードを読みやすい形に調整してくれます。たとえば、以下のコードは字下げもなく、スペースもほとんど入れていないコードですが、<code>tidy = TRUE</code>を付けた場合と付けなかった場合の出力結果の違いを見てみましょう。</p>
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb29-1"><a href="rmarkdown.html#cb29-1"></a><span class="in">```{r, eval = FALSE}</span></span>
+<span id="cb29-2"><a href="rmarkdown.html#cb29-2"></a><span class="in">for(i in 1:10){</span></span>
+<span id="cb29-3"><a href="rmarkdown.html#cb29-3"></a><span class="in">print(i*2)</span></span>
+<span id="cb29-4"><a href="rmarkdown.html#cb29-4"></a><span class="in">}</span></span>
+<span id="cb29-5"><a href="rmarkdown.html#cb29-5"></a><span class="in">```</span></span></code></pre></div>
+<p><strong>Output:</strong>　</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="rmarkdown.html#cb30-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>){</span>
+<span id="cb30-2"><a href="rmarkdown.html#cb30-2"></a><span class="kw">print</span>(i<span class="op">*</span><span class="dv">2</span>)</span>
+<span id="cb30-3"><a href="rmarkdown.html#cb30-3"></a>}</span></code></pre></div>
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb31-1"><a href="rmarkdown.html#cb31-1"></a><span class="in">```{r, eval = FALSE, tidy = TRUE}</span></span>
+<span id="cb31-2"><a href="rmarkdown.html#cb31-2"></a><span class="in">for(i in 1:10){</span></span>
+<span id="cb31-3"><a href="rmarkdown.html#cb31-3"></a><span class="in">print(i*2)</span></span>
+<span id="cb31-4"><a href="rmarkdown.html#cb31-4"></a><span class="in">}</span></span>
+<span id="cb31-5"><a href="rmarkdown.html#cb31-5"></a><span class="in">```</span></span></code></pre></div>
+<p><strong>Output:</strong></p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="rmarkdown.html#cb32-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>) {</span>
+<span id="cb32-2"><a href="rmarkdown.html#cb32-2"></a>    <span class="kw">print</span>(i <span class="op">*</span><span class="st"> </span><span class="dv">2</span>)</span>
+<span id="cb32-3"><a href="rmarkdown.html#cb32-3"></a>}</span></code></pre></div>
+<p>　<code>tidy = TRUE</code>を付けただけで、読みやすいコードになりました。ちなみに<code>tidy</code>オプションを使うためには事前に<code>formatR</code>パッケージをインストールしておく必要があります。ただし、<code>formatR</code>パッケージはR Markdwon内において読み込んでおく必要はありません。また、<code>formatR</code>パッケージは万能ではないため、普段から読みやすいコードを書くようにしましょう。</p>
 <hr />
+</div>
 </div>
 <div id="rmarkdown-header" class="section level2" number="22.5">
 <h2><span class="header-section-number">22.5</span> ヘッダーのオプション</h2>
 <p>　R Markdownファイルを生成すると、ファイルの最上段には以下のようなヘッダー（header）というものが生成されます。</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb25-1"><a href="rmarkdown.html#cb25-1"></a><span class="pp">---</span></span>
-<span id="cb25-2"><a href="rmarkdown.html#cb25-2"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;Untitled&quot;</span></span>
-<span id="cb25-3"><a href="rmarkdown.html#cb25-3"></a><span class="fu">author</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;Jaehyun Song&quot;</span></span>
-<span id="cb25-4"><a href="rmarkdown.html#cb25-4"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;8/6/2020&quot;</span></span>
-<span id="cb25-5"><a href="rmarkdown.html#cb25-5"></a><span class="fu">output</span><span class="kw">:</span><span class="at"> html_document</span></span>
-<span id="cb25-6"><a href="rmarkdown.html#cb25-6"></a><span class="pp">---</span></span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb33-1"><a href="rmarkdown.html#cb33-1"></a><span class="pp">---</span></span>
+<span id="cb33-2"><a href="rmarkdown.html#cb33-2"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;Untitled&quot;</span></span>
+<span id="cb33-3"><a href="rmarkdown.html#cb33-3"></a><span class="fu">author</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;Jaehyun Song&quot;</span></span>
+<span id="cb33-4"><a href="rmarkdown.html#cb33-4"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;8/6/2020&quot;</span></span>
+<span id="cb33-5"><a href="rmarkdown.html#cb33-5"></a><span class="fu">output</span><span class="kw">:</span><span class="at"> html_document</span></span>
+<span id="cb33-6"><a href="rmarkdown.html#cb33-6"></a><span class="pp">---</span></span></code></pre></div>
 <p>　基本的には4つの項目が指定されており、それぞれ文書のタイトル（<code>title:</code>）、作成者名（<code>author:</code>）、作成日（<code>date:</code>）、出力形式（<code>output:</code>）があります。タイトルと作成者名はファイル生成時に指定した内容が、作成日は今日の日付が、出力形式はHTMLで設定した場合<code>html_document</code>になっています。R MarkdownヘッダーはYAML（やむる）形式で書かれています。こちらはいつでも修正可能であり、インラインRコードを埋め込むことも可能です。たとえば、作成日をファイル生成日でなく、Knitした日付にしたい場合は日付を出力する<code>Sys.Date()</code>関数を使って、<code>date: "最終修正: `r Sys.Date()`"</code>のように書くことも可能です。他にもデフォルトでは指定されていませんが、<code>subtitle:</code>を使ってサブタイトルを指定したり、<code>abstract:</code>で要約を入れることも可能です。
 　
 　また、R Markdownのコメントは<code>&lt;!--</code>と<code>--&gt;</code>を使いますが、ヘッダー内のコメントはRと同様、<code>#</code>を使います。</p>
@@ -946,18 +1048,18 @@ X &lt;- c(2, 3, 5, 7, 11)
 <div id="目次の追加" class="section level3" number="22.5.1">
 <h3><span class="header-section-number">22.5.1</span> 目次の追加</h3>
 <p>　R Markdownの文章が長くなったり、コードが多く含まれる場合、目次を入れたら文章の構造が一目で把握できるでしょう。目次は見出しに沿って自動的に生成されます。<code>#</code>は章、<code>##</code>は節といった形式です。</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb26-1"><a href="rmarkdown.html#cb26-1"></a><span class="pp">---</span></span>
-<span id="cb26-2"><a href="rmarkdown.html#cb26-2"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;タイトル&quot;</span></span>
-<span id="cb26-3"><a href="rmarkdown.html#cb26-3"></a><span class="fu">subtitle</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;サブタイトル&quot;</span></span>
-<span id="cb26-4"><a href="rmarkdown.html#cb26-4"></a><span class="fu">author</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;作成者名&quot;</span></span>
-<span id="cb26-5"><a href="rmarkdown.html#cb26-5"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;最終修正: `r Sys.Date()`&quot;</span></span>
-<span id="cb26-6"><a href="rmarkdown.html#cb26-6"></a><span class="fu">output</span><span class="kw">:</span></span>
-<span id="cb26-7"><a href="rmarkdown.html#cb26-7"></a><span class="at">  </span><span class="fu">html_document</span><span class="kw">:</span></span>
-<span id="cb26-8"><a href="rmarkdown.html#cb26-8"></a><span class="at">    </span><span class="fu">toc</span><span class="kw">:</span><span class="at"> </span><span class="ch">FALSE</span></span>
-<span id="cb26-9"><a href="rmarkdown.html#cb26-9"></a><span class="at">    </span><span class="fu">toc_depth</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
-<span id="cb26-10"><a href="rmarkdown.html#cb26-10"></a><span class="at">    </span><span class="fu">toc_float</span><span class="kw">:</span><span class="at"> </span><span class="ch">FALSE</span></span>
-<span id="cb26-11"><a href="rmarkdown.html#cb26-11"></a><span class="at">    </span><span class="fu">number_sections</span><span class="kw">:</span><span class="at"> </span><span class="ch">FALSE</span></span>
-<span id="cb26-12"><a href="rmarkdown.html#cb26-12"></a><span class="pp">---</span></span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb34-1"><a href="rmarkdown.html#cb34-1"></a><span class="pp">---</span></span>
+<span id="cb34-2"><a href="rmarkdown.html#cb34-2"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;タイトル&quot;</span></span>
+<span id="cb34-3"><a href="rmarkdown.html#cb34-3"></a><span class="fu">subtitle</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;サブタイトル&quot;</span></span>
+<span id="cb34-4"><a href="rmarkdown.html#cb34-4"></a><span class="fu">author</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;作成者名&quot;</span></span>
+<span id="cb34-5"><a href="rmarkdown.html#cb34-5"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;最終修正: `r Sys.Date()`&quot;</span></span>
+<span id="cb34-6"><a href="rmarkdown.html#cb34-6"></a><span class="fu">output</span><span class="kw">:</span></span>
+<span id="cb34-7"><a href="rmarkdown.html#cb34-7"></a><span class="at">  </span><span class="fu">html_document</span><span class="kw">:</span></span>
+<span id="cb34-8"><a href="rmarkdown.html#cb34-8"></a><span class="at">    </span><span class="fu">toc</span><span class="kw">:</span><span class="at"> </span><span class="ch">FALSE</span></span>
+<span id="cb34-9"><a href="rmarkdown.html#cb34-9"></a><span class="at">    </span><span class="fu">toc_depth</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
+<span id="cb34-10"><a href="rmarkdown.html#cb34-10"></a><span class="at">    </span><span class="fu">toc_float</span><span class="kw">:</span><span class="at"> </span><span class="ch">FALSE</span></span>
+<span id="cb34-11"><a href="rmarkdown.html#cb34-11"></a><span class="at">    </span><span class="fu">number_sections</span><span class="kw">:</span><span class="at"> </span><span class="ch">FALSE</span></span>
+<span id="cb34-12"><a href="rmarkdown.html#cb34-12"></a><span class="pp">---</span></span></code></pre></div>
 <p>　字下げには常に注意してください。<code>html_document</code>は<code>output:</code>の下位項目ですから、字下げを行います。また、<code>toc</code>は<code>html_document</code>の下位項目ですので、更に字下げをします。ここでは目次と関連する項目として以下の4つを紹介します。</p>
 <ul>
 <li><code>toc</code>: 目次の出力有無
@@ -981,15 +1083,15 @@ X &lt;- c(2, 3, 5, 7, 11)
 <div id="コードのハイライト" class="section level3" number="22.5.2">
 <h3><span class="header-section-number">22.5.2</span> コードのハイライト</h3>
 <p>　R Markdownの場合、コードチャンク内のコードの一部に対して自動的に色付けを行います。たとえば、本書の場合、関数名は緑、引数は赤、文字列は青といった形です。これはコードの可読性を向上させる効果もあります。この色付けの詳細は<code>html_document:</code>の<code>highligh:</code>から調整できます。</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb27-1"><a href="rmarkdown.html#cb27-1"></a><span class="pp">---</span></span>
-<span id="cb27-2"><a href="rmarkdown.html#cb27-2"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;タイトル&quot;</span></span>
-<span id="cb27-3"><a href="rmarkdown.html#cb27-3"></a><span class="fu">subtitle</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;サブタイトル&quot;</span></span>
-<span id="cb27-4"><a href="rmarkdown.html#cb27-4"></a><span class="fu">author</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;作成者名&quot;</span></span>
-<span id="cb27-5"><a href="rmarkdown.html#cb27-5"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;最終修正: `r Sys.Date()`&quot;</span></span>
-<span id="cb27-6"><a href="rmarkdown.html#cb27-6"></a><span class="fu">output</span><span class="kw">:</span></span>
-<span id="cb27-7"><a href="rmarkdown.html#cb27-7"></a><span class="at">  </span><span class="fu">html_document</span><span class="kw">:</span></span>
-<span id="cb27-8"><a href="rmarkdown.html#cb27-8"></a><span class="at">    </span><span class="fu">highlight</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;tango&quot;</span></span>
-<span id="cb27-9"><a href="rmarkdown.html#cb27-9"></a><span class="pp">---</span></span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb35-1"><a href="rmarkdown.html#cb35-1"></a><span class="pp">---</span></span>
+<span id="cb35-2"><a href="rmarkdown.html#cb35-2"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;タイトル&quot;</span></span>
+<span id="cb35-3"><a href="rmarkdown.html#cb35-3"></a><span class="fu">subtitle</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;サブタイトル&quot;</span></span>
+<span id="cb35-4"><a href="rmarkdown.html#cb35-4"></a><span class="fu">author</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;作成者名&quot;</span></span>
+<span id="cb35-5"><a href="rmarkdown.html#cb35-5"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;最終修正: `r Sys.Date()`&quot;</span></span>
+<span id="cb35-6"><a href="rmarkdown.html#cb35-6"></a><span class="fu">output</span><span class="kw">:</span></span>
+<span id="cb35-7"><a href="rmarkdown.html#cb35-7"></a><span class="at">  </span><span class="fu">html_document</span><span class="kw">:</span></span>
+<span id="cb35-8"><a href="rmarkdown.html#cb35-8"></a><span class="at">    </span><span class="fu">highlight</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;tango&quot;</span></span>
+<span id="cb35-9"><a href="rmarkdown.html#cb35-9"></a><span class="pp">---</span></span></code></pre></div>
 <p>R Markdown 2.3の場合、使用可能なテーマは以下の10種類です。自分の好みでハイライトテーマを替えてみましょう。</p>
 <table>
 <thead>
@@ -1046,35 +1148,22 @@ X &lt;- c(2, 3, 5, 7, 11)
 </div>
 <div id="rmarkdown-japanese" class="section level2" number="22.6">
 <h2><span class="header-section-number">22.6</span> 日本語が含まれているPDFの出力</h2>
-<p>　本文中に日本語が含まれている場合、PDF出力の祭、エラーが表示されるだろう。日本語が含まれたPDFの場合、自分のパソコンに日本語TeX環境を整える必要がある。</p>
-<p>　もし、自分のPCで既に日本語TeX環境が整っている場合、R Markdownのヘッダーを以下のように修正する。</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb28-1"><a href="rmarkdown.html#cb28-1"></a><span class="pp">---</span></span>
-<span id="cb28-2"><a href="rmarkdown.html#cb28-2"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;R楽しいぞ&quot;</span></span>
-<span id="cb28-3"><a href="rmarkdown.html#cb28-3"></a><span class="fu">subtitle</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;みんなでやろうぜ&quot;</span></span>
-<span id="cb28-4"><a href="rmarkdown.html#cb28-4"></a><span class="fu">author</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;矢内勇生 a.k.a Rの神&quot;</span></span>
-<span id="cb28-5"><a href="rmarkdown.html#cb28-5"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;2020年4月10日&quot;</span></span>
-<span id="cb28-6"><a href="rmarkdown.html#cb28-6"></a><span class="fu">output</span><span class="kw">:</span></span>
-<span id="cb28-7"><a href="rmarkdown.html#cb28-7"></a><span class="at">  </span><span class="fu">pdf_document</span><span class="kw">:</span></span>
-<span id="cb28-8"><a href="rmarkdown.html#cb28-8"></a><span class="at">    </span><span class="fu">highlight</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;default&quot;</span></span>
-<span id="cb28-9"><a href="rmarkdown.html#cb28-9"></a><span class="at">    </span><span class="fu">number_sections</span><span class="kw">:</span><span class="at"> </span><span class="ch">yes</span></span>
-<span id="cb28-10"><a href="rmarkdown.html#cb28-10"></a><span class="at">    </span><span class="fu">toc</span><span class="kw">:</span><span class="at"> </span><span class="ch">yes</span></span>
-<span id="cb28-11"><a href="rmarkdown.html#cb28-11"></a><span class="at">    </span><span class="fu">latex_engine</span><span class="kw">:</span><span class="at"> xelatex</span></span>
-<span id="cb28-12"><a href="rmarkdown.html#cb28-12"></a><span class="fu">mainfont</span><span class="kw">:</span><span class="at"> ipaexg.ttf</span></span>
-<span id="cb28-13"><a href="rmarkdown.html#cb28-13"></a><span class="pp">---</span></span></code></pre></div>
-<p>コンパイルしたら以下のようなPDFファイルが生成される。</p>
+<p>　本文中に日本語が含まれている場合、PDF出力の祭、エラーが表示されます。日本語が含まれたPDFの場合、自分のパソコンに日本語TeX環境を整える必要があります。もし、自分のPCで既に日本語TeX環境が整っている場合、R Markdownのヘッダーを以下のように修正します。</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb36-1"><a href="rmarkdown.html#cb36-1"></a><span class="pp">---</span></span>
+<span id="cb36-2"><a href="rmarkdown.html#cb36-2"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;R楽しいぞ&quot;</span></span>
+<span id="cb36-3"><a href="rmarkdown.html#cb36-3"></a><span class="fu">subtitle</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;みんなでやろうぜ&quot;</span></span>
+<span id="cb36-4"><a href="rmarkdown.html#cb36-4"></a><span class="fu">author</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;矢内勇生 a.k.a Rの神&quot;</span></span>
+<span id="cb36-5"><a href="rmarkdown.html#cb36-5"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;2020年4月10日&quot;</span></span>
+<span id="cb36-6"><a href="rmarkdown.html#cb36-6"></a><span class="fu">output</span><span class="kw">:</span></span>
+<span id="cb36-7"><a href="rmarkdown.html#cb36-7"></a><span class="at">  </span><span class="fu">pdf_document</span><span class="kw">:</span></span>
+<span id="cb36-8"><a href="rmarkdown.html#cb36-8"></a><span class="at">    </span><span class="fu">highlight</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;default&quot;</span></span>
+<span id="cb36-9"><a href="rmarkdown.html#cb36-9"></a><span class="at">    </span><span class="fu">number_sections</span><span class="kw">:</span><span class="at"> </span><span class="ch">yes</span></span>
+<span id="cb36-10"><a href="rmarkdown.html#cb36-10"></a><span class="at">    </span><span class="fu">toc</span><span class="kw">:</span><span class="at"> </span><span class="ch">yes</span></span>
+<span id="cb36-11"><a href="rmarkdown.html#cb36-11"></a><span class="at">    </span><span class="fu">latex_engine</span><span class="kw">:</span><span class="at"> xelatex</span></span>
+<span id="cb36-12"><a href="rmarkdown.html#cb36-12"></a><span class="fu">mainfont</span><span class="kw">:</span><span class="at"> ipaexg.ttf</span></span>
+<span id="cb36-13"><a href="rmarkdown.html#cb36-13"></a><span class="pp">---</span></span></code></pre></div>
+<p>コンパイルしたら以下のようなPDFファイルが生成されます。</p>
 <p><img src="figures/Markdown/Japanese.png" /></p>
-<p>ヘッダーの主な修正は<code>output:</code>オプションである。それでは一つずつ解説する。</p>
-<ul>
-<li><code>pdf_document:</code>: PDF出力</li>
-<li><code>highlight:</code>: コードのハイライトテーマを設定する。
-<ul>
-<li>使用可能なテーマは<code>default</code>、<code>tango</code>、<code>pygments</code>、<code>kate</code>、<code>monochrome</code>、<code>espresso</code>、<code>zenburn</code>、<code>haddock</code>、<code>breezedark</code>の9種類である。それぞれの例は後で紹介する。</li>
-</ul></li>
-<li><code>number_sections:</code>: 章・節の前に数字を付ける場合、<code>yes</code></li>
-<li><code>toc</code>: 目次を付ける場合、<code>yes</code></li>
-<li><code>latex_engine:</code>: ここは<code>xelatex</code>のままにする。</li>
-<li><code>mainfont:</code>: ここも<code>ipaexg.ttf</code>のままにする。</li>
-</ul>
 
 </div>
 </div>
