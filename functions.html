@@ -332,9 +332,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="11" data-path="functions.html"><a href="functions.html"><i class="fa fa-check"></i><b>11</b> 関数の自作</a>
 <ul>
-<li class="chapter" data-level="11.1" data-path="functions.html"><a href="functions.html#programming-function"><i class="fa fa-check"></i><b>11.1</b> 関数の作成</a></li>
-<li class="chapter" data-level="11.2" data-path="functions.html"><a href="functions.html#関数-in-関数"><i class="fa fa-check"></i><b>11.2</b> 関数 in 関数</a></li>
-<li class="chapter" data-level="11.3" data-path="programming.html"><a href="programming.html#programming-exercise"><i class="fa fa-check"></i><b>11.3</b> 練習問題</a></li>
+<li class="chapter" data-level="11.1" data-path="functions.html"><a href="functions.html#func-intro"><i class="fa fa-check"></i><b>11.1</b> 関数の作成</a></li>
+<li class="chapter" data-level="11.2" data-path="functions.html"><a href="functions.html#func-adv"><i class="fa fa-check"></i><b>11.2</b> ちょっと複雑な関数</a></li>
+<li class="chapter" data-level="11.3" data-path="functions.html"><a href="functions.html#func-in-func"><i class="fa fa-check"></i><b>11.3</b> 関数 in 関数</a></li>
+<li class="chapter" data-level="11.4" data-path="functions.html"><a href="functions.html#func-exercise"><i class="fa fa-check"></i><b>11.4</b> 練習問題</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="datahandling1.html"><a href="datahandling1.html"><i class="fa fa-check"></i><b>12</b> データハンドリング [基礎編: 抽出]</a>
 <ul>
@@ -573,28 +574,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="functions" class="section level1" number="11">
 <h1><span class="header-section-number">11.</span> 関数の自作</h1>
-<div id="programming-function" class="section level2" number="11.1">
+<div id="func-intro" class="section level2" number="11.1">
 <h2><span class="header-section-number">11.1</span> 関数の作成</h2>
 <p>これまで<code>class()</code>や、<code>sum()</code>、<code>print()</code>など様々な関数を使ってきました。関数は<code>関数名(引数)</code>の書き方をします。関数とは<code>()</code>内の引数のデータを関数内部の手続きに沿って処理し、その結果を返す関数です。したがって、関数は「データだけ違って、同じ処理を行いたい」場合に非常に便利です。</p>
 <p>ベクトル<code>c(1, 2, 3, 4, 5)</code>の総和を計算する方法について考えてみましょう。まず、1つ目は単純に足し算をする方法があります。</p>
-<div class="sourceCode" id="cb719"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb719-1"><a href="functions.html#cb719-1"></a><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span><span class="dv">3</span> <span class="op">+</span><span class="st"> </span><span class="dv">4</span> <span class="op">+</span><span class="st"> </span><span class="dv">5</span></span></code></pre></div>
+<div class="sourceCode" id="cb717"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb717-1"><a href="functions.html#cb717-1"></a><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span><span class="dv">3</span> <span class="op">+</span><span class="st"> </span><span class="dv">4</span> <span class="op">+</span><span class="st"> </span><span class="dv">5</span></span></code></pre></div>
 <pre><code>## [1] 15</code></pre>
 <p>他にも反復処理を使うことも可能です。とりわけ、<code>1:100</code>のようなベクトルを1つ目の方法で記述するのは時間の無駄でしょう。<code>for()</code>文を使った方法は以下のようになります。</p>
-<div class="sourceCode" id="cb721"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb721-1"><a href="functions.html#cb721-1"></a>Result &lt;-<span class="st"> </span><span class="dv">0</span></span>
-<span id="cb721-2"><a href="functions.html#cb721-2"></a></span>
-<span id="cb721-3"><a href="functions.html#cb721-3"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>) {</span>
-<span id="cb721-4"><a href="functions.html#cb721-4"></a>  Result &lt;-<span class="st"> </span>Result <span class="op">+</span><span class="st"> </span>i  </span>
-<span id="cb721-5"><a href="functions.html#cb721-5"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb722"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb722-1"><a href="functions.html#cb722-1"></a>Result</span></code></pre></div>
+<div class="sourceCode" id="cb719"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb719-1"><a href="functions.html#cb719-1"></a>Result &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb719-2"><a href="functions.html#cb719-2"></a></span>
+<span id="cb719-3"><a href="functions.html#cb719-3"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>) {</span>
+<span id="cb719-4"><a href="functions.html#cb719-4"></a>  Result &lt;-<span class="st"> </span>Result <span class="op">+</span><span class="st"> </span>i  </span>
+<span id="cb719-5"><a href="functions.html#cb719-5"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb720"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb720-1"><a href="functions.html#cb720-1"></a>Result</span></code></pre></div>
 <pre><code>## [1] 15</code></pre>
 <p>数個の数字を足すだけなら方法1の方が楽でしょうし、数百個の数字の場合は方法2の方が効率的です。それでもやはり<code>sum()</code>関数の方が数倍は効率的です。また、関数を使うことで、スクリプトの量をへらすこともできます。1から100までの総和なら、方法2の<code>for (i in 1:5)</code>を<code>for (i in 1:100)</code>に変えることで対応可能ですが、それでも全体としては数行のコードで書かなくてもなりません。一方、<code>sum(1:100)</code>なら一行で済みます。</p>
 <p><code>sum()</code>はまだマシな方です。たとえば、回帰分析をしたい場合、毎回回帰分析のコードを一から書くのはあまりにも非効率的です。<code>lm()</code>関数を使うと、データや回帰式などを指定するだけで、一連の作業を全て自動的に行い、その結果を返してくれます。中には回帰式の係数も計算してくれますが、他にも残差や決定係数なども計算してくれます。その意味で、<code>lm()</code>という関数は複数の機能を一つの関数としてまとめたものでもあります。</p>
 <p>これらの関数は既にR開発チームが書いた関数ですが、ユーザー側から関数を作成することも可能です。長いコードを書く、同じ作業を繰り返す場合、関数の作成はほぼ必須とも言えます。ここではまず、簡単な関数を作成してみましょう。与えられた数字を二乗し、その結果を返す<code>myPower()</code>関数を作ってみましょう。</p>
-<div class="sourceCode" id="cb724"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb724-1"><a href="functions.html#cb724-1"></a>myPower &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
-<span id="cb724-2"><a href="functions.html#cb724-2"></a>  x<span class="op">^</span><span class="dv">2</span></span>
-<span id="cb724-3"><a href="functions.html#cb724-3"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb725"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb725-1"><a href="functions.html#cb725-1"></a><span class="co"># 引数が一つしかないので、myPower(24)も可能</span></span>
-<span id="cb725-2"><a href="functions.html#cb725-2"></a><span class="kw">myPower</span>(<span class="dt">x =</span> <span class="dv">24</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb722"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb722-1"><a href="functions.html#cb722-1"></a>myPower &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
+<span id="cb722-2"><a href="functions.html#cb722-2"></a>  x<span class="op">^</span><span class="dv">2</span></span>
+<span id="cb722-3"><a href="functions.html#cb722-3"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb723"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb723-1"><a href="functions.html#cb723-1"></a><span class="co"># 引数が一つしかないので、myPower(24)も可能</span></span>
+<span id="cb723-2"><a href="functions.html#cb723-2"></a><span class="kw">myPower</span>(<span class="dt">x =</span> <span class="dv">24</span>)</span></code></pre></div>
 <pre><code>## [1] 576</code></pre>
 <p>それではコードを解説します。関数は以下のように定義されます。</p>
 <pre><code>関数名 &lt;- function (引数名) {
@@ -604,61 +605,63 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>myPower &lt;- function (x)</code></pre>
 <p>の部分です。続いて、<code>{}</code>内に処理内容を書きます。今回は<code>x^2</code>であり、これは<code>x</code>の2乗を意味します。そして、関数の処理結果が返されますが、<code>{}</code>内の最後の行が結果として返されます。<code>x^2</code>の部分は<code>return(x^2)</code>と書き換えることも可能です。<code>return()</code>は「この結果を返せよ」という意味の関数ですが、返す結果が最後の行である場合、省略可能であり、Hadely先生もこのような書き方を推奨しています。</p>
 <p>それでは、もうちょっと複雑な関数を作成してみましょう。ベクトルを引数とし、その和を計算する<code>mySum()</code>という関数です。要するに<code>sum()</code>関数を再現したものです。</p>
-<div class="sourceCode" id="cb729"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb729-1"><a href="functions.html#cb729-1"></a><span class="co"># mySum関数を定義し、引数はxのみとする</span></span>
-<span id="cb729-2"><a href="functions.html#cb729-2"></a>mySum &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
-<span id="cb729-3"><a href="functions.html#cb729-3"></a>  <span class="co"># 結果を格納するベクトルResultを生成し、0を入れておく</span></span>
-<span id="cb729-4"><a href="functions.html#cb729-4"></a>  Result &lt;-<span class="st"> </span><span class="dv">0</span></span>
-<span id="cb729-5"><a href="functions.html#cb729-5"></a>  </span>
-<span id="cb729-6"><a href="functions.html#cb729-6"></a>  <span class="co"># xの要素をiに一つずつ入れながら反復処理</span></span>
-<span id="cb729-7"><a href="functions.html#cb729-7"></a>  <span class="cf">for</span> (i <span class="cf">in</span> x) {</span>
-<span id="cb729-8"><a href="functions.html#cb729-8"></a>    <span class="co"># Resultに既存のResultの値にiを足した結果を上書きする</span></span>
-<span id="cb729-9"><a href="functions.html#cb729-9"></a>    Result &lt;-<span class="st"> </span>Result <span class="op">+</span><span class="st"> </span>i</span>
-<span id="cb729-10"><a href="functions.html#cb729-10"></a>  }</span>
-<span id="cb729-11"><a href="functions.html#cb729-11"></a>  </span>
-<span id="cb729-12"><a href="functions.html#cb729-12"></a>  <span class="co"># Resultを返す</span></span>
-<span id="cb729-13"><a href="functions.html#cb729-13"></a>  Result</span>
-<span id="cb729-14"><a href="functions.html#cb729-14"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb730"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb730-1"><a href="functions.html#cb730-1"></a><span class="kw">mySum</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb727"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb727-1"><a href="functions.html#cb727-1"></a><span class="co"># mySum関数を定義し、引数はxのみとする</span></span>
+<span id="cb727-2"><a href="functions.html#cb727-2"></a>mySum &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
+<span id="cb727-3"><a href="functions.html#cb727-3"></a>  <span class="co"># 結果を格納するベクトルResultを生成し、0を入れておく</span></span>
+<span id="cb727-4"><a href="functions.html#cb727-4"></a>  Result &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb727-5"><a href="functions.html#cb727-5"></a>  </span>
+<span id="cb727-6"><a href="functions.html#cb727-6"></a>  <span class="co"># xの要素をiに一つずつ入れながら反復処理</span></span>
+<span id="cb727-7"><a href="functions.html#cb727-7"></a>  <span class="cf">for</span> (i <span class="cf">in</span> x) {</span>
+<span id="cb727-8"><a href="functions.html#cb727-8"></a>    <span class="co"># Resultに既存のResultの値にiを足した結果を上書きする</span></span>
+<span id="cb727-9"><a href="functions.html#cb727-9"></a>    Result &lt;-<span class="st"> </span>Result <span class="op">+</span><span class="st"> </span>i</span>
+<span id="cb727-10"><a href="functions.html#cb727-10"></a>  }</span>
+<span id="cb727-11"><a href="functions.html#cb727-11"></a>  </span>
+<span id="cb727-12"><a href="functions.html#cb727-12"></a>  <span class="co"># Resultを返す</span></span>
+<span id="cb727-13"><a href="functions.html#cb727-13"></a>  Result</span>
+<span id="cb727-14"><a href="functions.html#cb727-14"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb728"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb728-1"><a href="functions.html#cb728-1"></a><span class="kw">mySum</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)</span></code></pre></div>
 <pre><code>## [1] 15</code></pre>
 <p>普通の<code>sum()</code>関数と同じ動きをする関数が出来上がりました。よく見ると、上で説明した総和を計算する方法2のコードを丸ごと関数内に入っているだけです。変わったところがあるとすれば、<code>for()</code>文であり、<code>for (i in 1:5)</code>が<code>for (i in x)</code>に変わっただけです。ここの<code>x</code>は<code>mySum &lt;- function (x)</code>の<code>x</code>を意味します。このように関数を一回作成しておくと、これからは総和を出す作業を1行に短縮することができます。</p>
 <p>この<code>mySum()</code>ですが、一つ問題があります。それは<code>x</code>に欠損値が含まれている場合、結果が<code>NA</code>になることです。</p>
-<div class="sourceCode" id="cb732"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb732-1"><a href="functions.html#cb732-1"></a><span class="kw">mySum</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="ot">NA</span>, <span class="dv">5</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb730"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb730-1"><a href="functions.html#cb730-1"></a><span class="kw">mySum</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="ot">NA</span>, <span class="dv">5</span>))</span></code></pre></div>
 <pre><code>## [1] NA</code></pre>
 <p>実際、R内蔵関数である<code>sum()</code>も同じですが、<code>sum()</code>には<code>na.rm =</code>というもう一つの引数があり、これを<code>TRUE</code>にすることで欠損値を除いた総和が計算できます。つまり、関数は複数の引数を持つことができます。それでは、<code>mySum()</code>を改良してみましょう。ここにも<code>na.rm</code>という関数を追加し、<code>na.rm</code>引数が<code>TRUE</code>の場合、<code>x</code>から欠損値を除いた上で総和を計算するようにしましょう。</p>
-<div class="sourceCode" id="cb734"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb734-1"><a href="functions.html#cb734-1"></a>mySum &lt;-<span class="st"> </span><span class="cf">function</span>(x, <span class="dt">na.rm =</span> <span class="ot">FALSE</span>) {</span>
-<span id="cb734-2"><a href="functions.html#cb734-2"></a>  <span class="cf">if</span> (na.rm <span class="op">==</span><span class="st"> </span><span class="ot">TRUE</span>) {</span>
-<span id="cb734-3"><a href="functions.html#cb734-3"></a>    x &lt;-<span class="st"> </span>x[<span class="op">!</span><span class="kw">is.na</span>(x)]</span>
-<span id="cb734-4"><a href="functions.html#cb734-4"></a>  }</span>
-<span id="cb734-5"><a href="functions.html#cb734-5"></a>  </span>
-<span id="cb734-6"><a href="functions.html#cb734-6"></a>  Result &lt;-<span class="st"> </span><span class="dv">0</span></span>
-<span id="cb734-7"><a href="functions.html#cb734-7"></a>  </span>
-<span id="cb734-8"><a href="functions.html#cb734-8"></a>  <span class="cf">for</span> (i <span class="cf">in</span> x) {</span>
-<span id="cb734-9"><a href="functions.html#cb734-9"></a>      Result &lt;-<span class="st"> </span>Result <span class="op">+</span><span class="st"> </span>i</span>
-<span id="cb734-10"><a href="functions.html#cb734-10"></a>  }</span>
-<span id="cb734-11"><a href="functions.html#cb734-11"></a>  </span>
-<span id="cb734-12"><a href="functions.html#cb734-12"></a>  Result</span>
-<span id="cb734-13"><a href="functions.html#cb734-13"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb735"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb735-1"><a href="functions.html#cb735-1"></a><span class="kw">mySum</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="ot">NA</span>, <span class="dv">5</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb732"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb732-1"><a href="functions.html#cb732-1"></a>mySum &lt;-<span class="st"> </span><span class="cf">function</span>(x, <span class="dt">na.rm =</span> <span class="ot">FALSE</span>) {</span>
+<span id="cb732-2"><a href="functions.html#cb732-2"></a>  <span class="cf">if</span> (na.rm <span class="op">==</span><span class="st"> </span><span class="ot">TRUE</span>) {</span>
+<span id="cb732-3"><a href="functions.html#cb732-3"></a>    x &lt;-<span class="st"> </span>x[<span class="op">!</span><span class="kw">is.na</span>(x)]</span>
+<span id="cb732-4"><a href="functions.html#cb732-4"></a>  }</span>
+<span id="cb732-5"><a href="functions.html#cb732-5"></a>  </span>
+<span id="cb732-6"><a href="functions.html#cb732-6"></a>  Result &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb732-7"><a href="functions.html#cb732-7"></a>  </span>
+<span id="cb732-8"><a href="functions.html#cb732-8"></a>  <span class="cf">for</span> (i <span class="cf">in</span> x) {</span>
+<span id="cb732-9"><a href="functions.html#cb732-9"></a>      Result &lt;-<span class="st"> </span>Result <span class="op">+</span><span class="st"> </span>i</span>
+<span id="cb732-10"><a href="functions.html#cb732-10"></a>  }</span>
+<span id="cb732-11"><a href="functions.html#cb732-11"></a>  </span>
+<span id="cb732-12"><a href="functions.html#cb732-12"></a>  Result</span>
+<span id="cb732-13"><a href="functions.html#cb732-13"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb733"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb733-1"><a href="functions.html#cb733-1"></a><span class="kw">mySum</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="ot">NA</span>, <span class="dv">5</span>))</span></code></pre></div>
 <pre><code>## [1] NA</code></pre>
-<div class="sourceCode" id="cb737"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb737-1"><a href="functions.html#cb737-1"></a><span class="kw">mySum</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="ot">NA</span>, <span class="dv">5</span>), <span class="dt">na.rm =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb735"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb735-1"><a href="functions.html#cb735-1"></a><span class="kw">mySum</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="ot">NA</span>, <span class="dv">5</span>), <span class="dt">na.rm =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
 <pre><code>## [1] NA</code></pre>
-<div class="sourceCode" id="cb739"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb739-1"><a href="functions.html#cb739-1"></a><span class="kw">mySum</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="ot">NA</span>, <span class="dv">5</span>), <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb737"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb737-1"><a href="functions.html#cb737-1"></a><span class="kw">mySum</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="ot">NA</span>, <span class="dv">5</span>), <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <pre><code>## [1] 11</code></pre>
 <p>変わったところは、まず<code>function (x)</code>が<code>function (x, na.rm = FALSE)</code>になりました。これは<code>x</code>と<code>na.rm</code>の引数が必要であるが、<code>na.rm</code>のデフォルト値は<code>FALSE</code>であることを意味します。デフォルト値が指定されている場合、関数を使用する際、その引数は省略できます。実際、<code>sum()</code>関数の<code>na.rm</code>引数も<code>FALSE</code>がデフォルトとなっており、省略可能となっています。</p>
 <p>次は最初に条件分岐が追加されました。ここでは<code>na.rm</code>が<code>TRUE</code>の場合、<code>x</code>から欠損値を抜いたベクトルを<code>x</code>に上書きするように指定しました。もし、<code>FALSE</code>ならこの処理は行いません。</p>
 <p>これでR開発チームが作成した<code>sum()</code>関数と同じものが出来上がりました。それでは引数の順番について簡単に解説し、もうちょっと複雑な関数を作ってみましょう。引数の順番は基本的に<code>function()</code>の<code>()</code>内で定義した順番であるなら、引数名を省略することも可能です。</p>
-<div class="sourceCode" id="cb741"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb741-1"><a href="functions.html#cb741-1"></a><span class="kw">mySum</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="ot">NA</span>, <span class="dv">5</span>), <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb739"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb739-1"><a href="functions.html#cb739-1"></a><span class="kw">mySum</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="ot">NA</span>, <span class="dv">5</span>), <span class="ot">TRUE</span>)</span></code></pre></div>
 <pre><code>## [1] 11</code></pre>
 <p>ただし、順番を逆にすると、以下のようにわけのわからない結果が返されます。</p>
-<div class="sourceCode" id="cb743"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb743-1"><a href="functions.html#cb743-1"></a><span class="kw">mySum</span>(<span class="ot">TRUE</span>, <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="ot">NA</span>, <span class="dv">5</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb741"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb741-1"><a href="functions.html#cb741-1"></a><span class="kw">mySum</span>(<span class="ot">TRUE</span>, <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="ot">NA</span>, <span class="dv">5</span>))</span></code></pre></div>
 <pre><code>## Warning in if (na.rm == TRUE) {: 条件が長さが 2 以上なので、最初の 1 つだけ
 ## が使われます</code></pre>
 <pre><code>## [1] 1</code></pre>
 <p>任意の順番で引数を指定する場合、引数名を指定する必要があります。</p>
-<div class="sourceCode" id="cb746"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb746-1"><a href="functions.html#cb746-1"></a><span class="kw">mySum</span>(<span class="dt">na.rm =</span> <span class="ot">TRUE</span>, <span class="dt">x =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="ot">NA</span>, <span class="dv">5</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb744"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb744-1"><a href="functions.html#cb744-1"></a><span class="kw">mySum</span>(<span class="dt">na.rm =</span> <span class="ot">TRUE</span>, <span class="dt">x =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="ot">NA</span>, <span class="dv">5</span>))</span></code></pre></div>
 <pre><code>## [1] 11</code></pre>
 <p>自分で関数を作成し、他の人にも使ってもらう場合、引数名、順番、デフォルト値を適切に設定しておくことも大事です。</p>
-<p><strong>ちょっと複雑な関数を作ってみよう</strong></p>
+</div>
+<div id="func-adv" class="section level2" number="11.2">
+<h2><span class="header-section-number">11.2</span> ちょっと複雑な関数</h2>
 <p>それではちょっとした遊び心を込めた関数を作ってみましょう。その名もドラクエ戦闘シミュレーターです。</p>
 <p>以下はドラクエ11のダメージ公式です。</p>
 <ul>
@@ -672,54 +675,54 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul>
 <p>ダメージの最小値は「ダメージの基礎値 - ダメージの幅」、最大値は「ダメージの基礎値 - ダメージの幅」となります。この最小値が負になることもありますが、その場合は0扱いになります。実際のダメージはこの範囲内でランダムに決まります (<code>runif()</code>関数使用)。</p>
-<div class="sourceCode" id="cb748"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb748-1"><a href="functions.html#cb748-1"></a><span class="co"># DQ_Attack関数を定義</span></span>
-<span id="cb748-2"><a href="functions.html#cb748-2"></a>DQ_Attack &lt;-<span class="st"> </span><span class="cf">function</span>(attack, defence, hp, enemy) {</span>
-<span id="cb748-3"><a href="functions.html#cb748-3"></a>  <span class="co">## 引数一覧</span></span>
-<span id="cb748-4"><a href="functions.html#cb748-4"></a>  <span class="co">## attack: 勇者の力 + 武器の攻撃力 (長さ1の数値型ベクトル)</span></span>
-<span id="cb748-5"><a href="functions.html#cb748-5"></a>  <span class="co">## defence: 敵の守備力 (長さ1の数値型ベクトル)</span></span>
-<span id="cb748-6"><a href="functions.html#cb748-6"></a>  <span class="co">## hp: 敵のHP (長さ1の数値型ベクトル)</span></span>
-<span id="cb748-7"><a href="functions.html#cb748-7"></a>  <span class="co">## enemy: 敵の名前 (長さ1の文字型ベクトル)</span></span>
-<span id="cb748-8"><a href="functions.html#cb748-8"></a>  </span>
-<span id="cb748-9"><a href="functions.html#cb748-9"></a>  <span class="co"># ダメージの基礎値</span></span>
-<span id="cb748-10"><a href="functions.html#cb748-10"></a>  DefaultDamage &lt;-<span class="st"> </span>(attack <span class="op">/</span><span class="st"> </span><span class="dv">2</span>) <span class="op">-</span><span class="st"> </span>(defence <span class="op">/</span><span class="st"> </span><span class="dv">4</span>)</span>
-<span id="cb748-11"><a href="functions.html#cb748-11"></a>  <span class="co"># ダメージの基礎値が負の場合、0とする</span></span>
-<span id="cb748-12"><a href="functions.html#cb748-12"></a>  DefaultDamage &lt;-<span class="st"> </span><span class="kw">ifelse</span>(DefaultDamage <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">0</span>, DefaultDamage)</span>
-<span id="cb748-13"><a href="functions.html#cb748-13"></a>  <span class="co"># ダメージの幅</span></span>
-<span id="cb748-14"><a href="functions.html#cb748-14"></a>  DamageWidth   &lt;-<span class="st"> </span><span class="kw">floor</span>(DefaultDamage <span class="op">/</span><span class="st"> </span><span class="dv">16</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
-<span id="cb748-15"><a href="functions.html#cb748-15"></a>  </span>
-<span id="cb748-16"><a href="functions.html#cb748-16"></a>  <span class="co"># ダメージの最小値</span></span>
-<span id="cb748-17"><a href="functions.html#cb748-17"></a>  DamageMin     &lt;-<span class="st"> </span>DefaultDamage <span class="op">-</span><span class="st"> </span>DamageWidth</span>
-<span id="cb748-18"><a href="functions.html#cb748-18"></a>  <span class="co"># ダメージの最小値が負の場合、0とする</span></span>
-<span id="cb748-19"><a href="functions.html#cb748-19"></a>  DamageMin     &lt;-<span class="st"> </span><span class="kw">ifelse</span>(DamageMin <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">0</span>, DamageMin)</span>
-<span id="cb748-20"><a href="functions.html#cb748-20"></a>  <span class="co"># ダメージの最大値</span></span>
-<span id="cb748-21"><a href="functions.html#cb748-21"></a>  DamageMax     &lt;-<span class="st"> </span>DefaultDamage <span class="op">+</span><span class="st"> </span>DamageWidth</span>
-<span id="cb748-22"><a href="functions.html#cb748-22"></a>  </span>
-<span id="cb748-23"><a href="functions.html#cb748-23"></a>  <span class="co"># 敵の残りHPを格納する</span></span>
-<span id="cb748-24"><a href="functions.html#cb748-24"></a>  CurrentHP     &lt;-<span class="st"> </span>hp</span>
-<span id="cb748-25"><a href="functions.html#cb748-25"></a>  </span>
-<span id="cb748-26"><a href="functions.html#cb748-26"></a>  <span class="co"># 残りHPが0より大きい場合、以下の処理を繰り返す</span></span>
-<span id="cb748-27"><a href="functions.html#cb748-27"></a>  <span class="cf">while</span> (CurrentHP <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) {</span>
-<span id="cb748-28"><a href="functions.html#cb748-28"></a>    <span class="co"># ダメージの最小値から最大値の間の数値を1つ無作為に抽出する</span></span>
-<span id="cb748-29"><a href="functions.html#cb748-29"></a>    Damage &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dt">n =</span> <span class="dv">1</span>, <span class="dt">min =</span> DamageMin, <span class="dt">max =</span> DamageMax)</span>
-<span id="cb748-30"><a href="functions.html#cb748-30"></a>    <span class="co"># 小数点1位で丸める</span></span>
-<span id="cb748-31"><a href="functions.html#cb748-31"></a>    Damage &lt;-<span class="st"> </span><span class="kw">round</span>(Damage, <span class="dv">0</span>)</span>
-<span id="cb748-32"><a href="functions.html#cb748-32"></a>    <span class="co"># 残りのHPを更新する</span></span>
-<span id="cb748-33"><a href="functions.html#cb748-33"></a>    CurrentHP &lt;-<span class="st"> </span>CurrentHP <span class="op">-</span><span class="st"> </span>Damage</span>
-<span id="cb748-34"><a href="functions.html#cb748-34"></a>    <span class="co"># メッセージを表示</span></span>
-<span id="cb748-35"><a href="functions.html#cb748-35"></a>    <span class="kw">print</span>(<span class="kw">paste0</span>(enemy, <span class="st">&quot;に&quot;</span>, Damage, <span class="st">&quot;のダメージ!!&quot;</span>))</span>
-<span id="cb748-36"><a href="functions.html#cb748-36"></a>  }</span>
-<span id="cb748-37"><a href="functions.html#cb748-37"></a>  </span>
-<span id="cb748-38"><a href="functions.html#cb748-38"></a>  <span class="co"># 上記の反復処理が終わったら勝利メッセージを出力</span></span>
-<span id="cb748-39"><a href="functions.html#cb748-39"></a>  <span class="kw">paste0</span>(enemy, <span class="st">&quot;をやっつけた！&quot;</span>)</span>
-<span id="cb748-40"><a href="functions.html#cb748-40"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb746"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb746-1"><a href="functions.html#cb746-1"></a><span class="co"># DQ_Attack関数を定義</span></span>
+<span id="cb746-2"><a href="functions.html#cb746-2"></a>DQ_Attack &lt;-<span class="st"> </span><span class="cf">function</span>(attack, defence, hp, enemy) {</span>
+<span id="cb746-3"><a href="functions.html#cb746-3"></a>  <span class="co">## 引数一覧</span></span>
+<span id="cb746-4"><a href="functions.html#cb746-4"></a>  <span class="co">## attack: 勇者の力 + 武器の攻撃力 (長さ1の数値型ベクトル)</span></span>
+<span id="cb746-5"><a href="functions.html#cb746-5"></a>  <span class="co">## defence: 敵の守備力 (長さ1の数値型ベクトル)</span></span>
+<span id="cb746-6"><a href="functions.html#cb746-6"></a>  <span class="co">## hp: 敵のHP (長さ1の数値型ベクトル)</span></span>
+<span id="cb746-7"><a href="functions.html#cb746-7"></a>  <span class="co">## enemy: 敵の名前 (長さ1の文字型ベクトル)</span></span>
+<span id="cb746-8"><a href="functions.html#cb746-8"></a>  </span>
+<span id="cb746-9"><a href="functions.html#cb746-9"></a>  <span class="co"># ダメージの基礎値</span></span>
+<span id="cb746-10"><a href="functions.html#cb746-10"></a>  DefaultDamage &lt;-<span class="st"> </span>(attack <span class="op">/</span><span class="st"> </span><span class="dv">2</span>) <span class="op">-</span><span class="st"> </span>(defence <span class="op">/</span><span class="st"> </span><span class="dv">4</span>)</span>
+<span id="cb746-11"><a href="functions.html#cb746-11"></a>  <span class="co"># ダメージの基礎値が負の場合、0とする</span></span>
+<span id="cb746-12"><a href="functions.html#cb746-12"></a>  DefaultDamage &lt;-<span class="st"> </span><span class="kw">ifelse</span>(DefaultDamage <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">0</span>, DefaultDamage)</span>
+<span id="cb746-13"><a href="functions.html#cb746-13"></a>  <span class="co"># ダメージの幅</span></span>
+<span id="cb746-14"><a href="functions.html#cb746-14"></a>  DamageWidth   &lt;-<span class="st"> </span><span class="kw">floor</span>(DefaultDamage <span class="op">/</span><span class="st"> </span><span class="dv">16</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb746-15"><a href="functions.html#cb746-15"></a>  </span>
+<span id="cb746-16"><a href="functions.html#cb746-16"></a>  <span class="co"># ダメージの最小値</span></span>
+<span id="cb746-17"><a href="functions.html#cb746-17"></a>  DamageMin     &lt;-<span class="st"> </span>DefaultDamage <span class="op">-</span><span class="st"> </span>DamageWidth</span>
+<span id="cb746-18"><a href="functions.html#cb746-18"></a>  <span class="co"># ダメージの最小値が負の場合、0とする</span></span>
+<span id="cb746-19"><a href="functions.html#cb746-19"></a>  DamageMin     &lt;-<span class="st"> </span><span class="kw">ifelse</span>(DamageMin <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>, <span class="dv">0</span>, DamageMin)</span>
+<span id="cb746-20"><a href="functions.html#cb746-20"></a>  <span class="co"># ダメージの最大値</span></span>
+<span id="cb746-21"><a href="functions.html#cb746-21"></a>  DamageMax     &lt;-<span class="st"> </span>DefaultDamage <span class="op">+</span><span class="st"> </span>DamageWidth</span>
+<span id="cb746-22"><a href="functions.html#cb746-22"></a>  </span>
+<span id="cb746-23"><a href="functions.html#cb746-23"></a>  <span class="co"># 敵の残りHPを格納する</span></span>
+<span id="cb746-24"><a href="functions.html#cb746-24"></a>  CurrentHP     &lt;-<span class="st"> </span>hp</span>
+<span id="cb746-25"><a href="functions.html#cb746-25"></a>  </span>
+<span id="cb746-26"><a href="functions.html#cb746-26"></a>  <span class="co"># 残りHPが0より大きい場合、以下の処理を繰り返す</span></span>
+<span id="cb746-27"><a href="functions.html#cb746-27"></a>  <span class="cf">while</span> (CurrentHP <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) {</span>
+<span id="cb746-28"><a href="functions.html#cb746-28"></a>    <span class="co"># ダメージの最小値から最大値の間の数値を1つ無作為に抽出する</span></span>
+<span id="cb746-29"><a href="functions.html#cb746-29"></a>    Damage &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dt">n =</span> <span class="dv">1</span>, <span class="dt">min =</span> DamageMin, <span class="dt">max =</span> DamageMax)</span>
+<span id="cb746-30"><a href="functions.html#cb746-30"></a>    <span class="co"># 小数点1位で丸める</span></span>
+<span id="cb746-31"><a href="functions.html#cb746-31"></a>    Damage &lt;-<span class="st"> </span><span class="kw">round</span>(Damage, <span class="dv">0</span>)</span>
+<span id="cb746-32"><a href="functions.html#cb746-32"></a>    <span class="co"># 残りのHPを更新する</span></span>
+<span id="cb746-33"><a href="functions.html#cb746-33"></a>    CurrentHP &lt;-<span class="st"> </span>CurrentHP <span class="op">-</span><span class="st"> </span>Damage</span>
+<span id="cb746-34"><a href="functions.html#cb746-34"></a>    <span class="co"># メッセージを表示</span></span>
+<span id="cb746-35"><a href="functions.html#cb746-35"></a>    <span class="kw">print</span>(<span class="kw">paste0</span>(enemy, <span class="st">&quot;に&quot;</span>, Damage, <span class="st">&quot;のダメージ!!&quot;</span>))</span>
+<span id="cb746-36"><a href="functions.html#cb746-36"></a>  }</span>
+<span id="cb746-37"><a href="functions.html#cb746-37"></a>  </span>
+<span id="cb746-38"><a href="functions.html#cb746-38"></a>  <span class="co"># 上記の反復処理が終わったら勝利メッセージを出力</span></span>
+<span id="cb746-39"><a href="functions.html#cb746-39"></a>  <span class="kw">paste0</span>(enemy, <span class="st">&quot;をやっつけた！&quot;</span>)</span>
+<span id="cb746-40"><a href="functions.html#cb746-40"></a>}</span></code></pre></div>
 <p>初めて見る関数が3つありますね。まず、<code>floor()</code>関数は引数の端数は切り捨てる関数です。たとえば、<code>floor(2.1)</code>も<code>floor(2.6)</code>も結果は2です。続いて、<code>runif()</code>関数は指定された範囲の一様分布から乱数を生成する関数です。引数は生成する乱数の個数 (<code>n</code>)、最小値 (<code>min</code>)、最大値 (<code>max</code>)の3つです。<code>runif(5, 3, 10)</code>なら最小値3、最大値10の乱数を5個生成するという意味です。正規分布は平均値周辺の値が生成されやすい一方、一様分布の場合、ある値が抽出される確率は同じです。最後に<code>round()</code>関数は四捨五入の関数です。引数は2つあり、1つ目の引数は数値型のベクトルです。2つ目は丸める小数点です。たとえば、<code>round(3.127, 1)</code>の結果は<code>3.1</code>であり、<code>round(3.127, 2)</code>の結果は<code>3.13</code>となります。</p>
 <p>それでは「ひのきのぼう」を装備したレベル1の勇者を考えてみましょう。ドラクエ5の場合、Lv1勇者の力は11、「ひのきのぼう」の攻撃力は2ですので、攻撃力は13です。まずは定番のスライムから狩ってみましょう。スライムのHPと守備力は両方7です。</p>
-<div class="sourceCode" id="cb749"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb749-1"><a href="functions.html#cb749-1"></a><span class="kw">DQ_Attack</span>(<span class="dv">13</span>, <span class="dt">defence =</span> <span class="dv">7</span>, <span class="dt">hp =</span> <span class="dv">7</span>, <span class="st">&quot;スライム&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb747"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb747-1"><a href="functions.html#cb747-1"></a><span class="kw">DQ_Attack</span>(<span class="dv">13</span>, <span class="dt">defence =</span> <span class="dv">7</span>, <span class="dt">hp =</span> <span class="dv">7</span>, <span class="st">&quot;スライム&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;スライムに4のダメージ!!&quot;
 ## [1] &quot;スライムに6のダメージ!!&quot;</code></pre>
 <pre><code>## [1] &quot;スライムをやっつけた！&quot;</code></pre>
 <p>まぁ、こんなもんでしょう。それではスライムナイト (=ピエール)はどうでしょう。スライムナイトのHPのは40、守備力は44です。</p>
-<div class="sourceCode" id="cb752"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb752-1"><a href="functions.html#cb752-1"></a><span class="kw">DQ_Attack</span>(<span class="dv">13</span>, <span class="dt">defence =</span> <span class="dv">44</span>, <span class="dt">hp =</span> <span class="dv">40</span>, <span class="st">&quot;スライムナイト&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb750"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb750-1"><a href="functions.html#cb750-1"></a><span class="kw">DQ_Attack</span>(<span class="dv">13</span>, <span class="dt">defence =</span> <span class="dv">44</span>, <span class="dt">hp =</span> <span class="dv">40</span>, <span class="st">&quot;スライムナイト&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;スライムナイトに0のダメージ!!&quot;
 ## [1] &quot;スライムナイトに1のダメージ!!&quot;
 ## [1] &quot;スライムナイトに0のダメージ!!&quot;
@@ -827,8 +830,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>これだと「なんと　スライムナイトが　おきあがりなかまに　なりたそうに　こちらをみている！」のメッセージを見る前に勇者ご一行が全滅しますね。エスターク (HP: 9000 / 守備力: 250)は計算するまでもないでしょう…</p>
 <p>以上の関数に条件分岐を追加することで「かいしんの　いちげき！」を入れることもできますし<a href="#fn62" class="footnote-ref" id="fnref62"><sup>62</sup></a>、逆に敵からの攻撃を計算して誰が先に倒れるかをシミュレーションすることも可能でしょうね。色々遊んでみましょう。</p>
 </div>
-<div id="関数-in-関数" class="section level2" number="11.2">
-<h2><span class="header-section-number">11.2</span> 関数 in 関数</h2>
+<div id="func-in-func" class="section level2" number="11.3">
+<h2><span class="header-section-number">11.3</span> 関数 in 関数</h2>
 <p>当たり前かも知れまっせんが、自作関数を他の自作関数に含めることもできます。ここでは乱数を生成する関数を作ってみましょう。パソコンだけだと完全な乱数を作成することは不可能ですが<a href="#fn63" class="footnote-ref" id="fnref63"><sup>63</sup></a>、乱数に近いものは作れます。このようにソフトウェアで生成された乱数は擬似乱数と呼ばれ、様々なアルゴリズムが提案されています。天才、フォン・ノイマン大先生も乱数生成では天才ではなかったらしく、彼が提案した平方採中法 (middle-square method)は使い物になりませんので、ここではもうちょっとマシな方法である線形合同法 (linear congruential generators; 以下、LCG)を採用します。平方採中法よりは式が複雑ですが、それでも非常に簡単な式で乱数が生成可能であり、Rによる実装に関しては平方採中法より簡単です。ちなみに、線形合同法にも様々な問題があり、Rのデフォルトは広島大学の<a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/index.html">松本眞</a>先生と山形大学の<a href="http://yudb.kj.yamagata-u.ac.jp/html/428_ja.html">西村拓士</a>先生が開発しましたメルセンヌ・ツイスタ (Mersenne twister)を採用しています。それでは、LCGのアルゴリズムから見ましょう。</p>
 <p>乱数の列があるとし、<span class="math inline">\(n\)</span>番目の乱数を<span class="math inline">\(X_n\)</span>とします。この場合、<span class="math inline">\(X_{n+1}\)</span>は以下のように生成されます。</p>
 <p><span class="math display">\[
@@ -841,31 +844,31 @@ X_{n+1} = (aX_n + c) \text{ mod } m
 0 \leq &amp;  c &lt; m.
 \end{align}\]</span></p>
 <p>ベストな<span class="math inline">\(a\)</span>、<span class="math inline">\(c\)</span>、<span class="math inline">\(m\)</span>も決め方はありませんが、ここではTurbo Cの設定を真似て<span class="math inline">\(a = 22695477\)</span>、<span class="math inline">\(c = 1\)</span>、<span class="math inline">\(m = 2^{32}\)</span>をデフォルト値として設定します<a href="#fn64" class="footnote-ref" id="fnref64"><sup>64</sup></a>。そして、もう一つ重要なのが最初の数、つまり<span class="math inline">\(X_n\)</span>をどう決めるかですが、これは自由に決めて問題ありません。最初の数 (<span class="math inline">\(X_0\)</span>)はシード (seed)と呼ばれ、最終的には使わない数字となります。それでは<code>seed</code>という引数からある乱数を生成する関数<code>rng_number()</code>を作ってみましょう。</p>
-<div class="sourceCode" id="cb755"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb755-1"><a href="functions.html#cb755-1"></a>rng_number &lt;-<span class="st"> </span><span class="cf">function</span>(seed, <span class="dt">a =</span> <span class="dv">22695477</span>, <span class="dt">c =</span> <span class="dv">1</span>, <span class="dt">m =</span> <span class="dv">2</span><span class="op">^</span><span class="dv">32</span>) {</span>
-<span id="cb755-2"><a href="functions.html#cb755-2"></a>  (a <span class="op">*</span><span class="st"> </span>seed <span class="op">+</span><span class="st"> </span>c) <span class="op">%%</span><span class="st"> </span>m</span>
-<span id="cb755-3"><a href="functions.html#cb755-3"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb753"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb753-1"><a href="functions.html#cb753-1"></a>rng_number &lt;-<span class="st"> </span><span class="cf">function</span>(seed, <span class="dt">a =</span> <span class="dv">22695477</span>, <span class="dt">c =</span> <span class="dv">1</span>, <span class="dt">m =</span> <span class="dv">2</span><span class="op">^</span><span class="dv">32</span>) {</span>
+<span id="cb753-2"><a href="functions.html#cb753-2"></a>  (a <span class="op">*</span><span class="st"> </span>seed <span class="op">+</span><span class="st"> </span>c) <span class="op">%%</span><span class="st"> </span>m</span>
+<span id="cb753-3"><a href="functions.html#cb753-3"></a>}</span></code></pre></div>
 <p>簡単な四則演算のみで構成された関数ですね。ちなみに<code>%%</code>は余りを計算する演算子です。とりあえず、<code>seed</code>を12345に設定し、一つの乱数を生成してみましょう。</p>
-<div class="sourceCode" id="cb756"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb756-1"><a href="functions.html#cb756-1"></a><span class="kw">rng_number</span>(<span class="dv">12345</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb754"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb754-1"><a href="functions.html#cb754-1"></a><span class="kw">rng_number</span>(<span class="dv">12345</span>)</span></code></pre></div>
 <pre><code>## [1] 1002789326</code></pre>
 <p>かなり大きい数字が出ました。ちなみに線形合同法で得られる乱数の最大値は<span class="math inline">\(m\)</span>、最小値は0です。次は、今回得られた乱数1.0027893^{9}を新しい<code>seed</code>とし、新しい乱数を作ってみましょう。</p>
-<div class="sourceCode" id="cb758"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb758-1"><a href="functions.html#cb758-1"></a><span class="kw">rng_number</span>(<span class="dv">1002789326</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb756"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb756-1"><a href="functions.html#cb756-1"></a><span class="kw">rng_number</span>(<span class="dv">1002789326</span>)</span></code></pre></div>
 <pre><code>## [1] 3785644968</code></pre>
 <p>この作業を繰り返すと、(疑似)乱数の数列が得られます。続いて、この作業を<code>n</code>回繰り返し、長さ<code>n</code>の乱数ベクトルを返す関数<code>LCG</code>を作ってみましょう。いかがコードになります。</p>
-<div class="sourceCode" id="cb760"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb760-1"><a href="functions.html#cb760-1"></a>LCG &lt;-<span class="st"> </span><span class="cf">function</span>(n, seed, <span class="dt">a =</span> <span class="dv">22695477</span>, <span class="dt">c =</span> <span class="dv">1</span>, <span class="dt">m =</span> <span class="dv">2</span><span class="op">^</span><span class="dv">32</span>) {</span>
-<span id="cb760-2"><a href="functions.html#cb760-2"></a>  rng_vec    &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>, n <span class="op">+</span><span class="st"> </span><span class="dv">1</span>) <span class="co"># seedも入るので長さn+1の空ベクトルを生成</span></span>
-<span id="cb760-3"><a href="functions.html#cb760-3"></a>  rng_vec[<span class="dv">1</span>] &lt;-<span class="st"> </span>seed           <span class="co"># 1番目の要素にseedを入れる</span></span>
-<span id="cb760-4"><a href="functions.html#cb760-4"></a>  </span>
-<span id="cb760-5"><a href="functions.html#cb760-5"></a>  <span class="co"># iに2からn+1までの値を順次的に投入しながら、反復処理</span></span>
-<span id="cb760-6"><a href="functions.html#cb760-6"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>(n<span class="op">+</span><span class="dv">1</span>)) {</span>
-<span id="cb760-7"><a href="functions.html#cb760-7"></a>    <span class="co"># rng_vecのi番目にi-1番目の要素をseedにした疑似乱数を格納</span></span>
-<span id="cb760-8"><a href="functions.html#cb760-8"></a>    rng_vec[i] &lt;-<span class="st"> </span><span class="kw">rng_number</span>(rng_vec[i <span class="op">-</span><span class="st"> </span><span class="dv">1</span>], a, c, m)</span>
-<span id="cb760-9"><a href="functions.html#cb760-9"></a>  }</span>
-<span id="cb760-10"><a href="functions.html#cb760-10"></a>  </span>
-<span id="cb760-11"><a href="functions.html#cb760-11"></a>  rng_vec &lt;-<span class="st"> </span>rng_vec[<span class="op">-</span><span class="dv">1</span>] <span class="co"># 1番目の要素 (seed)を捨てる</span></span>
-<span id="cb760-12"><a href="functions.html#cb760-12"></a>  rng_vec &lt;-<span class="st"> </span>rng_vec <span class="op">/</span><span class="st"> </span>m <span class="co"># 最小値0、最大値1になるように、mで割る</span></span>
-<span id="cb760-13"><a href="functions.html#cb760-13"></a>  </span>
-<span id="cb760-14"><a href="functions.html#cb760-14"></a>  rng_vec <span class="co"># 結果を返す</span></span>
-<span id="cb760-15"><a href="functions.html#cb760-15"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb758"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb758-1"><a href="functions.html#cb758-1"></a>LCG &lt;-<span class="st"> </span><span class="cf">function</span>(n, seed, <span class="dt">a =</span> <span class="dv">22695477</span>, <span class="dt">c =</span> <span class="dv">1</span>, <span class="dt">m =</span> <span class="dv">2</span><span class="op">^</span><span class="dv">32</span>) {</span>
+<span id="cb758-2"><a href="functions.html#cb758-2"></a>  rng_vec    &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>, n <span class="op">+</span><span class="st"> </span><span class="dv">1</span>) <span class="co"># seedも入るので長さn+1の空ベクトルを生成</span></span>
+<span id="cb758-3"><a href="functions.html#cb758-3"></a>  rng_vec[<span class="dv">1</span>] &lt;-<span class="st"> </span>seed           <span class="co"># 1番目の要素にseedを入れる</span></span>
+<span id="cb758-4"><a href="functions.html#cb758-4"></a>  </span>
+<span id="cb758-5"><a href="functions.html#cb758-5"></a>  <span class="co"># iに2からn+1までの値を順次的に投入しながら、反復処理</span></span>
+<span id="cb758-6"><a href="functions.html#cb758-6"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>(n<span class="op">+</span><span class="dv">1</span>)) {</span>
+<span id="cb758-7"><a href="functions.html#cb758-7"></a>    <span class="co"># rng_vecのi番目にi-1番目の要素をseedにした疑似乱数を格納</span></span>
+<span id="cb758-8"><a href="functions.html#cb758-8"></a>    rng_vec[i] &lt;-<span class="st"> </span><span class="kw">rng_number</span>(rng_vec[i <span class="op">-</span><span class="st"> </span><span class="dv">1</span>], a, c, m)</span>
+<span id="cb758-9"><a href="functions.html#cb758-9"></a>  }</span>
+<span id="cb758-10"><a href="functions.html#cb758-10"></a>  </span>
+<span id="cb758-11"><a href="functions.html#cb758-11"></a>  rng_vec &lt;-<span class="st"> </span>rng_vec[<span class="op">-</span><span class="dv">1</span>] <span class="co"># 1番目の要素 (seed)を捨てる</span></span>
+<span id="cb758-12"><a href="functions.html#cb758-12"></a>  rng_vec &lt;-<span class="st"> </span>rng_vec <span class="op">/</span><span class="st"> </span>m <span class="co"># 最小値0、最大値1になるように、mで割る</span></span>
+<span id="cb758-13"><a href="functions.html#cb758-13"></a>  </span>
+<span id="cb758-14"><a href="functions.html#cb758-14"></a>  rng_vec <span class="co"># 結果を返す</span></span>
+<span id="cb758-15"><a href="functions.html#cb758-15"></a>}</span></code></pre></div>
 <p>それでは、詳細に解説します。</p>
 <ul>
 <li>1行目: 関数<code>LCG</code>を定義し、必要な引数として<code>n</code>と<code>seed</code>を設定する。</li>
@@ -878,27 +881,43 @@ X_{n+1} = (aX_n + c) \text{ mod } m
 <li>14行目: 結果ベクトルを返す。</li>
 </ul>
 <p>それでは、<code>seed</code>を<a href="https://www.jaysong.net">19861008</a>とした疑似乱数10000個を生成し、<code>LCG_Numbers</code>という名のベクトルに格納してみましょう。結果を全て表示させるのは無理があるので、最初の20個のみを確認してみます。</p>
-<div class="sourceCode" id="cb761"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb761-1"><a href="functions.html#cb761-1"></a>LCG_Numbers &lt;-<span class="st"> </span><span class="kw">LCG</span>(<span class="dv">10000</span>, <span class="dv">19861008</span>)</span>
-<span id="cb761-2"><a href="functions.html#cb761-2"></a><span class="kw">head</span>(LCG_Numbers, <span class="dv">20</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb759"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb759-1"><a href="functions.html#cb759-1"></a>LCG_Numbers &lt;-<span class="st"> </span><span class="kw">LCG</span>(<span class="dv">10000</span>, <span class="dv">19861008</span>)</span>
+<span id="cb759-2"><a href="functions.html#cb759-2"></a><span class="kw">head</span>(LCG_Numbers, <span class="dv">20</span>)</span></code></pre></div>
 <pre><code>##  [1] 0.58848246 0.09900449 0.21707060 0.89462981 0.23421890 0.72341249
 ##  [7] 0.55965400 0.59552685 0.96594972 0.69050965 0.98383344 0.20136551
 ## [13] 0.25856502 0.37569497 0.50086451 0.03986446 0.89291806 0.24760102
 ## [19] 0.27912510 0.24493750</code></pre>
 <p>正直、これが乱数かどうかは見るだけでは分かりませんね。簡単な確認方法としては、これらの乱数列のヒストグラムを見れば分かります。得られた数列が本当に乱数(に近いもの)なら、その分布は一様分布に従っているからです。ただし、一様分布に従っていることが乱数を意味するものではありません。</p>
 <p>可視化については第<a href="visualization1.html#visualization1">16</a>章以降で解説しますが、ここでは簡単に<code>hist()</code>関数を使ってみましょう。必要な引数はnumeric型のベクトルのみです。以下のコードにある<code>xlab =</code>などはラベルを指定する引数ですが、省略しても構いません。</p>
-<div class="sourceCode" id="cb763"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb763-1"><a href="functions.html#cb763-1"></a><span class="kw">hist</span>(LCG_Numbers, <span class="dt">xlab =</span> <span class="st">&quot;乱数&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;度数&quot;</span>, </span>
-<span id="cb763-2"><a href="functions.html#cb763-2"></a>     <span class="dt">main =</span> <span class="st">&quot;生成された乱数10000個のヒストグラム&quot;</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-353-1.png" width="672" /></p>
+<div class="sourceCode" id="cb761"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb761-1"><a href="functions.html#cb761-1"></a><span class="kw">hist</span>(LCG_Numbers, <span class="dt">xlab =</span> <span class="st">&quot;乱数&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;度数&quot;</span>, </span>
+<span id="cb761-2"><a href="functions.html#cb761-2"></a>     <span class="dt">main =</span> <span class="st">&quot;生成された乱数10000個のヒストグラム&quot;</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-352-1.png" width="672" /></p>
 <p>ややギザギザしているように見えますが<a href="#fn65" class="footnote-ref" id="fnref65"><sup>65</sup></a>、これなら一様分布だと考えて良いでしょう。</p>
 <hr />
 </div>
-<div id="programming-exercise" class="section level2" number="11.3">
-<h2><span class="header-section-number">11.3</span> 練習問題</h2>
+<div id="func-exercise" class="section level2" number="11.4">
+<h2><span class="header-section-number">11.4</span> 練習問題</h2>
 <p><strong>問1</strong></p>
 <ul>
 <li>長さ2のnumericベクトル<code>Data</code>について考える。条件分岐を用いて<code>Data</code>の1番目の要素 (<code>Data[1]</code>)が2番目の要素 (<code>Data[2]</code>)より大きい場合、1番目の要素と2番目の順番を逆転させる条件分岐を作成せよ。たとえば、<code>Data &lt;- c(5, 3)</code>なら、条件分岐後の<code>Data</code>の値が<code>c(3, 5)</code>になること。</li>
 </ul>
 <p><strong>問2</strong></p>
+<p><code>while()</code>を使った Hero of Alexandria の平方根計算。</p>
+<div class="sourceCode" id="cb762"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb762-1"><a href="functions.html#cb762-1"></a>my_sqrt &lt;-<span class="st"> </span><span class="cf">function</span>(x, g, <span class="dt">e =</span> <span class="fl">0.001</span>) {</span>
+<span id="cb762-2"><a href="functions.html#cb762-2"></a>	gap =<span class="st"> </span><span class="ot">Inf</span></span>
+<span id="cb762-3"><a href="functions.html#cb762-3"></a>	<span class="cf">while</span> (gap <span class="op">&gt;</span><span class="st"> </span>e) {</span>
+<span id="cb762-4"><a href="functions.html#cb762-4"></a>		gap &lt;-<span class="st"> </span><span class="kw">abs</span>(x <span class="op">-</span><span class="st"> </span>g<span class="op">^</span><span class="dv">2</span>)</span>
+<span id="cb762-5"><a href="functions.html#cb762-5"></a>		<span class="cf">if</span> (gap <span class="op">&gt;</span><span class="st"> </span>e) {</span>
+<span id="cb762-6"><a href="functions.html#cb762-6"></a>			g &lt;-<span class="st"> </span>(g <span class="op">+</span><span class="st"> </span>x <span class="op">/</span><span class="st"> </span>g) <span class="op">/</span><span class="st"> </span><span class="dv">2</span></span>
+<span id="cb762-7"><a href="functions.html#cb762-7"></a>		} <span class="cf">else</span> {</span>
+<span id="cb762-8"><a href="functions.html#cb762-8"></a>			<span class="kw">print</span>(g)</span>
+<span id="cb762-9"><a href="functions.html#cb762-9"></a>		}</span>
+<span id="cb762-10"><a href="functions.html#cb762-10"></a>	}</span>
+<span id="cb762-11"><a href="functions.html#cb762-11"></a>}</span>
+<span id="cb762-12"><a href="functions.html#cb762-12"></a></span>
+<span id="cb762-13"><a href="functions.html#cb762-13"></a><span class="kw">my_sqrt</span>(<span class="dv">29</span>, <span class="dv">5</span>) <span class="co"># 29の平方根。初期値は5</span></span></code></pre></div>
+<pre><code>## [1] 5.385185</code></pre>
+<p><strong>問3</strong></p>
 <ul>
 <li>問3ではベクトルの1番目要素と2番目の要素を比較し、前者が大きい場合において順番を入れ替える条件分岐を行った。これを長さ3以上のベクトルにも適用したい。長さ4のnumeric型ベクトル<code>Data</code>がある場合の計算手順について考えてみよう。
 <ol style="list-style-type: decimal">
@@ -918,11 +937,11 @@ X_{n+1} = (aX_n + c) \text{ mod } m
 <li>内側の<code>for()</code>文は3, 2, 1ペアの比較を行うことになる。</li>
 </ul></li>
 </ul>
-<p><strong>問3</strong></p>
+<p><strong>問4</strong></p>
 <ul>
 <li>「問4」の練習問題で作成したコードを関数化せよ。関数名は<code>mySort()</code>であり、引数は長さ2以上のnumeric型ベクトルのみである。引数名は自由に決めても良いし、<code>data</code>や<code>x</code>などを使っても良い。</li>
 </ul>
-<p><strong>問4</strong></p>
+<p><strong>問5</strong></p>
 <ul>
 <li>既に作成した<code>DQ_Attack</code>関数を修正してみよう。今の関数は通常攻撃のみであるが、稀に「会心の一撃」が発生するように修正する。
 <ul>
@@ -931,7 +950,7 @@ X_{n+1} = (aX_n + c) \text{ mod } m
 <li>会心の一撃が発生したら、<code>"かいしんのいちげき! スライムに10のダメージ!!"</code>のようなメッセージを出力させること。</li>
 </ul></li>
 </ul>
-<p><strong>問5</strong></p>
+<p><strong>問6</strong></p>
 <ul>
 <li>与えられたベクトル<code>x</code>から<code>n</code>個の要素を無作為に抽出する関数、<code>mySample()</code>を定義せよ。<code>mySample()</code>の引数は<code>x</code>と<code>n</code>、<code>seed</code>とし、<code>x</code>は長さ1以上のベクトルとする。<code>n</code>は長さ1の整数型ベクトルである。
 <ul>
