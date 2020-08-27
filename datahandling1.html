@@ -630,20 +630,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>データの中身を確認してみましょう。</p>
 <div class="sourceCode" id="cb772"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb772-1"><a href="datahandling1.html#cb772-1"></a>df</span></code></pre></div>
 <pre><code>## # A tibble: 6,292 x 14
-##    ID    Name  Pref  Zipcode Latitude Longitude Line  Station  Walk   Bus
-##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
-##  1 e539… 居酒屋 … 東京都… 1040031     35.7      140. 地下鉄有… 銀座一丁目駅…     3    NA
-##  2 gfeb… 本格上海… 東京都… 1100005     35.7      140. 地下鉄日… 仲御徒町駅…     1    NA
-##  3 ggt5… 食べ飲み… 東京都… 1250041     35.8      140. ＪＲ常磐… 金町駅      2    NA
-##  4 g181… 博多餃子… 東京都… 1920904     35.7      139. ＪＲ  八王子駅…     1    NA
-##  5 ggww… まさ屋 … 東京都… 1500042     35.7      140. 地下鉄半… 渋谷駅      7    NA
-##  6 gdzk… 完全個室… 東京都… 1000013     35.7      140. 地下鉄銀… 虎ノ門駅…     3    NA
-##  7 ga2g… 鶏そば … 東京都… 1760006     35.7      140. 西武池袋… 江古田駅…     2    NA
-##  8 gg9m… 宴会個室… 東京都… 1010021     35.7      140. ＪＲ  秋葉原駅…     4    NA
-##  9 gdvk… 中国料理… 東京都… 1000006     35.7      140. ＪＲ  有楽町駅…     1    NA
-## 10 gggb… 中国料理… 東京都… 1140002     35.8      140. 地下鉄南… 王子駅      2    NA
-## # … with 6,282 more rows, and 4 more variables: Car &lt;dbl&gt;, Budget &lt;dbl&gt;,
-## #   ScoreN &lt;dbl&gt;, Score &lt;dbl&gt;</code></pre>
+##    ID    Name  Pref  Zipcode Latitude Longitude Line  Station  Walk   Bus   Car Budget
+##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+##  1 e539… 居酒屋 … 東京都… 1040031     35.7      140. 地下鉄有… 銀座一丁目駅…     3    NA    NA   3000
+##  2 gfeb… 本格上海… 東京都… 1100005     35.7      140. 地下鉄日… 仲御徒町駅…     1    NA    NA   2000
+##  3 ggt5… 食べ飲み… 東京都… 1250041     35.8      140. ＪＲ常磐… 金町駅      2    NA    NA   2980
+##  4 g181… 博多餃子… 東京都… 1920904     35.7      139. ＪＲ  八王子駅…     1    NA    NA   2000
+##  5 ggww… まさ屋 … 東京都… 1500042     35.7      140. 地下鉄半… 渋谷駅      7    NA    NA    380
+##  6 gdzk… 完全個室… 東京都… 1000013     35.7      140. 地下鉄銀… 虎ノ門駅…     3    NA    NA   2980
+##  7 ga2g… 鶏そば … 東京都… 1760006     35.7      140. 西武池袋… 江古田駅…     2    NA    NA    850
+##  8 gg9m… 宴会個室… 東京都… 1010021     35.7      140. ＪＲ  秋葉原駅…     4    NA    NA   2000
+##  9 gdvk… 中国料理… 東京都… 1000006     35.7      140. ＪＲ  有楽町駅…     1    NA    NA   1000
+## 10 gggb… 中国料理… 東京都… 1140002     35.8      140. 地下鉄南… 王子駅      2    NA    NA   2000
+## # … with 6,282 more rows, and 2 more variables: ScoreN &lt;dbl&gt;, Score &lt;dbl&gt;</code></pre>
 <p>1行目の<code># A tibble: 2,000 x 12</code>から、ケース数 (店舗数)は2000、変数は12個あることが分かります。各変数の詳細は以下の通りです。</p>
 <table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -778,36 +777,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb774"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb774-1"><a href="datahandling1.html#cb774-1"></a><span class="co"># dplyrを使わない方法</span></span>
 <span id="cb774-2"><a href="datahandling1.html#cb774-2"></a>df[, <span class="kw">c</span>(<span class="st">&quot;ID&quot;</span>, <span class="st">&quot;Name&quot;</span>, <span class="st">&quot;Pref&quot;</span>, <span class="st">&quot;Score&quot;</span>)]</span></code></pre></div>
 <pre><code>## # A tibble: 6,292 x 4
-##    ID      Name                                                  Pref  Score
-##    &lt;chr&gt;   &lt;chr&gt;                                                 &lt;chr&gt; &lt;dbl&gt;
-##  1 e539604 居酒屋 龍記 京橋店                                    東京都… NA   
-##  2 gfeb600 本格上海料理 新錦江 上野御徒町本店                    東京都…  4.5 
-##  3 ggt5900 食べ飲み放題×中華ビストロ NOZOMI（のぞみ）            東京都… NA   
-##  4 g181340 博多餃子軒 八王子店 タピオカ店 Bull Pulu（ブルプル）併設… 東京都… NA   
-##  5 ggww100 まさ屋 渋谷店                                         東京都… NA   
-##  6 gdzk500 完全個室 上海レストラン 檸檬 霞ヶ関ビル内店           東京都… NA   
-##  7 ga2g202 鶏そば きらり                                         東京都… NA   
-##  8 gg9m100 宴会個室×餃子酒場 北京飯店 秋葉原本店                 東京都…  3.33
-##  9 gdvk200 中国料理 宝龍                                         東京都…  2.5 
-## 10 gggb200 中国料理 天安門                                       東京都… NA   
+##    ID      Name                                                     Pref   Score
+##    &lt;chr&gt;   &lt;chr&gt;                                                    &lt;chr&gt;  &lt;dbl&gt;
+##  1 e539604 居酒屋 龍記 京橋店                                       東京都 NA   
+##  2 gfeb600 本格上海料理 新錦江 上野御徒町本店                       東京都  4.5 
+##  3 ggt5900 食べ飲み放題×中華ビストロ NOZOMI（のぞみ）               東京都 NA   
+##  4 g181340 博多餃子軒 八王子店 タピオカ店 Bull Pulu（ブルプル）併設 東京都 NA   
+##  5 ggww100 まさ屋 渋谷店                                            東京都 NA   
+##  6 gdzk500 完全個室 上海レストラン 檸檬 霞ヶ関ビル内店              東京都 NA   
+##  7 ga2g202 鶏そば きらり                                            東京都 NA   
+##  8 gg9m100 宴会個室×餃子酒場 北京飯店 秋葉原本店                    東京都  3.33
+##  9 gdvk200 中国料理 宝龍                                            東京都  2.5 
+## 10 gggb200 中国料理 天安門                                          東京都 NA   
 ## # … with 6,282 more rows</code></pre>
 <div class="sourceCode" id="cb776"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb776-1"><a href="datahandling1.html#cb776-1"></a><span class="co"># dplyr::select()を使う方法</span></span>
 <span id="cb776-2"><a href="datahandling1.html#cb776-2"></a><span class="co"># select(df, ID, Name, Pref, Score)でもOK</span></span>
 <span id="cb776-3"><a href="datahandling1.html#cb776-3"></a>df <span class="op">%&gt;%</span></span>
 <span id="cb776-4"><a href="datahandling1.html#cb776-4"></a><span class="st">  </span><span class="kw">select</span>(ID, Name, Pref, Score)</span></code></pre></div>
 <pre><code>## # A tibble: 6,292 x 4
-##    ID      Name                                                  Pref  Score
-##    &lt;chr&gt;   &lt;chr&gt;                                                 &lt;chr&gt; &lt;dbl&gt;
-##  1 e539604 居酒屋 龍記 京橋店                                    東京都… NA   
-##  2 gfeb600 本格上海料理 新錦江 上野御徒町本店                    東京都…  4.5 
-##  3 ggt5900 食べ飲み放題×中華ビストロ NOZOMI（のぞみ）            東京都… NA   
-##  4 g181340 博多餃子軒 八王子店 タピオカ店 Bull Pulu（ブルプル）併設… 東京都… NA   
-##  5 ggww100 まさ屋 渋谷店                                         東京都… NA   
-##  6 gdzk500 完全個室 上海レストラン 檸檬 霞ヶ関ビル内店           東京都… NA   
-##  7 ga2g202 鶏そば きらり                                         東京都… NA   
-##  8 gg9m100 宴会個室×餃子酒場 北京飯店 秋葉原本店                 東京都…  3.33
-##  9 gdvk200 中国料理 宝龍                                         東京都…  2.5 
-## 10 gggb200 中国料理 天安門                                       東京都… NA   
+##    ID      Name                                                     Pref   Score
+##    &lt;chr&gt;   &lt;chr&gt;                                                    &lt;chr&gt;  &lt;dbl&gt;
+##  1 e539604 居酒屋 龍記 京橋店                                       東京都 NA   
+##  2 gfeb600 本格上海料理 新錦江 上野御徒町本店                       東京都  4.5 
+##  3 ggt5900 食べ飲み放題×中華ビストロ NOZOMI（のぞみ）               東京都 NA   
+##  4 g181340 博多餃子軒 八王子店 タピオカ店 Bull Pulu（ブルプル）併設 東京都 NA   
+##  5 ggww100 まさ屋 渋谷店                                            東京都 NA   
+##  6 gdzk500 完全個室 上海レストラン 檸檬 霞ヶ関ビル内店              東京都 NA   
+##  7 ga2g202 鶏そば きらり                                            東京都 NA   
+##  8 gg9m100 宴会個室×餃子酒場 北京飯店 秋葉原本店                    東京都  3.33
+##  9 gdvk200 中国料理 宝龍                                            東京都  2.5 
+## 10 gggb200 中国料理 天安門                                          東京都 NA   
 ## # … with 6,282 more rows</code></pre>
 <p>どれも結果は同じですが、<code>select()</code>関数を使った方がより読みやすいコードになっているでしょう。むろん、<code>select()</code>関数を使わない方がスッキリする方も知るかも知れません。実際、自分でパッケージなどを作成する際は<code>select()</code>を使わない場合が多いです。ただし、一般的な分析の流れでは<code>select()</code>の方がコードも意味も明確となり、パイプ演算子でつなぐのも容易です。</p>
 <p><code>select()</code>関数の使い方は非常に簡単です。第一引数はデータフレームですが、パイプ演算子を使う場合は省略可能です。第二引数以降の引数はデータフレームの変数名です。つまり、ここには残す変数名のみを書くだけで十分です。</p>
@@ -835,18 +834,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb780"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb780-1"><a href="datahandling1.html#cb780-1"></a>df <span class="op">%&gt;%</span></span>
 <span id="cb780-2"><a href="datahandling1.html#cb780-2"></a><span class="st">  </span><span class="kw">select</span>(ID, Name, <span class="dt">Prefecture =</span> Pref, Score)</span></code></pre></div>
 <pre><code>## # A tibble: 6,292 x 4
-##    ID      Name                                             Prefecture Score
-##    &lt;chr&gt;   &lt;chr&gt;                                            &lt;chr&gt;      &lt;dbl&gt;
-##  1 e539604 居酒屋 龍記 京橋店                               東京都     NA   
-##  2 gfeb600 本格上海料理 新錦江 上野御徒町本店               東京都      4.5 
-##  3 ggt5900 食べ飲み放題×中華ビストロ NOZOMI（のぞみ）       東京都     NA   
-##  4 g181340 博多餃子軒 八王子店 タピオカ店 Bull Pulu（ブルプル）併設… 東京都     NA   
-##  5 ggww100 まさ屋 渋谷店                                    東京都     NA   
-##  6 gdzk500 完全個室 上海レストラン 檸檬 霞ヶ関ビル内店      東京都     NA   
-##  7 ga2g202 鶏そば きらり                                    東京都     NA   
-##  8 gg9m100 宴会個室×餃子酒場 北京飯店 秋葉原本店            東京都      3.33
-##  9 gdvk200 中国料理 宝龍                                    東京都      2.5 
-## 10 gggb200 中国料理 天安門                                  東京都     NA   
+##    ID      Name                                                     Prefecture Score
+##    &lt;chr&gt;   &lt;chr&gt;                                                    &lt;chr&gt;      &lt;dbl&gt;
+##  1 e539604 居酒屋 龍記 京橋店                                       東京都     NA   
+##  2 gfeb600 本格上海料理 新錦江 上野御徒町本店                       東京都      4.5 
+##  3 ggt5900 食べ飲み放題×中華ビストロ NOZOMI（のぞみ）               東京都     NA   
+##  4 g181340 博多餃子軒 八王子店 タピオカ店 Bull Pulu（ブルプル）併設 東京都     NA   
+##  5 ggww100 まさ屋 渋谷店                                            東京都     NA   
+##  6 gdzk500 完全個室 上海レストラン 檸檬 霞ヶ関ビル内店              東京都     NA   
+##  7 ga2g202 鶏そば きらり                                            東京都     NA   
+##  8 gg9m100 宴会個室×餃子酒場 北京飯店 秋葉原本店                    東京都      3.33
+##  9 gdvk200 中国料理 宝龍                                            東京都      2.5 
+## 10 gggb200 中国料理 天安門                                          東京都     NA   
 ## # … with 6,282 more rows</code></pre>
 <p>抽出する際、変数を<code>新しい変数名 = 既存の変数名</code>にするだけで、変数名が簡単に変更できました。もし、特定の列は抽出しないものの、変数名を変えるにはどうすれば良いでしょうか。ここでは<code>df</code>の<code>Pref</code>を<code>Prefecture</code>に、<code>Walk</code>を<code>Distance</code>に変更してみます。<code>dplyr</code>を使わない場合と<code>dplyr</code>の<code>rename()</code>関数を使う場合を両方紹介します。</p>
 <p>まずは、<code>name()</code>関数についてですが、これはデータフレームの変数名をベクトルとして出力する関数です。</p>
@@ -861,20 +860,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb784-4"><a href="datahandling1.html#cb784-4"></a><span class="co"># dfの中身を出力</span></span>
 <span id="cb784-5"><a href="datahandling1.html#cb784-5"></a>df</span></code></pre></div>
 <pre><code>## # A tibble: 6,292 x 14
-##    ID    Name  Prefecture Zipcode Latitude Longitude Line  Station Distance
-##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;        &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt;
-##  1 e539… 居酒屋 … 東京都     1040031     35.7      140. 地下鉄有… 銀座一丁目駅…        3
-##  2 gfeb… 本格上海… 東京都     1100005     35.7      140. 地下鉄日… 仲御徒町駅…        1
-##  3 ggt5… 食べ飲み… 東京都     1250041     35.8      140. ＪＲ常磐… 金町駅         2
-##  4 g181… 博多餃子… 東京都     1920904     35.7      139. ＪＲ  八王子駅…        1
-##  5 ggww… まさ屋 … 東京都     1500042     35.7      140. 地下鉄半… 渋谷駅         7
-##  6 gdzk… 完全個室… 東京都     1000013     35.7      140. 地下鉄銀… 虎ノ門駅…        3
-##  7 ga2g… 鶏そば … 東京都     1760006     35.7      140. 西武池袋… 江古田駅…        2
-##  8 gg9m… 宴会個室… 東京都     1010021     35.7      140. ＪＲ  秋葉原駅…        4
-##  9 gdvk… 中国料理… 東京都     1000006     35.7      140. ＪＲ  有楽町駅…        1
-## 10 gggb… 中国料理… 東京都     1140002     35.8      140. 地下鉄南… 王子駅         2
-## # … with 6,282 more rows, and 5 more variables: Bus &lt;dbl&gt;, Car &lt;dbl&gt;,
-## #   Budget &lt;dbl&gt;, ScoreN &lt;dbl&gt;, Score &lt;dbl&gt;</code></pre>
+##    ID    Name  Prefecture Zipcode Latitude Longitude Line  Station Distance   Bus
+##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;        &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt;
+##  1 e539… 居酒屋 … 東京都     1040031     35.7      140. 地下鉄有… 銀座一丁目駅…        3    NA
+##  2 gfeb… 本格上海… 東京都     1100005     35.7      140. 地下鉄日… 仲御徒町駅…        1    NA
+##  3 ggt5… 食べ飲み… 東京都     1250041     35.8      140. ＪＲ常磐… 金町駅         2    NA
+##  4 g181… 博多餃子… 東京都     1920904     35.7      139. ＪＲ  八王子駅…        1    NA
+##  5 ggww… まさ屋 … 東京都     1500042     35.7      140. 地下鉄半… 渋谷駅         7    NA
+##  6 gdzk… 完全個室… 東京都     1000013     35.7      140. 地下鉄銀… 虎ノ門駅…        3    NA
+##  7 ga2g… 鶏そば … 東京都     1760006     35.7      140. 西武池袋… 江古田駅…        2    NA
+##  8 gg9m… 宴会個室… 東京都     1010021     35.7      140. ＪＲ  秋葉原駅…        4    NA
+##  9 gdvk… 中国料理… 東京都     1000006     35.7      140. ＪＲ  有楽町駅…        1    NA
+## 10 gggb… 中国料理… 東京都     1140002     35.8      140. 地下鉄南… 王子駅         2    NA
+## # … with 6,282 more rows, and 4 more variables: Car &lt;dbl&gt;, Budget &lt;dbl&gt;,
+## #   ScoreN &lt;dbl&gt;, Score &lt;dbl&gt;</code></pre>
 <p>簡単に変数名の変更ができました。続いて、<code>dplyr</code>の<code>rename()</code>関数を使った方法です。今回は、<code>Prefecture</code>を<code>Pref</code>に、<code>Distance</code>を<code>Walk</code>に戻して見ましょう。そして、出力するだけにとどまらず、<code>df</code>に上書きしましょう。</p>
 <div class="sourceCode" id="cb786"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb786-1"><a href="datahandling1.html#cb786-1"></a><span class="co"># dfのPrefectureをPrefに、DistanceをWalkに変更し、上書きする</span></span>
 <span id="cb786-2"><a href="datahandling1.html#cb786-2"></a>df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span></span>
@@ -888,36 +887,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb787-2"><a href="datahandling1.html#cb787-2"></a><span class="st">  </span><span class="kw">select</span>(ID, Name, Pref, Zipcode, </span>
 <span id="cb787-3"><a href="datahandling1.html#cb787-3"></a>         Line, Station, Walk, Bus, Car, Budget, ScoreN, Score)</span></code></pre></div>
 <pre><code>## # A tibble: 6,292 x 12
-##    ID    Name  Pref  Zipcode Line  Station  Walk   Bus   Car Budget ScoreN
-##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-##  1 e539… 居酒屋 … 東京都… 1040031 地下鉄有… 銀座一丁目駅…     3    NA    NA   3000      0
-##  2 gfeb… 本格上海… 東京都… 1100005 地下鉄日… 仲御徒町駅…     1    NA    NA   2000      2
-##  3 ggt5… 食べ飲み… 東京都… 1250041 ＪＲ常磐… 金町駅      2    NA    NA   2980      0
-##  4 g181… 博多餃子… 東京都… 1920904 ＪＲ  八王子駅…     1    NA    NA   2000      0
-##  5 ggww… まさ屋 … 東京都… 1500042 地下鉄半… 渋谷駅      7    NA    NA    380      0
-##  6 gdzk… 完全個室… 東京都… 1000013 地下鉄銀… 虎ノ門駅…     3    NA    NA   2980      0
-##  7 ga2g… 鶏そば … 東京都… 1760006 西武池袋… 江古田駅…     2    NA    NA    850      0
-##  8 gg9m… 宴会個室… 東京都… 1010021 ＪＲ  秋葉原駅…     4    NA    NA   2000      3
-##  9 gdvk… 中国料理… 東京都… 1000006 ＪＲ  有楽町駅…     1    NA    NA   1000      2
-## 10 gggb… 中国料理… 東京都… 1140002 地下鉄南… 王子駅      2    NA    NA   2000      0
-## # … with 6,282 more rows, and 1 more variable: Score &lt;dbl&gt;</code></pre>
+##    ID     Name       Pref  Zipcode Line  Station  Walk   Bus   Car Budget ScoreN Score
+##    &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+##  1 e5396… 居酒屋 龍記 京橋… 東京都… 1040031 地下鉄有… 銀座一丁目駅…     3    NA    NA   3000      0 NA   
+##  2 gfeb6… 本格上海料理 新錦… 東京都… 1100005 地下鉄日… 仲御徒町駅…     1    NA    NA   2000      2  4.5 
+##  3 ggt59… 食べ飲み放題×中華… 東京都… 1250041 ＪＲ常磐… 金町駅      2    NA    NA   2980      0 NA   
+##  4 g1813… 博多餃子軒 八王子… 東京都… 1920904 ＪＲ  八王子駅…     1    NA    NA   2000      0 NA   
+##  5 ggww1… まさ屋 渋谷店… 東京都… 1500042 地下鉄半… 渋谷駅      7    NA    NA    380      0 NA   
+##  6 gdzk5… 完全個室 上海レス… 東京都… 1000013 地下鉄銀… 虎ノ門駅…     3    NA    NA   2980      0 NA   
+##  7 ga2g2… 鶏そば きらり… 東京都… 1760006 西武池袋… 江古田駅…     2    NA    NA    850      0 NA   
+##  8 gg9m1… 宴会個室×餃子酒場… 東京都… 1010021 ＪＲ  秋葉原駅…     4    NA    NA   2000      3  3.33
+##  9 gdvk2… 中国料理 宝龍… 東京都… 1000006 ＪＲ  有楽町駅…     1    NA    NA   1000      2  2.5 
+## 10 gggb2… 中国料理 天安門… 東京都… 1140002 地下鉄南… 王子駅      2    NA    NA   2000      0 NA   
+## # … with 6,282 more rows</code></pre>
 <p>かなり長いコードになりましたね。しかし、もっと簡単な方法があります。それは<code>-</code>を使う方法です。</p>
 <div class="sourceCode" id="cb789"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb789-1"><a href="datahandling1.html#cb789-1"></a>df <span class="op">%&gt;%</span></span>
 <span id="cb789-2"><a href="datahandling1.html#cb789-2"></a><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>Latitude, <span class="op">-</span>Longitude) <span class="co"># select(-c(Latitude, Longitude))</span></span></code></pre></div>
 <pre><code>## # A tibble: 6,292 x 12
-##    ID    Name  Pref  Zipcode Line  Station  Walk   Bus   Car Budget ScoreN
-##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-##  1 e539… 居酒屋 … 東京都… 1040031 地下鉄有… 銀座一丁目駅…     3    NA    NA   3000      0
-##  2 gfeb… 本格上海… 東京都… 1100005 地下鉄日… 仲御徒町駅…     1    NA    NA   2000      2
-##  3 ggt5… 食べ飲み… 東京都… 1250041 ＪＲ常磐… 金町駅      2    NA    NA   2980      0
-##  4 g181… 博多餃子… 東京都… 1920904 ＪＲ  八王子駅…     1    NA    NA   2000      0
-##  5 ggww… まさ屋 … 東京都… 1500042 地下鉄半… 渋谷駅      7    NA    NA    380      0
-##  6 gdzk… 完全個室… 東京都… 1000013 地下鉄銀… 虎ノ門駅…     3    NA    NA   2980      0
-##  7 ga2g… 鶏そば … 東京都… 1760006 西武池袋… 江古田駅…     2    NA    NA    850      0
-##  8 gg9m… 宴会個室… 東京都… 1010021 ＪＲ  秋葉原駅…     4    NA    NA   2000      3
-##  9 gdvk… 中国料理… 東京都… 1000006 ＪＲ  有楽町駅…     1    NA    NA   1000      2
-## 10 gggb… 中国料理… 東京都… 1140002 地下鉄南… 王子駅      2    NA    NA   2000      0
-## # … with 6,282 more rows, and 1 more variable: Score &lt;dbl&gt;</code></pre>
+##    ID     Name       Pref  Zipcode Line  Station  Walk   Bus   Car Budget ScoreN Score
+##    &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+##  1 e5396… 居酒屋 龍記 京橋… 東京都… 1040031 地下鉄有… 銀座一丁目駅…     3    NA    NA   3000      0 NA   
+##  2 gfeb6… 本格上海料理 新錦… 東京都… 1100005 地下鉄日… 仲御徒町駅…     1    NA    NA   2000      2  4.5 
+##  3 ggt59… 食べ飲み放題×中華… 東京都… 1250041 ＪＲ常磐… 金町駅      2    NA    NA   2980      0 NA   
+##  4 g1813… 博多餃子軒 八王子… 東京都… 1920904 ＪＲ  八王子駅…     1    NA    NA   2000      0 NA   
+##  5 ggww1… まさ屋 渋谷店… 東京都… 1500042 地下鉄半… 渋谷駅      7    NA    NA    380      0 NA   
+##  6 gdzk5… 完全個室 上海レス… 東京都… 1000013 地下鉄銀… 虎ノ門駅…     3    NA    NA   2980      0 NA   
+##  7 ga2g2… 鶏そば きらり… 東京都… 1760006 西武池袋… 江古田駅…     2    NA    NA    850      0 NA   
+##  8 gg9m1… 宴会個室×餃子酒場… 東京都… 1010021 ＪＲ  秋葉原駅…     4    NA    NA   2000      3  3.33
+##  9 gdvk2… 中国料理 宝龍… 東京都… 1000006 ＪＲ  有楽町駅…     1    NA    NA   1000      2  2.5 
+## 10 gggb2… 中国料理 天安門… 東京都… 1140002 地下鉄南… 王子駅      2    NA    NA   2000      0 NA   
+## # … with 6,282 more rows</code></pre>
 <p>除外したい変数名の前に<code>-</code>を付けただけです。また、<code>-Latitude</code>と<code>-Longitude</code>をそれぞれ指定せず、<code>-c(Latitude, Longitude)</code>のように<code>c()</code>でまとめるのも可能です。</p>
 </div>
 <div id="隣接した列を指定する" class="section level3" number="12.3.4">
@@ -942,75 +941,71 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb795"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb795-1"><a href="datahandling1.html#cb795-1"></a>df <span class="op">%&gt;%</span></span>
 <span id="cb795-2"><a href="datahandling1.html#cb795-2"></a><span class="st">  </span><span class="kw">select</span>(Score, ScoreN, ID<span class="op">:</span>Budget)</span></code></pre></div>
 <pre><code>## # A tibble: 6,292 x 14
-##    Score ScoreN ID    Name  Pref  Zipcode Latitude Longitude Line  Station
-##    &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  
-##  1 NA         0 e539… 居酒屋 … 東京都… 1040031     35.7      140. 地下鉄有… 銀座一丁目駅…
-##  2  4.5       2 gfeb… 本格上海… 東京都… 1100005     35.7      140. 地下鉄日… 仲御徒町駅…
-##  3 NA         0 ggt5… 食べ飲み… 東京都… 1250041     35.8      140. ＪＲ常磐… 金町駅 
-##  4 NA         0 g181… 博多餃子… 東京都… 1920904     35.7      139. ＪＲ  八王子駅…
-##  5 NA         0 ggww… まさ屋 … 東京都… 1500042     35.7      140. 地下鉄半… 渋谷駅 
-##  6 NA         0 gdzk… 完全個室… 東京都… 1000013     35.7      140. 地下鉄銀… 虎ノ門駅…
-##  7 NA         0 ga2g… 鶏そば … 東京都… 1760006     35.7      140. 西武池袋… 江古田駅…
-##  8  3.33      3 gg9m… 宴会個室… 東京都… 1010021     35.7      140. ＪＲ  秋葉原駅…
-##  9  2.5       2 gdvk… 中国料理… 東京都… 1000006     35.7      140. ＪＲ  有楽町駅…
-## 10 NA         0 gggb… 中国料理… 東京都… 1140002     35.8      140. 地下鉄南… 王子駅 
-## # … with 6,282 more rows, and 4 more variables: Walk &lt;dbl&gt;, Bus &lt;dbl&gt;,
-## #   Car &lt;dbl&gt;, Budget &lt;dbl&gt;</code></pre>
+##    Score ScoreN ID    Name  Pref  Zipcode Latitude Longitude Line  Station  Walk   Bus
+##    &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
+##  1 NA         0 e539… 居酒屋 … 東京都… 1040031     35.7      140. 地下鉄有… 銀座一丁目駅…     3    NA
+##  2  4.5       2 gfeb… 本格上海… 東京都… 1100005     35.7      140. 地下鉄日… 仲御徒町駅…     1    NA
+##  3 NA         0 ggt5… 食べ飲み… 東京都… 1250041     35.8      140. ＪＲ常磐… 金町駅      2    NA
+##  4 NA         0 g181… 博多餃子… 東京都… 1920904     35.7      139. ＪＲ  八王子駅…     1    NA
+##  5 NA         0 ggww… まさ屋 … 東京都… 1500042     35.7      140. 地下鉄半… 渋谷駅      7    NA
+##  6 NA         0 gdzk… 完全個室… 東京都… 1000013     35.7      140. 地下鉄銀… 虎ノ門駅…     3    NA
+##  7 NA         0 ga2g… 鶏そば … 東京都… 1760006     35.7      140. 西武池袋… 江古田駅…     2    NA
+##  8  3.33      3 gg9m… 宴会個室… 東京都… 1010021     35.7      140. ＪＲ  秋葉原駅…     4    NA
+##  9  2.5       2 gdvk… 中国料理… 東京都… 1000006     35.7      140. ＪＲ  有楽町駅…     1    NA
+## 10 NA         0 gggb… 中国料理… 東京都… 1140002     35.8      140. 地下鉄南… 王子駅      2    NA
+## # … with 6,282 more rows, and 2 more variables: Car &lt;dbl&gt;, Budget &lt;dbl&gt;</code></pre>
 <p>しかし、<code>dplyr</code>には<code>relocate()</code>というより便利な専用関数を提供しています。<code>relocate()</code>には変数名を指定するだけですが、ここで指定した変数がデータフレームの最初列の方に移動します。</p>
 <div class="sourceCode" id="cb797"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb797-1"><a href="datahandling1.html#cb797-1"></a>df <span class="op">%&gt;%</span></span>
 <span id="cb797-2"><a href="datahandling1.html#cb797-2"></a><span class="st">  </span><span class="kw">relocate</span>(Score, ScoreN)</span></code></pre></div>
 <pre><code>## # A tibble: 6,292 x 14
-##    Score ScoreN ID    Name  Pref  Zipcode Latitude Longitude Line  Station
-##    &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  
-##  1 NA         0 e539… 居酒屋 … 東京都… 1040031     35.7      140. 地下鉄有… 銀座一丁目駅…
-##  2  4.5       2 gfeb… 本格上海… 東京都… 1100005     35.7      140. 地下鉄日… 仲御徒町駅…
-##  3 NA         0 ggt5… 食べ飲み… 東京都… 1250041     35.8      140. ＪＲ常磐… 金町駅 
-##  4 NA         0 g181… 博多餃子… 東京都… 1920904     35.7      139. ＪＲ  八王子駅…
-##  5 NA         0 ggww… まさ屋 … 東京都… 1500042     35.7      140. 地下鉄半… 渋谷駅 
-##  6 NA         0 gdzk… 完全個室… 東京都… 1000013     35.7      140. 地下鉄銀… 虎ノ門駅…
-##  7 NA         0 ga2g… 鶏そば … 東京都… 1760006     35.7      140. 西武池袋… 江古田駅…
-##  8  3.33      3 gg9m… 宴会個室… 東京都… 1010021     35.7      140. ＪＲ  秋葉原駅…
-##  9  2.5       2 gdvk… 中国料理… 東京都… 1000006     35.7      140. ＪＲ  有楽町駅…
-## 10 NA         0 gggb… 中国料理… 東京都… 1140002     35.8      140. 地下鉄南… 王子駅 
-## # … with 6,282 more rows, and 4 more variables: Walk &lt;dbl&gt;, Bus &lt;dbl&gt;,
-## #   Car &lt;dbl&gt;, Budget &lt;dbl&gt;</code></pre>
+##    Score ScoreN ID    Name  Pref  Zipcode Latitude Longitude Line  Station  Walk   Bus
+##    &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
+##  1 NA         0 e539… 居酒屋 … 東京都… 1040031     35.7      140. 地下鉄有… 銀座一丁目駅…     3    NA
+##  2  4.5       2 gfeb… 本格上海… 東京都… 1100005     35.7      140. 地下鉄日… 仲御徒町駅…     1    NA
+##  3 NA         0 ggt5… 食べ飲み… 東京都… 1250041     35.8      140. ＪＲ常磐… 金町駅      2    NA
+##  4 NA         0 g181… 博多餃子… 東京都… 1920904     35.7      139. ＪＲ  八王子駅…     1    NA
+##  5 NA         0 ggww… まさ屋 … 東京都… 1500042     35.7      140. 地下鉄半… 渋谷駅      7    NA
+##  6 NA         0 gdzk… 完全個室… 東京都… 1000013     35.7      140. 地下鉄銀… 虎ノ門駅…     3    NA
+##  7 NA         0 ga2g… 鶏そば … 東京都… 1760006     35.7      140. 西武池袋… 江古田駅…     2    NA
+##  8  3.33      3 gg9m… 宴会個室… 東京都… 1010021     35.7      140. ＪＲ  秋葉原駅…     4    NA
+##  9  2.5       2 gdvk… 中国料理… 東京都… 1000006     35.7      140. ＪＲ  有楽町駅…     1    NA
+## 10 NA         0 gggb… 中国料理… 東京都… 1140002     35.8      140. 地下鉄南… 王子駅      2    NA
+## # … with 6,282 more rows, and 2 more variables: Car &lt;dbl&gt;, Budget &lt;dbl&gt;</code></pre>
 <p><code>relocate()</code>を使うと<code>ID:Budget</code>が省略可能となり、より短いコードになります。もう一つの例は、最初に持ってくるのではなく、「ある変数の前」または「ある変数の後」に移動させるケースです。これも<code>relocate()</code>で可能ですが、もう一つの引数が必要です。<code>Pref</code>と<code>Zipcdoe</code>の順番を変えるなら、まずは以下のような方法が考えられます。</p>
 <div class="sourceCode" id="cb799"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb799-1"><a href="datahandling1.html#cb799-1"></a>df <span class="op">%&gt;%</span></span>
 <span id="cb799-2"><a href="datahandling1.html#cb799-2"></a><span class="st">  </span><span class="kw">select</span>(ID<span class="op">:</span>Name, Zipcode, Pref, Latitude<span class="op">:</span>Score)</span></code></pre></div>
 <pre><code>## # A tibble: 6,292 x 14
-##    ID    Name  Zipcode Pref  Latitude Longitude Line  Station  Walk   Bus
-##    &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
-##  1 e539… 居酒屋 … 1040031 東京都…     35.7      140. 地下鉄有… 銀座一丁目駅…     3    NA
-##  2 gfeb… 本格上海… 1100005 東京都…     35.7      140. 地下鉄日… 仲御徒町駅…     1    NA
-##  3 ggt5… 食べ飲み… 1250041 東京都…     35.8      140. ＪＲ常磐… 金町駅      2    NA
-##  4 g181… 博多餃子… 1920904 東京都…     35.7      139. ＪＲ  八王子駅…     1    NA
-##  5 ggww… まさ屋 … 1500042 東京都…     35.7      140. 地下鉄半… 渋谷駅      7    NA
-##  6 gdzk… 完全個室… 1000013 東京都…     35.7      140. 地下鉄銀… 虎ノ門駅…     3    NA
-##  7 ga2g… 鶏そば … 1760006 東京都…     35.7      140. 西武池袋… 江古田駅…     2    NA
-##  8 gg9m… 宴会個室… 1010021 東京都…     35.7      140. ＪＲ  秋葉原駅…     4    NA
-##  9 gdvk… 中国料理… 1000006 東京都…     35.7      140. ＪＲ  有楽町駅…     1    NA
-## 10 gggb… 中国料理… 1140002 東京都…     35.8      140. 地下鉄南… 王子駅      2    NA
-## # … with 6,282 more rows, and 4 more variables: Car &lt;dbl&gt;, Budget &lt;dbl&gt;,
-## #   ScoreN &lt;dbl&gt;, Score &lt;dbl&gt;</code></pre>
+##    ID    Name  Zipcode Pref  Latitude Longitude Line  Station  Walk   Bus   Car Budget
+##    &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+##  1 e539… 居酒屋 … 1040031 東京都…     35.7      140. 地下鉄有… 銀座一丁目駅…     3    NA    NA   3000
+##  2 gfeb… 本格上海… 1100005 東京都…     35.7      140. 地下鉄日… 仲御徒町駅…     1    NA    NA   2000
+##  3 ggt5… 食べ飲み… 1250041 東京都…     35.8      140. ＪＲ常磐… 金町駅      2    NA    NA   2980
+##  4 g181… 博多餃子… 1920904 東京都…     35.7      139. ＪＲ  八王子駅…     1    NA    NA   2000
+##  5 ggww… まさ屋 … 1500042 東京都…     35.7      140. 地下鉄半… 渋谷駅      7    NA    NA    380
+##  6 gdzk… 完全個室… 1000013 東京都…     35.7      140. 地下鉄銀… 虎ノ門駅…     3    NA    NA   2980
+##  7 ga2g… 鶏そば … 1760006 東京都…     35.7      140. 西武池袋… 江古田駅…     2    NA    NA    850
+##  8 gg9m… 宴会個室… 1010021 東京都…     35.7      140. ＪＲ  秋葉原駅…     4    NA    NA   2000
+##  9 gdvk… 中国料理… 1000006 東京都…     35.7      140. ＪＲ  有楽町駅…     1    NA    NA   1000
+## 10 gggb… 中国料理… 1140002 東京都…     35.8      140. 地下鉄南… 王子駅      2    NA    NA   2000
+## # … with 6,282 more rows, and 2 more variables: ScoreN &lt;dbl&gt;, Score &lt;dbl&gt;</code></pre>
 <p>これを<code>relocate()</code>で書き換えるなら、<code>.after</code>または<code>.before</code>引数が必要になります。<code>relocate(変数名1, .after = 変数名2)</code>は「変数1を変数2の直後に移動させる」
 ことを意味します。</p>
 <div class="sourceCode" id="cb801"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb801-1"><a href="datahandling1.html#cb801-1"></a>df <span class="op">%&gt;%</span></span>
 <span id="cb801-2"><a href="datahandling1.html#cb801-2"></a><span class="st">  </span><span class="kw">relocate</span>(Pref, <span class="dt">.after =</span> Zipcode)</span></code></pre></div>
 <pre><code>## # A tibble: 6,292 x 14
-##    ID    Name  Zipcode Pref  Latitude Longitude Line  Station  Walk   Bus
-##    &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
-##  1 e539… 居酒屋 … 1040031 東京都…     35.7      140. 地下鉄有… 銀座一丁目駅…     3    NA
-##  2 gfeb… 本格上海… 1100005 東京都…     35.7      140. 地下鉄日… 仲御徒町駅…     1    NA
-##  3 ggt5… 食べ飲み… 1250041 東京都…     35.8      140. ＪＲ常磐… 金町駅      2    NA
-##  4 g181… 博多餃子… 1920904 東京都…     35.7      139. ＪＲ  八王子駅…     1    NA
-##  5 ggww… まさ屋 … 1500042 東京都…     35.7      140. 地下鉄半… 渋谷駅      7    NA
-##  6 gdzk… 完全個室… 1000013 東京都…     35.7      140. 地下鉄銀… 虎ノ門駅…     3    NA
-##  7 ga2g… 鶏そば … 1760006 東京都…     35.7      140. 西武池袋… 江古田駅…     2    NA
-##  8 gg9m… 宴会個室… 1010021 東京都…     35.7      140. ＪＲ  秋葉原駅…     4    NA
-##  9 gdvk… 中国料理… 1000006 東京都…     35.7      140. ＪＲ  有楽町駅…     1    NA
-## 10 gggb… 中国料理… 1140002 東京都…     35.8      140. 地下鉄南… 王子駅      2    NA
-## # … with 6,282 more rows, and 4 more variables: Car &lt;dbl&gt;, Budget &lt;dbl&gt;,
-## #   ScoreN &lt;dbl&gt;, Score &lt;dbl&gt;</code></pre>
+##    ID    Name  Zipcode Pref  Latitude Longitude Line  Station  Walk   Bus   Car Budget
+##    &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+##  1 e539… 居酒屋 … 1040031 東京都…     35.7      140. 地下鉄有… 銀座一丁目駅…     3    NA    NA   3000
+##  2 gfeb… 本格上海… 1100005 東京都…     35.7      140. 地下鉄日… 仲御徒町駅…     1    NA    NA   2000
+##  3 ggt5… 食べ飲み… 1250041 東京都…     35.8      140. ＪＲ常磐… 金町駅      2    NA    NA   2980
+##  4 g181… 博多餃子… 1920904 東京都…     35.7      139. ＪＲ  八王子駅…     1    NA    NA   2000
+##  5 ggww… まさ屋 … 1500042 東京都…     35.7      140. 地下鉄半… 渋谷駅      7    NA    NA    380
+##  6 gdzk… 完全個室… 1000013 東京都…     35.7      140. 地下鉄銀… 虎ノ門駅…     3    NA    NA   2980
+##  7 ga2g… 鶏そば … 1760006 東京都…     35.7      140. 西武池袋… 江古田駅…     2    NA    NA    850
+##  8 gg9m… 宴会個室… 1010021 東京都…     35.7      140. ＪＲ  秋葉原駅…     4    NA    NA   2000
+##  9 gdvk… 中国料理… 1000006 東京都…     35.7      140. ＪＲ  有楽町駅…     1    NA    NA   1000
+## 10 gggb… 中国料理… 1140002 東京都…     35.8      140. 地下鉄南… 王子駅      2    NA    NA   2000
+## # … with 6,282 more rows, and 2 more variables: ScoreN &lt;dbl&gt;, Score &lt;dbl&gt;</code></pre>
 <p><code>.before</code>を使うことできます。この場合は「<code>Zipcode</code>を<code>Pref</code>の直前に移動させる」
 ことを指定する必要があります。結果は省略しますが、自分でコードを走らせ、上と同じ結果が得られるかを確認してみてください。</p>
 <div class="sourceCode" id="cb803"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb803-1"><a href="datahandling1.html#cb803-1"></a>df <span class="op">%&gt;%</span></span>
@@ -1025,18 +1020,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb804-2"><a href="datahandling1.html#cb804-2"></a>df <span class="op">%&gt;%</span></span>
 <span id="cb804-3"><a href="datahandling1.html#cb804-3"></a><span class="st">  </span><span class="kw">select</span>(ID, Name, <span class="kw">starts_with</span>(<span class="st">&quot;Score&quot;</span>))</span></code></pre></div>
 <pre><code>## # A tibble: 6,292 x 4
-##    ID      Name                                                 ScoreN Score
-##    &lt;chr&gt;   &lt;chr&gt;                                                 &lt;dbl&gt; &lt;dbl&gt;
-##  1 e539604 居酒屋 龍記 京橋店                                        0 NA   
-##  2 gfeb600 本格上海料理 新錦江 上野御徒町本店                        2  4.5 
-##  3 ggt5900 食べ飲み放題×中華ビストロ NOZOMI（のぞみ）                0 NA   
-##  4 g181340 博多餃子軒 八王子店 タピオカ店 Bull Pulu（ブルプル）併設…      0 NA   
-##  5 ggww100 まさ屋 渋谷店                                             0 NA   
-##  6 gdzk500 完全個室 上海レストラン 檸檬 霞ヶ関ビル内店               0 NA   
-##  7 ga2g202 鶏そば きらり                                             0 NA   
-##  8 gg9m100 宴会個室×餃子酒場 北京飯店 秋葉原本店                     3  3.33
-##  9 gdvk200 中国料理 宝龍                                             2  2.5 
-## 10 gggb200 中国料理 天安門                                           0 NA   
+##    ID      Name                                                     ScoreN Score
+##    &lt;chr&gt;   &lt;chr&gt;                                                     &lt;dbl&gt; &lt;dbl&gt;
+##  1 e539604 居酒屋 龍記 京橋店                                            0 NA   
+##  2 gfeb600 本格上海料理 新錦江 上野御徒町本店                            2  4.5 
+##  3 ggt5900 食べ飲み放題×中華ビストロ NOZOMI（のぞみ）                    0 NA   
+##  4 g181340 博多餃子軒 八王子店 タピオカ店 Bull Pulu（ブルプル）併設      0 NA   
+##  5 ggww100 まさ屋 渋谷店                                                 0 NA   
+##  6 gdzk500 完全個室 上海レストラン 檸檬 霞ヶ関ビル内店                   0 NA   
+##  7 ga2g202 鶏そば きらり                                                 0 NA   
+##  8 gg9m100 宴会個室×餃子酒場 北京飯店 秋葉原本店                         3  3.33
+##  9 gdvk200 中国料理 宝龍                                                 2  2.5 
+## 10 gggb200 中国料理 天安門                                               0 NA   
 ## # … with 6,282 more rows</code></pre>
 <div class="sourceCode" id="cb806"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb806-1"><a href="datahandling1.html#cb806-1"></a><span class="co"># eで終わる変数名を除去</span></span>
 <span id="cb806-2"><a href="datahandling1.html#cb806-2"></a>df <span class="op">%&gt;%</span></span>
@@ -1347,12 +1342,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb848-2"><a href="datahandling1.html#cb848-2"></a>select.df <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb848-3"><a href="datahandling1.html#cb848-3"></a><span class="st">  </span><span class="kw">slice_max</span>(Budget, <span class="dt">n =</span> <span class="dv">4</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 4 x 5
-##   ID      Name                                          Pref    Budget Score
-##   &lt;chr&gt;   &lt;chr&gt;                                         &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt;
-## 1 g670609 横浜ベイシェラトン ホテル＆タワーズ 中国料理 彩龍… 神奈川県…   8000    NA
-## 2 g910420 JASMINE 憶江南                                東京都    7000    NA
-## 3 7176666 赤坂焼鳥 鳳                                   東京都    7000    NA
-## 4 b612800 羽衣 銀座本店                                 東京都    6000    NA</code></pre>
+##   ID      Name                                              Pref     Budget Score
+##   &lt;chr&gt;   &lt;chr&gt;                                             &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;
+## 1 g670609 横浜ベイシェラトン ホテル＆タワーズ 中国料理 彩龍 神奈川県   8000    NA
+## 2 g910420 JASMINE 憶江南                                    東京都     7000    NA
+## 3 7176666 赤坂焼鳥 鳳                                       東京都     7000    NA
+## 4 b612800 羽衣 銀座本店                                     東京都     6000    NA</code></pre>
 <p><strong><code>slice_min()</code>: 指定した変数が小さい順でn行抽出する</strong></p>
 <p>一方、<code>slice_min()</code>関数が小さい順で抽出します。</p>
 <div class="sourceCode" id="cb850"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb850-1"><a href="datahandling1.html#cb850-1"></a><span class="co"># select.dfからScoreの値が低い順で3行を抽出し、出力する</span></span>
@@ -1449,18 +1444,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb862-2"><a href="datahandling1.html#cb862-2"></a><span class="st">  </span><span class="kw">filter</span>(ScoreN <span class="op">!=</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span></span>
 <span id="cb862-3"><a href="datahandling1.html#cb862-3"></a><span class="st">  </span><span class="kw">select</span>(Name, Station, <span class="kw">starts_with</span>(<span class="st">&quot;Score&quot;</span>))</span></code></pre></div>
 <pre><code>## # A tibble: 1,344 x 4
-##    Name                                          Station        ScoreN Score
-##    &lt;chr&gt;                                         &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt;
-##  1 本格上海料理 新錦江 上野御徒町本店            仲御徒町駅          2  4.5 
-##  2 宴会個室×餃子酒場 北京飯店 秋葉原本店         秋葉原駅            3  3.33
-##  3 中国料理 宝龍                                 有楽町駅            2  2.5 
-##  4 麺達 うま家                                   高田馬場駅          2  3   
-##  5 刀削麺・火鍋・西安料理 XI’AN（シーアン） 後楽園店… 後楽園駅            1 NA   
-##  6 七志らーめん 渋谷道玄坂店                     渋谷駅              7  4.5 
-##  7 永楽                                          京成小岩駅          6  4.42
-##  8 よってこや お台場店                           お台場海浜公園駅…      1  4   
-##  9 ラーメン武藤製麺所                            竹ノ塚駅            4  3.5 
-## 10 桂花ラーメン 新宿末広店                       新宿三丁目駅        8  3   
+##    Name                                              Station          ScoreN Score
+##    &lt;chr&gt;                                             &lt;chr&gt;             &lt;dbl&gt; &lt;dbl&gt;
+##  1 本格上海料理 新錦江 上野御徒町本店                仲御徒町駅            2  4.5 
+##  2 宴会個室×餃子酒場 北京飯店 秋葉原本店             秋葉原駅              3  3.33
+##  3 中国料理 宝龍                                     有楽町駅              2  2.5 
+##  4 麺達 うま家                                       高田馬場駅            2  3   
+##  5 刀削麺・火鍋・西安料理 XI’AN（シーアン） 後楽園店 後楽園駅              1 NA   
+##  6 七志らーめん 渋谷道玄坂店                         渋谷駅                7  4.5 
+##  7 永楽                                              京成小岩駅            6  4.42
+##  8 よってこや お台場店                               お台場海浜公園駅      1  4   
+##  9 ラーメン武藤製麺所                                竹ノ塚駅              4  3.5 
+## 10 桂花ラーメン 新宿末広店                           新宿三丁目駅          8  3   
 ## # … with 1,334 more rows</code></pre>
 <p>これで口コミ数が1以上の店舗のみに絞ることができました。ただし、店によっては口コミはあっても、評価 (<code>Score</code>)が付いていないところもあります。たとえば、「刀削麺・火鍋・西安料理 XI’AN（シーアン） 後楽園店」の場合、口コミはありますが、評価はありません。したがって、今回は評価が付いている店舗に絞ってみましょう。</p>
 <div class="sourceCode" id="cb864"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb864-1"><a href="datahandling1.html#cb864-1"></a>df <span class="op">%&gt;%</span></span>
@@ -1593,32 +1588,32 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb878-4"><a href="datahandling1.html#cb878-4"></a><span class="st">  </span><span class="kw">arrange</span>(Walk) <span class="op">%&gt;%</span></span>
 <span id="cb878-5"><a href="datahandling1.html#cb878-5"></a><span class="st">  </span><span class="kw">print</span>(<span class="dt">n =</span> <span class="ot">Inf</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 24 x 5
-##    Name                                 Station            Walk ScoreN Score
-##    &lt;chr&gt;                                &lt;chr&gt;             &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
-##  1 麺屋 あまのじゃく 本店               富雄駅                2      2  4.5 
-##  2 紀州和歌山らーめんきぶんや 奈良富雄店… 富雄駅                4      1  4   
-##  3 ラーメン家 みつ葉                    富雄駅                4      1  3.5 
-##  4 天下一品 新大宮店                    新大宮駅              6      1  3   
-##  5 麺屋 一徳                            天理駅                7      1  3   
-##  6 丸源ラーメン 橿原店                  金橋駅                8      1  3.5 
-##  7 らーめん食堂 よってこや 平群店       元山上口駅           10      1  4   
-##  8 天理スタミナラーメン本店             櫟本駅               11      2  3.25
-##  9 博多長浜らーめん夢街道 奈良土橋店    真菅駅               11      1  3.5 
-## 10 ぶ～け                               奈良駅               11      1  5   
-## 11 つけめん らーめん元喜神 押熊店       学研奈良登美ヶ丘駅…    12      4  4.12
-## 12 彩華ラーメン 本店                    前栽駅               12      5  3.6 
-## 13 力皇                                 天理駅               13      1  3.5 
-## 14 らーめん きみちゃん                  京終駅               14      2  4.5 
-## 15 無鉄砲がむしゃら                     帯解駅               15      2  4   
-## 16 彩華ラーメン 田原本店                石見駅               15      1  4   
-## 17 神座 大和高田店                      大和高田駅           17      2  3.75
-## 18 彩華ラーメン 奈良店                  尼ヶ辻駅             17      3  4.33
-## 19 彩華ラーメン 桜井店                  大福駅               18      1  3   
-## 20 天下一品 東生駒店                    東生駒駅             19      1  3.5 
-## 21 まりお流ラーメン                     新大宮駅             20      1  5   
-## 22 どうとんぼり神座 奈良柏木店          西ノ京駅             22      1  3   
-## 23 河童ラーメン本舗 押熊店              学研奈良登美ヶ丘駅…    28      1  4   
-## 24 博多長浜らーめん 夢街道 四条大路店   新大宮駅             29      4  2.88</code></pre>
+##    Name                                  Station             Walk ScoreN Score
+##    &lt;chr&gt;                                 &lt;chr&gt;              &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+##  1 麺屋 あまのじゃく 本店                富雄駅                 2      2  4.5 
+##  2 紀州和歌山らーめんきぶんや 奈良富雄店 富雄駅                 4      1  4   
+##  3 ラーメン家 みつ葉                     富雄駅                 4      1  3.5 
+##  4 天下一品 新大宮店                     新大宮駅               6      1  3   
+##  5 麺屋 一徳                             天理駅                 7      1  3   
+##  6 丸源ラーメン 橿原店                   金橋駅                 8      1  3.5 
+##  7 らーめん食堂 よってこや 平群店        元山上口駅            10      1  4   
+##  8 天理スタミナラーメン本店              櫟本駅                11      2  3.25
+##  9 博多長浜らーめん夢街道 奈良土橋店     真菅駅                11      1  3.5 
+## 10 ぶ～け                                奈良駅                11      1  5   
+## 11 つけめん らーめん元喜神 押熊店        学研奈良登美ヶ丘駅    12      4  4.12
+## 12 彩華ラーメン 本店                     前栽駅                12      5  3.6 
+## 13 力皇                                  天理駅                13      1  3.5 
+## 14 らーめん きみちゃん                   京終駅                14      2  4.5 
+## 15 無鉄砲がむしゃら                      帯解駅                15      2  4   
+## 16 彩華ラーメン 田原本店                 石見駅                15      1  4   
+## 17 神座 大和高田店                       大和高田駅            17      2  3.75
+## 18 彩華ラーメン 奈良店                   尼ヶ辻駅              17      3  4.33
+## 19 彩華ラーメン 桜井店                   大福駅                18      1  3   
+## 20 天下一品 東生駒店                     東生駒駅              19      1  3.5 
+## 21 まりお流ラーメン                      新大宮駅              20      1  5   
+## 22 どうとんぼり神座 奈良柏木店           西ノ京駅              22      1  3   
+## 23 河童ラーメン本舗 押熊店               学研奈良登美ヶ丘駅    28      1  4   
+## 24 博多長浜らーめん 夢街道 四条大路店    新大宮駅              29      4  2.88</code></pre>
 <p>3行まではこれまで習ってきたもので、4行目がソートの関数、<code>arrange()</code>です。引数はソートの基準となる変数で、今回は最寄りの駅からの徒歩距離を表す<code>Walk</code>です。5行目は省略可能ですが、<code>tibble</code>クラスの場合、10行までしか出力されないので、<code>print(n = Inf)</code>で「すべての行を表示」させます。<code>n</code>を指定することで出力される行数が調整可能です。奈良県のラーメン屋の中で最寄りの駅から最も近い店は「<a href="https://www.menya-amanojaku.com">麺屋 あまのじゃく 本店</a>」で徒歩2分でした。京田辺店も駅から約2分ですし、近いですね。ちなみにSongはここの塩とんこつが好きです。世界一こってりなラーメンとも言われる「チョモランマ」で有名な「<a href="http://www.marioramen.com">まりお流ラーメン</a>」は新大宮駅から徒歩20分でかなり遠いことが分かります。</p>
 <p>続いて、駅からの距離ではなく、評価が高い順にしてみましょう。評価が高いほど上に来るので、今回は昇順でなく、<strong>降順 (descending)</strong>でソートする必要があります。<code>arrange()</code>関数は基本的に、指定された変数を基準に昇順でソートします。降順にするためには<code>desc()</code>関数を更に用います。たとえば、<code>arrange(desc(変数名))</code>のようにです。それでは実際にやってみましょう。上のコードの4行目を<code>arange(Walk)</code>から<code>arrange(desc(Score))</code>にちょっと修正するだけです。</p>
 <div class="sourceCode" id="cb880"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb880-1"><a href="datahandling1.html#cb880-1"></a>df <span class="op">%&gt;%</span></span>
@@ -1627,32 +1622,32 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb880-4"><a href="datahandling1.html#cb880-4"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(Score)) <span class="op">%&gt;%</span></span>
 <span id="cb880-5"><a href="datahandling1.html#cb880-5"></a><span class="st">  </span><span class="kw">print</span>(<span class="dt">n =</span> <span class="ot">Inf</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 24 x 5
-##    Name                                 Station            Walk ScoreN Score
-##    &lt;chr&gt;                                &lt;chr&gt;             &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
-##  1 まりお流ラーメン                     新大宮駅             20      1  5   
-##  2 ぶ～け                               奈良駅               11      1  5   
-##  3 麺屋 あまのじゃく 本店               富雄駅                2      2  4.5 
-##  4 らーめん きみちゃん                  京終駅               14      2  4.5 
-##  5 彩華ラーメン 奈良店                  尼ヶ辻駅             17      3  4.33
-##  6 つけめん らーめん元喜神 押熊店       学研奈良登美ヶ丘駅…    12      4  4.12
-##  7 河童ラーメン本舗 押熊店              学研奈良登美ヶ丘駅…    28      1  4   
-##  8 無鉄砲がむしゃら                     帯解駅               15      2  4   
-##  9 紀州和歌山らーめんきぶんや 奈良富雄店… 富雄駅                4      1  4   
-## 10 彩華ラーメン 田原本店                石見駅               15      1  4   
-## 11 らーめん食堂 よってこや 平群店       元山上口駅           10      1  4   
-## 12 神座 大和高田店                      大和高田駅           17      2  3.75
-## 13 彩華ラーメン 本店                    前栽駅               12      5  3.6 
-## 14 天下一品 東生駒店                    東生駒駅             19      1  3.5 
-## 15 力皇                                 天理駅               13      1  3.5 
-## 16 博多長浜らーめん夢街道 奈良土橋店    真菅駅               11      1  3.5 
-## 17 ラーメン家 みつ葉                    富雄駅                4      1  3.5 
-## 18 丸源ラーメン 橿原店                  金橋駅                8      1  3.5 
-## 19 天理スタミナラーメン本店             櫟本駅               11      2  3.25
-## 20 麺屋 一徳                            天理駅                7      1  3   
-## 21 どうとんぼり神座 奈良柏木店          西ノ京駅             22      1  3   
-## 22 彩華ラーメン 桜井店                  大福駅               18      1  3   
-## 23 天下一品 新大宮店                    新大宮駅              6      1  3   
-## 24 博多長浜らーめん 夢街道 四条大路店   新大宮駅             29      4  2.88</code></pre>
+##    Name                                  Station             Walk ScoreN Score
+##    &lt;chr&gt;                                 &lt;chr&gt;              &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+##  1 まりお流ラーメン                      新大宮駅              20      1  5   
+##  2 ぶ～け                                奈良駅                11      1  5   
+##  3 麺屋 あまのじゃく 本店                富雄駅                 2      2  4.5 
+##  4 らーめん きみちゃん                   京終駅                14      2  4.5 
+##  5 彩華ラーメン 奈良店                   尼ヶ辻駅              17      3  4.33
+##  6 つけめん らーめん元喜神 押熊店        学研奈良登美ヶ丘駅    12      4  4.12
+##  7 河童ラーメン本舗 押熊店               学研奈良登美ヶ丘駅    28      1  4   
+##  8 無鉄砲がむしゃら                      帯解駅                15      2  4   
+##  9 紀州和歌山らーめんきぶんや 奈良富雄店 富雄駅                 4      1  4   
+## 10 彩華ラーメン 田原本店                 石見駅                15      1  4   
+## 11 らーめん食堂 よってこや 平群店        元山上口駅            10      1  4   
+## 12 神座 大和高田店                       大和高田駅            17      2  3.75
+## 13 彩華ラーメン 本店                     前栽駅                12      5  3.6 
+## 14 天下一品 東生駒店                     東生駒駅              19      1  3.5 
+## 15 力皇                                  天理駅                13      1  3.5 
+## 16 博多長浜らーめん夢街道 奈良土橋店     真菅駅                11      1  3.5 
+## 17 ラーメン家 みつ葉                     富雄駅                 4      1  3.5 
+## 18 丸源ラーメン 橿原店                   金橋駅                 8      1  3.5 
+## 19 天理スタミナラーメン本店              櫟本駅                11      2  3.25
+## 20 麺屋 一徳                             天理駅                 7      1  3   
+## 21 どうとんぼり神座 奈良柏木店           西ノ京駅              22      1  3   
+## 22 彩華ラーメン 桜井店                   大福駅                18      1  3   
+## 23 天下一品 新大宮店                     新大宮駅               6      1  3   
+## 24 博多長浜らーめん 夢街道 四条大路店    新大宮駅              29      4  2.88</code></pre>
 <p>よく考えてみれば、「評価が同点の場合、どうなるの?」と疑問を抱く方がいるかも知れません。たとえば、7行目の「河童ラーメン本舗 押熊店」と8行目の「無鉄砲がむしゃら」はどれも評価が4点ですが、「河童ラーメン本舗 押熊店」が先に表示されます。そのこれは簡単です。同点の場合、データセット内で上に位置する行が先に表示されます。これを確認するには<code>which()</code>関数を使います。<code>()</code>内に条件文を指定することで、この条件に合致する要素の位置を返します。もし、条件に合致するものが複数あった場合は全ての位置を返します<a href="#fn62" class="footnote-ref" id="fnref62"><sup>62</sup></a>。</p>
 <div class="sourceCode" id="cb882"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb882-1"><a href="datahandling1.html#cb882-1"></a><span class="kw">which</span>(df<span class="op">$</span>Name <span class="op">==</span><span class="st"> &quot;河童ラーメン本舗 押熊店&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] 6021</code></pre>
@@ -1665,32 +1660,32 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb886-4"><a href="datahandling1.html#cb886-4"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(Score), <span class="kw">desc</span>(ScoreN)) <span class="op">%&gt;%</span></span>
 <span id="cb886-5"><a href="datahandling1.html#cb886-5"></a><span class="st">  </span><span class="kw">print</span>(<span class="dt">n =</span> <span class="ot">Inf</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 24 x 5
-##    Name                                 Station            Walk ScoreN Score
-##    &lt;chr&gt;                                &lt;chr&gt;             &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
-##  1 まりお流ラーメン                     新大宮駅             20      1  5   
-##  2 ぶ～け                               奈良駅               11      1  5   
-##  3 麺屋 あまのじゃく 本店               富雄駅                2      2  4.5 
-##  4 らーめん きみちゃん                  京終駅               14      2  4.5 
-##  5 彩華ラーメン 奈良店                  尼ヶ辻駅             17      3  4.33
-##  6 つけめん らーめん元喜神 押熊店       学研奈良登美ヶ丘駅…    12      4  4.12
-##  7 無鉄砲がむしゃら                     帯解駅               15      2  4   
-##  8 河童ラーメン本舗 押熊店              学研奈良登美ヶ丘駅…    28      1  4   
-##  9 紀州和歌山らーめんきぶんや 奈良富雄店… 富雄駅                4      1  4   
-## 10 彩華ラーメン 田原本店                石見駅               15      1  4   
-## 11 らーめん食堂 よってこや 平群店       元山上口駅           10      1  4   
-## 12 神座 大和高田店                      大和高田駅           17      2  3.75
-## 13 彩華ラーメン 本店                    前栽駅               12      5  3.6 
-## 14 天下一品 東生駒店                    東生駒駅             19      1  3.5 
-## 15 力皇                                 天理駅               13      1  3.5 
-## 16 博多長浜らーめん夢街道 奈良土橋店    真菅駅               11      1  3.5 
-## 17 ラーメン家 みつ葉                    富雄駅                4      1  3.5 
-## 18 丸源ラーメン 橿原店                  金橋駅                8      1  3.5 
-## 19 天理スタミナラーメン本店             櫟本駅               11      2  3.25
-## 20 麺屋 一徳                            天理駅                7      1  3   
-## 21 どうとんぼり神座 奈良柏木店          西ノ京駅             22      1  3   
-## 22 彩華ラーメン 桜井店                  大福駅               18      1  3   
-## 23 天下一品 新大宮店                    新大宮駅              6      1  3   
-## 24 博多長浜らーめん 夢街道 四条大路店   新大宮駅             29      4  2.88</code></pre>
+##    Name                                  Station             Walk ScoreN Score
+##    &lt;chr&gt;                                 &lt;chr&gt;              &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+##  1 まりお流ラーメン                      新大宮駅              20      1  5   
+##  2 ぶ～け                                奈良駅                11      1  5   
+##  3 麺屋 あまのじゃく 本店                富雄駅                 2      2  4.5 
+##  4 らーめん きみちゃん                   京終駅                14      2  4.5 
+##  5 彩華ラーメン 奈良店                   尼ヶ辻駅              17      3  4.33
+##  6 つけめん らーめん元喜神 押熊店        学研奈良登美ヶ丘駅    12      4  4.12
+##  7 無鉄砲がむしゃら                      帯解駅                15      2  4   
+##  8 河童ラーメン本舗 押熊店               学研奈良登美ヶ丘駅    28      1  4   
+##  9 紀州和歌山らーめんきぶんや 奈良富雄店 富雄駅                 4      1  4   
+## 10 彩華ラーメン 田原本店                 石見駅                15      1  4   
+## 11 らーめん食堂 よってこや 平群店        元山上口駅            10      1  4   
+## 12 神座 大和高田店                       大和高田駅            17      2  3.75
+## 13 彩華ラーメン 本店                     前栽駅                12      5  3.6 
+## 14 天下一品 東生駒店                     東生駒駅              19      1  3.5 
+## 15 力皇                                  天理駅                13      1  3.5 
+## 16 博多長浜らーめん夢街道 奈良土橋店     真菅駅                11      1  3.5 
+## 17 ラーメン家 みつ葉                     富雄駅                 4      1  3.5 
+## 18 丸源ラーメン 橿原店                   金橋駅                 8      1  3.5 
+## 19 天理スタミナラーメン本店              櫟本駅                11      2  3.25
+## 20 麺屋 一徳                             天理駅                 7      1  3   
+## 21 どうとんぼり神座 奈良柏木店           西ノ京駅              22      1  3   
+## 22 彩華ラーメン 桜井店                   大福駅                18      1  3   
+## 23 天下一品 新大宮店                     新大宮駅               6      1  3   
+## 24 博多長浜らーめん 夢街道 四条大路店    新大宮駅              29      4  2.88</code></pre>
 <p>ソートの基準は<code>arrange()</code>内において先に指定された変数の順番となります。「口コミ評価も評価数も同じなら、駅から近いところにしたい」場合は変数が3つとなり、<code>Score</code>、<code>ScoreN</code>、<code>Walk</code>の順で入れます。</p>
 <div class="sourceCode" id="cb888"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb888-1"><a href="datahandling1.html#cb888-1"></a>df <span class="op">%&gt;%</span></span>
 <span id="cb888-2"><a href="datahandling1.html#cb888-2"></a><span class="st">  </span><span class="kw">filter</span>(Pref <span class="op">==</span><span class="st"> &quot;奈良県&quot;</span>, <span class="op">!</span><span class="kw">is.na</span>(Station), ScoreN <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span></span>
@@ -1698,32 +1693,32 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb888-4"><a href="datahandling1.html#cb888-4"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(Score), <span class="kw">desc</span>(ScoreN), Walk) <span class="op">%&gt;%</span></span>
 <span id="cb888-5"><a href="datahandling1.html#cb888-5"></a><span class="st">  </span><span class="kw">print</span>(<span class="dt">n =</span> <span class="ot">Inf</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 24 x 5
-##    Name                                 Station            Walk ScoreN Score
-##    &lt;chr&gt;                                &lt;chr&gt;             &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
-##  1 ぶ～け                               奈良駅               11      1  5   
-##  2 まりお流ラーメン                     新大宮駅             20      1  5   
-##  3 麺屋 あまのじゃく 本店               富雄駅                2      2  4.5 
-##  4 らーめん きみちゃん                  京終駅               14      2  4.5 
-##  5 彩華ラーメン 奈良店                  尼ヶ辻駅             17      3  4.33
-##  6 つけめん らーめん元喜神 押熊店       学研奈良登美ヶ丘駅…    12      4  4.12
-##  7 無鉄砲がむしゃら                     帯解駅               15      2  4   
-##  8 紀州和歌山らーめんきぶんや 奈良富雄店… 富雄駅                4      1  4   
-##  9 らーめん食堂 よってこや 平群店       元山上口駅           10      1  4   
-## 10 彩華ラーメン 田原本店                石見駅               15      1  4   
-## 11 河童ラーメン本舗 押熊店              学研奈良登美ヶ丘駅…    28      1  4   
-## 12 神座 大和高田店                      大和高田駅           17      2  3.75
-## 13 彩華ラーメン 本店                    前栽駅               12      5  3.6 
-## 14 ラーメン家 みつ葉                    富雄駅                4      1  3.5 
-## 15 丸源ラーメン 橿原店                  金橋駅                8      1  3.5 
-## 16 博多長浜らーめん夢街道 奈良土橋店    真菅駅               11      1  3.5 
-## 17 力皇                                 天理駅               13      1  3.5 
-## 18 天下一品 東生駒店                    東生駒駅             19      1  3.5 
-## 19 天理スタミナラーメン本店             櫟本駅               11      2  3.25
-## 20 天下一品 新大宮店                    新大宮駅              6      1  3   
-## 21 麺屋 一徳                            天理駅                7      1  3   
-## 22 彩華ラーメン 桜井店                  大福駅               18      1  3   
-## 23 どうとんぼり神座 奈良柏木店          西ノ京駅             22      1  3   
-## 24 博多長浜らーめん 夢街道 四条大路店   新大宮駅             29      4  2.88</code></pre>
+##    Name                                  Station             Walk ScoreN Score
+##    &lt;chr&gt;                                 &lt;chr&gt;              &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+##  1 ぶ～け                                奈良駅                11      1  5   
+##  2 まりお流ラーメン                      新大宮駅              20      1  5   
+##  3 麺屋 あまのじゃく 本店                富雄駅                 2      2  4.5 
+##  4 らーめん きみちゃん                   京終駅                14      2  4.5 
+##  5 彩華ラーメン 奈良店                   尼ヶ辻駅              17      3  4.33
+##  6 つけめん らーめん元喜神 押熊店        学研奈良登美ヶ丘駅    12      4  4.12
+##  7 無鉄砲がむしゃら                      帯解駅                15      2  4   
+##  8 紀州和歌山らーめんきぶんや 奈良富雄店 富雄駅                 4      1  4   
+##  9 らーめん食堂 よってこや 平群店        元山上口駅            10      1  4   
+## 10 彩華ラーメン 田原本店                 石見駅                15      1  4   
+## 11 河童ラーメン本舗 押熊店               学研奈良登美ヶ丘駅    28      1  4   
+## 12 神座 大和高田店                       大和高田駅            17      2  3.75
+## 13 彩華ラーメン 本店                     前栽駅                12      5  3.6 
+## 14 ラーメン家 みつ葉                     富雄駅                 4      1  3.5 
+## 15 丸源ラーメン 橿原店                   金橋駅                 8      1  3.5 
+## 16 博多長浜らーめん夢街道 奈良土橋店     真菅駅                11      1  3.5 
+## 17 力皇                                  天理駅                13      1  3.5 
+## 18 天下一品 東生駒店                     東生駒駅              19      1  3.5 
+## 19 天理スタミナラーメン本店              櫟本駅                11      2  3.25
+## 20 天下一品 新大宮店                     新大宮駅               6      1  3   
+## 21 麺屋 一徳                             天理駅                 7      1  3   
+## 22 彩華ラーメン 桜井店                   大福駅                18      1  3   
+## 23 どうとんぼり神座 奈良柏木店           西ノ京駅              22      1  3   
+## 24 博多長浜らーめん 夢街道 四条大路店    新大宮駅              29      4  2.88</code></pre>
 <hr />
 </div>
 <div id="handling1-exercise" class="section level2" number="12.6">
