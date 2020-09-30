@@ -459,6 +459,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="19.2" data-path="visualization3.html"><a href="visualization3.html#visual3-coordinate"><i class="fa fa-check"></i><b>19.2</b> <code>coord_*()</code>: 座標系の調整</a></li>
 <li class="chapter" data-level="19.3" data-path="visualization3.html"><a href="visualization3.html#visual3-scale"><i class="fa fa-check"></i><b>19.3</b> <code>scale_*_*()</code>: スケールの調整</a></li>
 <li class="chapter" data-level="19.4" data-path="visualization3.html"><a href="visualization3.html#visual3-theme"><i class="fa fa-check"></i><b>19.4</b> <code>theme_*()</code>と<code>theme()</code>: テーマの指定</a></li>
+<li class="chapter" data-level="19.5" data-path="visualization3.html"><a href="visualization3.html#visual3-merge"><i class="fa fa-check"></i><b>19.5</b> 図の結合</a>
+<ul>
+<li class="chapter" data-level="19.5.1" data-path="visualization3.html"><a href="visualization3.html#ggpubrパッケージ"><i class="fa fa-check"></i><b>19.5.1</b> ggpubrパッケージ</a></li>
+<li class="chapter" data-level="19.5.2" data-path="visualization3.html"><a href="visualization3.html#patchworkパッケージ"><i class="fa fa-check"></i><b>19.5.2</b> patchworkパッケージ</a></li>
+<li class="chapter" data-level="19.5.3" data-path="visualization3.html"><a href="visualization3.html#eggパッケージ"><i class="fa fa-check"></i><b>19.5.3</b> eggパッケージ</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="20" data-path="visualization4.html"><a href="visualization4.html"><i class="fa fa-check"></i><b>20</b> 可視化[発展]</a>
 <ul>
@@ -631,20 +637,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>データの中身を確認してみましょう。</p>
 <div class="sourceCode" id="cb771"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb771-1"><a href="datahandling1.html#cb771-1"></a>df</span></code></pre></div>
 <pre><code>## # A tibble: 6,292 x 14
-##    ID    Name  Pref  Zipcode Latitude Longitude Line  Station  Walk   Bus   Car
-##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 e539… 居酒屋 … 東京都… 1040031     35.7      140. 地下鉄有… 銀座一丁目駅…     3    NA    NA
-##  2 gfeb… 本格上海… 東京都… 1100005     35.7      140. 地下鉄日… 仲御徒町駅…     1    NA    NA
-##  3 ggt5… 食べ飲み… 東京都… 1250041     35.8      140. ＪＲ常磐… 金町駅      2    NA    NA
-##  4 g181… 博多餃子… 東京都… 1920904     35.7      139. ＪＲ  八王子駅…     1    NA    NA
-##  5 ggww… まさ屋 … 東京都… 1500042     35.7      140. 地下鉄半… 渋谷駅      7    NA    NA
-##  6 gdzk… 完全個室… 東京都… 1000013     35.7      140. 地下鉄銀… 虎ノ門駅…     3    NA    NA
-##  7 ga2g… 鶏そば … 東京都… 1760006     35.7      140. 西武池袋… 江古田駅…     2    NA    NA
-##  8 gg9m… 宴会個室… 東京都… 1010021     35.7      140. ＪＲ  秋葉原駅…     4    NA    NA
-##  9 gdvk… 中国料理… 東京都… 1000006     35.7      140. ＪＲ  有楽町駅…     1    NA    NA
-## 10 gggb… 中国料理… 東京都… 1140002     35.8      140. 地下鉄南… 王子駅      2    NA    NA
-## # … with 6,282 more rows, and 3 more variables: Budget &lt;dbl&gt;, ScoreN &lt;dbl&gt;,
-## #   Score &lt;dbl&gt;</code></pre>
+##    ID    Name  Pref  Zipcode Latitude Longitude Line  Station  Walk   Bus
+##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
+##  1 e539… 居酒屋 … 東京都… 1040031     35.7      140. 地下鉄有… 銀座一丁目駅…     3    NA
+##  2 gfeb… 本格上海… 東京都… 1100005     35.7      140. 地下鉄日… 仲御徒町駅…     1    NA
+##  3 ggt5… 食べ飲み… 東京都… 1250041     35.8      140. ＪＲ常磐… 金町駅      2    NA
+##  4 g181… 博多餃子… 東京都… 1920904     35.7      139. ＪＲ  八王子駅…     1    NA
+##  5 ggww… まさ屋 … 東京都… 1500042     35.7      140. 地下鉄半… 渋谷駅      7    NA
+##  6 gdzk… 完全個室… 東京都… 1000013     35.7      140. 地下鉄銀… 虎ノ門駅…     3    NA
+##  7 ga2g… 鶏そば … 東京都… 1760006     35.7      140. 西武池袋… 江古田駅…     2    NA
+##  8 gg9m… 宴会個室… 東京都… 1010021     35.7      140. ＪＲ  秋葉原駅…     4    NA
+##  9 gdvk… 中国料理… 東京都… 1000006     35.7      140. ＪＲ  有楽町駅…     1    NA
+## 10 gggb… 中国料理… 東京都… 1140002     35.8      140. 地下鉄南… 王子駅      2    NA
+## # … with 6,282 more rows, and 4 more variables: Car &lt;dbl&gt;, Budget &lt;dbl&gt;,
+## #   ScoreN &lt;dbl&gt;, Score &lt;dbl&gt;</code></pre>
 <p>1行目の<code># A tibble: 2,000 x 12</code>から、ケース数 (店舗数)は2000、変数は12個あることが分かります。各変数の詳細は以下の通りです。</p>
 <table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -779,36 +785,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb773"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb773-1"><a href="datahandling1.html#cb773-1"></a><span class="co"># dplyrを使わない方法</span></span>
 <span id="cb773-2"><a href="datahandling1.html#cb773-2"></a>df[, <span class="kw">c</span>(<span class="st">&quot;ID&quot;</span>, <span class="st">&quot;Name&quot;</span>, <span class="st">&quot;Pref&quot;</span>, <span class="st">&quot;Score&quot;</span>)]</span></code></pre></div>
 <pre><code>## # A tibble: 6,292 x 4
-##    ID      Name                                                     Pref  Score
-##    &lt;chr&gt;   &lt;chr&gt;                                                    &lt;chr&gt; &lt;dbl&gt;
-##  1 e539604 居酒屋 龍記 京橋店                                       東京都… NA   
-##  2 gfeb600 本格上海料理 新錦江 上野御徒町本店                       東京都…  4.5 
-##  3 ggt5900 食べ飲み放題×中華ビストロ NOZOMI（のぞみ）               東京都… NA   
-##  4 g181340 博多餃子軒 八王子店 タピオカ店 Bull Pulu（ブルプル）併設 東京都… NA   
-##  5 ggww100 まさ屋 渋谷店                                            東京都… NA   
-##  6 gdzk500 完全個室 上海レストラン 檸檬 霞ヶ関ビル内店              東京都… NA   
-##  7 ga2g202 鶏そば きらり                                            東京都… NA   
-##  8 gg9m100 宴会個室×餃子酒場 北京飯店 秋葉原本店                    東京都…  3.33
-##  9 gdvk200 中国料理 宝龍                                            東京都…  2.5 
-## 10 gggb200 中国料理 天安門                                          東京都… NA   
+##    ID      Name                                                    Pref  Score
+##    &lt;chr&gt;   &lt;chr&gt;                                                   &lt;chr&gt; &lt;dbl&gt;
+##  1 e539604 居酒屋 龍記 京橋店                                      東京都… NA   
+##  2 gfeb600 本格上海料理 新錦江 上野御徒町本店                      東京都…  4.5 
+##  3 ggt5900 食べ飲み放題×中華ビストロ NOZOMI（のぞみ）              東京都… NA   
+##  4 g181340 博多餃子軒 八王子店 タピオカ店 Bull Pulu（ブルプル）併設… 東京都… NA   
+##  5 ggww100 まさ屋 渋谷店                                           東京都… NA   
+##  6 gdzk500 完全個室 上海レストラン 檸檬 霞ヶ関ビル内店             東京都… NA   
+##  7 ga2g202 鶏そば きらり                                           東京都… NA   
+##  8 gg9m100 宴会個室×餃子酒場 北京飯店 秋葉原本店                   東京都…  3.33
+##  9 gdvk200 中国料理 宝龍                                           東京都…  2.5 
+## 10 gggb200 中国料理 天安門                                         東京都… NA   
 ## # … with 6,282 more rows</code></pre>
 <div class="sourceCode" id="cb775"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb775-1"><a href="datahandling1.html#cb775-1"></a><span class="co"># dplyr::select()を使う方法</span></span>
 <span id="cb775-2"><a href="datahandling1.html#cb775-2"></a><span class="co"># select(df, ID, Name, Pref, Score)でもOK</span></span>
 <span id="cb775-3"><a href="datahandling1.html#cb775-3"></a>df <span class="op">%&gt;%</span></span>
 <span id="cb775-4"><a href="datahandling1.html#cb775-4"></a><span class="st">  </span><span class="kw">select</span>(ID, Name, Pref, Score)</span></code></pre></div>
 <pre><code>## # A tibble: 6,292 x 4
-##    ID      Name                                                     Pref  Score
-##    &lt;chr&gt;   &lt;chr&gt;                                                    &lt;chr&gt; &lt;dbl&gt;
-##  1 e539604 居酒屋 龍記 京橋店                                       東京都… NA   
-##  2 gfeb600 本格上海料理 新錦江 上野御徒町本店                       東京都…  4.5 
-##  3 ggt5900 食べ飲み放題×中華ビストロ NOZOMI（のぞみ）               東京都… NA   
-##  4 g181340 博多餃子軒 八王子店 タピオカ店 Bull Pulu（ブルプル）併設 東京都… NA   
-##  5 ggww100 まさ屋 渋谷店                                            東京都… NA   
-##  6 gdzk500 完全個室 上海レストラン 檸檬 霞ヶ関ビル内店              東京都… NA   
-##  7 ga2g202 鶏そば きらり                                            東京都… NA   
-##  8 gg9m100 宴会個室×餃子酒場 北京飯店 秋葉原本店                    東京都…  3.33
-##  9 gdvk200 中国料理 宝龍                                            東京都…  2.5 
-## 10 gggb200 中国料理 天安門                                          東京都… NA   
+##    ID      Name                                                    Pref  Score
+##    &lt;chr&gt;   &lt;chr&gt;                                                   &lt;chr&gt; &lt;dbl&gt;
+##  1 e539604 居酒屋 龍記 京橋店                                      東京都… NA   
+##  2 gfeb600 本格上海料理 新錦江 上野御徒町本店                      東京都…  4.5 
+##  3 ggt5900 食べ飲み放題×中華ビストロ NOZOMI（のぞみ）              東京都… NA   
+##  4 g181340 博多餃子軒 八王子店 タピオカ店 Bull Pulu（ブルプル）併設… 東京都… NA   
+##  5 ggww100 まさ屋 渋谷店                                           東京都… NA   
+##  6 gdzk500 完全個室 上海レストラン 檸檬 霞ヶ関ビル内店             東京都… NA   
+##  7 ga2g202 鶏そば きらり                                           東京都… NA   
+##  8 gg9m100 宴会個室×餃子酒場 北京飯店 秋葉原本店                   東京都…  3.33
+##  9 gdvk200 中国料理 宝龍                                           東京都…  2.5 
+## 10 gggb200 中国料理 天安門                                         東京都… NA   
 ## # … with 6,282 more rows</code></pre>
 <p>どれも結果は同じですが、<code>select()</code>関数を使った方がより読みやすいコードになっているでしょう。むろん、<code>select()</code>関数を使わない方がスッキリする方も知るかも知れません。実際、自分でパッケージなどを作成する際は<code>select()</code>を使わない場合が多いです。ただし、一般的な分析の流れでは<code>select()</code>の方がコードも意味も明確となり、パイプ演算子でつなぐのも容易です。</p>
 <p><code>select()</code>関数の使い方は非常に簡単です。第一引数はデータフレームですが、パイプ演算子を使う場合は省略可能です。第二引数以降の引数はデータフレームの変数名です。つまり、ここには残す変数名のみを書くだけで十分です。</p>
@@ -836,18 +842,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb779"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb779-1"><a href="datahandling1.html#cb779-1"></a>df <span class="op">%&gt;%</span></span>
 <span id="cb779-2"><a href="datahandling1.html#cb779-2"></a><span class="st">  </span><span class="kw">select</span>(ID, Name, <span class="dt">Prefecture =</span> Pref, Score)</span></code></pre></div>
 <pre><code>## # A tibble: 6,292 x 4
-##    ID      Name                                                Prefecture Score
-##    &lt;chr&gt;   &lt;chr&gt;                                               &lt;chr&gt;      &lt;dbl&gt;
-##  1 e539604 居酒屋 龍記 京橋店                                  東京都     NA   
-##  2 gfeb600 本格上海料理 新錦江 上野御徒町本店                  東京都      4.5 
-##  3 ggt5900 食べ飲み放題×中華ビストロ NOZOMI（のぞみ）          東京都     NA   
+##    ID      Name                                               Prefecture Score
+##    &lt;chr&gt;   &lt;chr&gt;                                              &lt;chr&gt;      &lt;dbl&gt;
+##  1 e539604 居酒屋 龍記 京橋店                                 東京都     NA   
+##  2 gfeb600 本格上海料理 新錦江 上野御徒町本店                 東京都      4.5 
+##  3 ggt5900 食べ飲み放題×中華ビストロ NOZOMI（のぞみ）         東京都     NA   
 ##  4 g181340 博多餃子軒 八王子店 タピオカ店 Bull Pulu（ブルプル）併設… 東京都     NA   
-##  5 ggww100 まさ屋 渋谷店                                       東京都     NA   
-##  6 gdzk500 完全個室 上海レストラン 檸檬 霞ヶ関ビル内店         東京都     NA   
-##  7 ga2g202 鶏そば きらり                                       東京都     NA   
-##  8 gg9m100 宴会個室×餃子酒場 北京飯店 秋葉原本店               東京都      3.33
-##  9 gdvk200 中国料理 宝龍                                       東京都      2.5 
-## 10 gggb200 中国料理 天安門                                     東京都     NA   
+##  5 ggww100 まさ屋 渋谷店                                      東京都     NA   
+##  6 gdzk500 完全個室 上海レストラン 檸檬 霞ヶ関ビル内店        東京都     NA   
+##  7 ga2g202 鶏そば きらり                                      東京都     NA   
+##  8 gg9m100 宴会個室×餃子酒場 北京飯店 秋葉原本店              東京都      3.33
+##  9 gdvk200 中国料理 宝龍                                      東京都      2.5 
+## 10 gggb200 中国料理 天安門                                    東京都     NA   
 ## # … with 6,282 more rows</code></pre>
 <p>抽出する際、変数を<code>新しい変数名 = 既存の変数名</code>にするだけで、変数名が簡単に変更できました。もし、特定の列は抽出しないものの、変数名を変えるにはどうすれば良いでしょうか。ここでは<code>df</code>の<code>Pref</code>を<code>Prefecture</code>に、<code>Walk</code>を<code>Distance</code>に変更してみます。<code>dplyr</code>を使わない場合と<code>dplyr</code>の<code>rename()</code>関数を使う場合を両方紹介します。</p>
 <p>まずは、<code>name()</code>関数についてですが、これはデータフレームの変数名をベクトルとして出力する関数です。</p>
@@ -979,39 +985,39 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb798"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb798-1"><a href="datahandling1.html#cb798-1"></a>df <span class="op">%&gt;%</span></span>
 <span id="cb798-2"><a href="datahandling1.html#cb798-2"></a><span class="st">  </span><span class="kw">select</span>(ID<span class="op">:</span>Name, Zipcode, Pref, Latitude<span class="op">:</span>Score)</span></code></pre></div>
 <pre><code>## # A tibble: 6,292 x 14
-##    ID    Name  Zipcode Pref  Latitude Longitude Line  Station  Walk   Bus   Car
-##    &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 e539… 居酒屋 … 1040031 東京都…     35.7      140. 地下鉄有… 銀座一丁目駅…     3    NA    NA
-##  2 gfeb… 本格上海… 1100005 東京都…     35.7      140. 地下鉄日… 仲御徒町駅…     1    NA    NA
-##  3 ggt5… 食べ飲み… 1250041 東京都…     35.8      140. ＪＲ常磐… 金町駅      2    NA    NA
-##  4 g181… 博多餃子… 1920904 東京都…     35.7      139. ＪＲ  八王子駅…     1    NA    NA
-##  5 ggww… まさ屋 … 1500042 東京都…     35.7      140. 地下鉄半… 渋谷駅      7    NA    NA
-##  6 gdzk… 完全個室… 1000013 東京都…     35.7      140. 地下鉄銀… 虎ノ門駅…     3    NA    NA
-##  7 ga2g… 鶏そば … 1760006 東京都…     35.7      140. 西武池袋… 江古田駅…     2    NA    NA
-##  8 gg9m… 宴会個室… 1010021 東京都…     35.7      140. ＪＲ  秋葉原駅…     4    NA    NA
-##  9 gdvk… 中国料理… 1000006 東京都…     35.7      140. ＪＲ  有楽町駅…     1    NA    NA
-## 10 gggb… 中国料理… 1140002 東京都…     35.8      140. 地下鉄南… 王子駅      2    NA    NA
-## # … with 6,282 more rows, and 3 more variables: Budget &lt;dbl&gt;, ScoreN &lt;dbl&gt;,
-## #   Score &lt;dbl&gt;</code></pre>
+##    ID    Name  Zipcode Pref  Latitude Longitude Line  Station  Walk   Bus
+##    &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
+##  1 e539… 居酒屋 … 1040031 東京都…     35.7      140. 地下鉄有… 銀座一丁目駅…     3    NA
+##  2 gfeb… 本格上海… 1100005 東京都…     35.7      140. 地下鉄日… 仲御徒町駅…     1    NA
+##  3 ggt5… 食べ飲み… 1250041 東京都…     35.8      140. ＪＲ常磐… 金町駅      2    NA
+##  4 g181… 博多餃子… 1920904 東京都…     35.7      139. ＪＲ  八王子駅…     1    NA
+##  5 ggww… まさ屋 … 1500042 東京都…     35.7      140. 地下鉄半… 渋谷駅      7    NA
+##  6 gdzk… 完全個室… 1000013 東京都…     35.7      140. 地下鉄銀… 虎ノ門駅…     3    NA
+##  7 ga2g… 鶏そば … 1760006 東京都…     35.7      140. 西武池袋… 江古田駅…     2    NA
+##  8 gg9m… 宴会個室… 1010021 東京都…     35.7      140. ＪＲ  秋葉原駅…     4    NA
+##  9 gdvk… 中国料理… 1000006 東京都…     35.7      140. ＪＲ  有楽町駅…     1    NA
+## 10 gggb… 中国料理… 1140002 東京都…     35.8      140. 地下鉄南… 王子駅      2    NA
+## # … with 6,282 more rows, and 4 more variables: Car &lt;dbl&gt;, Budget &lt;dbl&gt;,
+## #   ScoreN &lt;dbl&gt;, Score &lt;dbl&gt;</code></pre>
 <p>これを<code>relocate()</code>で書き換えるなら、<code>.after</code>または<code>.before</code>引数が必要になります。<code>relocate(変数名1, .after = 変数名2)</code>は「変数1を変数2の直後に移動させる」
 ことを意味します。</p>
 <div class="sourceCode" id="cb800"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb800-1"><a href="datahandling1.html#cb800-1"></a>df <span class="op">%&gt;%</span></span>
 <span id="cb800-2"><a href="datahandling1.html#cb800-2"></a><span class="st">  </span><span class="kw">relocate</span>(Pref, <span class="dt">.after =</span> Zipcode)</span></code></pre></div>
 <pre><code>## # A tibble: 6,292 x 14
-##    ID    Name  Zipcode Pref  Latitude Longitude Line  Station  Walk   Bus   Car
-##    &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 e539… 居酒屋 … 1040031 東京都…     35.7      140. 地下鉄有… 銀座一丁目駅…     3    NA    NA
-##  2 gfeb… 本格上海… 1100005 東京都…     35.7      140. 地下鉄日… 仲御徒町駅…     1    NA    NA
-##  3 ggt5… 食べ飲み… 1250041 東京都…     35.8      140. ＪＲ常磐… 金町駅      2    NA    NA
-##  4 g181… 博多餃子… 1920904 東京都…     35.7      139. ＪＲ  八王子駅…     1    NA    NA
-##  5 ggww… まさ屋 … 1500042 東京都…     35.7      140. 地下鉄半… 渋谷駅      7    NA    NA
-##  6 gdzk… 完全個室… 1000013 東京都…     35.7      140. 地下鉄銀… 虎ノ門駅…     3    NA    NA
-##  7 ga2g… 鶏そば … 1760006 東京都…     35.7      140. 西武池袋… 江古田駅…     2    NA    NA
-##  8 gg9m… 宴会個室… 1010021 東京都…     35.7      140. ＪＲ  秋葉原駅…     4    NA    NA
-##  9 gdvk… 中国料理… 1000006 東京都…     35.7      140. ＪＲ  有楽町駅…     1    NA    NA
-## 10 gggb… 中国料理… 1140002 東京都…     35.8      140. 地下鉄南… 王子駅      2    NA    NA
-## # … with 6,282 more rows, and 3 more variables: Budget &lt;dbl&gt;, ScoreN &lt;dbl&gt;,
-## #   Score &lt;dbl&gt;</code></pre>
+##    ID    Name  Zipcode Pref  Latitude Longitude Line  Station  Walk   Bus
+##    &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
+##  1 e539… 居酒屋 … 1040031 東京都…     35.7      140. 地下鉄有… 銀座一丁目駅…     3    NA
+##  2 gfeb… 本格上海… 1100005 東京都…     35.7      140. 地下鉄日… 仲御徒町駅…     1    NA
+##  3 ggt5… 食べ飲み… 1250041 東京都…     35.8      140. ＪＲ常磐… 金町駅      2    NA
+##  4 g181… 博多餃子… 1920904 東京都…     35.7      139. ＪＲ  八王子駅…     1    NA
+##  5 ggww… まさ屋 … 1500042 東京都…     35.7      140. 地下鉄半… 渋谷駅      7    NA
+##  6 gdzk… 完全個室… 1000013 東京都…     35.7      140. 地下鉄銀… 虎ノ門駅…     3    NA
+##  7 ga2g… 鶏そば … 1760006 東京都…     35.7      140. 西武池袋… 江古田駅…     2    NA
+##  8 gg9m… 宴会個室… 1010021 東京都…     35.7      140. ＪＲ  秋葉原駅…     4    NA
+##  9 gdvk… 中国料理… 1000006 東京都…     35.7      140. ＪＲ  有楽町駅…     1    NA
+## 10 gggb… 中国料理… 1140002 東京都…     35.8      140. 地下鉄南… 王子駅      2    NA
+## # … with 6,282 more rows, and 4 more variables: Car &lt;dbl&gt;, Budget &lt;dbl&gt;,
+## #   ScoreN &lt;dbl&gt;, Score &lt;dbl&gt;</code></pre>
 <p><code>.before</code>を使うことできます。この場合は「<code>Zipcode</code>を<code>Pref</code>の直前に移動させる」
 ことを指定する必要があります。結果は省略しますが、自分でコードを走らせ、上と同じ結果が得られるかを確認してみてください。</p>
 <div class="sourceCode" id="cb802"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb802-1"><a href="datahandling1.html#cb802-1"></a>df <span class="op">%&gt;%</span></span>
@@ -1026,18 +1032,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb803-2"><a href="datahandling1.html#cb803-2"></a>df <span class="op">%&gt;%</span></span>
 <span id="cb803-3"><a href="datahandling1.html#cb803-3"></a><span class="st">  </span><span class="kw">select</span>(ID, Name, <span class="kw">starts_with</span>(<span class="st">&quot;Score&quot;</span>))</span></code></pre></div>
 <pre><code>## # A tibble: 6,292 x 4
-##    ID      Name                                                    ScoreN Score
-##    &lt;chr&gt;   &lt;chr&gt;                                                    &lt;dbl&gt; &lt;dbl&gt;
-##  1 e539604 居酒屋 龍記 京橋店                                           0 NA   
-##  2 gfeb600 本格上海料理 新錦江 上野御徒町本店                           2  4.5 
-##  3 ggt5900 食べ飲み放題×中華ビストロ NOZOMI（のぞみ）                   0 NA   
+##    ID      Name                                                   ScoreN Score
+##    &lt;chr&gt;   &lt;chr&gt;                                                   &lt;dbl&gt; &lt;dbl&gt;
+##  1 e539604 居酒屋 龍記 京橋店                                          0 NA   
+##  2 gfeb600 本格上海料理 新錦江 上野御徒町本店                          2  4.5 
+##  3 ggt5900 食べ飲み放題×中華ビストロ NOZOMI（のぞみ）                  0 NA   
 ##  4 g181340 博多餃子軒 八王子店 タピオカ店 Bull Pulu（ブルプル）併設…      0 NA   
-##  5 ggww100 まさ屋 渋谷店                                                0 NA   
-##  6 gdzk500 完全個室 上海レストラン 檸檬 霞ヶ関ビル内店                  0 NA   
-##  7 ga2g202 鶏そば きらり                                                0 NA   
-##  8 gg9m100 宴会個室×餃子酒場 北京飯店 秋葉原本店                        3  3.33
-##  9 gdvk200 中国料理 宝龍                                                2  2.5 
-## 10 gggb200 中国料理 天安門                                              0 NA   
+##  5 ggww100 まさ屋 渋谷店                                               0 NA   
+##  6 gdzk500 完全個室 上海レストラン 檸檬 霞ヶ関ビル内店                 0 NA   
+##  7 ga2g202 鶏そば きらり                                               0 NA   
+##  8 gg9m100 宴会個室×餃子酒場 北京飯店 秋葉原本店                       3  3.33
+##  9 gdvk200 中国料理 宝龍                                               2  2.5 
+## 10 gggb200 中国料理 天安門                                             0 NA   
 ## # … with 6,282 more rows</code></pre>
 <div class="sourceCode" id="cb805"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb805-1"><a href="datahandling1.html#cb805-1"></a><span class="co"># eで終わる変数名を除去</span></span>
 <span id="cb805-2"><a href="datahandling1.html#cb805-2"></a>df <span class="op">%&gt;%</span></span>
@@ -1348,12 +1354,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb847-2"><a href="datahandling1.html#cb847-2"></a>select.df <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb847-3"><a href="datahandling1.html#cb847-3"></a><span class="st">  </span><span class="kw">slice_max</span>(Budget, <span class="dt">n =</span> <span class="dv">4</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 4 x 5
-##   ID      Name                                             Pref    Budget Score
-##   &lt;chr&gt;   &lt;chr&gt;                                            &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt;
+##   ID      Name                                            Pref    Budget Score
+##   &lt;chr&gt;   &lt;chr&gt;                                           &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt;
 ## 1 g670609 横浜ベイシェラトン ホテル＆タワーズ 中国料理 彩龍… 神奈川県…   8000    NA
-## 2 g910420 JASMINE 憶江南                                   東京都    7000    NA
-## 3 7176666 赤坂焼鳥 鳳                                      東京都    7000    NA
-## 4 b612800 羽衣 銀座本店                                    東京都    6000    NA</code></pre>
+## 2 g910420 JASMINE 憶江南                                  東京都    7000    NA
+## 3 7176666 赤坂焼鳥 鳳                                     東京都    7000    NA
+## 4 b612800 羽衣 銀座本店                                   東京都    6000    NA</code></pre>
 <p><strong><code>slice_min()</code>: 指定した変数が小さい順でn行抽出する</strong></p>
 <p>一方、<code>slice_min()</code>関数が小さい順で抽出します。</p>
 <div class="sourceCode" id="cb849"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb849-1"><a href="datahandling1.html#cb849-1"></a><span class="co"># select.dfからScoreの値が低い順で3行を抽出し、出力する</span></span>
@@ -1450,18 +1456,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb861-2"><a href="datahandling1.html#cb861-2"></a><span class="st">  </span><span class="kw">filter</span>(ScoreN <span class="op">!=</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span></span>
 <span id="cb861-3"><a href="datahandling1.html#cb861-3"></a><span class="st">  </span><span class="kw">select</span>(Name, Station, <span class="kw">starts_with</span>(<span class="st">&quot;Score&quot;</span>))</span></code></pre></div>
 <pre><code>## # A tibble: 1,344 x 4
-##    Name                                            Station         ScoreN Score
-##    &lt;chr&gt;                                           &lt;chr&gt;            &lt;dbl&gt; &lt;dbl&gt;
-##  1 本格上海料理 新錦江 上野御徒町本店              仲御徒町駅           2  4.5 
-##  2 宴会個室×餃子酒場 北京飯店 秋葉原本店           秋葉原駅             3  3.33
-##  3 中国料理 宝龍                                   有楽町駅             2  2.5 
-##  4 麺達 うま家                                     高田馬場駅           2  3   
+##    Name                                           Station         ScoreN Score
+##    &lt;chr&gt;                                          &lt;chr&gt;            &lt;dbl&gt; &lt;dbl&gt;
+##  1 本格上海料理 新錦江 上野御徒町本店             仲御徒町駅           2  4.5 
+##  2 宴会個室×餃子酒場 北京飯店 秋葉原本店          秋葉原駅             3  3.33
+##  3 中国料理 宝龍                                  有楽町駅             2  2.5 
+##  4 麺達 うま家                                    高田馬場駅           2  3   
 ##  5 刀削麺・火鍋・西安料理 XI’AN（シーアン） 後楽園店… 後楽園駅             1 NA   
-##  6 七志らーめん 渋谷道玄坂店                       渋谷駅               7  4.5 
-##  7 永楽                                            京成小岩駅           6  4.42
-##  8 よってこや お台場店                             お台場海浜公園駅…      1  4   
-##  9 ラーメン武藤製麺所                              竹ノ塚駅             4  3.5 
-## 10 桂花ラーメン 新宿末広店                         新宿三丁目駅         8  3   
+##  6 七志らーめん 渋谷道玄坂店                      渋谷駅               7  4.5 
+##  7 永楽                                           京成小岩駅           6  4.42
+##  8 よってこや お台場店                            お台場海浜公園駅…      1  4   
+##  9 ラーメン武藤製麺所                             竹ノ塚駅             4  3.5 
+## 10 桂花ラーメン 新宿末広店                        新宿三丁目駅         8  3   
 ## # … with 1,334 more rows</code></pre>
 <p>これで口コミ数が1以上の店舗のみに絞ることができました。ただし、店によっては口コミはあっても、評価 (<code>Score</code>)が付いていないところもあります。たとえば、「刀削麺・火鍋・西安料理 XI’AN（シーアン） 後楽園店」の場合、口コミはありますが、評価はありません。したがって、今回は評価が付いている店舗に絞ってみましょう。</p>
 <div class="sourceCode" id="cb863"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb863-1"><a href="datahandling1.html#cb863-1"></a>df <span class="op">%&gt;%</span></span>

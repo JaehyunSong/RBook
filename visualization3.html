@@ -476,7 +476,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="19" data-path="visualization3.html"><a href="visualization3.html"><i class="fa fa-check"></i><b>19</b> 可視化[応用]</a>
 <ul>
 <li class="chapter" data-level="19.1" data-path="visualization3.html"><a href="visualization3.html#visual3-labs"><i class="fa fa-check"></i><b>19.1</b> <code>labs()</code>: ラベルの修正</a></li>
-<li class="chapter" data-level="19.2" data-path="visualization3.html"><a href="visualization3.html#visual3-coordinate"><i class="fa fa-check"></i><b>19.2</b> <code>coord_*()</code>: 座標系の調整</a></li>
+<li class="chapter" data-level="19.2" data-path="visualization3.html"><a href="visualization3.html#visual3-coordinate"><i class="fa fa-check"></i><b>19.2</b> <code>coord_*()</code>: 座標系の調整</a>
+<ul>
+<li class="chapter" data-level="19.2.1" data-path="visualization3.html"><a href="visualization3.html#直交座標系の操作"><i class="fa fa-check"></i><b>19.2.1</b> 直交座標系の操作</a></li>
+<li class="chapter" data-level="19.2.2" data-path="visualization3.html"><a href="visualization3.html#座標系の変換"><i class="fa fa-check"></i><b>19.2.2</b> 座標系の変換</a></li>
+<li class="chapter" data-level="19.2.3" data-path="visualization3.html"><a href="visualization3.html#座標系の回転"><i class="fa fa-check"></i><b>19.2.3</b> 座標系の回転</a></li>
+<li class="chapter" data-level="19.2.4" data-path="visualization3.html"><a href="visualization3.html#座標系の固定"><i class="fa fa-check"></i><b>19.2.4</b> 座標系の固定</a></li>
+</ul></li>
 <li class="chapter" data-level="19.3" data-path="visualization3.html"><a href="visualization3.html#visual3-scale"><i class="fa fa-check"></i><b>19.3</b> <code>scale_*_*()</code>: スケールの調整</a></li>
 <li class="chapter" data-level="19.4" data-path="visualization3.html"><a href="visualization3.html#visual3-theme"><i class="fa fa-check"></i><b>19.4</b> <code>theme_*()</code>と<code>theme()</code>: テーマの指定</a></li>
 <li class="chapter" data-level="19.5" data-path="visualization3.html"><a href="visualization3.html#visual3-merge"><i class="fa fa-check"></i><b>19.5</b> 図の結合</a>
@@ -590,8 +596,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>　一方、凡例はマッピングされない場合、表示されません。幾何オブジェクトの<code>aes()</code>内に<code>color</code>、<code>size</code>、<code>linetype</code>などの要素がマッピングされてから初めて凡例で表示されます。凡例が存在することは何かの要素にマッピングがされていることを意味します。このマッピング要素名（<code>color</code>、<code>size</code>、<code>linetype</code>など）を<code>labs()</code>の引数として使うことで凡例のラベルが修正されます。マッピングされていない要素に対してラベルを指定しても、図に影響はありません。たとえば、<code>Country_df</code>の一人あたりGDP（<code>GDP_per_capita</code>）を横軸、フリーダムハウスのスコア（<code>FH_Total</code>）を縦軸にした散布図を作成します。</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2-1"><a href="visualization3.html#cb2-1"></a>Country_df <span class="op">%&gt;%</span></span>
 <span id="cb2-2"><a href="visualization3.html#cb2-2"></a><span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb2-3"><a href="visualization3.html#cb2-3"></a><span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> GDP_per_capita, <span class="dt">y =</span> FH_Total)) <span class="op">+</span></span>
-<span id="cb2-4"><a href="visualization3.html#cb2-4"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;一人あたりGDP (USD)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;フリーダムハウススコア&quot;</span>,</span>
+<span id="cb2-3"><a href="visualization3.html#cb2-3"></a><span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> FH_Total, <span class="dt">y =</span> GDP_per_capita)) <span class="op">+</span></span>
+<span id="cb2-4"><a href="visualization3.html#cb2-4"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;フリーダムハウススコア&quot;</span>,<span class="dt">y =</span> <span class="st">&quot;一人あたりGDP (USD)&quot;</span>, </span>
 <span id="cb2-5"><a href="visualization3.html#cb2-5"></a>         <span class="dt">color =</span> <span class="st">&quot;大陸&quot;</span>) <span class="op">+</span></span>
 <span id="cb2-6"><a href="visualization3.html#cb2-6"></a><span class="st">    </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
@@ -599,8 +605,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>　<code>geom_point()</code>は横軸と縦軸のみにマッピングをしているため、<code>labs()</code>に<code>color =</code>を指定しても何の変化もありません。そもそも凡例が存在しないからです。それでは大陸ごとに色分けした散布図に修正してみましょう。</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb4-1"><a href="visualization3.html#cb4-1"></a>Country_df <span class="op">%&gt;%</span></span>
 <span id="cb4-2"><a href="visualization3.html#cb4-2"></a><span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb4-3"><a href="visualization3.html#cb4-3"></a><span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> GDP_per_capita, <span class="dt">y =</span> FH_Total, <span class="dt">color =</span> Continent)) <span class="op">+</span></span>
-<span id="cb4-4"><a href="visualization3.html#cb4-4"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;一人あたりGDP (USD)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;フリーダムハウススコア&quot;</span>,</span>
+<span id="cb4-3"><a href="visualization3.html#cb4-3"></a><span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> FH_Total, <span class="dt">y =</span> GDP_per_capita, <span class="dt">color =</span> Continent)) <span class="op">+</span></span>
+<span id="cb4-4"><a href="visualization3.html#cb4-4"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;フリーダムハウススコア&quot;</span>,<span class="dt">y =</span> <span class="st">&quot;一人あたりGDP (USD)&quot;</span>, </span>
 <span id="cb4-5"><a href="visualization3.html#cb4-5"></a>         <span class="dt">color =</span> <span class="st">&quot;大陸&quot;</span>) <span class="op">+</span></span>
 <span id="cb4-6"><a href="visualization3.html#cb4-6"></a><span class="st">    </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
@@ -609,14 +615,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>　ここまでが第<a href="visualization2.html#visualization2">18</a>章で使用しました<code>labs()</code>レイヤーの使い方です。他にも<code>labs()</code>は<strong>プロット</strong>のラベルを指定することもできます。ここでいう「プロットのラベル」とはプロットのタイトルとほぼ同じです。使用可能な引数は<code>title</code>、<code>subtitle</code>、<code>tag</code>です。</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb6-1"><a href="visualization3.html#cb6-1"></a>Country_df <span class="op">%&gt;%</span></span>
 <span id="cb6-2"><a href="visualization3.html#cb6-2"></a><span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb6-3"><a href="visualization3.html#cb6-3"></a><span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> GDP_per_capita, <span class="dt">y =</span> FH_Total, <span class="dt">color =</span> Continent)) <span class="op">+</span></span>
-<span id="cb6-4"><a href="visualization3.html#cb6-4"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;一人あたりGDP (USD)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;フリーダムハウススコア&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;大陸&quot;</span>,</span>
-<span id="cb6-5"><a href="visualization3.html#cb6-5"></a>         <span class="dt">title =</span> <span class="st">&quot;所得と民主化指標の関係&quot;</span>, <span class="dt">subtitle =</span> <span class="st">&quot;大陸別の傾向&quot;</span>, </span>
+<span id="cb6-3"><a href="visualization3.html#cb6-3"></a><span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> FH_Total, <span class="dt">y =</span> GDP_per_capita, <span class="dt">color =</span> Continent)) <span class="op">+</span></span>
+<span id="cb6-4"><a href="visualization3.html#cb6-4"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;フリーダムハウススコア&quot;</span>,<span class="dt">y =</span> <span class="st">&quot;一人あたりGDP (USD)&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;大陸&quot;</span>,</span>
+<span id="cb6-5"><a href="visualization3.html#cb6-5"></a>         <span class="dt">title =</span> <span class="st">&quot;民主主義の度合いと所得の関係&quot;</span>, <span class="dt">subtitle =</span> <span class="st">&quot;大陸別の傾向&quot;</span>, </span>
 <span id="cb6-6"><a href="visualization3.html#cb6-6"></a>         <span class="dt">tag =</span> <span class="st">&quot;(a)&quot;</span>) <span class="op">+</span></span>
 <span id="cb6-7"><a href="visualization3.html#cb6-7"></a><span class="st">    </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
 <p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-6-1.png" width="480" /></p>
-<p>　<code>title</code>は名前とおり、プロットのタイトルを意味します。</p>
+<p>　<code>title</code>は図のメインタイトルとおり、プロットのタイトルを意味します。上の図だと「民主主義の度合いと所得の関係」です。また、<code>subtitle</code>引数を指定することでサブタイトルを付けることも可能です。上の図の「大陸別の傾向」がサブタイトルです。最後の<code>tag</code>は複数の図を並べる際に便利な引数です。図が横に2つ並んでいる場合、それぞれ(a)と(b)という識別子を付けると、文中において「図3(a)は…」のように、引用しやすくなります。この「(a)」が<code>tag</code>引数に対応します。複数の図を並べる方法は本章の後半にて説明します。</p>
 <!--
 ## `guides()`: 
 -->
@@ -624,7 +630,53 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="visual3-coordinate" class="section level2" number="19.2">
 <h2><span class="header-section-number">19.2</span> <code>coord_*()</code>: 座標系の調整</h2>
+<p>　ggplot2はいくつかの座標系を提供しています。円グラフを作成する際に使われる極座標系（<code>coord_polar()</code>）や地図の出力によく使われる<code>coord_map()</code>や<code>coord_sf()</code>がその例です。中でも最も頻繁に使われる座標系はやはり縦軸と横軸は直交する直交座標系（デカルト座標系）でしょう。ここでは直交座標系の扱い方について解説します。</p>
+<div id="直交座標系の操作" class="section level3" number="19.2.1">
+<h3><span class="header-section-number">19.2.1</span> 直交座標系の操作</h3>
+<p>　まずは座標系の上限と下限を指定する方法から考えましょう。日米中間のCOVID-19累積感染者数の折れ線グラフを作成してみましょう。</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb8-1"><a href="visualization3.html#cb8-1"></a>Fig1 &lt;-<span class="st"> </span>COVID19_df <span class="op">%&gt;%</span></span>
+<span id="cb8-2"><a href="visualization3.html#cb8-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Date =</span> <span class="kw">as.Date</span>(Date)) <span class="op">%&gt;%</span></span>
+<span id="cb8-3"><a href="visualization3.html#cb8-3"></a><span class="st">  </span><span class="kw">filter</span>(Country <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Japan&quot;</span>, <span class="st">&quot;South Korea&quot;</span>, <span class="st">&quot;China&quot;</span>, <span class="st">&quot;United States&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb8-4"><a href="visualization3.html#cb8-4"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb8-5"><a href="visualization3.html#cb8-5"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> Confirmed_Total, <span class="dt">color =</span> Country)) <span class="op">+</span></span>
+<span id="cb8-6"><a href="visualization3.html#cb8-6"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;月&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;累積感染者数 (人)&quot;</span>) <span class="op">+</span></span>
+<span id="cb8-7"><a href="visualization3.html#cb8-7"></a><span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span>
+<span id="cb8-8"><a href="visualization3.html#cb8-8"></a></span>
+<span id="cb8-9"><a href="visualization3.html#cb8-9"></a><span class="kw">print</span>(Fig1)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>　アメリカの感染者が圧倒的に多いこともあり、日韓がほぼ同じ線に見えます。これを是正するために対数変換などを行うわけですが、対数変換したグラフは直感的ではないというデメリットがあります。それでもう一つの方法として、アメリカに関する情報は一部失われますが、縦軸の上限を10万にすることが考えられます。直交座標系の上限・下限を調整する関数が<code>coord_cartesian()</code>です。横軸は<code>xlim</code>、縦軸は<code>ylim</code>引数を指定し、実引数としては長さ2のnumericベクトルを指定します。たとえば、縦軸の下限を0、上限を10万にするなら、<code>ylim = c(0, 100000)</code>となります。先ほどの図は既に<code>Fig1</code>という名のオブジェクトとして保存されているため、ここに<code>coord_cartesian()</code>レイヤーを追加してみましょう。</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb9-1"><a href="visualization3.html#cb9-1"></a>Fig1 <span class="op">+</span></span>
+<span id="cb9-2"><a href="visualization3.html#cb9-2"></a><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">100000</span>))</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-8-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>3月下旬以降、アメリカの情報は図から失われましたが、日中韓についてはよりトレンドの差が区別できるようになりました。ggplot2は座標系の上限と下限をデータの最小値と最大値に合わせて自動的に調整してくれます。たとえば、以下のような例を考えてみましょう。</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb10-1"><a href="visualization3.html#cb10-1"></a>Fig2 &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">Class =</span> <span class="kw">paste0</span>(LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>], <span class="st">&quot;組&quot;</span>),</span>
+<span id="cb10-2"><a href="visualization3.html#cb10-2"></a>       <span class="dt">Score =</span> <span class="kw">c</span>(<span class="dv">78</span>, <span class="dv">80</span>, <span class="dv">85</span>, <span class="dv">77</span>, <span class="dv">70</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb10-3"><a href="visualization3.html#cb10-3"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb10-4"><a href="visualization3.html#cb10-4"></a><span class="st">  </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Class, <span class="dt">y =</span> Score), <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="op">+</span></span>
+<span id="cb10-5"><a href="visualization3.html#cb10-5"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;クラス&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;数学成績の平均 (点)&quot;</span>) <span class="op">+</span></span>
+<span id="cb10-6"><a href="visualization3.html#cb10-6"></a><span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span>
+<span id="cb10-7"><a href="visualization3.html#cb10-7"></a></span>
+<span id="cb10-8"><a href="visualization3.html#cb10-8"></a><span class="kw">print</span>(Fig2)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-9-1.png" width="384" style="display: block; margin: auto;" /></p>
+<p>　数学成績平均値は最大100点までありえますが、手元のデータにおける最高得点が85店であるため、棒グラフの縦軸の上限が85点程度となります。この場合、上限は満点である100点に調整した方が良いでしょう。</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb11-1"><a href="visualization3.html#cb11-1"></a>Fig2 <span class="op">+</span></span>
+<span id="cb11-2"><a href="visualization3.html#cb11-2"></a><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">100</span>))</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-10-1.png" width="384" style="display: block; margin: auto;" /></p>
+<p>　このように上限を調整すると、成績の満点が何点かに関する情報が含まれ、グラフにより豊富な情報を持たせることが可能です。</p>
+</div>
+<div id="座標系の変換" class="section level3" number="19.2.2">
+<h3><span class="header-section-number">19.2.2</span> 座標系の変換</h3>
+<p><code>coord_trans()</code></p>
+</div>
+<div id="座標系の回転" class="section level3" number="19.2.3">
+<h3><span class="header-section-number">19.2.3</span> 座標系の回転</h3>
+<p><code>coord_flip()</code></p>
+</div>
+<div id="座標系の固定" class="section level3" number="19.2.4">
+<h3><span class="header-section-number">19.2.4</span> 座標系の固定</h3>
+<p><code>coord_fixed()</code></p>
 <hr />
+</div>
 </div>
 <div id="visual3-scale" class="section level2" number="19.3">
 <h2><span class="header-section-number">19.3</span> <code>scale_*_*()</code>: スケールの調整</h2>
