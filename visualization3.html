@@ -583,7 +583,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="visualization3" class="section level1" number="19">
 <h1><span class="header-section-number">19.</span> 可視化[応用]</h1>
-<p>　第<a href="visualization1.html#visualization1">17</a>章と第<a href="visualization2.html#visualization2">18</a>章ではggplot2の概念と5つの代表的なグラフ（棒、ヒストグラム、箱ひげ図、散布図、折れ線）の作り方について説明しました。本章では軸の調整、座標系の調整など、幾何オブジェクト<strong>以外</strong>のレイヤーについて説明します。第<a href="visualization2.html#visualization2">18</a>章で紹介しなかった図の作成方法については第<a href="visualization4.html#visualization4">20</a>章で解説します。</p>
+<p>　第<a href="visualization1.html#visualization1">17</a>章と第<a href="visualization2.html#visualization2">18</a>章では{ggplot2}の概念と5つの代表的なグラフ（棒、ヒストグラム、箱ひげ図、散布図、折れ線）の作り方について説明しました。本章では軸の調整、座標系の調整など、幾何オブジェクト<strong>以外</strong>のレイヤーについて説明します。第<a href="visualization2.html#visualization2">18</a>章で紹介しなかった図の作成方法については第<a href="visualization4.html#visualization4">20</a>章で解説します。</p>
 <p>　本章で使用するデータは第<a href="visualization2.html#visualization2">18</a>章で使用したものと同じデータを使います。データの詳細については第<a href="visualization2.html#visualization2">18</a>章を参照してください。</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1-1"><a href="visualization3.html#cb1-1"></a><span class="kw">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="visualization3.html#cb1-2"></a>Country_df &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;Data/Countries.csv&quot;</span>)</span>
@@ -592,7 +592,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="visual3-labs" class="section level2" number="19.1">
 <h2><span class="header-section-number">19.1</span> <code>labs()</code>: ラベルの修正</h2>
 <p>　既に<code>labs()</code>レイヤーは第<a href="visualization2.html#visualization2">18</a>章で使ったことがあるでしょう。ここでは<code>labs()</code>の仕組みについて簡単に解説します。</p>
-<p>　<code>labs()</code>関数は軸、凡例、プロットのラベル（タイトルなど）を修正する際に使用する関数です。軸ラベルは横軸（<code>x</code>）と縦軸（<code>y</code>）のラベルを意味します。指定しない場合は、マッピングで指定した変数名がそのまま出力されます。これは凡例ラベルも同じです。ggplot2は2次元のグラフの出力に特化したパッケージであるため、出力される図には必ず横軸と縦軸があります。したがって、引数として<code>x</code>と<code>y</code>は常に指定可能です。</p>
+<p>　<code>labs()</code>関数は軸、凡例、プロットのラベル（タイトルなど）を修正する際に使用する関数です。軸ラベルは横軸（<code>x</code>）と縦軸（<code>y</code>）のラベルを意味します。指定しない場合は、マッピングで指定した変数名がそのまま出力されます。これは凡例ラベルも同じです。{ggplot2}は2次元のグラフの出力に特化したパッケージであるため、出力される図には必ず横軸と縦軸があります。したがって、引数として<code>x</code>と<code>y</code>は常に指定可能です。</p>
 <p>　一方、凡例はマッピングされない場合、表示されません。幾何オブジェクトの<code>aes()</code>内に<code>color</code>、<code>size</code>、<code>linetype</code>などの要素がマッピングされてから初めて凡例で表示されます。凡例が存在することは何かの要素にマッピングがされていることを意味します。このマッピング要素名（<code>color</code>、<code>size</code>、<code>linetype</code>など）を<code>labs()</code>の引数として使うことで凡例のラベルが修正されます。マッピングされていない要素に対してラベルを指定しても、図に影響はありません。たとえば、<code>Country_df</code>の一人あたりGDP（<code>GDP_per_capita</code>）を横軸、フリーダムハウスのスコア（<code>FH_Total</code>）を縦軸にした散布図を作成します。</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2-1"><a href="visualization3.html#cb2-1"></a>Country_df <span class="op">%&gt;%</span></span>
 <span id="cb2-2"><a href="visualization3.html#cb2-2"></a><span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
@@ -630,7 +630,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="visual3-coordinate" class="section level2" number="19.2">
 <h2><span class="header-section-number">19.2</span> <code>coord_*()</code>: 座標系の調整</h2>
-<p>　ggplot2はいくつかの座標系を提供しています。円グラフを作成する際に使われる極座標系（<code>coord_polar()</code>）や地図の出力によく使われる<code>coord_map()</code>や<code>coord_sf()</code>がその例です。中でも最も頻繁に使われる座標系はやはり縦軸と横軸は直交する直交座標系（デカルト座標系）でしょう。ここでは直交座標系の扱い方について解説します。</p>
+<p>　{ggplot2}はいくつかの座標系を提供しています。円グラフを作成する際に使われる極座標系（<code>coord_polar()</code>）や地図の出力によく使われる<code>coord_map()</code>や<code>coord_sf()</code>がその例です。中でも最も頻繁に使われる座標系はやはり縦軸と横軸は直交する直交座標系（デカルト座標系）でしょう。ここでは直交座標系の扱い方について解説します。</p>
 <div id="直交座標系の操作" class="section level3" number="19.2.1">
 <h3><span class="header-section-number">19.2.1</span> 直交座標系の操作</h3>
 <p>　まずは座標系の上限と下限を指定する方法から考えましょう。日米中間のCOVID-19累積感染者数の折れ線グラフを作成してみましょう。</p>
@@ -648,7 +648,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb9"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb9-1"><a href="visualization3.html#cb9-1"></a>Fig1 <span class="op">+</span></span>
 <span id="cb9-2"><a href="visualization3.html#cb9-2"></a><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">100000</span>))</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-8-1.png" width="768" style="display: block; margin: auto;" /></p>
-<p>3月下旬以降、アメリカの情報は図から失われましたが、日中韓についてはよりトレンドの差が区別できるようになりました。ggplot2は座標系の上限と下限をデータの最小値と最大値に合わせて自動的に調整してくれます。たとえば、以下のような例を考えてみましょう。</p>
+<p>3月下旬以降、アメリカの情報は図から失われましたが、日中韓についてはよりトレンドの差が区別できるようになりました。{ggplot2}は座標系の上限と下限をデータの最小値と最大値に合わせて自動的に調整してくれます。たとえば、以下のような例を考えてみましょう。</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb10-1"><a href="visualization3.html#cb10-1"></a>Fig2 &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">Class =</span> <span class="kw">paste0</span>(LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>], <span class="st">&quot;組&quot;</span>),</span>
 <span id="cb10-2"><a href="visualization3.html#cb10-2"></a>       <span class="dt">Score =</span> <span class="kw">c</span>(<span class="dv">78</span>, <span class="dv">80</span>, <span class="dv">85</span>, <span class="dv">77</span>, <span class="dv">70</span>)) <span class="op">%&gt;%</span></span>
 <span id="cb10-3"><a href="visualization3.html#cb10-3"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
@@ -666,11 +666,44 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="座標系の変換" class="section level3" number="19.2.2">
 <h3><span class="header-section-number">19.2.2</span> 座標系の変換</h3>
-<p><code>coord_trans()</code></p>
+<p>　続きまして座標系の変換について説明します。座標系の変換については実は第<a href="visualization2.html#visualization2">18</a>章でも取り上げました。対数化がその例です。例えば、連続型変数でマッピングされた横軸を底が10の対数化する場合、以下のような方法が考えれます。</p>
+<ol style="list-style-type: decimal">
+<li><code>log10()</code>関数を使用し、データレベルで値を対数化する</li>
+<li><code>scale_x_continuous()</code>レイヤーを重ね、<code>trans = "log10"</code>引数を指定する</li>
+<li><code>scale_x_log10()</code>レイヤーを重ねる</li>
+<li><code>coord_trans()</code>レイヤーを重ね、<code>x = "log10"</code>引数を指定する</li>
+</ol>
+<p>　どの方法でも得られる結果はさほど変わりませんが、<code>coord_trans()</code>は座標系全般を調整することができます。たとえば、<code>xlim</code>や<code>ylim</code>引数を使って座標系の上限と下限を同時に指定することも可能です。たとえば、座標系の上限を横軸は[0, 100]、縦軸は[-100, 100]とし、全て対数化を行うとします。方法はいくつか考えられます。たとえば、<code>scale_*_log10()</code>と<code>coord_cartesian()</code>を組み合わせることもできます。</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb12-1"><a href="visualization3.html#cb12-1"></a><span class="co"># coord_trans()を使用しない場合</span></span>
+<span id="cb12-2"><a href="visualization3.html#cb12-2"></a>ggplotオブジェクト <span class="op">+</span></span>
+<span id="cb12-3"><a href="visualization3.html#cb12-3"></a><span class="st">  </span><span class="kw">scale_x_log10</span>() <span class="op">+</span></span>
+<span id="cb12-4"><a href="visualization3.html#cb12-4"></a><span class="st">  </span><span class="kw">scale_y_log10</span>() <span class="op">+</span></span>
+<span id="cb12-5"><a href="visualization3.html#cb12-5"></a><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">100</span>), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">100</span>, <span class="dv">100</span>))</span></code></pre></div>
+<p>　しかし、上のコードは<code>coord_trans()</code>を使うと一行にまとめることができます。</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb13-1"><a href="visualization3.html#cb13-1"></a><span class="co"># coord_trans()を使用する場合</span></span>
+<span id="cb13-2"><a href="visualization3.html#cb13-2"></a>ggplotオブジェクト <span class="op">+</span></span>
+<span id="cb13-3"><a href="visualization3.html#cb13-3"></a><span class="st">  </span><span class="kw">coord_trans</span>(<span class="dt">x =</span> <span class="st">&quot;log10&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;log10&quot;</span>, <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">100</span>), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">100</span>, <span class="dv">100</span>))</span></code></pre></div>
+<p>　<code>coord_trans()</code>の<code>x</code>、<code>y</code>引数は<code>"log10"</code>以外にもあります。自然対数変換の<code>"log"</code>、反転を意味する<code>"reverse"</code>、平方根へ変換する<code>"sqrt"</code>などがあります。グラフを上下、または左右に反転する<code>"reverse"</code>は覚えておいて損はないでしょう。こちらは具体的には{tidyverse}パッケージ群に含まれている{scales}パッケージにある<code>*_trans()</code>関数に対応することになります。詳細は{scales}パッケージのヘルプを参照してください。</p>
 </div>
 <div id="座標系の回転" class="section level3" number="19.2.3">
 <h3><span class="header-section-number">19.2.3</span> 座標系の回転</h3>
-<p><code>coord_flip()</code></p>
+<p>　続きまして座標系を反時計方向回転する<code>coord_flip()</code>について紹介します。以下は<code>Country_df</code>を用い、大陸（<code>Continent</code>）ごとにPolity IVスコア（<code>Polity_Score</code>）の平均値を示した棒グラフです。</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb14-1"><a href="visualization3.html#cb14-1"></a>Flip_Fig &lt;-<span class="st"> </span>Country_df <span class="op">%&gt;%</span></span>
+<span id="cb14-2"><a href="visualization3.html#cb14-2"></a><span class="st">  </span><span class="kw">group_by</span>(Continent) <span class="op">%&gt;%</span></span>
+<span id="cb14-3"><a href="visualization3.html#cb14-3"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">Democracy =</span> <span class="kw">mean</span>(Polity_Score, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb14-4"><a href="visualization3.html#cb14-4"></a>            <span class="dt">.groups   =</span> <span class="st">&quot;drop&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb14-5"><a href="visualization3.html#cb14-5"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb14-6"><a href="visualization3.html#cb14-6"></a><span class="st">  </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Continent, <span class="dt">y =</span> Democracy), <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="op">+</span></span>
+<span id="cb14-7"><a href="visualization3.html#cb14-7"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;大陸&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Polity IV スコアの平均値&quot;</span>) <span class="op">+</span></span>
+<span id="cb14-8"><a href="visualization3.html#cb14-8"></a><span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span>
+<span id="cb14-9"><a href="visualization3.html#cb14-9"></a></span>
+<span id="cb14-10"><a href="visualization3.html#cb14-10"></a><span class="kw">print</span>(Flip_Fig)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-13-1.png" width="480" /></p>
+<p>　この図を反時計方向回転する場合は以上のプロットに<code>coord_flip()</code>レイヤーを追加します。</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb15-1"><a href="visualization3.html#cb15-1"></a>Flip_Fig <span class="op">+</span></span>
+<span id="cb15-2"><a href="visualization3.html#cb15-2"></a><span class="st">  </span><span class="kw">coord_flip</span>() <span class="co"># 座標系の回転</span></span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-14-1.png" width="480" /></p>
+<p>　非常に簡単な方法で図を回転させることができました。しかし、実はこの<code>coord_flip()</code>関数、最近になって使う場面がどんどん減っています。たとえば、先ほどの<code>geom_bar()</code>幾何オブジェクトの場合、<code>x</code>をPolity IVスコアの平均値で、<code>y</code>を大陸名でマッピングすることが可能です。昔の{ggplot2}は横軸と縦軸にマッピングでいるデータ型が厳格に決まっていましたが、最近になってはますます柔軟となってきました<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>。<code>coord_flip()</code>を使用する前に、各幾何オブジェクトのヘルプを確認し、<code>coord_flip()</code>を用いた回転が必要か否かを予め調べておくのも良いでしょう。</p>
 </div>
 <div id="座標系の固定" class="section level3" number="19.2.4">
 <h3><span class="header-section-number">19.2.4</span> 座標系の固定</h3>
@@ -700,6 +733,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </div>
 </div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>例えば、回帰係数の点推定値と信頼区間を示す係数プロット（キャタピラー・プロット）を作成する際は<code>geom_pointrange()</code>と<code>coord_flip()</code>を組み合わせてきましたが、今の{ggplot2}は<code>geom_pointrange()</code>のみで自由自在に作成できます。<a href="visualization3.html#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 
