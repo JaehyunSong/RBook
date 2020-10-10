@@ -463,7 +463,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="19.2.3" data-path="visualization3.html"><a href="visualization3.html#座標系の回転"><i class="fa fa-check"></i><b>19.2.3</b> 座標系の回転</a></li>
 <li class="chapter" data-level="19.2.4" data-path="visualization3.html"><a href="visualization3.html#座標系の固定"><i class="fa fa-check"></i><b>19.2.4</b> 座標系の固定</a></li>
 </ul></li>
-<li class="chapter" data-level="19.3" data-path="visualization3.html"><a href="visualization3.html#visual3-scale"><i class="fa fa-check"></i><b>19.3</b> <code>scale_*_*()</code>: スケールの調整</a></li>
+<li class="chapter" data-level="19.3" data-path="visualization3.html"><a href="visualization3.html#visual3-scale"><i class="fa fa-check"></i><b>19.3</b> <code>scale_*_*()</code>: スケールの調整</a>
+<ul>
+<li class="chapter" data-level="19.3.1" data-path="visualization3.html"><a href="visualization3.html#横軸縦軸スケールの調整"><i class="fa fa-check"></i><b>19.3.1</b> 横軸・縦軸スケールの調整</a></li>
+<li class="chapter" data-level="19.3.2" data-path="visualization3.html"><a href="visualization3.html#その他のスケール調整"><i class="fa fa-check"></i><b>19.3.2</b> その他のスケール調整</a></li>
+</ul></li>
 <li class="chapter" data-level="19.4" data-path="visualization3.html"><a href="visualization3.html#visual3-theme"><i class="fa fa-check"></i><b>19.4</b> <code>theme_*()</code>と<code>theme()</code>: テーマの指定</a></li>
 <li class="chapter" data-level="19.5" data-path="visualization3.html"><a href="visualization3.html#visual3-merge"><i class="fa fa-check"></i><b>19.5</b> 図の結合</a>
 <ul>
@@ -659,9 +663,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 9 和歌山県  3.97</code></pre>
 <p>表示される順番は<code>Score_df</code>と<code>Score_df_f1</code>も同じですが、<code>Pref</code>のデータ型が<code>&lt;fct&gt;</code>、つまりfactor型であることが分かります。実際、<code>Pref</code>列だけ抽出した場合、factor型として、和歌山県から神奈川県の順になっていることが確認できます。</p>
 <div class="sourceCode" id="cb1061"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1061-1"><a href="factor.html#cb1061-1"></a>Score_df_f1<span class="op">$</span>Pref</span></code></pre></div>
-<pre><code>## [1] 京都府   埼玉県   神奈川県 千葉県   大阪府   東京都   奈良県   兵庫県  
-## [9] 和歌山県
-## 9 Levels: 和歌山県 奈良県 大阪府 千葉県 京都府 東京都 埼玉県 ... 神奈川県</code></pre>
+<pre><code>## [1] 京都府   埼玉県   神奈川県 千葉県   大阪府   東京都   奈良県  
+## [8] 兵庫県   和歌山県
+## 9 Levels: 和歌山県 奈良県 大阪府 千葉県 京都府 東京都 ... 神奈川県</code></pre>
 <p>この<code>Score_df_f1</code>データを使って、図<a href="factor.html#fig:factor2">15.2</a>と全く同じコードを実行した結果が図<a href="factor.html#fig:factor4">15.4</a>です。</p>
 <div class="figure" style="text-align: center"><span id="fig:factor4"></span>
 <img src="R_Not_for_Everyone_files/figure-html/factor4-1.png" alt="Prefがfactor型の場合 (1)" width="576" />
@@ -845,10 +849,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>そして、都府県ごとのケース数を計算します。</p>
 <div class="sourceCode" id="cb1090"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1090-1"><a href="factor.html#cb1090-1"></a><span class="kw">table</span>(df2<span class="op">$</span>Pref)</span></code></pre></div>
 <pre><code>## 
-##   京都府   埼玉県 神奈川県   千葉県   大阪府   東京都   奈良県   兵庫県 
-##       79      118      219      108      175      298       28       85 
-## 和歌山県 
-##       24</code></pre>
+##   京都府   埼玉県 神奈川県   千葉県   大阪府   東京都   奈良県 
+##       79      118      219      108      175      298       28 
+##   兵庫県 和歌山県 
+##       85       24</code></pre>
 <p>ここで<code>Pref</code>をfactor化しますが、水準の順番を店舗数が多い方を先にするにはどうすれば良いでしょうか。<code>fct_infreq()</code>関数は指定された変数の各値の個数を計算し、多い順にfactorの水準を調整します。</p>
 <div class="sourceCode" id="cb1092"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1092-1"><a href="factor.html#cb1092-1"></a>df2 &lt;-<span class="st"> </span>df2 <span class="op">%&gt;%</span></span>
 <span id="cb1092-2"><a href="factor.html#cb1092-2"></a><span class="st">  </span><span class="co"># 多く出現した値順でfactor化する</span></span>
@@ -1222,11 +1226,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-528-1.png" width="672" /></p>
 <p>このグラフに違和感はあまりありませんが、「読みやすさ」の麺では改善の余地があります。たとえば、7月1日の時点で、新規感染者数が多いのは日本、韓国、香港、中国 (本土)、台湾の順です。しかし、右側の凡例の順番はそうではありません。この順番が一致すれば、更に図は読みやすくなるでしょう。</p>
 <div class="sourceCode" id="cb1125"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1125-1"><a href="factor.html#cb1125-1"></a><span class="kw">factor</span>(Reorder2_df<span class="op">$</span>Country)</span></code></pre></div>
-<pre><code>##  [1] 日本        日本        日本        日本        日本        韓国       
-##  [7] 韓国        韓国        韓国        韓国        中国 (本土) 中国 (本土)
-## [13] 中国 (本土) 中国 (本土) 中国 (本土) 台湾        台湾        台湾       
-## [19] 台湾        台湾        香港        香港        香港        香港       
-## [25] 香港       
+<pre><code>##  [1] 日本        日本        日本        日本        日本       
+##  [6] 韓国        韓国        韓国        韓国        韓国       
+## [11] 中国 (本土) 中国 (本土) 中国 (本土) 中国 (本土) 中国 (本土)
+## [16] 台湾        台湾        台湾        台湾        台湾       
+## [21] 香港        香港        香港        香港        香港       
 ## Levels: 韓国 香港 台湾 中国 (本土) 日本</code></pre>
 <p>実際、何も指定せずに<code>Reorder2_df</code>の<code>Country</code>をfactor化すると、韓国、香港、台湾、…の順であり、これは上のグラフと一致します。これをグラフにおける7月1日の新規感染者数の順で並べるためには、<code>Date</code>を昇順にソートし、そして最後の要素 (<code>"2020/07/01"</code>)内で新規感染者数 (<code>NewPat</code>)を降順に並べ替えた場合の順番にする必要があります。実際、<code>Reorder2_df</code>を<code>Date</code>で昇順、<code>NewPat</code>で降順にソートし、最後の5行を抽出した結果が以下のコードです。</p>
 <div class="sourceCode" id="cb1127"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1127-1"><a href="factor.html#cb1127-1"></a>Reorder2_df <span class="op">%&gt;%</span></span>
@@ -1250,7 +1254,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1130-2"><a href="factor.html#cb1130-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Country2 =</span> <span class="kw">fct_reorder2</span>(Country, Date, NewPat, last2)) </span></code></pre></div>
 <p>それでは新しく出来た<code>Country2</code>の水準を確認してみましょう。</p>
 <div class="sourceCode" id="cb1131"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1131-1"><a href="factor.html#cb1131-1"></a><span class="kw">levels</span>(Reorder2_df<span class="op">$</span>Country2)</span></code></pre></div>
-<pre><code>## [1] &quot;日本&quot;        &quot;韓国&quot;        &quot;香港&quot;        &quot;中国 (本土)&quot; &quot;台湾&quot;</code></pre>
+<pre><code>## [1] &quot;日本&quot;        &quot;韓国&quot;        &quot;香港&quot;        &quot;中国 (本土)&quot;
+## [5] &quot;台湾&quot;</code></pre>
 <p>ちゃんと7月1日の新規感染者数基準で水準の順番が調整されましたので、これを使ってグラフをもう一回作ってみます。</p>
 <div class="sourceCode" id="cb1133"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1133-1"><a href="factor.html#cb1133-1"></a>Reorder2_df <span class="op">%&gt;%</span></span>
 <span id="cb1133-2"><a href="factor.html#cb1133-2"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
@@ -1282,18 +1287,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1136-10"><a href="factor.html#cb1136-10"></a></span>
 <span id="cb1136-11"><a href="factor.html#cb1136-11"></a>df4</span></code></pre></div>
 <pre><code>## # A tibble: 10 x 4
-##       ID Q1                         Q1_R                      Q1_R2           
-##    &lt;int&gt; &lt;fct&gt;                      &lt;fct&gt;                     &lt;fct&gt;           
-##  1     1 そう思う                   そう思う                  そう思う        
-##  2     2 そう思わない               そう思わない              そう思わない    
-##  3     3 どちらとも言えない         どちらとも言えない        どちらとも言えない…
-##  4     4 どちらかと言えばそう思う   どちらかと言えばそう思う  そう思う        
-##  5     5 答えたくない               答えたくない              答えたくない    
-##  6     6 どちらかと言えばそう思う   どちらかと言えばそう思う  そう思う        
-##  7     7 どちらかと言えばそう思わない… どちらかと言えばそう思わない… そう思わない    
-##  8     8 答えたくない               答えたくない              答えたくない    
-##  9     9 そう思わない               そう思わない              そう思わない    
-## 10    10 そう思う                   そう思う                  そう思う</code></pre>
+##       ID Q1                      Q1_R                   Q1_R2         
+##    &lt;int&gt; &lt;fct&gt;                   &lt;fct&gt;                  &lt;fct&gt;         
+##  1     1 そう思う                そう思う               そう思う      
+##  2     2 そう思わない            そう思わない           そう思わない  
+##  3     3 どちらとも言えない      どちらとも言えない     どちらとも言えない…
+##  4     4 どちらかと言えばそう思う… どちらかと言えばそう思う… そう思う      
+##  5     5 答えたくない            答えたくない           答えたくない  
+##  6     6 どちらかと言えばそう思う… どちらかと言えばそう思う… そう思う      
+##  7     7 どちらかと言えばそう思わない… どちらかと言えばそう思わない… そう思わない  
+##  8     8 答えたくない            答えたくない           答えたくない  
+##  9     9 そう思わない            そう思わない           そう思わない  
+## 10    10 そう思う                そう思う               そう思う</code></pre>
 <div class="sourceCode" id="cb1138"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1138-1"><a href="factor.html#cb1138-1"></a><span class="kw">levels</span>(df4<span class="op">$</span>Q1_R2)</span></code></pre></div>
 <pre><code>## [1] &quot;そう思う&quot;           &quot;どちらとも言えない&quot; &quot;そう思わない&quot;      
 ## [4] &quot;答えたくない&quot;</code></pre>
@@ -1308,18 +1313,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1140-8"><a href="factor.html#cb1140-8"></a></span>
 <span id="cb1140-9"><a href="factor.html#cb1140-9"></a>df4</span></code></pre></div>
 <pre><code>## # A tibble: 10 x 5
-##       ID Q1                   Q1_R                 Q1_R2         Q1_R3        
-##    &lt;int&gt; &lt;fct&gt;                &lt;fct&gt;                &lt;fct&gt;         &lt;fct&gt;        
-##  1     1 そう思う             そう思う             そう思う      そう思う     
-##  2     2 そう思わない         そう思わない         そう思わない  そう思わない 
-##  3     3 どちらとも言えない   どちらとも言えない   どちらとも言えない… どちらとも言えない…
-##  4     4 どちらかと言えばそう思う… どちらかと言えばそう思う… そう思う      そう思う     
-##  5     5 答えたくない         答えたくない         答えたくない  答えたくない 
-##  6     6 どちらかと言えばそう思う… どちらかと言えばそう思う… そう思う      そう思う     
-##  7     7 どちらかと言えばそう思わない… どちらかと言えばそう思わない… そう思わない  そう思わない 
-##  8     8 答えたくない         答えたくない         答えたくない  答えたくない 
-##  9     9 そう思わない         そう思わない         そう思わない  そう思わない 
-## 10    10 そう思う             そう思う             そう思う      そう思う</code></pre>
+##       ID Q1                 Q1_R               Q1_R2       Q1_R3      
+##    &lt;int&gt; &lt;fct&gt;              &lt;fct&gt;              &lt;fct&gt;       &lt;fct&gt;      
+##  1     1 そう思う           そう思う           そう思う    そう思う   
+##  2     2 そう思わない       そう思わない       そう思わない… そう思わない…
+##  3     3 どちらとも言えない どちらとも言えない どちらとも言えない… どちらとも言えない…
+##  4     4 どちらかと言えばそう思う… どちらかと言えばそう思う… そう思う    そう思う   
+##  5     5 答えたくない       答えたくない       答えたくない… 答えたくない…
+##  6     6 どちらかと言えばそう思う… どちらかと言えばそう思う… そう思う    そう思う   
+##  7     7 どちらかと言えばそう思わない… どちらかと言えばそう思わない… そう思わない… そう思わない…
+##  8     8 答えたくない       答えたくない       答えたくない… 答えたくない…
+##  9     9 そう思わない       そう思わない       そう思わない… そう思わない…
+## 10    10 そう思う           そう思う           そう思う    そう思う</code></pre>
 <div class="sourceCode" id="cb1142"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1142-1"><a href="factor.html#cb1142-1"></a><span class="kw">levels</span>(df4<span class="op">$</span>Q1_R3)</span></code></pre></div>
 <pre><code>## [1] &quot;そう思う&quot;           &quot;どちらとも言えない&quot; &quot;そう思わない&quot;      
 ## [4] &quot;答えたくない&quot;</code></pre>
@@ -1390,10 +1395,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>見た目は全く変わらず、滋賀県の行が新しく出来たわけでもありません。<code>dplyr</code>の<code>group_by()</code>の場合、空水準はグループ化の対象になりません。一方、多くのR内蔵関数はケースとして存在しなくても計算の対象となります。たとえば、ベクトル内のある値が何個格納されているか確認する<code>table()</code>関数の例を見てみましょう。</p>
 <div class="sourceCode" id="cb1155"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1155-1"><a href="factor.html#cb1155-1"></a><span class="kw">table</span>(df5<span class="op">$</span>Pref)</span></code></pre></div>
 <pre><code>## 
-##   京都府   埼玉県 神奈川県   千葉県   大阪府   東京都   奈良県   兵庫県 
-##      414     1000     1000     1000     1000     1000      147      591 
-## 和歌山県   滋賀県 
-##      140        0</code></pre>
+##   京都府   埼玉県 神奈川県   千葉県   大阪府   東京都   奈良県 
+##      414     1000     1000     1000     1000     1000      147 
+##   兵庫県 和歌山県   滋賀県 
+##      591      140        0</code></pre>
 <p><code>"滋賀県"</code>という列があり、合致するケースが0と表示されます。<code>group_by()</code>でも空の水準まで含めて出力する引数<code>.drop</code>があります。デフォルトは<code>TRUE</code>ですが、これを<code>FALSE</code>に指定してみます。</p>
 <div class="sourceCode" id="cb1157"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1157-1"><a href="factor.html#cb1157-1"></a>df5 <span class="op">%&gt;%</span></span>
 <span id="cb1157-2"><a href="factor.html#cb1157-2"></a><span class="st">  </span><span class="kw">group_by</span>(Pref, <span class="dt">.drop =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span></span>
@@ -1480,8 +1485,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><code>X1</code>をcharacter型に戻す理由<a href="#fn66" class="footnote-ref" id="fnref66"><sup>66</sup></a>は、水準にない値が入るとfactor化が解除されるからです。factor型をcharacter型に戻さずに<code>df6$X1</code>の<code>NA</code>を<code>"欠損値"</code>に置換すると、以下のようになります。</p>
 <div class="sourceCode" id="cb1165"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1165-1"><a href="factor.html#cb1165-1"></a><span class="co"># df6のX1がNAなら&quot;欠損&quot;、それ以外なら元のX1の値を返す</span></span>
 <span id="cb1165-2"><a href="factor.html#cb1165-2"></a><span class="kw">ifelse</span>(<span class="kw">is.na</span>(df6<span class="op">$</span>X1), <span class="st">&quot;欠損値&quot;</span>, df6<span class="op">$</span>X1)</span></code></pre></div>
-<pre><code>##  [1] &quot;1&quot;      &quot;3&quot;      &quot;2&quot;      &quot;欠損値&quot; &quot;2&quot;      &quot;2&quot;      &quot;1&quot;      &quot;欠損値&quot;
-##  [9] &quot;3&quot;      &quot;欠損値&quot;</code></pre>
+<pre><code>##  [1] &quot;1&quot;      &quot;3&quot;      &quot;2&quot;      &quot;欠損値&quot; &quot;2&quot;      &quot;2&quot;      &quot;1&quot;     
+##  [8] &quot;欠損値&quot; &quot;3&quot;      &quot;欠損値&quot;</code></pre>
 <p><code>"ラーメン"</code>と<code>"うどん"</code>、<code>"そば"</code>がfactor化前の1, 2, 3に戻っただけでなく、<code>NA</code>が<code>"欠損値"</code>というcharacter型に置換されたため、全体がcharacter型に変換されました。このように欠損値に水準を与える作業は難しくはありませんが、面倒な作業です。そこで登場する関数が<code>fct_exlpicit_na()</code>関数です。使い方は、元の変数に加え、欠損値の水準名を指定する<code>na_level</code>です。</p>
 <div class="sourceCode" id="cb1167"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1167-1"><a href="factor.html#cb1167-1"></a>df6 &lt;-<span class="st"> </span>df6 <span class="op">%&gt;%</span></span>
 <span id="cb1167-2"><a href="factor.html#cb1167-2"></a><span class="st">  </span><span class="co"># na_levelのデフォルト値は&quot;(Missing)&quot;</span></span>
