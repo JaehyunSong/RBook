@@ -486,7 +486,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="19.3" data-path="visualization3.html"><a href="visualization3.html#visual3-scale"><i class="fa fa-check"></i><b>19.3</b> <code>scale_*_*()</code>: スケールの調整</a>
 <ul>
 <li class="chapter" data-level="19.3.1" data-path="visualization3.html"><a href="visualization3.html#横軸縦軸スケールの調整"><i class="fa fa-check"></i><b>19.3.1</b> 横軸・縦軸スケールの調整</a></li>
-<li class="chapter" data-level="19.3.2" data-path="visualization3.html"><a href="visualization3.html#その他のスケール調整"><i class="fa fa-check"></i><b>19.3.2</b> その他のスケール調整</a></li>
+<li class="chapter" data-level="19.3.2" data-path="visualization3.html"><a href="visualization3.html#colorスケールの調整"><i class="fa fa-check"></i><b>19.3.2</b> <code>color</code>スケールの調整</a></li>
+<li class="chapter" data-level="19.3.3" data-path="visualization3.html"><a href="visualization3.html#alphaスケールの調整"><i class="fa fa-check"></i><b>19.3.3</b> <code>alpha</code>スケールの調整</a></li>
+<li class="chapter" data-level="19.3.4" data-path="visualization3.html"><a href="visualization3.html#sizeスケールの調整"><i class="fa fa-check"></i><b>19.3.4</b> <code>size</code>スケールの調整</a></li>
+<li class="chapter" data-level="19.3.5" data-path="visualization3.html"><a href="visualization3.html#linetypeスケールの調整"><i class="fa fa-check"></i><b>19.3.5</b> <code>linetype</code>スケールの調整</a></li>
 </ul></li>
 <li class="chapter" data-level="19.4" data-path="visualization3.html"><a href="visualization3.html#visual3-theme"><i class="fa fa-check"></i><b>19.4</b> <code>theme_*()</code>と<code>theme()</code>: テーマの指定</a></li>
 <li class="chapter" data-level="19.5" data-path="visualization3.html"><a href="visualization3.html#visual3-merge"><i class="fa fa-check"></i><b>19.5</b> 図の結合</a>
@@ -611,28 +614,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-4"><a href="visualization3.html#cb2-4"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;フリーダムハウススコア&quot;</span>,<span class="dt">y =</span> <span class="st">&quot;一人あたりGDP (USD)&quot;</span>, </span>
 <span id="cb2-5"><a href="visualization3.html#cb2-5"></a>         <span class="dt">color =</span> <span class="st">&quot;大陸&quot;</span>) <span class="op">+</span></span>
 <span id="cb2-6"><a href="visualization3.html#cb2-6"></a><span class="st">    </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-4-1.png" width="384" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-4-1.png" width="384" style="display: block; margin: auto;" /></p>
 <p>　<code>geom_point()</code>は横軸と縦軸のみにマッピングをしているため、<code>labs()</code>に<code>color =</code>を指定しても何の変化もありません。そもそも凡例が存在しないからです。それでは大陸ごとに色分けした散布図に修正してみましょう。</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb3-1"><a href="visualization3.html#cb3-1"></a>Country_df <span class="op">%&gt;%</span></span>
+<span id="cb3-2"><a href="visualization3.html#cb3-2"></a><span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb3-3"><a href="visualization3.html#cb3-3"></a><span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> FH_Total, <span class="dt">y =</span> GDP_per_capita, <span class="dt">color =</span> Continent)) <span class="op">+</span></span>
+<span id="cb3-4"><a href="visualization3.html#cb3-4"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;フリーダムハウススコア&quot;</span>,<span class="dt">y =</span> <span class="st">&quot;一人あたりGDP (USD)&quot;</span>, </span>
+<span id="cb3-5"><a href="visualization3.html#cb3-5"></a>         <span class="dt">color =</span> <span class="st">&quot;大陸&quot;</span>) <span class="op">+</span></span>
+<span id="cb3-6"><a href="visualization3.html#cb3-6"></a><span class="st">    </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-5-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p><code>color</code>に<code>Continent</code>変数をマッピングすることによって、各点の色は何らかの情報を持つようになりました。そして各色が<code>Continent</code>のどの値に対応しているかを示すために凡例が表示されます。凡例のラベルはデフォルトは変数名（この例の場合、「Continent」）ですが、ここでは「大陸」と修正されました。</p>
+<p>　ここまでが第<a href="visualization2.html#visualization2">18</a>章で使用しました<code>labs()</code>レイヤーの使い方です。他にも<code>labs()</code>は<strong>プロット</strong>のラベルを指定することもできます。ここでいう「プロットのラベル」とはプロットのタイトルとほぼ同じです。使用可能な引数は<code>title</code>、<code>subtitle</code>、<code>tag</code>です。</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb4-1"><a href="visualization3.html#cb4-1"></a>Country_df <span class="op">%&gt;%</span></span>
 <span id="cb4-2"><a href="visualization3.html#cb4-2"></a><span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
 <span id="cb4-3"><a href="visualization3.html#cb4-3"></a><span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> FH_Total, <span class="dt">y =</span> GDP_per_capita, <span class="dt">color =</span> Continent)) <span class="op">+</span></span>
-<span id="cb4-4"><a href="visualization3.html#cb4-4"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;フリーダムハウススコア&quot;</span>,<span class="dt">y =</span> <span class="st">&quot;一人あたりGDP (USD)&quot;</span>, </span>
-<span id="cb4-5"><a href="visualization3.html#cb4-5"></a>         <span class="dt">color =</span> <span class="st">&quot;大陸&quot;</span>) <span class="op">+</span></span>
-<span id="cb4-6"><a href="visualization3.html#cb4-6"></a><span class="st">    </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-5-1.png" width="480" /></p>
-<p><code>color</code>に<code>Continent</code>変数をマッピングすることによって、各点の色は何らかの情報を持つようになりました。そして各色が<code>Continent</code>のどの値に対応しているかを示すために凡例が表示されます。凡例のラベルはデフォルトは変数名（この例の場合、「Continent」）ですが、ここでは「大陸」と修正されました。</p>
-<p>　ここまでが第<a href="visualization2.html#visualization2">18</a>章で使用しました<code>labs()</code>レイヤーの使い方です。他にも<code>labs()</code>は<strong>プロット</strong>のラベルを指定することもできます。ここでいう「プロットのラベル」とはプロットのタイトルとほぼ同じです。使用可能な引数は<code>title</code>、<code>subtitle</code>、<code>tag</code>です。</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb6-1"><a href="visualization3.html#cb6-1"></a>Country_df <span class="op">%&gt;%</span></span>
-<span id="cb6-2"><a href="visualization3.html#cb6-2"></a><span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb6-3"><a href="visualization3.html#cb6-3"></a><span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> FH_Total, <span class="dt">y =</span> GDP_per_capita, <span class="dt">color =</span> Continent)) <span class="op">+</span></span>
-<span id="cb6-4"><a href="visualization3.html#cb6-4"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;フリーダムハウススコア&quot;</span>,<span class="dt">y =</span> <span class="st">&quot;一人あたりGDP (USD)&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;大陸&quot;</span>,</span>
-<span id="cb6-5"><a href="visualization3.html#cb6-5"></a>         <span class="dt">title =</span> <span class="st">&quot;民主主義の度合いと所得の関係&quot;</span>, <span class="dt">subtitle =</span> <span class="st">&quot;大陸別の傾向&quot;</span>, </span>
-<span id="cb6-6"><a href="visualization3.html#cb6-6"></a>         <span class="dt">tag =</span> <span class="st">&quot;(a)&quot;</span>) <span class="op">+</span></span>
-<span id="cb6-7"><a href="visualization3.html#cb6-7"></a><span class="st">    </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-6-1.png" width="480" /></p>
+<span id="cb4-4"><a href="visualization3.html#cb4-4"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;フリーダムハウススコア&quot;</span>,<span class="dt">y =</span> <span class="st">&quot;一人あたりGDP (USD)&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;大陸&quot;</span>,</span>
+<span id="cb4-5"><a href="visualization3.html#cb4-5"></a>         <span class="dt">title =</span> <span class="st">&quot;民主主義の度合いと所得の関係&quot;</span>, <span class="dt">subtitle =</span> <span class="st">&quot;大陸別の傾向&quot;</span>, </span>
+<span id="cb4-6"><a href="visualization3.html#cb4-6"></a>         <span class="dt">tag =</span> <span class="st">&quot;(a)&quot;</span>) <span class="op">+</span></span>
+<span id="cb4-7"><a href="visualization3.html#cb4-7"></a><span class="st">    </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-6-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>　<code>title</code>は図のメインタイトルとおり、プロットのタイトルを意味します。上の図だと「民主主義の度合いと所得の関係」です。また、<code>subtitle</code>引数を指定することでサブタイトルを付けることも可能です。上の図の「大陸別の傾向」がサブタイトルです。最後の<code>tag</code>は複数の図を並べる際に便利な引数です。図が横に2つ並んでいる場合、それぞれ(a)と(b)という識別子を付けると、文中において「図3(a)は…」のように、引用しやすくなります。この「(a)」が<code>tag</code>引数に対応します。複数の図を並べる方法は本章の後半にて説明します。</p>
 <!--
 ## `guides()`: 
@@ -645,33 +645,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="直交座標系の操作" class="section level3" number="19.2.1">
 <h3><span class="header-section-number">19.2.1</span> 直交座標系の操作</h3>
 <p>　まずは座標系の上限と下限を指定する方法から考えましょう。日米中間のCOVID-19累積感染者数の折れ線グラフを作成してみましょう。</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb8-1"><a href="visualization3.html#cb8-1"></a>Fig1 &lt;-<span class="st"> </span>COVID19_df <span class="op">%&gt;%</span></span>
-<span id="cb8-2"><a href="visualization3.html#cb8-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Date =</span> <span class="kw">as.Date</span>(Date)) <span class="op">%&gt;%</span></span>
-<span id="cb8-3"><a href="visualization3.html#cb8-3"></a><span class="st">  </span><span class="kw">filter</span>(Country <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Japan&quot;</span>, <span class="st">&quot;South Korea&quot;</span>, <span class="st">&quot;China&quot;</span>, <span class="st">&quot;United States&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb8-4"><a href="visualization3.html#cb8-4"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb8-5"><a href="visualization3.html#cb8-5"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> Confirmed_Total, <span class="dt">color =</span> Country)) <span class="op">+</span></span>
-<span id="cb8-6"><a href="visualization3.html#cb8-6"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;月&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;累積感染者数 (人)&quot;</span>) <span class="op">+</span></span>
-<span id="cb8-7"><a href="visualization3.html#cb8-7"></a><span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span>
-<span id="cb8-8"><a href="visualization3.html#cb8-8"></a></span>
-<span id="cb8-9"><a href="visualization3.html#cb8-9"></a><span class="kw">print</span>(Fig1)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb5-1"><a href="visualization3.html#cb5-1"></a>Fig1 &lt;-<span class="st"> </span>COVID19_df <span class="op">%&gt;%</span></span>
+<span id="cb5-2"><a href="visualization3.html#cb5-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Date =</span> <span class="kw">as.Date</span>(Date)) <span class="op">%&gt;%</span></span>
+<span id="cb5-3"><a href="visualization3.html#cb5-3"></a><span class="st">  </span><span class="kw">filter</span>(Country <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Japan&quot;</span>, <span class="st">&quot;South Korea&quot;</span>, <span class="st">&quot;China&quot;</span>, <span class="st">&quot;United States&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb5-4"><a href="visualization3.html#cb5-4"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb5-5"><a href="visualization3.html#cb5-5"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> Confirmed_Total, <span class="dt">color =</span> Country)) <span class="op">+</span></span>
+<span id="cb5-6"><a href="visualization3.html#cb5-6"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;月&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;累積感染者数 (人)&quot;</span>) <span class="op">+</span></span>
+<span id="cb5-7"><a href="visualization3.html#cb5-7"></a><span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span>
+<span id="cb5-8"><a href="visualization3.html#cb5-8"></a></span>
+<span id="cb5-9"><a href="visualization3.html#cb5-9"></a><span class="kw">print</span>(Fig1)</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>　アメリカの感染者が圧倒的に多いこともあり、日韓がほぼ同じ線に見えます。これを是正するために対数変換などを行うわけですが、対数変換したグラフは直感的ではないというデメリットがあります。それでもう一つの方法として、アメリカに関する情報は一部失われますが、縦軸の上限を10万にすることが考えられます。直交座標系の上限・下限を調整する関数が<code>coord_cartesian()</code>です。横軸は<code>xlim</code>、縦軸は<code>ylim</code>引数を指定し、実引数としては長さ2のnumericベクトルを指定します。たとえば、縦軸の下限を0、上限を10万にするなら、<code>ylim = c(0, 100000)</code>となります。先ほどの図は既に<code>Fig1</code>という名のオブジェクトとして保存されているため、ここに<code>coord_cartesian()</code>レイヤーを追加してみましょう。</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb9-1"><a href="visualization3.html#cb9-1"></a>Fig1 <span class="op">+</span></span>
-<span id="cb9-2"><a href="visualization3.html#cb9-2"></a><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">100000</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb6-1"><a href="visualization3.html#cb6-1"></a>Fig1 <span class="op">+</span></span>
+<span id="cb6-2"><a href="visualization3.html#cb6-2"></a><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">100000</span>))</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-8-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>3月下旬以降、アメリカの情報は図から失われましたが、日中韓についてはよりトレンドの差が区別できるようになりました。{ggplot2}は座標系の上限と下限をデータの最小値と最大値に合わせて自動的に調整してくれます。たとえば、以下のような例を考えてみましょう。</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb10-1"><a href="visualization3.html#cb10-1"></a>Fig2 &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">Class =</span> <span class="kw">paste0</span>(LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>], <span class="st">&quot;組&quot;</span>),</span>
-<span id="cb10-2"><a href="visualization3.html#cb10-2"></a>       <span class="dt">Score =</span> <span class="kw">c</span>(<span class="dv">78</span>, <span class="dv">80</span>, <span class="dv">85</span>, <span class="dv">77</span>, <span class="dv">70</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb10-3"><a href="visualization3.html#cb10-3"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb10-4"><a href="visualization3.html#cb10-4"></a><span class="st">  </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Class, <span class="dt">y =</span> Score), <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="op">+</span></span>
-<span id="cb10-5"><a href="visualization3.html#cb10-5"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;クラス&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;数学成績の平均 (点)&quot;</span>) <span class="op">+</span></span>
-<span id="cb10-6"><a href="visualization3.html#cb10-6"></a><span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span>
-<span id="cb10-7"><a href="visualization3.html#cb10-7"></a></span>
-<span id="cb10-8"><a href="visualization3.html#cb10-8"></a><span class="kw">print</span>(Fig2)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb7-1"><a href="visualization3.html#cb7-1"></a>Fig2 &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">Class =</span> <span class="kw">paste0</span>(LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>], <span class="st">&quot;組&quot;</span>),</span>
+<span id="cb7-2"><a href="visualization3.html#cb7-2"></a>       <span class="dt">Score =</span> <span class="kw">c</span>(<span class="dv">78</span>, <span class="dv">80</span>, <span class="dv">85</span>, <span class="dv">77</span>, <span class="dv">70</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb7-3"><a href="visualization3.html#cb7-3"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb7-4"><a href="visualization3.html#cb7-4"></a><span class="st">  </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Class, <span class="dt">y =</span> Score), <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="op">+</span></span>
+<span id="cb7-5"><a href="visualization3.html#cb7-5"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;クラス&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;数学成績の平均 (点)&quot;</span>) <span class="op">+</span></span>
+<span id="cb7-6"><a href="visualization3.html#cb7-6"></a><span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span>
+<span id="cb7-7"><a href="visualization3.html#cb7-7"></a></span>
+<span id="cb7-8"><a href="visualization3.html#cb7-8"></a><span class="kw">print</span>(Fig2)</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-9-1.png" width="384" style="display: block; margin: auto;" /></p>
 <p>　数学成績平均値は最大100点までありえますが、手元のデータにおける最高得点が85店であるため、棒グラフの縦軸の上限が85点程度となります。この場合、上限は満点である100点に調整した方が良いでしょう。</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb11-1"><a href="visualization3.html#cb11-1"></a>Fig2 <span class="op">+</span></span>
-<span id="cb11-2"><a href="visualization3.html#cb11-2"></a><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">100</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb8-1"><a href="visualization3.html#cb8-1"></a>Fig2 <span class="op">+</span></span>
+<span id="cb8-2"><a href="visualization3.html#cb8-2"></a><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">100</span>))</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-10-1.png" width="384" style="display: block; margin: auto;" /></p>
 <p>　このように上限を調整すると、成績の満点が何点かに関する情報が含まれ、グラフにより豊富な情報を持たせることが可能です。</p>
 </div>
@@ -685,52 +685,52 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><code>coord_trans()</code>レイヤーを重ね、<code>x = "log10"</code>引数を指定する</li>
 </ol>
 <p>　どの方法でも得られる結果はさほど変わりませんが、<code>coord_trans()</code>は座標系全般を調整することができます。たとえば、<code>xlim</code>や<code>ylim</code>引数を使って座標系の上限と下限を同時に指定することも可能です。たとえば、座標系の上限を横軸は[0, 100]、縦軸は[-100, 100]とし、全て対数化を行うとします。方法はいくつか考えられます。たとえば、<code>scale_*_log10()</code>と<code>coord_cartesian()</code>を組み合わせることもできます。</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb12-1"><a href="visualization3.html#cb12-1"></a><span class="co"># coord_trans()を使用しない場合</span></span>
-<span id="cb12-2"><a href="visualization3.html#cb12-2"></a>ggplotオブジェクト <span class="op">+</span></span>
-<span id="cb12-3"><a href="visualization3.html#cb12-3"></a><span class="st">  </span><span class="kw">scale_x_log10</span>() <span class="op">+</span></span>
-<span id="cb12-4"><a href="visualization3.html#cb12-4"></a><span class="st">  </span><span class="kw">scale_y_log10</span>() <span class="op">+</span></span>
-<span id="cb12-5"><a href="visualization3.html#cb12-5"></a><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">100</span>), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">100</span>, <span class="dv">100</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb9-1"><a href="visualization3.html#cb9-1"></a><span class="co"># coord_trans()を使用しない場合</span></span>
+<span id="cb9-2"><a href="visualization3.html#cb9-2"></a>ggplotオブジェクト <span class="op">+</span></span>
+<span id="cb9-3"><a href="visualization3.html#cb9-3"></a><span class="st">  </span><span class="kw">scale_x_log10</span>() <span class="op">+</span></span>
+<span id="cb9-4"><a href="visualization3.html#cb9-4"></a><span class="st">  </span><span class="kw">scale_y_log10</span>() <span class="op">+</span></span>
+<span id="cb9-5"><a href="visualization3.html#cb9-5"></a><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">100</span>), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">100</span>, <span class="dv">100</span>))</span></code></pre></div>
 <p>　しかし、上のコードは<code>coord_trans()</code>を使うと一行にまとめることができます。</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb13-1"><a href="visualization3.html#cb13-1"></a><span class="co"># coord_trans()を使用する場合</span></span>
-<span id="cb13-2"><a href="visualization3.html#cb13-2"></a>ggplotオブジェクト <span class="op">+</span></span>
-<span id="cb13-3"><a href="visualization3.html#cb13-3"></a><span class="st">  </span><span class="kw">coord_trans</span>(<span class="dt">x =</span> <span class="st">&quot;log10&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;log10&quot;</span>, <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">100</span>), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">100</span>, <span class="dv">100</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb10-1"><a href="visualization3.html#cb10-1"></a><span class="co"># coord_trans()を使用する場合</span></span>
+<span id="cb10-2"><a href="visualization3.html#cb10-2"></a>ggplotオブジェクト <span class="op">+</span></span>
+<span id="cb10-3"><a href="visualization3.html#cb10-3"></a><span class="st">  </span><span class="kw">coord_trans</span>(<span class="dt">x =</span> <span class="st">&quot;log10&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;log10&quot;</span>, <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">100</span>), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">100</span>, <span class="dv">100</span>))</span></code></pre></div>
 <p>　<code>coord_trans()</code>の<code>x</code>、<code>y</code>引数は<code>"log10"</code>以外にもあります。自然対数変換の<code>"log"</code>、反転を意味する<code>"reverse"</code>、平方根へ変換する<code>"sqrt"</code>などがあります。グラフを上下、または左右に反転する<code>"reverse"</code>は覚えておいて損はないでしょう。こちらは具体的には{tidyverse}パッケージ群に含まれている{scales}パッケージにある<code>*_trans()</code>関数に対応することになります。詳細は{scales}パッケージのヘルプを参照してください。</p>
 </div>
 <div id="座標系の回転" class="section level3" number="19.2.3">
 <h3><span class="header-section-number">19.2.3</span> 座標系の回転</h3>
 <p>　続きまして座標系を反時計方向回転する<code>coord_flip()</code>について紹介します。以下は<code>Country_df</code>を用い、大陸（<code>Continent</code>）ごとにPolity IVスコア（<code>Polity_Score</code>）の平均値を示した棒グラフです。</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb14-1"><a href="visualization3.html#cb14-1"></a>Flip_Fig &lt;-<span class="st"> </span>Country_df <span class="op">%&gt;%</span></span>
-<span id="cb14-2"><a href="visualization3.html#cb14-2"></a><span class="st">  </span><span class="kw">group_by</span>(Continent) <span class="op">%&gt;%</span></span>
-<span id="cb14-3"><a href="visualization3.html#cb14-3"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">Democracy =</span> <span class="kw">mean</span>(Polity_Score, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</span>
-<span id="cb14-4"><a href="visualization3.html#cb14-4"></a>            <span class="dt">.groups   =</span> <span class="st">&quot;drop&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb14-5"><a href="visualization3.html#cb14-5"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb14-6"><a href="visualization3.html#cb14-6"></a><span class="st">  </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Continent, <span class="dt">y =</span> Democracy), <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="op">+</span></span>
-<span id="cb14-7"><a href="visualization3.html#cb14-7"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;大陸&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Polity IV スコアの平均値&quot;</span>) <span class="op">+</span></span>
-<span id="cb14-8"><a href="visualization3.html#cb14-8"></a><span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span>
-<span id="cb14-9"><a href="visualization3.html#cb14-9"></a></span>
-<span id="cb14-10"><a href="visualization3.html#cb14-10"></a><span class="kw">print</span>(Flip_Fig)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-13-1.png" width="480" /></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb11-1"><a href="visualization3.html#cb11-1"></a>Flip_Fig &lt;-<span class="st"> </span>Country_df <span class="op">%&gt;%</span></span>
+<span id="cb11-2"><a href="visualization3.html#cb11-2"></a><span class="st">  </span><span class="kw">group_by</span>(Continent) <span class="op">%&gt;%</span></span>
+<span id="cb11-3"><a href="visualization3.html#cb11-3"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">Democracy =</span> <span class="kw">mean</span>(Polity_Score, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb11-4"><a href="visualization3.html#cb11-4"></a>            <span class="dt">.groups   =</span> <span class="st">&quot;drop&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb11-5"><a href="visualization3.html#cb11-5"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb11-6"><a href="visualization3.html#cb11-6"></a><span class="st">  </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Continent, <span class="dt">y =</span> Democracy), <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="op">+</span></span>
+<span id="cb11-7"><a href="visualization3.html#cb11-7"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;大陸&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Polity IV スコアの平均値&quot;</span>) <span class="op">+</span></span>
+<span id="cb11-8"><a href="visualization3.html#cb11-8"></a><span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span>
+<span id="cb11-9"><a href="visualization3.html#cb11-9"></a></span>
+<span id="cb11-10"><a href="visualization3.html#cb11-10"></a><span class="kw">print</span>(Flip_Fig)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-13-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>　この図を反時計方向回転する場合は以上のプロットに<code>coord_flip()</code>レイヤーを追加します。</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb15-1"><a href="visualization3.html#cb15-1"></a>Flip_Fig <span class="op">+</span></span>
-<span id="cb15-2"><a href="visualization3.html#cb15-2"></a><span class="st">  </span><span class="kw">coord_flip</span>() <span class="co"># 座標系の回転</span></span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-14-1.png" width="480" /></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb12-1"><a href="visualization3.html#cb12-1"></a>Flip_Fig <span class="op">+</span></span>
+<span id="cb12-2"><a href="visualization3.html#cb12-2"></a><span class="st">  </span><span class="kw">coord_flip</span>() <span class="co"># 座標系の回転</span></span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-14-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>　非常に簡単な方法で図を回転させることができました。しかし、実はこの<code>coord_flip()</code>関数、最近になって使う場面がどんどん減っています。たとえば、先ほどの<code>geom_bar()</code>幾何オブジェクトの場合、<code>x</code>をPolity IVスコアの平均値で、<code>y</code>を大陸名でマッピングすることが可能です。昔の{ggplot2}は横軸と縦軸にマッピングでいるデータ型が厳格に決まっていましたが、最近になってはますます柔軟となってきました<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>。<code>coord_flip()</code>を使用する前に、各幾何オブジェクトのヘルプを確認し、<code>coord_flip()</code>を用いた回転が必要か否かを予め調べておくのも良いでしょう。</p>
 </div>
 <div id="座標系の固定" class="section level3" number="19.2.4">
 <h3><span class="header-section-number">19.2.4</span> 座標系の固定</h3>
 <p>　他にも地味に便利な機能として座標系比を固定する<code>coord_fixed()</code>を紹介します。これは出力される座標系の「横:縦」を調整するレイヤーです。たとえば、以下のような散布図を考えてみましょう。</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb16-1"><a href="visualization3.html#cb16-1"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb16-2"><a href="visualization3.html#cb16-2"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">y =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-15-1.png" width="480" /></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb13-1"><a href="visualization3.html#cb13-1"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb13-2"><a href="visualization3.html#cb13-2"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">y =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-15-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>　こちらは横と縦が同じスケールでありますが、図の大きさに応じて、見た目が変わってきます。たとえば、上の図だと、横軸における1間隔は縦軸のそれの約2倍です。もし、図を上下に大きくし、左右を縮小したら同じ図でありながら随分と見た目が変わってきます。</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb17-1"><a href="visualization3.html#cb17-1"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb17-2"><a href="visualization3.html#cb17-2"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">y =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-16-1.png" width="240" /></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb14-1"><a href="visualization3.html#cb14-1"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb14-2"><a href="visualization3.html#cb14-2"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">y =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-16-1.png" width="240" style="display: block; margin: auto;" /></p>
 <p>　2つの図は本質的に同じですが、図の見せ方によって、傾きが緩やかに見せたり、急に見せたりすることができます。ここで活躍するレイヤーが<code>coord_fixed()</code>です。これを追加すると横を1とした場合の縦の比率を指定することができます。</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb18-1"><a href="visualization3.html#cb18-1"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb18-2"><a href="visualization3.html#cb18-2"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">y =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)) <span class="op">+</span></span>
-<span id="cb18-3"><a href="visualization3.html#cb18-3"></a><span class="st">  </span><span class="kw">coord_fixed</span>(<span class="dt">ratio =</span> <span class="dv">1</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-17-1.png" width="384" /></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb15-1"><a href="visualization3.html#cb15-1"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb15-2"><a href="visualization3.html#cb15-2"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">y =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)) <span class="op">+</span></span>
+<span id="cb15-3"><a href="visualization3.html#cb15-3"></a><span class="st">  </span><span class="kw">coord_fixed</span>(<span class="dt">ratio =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-17-1.png" width="384" style="display: block; margin: auto;" /></p>
 <p>　<code>ratio = 1</code>を指定すると縦横比は1:1となり、図の高さや幅を変更してもこの軸は変わりません。たとえば、RStudioのPlotsペインの大きさを変更すると図の大きさが変わりますが、<code>coord_fixed(ratio = 1)</code>を指定すると1:1の比率は維持されるまま図が拡大・縮小されます。直接やってみましょう。</p>
 <hr />
 </div>
@@ -746,58 +746,53 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="連続変数の場合" class="section level4" number="19.3.1.1">
 <h4><span class="header-section-number">19.3.1.1</span> 連続変数の場合</h4>
 <p>　軸に連続変数がマッピングされている場合は<code>scale_*_continuous()</code>レイヤーを追加します。<code>*</code>の箇所は横軸の場合は<code>x</code>、縦軸の場合は<code>y</code>となります。それでは<code>Country_df</code>の<code>FH_Total</code>を横軸、<code>GDP_per_capita</code>を縦軸にした散布図を作成し、<code>Scale_Fig1</code>という名のオブジェクトに格納します。</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb19-1"><a href="visualization3.html#cb19-1"></a>Scale_Fig1 &lt;-<span class="st"> </span>Country_df <span class="op">%&gt;%</span></span>
-<span id="cb19-2"><a href="visualization3.html#cb19-2"></a><span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb19-3"><a href="visualization3.html#cb19-3"></a><span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> FH_Total, <span class="dt">y =</span> GDP_per_capita)) <span class="op">+</span></span>
-<span id="cb19-4"><a href="visualization3.html#cb19-4"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;フリーダムハウススコア&quot;</span>,<span class="dt">y =</span> <span class="st">&quot;一人あたりGDP (USD)&quot;</span>) <span class="op">+</span></span>
-<span id="cb19-5"><a href="visualization3.html#cb19-5"></a><span class="st">    </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span>
-<span id="cb19-6"><a href="visualization3.html#cb19-6"></a></span>
-<span id="cb19-7"><a href="visualization3.html#cb19-7"></a><span class="kw">print</span>(Scale_Fig1)</span></code></pre></div>
-<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-18-1.png" width="480" /></p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb16-1"><a href="visualization3.html#cb16-1"></a>Scale_Fig1 &lt;-<span class="st"> </span>Country_df <span class="op">%&gt;%</span></span>
+<span id="cb16-2"><a href="visualization3.html#cb16-2"></a><span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb16-3"><a href="visualization3.html#cb16-3"></a><span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> FH_Total, <span class="dt">y =</span> GDP_per_capita)) <span class="op">+</span></span>
+<span id="cb16-4"><a href="visualization3.html#cb16-4"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;フリーダムハウススコア&quot;</span>,<span class="dt">y =</span> <span class="st">&quot;一人あたりGDP (USD)&quot;</span>) <span class="op">+</span></span>
+<span id="cb16-5"><a href="visualization3.html#cb16-5"></a><span class="st">    </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span>
+<span id="cb16-6"><a href="visualization3.html#cb16-6"></a></span>
+<span id="cb16-7"><a href="visualization3.html#cb16-7"></a><span class="kw">print</span>(Scale_Fig1)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-18-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>　<code>Scale_Fig1</code>の横軸の場合、最小値0、最大値100であり、目盛りは25間隔となっております。ここではこの横軸を調整したいと思います。まず、プロットにおける最小値と最大値はスケールではなく座標系の問題ですので、<code>coord_*()</code>を使用します。ここでは目盛りを修正してみましょう。たとえば、目盛りを10間隔にし、そのラベルも0、10、20、…、100にします。<code>FH_Total</code>は連続変数ですので、<code>scale_x_continuous()</code>を使います。使い方は以下の通りです。</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb21-1"><a href="visualization3.html#cb21-1"></a>Scale_Fig1 <span class="op">+</span></span>
-<span id="cb21-2"><a href="visualization3.html#cb21-2"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> 目盛りの位置,</span>
-<span id="cb21-3"><a href="visualization3.html#cb21-3"></a>                     <span class="dt">labels =</span> 目盛りのラベル)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb17-1"><a href="visualization3.html#cb17-1"></a>Scale_Fig1 <span class="op">+</span></span>
+<span id="cb17-2"><a href="visualization3.html#cb17-2"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> 目盛りの位置,</span>
+<span id="cb17-3"><a href="visualization3.html#cb17-3"></a>                     <span class="dt">labels =</span> 目盛りのラベル)</span></code></pre></div>
 <p>　<code>breaks</code>と<code>labels</code>の実引数としては数値型ベクトルを指定します。0から100まで10刻みの目盛りとラベルなら、<code>seq(0, 100, by = 10)</code>、または<code>c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100)</code>と指定します。</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb22-1"><a href="visualization3.html#cb22-1"></a>Scale_Fig1 <span class="op">+</span></span>
-<span id="cb22-2"><a href="visualization3.html#cb22-2"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="dt">by =</span> <span class="dv">10</span>),</span>
-<span id="cb22-3"><a href="visualization3.html#cb22-3"></a>                     <span class="dt">labels =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="dt">by =</span> <span class="dv">10</span>))</span></code></pre></div>
-<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-20-1.png" width="480" /></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb18-1"><a href="visualization3.html#cb18-1"></a>Scale_Fig1 <span class="op">+</span></span>
+<span id="cb18-2"><a href="visualization3.html#cb18-2"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="dt">by =</span> <span class="dv">10</span>),</span>
+<span id="cb18-3"><a href="visualization3.html#cb18-3"></a>                     <span class="dt">labels =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="dt">by =</span> <span class="dv">10</span>))</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-20-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>　目盛りのラベルを文字型にすることも可能です。例えば、目盛りを0、50、100にし、それぞれ「最低」、「中間」、「最高」としたい場合は以下のようにします。</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb24-1"><a href="visualization3.html#cb24-1"></a>Scale_Fig1 <span class="op">+</span></span>
-<span id="cb24-2"><a href="visualization3.html#cb24-2"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">50</span>, <span class="dv">100</span>),</span>
-<span id="cb24-3"><a href="visualization3.html#cb24-3"></a>                     <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;最低&quot;</span>, <span class="st">&quot;中間&quot;</span>, <span class="st">&quot;最高&quot;</span>))</span></code></pre></div>
-<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-21-1.png" width="480" /></p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb19-1"><a href="visualization3.html#cb19-1"></a>Scale_Fig1 <span class="op">+</span></span>
+<span id="cb19-2"><a href="visualization3.html#cb19-2"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">50</span>, <span class="dv">100</span>),</span>
+<span id="cb19-3"><a href="visualization3.html#cb19-3"></a>                     <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;最低&quot;</span>, <span class="st">&quot;中間&quot;</span>, <span class="st">&quot;最高&quot;</span>))</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-21-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>　<code>scale_x_continuous()</code>は目盛りの調整が主な使い道ですが、他にも様々な機能を提供しています。たとえば、座標系の最小値と最大値の指定は<code>coord_*()</code>を使うと説明しましたが、実は<code>scale_*_continuous()</code>でも<code>limits</code>引数で指定することも可能です。たとえば、縦軸の範囲を0ドルから10万ドルにしたい場合は<code>scale_y_continuous()</code>の中に<code>limits = c(0, 100000)</code>を指定します。</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb26-1"><a href="visualization3.html#cb26-1"></a>Scale_Fig1 <span class="op">+</span></span>
-<span id="cb26-2"><a href="visualization3.html#cb26-2"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="dt">by =</span> <span class="dv">10</span>),</span>
-<span id="cb26-3"><a href="visualization3.html#cb26-3"></a>                     <span class="dt">labels =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="dt">by =</span> <span class="dv">10</span>)) <span class="op">+</span></span>
-<span id="cb26-4"><a href="visualization3.html#cb26-4"></a><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">limits =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">100000</span>))</span></code></pre></div>
-<pre><code>## Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-22-1.png" width="480" /></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb20-1"><a href="visualization3.html#cb20-1"></a>Scale_Fig1 <span class="op">+</span></span>
+<span id="cb20-2"><a href="visualization3.html#cb20-2"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="dt">by =</span> <span class="dv">10</span>),</span>
+<span id="cb20-3"><a href="visualization3.html#cb20-3"></a>                     <span class="dt">labels =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="dt">by =</span> <span class="dv">10</span>)) <span class="op">+</span></span>
+<span id="cb20-4"><a href="visualization3.html#cb20-4"></a><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">limits =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">100000</span>))</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-22-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>　他にも目盛りと目盛りラベルの位置を変更することも可能です。これは<code>position</code>引数を使います。基本的に横軸の目盛りは下（<code>"bottom"</code>）、縦軸は左（<code>"left"</code>）ですが、<code>"top"</code>や<code>"right"</code>を使うことも可能です。もし、縦軸の目盛りとラベル、軸のラベルを右側にしたい場合は<code>scale_y_continuous()</code>の中に<code>position = "right"</code>を指定します。</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb28-1"><a href="visualization3.html#cb28-1"></a>Scale_Fig1 <span class="op">+</span></span>
-<span id="cb28-2"><a href="visualization3.html#cb28-2"></a><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">position =</span> <span class="st">&quot;right&quot;</span>)</span></code></pre></div>
-<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-23-1.png" width="480" /></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb21-1"><a href="visualization3.html#cb21-1"></a>Scale_Fig1 <span class="op">+</span></span>
+<span id="cb21-2"><a href="visualization3.html#cb21-2"></a><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">position =</span> <span class="st">&quot;right&quot;</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-23-1.png" width="480" style="display: block; margin: auto;" /></p>
 </div>
 <div id="離散変数の場合" class="section level4" number="19.3.1.2">
 <h4><span class="header-section-number">19.3.1.2</span> 離散変数の場合</h4>
 <p>　もし、軸が名目変数や順序変数のような離散変数でマッピングされている場合は、<code>scale_*_discrete()</code>を使います。たとえば、座標系の回転の例で使いました<code>Flip_Fig</code>の場合、横軸の大陸名が英語のままになっています。これを日本語にする場合、データレベルで大陸名を日本語で置換することも可能ですが、<code>scale_x_discrete()</code>を使うことも可能です。使い方は<code>scale_*_continuous()</code>と同じであり、<code>breaks</code>と<code>labels</code>引数を指定するだけです。</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb30-1"><a href="visualization3.html#cb30-1"></a>Flip_Fig <span class="op">+</span></span>
-<span id="cb30-2"><a href="visualization3.html#cb30-2"></a><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="st">&quot;Africa&quot;</span>, <span class="st">&quot;America&quot;</span>, <span class="st">&quot;Asia&quot;</span>, <span class="st">&quot;Europe&quot;</span>, <span class="st">&quot;Oceania&quot;</span>),</span>
-<span id="cb30-3"><a href="visualization3.html#cb30-3"></a>                   <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;アフリカ&quot;</span>, <span class="st">&quot;アメリカ&quot;</span>, <span class="st">&quot;アジア&quot;</span>, <span class="st">&quot;ヨーロッパ&quot;</span>, <span class="st">&quot;オセアニア&quot;</span>))</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-24-1.png" width="480" /></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb22-1"><a href="visualization3.html#cb22-1"></a>Flip_Fig <span class="op">+</span></span>
+<span id="cb22-2"><a href="visualization3.html#cb22-2"></a><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="st">&quot;Africa&quot;</span>, <span class="st">&quot;America&quot;</span>, <span class="st">&quot;Asia&quot;</span>, <span class="st">&quot;Europe&quot;</span>, <span class="st">&quot;Oceania&quot;</span>),</span>
+<span id="cb22-3"><a href="visualization3.html#cb22-3"></a>                   <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;アフリカ&quot;</span>, <span class="st">&quot;アメリカ&quot;</span>, <span class="st">&quot;アジア&quot;</span>, <span class="st">&quot;ヨーロッパ&quot;</span>, <span class="st">&quot;オセアニア&quot;</span>))</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-24-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>　今回は大陸名が文字型の列でしたが、factor型の場合、いくつか便利な機能が使えます。たとえば、<code>Polity_Type</code>ごとに国数を計算し、棒グラフを作成するとします。</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb31-1"><a href="visualization3.html#cb31-1"></a>Scale_df1 &lt;-<span class="st"> </span>Country_df <span class="op">%&gt;%</span></span>
-<span id="cb31-2"><a href="visualization3.html#cb31-2"></a><span class="st">  </span><span class="kw">group_by</span>(Polity_Type) <span class="op">%&gt;%</span></span>
-<span id="cb31-3"><a href="visualization3.html#cb31-3"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">N       =</span> <span class="kw">n</span>(),</span>
-<span id="cb31-4"><a href="visualization3.html#cb31-4"></a>            <span class="dt">.groups =</span> <span class="st">&quot;drop&quot;</span>)</span>
-<span id="cb31-5"><a href="visualization3.html#cb31-5"></a></span>
-<span id="cb31-6"><a href="visualization3.html#cb31-6"></a>Scale_df1</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb23-1"><a href="visualization3.html#cb23-1"></a>Scale_df1 &lt;-<span class="st"> </span>Country_df <span class="op">%&gt;%</span></span>
+<span id="cb23-2"><a href="visualization3.html#cb23-2"></a><span class="st">  </span><span class="kw">group_by</span>(Polity_Type) <span class="op">%&gt;%</span></span>
+<span id="cb23-3"><a href="visualization3.html#cb23-3"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">N       =</span> <span class="kw">n</span>(),</span>
+<span id="cb23-4"><a href="visualization3.html#cb23-4"></a>            <span class="dt">.groups =</span> <span class="st">&quot;drop&quot;</span>)</span>
+<span id="cb23-5"><a href="visualization3.html#cb23-5"></a></span>
+<span id="cb23-6"><a href="visualization3.html#cb23-6"></a>Scale_df1</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 2
 ##   Polity_Type         N
 ##   &lt;chr&gt;           &lt;int&gt;
@@ -808,145 +803,137 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 5 Open Anocracy      20
 ## 6 &lt;NA&gt;               28</code></pre>
 <p>　続きまして、<code>Polity_Type</code>列をfactor型にします。最もスコアの低い独裁（Autocracy）から最もスコアの高い完全な民主主義（Full Democracy）の順番のfactorにします。</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb33-1"><a href="visualization3.html#cb33-1"></a>Scale_df1 &lt;-<span class="st"> </span>Scale_df1 <span class="op">%&gt;%</span></span>
-<span id="cb33-2"><a href="visualization3.html#cb33-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Polity_Type =</span> <span class="kw">factor</span>(Polity_Type, <span class="dt">ordered =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb33-3"><a href="visualization3.html#cb33-3"></a>                              <span class="dt">levels  =</span> <span class="kw">c</span>(<span class="st">&quot;Autocracy&quot;</span>,</span>
-<span id="cb33-4"><a href="visualization3.html#cb33-4"></a>                                          <span class="st">&quot;Closed Anocracy&quot;</span>,</span>
-<span id="cb33-5"><a href="visualization3.html#cb33-5"></a>                                          <span class="st">&quot;Open Anocracy&quot;</span>,</span>
-<span id="cb33-6"><a href="visualization3.html#cb33-6"></a>                                          <span class="st">&quot;Democracy&quot;</span>,</span>
-<span id="cb33-7"><a href="visualization3.html#cb33-7"></a>                                          <span class="st">&quot;Full Democracy&quot;</span>)))</span>
-<span id="cb33-8"><a href="visualization3.html#cb33-8"></a></span>
-<span id="cb33-9"><a href="visualization3.html#cb33-9"></a>Scale_df1<span class="op">$</span>Polity_Type</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb25-1"><a href="visualization3.html#cb25-1"></a>Scale_df1 &lt;-<span class="st"> </span>Scale_df1 <span class="op">%&gt;%</span></span>
+<span id="cb25-2"><a href="visualization3.html#cb25-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Polity_Type =</span> <span class="kw">factor</span>(Polity_Type, <span class="dt">ordered =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb25-3"><a href="visualization3.html#cb25-3"></a>                              <span class="dt">levels  =</span> <span class="kw">c</span>(<span class="st">&quot;Autocracy&quot;</span>,</span>
+<span id="cb25-4"><a href="visualization3.html#cb25-4"></a>                                          <span class="st">&quot;Closed Anocracy&quot;</span>,</span>
+<span id="cb25-5"><a href="visualization3.html#cb25-5"></a>                                          <span class="st">&quot;Open Anocracy&quot;</span>,</span>
+<span id="cb25-6"><a href="visualization3.html#cb25-6"></a>                                          <span class="st">&quot;Democracy&quot;</span>,</span>
+<span id="cb25-7"><a href="visualization3.html#cb25-7"></a>                                          <span class="st">&quot;Full Democracy&quot;</span>)))</span>
+<span id="cb25-8"><a href="visualization3.html#cb25-8"></a></span>
+<span id="cb25-9"><a href="visualization3.html#cb25-9"></a>Scale_df1<span class="op">$</span>Polity_Type</span></code></pre></div>
 <pre><code>## [1] Autocracy       Closed Anocracy Democracy       Full Democracy 
 ## [5] Open Anocracy   &lt;NA&gt;           
-## 5 Levels: Autocracy &lt; Closed Anocracy &lt; ... &lt; Full Democracy</code></pre>
+## 5 Levels: Autocracy &lt; Closed Anocracy &lt; Open Anocracy &lt; ... &lt; Full Democracy</code></pre>
 <p>　問題なくfactor化も出来たので、それでは作図をしてみましょう。</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb35-1"><a href="visualization3.html#cb35-1"></a>Scale_df1 <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb35-2"><a href="visualization3.html#cb35-2"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb35-3"><a href="visualization3.html#cb35-3"></a><span class="st">  </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Polity_Type, <span class="dt">y =</span> N), <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-27-1.png" width="480" /></p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb27-1"><a href="visualization3.html#cb27-1"></a>Scale_df1 <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb27-2"><a href="visualization3.html#cb27-2"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb27-3"><a href="visualization3.html#cb27-3"></a><span class="st">  </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Polity_Type, <span class="dt">y =</span> N), <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-27-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>　Polityプロジェクトの対象外があり、この場合は欠損値（<code>NA</code>）になります。そして、問題はこの欠損値も表示されることです。むろん、欠損値のカテゴリも出力したいケースもありますが、もし欠損値カテゴリの棒を消すにはどうすれば良いでしょうか。1つ目の方法は<code>Scale_df1 %&gt;% drop_na()</code>で欠損値を含む行を除去してから作図する方法です。2つ目の方法は<code>scale_x_discrete()</code>で<code>na.translate = FALSE</code>を指定する方法です。ここでは横軸の目盛りラベルも日本語に変更し、欠損値のカテゴリを除外してみましょう。また、地味に便利な機能として、軸ラベルも<code>scale_*_*()</code>で指定可能です。第1引数として長さ1の文字ベクトルを指定すると、自動的に軸ラベルが修正され、<code>labs()</code>が不要となります。</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb36-1"><a href="visualization3.html#cb36-1"></a>Scale_df1 <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb36-2"><a href="visualization3.html#cb36-2"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb36-3"><a href="visualization3.html#cb36-3"></a><span class="st">  </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Polity_Type, <span class="dt">y =</span> N), <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="op">+</span></span>
-<span id="cb36-4"><a href="visualization3.html#cb36-4"></a><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="st">&quot;Polity IV スコア&quot;</span>, <span class="co"># 第1引数で軸ラベルも指定可能</span></span>
-<span id="cb36-5"><a href="visualization3.html#cb36-5"></a>                   <span class="dt">breaks =</span> <span class="kw">c</span>(<span class="st">&quot;Autocracy&quot;</span>, <span class="st">&quot;Closed Anocracy&quot;</span>, <span class="st">&quot;Open Anocracy&quot;</span>,</span>
-<span id="cb36-6"><a href="visualization3.html#cb36-6"></a>                              <span class="st">&quot;Democracy&quot;</span>, <span class="st">&quot;Full Democracy&quot;</span>),</span>
-<span id="cb36-7"><a href="visualization3.html#cb36-7"></a>                   <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;独裁&quot;</span>, <span class="st">&quot;閉じられたアノクラシー&quot;</span>,</span>
-<span id="cb36-8"><a href="visualization3.html#cb36-8"></a>                              <span class="st">&quot;開かれたアノクラシー&quot;</span>, <span class="st">&quot;民主主義&quot;</span>,</span>
-<span id="cb36-9"><a href="visualization3.html#cb36-9"></a>                              <span class="st">&quot;完全な民主主義&quot;</span>),</span>
-<span id="cb36-10"><a href="visualization3.html#cb36-10"></a>                   <span class="dt">na.translate =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
-<span id="cb36-11"><a href="visualization3.html#cb36-11"></a><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="st">&quot;国数&quot;</span>) <span class="op">+</span></span>
-<span id="cb36-12"><a href="visualization3.html#cb36-12"></a><span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<pre><code>## Warning: Removed 1 rows containing missing values (position_stack).</code></pre>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-28-1.png" width="480" /></p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb28-1"><a href="visualization3.html#cb28-1"></a>Scale_df1 <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb28-2"><a href="visualization3.html#cb28-2"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb28-3"><a href="visualization3.html#cb28-3"></a><span class="st">  </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Polity_Type, <span class="dt">y =</span> N), <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="op">+</span></span>
+<span id="cb28-4"><a href="visualization3.html#cb28-4"></a><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="st">&quot;Polity IV スコア&quot;</span>, <span class="co"># 第1引数で軸ラベルも指定可能</span></span>
+<span id="cb28-5"><a href="visualization3.html#cb28-5"></a>                   <span class="dt">breaks =</span> <span class="kw">c</span>(<span class="st">&quot;Autocracy&quot;</span>, <span class="st">&quot;Closed Anocracy&quot;</span>, <span class="st">&quot;Open Anocracy&quot;</span>,</span>
+<span id="cb28-6"><a href="visualization3.html#cb28-6"></a>                              <span class="st">&quot;Democracy&quot;</span>, <span class="st">&quot;Full Democracy&quot;</span>),</span>
+<span id="cb28-7"><a href="visualization3.html#cb28-7"></a>                   <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;独裁&quot;</span>, <span class="st">&quot;閉じられたアノクラシー&quot;</span>,</span>
+<span id="cb28-8"><a href="visualization3.html#cb28-8"></a>                              <span class="st">&quot;開かれたアノクラシー&quot;</span>, <span class="st">&quot;民主主義&quot;</span>,</span>
+<span id="cb28-9"><a href="visualization3.html#cb28-9"></a>                              <span class="st">&quot;完全な民主主義&quot;</span>),</span>
+<span id="cb28-10"><a href="visualization3.html#cb28-10"></a>                   <span class="dt">na.translate =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
+<span id="cb28-11"><a href="visualization3.html#cb28-11"></a><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="st">&quot;国数&quot;</span>) <span class="op">+</span></span>
+<span id="cb28-12"><a href="visualization3.html#cb28-12"></a><span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-28-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>これで欠損値を除外することができました。目盛りラベルが重なる箇所があり、多少気になりますが、この問題に関しては第<a href="visualization3.html#visual3-theme">19.4</a>節で取り上げます。</p>
 </div>
 </div>
-<div id="その他のスケール調整" class="section level3" number="19.3.2">
-<h3><span class="header-section-number">19.3.2</span> その他のスケール調整</h3>
-<div id="colorスケール" class="section level4" number="19.3.2.1">
-<h4><span class="header-section-number">19.3.2.1</span> <code>color</code>スケール</h4>
+<div id="colorスケールの調整" class="section level3" number="19.3.2">
+<h3><span class="header-section-number">19.3.2</span> <code>color</code>スケールの調整</h3>
 <p>　グラフの次元を増やす際において広く使われている方法は変数の値に応じて色分けをすることでした。この場合、幾何オブジェクトの<code>aes()</code>内に<code>color = マッピングする変数名</code>を指定することになります。このように色が変数でマッピングされている場合は、色分けのスケールも調整可能です。たとえば、折れ線グラフにおいて日本が赤い線だったのを青い線に変更することが考えられます。ここでも<code>color</code>にマッピングされている変数のデータ型によって使用する関数が変わります。ここでは連続変数、順序付き離散変数、順序なし離散変数について説明します。</p>
+<div id="color引数が連続変数でマッピングされている場合" class="section level4" number="19.3.2.1">
+<h4><span class="header-section-number">19.3.2.1</span> <code>color</code>引数が連続変数でマッピングされている場合</h4>
 <p>　まずは、連続変数からです。横軸は底10の対数変換した一人あたりGDP（<code>GDP_per_capita</code>）、縦軸は人間開発指数（<code>HDI_2018</code>）にした散布図を作成し、Polity IVスコア（<code>Polity_Score</code>）で点の色分けをしてみましょう。</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb38-1"><a href="visualization3.html#cb38-1"></a>Scale_Fig2 &lt;-<span class="st"> </span>Country_df <span class="op">%&gt;%</span></span>
-<span id="cb38-2"><a href="visualization3.html#cb38-2"></a><span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb38-3"><a href="visualization3.html#cb38-3"></a><span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> GDP_per_capita, <span class="dt">y =</span> HDI_<span class="dv">2018</span>, <span class="dt">color =</span> Polity_Score)) <span class="op">+</span></span>
-<span id="cb38-4"><a href="visualization3.html#cb38-4"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;一人あたりGDP (USD)&quot;</span>,<span class="dt">y =</span> <span class="st">&quot;人間開発指数&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;Polity IVスコア&quot;</span>) <span class="op">+</span></span>
-<span id="cb38-5"><a href="visualization3.html#cb38-5"></a><span class="st">    </span><span class="kw">scale_x_log10</span>() <span class="op">+</span></span>
-<span id="cb38-6"><a href="visualization3.html#cb38-6"></a><span class="st">    </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span>
-<span id="cb38-7"><a href="visualization3.html#cb38-7"></a></span>
-<span id="cb38-8"><a href="visualization3.html#cb38-8"></a>Scale_Fig2</span></code></pre></div>
-<pre><code>## Warning: Removed 6 rows containing missing values (geom_point).</code></pre>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-29-1.png" width="576" /></p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb29-1"><a href="visualization3.html#cb29-1"></a>Scale_Fig2 &lt;-<span class="st"> </span>Country_df <span class="op">%&gt;%</span></span>
+<span id="cb29-2"><a href="visualization3.html#cb29-2"></a><span class="st">    </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb29-3"><a href="visualization3.html#cb29-3"></a><span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> GDP_per_capita, <span class="dt">y =</span> HDI_<span class="dv">2018</span>, <span class="dt">color =</span> Polity_Score)) <span class="op">+</span></span>
+<span id="cb29-4"><a href="visualization3.html#cb29-4"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;一人あたりGDP (USD)&quot;</span>,<span class="dt">y =</span> <span class="st">&quot;人間開発指数&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;Polity IVスコア&quot;</span>) <span class="op">+</span></span>
+<span id="cb29-5"><a href="visualization3.html#cb29-5"></a><span class="st">    </span><span class="kw">scale_x_log10</span>() <span class="op">+</span></span>
+<span id="cb29-6"><a href="visualization3.html#cb29-6"></a><span class="st">    </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span>
+<span id="cb29-7"><a href="visualization3.html#cb29-7"></a></span>
+<span id="cb29-8"><a href="visualization3.html#cb29-8"></a>Scale_Fig2</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-29-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>　これまでは<code>color</code>引数を離散変数でしかマッピングしませんでしたが、このように連続変数でマッピングすることも可能です。ただし、この場合は値に応じてはっきりした色分けがされるのではなく、グラデーションで色分けされます。この例だと、青に近いほどPolity IVスコアが高く、黒に近いほど低いことが分かります。この場合、<code>color</code>のスケール調整は最小値と最大値における色を指定するだけです。その間の色については{ggplot2}が自動的に計算してくれます。</p>
 <p>　今回使用する関数は<code>scale_x_gradient()</code>です。これまでの例だと<code>scale_color_continuous()</code>かと思う方も多いでしょう。実際、<code>scale_color_continuous()</code>関数も提供されており、使い方もほぼ同じです。ただし、<code>scale_color_continuous()</code>を使う際は引数として<code>type = "gradient"</code>を指定する必要があります。<code>scale_x_gradient()</code>の場合、最小値における色を<code>low</code>、最大値のそれを<code>high</code>で指定します。数値は<code>"red"</code>や<code>"blue"</code>なども可能であり、<code>"#132B43"</code>のような書き方も使えます。たとえば、先ほどの<code>Scale_Fig2</code>においてPolity IVスコアが高いほど<span style="color:#cd3333;font-weight:bold;">brown3</span>、低いほど<span style="color:#6495ED;font-weight:bold;">cornflowerblue</span>になるようにする場合は以下のように書きます。</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb40-1"><a href="visualization3.html#cb40-1"></a>Scale_Fig2 <span class="op">+</span></span>
-<span id="cb40-2"><a href="visualization3.html#cb40-2"></a><span class="st">    </span><span class="kw">scale_color_gradient</span>(<span class="dt">high =</span> <span class="st">&quot;brown3&quot;</span>, <span class="dt">low =</span> <span class="st">&quot;cornflowerblue&quot;</span>)</span></code></pre></div>
-<pre><code>## Warning: Removed 6 rows containing missing values (geom_point).</code></pre>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-30-1.png" width="576" /></p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb30-1"><a href="visualization3.html#cb30-1"></a>Scale_Fig2 <span class="op">+</span></span>
+<span id="cb30-2"><a href="visualization3.html#cb30-2"></a><span class="st">    </span><span class="kw">scale_color_gradient</span>(<span class="dt">high =</span> <span class="st">&quot;brown3&quot;</span>, <span class="dt">low =</span> <span class="st">&quot;cornflowerblue&quot;</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-30-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>　このような書き方だとどのような色名で使えるかを事前に知っておく必要があります。使える色名のリストは<code>colors()</code>から確認できます。全部で657種類がありますが、ここでは最初の50個のみを出力します。</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb42-1"><a href="visualization3.html#cb42-1"></a><span class="kw">head</span>(<span class="kw">colors</span>(), <span class="dv">50</span>)</span></code></pre></div>
-<pre><code>##  [1] &quot;white&quot;          &quot;aliceblue&quot;      &quot;antiquewhite&quot;  
-##  [4] &quot;antiquewhite1&quot;  &quot;antiquewhite2&quot;  &quot;antiquewhite3&quot; 
-##  [7] &quot;antiquewhite4&quot;  &quot;aquamarine&quot;     &quot;aquamarine1&quot;   
-## [10] &quot;aquamarine2&quot;    &quot;aquamarine3&quot;    &quot;aquamarine4&quot;   
-## [13] &quot;azure&quot;          &quot;azure1&quot;         &quot;azure2&quot;        
-## [16] &quot;azure3&quot;         &quot;azure4&quot;         &quot;beige&quot;         
-## [19] &quot;bisque&quot;         &quot;bisque1&quot;        &quot;bisque2&quot;       
-## [22] &quot;bisque3&quot;        &quot;bisque4&quot;        &quot;black&quot;         
-## [25] &quot;blanchedalmond&quot; &quot;blue&quot;           &quot;blue1&quot;         
-## [28] &quot;blue2&quot;          &quot;blue3&quot;          &quot;blue4&quot;         
-## [31] &quot;blueviolet&quot;     &quot;brown&quot;          &quot;brown1&quot;        
-## [34] &quot;brown2&quot;         &quot;brown3&quot;         &quot;brown4&quot;        
-## [37] &quot;burlywood&quot;      &quot;burlywood1&quot;     &quot;burlywood2&quot;    
-## [40] &quot;burlywood3&quot;     &quot;burlywood4&quot;     &quot;cadetblue&quot;     
-## [43] &quot;cadetblue1&quot;     &quot;cadetblue2&quot;     &quot;cadetblue3&quot;    
-## [46] &quot;cadetblue4&quot;     &quot;chartreuse&quot;     &quot;chartreuse1&quot;   
+<div class="sourceCode" id="cb31"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb31-1"><a href="visualization3.html#cb31-1"></a><span class="kw">head</span>(<span class="kw">colors</span>(), <span class="dv">50</span>)</span></code></pre></div>
+<pre><code>##  [1] &quot;white&quot;          &quot;aliceblue&quot;      &quot;antiquewhite&quot;   &quot;antiquewhite1&quot; 
+##  [5] &quot;antiquewhite2&quot;  &quot;antiquewhite3&quot;  &quot;antiquewhite4&quot;  &quot;aquamarine&quot;    
+##  [9] &quot;aquamarine1&quot;    &quot;aquamarine2&quot;    &quot;aquamarine3&quot;    &quot;aquamarine4&quot;   
+## [13] &quot;azure&quot;          &quot;azure1&quot;         &quot;azure2&quot;         &quot;azure3&quot;        
+## [17] &quot;azure4&quot;         &quot;beige&quot;          &quot;bisque&quot;         &quot;bisque1&quot;       
+## [21] &quot;bisque2&quot;        &quot;bisque3&quot;        &quot;bisque4&quot;        &quot;black&quot;         
+## [25] &quot;blanchedalmond&quot; &quot;blue&quot;           &quot;blue1&quot;          &quot;blue2&quot;         
+## [29] &quot;blue3&quot;          &quot;blue4&quot;          &quot;blueviolet&quot;     &quot;brown&quot;         
+## [33] &quot;brown1&quot;         &quot;brown2&quot;         &quot;brown3&quot;         &quot;brown4&quot;        
+## [37] &quot;burlywood&quot;      &quot;burlywood1&quot;     &quot;burlywood2&quot;     &quot;burlywood3&quot;    
+## [41] &quot;burlywood4&quot;     &quot;cadetblue&quot;      &quot;cadetblue1&quot;     &quot;cadetblue2&quot;    
+## [45] &quot;cadetblue3&quot;     &quot;cadetblue4&quot;     &quot;chartreuse&quot;     &quot;chartreuse1&quot;   
 ## [49] &quot;chartreuse2&quot;    &quot;chartreuse3&quot;</code></pre>
 <p><code>scale_x_gradient()</code>から派生した関数として<code>scale_x_gradient2()</code>というものもあります。これは最小値と最大値だけでなく、<code>mid</code>引数を使って中間における色も指定可能な関数です。例えば、先ほどの例で真ん中を<span style="color:#00AC97;font-weight:bold;">seagreen</span>にしてみましょう。</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb44-1"><a href="visualization3.html#cb44-1"></a>Scale_Fig2 <span class="op">+</span></span>
-<span id="cb44-2"><a href="visualization3.html#cb44-2"></a><span class="st">    </span><span class="kw">scale_color_gradient2</span>(<span class="dt">high =</span> <span class="st">&quot;brown3&quot;</span>, <span class="dt">mid =</span> <span class="st">&quot;seagreen&quot;</span>, <span class="dt">low =</span> <span class="st">&quot;cornflowerblue&quot;</span>)</span></code></pre></div>
-<pre><code>## Warning: Removed 6 rows containing missing values (geom_point).</code></pre>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-32-1.png" width="576" /></p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb33-1"><a href="visualization3.html#cb33-1"></a>Scale_Fig2 <span class="op">+</span></span>
+<span id="cb33-2"><a href="visualization3.html#cb33-2"></a><span class="st">    </span><span class="kw">scale_color_gradient2</span>(<span class="dt">high =</span> <span class="st">&quot;brown3&quot;</span>, <span class="dt">mid =</span> <span class="st">&quot;seagreen&quot;</span>, <span class="dt">low =</span> <span class="st">&quot;cornflowerblue&quot;</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-32-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>　色は<code>"seagreen"</code>、<code>"red"</code>でなく、<code>"#00AC97"</code>、<code>"#FF0000"</code>のように具体的なRGB値で指定することもできます。これは色を赤（R）、緑（G）、青（B）の3つの原色を混ぜて様々な色を表現する方法です。<code>"#FF0000"</code>の場合、最初の<code>#</code>はRGB表記であることを意味し、<code>FF</code>は赤が255であることの16進法表記、次の<code>00</code>と最後の<code>00</code>は緑と青が0であることの16進法表記です。各原色は0から255までの値を取ります。{ggplot2}でよく見る色としては<span style="color:#F8766D;font-weight:bold;">#F8766D</span>、<span style="color:#00BFC4;font-weight:bold;">#00BFC4</span>、<span style="color:#C77CFF;font-weight:bold;">#C77CFF</span>、<span style="color:#7CAE00;font-weight:bold;">#7CAE00</span>があります。他にもGoogleなどで「RGB color list」などを検索すれば様々な色を見ることができます。</p>
 <p>他にも{ggplot2}は様々なユーザー指定のパレットが使用可能であり、実際、パッケージの形式として提供される場合もあります。たとえば、ジブリ風のカラーパレットが{<a href="https://github.com/ewenme/ghibli">ghibli</a>}パッケージとして提供されており、<code>install.packages("ghibli")</code>でインストール可能です。</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb46-1"><a href="visualization3.html#cb46-1"></a>Scale_Fig2 <span class="op">+</span></span>
-<span id="cb46-2"><a href="visualization3.html#cb46-2"></a><span class="st">    </span><span class="co"># 連続変数（_c）用の「もののけ姫」パレット（medium）</span></span>
-<span id="cb46-3"><a href="visualization3.html#cb46-3"></a><span class="st">    </span>ghibli<span class="op">::</span><span class="kw">scale_color_ghibli_c</span>(<span class="st">&quot;MononokeMedium&quot;</span>)</span></code></pre></div>
-<pre><code>## Warning: Removed 6 rows containing missing values (geom_point).</code></pre>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-33-1.png" width="576" /></p>
-<p>順序付き離散変数</p>
-<p>連続変数のようにグラデーションではあるものの、それぞれの値に対して具体的な色が指定されている。</p>
-<p><code>scale_color_hue()</code></p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb48-1"><a href="visualization3.html#cb48-1"></a>Scale_Fig3 &lt;-<span class="st"> </span>Country_df <span class="op">%&gt;%</span></span>
-<span id="cb48-2"><a href="visualization3.html#cb48-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Polity_Type =</span> <span class="kw">factor</span>(Polity_Type, <span class="dt">ordered =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb48-3"><a href="visualization3.html#cb48-3"></a>                              <span class="dt">levels  =</span> <span class="kw">c</span>(<span class="st">&quot;Autocracy&quot;</span>,</span>
-<span id="cb48-4"><a href="visualization3.html#cb48-4"></a>                                          <span class="st">&quot;Closed Anocracy&quot;</span>,</span>
-<span id="cb48-5"><a href="visualization3.html#cb48-5"></a>                                          <span class="st">&quot;Open Anocracy&quot;</span>,</span>
-<span id="cb48-6"><a href="visualization3.html#cb48-6"></a>                                          <span class="st">&quot;Democracy&quot;</span>,</span>
-<span id="cb48-7"><a href="visualization3.html#cb48-7"></a>                                          <span class="st">&quot;Full Democracy&quot;</span>))) <span class="op">%&gt;%</span></span>
-<span id="cb48-8"><a href="visualization3.html#cb48-8"></a><span class="st">  </span><span class="kw">drop_na</span>(Polity_Type) <span class="op">%&gt;%</span></span>
-<span id="cb48-9"><a href="visualization3.html#cb48-9"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb48-10"><a href="visualization3.html#cb48-10"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> GDP_per_capita, <span class="dt">y =</span> HDI_<span class="dv">2018</span>, <span class="dt">color =</span> Polity_Type)) <span class="op">+</span></span>
-<span id="cb48-11"><a href="visualization3.html#cb48-11"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;一人あたりGDP (USD)&quot;</span>,<span class="dt">y =</span> <span class="st">&quot;人間開発指数&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;Polity IVタイプ&quot;</span>) <span class="op">+</span></span>
-<span id="cb48-12"><a href="visualization3.html#cb48-12"></a><span class="st">  </span><span class="kw">scale_x_log10</span>() <span class="op">+</span></span>
-<span id="cb48-13"><a href="visualization3.html#cb48-13"></a><span class="st">  </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span>
-<span id="cb48-14"><a href="visualization3.html#cb48-14"></a></span>
-<span id="cb48-15"><a href="visualization3.html#cb48-15"></a>Scale_Fig3</span></code></pre></div>
-<pre><code>## Warning: Removed 2 rows containing missing values (geom_point).</code></pre>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-34-1.png" width="576" /></p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb50-1"><a href="visualization3.html#cb50-1"></a>Scale_Fig3 <span class="op">+</span></span>
-<span id="cb50-2"><a href="visualization3.html#cb50-2"></a><span class="st">  </span><span class="kw">scale_color_hue</span>(<span class="dt">h =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">360</span>), <span class="dt">c =</span> <span class="dv">100</span>, <span class="dt">l =</span> <span class="dv">65</span>)</span></code></pre></div>
-<pre><code>## Warning: Removed 2 rows containing missing values (geom_point).</code></pre>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-35-1.png" width="576" /></p>
-<p>Hueの色は以下の通り。左端が0で、右端が360。<code>h</code>は実引数として長さ2の数値型ベクトルを指定し、どの範囲を使用するかを指定する。<code>c</code>は色相の強度。0に近いほどグレイへ近づき、色間の区別がしにくくなる。<code>l</code>は明るさ。</p>
-<pre><code>## 
-##  次のパッケージを付け加えます: &#39;scales&#39;</code></pre>
-<pre><code>##  以下のオブジェクトは &#39;package:purrr&#39; からマスクされています: 
-## 
-##      discard</code></pre>
-<pre><code>##  以下のオブジェクトは &#39;package:readr&#39; からマスクされています: 
-## 
-##      col_factor</code></pre>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
-<p>他にも<a href="https://bids.github.io/colormap/">mpl colormaps</a>を使うことも可能。<code>option</code>の場合、デフォルトは<code>"D"</code>であり、これはVIRIDIS colormapを意味する。<code>begin</code>と<code>end</code>でcolormapの使用範囲を指定する。</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb55-1"><a href="visualization3.html#cb55-1"></a>Scale_Fig3 <span class="op">+</span></span>
-<span id="cb55-2"><a href="visualization3.html#cb55-2"></a><span class="st">  </span><span class="co"># PLASMA colormapを使用する（option = &quot;C&quot;）</span></span>
-<span id="cb55-3"><a href="visualization3.html#cb55-3"></a><span class="st">  </span><span class="kw">scale_color_viridis_d</span>(<span class="dt">begin =</span> <span class="dv">0</span>, <span class="dt">end =</span> <span class="dv">1</span>, <span class="dt">option =</span> <span class="st">&quot;C&quot;</span>)</span></code></pre></div>
-<pre><code>## Warning: Removed 2 rows containing missing values (geom_point).</code></pre>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-37-1.png" width="576" /></p>
-<p>離散変数</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb34-1"><a href="visualization3.html#cb34-1"></a>Scale_Fig2 <span class="op">+</span></span>
+<span id="cb34-2"><a href="visualization3.html#cb34-2"></a><span class="st">    </span><span class="co"># 連続変数（_c）用の「もののけ姫」パレット（medium）</span></span>
+<span id="cb34-3"><a href="visualization3.html#cb34-3"></a><span class="st">    </span>ghibli<span class="op">::</span><span class="kw">scale_color_ghibli_c</span>(<span class="st">&quot;MononokeMedium&quot;</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-33-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="color引数が順序付き離散変数でマッピングされている場合" class="section level4" number="19.3.2.2">
+<h4><span class="header-section-number">19.3.2.2</span> <code>color</code>引数が順序付き離散変数でマッピングされている場合</h4>
+<p>　連続変数のようにグラデーションではあるものの、それぞれの値に対して具体的な色が指定されます。まずは先ほど作成しました<code>Scale_Fig2</code>の色分けを連続変数である<code>Polity_Score</code>でなく、順序付き離散変数である<code>Polity_Type</code>にします。<code>Polity_Type</code>の順序は独裁（Autocracy）、閉じられたアノクラシー（Closed Anocracy）、開かれたアノクラシー（Open Anocracy）、民主主義（Democracy）、完全な民主主義（Full Democracy）にします。また、<code>Polity_Type</code>が定義されていない国もデータセットに含まれているため、<code>drop_na(Polity_Type)</code>を追加し、<code>Polity_Type</code>が欠損している行を除去します。</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb35-1"><a href="visualization3.html#cb35-1"></a>Scale_Fig3 &lt;-<span class="st"> </span>Country_df <span class="op">%&gt;%</span></span>
+<span id="cb35-2"><a href="visualization3.html#cb35-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Polity_Type =</span> <span class="kw">factor</span>(Polity_Type, <span class="dt">ordered =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb35-3"><a href="visualization3.html#cb35-3"></a>                              <span class="dt">levels  =</span> <span class="kw">c</span>(<span class="st">&quot;Autocracy&quot;</span>,</span>
+<span id="cb35-4"><a href="visualization3.html#cb35-4"></a>                                          <span class="st">&quot;Closed Anocracy&quot;</span>,</span>
+<span id="cb35-5"><a href="visualization3.html#cb35-5"></a>                                          <span class="st">&quot;Open Anocracy&quot;</span>,</span>
+<span id="cb35-6"><a href="visualization3.html#cb35-6"></a>                                          <span class="st">&quot;Democracy&quot;</span>,</span>
+<span id="cb35-7"><a href="visualization3.html#cb35-7"></a>                                          <span class="st">&quot;Full Democracy&quot;</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb35-8"><a href="visualization3.html#cb35-8"></a><span class="st">  </span><span class="kw">drop_na</span>(Polity_Type) <span class="op">%&gt;%</span></span>
+<span id="cb35-9"><a href="visualization3.html#cb35-9"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb35-10"><a href="visualization3.html#cb35-10"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> GDP_per_capita, <span class="dt">y =</span> HDI_<span class="dv">2018</span>, <span class="dt">color =</span> Polity_Type)) <span class="op">+</span></span>
+<span id="cb35-11"><a href="visualization3.html#cb35-11"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;一人あたりGDP (USD)&quot;</span>,<span class="dt">y =</span> <span class="st">&quot;人間開発指数&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;Polity IVタイプ&quot;</span>) <span class="op">+</span></span>
+<span id="cb35-12"><a href="visualization3.html#cb35-12"></a><span class="st">  </span><span class="kw">scale_x_log10</span>() <span class="op">+</span></span>
+<span id="cb35-13"><a href="visualization3.html#cb35-13"></a><span class="st">  </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span>
+<span id="cb35-14"><a href="visualization3.html#cb35-14"></a></span>
+<span id="cb35-15"><a href="visualization3.html#cb35-15"></a>Scale_Fig3</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-34-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>　今回は紫（独裁）から黄色（完全な民主主義）の順で色分けがされ、その間のカテゴリーも紫と黄色の間の値をとります。実は順序付き離散変数の場合、色のスケールを調整することはあまりありませんし、これまでの方法に比べてやや複雑です。ここでは色相（Hue）の範囲と強度、明るさを調整する方法について紹介します。</p>
+<p>　まずは、色相について知る必要があります。{ggplot2}において色相の範囲は0から360です。そして、色には強度（intensity）、または彩度という概念があり、0に近いほどグレイへ近づき、色間の区別がしにくくなります。{ggplot2}では彩度のデフォルト値は100であり、我々が普段{ggplot2}で見る図の色です。最後に明るさ（luminance）があり、0から100までの値を取ります。値が大きいほど明るくなり、{ggplot2}のデフォルト値は65です。重要なのは色相のところであり、Hueの具体的な数値がどの色なのかを確認する必要があります。そのためには、{scales}パッケージの<code>hue_pal()</code>と<code>show_col()</code>関数を使用します。</p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-35-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>　左上が0、右下が360の色を意味します。順序変数でマッピングされた色スケールを色相に基づいて調整する際は、<code>scale_color_hue()</code>レイヤーを追加し、色相の範囲、彩度、明るさを指定します。たとえば、0から300までの範囲の色を使用し、再度と明るさはデフォルトにしたい場合、以下のように書きます。</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb36-1"><a href="visualization3.html#cb36-1"></a>Scale_Fig3 <span class="op">+</span></span>
+<span id="cb36-2"><a href="visualization3.html#cb36-2"></a><span class="st">  </span><span class="kw">scale_color_hue</span>(<span class="dt">h =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">360</span>), <span class="dt">c =</span> <span class="dv">100</span>, <span class="dt">l =</span> <span class="dv">65</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-36-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>　また、<code>direction = -1</code>を追加することで、色の順番を逆にすることも可能です。</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb37-1"><a href="visualization3.html#cb37-1"></a>Scale_Fig3 <span class="op">+</span></span>
+<span id="cb37-2"><a href="visualization3.html#cb37-2"></a><span class="st">  </span><span class="kw">scale_color_hue</span>(<span class="dt">h =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">360</span>), <span class="dt">c =</span> <span class="dv">100</span>, <span class="dt">l =</span> <span class="dv">65</span>, <span class="dt">direction =</span> <span class="dv">-1</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-37-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>　他にも<a href="https://bids.github.io/colormap/">mpl colormaps</a>というカラーマップを使うことも可能です。この場合は<code>scale_color_hue()</code>ではなく、<code>scale_color_viridis_d()</code>を使用します。具体的な色の情報は<a href="https://bids.github.io/colormap/">mpl colormaps</a>を参照してください。必要な引数は色のスタート地点（<code>begin</code>）と終了地点（<code>end</code>）です。そして、<code>option</code>の引数のデフォルト値は<code>"D"</code>であり、これはVIRIDIS colormapを意味します。実は<code>scale_color_*()</code>を付けなかった場合の色分けがこれです。たとえば、VIRIDIS colormapでなく、PLASMA colormapを使うなら<code>option = "C"</code>を付けます。</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb38-1"><a href="visualization3.html#cb38-1"></a>Scale_Fig3 <span class="op">+</span></span>
+<span id="cb38-2"><a href="visualization3.html#cb38-2"></a><span class="st">  </span><span class="co"># PLASMA colormapを使用する（option = &quot;C&quot;）</span></span>
+<span id="cb38-3"><a href="visualization3.html#cb38-3"></a><span class="st">  </span><span class="kw">scale_color_viridis_d</span>(<span class="dt">begin =</span> <span class="dv">0</span>, <span class="dt">end =</span> <span class="dv">1</span>, <span class="dt">option =</span> <span class="st">&quot;C&quot;</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-38-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="color引数が順序なし離散変数でマッピングされている場合" class="section level4" number="19.3.2.3">
+<h4><span class="header-section-number">19.3.2.3</span> <code>color</code>引数が順序なし離散変数でマッピングされている場合</h4>
 <p><code>scale_color_manual()</code></p>
 <p>{ggplot2}における<code>color</code>スケールは非常に細かく調整可能であり、関連関数やパッケージも多く提供されています。本書では全てを紹介することはできませんが、ここまで紹介してきました例だけでも、かなり自分好みに色を調整できるでしょう。</p>
 </div>
-<div id="sizeスケール" class="section level4" number="19.3.2.2">
-<h4><span class="header-section-number">19.3.2.2</span> <code>size</code>スケール</h4>
 </div>
-<div id="linetypeスケール" class="section level4" number="19.3.2.3">
-<h4><span class="header-section-number">19.3.2.3</span> <code>linetype</code>スケール</h4>
+<div id="alphaスケールの調整" class="section level3" number="19.3.3">
+<h3><span class="header-section-number">19.3.3</span> <code>alpha</code>スケールの調整</h3>
+</div>
+<div id="sizeスケールの調整" class="section level3" number="19.3.4">
+<h3><span class="header-section-number">19.3.4</span> <code>size</code>スケールの調整</h3>
+</div>
+<div id="linetypeスケールの調整" class="section level3" number="19.3.5">
+<h3><span class="header-section-number">19.3.5</span> <code>linetype</code>スケールの調整</h3>
 <hr />
-</div>
 </div>
 </div>
 <div id="visual3-theme" class="section level2" number="19.4">
