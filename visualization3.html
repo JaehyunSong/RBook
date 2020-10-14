@@ -905,7 +905,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>　今回は紫（独裁）から黄色（完全な民主主義）の順で色分けがされ、その間のカテゴリーも紫と黄色の間の値をとります。実は順序付き離散変数の場合、色のスケールを調整することはあまりありませんし、これまでの方法に比べてやや複雑です。ここでは色相（Hue）の範囲と強度、明るさを調整する方法について紹介します。</p>
 <p>　まずは、色相について知る必要があります。{ggplot2}において色相の範囲は0から360です。そして、色には強度（intensity）、または彩度という概念があり、0に近いほどグレイへ近づき、色間の区別がしにくくなります。{ggplot2}では彩度のデフォルト値は100であり、我々が普段{ggplot2}で見る図の色です。最後に明るさ（luminance）があり、0から100までの値を取ります。値が大きいほど明るくなり、{ggplot2}のデフォルト値は65です。重要なのは色相のところであり、Hueの具体的な数値がどの色なのかを確認する必要があります。そのためには、{scales}パッケージの<code>hue_pal()</code>と<code>show_col()</code>関数を使用します。</p>
 <p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-35-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>　左上が0、右下が360の色を意味します。順序変数でマッピングされた色スケールを色相に基づいて調整する際は、<code>scale_color_hue()</code>レイヤーを追加し、色相の範囲、彩度、明るさを指定します。たとえば、0から300までの範囲の色を使用し、再度と明るさはデフォルトにしたい場合、以下のように書きます。</p>
+<p>　左上が0、右下が360の色を意味します。順序変数でマッピングされた色スケールを色相に基づいて調整する際は、<code>scale_color_hue()</code>レイヤーを追加し、色相の範囲、彩度、明るさを指定します。たとえば、0から300までの範囲の色を使用し<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>、再度と明るさはデフォルトにしたい場合、以下のように書きます。</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb36-1"><a href="visualization3.html#cb36-1"></a>Scale_Fig3 <span class="op">+</span></span>
 <span id="cb36-2"><a href="visualization3.html#cb36-2"></a><span class="st">  </span><span class="kw">scale_color_hue</span>(<span class="dt">h =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">360</span>), <span class="dt">c =</span> <span class="dv">100</span>, <span class="dt">l =</span> <span class="dv">65</span>)</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-36-1.png" width="576" style="display: block; margin: auto;" /></p>
@@ -921,8 +921,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="color引数が順序なし離散変数でマッピングされている場合" class="section level4" number="19.3.2.3">
 <h4><span class="header-section-number">19.3.2.3</span> <code>color</code>引数が順序なし離散変数でマッピングされている場合</h4>
-<p><code>scale_color_manual()</code></p>
-<p>{ggplot2}における<code>color</code>スケールは非常に細かく調整可能であり、関連関数やパッケージも多く提供されています。本書では全てを紹介することはできませんが、ここまで紹介してきました例だけでも、かなり自分好みに色を調整できるでしょう。</p>
+<p>　最後に順序なし離散変数の場合について解説します。ここでは<code>scale_color_manual()</code>関数を使用し、マッピングされている変数のそれぞれ値に対して具体的な色を指定する方法です。以下で説明する方法は、順序付き離散変数でも使用可能であるため、<code>Scale_Fig3</code>の図をそのまま利用してみたいと思います。</p>
+<p>　<code>scale_color_manual()</code>の核心となる引数は<code>values</code>であり、ここに<code>"変数の値" = "色"</code>で指定します。この色は<code>"red"</code>のような具体的な色名でも、<code>"#FF0000"</code>のようなRGB表記でも構いません。</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb39-1"><a href="visualization3.html#cb39-1"></a>ggplot2オブジェクト <span class="op">+</span></span>
+<span id="cb39-2"><a href="visualization3.html#cb39-2"></a><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;変数の値1&quot;</span> =<span class="st"> &quot;色1&quot;</span>,</span>
+<span id="cb39-3"><a href="visualization3.html#cb39-3"></a>                                <span class="st">&quot;変数の値2&quot;</span> =<span class="st"> &quot;色2&quot;</span>,</span>
+<span id="cb39-4"><a href="visualization3.html#cb39-4"></a>                                <span class="st">&quot;変数の値3&quot;</span> =<span class="st"> &quot;色3&quot;</span>,</span>
+<span id="cb39-5"><a href="visualization3.html#cb39-5"></a>                                ...))</span></code></pre></div>
+<p>　それでは<code>Polity_Type</code>の値が<code>"Autocracy"</code>の場合は<span style="color:darkred;font-weight:bold;">darkred</span>、<code>"Closed Anocracy"</code>は<span style="color:seagreen;font-weight:bold;">seagreen</span>、<code>"Open Anocracy"</code>は<span style="color:cornflowerblue;font-weight:bold;">cornflowerblue</span>、<code>"Democracy"</code>は<span style="color:orchid;font-weight:bold;">orchid</span>、<code>"Full Democracy"</code>は<span style="color:orange;font-weight:bold;">orange</span>にしてみましょう。</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb40-1"><a href="visualization3.html#cb40-1"></a>Scale_Fig3 <span class="op">+</span></span>
+<span id="cb40-2"><a href="visualization3.html#cb40-2"></a><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;Autocracy&quot;</span>       =<span class="st"> &quot;darkred&quot;</span>,</span>
+<span id="cb40-3"><a href="visualization3.html#cb40-3"></a>                                <span class="st">&quot;Closed Anocracy&quot;</span> =<span class="st"> &quot;seagreen&quot;</span>,</span>
+<span id="cb40-4"><a href="visualization3.html#cb40-4"></a>                                <span class="st">&quot;Open Anocracy&quot;</span>   =<span class="st"> &quot;cornflowerblue&quot;</span>,</span>
+<span id="cb40-5"><a href="visualization3.html#cb40-5"></a>                                <span class="st">&quot;Democracy&quot;</span>       =<span class="st"> &quot;orchid&quot;</span>,</span>
+<span id="cb40-6"><a href="visualization3.html#cb40-6"></a>                                <span class="st">&quot;Full Democracy&quot;</span>  =<span class="st"> &quot;orange&quot;</span>))</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-40-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>　色を決める際は色覚多様性に気をつけるべきです。誰にとっても見やすい図にはUniversal Designが必要です。特によくある例が「緑と赤」の組み合わせです。緑も赤も暖色系であり、P型およびD型色弱の場合、両者の区別が難しいと言われています。しかも、色弱の方は意外と多いです。日本の場合、男性の5%、女性の0.2%と言われております。これには人種差もありまして、フランスや北欧の男性の場合は約10%です。一通り図を作成しましたら、色覚シミュレーターなどを使用して、誰にとっても見やすい色であるかを確認することも良いでしょう。また、{ggplot2}がデフォルトで採用しているVIRIDISは色弱に優しいカラーパレットと言われています。一般的に二色の組み合わせの場合、最も区別しやすい色は青とオレンジと言われいます。</p>
+<p>　{ggplot2}における<code>color</code>スケールは非常に細かく調整可能であり、関連関数やパッケージも多く提供されています。本書では全てを紹介することはできませんが、ここまで紹介してきました例だけでも、自分好みに色を調整できるでしょう。</p>
 </div>
 </div>
 <div id="alphaスケールの調整" class="section level3" number="19.3.3">
@@ -959,6 +974,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <hr />
 <ol start="1">
 <li id="fn1"><p>例えば、回帰係数の点推定値と信頼区間を示す係数プロット（キャタピラー・プロット）を作成する際は<code>geom_pointrange()</code>と<code>coord_flip()</code>を組み合わせてきましたが、今の{ggplot2}は<code>geom_pointrange()</code>のみで自由自在に作成できます。<a href="visualization3.html#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>厳密には0から360までの全範囲の色を使うわけではありません。なぜなら、Hueは0度から360度、つまり循環する仕組みになっているからです。実際、Hueが[0, 360]の図を見ても、左上の色と右下の色は非常に似ていることが分かります。したがって、0から360を全て使用すると色の区別が難しくなるため、この場合は後半の色は仕様されません。<a href="visualization3.html#fnref2" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
