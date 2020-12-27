@@ -540,6 +540,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="26.2.3" data-path="solution.html"><a href="solution.html#データフレーム-1"><i class="fa fa-check"></i><b>26.2.3</b> データフレーム</a></li>
 </ul></li>
 <li class="chapter" data-level="26.3" data-path="solution.html"><a href="solution.html#rプログラミングの基礎"><i class="fa fa-check"></i><b>26.3</b> Rプログラミングの基礎</a></li>
+<li class="chapter" data-level="26.4" data-path="solution.html"><a href="solution.html#関数の自作"><i class="fa fa-check"></i><b>26.4</b> 関数の自作</a></li>
 </ul></li>
 <li class="chapter" data-level="27" data-path="sessioninfo.html"><a href="sessioninfo.html"><i class="fa fa-check"></i><b>27</b> 本書の執筆環境</a></li>
 <li class="chapter" data-level="28" data-path="reference.html"><a href="reference.html"><i class="fa fa-check"></i><b>28</b> 参考資料</a></li>
@@ -1147,18 +1148,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb628-5"><a href="programming.html#cb628-5"></a></span>
 <span id="cb628-6"><a href="programming.html#cb628-6"></a>my_df</span></code></pre></div>
 <pre><code>## # A tibble: 10 x 6
-##       ID Team    Rank Points Prev_Points Confederation
-##    &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;        
-##  1     4 Ameri…   192    900         900 OFC          
-##  2    69 Fiji     163    996         996 OFC          
-##  3   135 New C…   156   1035        1035 OFC          
-##  4   136 New Z…   122   1149        1149 OFC          
-##  5   147 Papua…   165    991         991 OFC          
-##  6   159 Samoa    194    894         894 OFC          
-##  7   171 Solom…   141   1073        1073 OFC          
-##  8   185 Tahiti   161   1014        1014 OFC          
-##  9   191 Tonga    203    862         862 OFC          
-## 10   204 Vanua…   163    996         996 OFC</code></pre>
+##       ID Team   Rank Points Prev_Points
+##    &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt;
+##  1     4 Amer…   192    900         900
+##  2    69 Fiji    163    996         996
+##  3   135 New …   156   1035        1035
+##  4   136 New …   122   1149        1149
+##  5   147 Papu…   165    991         991
+##  6   159 Samoa   194    894         894
+##  7   171 Solo…   141   1073        1073
+##  8   185 Tahi…   161   1014        1014
+##  9   191 Tonga   203    862         862
+## 10   204 Vanu…   163    996         996
+## # … with 1 more variable:
+## #   Confederation &lt;chr&gt;</code></pre>
 <p>OFCに10チーム加盟していることがわかる。</p>
 <p>　以下のような内容が表示されるコードを書きたい。</p>
 <pre><code>=====1番目のチーム情報=====
@@ -1590,8 +1593,9 @@ Team: New Caledonia
 <p>このコードでは、<code>scores</code> を定義した後、中身が<code>NA</code>のみで構成される長さが<code>scores</code> と同じベクトル<code>pf</code>を定義する。<code>rep(NA, length(scores))</code>は<code>NA</code>を<code>length(Scores)</code>個（ここでは10個）並べたベクトルを生成する。
 続いて、点数によって条件分岐を行い、メッセージを出力するのではなく、<code>pf</code>の<code>i</code>番目に<code>"合格"</code>か<code>"不合格"</code>を入れる。結果を確認してみよう。</p>
 <div class="sourceCode" id="cb684"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb684-1"><a href="programming.html#cb684-1"></a>pf</span></code></pre></div>
-<pre><code>##  [1] &quot;不合格&quot; &quot;合格&quot;   &quot;合格&quot;   &quot;合格&quot;   &quot;合格&quot;  
-##  [6] &quot;合格&quot;   &quot;不合格&quot; &quot;合格&quot;   &quot;合格&quot;   &quot;合格&quot;</code></pre>
+<pre><code>##  [1] &quot;不合格&quot; &quot;合格&quot;   &quot;合格&quot;   &quot;合格&quot;  
+##  [5] &quot;合格&quot;   &quot;合格&quot;   &quot;不合格&quot; &quot;合格&quot;  
+##  [9] &quot;合格&quot;   &quot;合格&quot;</code></pre>
 <p>　このように、<code>if</code>文は反復処理を行う<code>for</code>ループまたは<code>while</code>ループと組み合わせることでその本領を発揮する。実は、今回の例については次に説明する<code>ifelse()</code>を使えば1行で処理することができる。しかし、複雑な処理を伴う反復と条件分岐を組み合わせるには、今回のように<code>for</code>ループと<code>if</code>文を組み合わせるのが有効である。</p>
 </div>
 <div id="ifelseによる条件分岐" class="section level3" number="11.4.2">
@@ -1602,8 +1606,8 @@ Team: New Caledonia
 <div class="sourceCode" id="cb687"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb687-1"><a href="programming.html#cb687-1"></a>scores &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">58</span>, <span class="dv">100</span>, <span class="dv">81</span>, <span class="dv">97</span>, <span class="dv">71</span>, <span class="dv">61</span>, <span class="dv">47</span>, <span class="dv">60</span>, <span class="dv">73</span>, <span class="dv">85</span>)</span>
 <span id="cb687-2"><a href="programming.html#cb687-2"></a>pf &lt;-<span class="st"> </span><span class="kw">ifelse</span>(scores <span class="op">&gt;=</span><span class="st"> </span><span class="dv">60</span>, <span class="st">&quot;Pass&quot;</span>, <span class="st">&quot;Fail&quot;</span>)</span>
 <span id="cb687-3"><a href="programming.html#cb687-3"></a>pf</span></code></pre></div>
-<pre><code>##  [1] &quot;Fail&quot; &quot;Pass&quot; &quot;Pass&quot; &quot;Pass&quot; &quot;Pass&quot; &quot;Pass&quot; &quot;Fail&quot;
-##  [8] &quot;Pass&quot; &quot;Pass&quot; &quot;Pass&quot;</code></pre>
+<pre><code>##  [1] &quot;Fail&quot; &quot;Pass&quot; &quot;Pass&quot; &quot;Pass&quot; &quot;Pass&quot;
+##  [6] &quot;Pass&quot; &quot;Fail&quot; &quot;Pass&quot; &quot;Pass&quot; &quot;Pass&quot;</code></pre>
 <p>条件は<code>scores</code>の値が60以上か否かであり、60以上なら<code>"Pass"</code>を、それ以外なら<code>"Fail"</code>を返す。</p>
 <p>　返す値として新しい値を与える代わりに、一定の条件が満たされたら現状の値を保持し、それ以外なら指定した値に変更して返すこともできる。たとえば、世論調査では以下のように「答えたくない」または「わからない」を9や99などで記録することが多い。この値はこのままでは分析するのが難しいので、欠損値として扱いたいことがある。例として、次の質問を考えよう。</p>
 <p>Q. あなたはラーメンが好きですか。</p>
@@ -1651,7 +1655,8 @@ Team: New Caledonia
 <span id="cb694-4"><a href="programming.html#cb694-4"></a>                              <span class="kw">ifelse</span>(scores <span class="op">&gt;=</span><span class="st"> </span><span class="dv">60</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;F&quot;</span>))))</span></code></pre></div>
 <p>このコードでは、<code>ifelse()</code>の条件が<code>FALSE</code>の場合、次の<code>ifelse()</code>での判定を行う。結果を確認しておこう。</p>
 <div class="sourceCode" id="cb695"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb695-1"><a href="programming.html#cb695-1"></a>grade</span></code></pre></div>
-<pre><code>##  [1] &quot;F&quot; &quot;S&quot; &quot;A&quot; &quot;S&quot; &quot;B&quot; &quot;C&quot; &quot;F&quot; &quot;C&quot; &quot;B&quot; &quot;A&quot;</code></pre>
+<pre><code>##  [1] &quot;F&quot; &quot;S&quot; &quot;A&quot; &quot;S&quot; &quot;B&quot; &quot;C&quot; &quot;F&quot; &quot;C&quot; &quot;B&quot;
+## [10] &quot;A&quot;</code></pre>
 <p>　この例からもわかるとおり、<code>ifelse()</code>を使いすぎるとコードの可読性が低くなるので、このようなコードはあまり推奨できない。複数の条件に応じて返す値を変える処理は、{dplyr}パッケージの<code>case_when()</code>関数で行うのがよいだろう。この関数については、<a href="datahandling1.html#datahandling1">13</a>章で詳細に説明するが、ここでは上のコードと同じ処理を実施する例のみ示す。</p>
 <div class="sourceCode" id="cb697"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb697-1"><a href="programming.html#cb697-1"></a>grade2 &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">case_when</span>(scores <span class="op">&gt;=</span><span class="st"> </span><span class="dv">90</span> <span class="op">~</span><span class="st"> &quot;S&quot;</span>,</span>
 <span id="cb697-2"><a href="programming.html#cb697-2"></a>                           scores <span class="op">&gt;=</span><span class="st"> </span><span class="dv">80</span> <span class="op">~</span><span class="st"> &quot;A&quot;</span>,</span>
@@ -1659,7 +1664,8 @@ Team: New Caledonia
 <span id="cb697-4"><a href="programming.html#cb697-4"></a>                           scores <span class="op">&gt;=</span><span class="st"> </span><span class="dv">60</span> <span class="op">~</span><span class="st"> &quot;C&quot;</span>,</span>
 <span id="cb697-5"><a href="programming.html#cb697-5"></a>                           <span class="ot">TRUE</span>         <span class="op">~</span><span class="st"> &quot;F&quot;</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb698"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb698-1"><a href="programming.html#cb698-1"></a>grade2</span></code></pre></div>
-<pre><code>##  [1] &quot;F&quot; &quot;S&quot; &quot;A&quot; &quot;S&quot; &quot;B&quot; &quot;C&quot; &quot;F&quot; &quot;C&quot; &quot;B&quot; &quot;A&quot;</code></pre>
+<pre><code>##  [1] &quot;F&quot; &quot;S&quot; &quot;A&quot; &quot;S&quot; &quot;B&quot; &quot;C&quot; &quot;F&quot; &quot;C&quot; &quot;B&quot;
+## [10] &quot;A&quot;</code></pre>
 </div>
 <div id="switchによる条件分岐" class="section level3" number="11.4.3">
 <h3><span class="header-section-number">11.4.3</span> <code>switch()</code>による条件分岐</h3>
