@@ -1419,14 +1419,14 @@ Stock
 ## 3 Yanai      100        95 Female</code></pre>
 <p>このデータは既に指摘した通り「1列1変数」の条件を満たしております。この条件を満たすデータは以下のような形となります。</p>
 <pre><code>## # A tibble: 6 x 4
-##   Name   Gender Treat     Math_Score
-##   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;          &lt;dbl&gt;
-## 1 Hadley Male   Control           90
-## 2 Hadley Male   Treatment         90
-## 3 Song   Female Control           80
-## 4 Song   Female Treatment         25
-## 5 Yanai  Female Control          100
-## 6 Yanai  Female Treatment         95</code></pre>
+##   Name   Gender Treat   Math_Score
+##   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;        &lt;dbl&gt;
+## 1 Hadley Male   Control         90
+## 2 Hadley Male   Treatm…         90
+## 3 Song   Female Control         80
+## 4 Song   Female Treatm…         25
+## 5 Yanai  Female Control        100
+## 6 Yanai  Female Treatm…         95</code></pre>
 <p><code>Treat</code>変数が作成され、元々は変数名であった<code>"Control"</code>と<code>"Treatment"</code>が値として格納されます。この変数をキー変数と呼びます。そして、キー変数の値に応じた数学成績が<code>Math_Score</code>という変数でまとめられました。この変数を値変数と呼びます。</p>
 <p>「1列1変数」を満たさなかった最初のデータは「Wide型データ」、これを満たすようなデータは「Long型データ」と呼ばれます。これは相対的に最初のデータが横に広いから名付けた名前であって、「Wide型=雑然データ」もしくは「Long型=雑然データ」ではないことに注意してください<a href="#fn73" class="footnote-ref" id="fnref73"><sup>73</sup></a>。</p>
 <p>Wide型データをLong型へ変換する関数が<code>pivot_longer()</code>であり、基本的な使い方は以下の通りです。</p>
@@ -1444,14 +1444,14 @@ Stock
 <span id="cb1185-5"><a href="tidydata.html#cb1185-5"></a></span>
 <span id="cb1185-6"><a href="tidydata.html#cb1185-6"></a>df1_L</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 4
-##   Name   Gender Treat     Math_Score
-##   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;          &lt;dbl&gt;
-## 1 Hadley Male   Control           90
-## 2 Hadley Male   Treatment         90
-## 3 Song   Female Control           80
-## 4 Song   Female Treatment         25
-## 5 Yanai  Female Control          100
-## 6 Yanai  Female Treatment         95</code></pre>
+##   Name   Gender Treat   Math_Score
+##   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;        &lt;dbl&gt;
+## 1 Hadley Male   Control         90
+## 2 Hadley Male   Treatm…         90
+## 3 Song   Female Control         80
+## 4 Song   Female Treatm…         25
+## 5 Yanai  Female Control        100
+## 6 Yanai  Female Treatm…         95</code></pre>
 <p>これだけでも<code>pivot_longer()</code>関数を使ってWide型からLong型への変換は問題なくできますが、以下ではもうちょっと踏み込んだ使い方について解説します。「ここまでで十分だよ」という方は、ここを飛ばしても構いません。</p>
 <p>今回の実習データ<code>df3</code>は3人の体重を3日間に渡って計測したものです。ただし、ドジっ子のSongは2日目にうっかり測るのを忘れており、欠損値となっています。</p>
 <div class="sourceCode" id="cb1187"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1187-1"><a href="tidydata.html#cb1187-1"></a>df2 &lt;-<span class="st"> </span><span class="kw">tibble</span>(</span>
@@ -1779,7 +1779,7 @@ Stock
 <p>まずは、実習用データを読み込みます。</p>
 <div class="sourceCode" id="cb1197"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1197-1"><a href="tidydata.html#cb1197-1"></a>df3 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;Data/Population2015.csv&quot;</span>)</span></code></pre></div>
 <pre><code>## 
-## ─ Column specification ─────────
+## ─ Column specification ─────
 ## cols(
 ##   都道府県 = col_character(),
 ##   区分 = col_character(),
@@ -1943,7 +1943,7 @@ Stock
 <p><a href="Data/COVID19_JK.csv">実習用データ</a>を読み込んでみましょう。</p>
 <div class="sourceCode" id="cb1210"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1210-1"><a href="tidydata.html#cb1210-1"></a>df4 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;Data/COVID19_JK.csv&quot;</span>)</span></code></pre></div>
 <pre><code>## 
-## ─ Column specification ─────────
+## ─ Column specification ─────
 ## cols(
 ##   ID = col_double(),
 ##   Date = col_character(),
@@ -1953,20 +1953,22 @@ Stock
 ## )</code></pre>
 <div class="sourceCode" id="cb1212"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1212-1"><a href="tidydata.html#cb1212-1"></a>df4</span></code></pre></div>
 <pre><code>## # A tibble: 172 x 5
-##       ID Date  Week  Confirmed_Japan
-##    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;          
-##  1     1 2020… 木    1人            
-##  2     2 2020… 金    0人            
-##  3     3 2020… 土    0人            
-##  4     4 2020… 日    0人            
-##  5     5 2020… 月    0人            
-##  6     6 2020… 火    0人            
-##  7     7 2020… 水    0人            
-##  8     8 2020… 木    0人            
-##  9     9 2020… 金    2人            
-## 10    10 2020… 土    0人            
-## # … with 162 more rows, and 1 more
-## #   variable: Confirmed_Korea &lt;chr&gt;</code></pre>
+##       ID Date  Week 
+##    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;
+##  1     1 2020… 木   
+##  2     2 2020… 金   
+##  3     3 2020… 土   
+##  4     4 2020… 日   
+##  5     5 2020… 月   
+##  6     6 2020… 火   
+##  7     7 2020… 水   
+##  8     8 2020… 木   
+##  9     9 2020… 金   
+## 10    10 2020… 土   
+## # … with 162 more rows, and 2
+## #   more variables:
+## #   Confirmed_Japan &lt;chr&gt;,
+## #   Confirmed_Korea &lt;chr&gt;</code></pre>
 <p>このデータは2020年1月16日から2020年7月5日まで、COVID-19 (新型コロナ)の新規感染者数を日本と韓国を対象に収集したものです。データはWikipedia (<a href="https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Japan">日本</a> / <a href="https://en.wikipedia.org/wiki/COVID-19_pandemic_in_South_Korea">韓国</a>)から収集しました。韓国の新規感染者数は最初の4日分が欠損値のように見えますが、最初の感染者が確認されたのが1月20日のため、1月19日までは欠損となっています。</p>
 <table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -2031,19 +2033,21 @@ Stock
 <span id="cb1214-6"><a href="tidydata.html#cb1214-6"></a></span>
 <span id="cb1214-7"><a href="tidydata.html#cb1214-7"></a>df4_L</span></code></pre></div>
 <pre><code>## # A tibble: 344 x 5
-##       ID Date      Week  Country Confirmed
-##    &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;    
-##  1     1 2020/1/16 木    Japan   1人      
-##  2     1 2020/1/16 木    Korea   &lt;NA&gt;     
-##  3     2 2020/1/17 金    Japan   0人      
-##  4     2 2020/1/17 金    Korea   &lt;NA&gt;     
-##  5     3 2020/1/18 土    Japan   0人      
-##  6     3 2020/1/18 土    Korea   &lt;NA&gt;     
-##  7     4 2020/1/19 日    Japan   0人      
-##  8     4 2020/1/19 日    Korea   &lt;NA&gt;     
-##  9     5 2020/1/20 月    Japan   0人      
-## 10     5 2020/1/20 月    Korea   1人      
-## # … with 334 more rows</code></pre>
+##       ID Date  Week  Country
+##    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  
+##  1     1 2020… 木    Japan  
+##  2     1 2020… 木    Korea  
+##  3     2 2020… 金    Japan  
+##  4     2 2020… 金    Korea  
+##  5     3 2020… 土    Japan  
+##  6     3 2020… 土    Korea  
+##  7     4 2020… 日    Japan  
+##  8     4 2020… 日    Korea  
+##  9     5 2020… 月    Japan  
+## 10     5 2020… 月    Korea  
+## # … with 334 more rows, and 1
+## #   more variable:
+## #   Confirmed &lt;chr&gt;</code></pre>
 <p>続いて、新規感染者数を表す<code>Confirmed</code>列から「人」を除去しましょう。人間にとってはなんの問題もありませんが、パソコンにとって<code>1人</code>や<code>5人</code>は文字列に過ぎず、分析ができる状態ではありません。ここで使う関数が<code>parse_number()</code>です。引数として指定した列から数値のみ抽出します。<code>"$1000"</code>や<code>"1, 324, 392"</code>のような数値でありながら、character型として保存されている列から数値のみを取り出す際に使う関数です。使い方は以下の通りです。</p>
 <div class="sourceCode" id="cb1216"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1216-1"><a href="tidydata.html#cb1216-1"></a>データ名 <span class="op">%&gt;%</span></span>
 <span id="cb1216-2"><a href="tidydata.html#cb1216-2"></a><span class="st">  </span><span class="kw">mutate</span>(新しい変数名 =<span class="st"> </span><span class="kw">parse_number</span>(数値のみ抽出する変数名))</span></code></pre></div>
@@ -2054,19 +2058,21 @@ Stock
 <span id="cb1217-3"><a href="tidydata.html#cb1217-3"></a></span>
 <span id="cb1217-4"><a href="tidydata.html#cb1217-4"></a>df4_S</span></code></pre></div>
 <pre><code>## # A tibble: 344 x 5
-##       ID Date      Week  Country Confirmed
-##    &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt;
-##  1     1 2020/1/16 木    Japan           1
-##  2     1 2020/1/16 木    Korea          NA
-##  3     2 2020/1/17 金    Japan           0
-##  4     2 2020/1/17 金    Korea          NA
-##  5     3 2020/1/18 土    Japan           0
-##  6     3 2020/1/18 土    Korea          NA
-##  7     4 2020/1/19 日    Japan           0
-##  8     4 2020/1/19 日    Korea          NA
-##  9     5 2020/1/20 月    Japan           0
-## 10     5 2020/1/20 月    Korea           1
-## # … with 334 more rows</code></pre>
+##       ID Date  Week  Country
+##    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  
+##  1     1 2020… 木    Japan  
+##  2     1 2020… 木    Korea  
+##  3     2 2020… 金    Japan  
+##  4     2 2020… 金    Korea  
+##  5     3 2020… 土    Japan  
+##  6     3 2020… 土    Korea  
+##  7     4 2020… 日    Japan  
+##  8     4 2020… 日    Korea  
+##  9     5 2020… 月    Japan  
+## 10     5 2020… 月    Korea  
+## # … with 334 more rows, and 1
+## #   more variable:
+## #   Confirmed &lt;dbl&gt;</code></pre>
 <p>それでは国、曜日ごとの新規感染者数を調べてみます。求める統計量は曜日ごとの新規感染者数の合計、平均、標準偏差です。まず、曜日は月から日の順になるよう、factor型に変換します。そして、国と曜日ごとに記述統計量を計算し、<code>df4_S_Summary1</code>という名で保存します。</p>
 <div class="sourceCode" id="cb1219"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1219-1"><a href="tidydata.html#cb1219-1"></a>df4_S &lt;-<span class="st"> </span>df4_S <span class="op">%&gt;%</span></span>
 <span id="cb1219-2"><a href="tidydata.html#cb1219-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Week =</span> <span class="kw">factor</span>(Week, </span>
@@ -2102,17 +2108,19 @@ Stock
 <span id="cb1221-2"><a href="tidydata.html#cb1221-2"></a><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">names_from  =</span> Country,</span>
 <span id="cb1221-3"><a href="tidydata.html#cb1221-3"></a>              <span class="dt">values_from =</span> Sum<span class="op">:</span>SD)</span></code></pre></div>
 <pre><code>## # A tibble: 7 x 7
-##   Week  Sum_Japan Sum_Korea Mean_Japan
-##   &lt;fct&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
-## 1 月         2540      1609      106. 
-## 2 火         2093      1641       87.2
-## 3 水         2531      1626      105. 
-## 4 木         2704      1883      108. 
-## 5 金         3083      2099      123. 
-## 6 土         3327      2194      133. 
-## 7 日         3244      2088      130. 
-## # … with 3 more variables:
-## #   Mean_Korea &lt;dbl&gt;, SD_Japan &lt;dbl&gt;,
+##   Week  Sum_Japan Sum_Korea
+##   &lt;fct&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 月         2540      1609
+## 2 火         2093      1641
+## 3 水         2531      1626
+## 4 木         2704      1883
+## 5 金         3083      2099
+## 6 土         3327      2194
+## 7 日         3244      2088
+## # … with 4 more variables:
+## #   Mean_Japan &lt;dbl&gt;,
+## #   Mean_Korea &lt;dbl&gt;,
+## #   SD_Japan &lt;dbl&gt;,
 ## #   SD_Korea &lt;dbl&gt;</code></pre>
 <p>これで人間にとって読みやすい表が出来ました。今は「日本の合計」、「韓国の合計」、「日本の平均」、…の順番ですが、これを日本と韓国それぞれまとめる場合は、<code>relocate()</code>を使います。</p>
 <div class="sourceCode" id="cb1223"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1223-1"><a href="tidydata.html#cb1223-1"></a>df4_S_Summary1 <span class="op">%&gt;%</span></span>
@@ -2120,17 +2128,19 @@ Stock
 <span id="cb1223-3"><a href="tidydata.html#cb1223-3"></a>              <span class="dt">values_from =</span> Sum<span class="op">:</span>SD) <span class="op">%&gt;%</span></span>
 <span id="cb1223-4"><a href="tidydata.html#cb1223-4"></a><span class="st">  </span><span class="kw">relocate</span>(Week, <span class="kw">ends_with</span>(<span class="st">&quot;Japan&quot;</span>), <span class="kw">ends_with</span>(<span class="st">&quot;Korea&quot;</span>))</span></code></pre></div>
 <pre><code>## # A tibble: 7 x 7
-##   Week  Sum_Japan Mean_Japan SD_Japan
-##   &lt;fct&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;
-## 1 月         2540      106.      156.
-## 2 火         2093       87.2     111.
-## 3 水         2531      105.      133.
-## 4 木         2704      108.      151.
-## 5 金         3083      123.      172.
-## 6 土         3327      133.      189.
-## 7 日         3244      130.      179.
-## # … with 3 more variables:
-## #   Sum_Korea &lt;dbl&gt;, Mean_Korea &lt;dbl&gt;,
+##   Week  Sum_Japan Mean_Japan
+##   &lt;fct&gt;     &lt;dbl&gt;      &lt;dbl&gt;
+## 1 月         2540      106. 
+## 2 火         2093       87.2
+## 3 水         2531      105. 
+## 4 木         2704      108. 
+## 5 金         3083      123. 
+## 6 土         3327      133. 
+## 7 日         3244      130. 
+## # … with 4 more variables:
+## #   SD_Japan &lt;dbl&gt;,
+## #   Sum_Korea &lt;dbl&gt;,
+## #   Mean_Korea &lt;dbl&gt;,
 ## #   SD_Korea &lt;dbl&gt;</code></pre>
 <p>新規感染者が確認されるのは金〜日曜日が多いことが分かります。</p>
 <p>曜日ではなく、月ごとに記述統計料を計算する場合は、まず<code>Date</code>列を年、月、日に分割する必要があります。具体的には<code>Date</code>を<code>"/"</code>を基準に別ければいいです。そこで登場するのは<code>separate()</code>関数であり、使い方は以下の通りです。</p>
@@ -2145,20 +2155,22 @@ Stock
 <span id="cb1226-3"><a href="tidydata.html#cb1226-3"></a></span>
 <span id="cb1226-4"><a href="tidydata.html#cb1226-4"></a>df4_S</span></code></pre></div>
 <pre><code>## # A tibble: 344 x 7
-##       ID Year  Month Day   Week  Country
-##    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;fct&gt; &lt;chr&gt;  
-##  1     1 2020  1     16    木    Japan  
-##  2     1 2020  1     16    木    Korea  
-##  3     2 2020  1     17    金    Japan  
-##  4     2 2020  1     17    金    Korea  
-##  5     3 2020  1     18    土    Japan  
-##  6     3 2020  1     18    土    Korea  
-##  7     4 2020  1     19    日    Japan  
-##  8     4 2020  1     19    日    Korea  
-##  9     5 2020  1     20    月    Japan  
-## 10     5 2020  1     20    月    Korea  
-## # … with 334 more rows, and 1 more
-## #   variable: Confirmed &lt;dbl&gt;</code></pre>
+##       ID Year  Month Day   Week 
+##    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;fct&gt;
+##  1     1 2020  1     16    木   
+##  2     1 2020  1     16    木   
+##  3     2 2020  1     17    金   
+##  4     2 2020  1     17    金   
+##  5     3 2020  1     18    土   
+##  6     3 2020  1     18    土   
+##  7     4 2020  1     19    日   
+##  8     4 2020  1     19    日   
+##  9     5 2020  1     20    月   
+## 10     5 2020  1     20    月   
+## # … with 334 more rows, and 2
+## #   more variables:
+## #   Country &lt;chr&gt;,
+## #   Confirmed &lt;dbl&gt;</code></pre>
 <p>新しく出来た変数は元の変数があった場所になります。ここまで来たら月ごとに新規感染者の記述統計量は計算できます。曜日ごとに行ったコードの<code>Week</code>を<code>Month</code>に変えるだけです。また、<code>Month</code>は数字のみで構成されたcharacter型であるため、このままでも問題なくソートされます。したがって、別途factor化の必要もありません（むろん、してもいいですし、むしろ推奨されます）。</p>
 <div class="sourceCode" id="cb1228"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1228-1"><a href="tidydata.html#cb1228-1"></a>df4_S_Summary2 &lt;-<span class="st"> </span>df4_S <span class="op">%&gt;%</span></span>
 <span id="cb1228-2"><a href="tidydata.html#cb1228-2"></a><span class="st">  </span><span class="kw">group_by</span>(Country, Month) <span class="op">%&gt;%</span></span>
@@ -2169,38 +2181,42 @@ Stock
 <span id="cb1228-7"><a href="tidydata.html#cb1228-7"></a></span>
 <span id="cb1228-8"><a href="tidydata.html#cb1228-8"></a>df4_S_Summary2</span></code></pre></div>
 <pre><code>## # A tibble: 14 x 5
-##    Country Month   Sum    Mean     SD
-##    &lt;chr&gt;   &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
-##  1 Japan   1        17   1.06    1.34
-##  2 Japan   2       213   7.34    7.81
-##  3 Japan   3      1723  55.6    42.4 
-##  4 Japan   4     12135 404.    146.  
-##  5 Japan   5      2763  89.1    73.0 
-##  6 Japan   6      1742  58.1    23.0 
-##  7 Japan   7       929 186.     45.1 
-##  8 Korea   1        11   0.917   1.44
-##  9 Korea   2      3139 108.    203.  
-## 10 Korea   3      6737 217.    222.  
-## 11 Korea   4       887  29.6    26.6 
-## 12 Korea   5       729  23.5    16.2 
-## 13 Korea   6      1348  44.9    10.4 
-## 14 Korea   7       289  57.8     6.61</code></pre>
+##    Country Month   Sum    Mean
+##    &lt;chr&gt;   &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;
+##  1 Japan   1        17   1.06 
+##  2 Japan   2       213   7.34 
+##  3 Japan   3      1723  55.6  
+##  4 Japan   4     12135 404.   
+##  5 Japan   5      2763  89.1  
+##  6 Japan   6      1742  58.1  
+##  7 Japan   7       929 186.   
+##  8 Korea   1        11   0.917
+##  9 Korea   2      3139 108.   
+## 10 Korea   3      6737 217.   
+## 11 Korea   4       887  29.6  
+## 12 Korea   5       729  23.5  
+## 13 Korea   6      1348  44.9  
+## 14 Korea   7       289  57.8  
+## # … with 1 more variable:
+## #   SD &lt;dbl&gt;</code></pre>
 <div class="sourceCode" id="cb1230"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1230-1"><a href="tidydata.html#cb1230-1"></a>df4_S_Summary2 <span class="op">%&gt;%</span></span>
 <span id="cb1230-2"><a href="tidydata.html#cb1230-2"></a><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">names_from  =</span> Country,</span>
 <span id="cb1230-3"><a href="tidydata.html#cb1230-3"></a>              <span class="dt">values_from =</span> Sum<span class="op">:</span>SD) <span class="op">%&gt;%</span></span>
 <span id="cb1230-4"><a href="tidydata.html#cb1230-4"></a><span class="st">  </span><span class="kw">relocate</span>(Month, <span class="kw">ends_with</span>(<span class="st">&quot;Japan&quot;</span>), <span class="kw">ends_with</span>(<span class="st">&quot;Korea&quot;</span>))</span></code></pre></div>
 <pre><code>## # A tibble: 7 x 7
-##   Month Sum_Japan Mean_Japan SD_Japan
-##   &lt;chr&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;
-## 1 1            17       1.06     1.34
-## 2 2           213       7.34     7.81
-## 3 3          1723      55.6     42.4 
-## 4 4         12135     404.     146.  
-## 5 5          2763      89.1     73.0 
-## 6 6          1742      58.1     23.0 
-## 7 7           929     186.      45.1 
-## # … with 3 more variables:
-## #   Sum_Korea &lt;dbl&gt;, Mean_Korea &lt;dbl&gt;,
+##   Month Sum_Japan Mean_Japan
+##   &lt;chr&gt;     &lt;dbl&gt;      &lt;dbl&gt;
+## 1 1            17       1.06
+## 2 2           213       7.34
+## 3 3          1723      55.6 
+## 4 4         12135     404.  
+## 5 5          2763      89.1 
+## 6 6          1742      58.1 
+## 7 7           929     186.  
+## # … with 4 more variables:
+## #   SD_Japan &lt;dbl&gt;,
+## #   Sum_Korea &lt;dbl&gt;,
+## #   Mean_Korea &lt;dbl&gt;,
 ## #   SD_Korea &lt;dbl&gt;</code></pre>
 <p>平均値から見ると、日本は7都道府県を対象に緊急事態宣言が行われた4月がピークで緩やかに減少していますが、7月になって上がり気味です。韓国はカルト宗教団体におけるクラスターが発生した3月がピークで、6月からまた上がり気味ですね。傾向としては韓国が日本に1ヶ月先行しているように見えます。</p>
 <p>それでは<code>separate()</code>関数の他の引数についても簡単に紹介します。まず、<code>sep</code>引数はnumeric型でも可能です。この場合、文字列内の位置を基準に分割されます。年月日が<code>20200629</code>のように保存されている場合は、何らかの基準となる文字がありません。この場合、<code>sep = c(4, 6)</code>にすると、「<code>"20200629"</code>の4文字目と5文字目の間で分割、6文字目と7文字目の間で分割」となります。また、<code>sep = c(-4, -2)</code>のように負の値も指定可能であり、この場合は右からの位置順で分割します。</p>

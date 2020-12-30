@@ -914,8 +914,10 @@ COVID-19 累積検査数（人）
 <p>　まず、<code>Country_df</code>の<code>Continent</code>変数における各値の頻度数を棒グラフとして出してみましょう。表としてまとめる簡単な方法は<code>table()</code>関数があります。</p>
 <div class="sourceCode" id="cb1250"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1250-1"><a href="visualization2.html#cb1250-1"></a><span class="kw">table</span>(Country_df<span class="op">$</span>Continent)</span></code></pre></div>
 <pre><code>## 
-##  Africa America    Asia  Europe Oceania 
-##      54      36      42      50       4</code></pre>
+##  Africa America    Asia  Europe 
+##      54      36      42      50 
+## Oceania 
+##       4</code></pre>
 <p>　ケース数の棒グラフは、大陸名を横軸に、ケース数を縦軸にしたグラフです。それではグラフを作ってみます。データは<code>Country_df</code>であり、使う幾何オブジェクトは<code>geom_bar()</code>です。ここで必要な情報は横軸、つまり大陸 (<code>Continent</code>)のみです。縦軸も「ケース数」という情報も必要ですが、<code>ggplot2</code>が勝手に計算してくれるので、指定しません。また、<code>labs()</code>レイヤーを追加します。<code>labs()</code>レイヤーはマッピング要素のラベルを指定するものです。これを指定しない場合、<code>aes()</code>内で指定した変数名がそのまま出力されます。</p>
 <div class="sourceCode" id="cb1252"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1252-1"><a href="visualization2.html#cb1252-1"></a>Country_df <span class="op">%&gt;%</span></span>
 <span id="cb1252-2"><a href="visualization2.html#cb1252-2"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
@@ -1007,17 +1009,17 @@ COVID-19 累積検査数（人）
 <span id="cb1260-13"><a href="visualization2.html#cb1260-13"></a></span>
 <span id="cb1260-14"><a href="visualization2.html#cb1260-14"></a>Bar_df2</span></code></pre></div>
 <pre><code>## # A tibble: 9 x 3
-##   Continent  OECD         Democracy
-##   &lt;fct&gt;      &lt;fct&gt;            &lt;dbl&gt;
-## 1 アフリカ   OECD非加盟国     2.48 
-## 2 アメリカ   OECD非加盟国     6.55 
-## 3 アメリカ   OECD加盟国       8.6  
-## 4 アジア     OECD非加盟国    -0.314
-## 5 アジア     OECD加盟国       8    
-## 6 ヨーロッパ OECD非加盟国     5.87 
-## 7 ヨーロッパ OECD加盟国       9.12 
-## 8 オセアニア OECD非加盟国     4.5  
-## 9 オセアニア OECD加盟国      10</code></pre>
+##   Continent  OECD        Democracy
+##   &lt;fct&gt;      &lt;fct&gt;           &lt;dbl&gt;
+## 1 アフリカ   OECD非加盟国…     2.48 
+## 2 アメリカ   OECD非加盟国…     6.55 
+## 3 アメリカ   OECD加盟国      8.6  
+## 4 アジア     OECD非加盟国…    -0.314
+## 5 アジア     OECD加盟国      8    
+## 6 ヨーロッパ OECD非加盟国…     5.87 
+## 7 ヨーロッパ OECD加盟国      9.12 
+## 8 オセアニア OECD非加盟国…     4.5  
+## 9 オセアニア OECD加盟国     10</code></pre>
 <p>　これで作図の準備ができました。それではこの新しい次元である<code>OECD</code>をどのように表現すれば良いでしょうか。<code>Continent</code>は横軸の位置で表現され、<code>Democracy</code>は縦軸の位置として表現されているため、<code>x</code>と<code>y</code>以外の要素を考えてみましょう。棒グラフの場合、もう一つの軸が追加されるとしたらそれは、棒の色です。棒の色は<code>fill</code>で指定できます。<code>color</code>でないことに注意してください。<code>color</code>も指定可能ですが、これは棒の色ではなく、棒を囲む線の色であり、通常は「なし」となっています。それでは<code>fill</code>を<code>aes()</code>内に書き加えます。</p>
 <div class="sourceCode" id="cb1262"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1262-1"><a href="visualization2.html#cb1262-1"></a>Bar_df2 <span class="op">%&gt;%</span></span>
 <span id="cb1262-2"><a href="visualization2.html#cb1262-2"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
