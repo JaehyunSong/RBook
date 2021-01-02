@@ -491,6 +491,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="24.1" data-path="iteration.html"><a href="iteration.html#iteration-abstract"><i class="fa fa-check"></i><b>24.1</b> 概要</a></li>
 <li class="chapter" data-level="24.2" data-path="iteration.html"><a href="iteration.html#iteration-intro"><i class="fa fa-check"></i><b>24.2</b> <code>*apply()</code>関数群と<code>map_*()</code>関数群</a></li>
+<li class="chapter" data-level="24.3" data-path="iteration.html"><a href="iteration.html#iteration-two-arguments"><i class="fa fa-check"></i><b>24.3</b> 引数が2つ以上の場合</a></li>
 </ul></li>
 <li class="chapter" data-level="25" data-path="rmarkdown.html"><a href="rmarkdown.html"><i class="fa fa-check"></i><b>25</b> R Markdown [基礎]</a>
 <ul>
@@ -719,6 +720,39 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 図 24.1: <code>map_*()</code>関数群のイメージ
 </p>
 </div>
+<p><code>map()</code>の場合、返り値はリストとなり、<code>map_dbl()</code>の返り値はnumeric (double)型のベクトルとなります。他にも<code>map_*()</code>関数群には<code>map_int()</code>、<code>map_lgl()</code>、<code>map_chr()</code>、<code>map_df()</code>などがあり、それぞれ返り値のデータ型/データ構造を表しています。例えば、返り値がcharacter型のベクトルであれば、<code>map_chr()</code>を使います。<code>c(1, 2, 3, 4, 5)</code>のベクトルの各要素の前に<code>"ID: "</code>を付ける例だと以下のように書きます。</p>
+<div class="sourceCode" id="cb1463"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1463-1"><a href="iteration.html#cb1463-1"></a><span class="co"># 以下のコードでもOK</span></span>
+<span id="cb1463-2"><a href="iteration.html#cb1463-2"></a><span class="co"># map_chr(c(1, 2, 3, 4, 5), ~paste0(&quot;ID: &quot;, .x))</span></span>
+<span id="cb1463-3"><a href="iteration.html#cb1463-3"></a><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1463-4"><a href="iteration.html#cb1463-4"></a><span class="st">  </span><span class="kw">map_chr</span>(<span class="op">~</span><span class="kw">paste0</span>(<span class="st">&quot;ID: &quot;</span>, .x))</span></code></pre></div>
+<pre><code>## [1] &quot;ID: 1&quot; &quot;ID: 2&quot; &quot;ID: 3&quot; &quot;ID: 4&quot; &quot;ID: 5&quot;</code></pre>
+<hr />
+</div>
+<div id="iteration-two-arguments" class="section level2" number="24.3">
+<h2><span class="header-section-number">24.3</span> 引数が2つ以上の場合</h2>
+<p>{purrr}を使った本格的な例を紹介する前に、引数が2つ以上の場合を考えたいと思います。まずは引数が2つの場合です。この場合、<code>map2_*()</code>関数群を使用します。例えば、<code>num_vec</code>に長さ5のnumeric型ベクトル<code>num_vec2</code>をかける例を考えてみましょう。</p>
+<p>この場合、データとして<code>num_vec</code>と<code>num_vec2</code>が必要となり、ラムダ式にも2つの引数が必要です。まず、<code>num_vec2</code>を用意します。</p>
+<div class="sourceCode" id="cb1465"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1465-1"><a href="iteration.html#cb1465-1"></a>num_vec2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span></code></pre></div>
+<p>続いて<code>map2_dbl()</code>関数を使用し<code>num_vec</code>と<code>num_vec2</code>の掛け算を行います。<code>map2_*()</code>の使い方は<code>map_*()</code>とほぼ同様です。</p>
+<div class="sourceCode" id="cb1466"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1466-1"><a href="iteration.html#cb1466-1"></a><span class="kw">map2_dbl</span>(データ1, データ2, 関数 or ラムダ式, 追加の引数)</span></code></pre></div>
+<p><code>map_*()</code>との違いとしては、(1) データが2つである、(2) 関数、またはラムダ式に2つの引数が必要である点です。この2点目の引数ですが、データ2は<code>.y</code>と表記します。したがって、データ1とデータ2の掛け算を意味するラムダ式は<code>~.x * .y</code>です。</p>
+<div class="sourceCode" id="cb1467"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1467-1"><a href="iteration.html#cb1467-1"></a><span class="kw">map2_dbl</span>(num_vec, num_vec2, <span class="op">~</span>.x <span class="op">*</span><span class="st"> </span>.y)</span></code></pre></div>
+<pre><code>## [1] 3 0 5 0 7</code></pre>
+<p><code>num_vec</code>と<code>num_vec2</code>が必ずしも同じデータ構造、データ型、同じ長さである必要がありません。数字の前に<code>"ID:"</code>を付ける先ほどの例を<code>map2_chr()</code>で書いてみましょう。</p>
+<div class="sourceCode" id="cb1469"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1469-1"><a href="iteration.html#cb1469-1"></a><span class="kw">map2_chr</span>(num_vec, <span class="st">&quot;ID:&quot;</span>, <span class="op">~</span><span class="kw">paste0</span>(.y, .x))</span></code></pre></div>
+<pre><code>## [1] &quot;ID:3&quot; &quot;ID:2&quot; &quot;ID:5&quot; &quot;ID:4&quot; &quot;ID:7&quot;</code></pre>
+<p>それでは3つ以上の引数について考えてみましょう。たとえば、<code>num_vec</code>の前に<code>"ID"</code>を付けるとします。そして<code>"ID"</code>と<code>num_vec</code>の間に<code>":"</code>を入れたい場合はどうすればい良いでしょう。むろん、賢い解決方法は単純に<code>paste()</code>関数を使うだけです。</p>
+<div class="sourceCode" id="cb1471"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1471-1"><a href="iteration.html#cb1471-1"></a><span class="kw">paste</span>(<span class="st">&quot;ID&quot;</span>, num_vec, <span class="dt">sep =</span> <span class="st">&quot;:&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;ID:3&quot; &quot;ID:2&quot; &quot;ID:5&quot; &quot;ID:4&quot; &quot;ID:7&quot;</code></pre>
+<p>この場合、引数は3つです<a href="#fn88" class="footnote-ref" id="fnref88"><sup>88</sup></a>。この場合の書き方はどうなるでしょうか。<code>map2_*()</code>はデータを2つまでしか指定できません。3つ目以降は関数/ラムダ式の後ろに書くこととなります。ただし、関数/ラムダ式の後ろに指定される引数は長さ1のベクトルでなければなりません。また、ラムダ式内の引数は<code>.x</code>と<code>.y</code>でなく、<code>..1</code>、<code>..2</code>、<code>..3</code>、…となります。</p>
+<p>今回の例だと<code>map2_chr()</code>内に<code>num_vec</code>がデータ1、<code>"ID"</code>がデータ2です。そして、期待される結果は、「“ID” + <code>sep</code>の実引数 + <code>num_vec</code>の値」となります。したがって、ラムダ式は<code>paste(..2, ..1, sep = ..3)</code>となります。</p>
+<div class="sourceCode" id="cb1473"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1473-1"><a href="iteration.html#cb1473-1"></a><span class="kw">map2_chr</span>(num_vec, <span class="st">&quot;ID&quot;</span>, <span class="op">~</span><span class="kw">paste</span>(..<span class="dv">2</span>, ..<span class="dv">1</span>, <span class="dt">sep =</span> ..<span class="dv">3</span>), <span class="st">&quot;-&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;ID-3&quot; &quot;ID-2&quot; &quot;ID-5&quot; &quot;ID-4&quot; &quot;ID-7&quot;</code></pre>
+<p>データ2である<code>"ID"</code>は長さ1のcharacter型ベクトルであるため、以下のように<code>map_chr()</code>を使うことも可能です。</p>
+<div class="sourceCode" id="cb1475"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1475-1"><a href="iteration.html#cb1475-1"></a><span class="co"># データ2も長さ1なのでmap_chr()もOK</span></span>
+<span id="cb1475-2"><a href="iteration.html#cb1475-2"></a><span class="kw">map_chr</span>(num_vec, <span class="op">~</span><span class="kw">paste</span>(..<span class="dv">2</span>, ..<span class="dv">1</span>, <span class="dt">sep =</span> ..<span class="dv">3</span>), <span class="st">&quot;ID&quot;</span>, <span class="st">&quot;-&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;ID-3&quot; &quot;ID-2&quot; &quot;ID-5&quot; &quot;ID-4&quot; &quot;ID-7&quot;</code></pre>
+<p>それではデータを3つ以上使うにはどうすれば良いでしょうか。そこで登場するのが<code>pmap_*()</code>関数です。</p>
 
 </div>
 </div>
@@ -726,7 +760,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <hr />
 <ol start="86">
 <li id="fn86"><p>引数が2つなら<code>.x</code>と<code>.y</code>を使用します。もし3つ以上なら<code>..1</code>、<code>..2</code>、<code>..3</code>、…と表記します。<a href="iteration.html#fnref86" class="footnote-back">↩︎</a></p></li>
-<li id="fn87"><p>実は今回の例のように要素を抽出する場合、<code>`[`</code>すらも要りません。<code>map_dbl(num_list, 3)</code>だけで十分です。<a href="iteration.html#fnref87" class="footnote-back">↩︎</a></p></li>
+<li id="fn87"><p>実は今回の例のように要素を抽出する場合、<code>`[`</code>すら要りません。<code>map_dbl(num_list, 3)</code>だけで十分です。<a href="iteration.html#fnref87" class="footnote-back">↩︎</a></p></li>
+<li id="fn88"><p><code>paste()</code>関数は<code>sep =</code>以外はすべて結合の対象となります。引数が4つ以上になることもあります。たとえば、<code>paste("We", "love", "cats!", sep = " ")</code>です。<a href="iteration.html#fnref88" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
