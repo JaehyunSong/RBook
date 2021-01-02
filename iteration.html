@@ -673,7 +673,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>かなり短めなコードで「<code>num_vec</code>の全要素に2を足して3で割る」処理ができました。一方、<code>sapply()</code>や<code>lapply()</code>のような<code>*apply()</code>関数群だとラムダ式を使うことはできません。現在のメモリ上にある関数のみしか使うことができません。</p>
 <div class="sourceCode" id="cb1444"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1444-1"><a href="iteration.html#cb1444-1"></a><span class="kw">sapply</span>(num_vec, <span class="op">~</span>(.x <span class="op">+</span><span class="st"> </span><span class="dv">2</span>) <span class="op">/</span><span class="st"> </span><span class="dv">3</span>)</span></code></pre></div>
 <pre><code>## Error in match.fun(FUN): &#39;~(.x + 2)/3&#39; is not a function, character or symbol</code></pre>
-<p>これまでの例は<strong>正しい</strong>コードではありますが、<strong>良い</strong>コードとは言えないでしょう。なぜなら<code>num_vec + 2</code>という最適解が存在するからです。それでは以下の例はいかがでしょうか。</p>
+<p>これまでの例は<strong>正しい</strong>コードではありますが、<strong>良い</strong>コードとは言えないでしょう。なぜなら<code>num_vec + 2</code>という最適解が存在するからです。<code>*apply()</code>と<code>map_*()</code>はより複雑な処理に特化しています。たとえば、リスト型データの処理です。以下の例を考えてみましょう。</p>
 <div class="sourceCode" id="cb1446"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1446-1"><a href="iteration.html#cb1446-1"></a>num_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">List1 =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>),</span>
 <span id="cb1446-2"><a href="iteration.html#cb1446-2"></a>                 <span class="dt">List2 =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">10</span>, <span class="dv">13</span>, <span class="dv">3</span>),</span>
 <span id="cb1446-3"><a href="iteration.html#cb1446-3"></a>                 <span class="dt">List3 =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">2</span>, <span class="ot">NA</span>, <span class="dv">5</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">1</span>))</span></code></pre></div>
@@ -708,10 +708,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb1459"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1459-1"><a href="iteration.html#cb1459-1"></a><span class="kw">map_dbl</span>(num_list, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <pre><code>##    List1    List2    List3 
 ## 5.000000 6.571429 4.666667</code></pre>
-<p><code>*apply()</code>も<code>map_*()</code>も、それぞれの要素に対して同じ処理を行うことを得意とする関数です。他の応用としては、各ベクトルからn番目の要素を抽出することもできます。ベクトルからn番目の要素を抽出するには<code>ベクトル名[n]</code>と入力しますが、実はこの<code>[</code>も関数です。関数として使う場合は<code>+</code>と同様、<code>`[`</code>と表記します。<code>num_list</code>内の3つのベクトルから3番目の要素を抽出してみましょう。</p>
+<p><code>*apply()</code>も<code>map_*()</code>も、それぞれの要素に対して同じ処理を行うことを得意とする関数です。他の応用としては、各ベクトルからn番目の要素を抽出することもできます。ベクトルからn番目の要素を抽出するには<code>ベクトル名[n]</code>と入力しますが、実はこの<code>[</code>も関数です。関数として使う場合は<code>+</code>と同様、<code>`[`</code>と表記します。<code>num_list</code>内の3つのベクトルから3番目の要素を抽出してみましょう<a href="#fn87" class="footnote-ref" id="fnref87"><sup>87</sup></a>。</p>
 <div class="sourceCode" id="cb1461"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1461-1"><a href="iteration.html#cb1461-1"></a><span class="kw">map_dbl</span>(num_list, <span class="st">`</span><span class="dt">[</span><span class="st">`</span>, <span class="dv">3</span>)</span></code></pre></div>
 <pre><code>## List1 List2 List3 
 ##     5     6    NA</code></pre>
+<p>ここまで来たら<code>map_*()</code>関数群の仕組みについてイメージが出来たかと思います。<code>map_*()</code>関数群の動きは図<a href="iteration.html#fig:map-inside">24.1</a>のように表すことができます。第一引数はデータであり、そのデータの各要素に対して第二引数で指定された関数を適用します。この関数に必要な（データを除く）引数は第三引数以降に指定します。この関数部（第二引数）はRやパッケージなどで予め提供されている関数でも、内部に直接無名関数を作成することもできます。この無名関数は<code>function(x){}</code>のような従来の書き方も可能ですが、<code>map_*()</code>関数群の場合<code>~</code>で始まるラムダ式を使うことも可能です。</p>
+<div class="figure" style="text-align: center"><span id="fig:map-inside"></span>
+<img src="figures/Iteration/map_inside.png" alt="`map_*()`関数群のイメージ" width="100%" />
+<p class="caption">
+図 24.1: <code>map_*()</code>関数群のイメージ
+</p>
+</div>
 
 </div>
 </div>
@@ -719,6 +726,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <hr />
 <ol start="86">
 <li id="fn86"><p>引数が2つなら<code>.x</code>と<code>.y</code>を使用します。もし3つ以上なら<code>..1</code>、<code>..2</code>、<code>..3</code>、…と表記します。<a href="iteration.html#fnref86" class="footnote-back">↩︎</a></p></li>
+<li id="fn87"><p>実は今回の例のように要素を抽出する場合、<code>`[`</code>すらも要りません。<code>map_dbl(num_list, 3)</code>だけで十分です。<a href="iteration.html#fnref87" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
