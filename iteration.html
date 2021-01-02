@@ -753,6 +753,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1475-2"><a href="iteration.html#cb1475-2"></a><span class="kw">map_chr</span>(num_vec, <span class="op">~</span><span class="kw">paste</span>(..<span class="dv">2</span>, ..<span class="dv">1</span>, <span class="dt">sep =</span> ..<span class="dv">3</span>), <span class="st">&quot;ID&quot;</span>, <span class="st">&quot;-&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;ID-3&quot; &quot;ID-2&quot; &quot;ID-5&quot; &quot;ID-4&quot; &quot;ID-7&quot;</code></pre>
 <p>それではデータを3つ以上使うにはどうすれば良いでしょうか。そこで登場するのが<code>pmap_*()</code>関数です。</p>
+<div class="sourceCode" id="cb1477"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1477-1"><a href="iteration.html#cb1477-1"></a>name_vec  &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Hadley&quot;</span>, <span class="st">&quot;Song&quot;</span>, <span class="st">&quot;Yanai&quot;</span>)</span>
+<span id="cb1477-2"><a href="iteration.html#cb1477-2"></a>math_vec  &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">70</span>, <span class="dv">55</span>, <span class="dv">80</span>)</span>
+<span id="cb1477-3"><a href="iteration.html#cb1477-3"></a>cheat_vec &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1478"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1478-1"><a href="iteration.html#cb1478-1"></a><span class="kw">pmap_chr</span>(<span class="kw">list</span>(name_vec, math_vec, cheat_vec), </span>
+<span id="cb1478-2"><a href="iteration.html#cb1478-2"></a>         <span class="op">~</span><span class="kw">paste0</span>(..<span class="dv">1</span>, <span class="st">&quot;:&quot;</span>, ..<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>..<span class="dv">3</span>)))</span></code></pre></div>
+<pre><code>## [1] &quot;Hadley:70&quot; &quot;Song:0&quot;    &quot;Yanai:80&quot;</code></pre>
+<p>第一引数はデータであるため、まずリストを作成し、パイプ演算子（<code>%&gt;%</code>）で<code>pmap_*()</code>に渡すことも可能です。</p>
+<div class="sourceCode" id="cb1480"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1480-1"><a href="iteration.html#cb1480-1"></a><span class="kw">list</span>(name_vec, math_vec, cheat_vec) <span class="op">%&gt;%</span></span>
+<span id="cb1480-2"><a href="iteration.html#cb1480-2"></a><span class="st">  </span><span class="kw">pmap_chr</span>(<span class="op">~</span><span class="kw">paste0</span>(..<span class="dv">1</span>, <span class="st">&quot;:&quot;</span>, ..<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>..<span class="dv">3</span>)))</span></code></pre></div>
+<pre><code>## [1] &quot;Hadley:70&quot; &quot;Song:0&quot;    &quot;Yanai:80&quot;</code></pre>
 
 </div>
 </div>
