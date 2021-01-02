@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>4. IDEの導入 | 私たちのR: ベストプラクティスの探究</title>
+  <title>24. 反復処理 | 私たちのR: ベストプラクティスの探究</title>
   <meta name="description" content="R Not for Everyone: An Esoteric Guide." />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="4. IDEの導入 | 私たちのR: ベストプラクティスの探究" />
+  <meta property="og:title" content="24. 反復処理 | 私たちのR: ベストプラクティスの探究" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="JaehyunSong/RBook" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="4. IDEの導入 | 私たちのR: ベストプラクティスの探究" />
+  <meta name="twitter:title" content="24. 反復処理 | 私たちのR: ベストプラクティスの探究" />
   
   <meta name="twitter:description" content="R Not for Everyone: An Esoteric Guide." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <link rel="apple-touch-icon-precomposed" sizes="152x152" href="HTML/apple-favicon.png" />
   <link rel="shortcut icon" href="HTML/favicon.png" type="image/x-icon" />
-<link rel="prev" href="installation.html"/>
-<link rel="next" href="R-Customize.html"/>
+<link rel="prev" href="scraping.html"/>
+<link rel="next" href="rmarkdown.html"/>
 <script src="libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -574,59 +574,160 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="ide" class="section level1" number="4">
-<h1><span class="header-section-number">4.</span> IDEの導入</h1>
-<p>本章の内容は今後、以下の資料に基づき、再作成する予定である。</p>
+<div id="iteration" class="section level1" number="24">
+<h1><span class="header-section-number">24.</span> 反復処理</h1>
+<div id="iteration-abstract" class="section level2" number="24.1">
+<h2><span class="header-section-number">24.1</span> 概要</h2>
 <ul>
-<li>矢内による資料 (<a href="https://yukiyanai.github.io/jp/resources/docs/install-R_macOS.pdf">macOS編</a>、<a href="https://yukiyanai.github.io/jp/resources/docs/install-R_ubuntu.pdf">Linux (Ubuntu)編</a>、<a href="https://yukiyanai.github.io/jp/resources/docs/install-R_windows.pdf">Windows編</a>)</li>
+<li>第<a href="iteration.html#iteration-intro">24.2</a>章: <code>*apply()</code>関数群と<code>map_*()</code>関数群</li>
 </ul>
-<!--
-## RStudioのインストールと起動 {#ide-install}
-
-### macOSの場合
-
-### Linux (Ubuntu)の場合
-
-### Windowsの場合
-
----
-
-## RStudioの設定 {#ide-setting}
-
-### 設定画面の開き方
-
-### 私たちのRStudio
-
----
-
-## RStudio Cloudについて
-
-これまでRとRStudioの導入について説明しましたが、これは自分のパソコンにインストールすることを前提としていました。したがって、パソコンを新しく買ったり、複数のパソコンを持つ場合は、それぞれに対してインストールと設定をする必要があります。これらの作業は慣れれば大したことではありませんが、それでも面倒だと思う方もいるでしょう。また、それぞれのパソコンにRとRStudioをインストールして常に同じ環境を維持するのも手間のかかる作業です。そこで一つの対案となるのが[RStudio Cloud](https://rstudio.cloud)です。
-
-<div class="figure" style="text-align: center">
-<img src="figures/Installation/RStudioCloud.png" alt="RStudio Cloudの起動画面 (Operaの場合)" width="100%" />
-<p class="caption">(\#fig:RStudioCloud)RStudio Cloudの起動画面 (Operaの場合)</p>
+<hr />
 </div>
+<div id="iteration-intro" class="section level2" number="24.2">
+<h2><span class="header-section-number">24.2</span> <code>*apply()</code>関数群と<code>map_*()</code>関数群</h2>
+<p>まず、我らの盟友、{tidyverse}を読み込んでおきましょう。</p>
+<div class="sourceCode" id="cb1413"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1413-1"><a href="iteration.html#cb1413-1"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
+<p>それでは、<code>*apply()</code>関数群と<code>map_*()</code>関数群の動きとその仕組について調べてみましょう。まず、実習用データとして長さ5のnumericベクトル<code>num_vec</code>を用意します。</p>
+<div class="sourceCode" id="cb1414"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1414-1"><a href="iteration.html#cb1414-1"></a>num_vec &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">7</span>)</span></code></pre></div>
+<p>この<code>num_vec</code>の個々の要素に2を足す場合はどうすれば良いでしょうか。Rはベクトル単位での演算が行われるため、<code>num_vec + 2</code>だけで十分です。<code>+</code>の右側にある2は長さ1のベクトルですが、<code>num_vec</code>の長さに合わせてリサイクルされます（第<a href="datastructure.html#structure-vector">10.2</a>章を参照）。</p>
+<div class="sourceCode" id="cb1415"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1415-1"><a href="iteration.html#cb1415-1"></a>num_vec <span class="op">+</span><span class="st"> </span><span class="dv">2</span></span></code></pre></div>
+<pre><code>## [1] 5 4 7 6 9</code></pre>
+<p>賢明なRユーザーなら上のコードが正解でしょう。しかし、これからの練習のために<code>+</code>を使わずに、<code>for()</code>文を使用してみましょう（第<a href="programming.html#programming-iteration">11.3</a>章を参照）。</p>
+<div class="sourceCode" id="cb1417"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1417-1"><a href="iteration.html#cb1417-1"></a><span class="cf">for</span> (i <span class="cf">in</span> num_vec) {</span>
+<span id="cb1417-2"><a href="iteration.html#cb1417-2"></a>    <span class="kw">print</span>(i <span class="op">+</span><span class="st"> </span><span class="dv">2</span>)</span>
+<span id="cb1417-3"><a href="iteration.html#cb1417-3"></a>}</span></code></pre></div>
+<pre><code>## [1] 5
+## [1] 4
+## [1] 7
+## [1] 6
+## [1] 9</code></pre>
+<p>実はこれと同じ役割をする関数がRには内蔵されており、それが<code>lapply()</code>関数です。</p>
+<div class="sourceCode" id="cb1419"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1419-1"><a href="iteration.html#cb1419-1"></a><span class="kw">lapply</span>(オブジェクト名, 関数名, 関数の引数)</span></code></pre></div>
+<p>以下のコードからも確認出来ますが、足し算を意味する<code>+</code>も関数です。ただし、演算子を関数として使う場合は演算子を<code>`</code>で囲む必要があり、<code>+</code>だと<code>`+`</code>と表記します。</p>
+<div class="sourceCode" id="cb1420"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1420-1"><a href="iteration.html#cb1420-1"></a><span class="st">`</span><span class="dt">+</span><span class="st">`</span>(num_vec, <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## [1] 5 4 7 6 9</code></pre>
+<p>したがって、<code>lapply()</code>関数を使用して<code>num_vec</code>の全要素に2を足す場合、以下のようなコードとなります。</p>
+<div class="sourceCode" id="cb1422"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1422-1"><a href="iteration.html#cb1422-1"></a><span class="kw">lapply</span>(num_vec, <span class="st">`</span><span class="dt">+</span><span class="st">`</span>, <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] 5
+## 
+## [[2]]
+## [1] 4
+## 
+## [[3]]
+## [1] 7
+## 
+## [[4]]
+## [1] 6
+## 
+## [[5]]
+## [1] 9</code></pre>
+<p>これと同じ動きをする関数が{purrr}パッケージの<code>map()</code>です。{purrr}は{tidyverse}を読み込むと自動的に読み込まれます。</p>
+<div class="sourceCode" id="cb1424"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1424-1"><a href="iteration.html#cb1424-1"></a><span class="kw">map</span>(num_vec, <span class="st">`</span><span class="dt">+</span><span class="st">`</span>, <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] 5
+## 
+## [[2]]
+## [1] 4
+## 
+## [[3]]
+## [1] 7
+## 
+## [[4]]
+## [1] 6
+## 
+## [[5]]
+## [1] 9</code></pre>
+<p>ただし、<code>lapply()</code>と<code>map()</code>の場合、戻り値はリスト型となります。もし、ベクトル型の戻り値が必要な場合は更に<code>unlist()</code>関数を使うか、<code>sapply()</code>を使います。</p>
+<div class="sourceCode" id="cb1426"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1426-1"><a href="iteration.html#cb1426-1"></a><span class="co"># unlist()を利用し、リストを解除する</span></span>
+<span id="cb1426-2"><a href="iteration.html#cb1426-2"></a><span class="kw">lapply</span>(num_vec, <span class="st">`</span><span class="dt">+</span><span class="st">`</span>, <span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unlist</span>()</span></code></pre></div>
+<pre><code>## [1] 5 4 7 6 9</code></pre>
+<div class="sourceCode" id="cb1428"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1428-1"><a href="iteration.html#cb1428-1"></a><span class="co"># sapply()を利用すると戻り値はベクトルとなる</span></span>
+<span id="cb1428-2"><a href="iteration.html#cb1428-2"></a><span class="kw">sapply</span>(num_vec, <span class="st">`</span><span class="dt">+</span><span class="st">`</span>, <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## [1] 5 4 7 6 9</code></pre>
+<p><code>map()</code>関数なら<code>unlist()</code>でも良いですが、<code>sapply()</code>と同じ動きをする<code>map_dbl()</code>があります。これは戻り値がdoubleのnumericベクトルになる<code>map()</code>関数です。</p>
+<div class="sourceCode" id="cb1430"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1430-1"><a href="iteration.html#cb1430-1"></a><span class="co"># map_dbl()を利用するとnumeric (double)のベクトルが返される</span></span>
+<span id="cb1430-2"><a href="iteration.html#cb1430-2"></a><span class="kw">map_dbl</span>(num_vec, <span class="st">`</span><span class="dt">+</span><span class="st">`</span>, <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## [1] 5 4 7 6 9</code></pre>
+<p>もし、2を足すだけでなく、更に3で割るためにはどうすれば良いでしょうか。まず考えられるのは更に<code>sapply()</code>や<code>map_dbl</code>を使うことです。</p>
+<div class="sourceCode" id="cb1432"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1432-1"><a href="iteration.html#cb1432-1"></a><span class="kw">map_dbl</span>(num_vec, <span class="st">`</span><span class="dt">+</span><span class="st">`</span>, <span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1432-2"><a href="iteration.html#cb1432-2"></a><span class="st">    </span><span class="kw">map_dbl</span>(<span class="st">`</span><span class="dt">/</span><span class="st">`</span>, <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## [1] 1.666667 1.333333 2.333333 2.000000 3.000000</code></pre>
+<p>もう一つの方法は<code>sapply()</code>や<code>map_dbl()</code>の第二引数に直接関数を指定する方法です。</p>
+<div class="sourceCode" id="cb1434"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1434-1"><a href="iteration.html#cb1434-1"></a><span class="kw">sapply</span>(num_vec, <span class="cf">function</span>(x){(x <span class="op">+</span><span class="st"> </span><span class="dv">2</span>) <span class="op">/</span><span class="st"> </span><span class="dv">3</span>})</span></code></pre></div>
+<pre><code>## [1] 1.666667 1.333333 2.333333 2.000000 3.000000</code></pre>
+<div class="sourceCode" id="cb1436"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1436-1"><a href="iteration.html#cb1436-1"></a><span class="kw">map_dbl</span>(num_vec, <span class="cf">function</span>(x){(x <span class="op">+</span><span class="st"> </span><span class="dv">2</span>) <span class="op">/</span><span class="st"> </span><span class="dv">3</span>})</span></code></pre></div>
+<pre><code>## [1] 1.666667 1.333333 2.333333 2.000000 3.000000</code></pre>
+<p>上のコードだと、<code>num_vec</code>の要素が第二引数で指定した関数の引数（<code>x</code>）として用いられます。関数が長くなる場合は、<code>sapply()</code>や<code>map()</code>の外側に関数を予め指定して置くことも可能です。</p>
+<div class="sourceCode" id="cb1438"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1438-1"><a href="iteration.html#cb1438-1"></a>add_two_divide_three &lt;-<span class="st"> </span><span class="cf">function</span>(x){</span>
+<span id="cb1438-2"><a href="iteration.html#cb1438-2"></a>    (x <span class="op">+</span><span class="st"> </span><span class="dv">2</span>) <span class="op">/</span><span class="st"> </span><span class="dv">3</span> </span>
+<span id="cb1438-3"><a href="iteration.html#cb1438-3"></a>}</span>
+<span id="cb1438-4"><a href="iteration.html#cb1438-4"></a><span class="kw">sapply</span>(num_vec, add_two_divide_three)</span></code></pre></div>
+<pre><code>## [1] 1.666667 1.333333 2.333333 2.000000 3.000000</code></pre>
+<div class="sourceCode" id="cb1440"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1440-1"><a href="iteration.html#cb1440-1"></a><span class="kw">map_dbl</span>(num_vec, add_two_divide_three)</span></code></pre></div>
+<pre><code>## [1] 1.666667 1.333333 2.333333 2.000000 3.000000</code></pre>
+<p>ここまでの例だと<code>sapply()</code>と<code>map_dbl()</code>はほぼ同じ関数です。なぜわざわざ{purrr}パッケージを読み込んでまで<code>map_dbl()</code>関数を使う必要があるでしょうか。それは<code>map_dbl()</code>の内部にはラムダ（lambda）式、あるいは無名関数（anonymous function）と呼ばれるものが使用可能だからです。ラムダ式は第<a href="datahandling2.html#handling2-summarise">14.1</a>章でも説明しましたが、もう一回解説します。ラムダ式は使い捨ての関数で、<code>map_dbl()</code>内部での処理が終わるとメモリ上から削除される関数です。使い捨てですので、関数の名前（オブジェクト名）も与えられておりません。</p>
+<p>このラムダ式の作り方ですが、<code>~</code>で始まり、引数の部分には<code>.x</code>が入ります<a href="#fn86" class="footnote-ref" id="fnref86"><sup>86</sup></a>。したがって、<code>~(.x + 2) / 2</code>は<code>function(x){(x + 2) / 3}</code>の簡略したものとなります。ただし、後者だと無名関数の引数に該当する<code>x</code>を<code>y</code>や<code>j</code>などに書き換えても問題ありませんが、ラムダ式では必ず<code>.x</code>と表記する必要があります。</p>
+<div class="sourceCode" id="cb1442"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1442-1"><a href="iteration.html#cb1442-1"></a><span class="kw">map_dbl</span>(num_vec, <span class="op">~</span>(.x <span class="op">+</span><span class="st"> </span><span class="dv">2</span>) <span class="op">/</span><span class="st"> </span><span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## [1] 1.666667 1.333333 2.333333 2.000000 3.000000</code></pre>
+<p>かなり短めなコードで「<code>num_vec</code>の全要素に2を足して3で割る」処理ができました。一方、<code>sapply()</code>や<code>lapply()</code>のような<code>*apply()</code>関数群だとラムダ式を使うことはできません。現在のメモリ上にある関数のみしか使うことができません。</p>
+<div class="sourceCode" id="cb1444"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1444-1"><a href="iteration.html#cb1444-1"></a><span class="kw">sapply</span>(num_vec, <span class="op">~</span>(.x <span class="op">+</span><span class="st"> </span><span class="dv">2</span>) <span class="op">/</span><span class="st"> </span><span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## Error in match.fun(FUN): &#39;~(.x + 2)/3&#39; is not a function, character or symbol</code></pre>
+<p>これまでの例は<strong>正しい</strong>コードではありますが、<strong>良い</strong>コードとは言えないでしょう。なぜなら<code>num_vec + 2</code>という最適解が存在するからです。それでは以下の例はいかがでしょうか。</p>
+<div class="sourceCode" id="cb1446"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1446-1"><a href="iteration.html#cb1446-1"></a>num_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">List1 =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>),</span>
+<span id="cb1446-2"><a href="iteration.html#cb1446-2"></a>                 <span class="dt">List2 =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">10</span>, <span class="dv">13</span>, <span class="dv">3</span>),</span>
+<span id="cb1446-3"><a href="iteration.html#cb1446-3"></a>                 <span class="dt">List3 =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">2</span>, <span class="ot">NA</span>, <span class="dv">5</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p><code>num_list</code>は3つのnumeric型ベクトルで構成されたリスト型オブジェクトです。それぞれのベクトルの平均値を求めてみましょう。これを普通に<code>mean()</code>関数のみで済まそうとすると、リストからベクトルを一つずつ抽出し、3回の<code>mean()</code>関数を使用する必要があります、</p>
+<div class="sourceCode" id="cb1447"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1447-1"><a href="iteration.html#cb1447-1"></a><span class="kw">mean</span>(num_list[[<span class="st">&quot;List1&quot;</span>]], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<pre><code>## [1] 5</code></pre>
+<div class="sourceCode" id="cb1449"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1449-1"><a href="iteration.html#cb1449-1"></a><span class="kw">mean</span>(num_list[[<span class="st">&quot;List2&quot;</span>]], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<pre><code>## [1] 6.571429</code></pre>
+<div class="sourceCode" id="cb1451"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1451-1"><a href="iteration.html#cb1451-1"></a><span class="kw">mean</span>(num_list[[<span class="st">&quot;List3&quot;</span>]], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<pre><code>## [1] 4.666667</code></pre>
+<p>もしリストの長さが大きくなると、以下のように<code>for()</code>文の方が効率的でしょう。</p>
+<div class="sourceCode" id="cb1453"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1453-1"><a href="iteration.html#cb1453-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">names</span>(num_list)) {</span>
+<span id="cb1453-2"><a href="iteration.html#cb1453-2"></a>    <span class="kw">print</span>(<span class="kw">mean</span>(num_list[[i]], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb1453-3"><a href="iteration.html#cb1453-3"></a>}</span></code></pre></div>
+<pre><code>## [1] 5
+## [1] 6.571429
+## [1] 4.666667</code></pre>
+<p>計算結果をベクトルとして出力/保存する場合は予めベクトルを用意しておく必要があります。</p>
+<div class="sourceCode" id="cb1455"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1455-1"><a href="iteration.html#cb1455-1"></a><span class="co"># num_listの長さと同じ長さの空ベクトルを生成</span></span>
+<span id="cb1455-2"><a href="iteration.html#cb1455-2"></a>Return_vec &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>, <span class="kw">length</span>(num_list))</span>
+<span id="cb1455-3"><a href="iteration.html#cb1455-3"></a></span>
+<span id="cb1455-4"><a href="iteration.html#cb1455-4"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(num_list)) {</span>
+<span id="cb1455-5"><a href="iteration.html#cb1455-5"></a>    Return_vec[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(num_list[[i]], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb1455-6"><a href="iteration.html#cb1455-6"></a>}</span>
+<span id="cb1455-7"><a href="iteration.html#cb1455-7"></a></span>
+<span id="cb1455-8"><a href="iteration.html#cb1455-8"></a>Return_vec</span></code></pre></div>
+<pre><code>## [1] 5.000000 6.571429 4.666667</code></pre>
+<p>以上の例は<code>sapply()</code>、または<code>map_dbl</code>関数を使うとより短くすることができます。</p>
+<div class="sourceCode" id="cb1457"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1457-1"><a href="iteration.html#cb1457-1"></a><span class="kw">sapply</span>(num_list, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<pre><code>##    List1    List2    List3 
+## 5.000000 6.571429 4.666667</code></pre>
+<div class="sourceCode" id="cb1459"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1459-1"><a href="iteration.html#cb1459-1"></a><span class="kw">map_dbl</span>(num_list, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<pre><code>##    List1    List2    List3 
+## 5.000000 6.571429 4.666667</code></pre>
+<p><code>*apply()</code>も<code>map_*()</code>も、それぞれの要素に対して同じ処理を行うことを得意とする関数です。他の応用としては、各ベクトルからn番目の要素を抽出することもできます。ベクトルからn番目の要素を抽出するには<code>ベクトル名[n]</code>と入力しますが、実はこの<code>[</code>も関数です。関数として使う場合は<code>+</code>と同様、<code>`[`</code>と表記します。<code>num_list</code>内の3つのベクトルから3番目の要素を抽出してみましょう。</p>
+<div class="sourceCode" id="cb1461"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1461-1"><a href="iteration.html#cb1461-1"></a><span class="kw">map_dbl</span>(num_list, <span class="st">`</span><span class="dt">[</span><span class="st">`</span>, <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## List1 List2 List3 
+##     5     6    NA</code></pre>
 
-RStudio Cloudはサーバー上にインストールされているRとRStudioをインターネットブラウザ[^browser]で動かすことができるサービスです。インターネットさえ接続されていれば、図\@ref(fig:RStudioCloud)のように、どこでも同じ環境のRとRStudioを使用することができます。また、無料です。ブラウザ上で操作できるため、スマートフォンやタブレットPCでも操作は不可能ではありませんが、基本的にはPCでの操作を想定しています。
-
-[^browser]: [Chrome](https://www.google.com/intl/ja_jp/chrome/)、 [Firefox](https://www.mozilla.org/ja/firefox/new/)、 [Opera](https://www.opera.com)、[Safari](https://www.apple.com/jp/safari/)、[Edge](https://www.microsoft.com/ja-jp/edge)など
-
-これだけだとRStudio Cloud最強説とかがあってもおかしくはありませんね。しかし、ブラウザ上で動くという点でローカルのRStudioよりもやや重いです。また、PCとは違って、メモリの増設もできませんし、マルチコアの使用も非常に制約されています。Tcl/Tkを使用するパッケージの起動はできない限界もあります。また、日本語ユーザー限定の問題かもしれませんが、図に日本語を含む2バイト文字を埋め込むのが非常に面倒くさい問題もあります。
-
-本書はローカルにインストールされているRとRStudioを念頭に置いて解説しますが、RStudio Cloudでも問題なく本書の実習が可能です[^rstudiocloud]。RStudio Cloudの使い方は適宜インターネットなどで検索してみてください。
-
-[^rstudiocloud]: ただし、図に日本語は入力できません。
--->
-
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="86">
+<li id="fn86"><p>引数が2つなら<code>.x</code>と<code>.y</code>を使用します。もし3つ以上なら<code>..1</code>、<code>..2</code>、<code>..3</code>、…と表記します。<a href="iteration.html#fnref86" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="installation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="R-Customize.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="scraping.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="rmarkdown.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
