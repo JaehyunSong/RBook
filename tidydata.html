@@ -61,6 +61,8 @@
 <script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
 <link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
 <script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-165592410-1"></script>
 <script>
@@ -492,6 +494,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="24.1" data-path="iteration.html"><a href="iteration.html#iteration-abstract"><i class="fa fa-check"></i><b>24.1</b> 概要</a></li>
 <li class="chapter" data-level="24.2" data-path="iteration.html"><a href="iteration.html#iteration-intro"><i class="fa fa-check"></i><b>24.2</b> <code>*apply()</code>関数群と<code>map_*()</code>関数群</a></li>
 <li class="chapter" data-level="24.3" data-path="iteration.html"><a href="iteration.html#iteration-two-arguments"><i class="fa fa-check"></i><b>24.3</b> 引数が2つ以上の場合</a></li>
+<li class="chapter" data-level="24.4" data-path="iteration.html"><a href="iteration.html#iteration-df"><i class="fa fa-check"></i><b>24.4</b> データフレームと{purrr}</a></li>
+<li class="chapter" data-level="24.5" data-path="iteration.html"><a href="iteration.html#iteration-model1"><i class="fa fa-check"></i><b>24.5</b> モデルの反復推定</a>
+<ul>
+<li class="chapter" data-level="24.5.1" data-path="iteration.html"><a href="iteration.html#iteration-split1"><i class="fa fa-check"></i><b>24.5.1</b> サンプルの分割とモデル推定（<code>split()</code>利用）</a></li>
+<li class="chapter" data-level="24.5.2" data-path="iteration.html"><a href="iteration.html#iteration-split2"><i class="fa fa-check"></i><b>24.5.2</b> サンプルの分割とモデル推定（<code>nest()</code>利用）</a></li>
+<li class="chapter" data-level="24.5.3" data-path="iteration.html"><a href="iteration.html#iteration-range"><i class="fa fa-check"></i><b>24.5.3</b> データの範囲を指定したモデル推定</a></li>
+<li class="chapter" data-level="24.5.4" data-path="iteration.html"><a href="iteration.html#iteration-variables"><i class="fa fa-check"></i><b>24.5.4</b> 説明・応答変数を指定したモデル推定</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="25" data-path="rmarkdown.html"><a href="rmarkdown.html"><i class="fa fa-check"></i><b>25</b> R Markdown [基礎]</a>
 <ul>
@@ -1785,7 +1795,7 @@ Stock
 <p>まずは、実習用データを読み込みます。</p>
 <div class="sourceCode" id="cb1197"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1197-1"><a href="tidydata.html#cb1197-1"></a>df3 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;Data/Population2015.csv&quot;</span>)</span></code></pre></div>
 <pre><code>## 
-## ─ Column specification ────────────────
+## ─ Column specification ─────────────
 ## cols(
 ##   都道府県 = col_character(),
 ##   区分 = col_character(),
@@ -1949,7 +1959,7 @@ Stock
 <p><a href="Data/COVID19_JK.csv">実習用データ</a>を読み込んでみましょう。</p>
 <div class="sourceCode" id="cb1210"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1210-1"><a href="tidydata.html#cb1210-1"></a>df4 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;Data/COVID19_JK.csv&quot;</span>)</span></code></pre></div>
 <pre><code>## 
-## ─ Column specification ────────────────
+## ─ Column specification ─────────────
 ## cols(
 ##   ID = col_double(),
 ##   Date = col_character(),
@@ -1959,19 +1969,20 @@ Stock
 ## )</code></pre>
 <div class="sourceCode" id="cb1212"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1212-1"><a href="tidydata.html#cb1212-1"></a>df4</span></code></pre></div>
 <pre><code>## # A tibble: 172 x 5
-##       ID Date     Week  Confirmed_Japan Confirmed_Korea
-##    &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;           &lt;chr&gt;          
-##  1     1 2020/1/… 木    1人             &lt;NA&gt;           
-##  2     2 2020/1/… 金    0人             &lt;NA&gt;           
-##  3     3 2020/1/… 土    0人             &lt;NA&gt;           
-##  4     4 2020/1/… 日    0人             &lt;NA&gt;           
-##  5     5 2020/1/… 月    0人             1人            
-##  6     6 2020/1/… 火    0人             0人            
-##  7     7 2020/1/… 水    0人             0人            
-##  8     8 2020/1/… 木    0人             0人            
-##  9     9 2020/1/… 金    2人             1人            
-## 10    10 2020/1/… 土    0人             0人            
-## # … with 162 more rows</code></pre>
+##       ID Date  Week  Confirmed_Japan
+##    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;          
+##  1     1 2020… 木    1人            
+##  2     2 2020… 金    0人            
+##  3     3 2020… 土    0人            
+##  4     4 2020… 日    0人            
+##  5     5 2020… 月    0人            
+##  6     6 2020… 火    0人            
+##  7     7 2020… 水    0人            
+##  8     8 2020… 木    0人            
+##  9     9 2020… 金    2人            
+## 10    10 2020… 土    0人            
+## # … with 162 more rows, and 1 more variable:
+## #   Confirmed_Korea &lt;chr&gt;</code></pre>
 <p>このデータは2020年1月16日から2020年7月5日まで、COVID-19 (新型コロナ)の新規感染者数を日本と韓国を対象に収集したものです。データはWikipedia (<a href="https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Japan">日本</a> / <a href="https://en.wikipedia.org/wiki/COVID-19_pandemic_in_South_Korea">韓国</a>)から収集しました。韓国の新規感染者数は最初の4日分が欠損値のように見えますが、最初の感染者が確認されたのが1月20日のため、1月19日までは欠損となっています。</p>
 <table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>

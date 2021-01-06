@@ -61,6 +61,8 @@
 <script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
 <link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
 <script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-165592410-1"></script>
 <script>
@@ -492,6 +494,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="24.1" data-path="iteration.html"><a href="iteration.html#iteration-abstract"><i class="fa fa-check"></i><b>24.1</b> 概要</a></li>
 <li class="chapter" data-level="24.2" data-path="iteration.html"><a href="iteration.html#iteration-intro"><i class="fa fa-check"></i><b>24.2</b> <code>*apply()</code>関数群と<code>map_*()</code>関数群</a></li>
 <li class="chapter" data-level="24.3" data-path="iteration.html"><a href="iteration.html#iteration-two-arguments"><i class="fa fa-check"></i><b>24.3</b> 引数が2つ以上の場合</a></li>
+<li class="chapter" data-level="24.4" data-path="iteration.html"><a href="iteration.html#iteration-df"><i class="fa fa-check"></i><b>24.4</b> データフレームと{purrr}</a></li>
+<li class="chapter" data-level="24.5" data-path="iteration.html"><a href="iteration.html#iteration-model1"><i class="fa fa-check"></i><b>24.5</b> モデルの反復推定</a>
+<ul>
+<li class="chapter" data-level="24.5.1" data-path="iteration.html"><a href="iteration.html#iteration-split1"><i class="fa fa-check"></i><b>24.5.1</b> サンプルの分割とモデル推定（<code>split()</code>利用）</a></li>
+<li class="chapter" data-level="24.5.2" data-path="iteration.html"><a href="iteration.html#iteration-split2"><i class="fa fa-check"></i><b>24.5.2</b> サンプルの分割とモデル推定（<code>nest()</code>利用）</a></li>
+<li class="chapter" data-level="24.5.3" data-path="iteration.html"><a href="iteration.html#iteration-range"><i class="fa fa-check"></i><b>24.5.3</b> データの範囲を指定したモデル推定</a></li>
+<li class="chapter" data-level="24.5.4" data-path="iteration.html"><a href="iteration.html#iteration-variables"><i class="fa fa-check"></i><b>24.5.4</b> 説明・応答変数を指定したモデル推定</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="25" data-path="rmarkdown.html"><a href="rmarkdown.html"><i class="fa fa-check"></i><b>25</b> R Markdown [基礎]</a>
 <ul>
@@ -993,8 +1003,8 @@ RStudioでは、 option + <code>-</code> [マイナス, ハイフン] (macOS 場
 <p>　ひとつひとつの要素を指定する代わりに、様々な方法でベクトルを作ることが可能である。 たとえば、<code>seq()</code> 関数を使うと、一連の数字からなるベクトルを作ることができる。<code>from</code> で数列の初項を、<code>to</code> で数列の最終項を指定し、<code>by</code> で要素間の差（第2要素は第1要素に <code>by</code> を加えた値になる ）を指定するか、<code>length.out</code> で最終的にできるベクトルの要素の数を指定する。Rのベクトルの <strong>length</strong> とは、要素の数のことなので、注意されたい。</p>
 <p>　いくつか例を挙げる。</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="rbasic.html#cb36-1"></a><span class="kw">seq</span>(<span class="dt">from =</span>  <span class="dv">1</span>, <span class="dt">to =</span>  <span class="dv">20</span>, <span class="dt">by =</span> <span class="dv">1</span>)           <span class="co"># 1から20までの整数。1:20 でも同じ</span></span></code></pre></div>
-<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17
-## [18] 18 19 20</code></pre>
+<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+## [16] 16 17 18 19 20</code></pre>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="rbasic.html#cb38-1"></a><span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">11</span>, <span class="dt">to =</span>  <span class="dv">20</span>, <span class="dt">by =</span> <span class="dv">2</span>)           <span class="co"># 1から19までの奇数</span></span></code></pre></div>
 <pre><code>## [1] 11 13 15 17 19</code></pre>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="rbasic.html#cb40-1"></a><span class="kw">seq</span>(<span class="dt">from =</span>  <span class="dv">2</span>, <span class="dt">to =</span>  <span class="dv">20</span>, <span class="dt">by =</span> <span class="dv">2</span>)           <span class="co"># 2から20までの偶数</span></span></code></pre></div>
@@ -1022,13 +1032,13 @@ Rでは、1つの関数で使う引数の数が複数あることが多いので
 <pre><code>## [1] &quot;C&quot; &quot;C&quot; &quot;A&quot; &quot;A&quot; &quot;T&quot; &quot;T&quot;</code></pre>
 <p>　アルファベットのベクトルは、あらかじめ用意されている。</p>
 <div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="rbasic.html#cb58-1"></a>LETTERS  <span class="co"># 大文字</span></span></code></pre></div>
-<pre><code>##  [1] &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot; &quot;E&quot; &quot;F&quot; &quot;G&quot; &quot;H&quot; &quot;I&quot; &quot;J&quot; &quot;K&quot; &quot;L&quot;
-## [13] &quot;M&quot; &quot;N&quot; &quot;O&quot; &quot;P&quot; &quot;Q&quot; &quot;R&quot; &quot;S&quot; &quot;T&quot; &quot;U&quot; &quot;V&quot; &quot;W&quot; &quot;X&quot;
-## [25] &quot;Y&quot; &quot;Z&quot;</code></pre>
+<pre><code>##  [1] &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot; &quot;E&quot; &quot;F&quot; &quot;G&quot; &quot;H&quot; &quot;I&quot; &quot;J&quot; &quot;K&quot;
+## [12] &quot;L&quot; &quot;M&quot; &quot;N&quot; &quot;O&quot; &quot;P&quot; &quot;Q&quot; &quot;R&quot; &quot;S&quot; &quot;T&quot; &quot;U&quot; &quot;V&quot;
+## [23] &quot;W&quot; &quot;X&quot; &quot;Y&quot; &quot;Z&quot;</code></pre>
 <div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="rbasic.html#cb60-1"></a>letters  <span class="co"># 小文字</span></span></code></pre></div>
-<pre><code>##  [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot; &quot;f&quot; &quot;g&quot; &quot;h&quot; &quot;i&quot; &quot;j&quot; &quot;k&quot; &quot;l&quot;
-## [13] &quot;m&quot; &quot;n&quot; &quot;o&quot; &quot;p&quot; &quot;q&quot; &quot;r&quot; &quot;s&quot; &quot;t&quot; &quot;u&quot; &quot;v&quot; &quot;w&quot; &quot;x&quot;
-## [25] &quot;y&quot; &quot;z&quot;</code></pre>
+<pre><code>##  [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot; &quot;f&quot; &quot;g&quot; &quot;h&quot; &quot;i&quot; &quot;j&quot; &quot;k&quot;
+## [12] &quot;l&quot; &quot;m&quot; &quot;n&quot; &quot;o&quot; &quot;p&quot; &quot;q&quot; &quot;r&quot; &quot;s&quot; &quot;t&quot; &quot;u&quot; &quot;v&quot;
+## [23] &quot;w&quot; &quot;x&quot; &quot;y&quot; &quot;z&quot;</code></pre>
 </div>
 <div id="rbasic-extract" class="section level2" number="7.5">
 <h2><span class="header-section-number">7.5</span> 要素の抽出</h2>
@@ -1056,8 +1066,8 @@ Rでは、1つの関数で使う引数の数が複数あることが多いので
 <pre><code>## [1] &quot;cat&quot;   &quot;lion&quot;  &quot;tiger&quot;</code></pre>
 <p>　<code>TRUE</code>と<code>FALSE</code>が使えるので、論理演算子を<code>[]</code>の中で使うこともできる。たとえば、<code>numeric_vec1</code>の各要素が偶数かどうかを判定するためには、インデックスが2で割り切れるかどうか（2で割った余りが0かどうか）を確認すれば良い。</p>
 <div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="rbasic.html#cb74-1"></a>(numeric_vec1 <span class="op">%%</span><span class="st"> </span><span class="dv">2</span>) <span class="op">==</span><span class="st"> </span><span class="dv">0</span>  <span class="co"># 偶数かどうかの判定</span></span></code></pre></div>
-<pre><code>## [1] FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE FALSE
-## [9] FALSE</code></pre>
+<pre><code>## [1] FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE
+## [8] FALSE FALSE</code></pre>
 <p>これを利用すれば、<code>numeric_vec1</code>から偶数のみを抽出できる。</p>
 <div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="rbasic.html#cb76-1"></a>numeric_vec1[(numeric_vec1 <span class="op">%%</span><span class="st"> </span><span class="dv">2</span>) <span class="op">==</span><span class="st"> </span><span class="dv">0</span>]</span></code></pre></div>
 <pre><code>## [1]  6 10 22</code></pre>

@@ -61,6 +61,8 @@
 <script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
 <link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
 <script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-165592410-1"></script>
 <script>
@@ -492,6 +494,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="24.1" data-path="iteration.html"><a href="iteration.html#iteration-abstract"><i class="fa fa-check"></i><b>24.1</b> 概要</a></li>
 <li class="chapter" data-level="24.2" data-path="iteration.html"><a href="iteration.html#iteration-intro"><i class="fa fa-check"></i><b>24.2</b> <code>*apply()</code>関数群と<code>map_*()</code>関数群</a></li>
 <li class="chapter" data-level="24.3" data-path="iteration.html"><a href="iteration.html#iteration-two-arguments"><i class="fa fa-check"></i><b>24.3</b> 引数が2つ以上の場合</a></li>
+<li class="chapter" data-level="24.4" data-path="iteration.html"><a href="iteration.html#iteration-df"><i class="fa fa-check"></i><b>24.4</b> データフレームと{purrr}</a></li>
+<li class="chapter" data-level="24.5" data-path="iteration.html"><a href="iteration.html#iteration-model1"><i class="fa fa-check"></i><b>24.5</b> モデルの反復推定</a>
+<ul>
+<li class="chapter" data-level="24.5.1" data-path="iteration.html"><a href="iteration.html#iteration-split1"><i class="fa fa-check"></i><b>24.5.1</b> サンプルの分割とモデル推定（<code>split()</code>利用）</a></li>
+<li class="chapter" data-level="24.5.2" data-path="iteration.html"><a href="iteration.html#iteration-split2"><i class="fa fa-check"></i><b>24.5.2</b> サンプルの分割とモデル推定（<code>nest()</code>利用）</a></li>
+<li class="chapter" data-level="24.5.3" data-path="iteration.html"><a href="iteration.html#iteration-range"><i class="fa fa-check"></i><b>24.5.3</b> データの範囲を指定したモデル推定</a></li>
+<li class="chapter" data-level="24.5.4" data-path="iteration.html"><a href="iteration.html#iteration-variables"><i class="fa fa-check"></i><b>24.5.4</b> 説明・応答変数を指定したモデル推定</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="25" data-path="rmarkdown.html"><a href="rmarkdown.html"><i class="fa fa-check"></i><b>25</b> R Markdown [基礎]</a>
 <ul>
@@ -752,18 +762,238 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb1475"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1475-1"><a href="iteration.html#cb1475-1"></a><span class="co"># データ2も長さ1なのでmap_chr()もOK</span></span>
 <span id="cb1475-2"><a href="iteration.html#cb1475-2"></a><span class="kw">map_chr</span>(num_vec, <span class="op">~</span><span class="kw">paste</span>(..<span class="dv">2</span>, ..<span class="dv">1</span>, <span class="dt">sep =</span> ..<span class="dv">3</span>), <span class="st">&quot;ID&quot;</span>, <span class="st">&quot;-&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;ID-3&quot; &quot;ID-2&quot; &quot;ID-5&quot; &quot;ID-4&quot; &quot;ID-7&quot;</code></pre>
-<p>それではデータを3つ以上使うにはどうすれば良いでしょうか。そこで登場するのが<code>pmap_*()</code>関数です。</p>
+<p>それではデータを3つ以上使うにはどうすれば良いでしょうか。そこで登場するのが<code>pmap_*()</code>関数です。以下の3つのベクトルを利用し、「名前:数学成績」を出力してみましょう。ただし、不正行為がある場合（<code>cheat_vec</code>の値が1）は成績が0点になるようにしましょう。</p>
 <div class="sourceCode" id="cb1477"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1477-1"><a href="iteration.html#cb1477-1"></a>name_vec  &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Hadley&quot;</span>, <span class="st">&quot;Song&quot;</span>, <span class="st">&quot;Yanai&quot;</span>)</span>
 <span id="cb1477-2"><a href="iteration.html#cb1477-2"></a>math_vec  &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">70</span>, <span class="dv">55</span>, <span class="dv">80</span>)</span>
 <span id="cb1477-3"><a href="iteration.html#cb1477-3"></a>cheat_vec &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb1478"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1478-1"><a href="iteration.html#cb1478-1"></a><span class="kw">pmap_chr</span>(<span class="kw">list</span>(name_vec, math_vec, cheat_vec), </span>
-<span id="cb1478-2"><a href="iteration.html#cb1478-2"></a>         <span class="op">~</span><span class="kw">paste0</span>(..<span class="dv">1</span>, <span class="st">&quot;:&quot;</span>, ..<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>..<span class="dv">3</span>)))</span></code></pre></div>
+<p>賢い解決法は普通に<code>paste0()</code>関数を使う方法です。</p>
+<div class="sourceCode" id="cb1478"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1478-1"><a href="iteration.html#cb1478-1"></a><span class="kw">paste0</span>(name_vec, <span class="st">&quot;:&quot;</span>, math_vec <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>cheat_vec))</span></code></pre></div>
+<pre><code>## [1] &quot;Hadley:70&quot; &quot;Song:0&quot;    &quot;Yanai:80&quot;</code></pre>
+<p>今回はあえて<code>pmap_*()</code>関数を使ってみましょう。<code>pmap_*()</code>の場合、第一引数であるデータはリスト型で渡す必要があります。したがって、3つのベクトルを<code>list()</code>関数を用いてリスト化します。第二引数には既存の関数やラムダ式を入力し、各引数は<code>..1</code>、<code>..2</code>、…といった形で表記します。</p>
+<div class="sourceCode" id="cb1480"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1480-1"><a href="iteration.html#cb1480-1"></a><span class="kw">pmap_chr</span>(<span class="kw">list</span>(name_vec, math_vec, cheat_vec), </span>
+<span id="cb1480-2"><a href="iteration.html#cb1480-2"></a>         <span class="op">~</span><span class="kw">paste0</span>(..<span class="dv">1</span>, <span class="st">&quot;:&quot;</span>, ..<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>..<span class="dv">3</span>)))</span></code></pre></div>
 <pre><code>## [1] &quot;Hadley:70&quot; &quot;Song:0&quot;    &quot;Yanai:80&quot;</code></pre>
 <p>第一引数はデータであるため、まずリストを作成し、パイプ演算子（<code>%&gt;%</code>）で<code>pmap_*()</code>に渡すことも可能です。</p>
-<div class="sourceCode" id="cb1480"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1480-1"><a href="iteration.html#cb1480-1"></a><span class="kw">list</span>(name_vec, math_vec, cheat_vec) <span class="op">%&gt;%</span></span>
-<span id="cb1480-2"><a href="iteration.html#cb1480-2"></a><span class="st">  </span><span class="kw">pmap_chr</span>(<span class="op">~</span><span class="kw">paste0</span>(..<span class="dv">1</span>, <span class="st">&quot;:&quot;</span>, ..<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>..<span class="dv">3</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb1482"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1482-1"><a href="iteration.html#cb1482-1"></a><span class="kw">list</span>(name_vec, math_vec, cheat_vec) <span class="op">%&gt;%</span></span>
+<span id="cb1482-2"><a href="iteration.html#cb1482-2"></a><span class="st">  </span><span class="kw">pmap_chr</span>(<span class="op">~</span><span class="kw">paste0</span>(..<span class="dv">1</span>, <span class="st">&quot;:&quot;</span>, ..<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>..<span class="dv">3</span>)))</span></code></pre></div>
 <pre><code>## [1] &quot;Hadley:70&quot; &quot;Song:0&quot;    &quot;Yanai:80&quot;</code></pre>
+<hr />
+</div>
+<div id="iteration-df" class="section level2" number="24.4">
+<h2><span class="header-section-number">24.4</span> データフレームと{purrr}</h2>
+<hr />
+</div>
+<div id="iteration-model1" class="section level2" number="24.5">
+<h2><span class="header-section-number">24.5</span> モデルの反復推定</h2>
+<div class="sourceCode" id="cb1484"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1484-1"><a href="iteration.html#cb1484-1"></a>Country_df &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;Data/Countries.csv&quot;</span>)</span></code></pre></div>
+<div id="iteration-split1" class="section level3" number="24.5.1">
+<h3><span class="header-section-number">24.5.1</span> サンプルの分割とモデル推定（<code>split()</code>利用）</h3>
+<div class="sourceCode" id="cb1485"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1485-1"><a href="iteration.html#cb1485-1"></a>Split_Data &lt;-<span class="st"> </span><span class="kw">split</span>(Country_df, Country_df<span class="op">$</span>Continent)</span></code></pre></div>
+<p>サンプルが分割された<code>Split_Data</code>のデータ構造はリスト型です。</p>
+<div class="sourceCode" id="cb1486"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1486-1"><a href="iteration.html#cb1486-1"></a><span class="kw">class</span>(Split_Data)</span></code></pre></div>
+<pre><code>## [1] &quot;list&quot;</code></pre>
+<p>中身を見るとリストの各要素としてtibble（データフレーム）が格納されています。リストの中にはあらゆるデータ型、データ構造を入れることができることが分かります。</p>
+<div class="sourceCode" id="cb1488"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1488-1"><a href="iteration.html#cb1488-1"></a>Split_Data</span></code></pre></div>
+<pre><code>## $Africa
+## # A tibble: 54 x 18
+##    Country Population   Area    GDP    PPP
+##    &lt;chr&gt;        &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+##  1 Algeria   43851044 2.38e6 1.70e5 4.97e5
+##  2 Angola    32866272 1.25e6 9.46e4 2.19e5
+##  3 Benin     12123200 1.13e5 1.44e4 3.72e4
+##  4 Botswa…    2351627 5.67e5 1.83e4 4.07e4
+##  5 Burkin…   20903273 2.74e5 1.57e4 3.76e4
+##  6 Burundi   11890784 2.57e4 3.01e3 8.72e3
+##  7 Cabo V…     555987 4.03e3 1.98e3 3.84e3
+##  8 Camero…   26545863 4.73e5 3.88e4 9.31e4
+##  9 Centra…    4829767 6.23e5 2.22e3 4.46e3
+## 10 Chad      16425864 1.26e6 1.13e4 2.51e4
+## # … with 44 more rows, and 13 more variables:
+## #   GDP_per_capita &lt;dbl&gt;, PPP_per_capita &lt;dbl&gt;,
+## #   G7 &lt;dbl&gt;, G20 &lt;dbl&gt;, OECD &lt;dbl&gt;,
+## #   HDI_2018 &lt;dbl&gt;, Polity_Score &lt;dbl&gt;,
+## #   Polity_Type &lt;chr&gt;, FH_PR &lt;dbl&gt;, FH_CL &lt;dbl&gt;,
+## #   FH_Total &lt;dbl&gt;, FH_Status &lt;chr&gt;,
+## #   Continent &lt;chr&gt;
+## 
+## $America
+## # A tibble: 36 x 18
+##    Country Population   Area    GDP    PPP
+##    &lt;chr&gt;        &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+##  1 Antigu…      97929 4.40e2 1.73e3 2.08e3
+##  2 Argent…   45195774 2.74e6 4.50e5 1.04e6
+##  3 Bahamas     393244 1.00e4 1.28e4 1.40e4
+##  4 Barbad…     287375 4.30e2 5.21e3 4.62e3
+##  5 Belize      397628 2.28e4 1.88e3 2.82e3
+##  6 Bolivia   11673021 1.08e6 4.09e4 1.01e5
+##  7 Brazil   212559417 8.36e6 1.84e6 3.13e6
+##  8 Canada    37742154 9.09e6 1.74e6 1.85e6
+##  9 Chile     19116201 7.44e5 2.82e5 4.64e5
+## 10 Colomb…   50882891 1.11e6 3.24e5 7.37e5
+## # … with 26 more rows, and 13 more variables:
+## #   GDP_per_capita &lt;dbl&gt;, PPP_per_capita &lt;dbl&gt;,
+## #   G7 &lt;dbl&gt;, G20 &lt;dbl&gt;, OECD &lt;dbl&gt;,
+## #   HDI_2018 &lt;dbl&gt;, Polity_Score &lt;dbl&gt;,
+## #   Polity_Type &lt;chr&gt;, FH_PR &lt;dbl&gt;, FH_CL &lt;dbl&gt;,
+## #   FH_Total &lt;dbl&gt;, FH_Status &lt;chr&gt;,
+## #   Continent &lt;chr&gt;
+## 
+## $Asia
+## # A tibble: 42 x 18
+##    Country Population   Area    GDP    PPP
+##    &lt;chr&gt;        &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+##  1 Afghan…   38928346 6.53e5 1.91e4 8.27e4
+##  2 Bahrain    1701575 7.60e2 3.86e4 7.42e4
+##  3 Bangla…  164689383 1.30e5 3.03e5 7.34e5
+##  4 Bhutan      771608 3.81e4 2.45e3 8.77e3
+##  5 Brunei      437479 5.27e3 1.35e4 2.65e4
+##  6 Burma     54409800 6.53e5 7.61e4 2.68e5
+##  7 Cambod…   16718965 1.77e5 2.71e4 6.93e4
+##  8 China   1447470092 9.39e6 1.48e7 2.20e7
+##  9 India   1380004385 2.97e6 2.88e6 9.06e6
+## 10 Indone…  273523615 1.81e6 1.12e6 3.12e6
+## # … with 32 more rows, and 13 more variables:
+## #   GDP_per_capita &lt;dbl&gt;, PPP_per_capita &lt;dbl&gt;,
+## #   G7 &lt;dbl&gt;, G20 &lt;dbl&gt;, OECD &lt;dbl&gt;,
+## #   HDI_2018 &lt;dbl&gt;, Polity_Score &lt;dbl&gt;,
+## #   Polity_Type &lt;chr&gt;, FH_PR &lt;dbl&gt;, FH_CL &lt;dbl&gt;,
+## #   FH_Total &lt;dbl&gt;, FH_Status &lt;chr&gt;,
+## #   Continent &lt;chr&gt;
+## 
+## $Europe
+## # A tibble: 50 x 18
+##    Country Population   Area    GDP     PPP
+##    &lt;chr&gt;        &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+##  1 Albania    2877797  27400 1.53e4  39658.
+##  2 Andorra      77265    470 3.15e3     NA 
+##  3 Armenia    2963243  28470 1.37e4  38446.
+##  4 Austria    9006398  82409 4.46e5 502771.
+##  5 Azerba…   10139177  82658 4.80e4 144556.
+##  6 Belarus    9449323 202910 6.31e4 183461.
+##  7 Belgium   11589623  30280 5.30e5 597433.
+##  8 Bosnia…    3280819  51000 2.00e4  49733.
+##  9 Bulgar…    6948445 108560 6.79e4 156693.
+## 10 Croatia    4105267  55960 6.04e4 114932.
+## # … with 40 more rows, and 13 more variables:
+## #   GDP_per_capita &lt;dbl&gt;, PPP_per_capita &lt;dbl&gt;,
+## #   G7 &lt;dbl&gt;, G20 &lt;dbl&gt;, OECD &lt;dbl&gt;,
+## #   HDI_2018 &lt;dbl&gt;, Polity_Score &lt;dbl&gt;,
+## #   Polity_Type &lt;chr&gt;, FH_PR &lt;dbl&gt;, FH_CL &lt;dbl&gt;,
+## #   FH_Total &lt;dbl&gt;, FH_Status &lt;chr&gt;,
+## #   Continent &lt;chr&gt;
+## 
+## $Oceania
+## # A tibble: 4 x 18
+##   Country Population   Area    GDP    PPP
+##   &lt;chr&gt;        &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 Austra…   25499884 7.68e6 1.39e6 1.28e6
+## 2 Fiji        896445 1.83e4 5.54e3 1.25e4
+## 3 New Ze…    4842780 2.64e5 2.07e5 2.04e5
+## 4 Papua …    8947024 4.53e5 2.50e4 3.73e4
+## # … with 13 more variables:
+## #   GDP_per_capita &lt;dbl&gt;, PPP_per_capita &lt;dbl&gt;,
+## #   G7 &lt;dbl&gt;, G20 &lt;dbl&gt;, OECD &lt;dbl&gt;,
+## #   HDI_2018 &lt;dbl&gt;, Polity_Score &lt;dbl&gt;,
+## #   Polity_Type &lt;chr&gt;, FH_PR &lt;dbl&gt;, FH_CL &lt;dbl&gt;,
+## #   FH_Total &lt;dbl&gt;, FH_Status &lt;chr&gt;,
+## #   Continent &lt;chr&gt;</code></pre>
+<p>それでは分割された各サンプルに対して<code>Polity_Score</code>と<code>FH_Total</code>の相関係数を計算してみましょう。その前に相関分析の方法について調べてみましょう。Rには相関分析の関数が2つ用意されています。単純に相関係数のみを計算するなら<code>cor()</code>、係数の不確実性（標準誤差、信頼区間など）まで計算し、検定を行うなら<code>cor.test()</code>を使用します。ここではより汎用性の高い<code>cor.test()</code>の使い方について紹介します。</p>
+<div class="sourceCode" id="cb1490"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1490-1"><a href="iteration.html#cb1490-1"></a><span class="co"># 相関分析: 方法1</span></span>
+<span id="cb1490-2"><a href="iteration.html#cb1490-2"></a><span class="kw">cor.test</span>(<span class="op">~</span><span class="st"> </span>変数名1 <span class="op">+</span><span class="st"> </span>変数名2, <span class="dt">data =</span> データ名)</span>
+<span id="cb1490-3"><a href="iteration.html#cb1490-3"></a></span>
+<span id="cb1490-4"><a href="iteration.html#cb1490-4"></a><span class="co"># 相関分析: 方法2</span></span>
+<span id="cb1490-5"><a href="iteration.html#cb1490-5"></a><span class="kw">cor.test</span>(データ名<span class="op">$</span>変数名1, データ名<span class="op">$</span>変数名2)</span></code></pre></div>
+<p>それでは全サンプルに対して相関分析をしてみましょう。</p>
+<div class="sourceCode" id="cb1491"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1491-1"><a href="iteration.html#cb1491-1"></a>Cor_fit1 &lt;-<span class="st"> </span><span class="kw">cor.test</span>(<span class="op">~</span><span class="st"> </span>Polity_Score <span class="op">+</span><span class="st"> </span>FH_Total, <span class="dt">data =</span> Country_df)</span>
+<span id="cb1491-2"><a href="iteration.html#cb1491-2"></a>Cor_fit1</span></code></pre></div>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  Polity_Score and FH_Total
+## t = 19.494, df = 156, p-value &lt; 2.2e-16
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.7896829 0.8821647
+## sample estimates:
+##       cor 
+## 0.8420031</code></pre>
+<p>ここから相関係数（0.8420031）のみを抽出するにはどうすれば良いでしょうか。それを確認するためには<code>Cor_fit1</code>というオブジェクトの構造を調べる必要があります。ここではR内蔵関数である<code>str()</code>を使って確認してみましょう。</p>
+<div class="sourceCode" id="cb1493"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1493-1"><a href="iteration.html#cb1493-1"></a><span class="kw">str</span>(Cor_fit1)</span></code></pre></div>
+<pre><code>## List of 9
+##  $ statistic  : Named num 19.5
+##   ..- attr(*, &quot;names&quot;)= chr &quot;t&quot;
+##  $ parameter  : Named int 156
+##   ..- attr(*, &quot;names&quot;)= chr &quot;df&quot;
+##  $ p.value    : num 1.16e-43
+##  $ estimate   : Named num 0.842
+##   ..- attr(*, &quot;names&quot;)= chr &quot;cor&quot;
+##  $ null.value : Named num 0
+##   ..- attr(*, &quot;names&quot;)= chr &quot;correlation&quot;
+##  $ alternative: chr &quot;two.sided&quot;
+##  $ method     : chr &quot;Pearson&#39;s product-moment correlation&quot;
+##  $ data.name  : chr &quot;Polity_Score and FH_Total&quot;
+##  $ conf.int   : num [1:2] 0.79 0.882
+##   ..- attr(*, &quot;conf.level&quot;)= num 0.95
+##  - attr(*, &quot;class&quot;)= chr &quot;htest&quot;</code></pre>
+<p>相関係数は<code>$estimate</code>で抽出できそうですね。実際に<code>Cor_fit1</code>から相関係数のみ抽出してみましょう。</p>
+<div class="sourceCode" id="cb1495"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1495-1"><a href="iteration.html#cb1495-1"></a>Cor_fit1<span class="op">$</span>estimate</span></code></pre></div>
+<pre><code>##       cor 
+## 0.8420031</code></pre>
+<p>それでは<code>map()</code>関数を利用して分割された各サンプルを対象に<code>Polity_Score</code>と<code>FH_Total</code>の相関係数を計算してみましょう。<code>map()</code>のデータは<code>Split_Data</code>とし、関数はラムダ式を書いてみましょう。<code>cor.test()</code>内<code>data</code>引数の実引数は<code>.x</code>、または<code>..1</code>となります。最後に<code>map_dbl("estimate")</code>を利用し、相関係数を抽出、numeric (double) 型ベクトルとして出力します。</p>
+<div class="sourceCode" id="cb1497"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1497-1"><a href="iteration.html#cb1497-1"></a>Cor_fit2 &lt;-<span class="st"> </span>Split_Data <span class="op">%&gt;%</span></span>
+<span id="cb1497-2"><a href="iteration.html#cb1497-2"></a><span class="st">  </span><span class="kw">map</span>(<span class="op">~</span><span class="kw">cor.test</span>(<span class="op">~</span><span class="st"> </span>Polity_Score <span class="op">+</span><span class="st"> </span>FH_Total, <span class="dt">data =</span> .x))</span></code></pre></div>
+<div class="sourceCode" id="cb1498"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1498-1"><a href="iteration.html#cb1498-1"></a><span class="kw">map_dbl</span>(Cor_fit2, <span class="st">&quot;estimate&quot;</span>)</span></code></pre></div>
+<pre><code>##    Africa   America      Asia    Europe   Oceania 
+## 0.7612138 0.8356899 0.8338172 0.8419547 0.9960776</code></pre>
+<div class="sourceCode" id="cb1500"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1500-1"><a href="iteration.html#cb1500-1"></a><span class="kw">map_dbl</span>(Cor_fit2, <span class="st">&quot;p.value&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">round</span>(<span class="dv">3</span>)</span></code></pre></div>
+<pre><code>##  Africa America    Asia  Europe Oceania 
+##   0.000   0.000   0.000   0.000   0.004</code></pre>
+</div>
+<div id="iteration-split2" class="section level3" number="24.5.2">
+<h3><span class="header-section-number">24.5.2</span> サンプルの分割とモデル推定（<code>nest()</code>利用）</h3>
+<div class="sourceCode" id="cb1502"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1502-1"><a href="iteration.html#cb1502-1"></a>Nested_Data &lt;-<span class="st"> </span>Country_df <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1502-2"><a href="iteration.html#cb1502-2"></a><span class="st">  </span><span class="kw">group_by</span>(Continent) <span class="op">%&gt;%</span></span>
+<span id="cb1502-3"><a href="iteration.html#cb1502-3"></a><span class="st">  </span><span class="kw">nest</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb1503"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1503-1"><a href="iteration.html#cb1503-1"></a>Nested_Data</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Continent"],"name":[1],"type":["chr"],"align":["left"]},{"label":["data"],"name":[2],"type":["list"],"align":["right"]}],"data":[{"1":"Asia","2":"<tbl_df[,17]>"},{"1":"Europe","2":"<tbl_df[,17]>"},{"1":"Africa","2":"<tbl_df[,17]>"},{"1":"America","2":"<tbl_df[,17]>"},{"1":"Oceania","2":"<tbl_df[,17]>"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode" id="cb1504"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1504-1"><a href="iteration.html#cb1504-1"></a>Nested_Data <span class="op">%&gt;%</span></span>
+<span id="cb1504-2"><a href="iteration.html#cb1504-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Cor_test =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="kw">cor.test</span>(<span class="op">~</span><span class="st"> </span>Polity_Score <span class="op">+</span><span class="st"> </span>FH_Total, <span class="dt">data =</span> .x)),</span>
+<span id="cb1504-3"><a href="iteration.html#cb1504-3"></a>         <span class="dt">Cor_coef =</span> <span class="kw">map</span>(Cor_test, <span class="st">&quot;estimate&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb1504-4"><a href="iteration.html#cb1504-4"></a><span class="st">  </span><span class="kw">unnest</span>(<span class="dt">cols =</span> Cor_coef)</span></code></pre></div>
+<pre><code>## # A tibble: 5 x 4
+## # Groups:   Continent [5]
+##   Continent data               Cor_test Cor_coef
+##   &lt;chr&gt;     &lt;list&gt;             &lt;list&gt;      &lt;dbl&gt;
+## 1 Asia      &lt;tibble [42 × 17]&gt; &lt;htest&gt;     0.834
+## 2 Europe    &lt;tibble [50 × 17]&gt; &lt;htest&gt;     0.842
+## 3 Africa    &lt;tibble [54 × 17]&gt; &lt;htest&gt;     0.761
+## 4 America   &lt;tibble [36 × 17]&gt; &lt;htest&gt;     0.836
+## 5 Oceania   &lt;tibble [4 × 17]&gt;  &lt;htest&gt;     0.996</code></pre>
+<div class="sourceCode" id="cb1506"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1506-1"><a href="iteration.html#cb1506-1"></a>Nested_Data <span class="op">%&gt;%</span></span>
+<span id="cb1506-2"><a href="iteration.html#cb1506-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Model =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="kw">lm</span>(PPP_per_capita <span class="op">~</span><span class="st"> </span>FH_Total, <span class="dt">data =</span> .x)),</span>
+<span id="cb1506-3"><a href="iteration.html#cb1506-3"></a>         <span class="dt">Model =</span> <span class="kw">map</span>(Model, broom<span class="op">::</span>tidy)) <span class="op">%&gt;%</span></span>
+<span id="cb1506-4"><a href="iteration.html#cb1506-4"></a><span class="st">  </span><span class="kw">unnest</span>(<span class="dt">cols =</span> Model) <span class="op">%&gt;%</span></span>
+<span id="cb1506-5"><a href="iteration.html#cb1506-5"></a><span class="st">  </span><span class="kw">filter</span>(term <span class="op">==</span><span class="st"> &quot;FH_Total&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1506-6"><a href="iteration.html#cb1506-6"></a><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(data, term))</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Continent"],"name":[1],"type":["chr"],"align":["left"]},{"label":["estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["std.error"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["statistic"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["p.value"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"Asia","2":"65.25075","3":"155.71501","4":"0.4190395","5":"6.774863e-01"},{"1":"Europe","2":"588.39972","3":"105.44583","4":"5.5801137","5":"1.392002e-06"},{"1":"Africa","2":"53.38066","3":"33.80454","4":"1.5790977","5":"1.206200e-01"},{"1":"America","2":"315.94989","3":"92.36997","4":"3.4204827","5":"1.682310e-03"},{"1":"Oceania","2":"1019.61879","3":"196.68056","4":"5.1841360","5":"3.525311e-02"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="iteration-range" class="section level3" number="24.5.3">
+<h3><span class="header-section-number">24.5.3</span> データの範囲を指定したモデル推定</h3>
+<p>RDDの例（バンド幅を変えながら推定）</p>
+</div>
+<div id="iteration-variables" class="section level3" number="24.5.4">
+<h3><span class="header-section-number">24.5.4</span> 説明・応答変数を指定したモデル推定</h3>
+<p>バランスチェックの例（応答変数を変えながら推定）</p>
 
+</div>
 </div>
 </div>
 <div class="footnotes">

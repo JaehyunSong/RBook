@@ -61,6 +61,8 @@
 <script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
 <link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
 <script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-165592410-1"></script>
 <script>
@@ -492,6 +494,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="24.1" data-path="iteration.html"><a href="iteration.html#iteration-abstract"><i class="fa fa-check"></i><b>24.1</b> 概要</a></li>
 <li class="chapter" data-level="24.2" data-path="iteration.html"><a href="iteration.html#iteration-intro"><i class="fa fa-check"></i><b>24.2</b> <code>*apply()</code>関数群と<code>map_*()</code>関数群</a></li>
 <li class="chapter" data-level="24.3" data-path="iteration.html"><a href="iteration.html#iteration-two-arguments"><i class="fa fa-check"></i><b>24.3</b> 引数が2つ以上の場合</a></li>
+<li class="chapter" data-level="24.4" data-path="iteration.html"><a href="iteration.html#iteration-df"><i class="fa fa-check"></i><b>24.4</b> データフレームと{purrr}</a></li>
+<li class="chapter" data-level="24.5" data-path="iteration.html"><a href="iteration.html#iteration-model1"><i class="fa fa-check"></i><b>24.5</b> モデルの反復推定</a>
+<ul>
+<li class="chapter" data-level="24.5.1" data-path="iteration.html"><a href="iteration.html#iteration-split1"><i class="fa fa-check"></i><b>24.5.1</b> サンプルの分割とモデル推定（<code>split()</code>利用）</a></li>
+<li class="chapter" data-level="24.5.2" data-path="iteration.html"><a href="iteration.html#iteration-split2"><i class="fa fa-check"></i><b>24.5.2</b> サンプルの分割とモデル推定（<code>nest()</code>利用）</a></li>
+<li class="chapter" data-level="24.5.3" data-path="iteration.html"><a href="iteration.html#iteration-range"><i class="fa fa-check"></i><b>24.5.3</b> データの範囲を指定したモデル推定</a></li>
+<li class="chapter" data-level="24.5.4" data-path="iteration.html"><a href="iteration.html#iteration-variables"><i class="fa fa-check"></i><b>24.5.4</b> 説明・応答変数を指定したモデル推定</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="25" data-path="rmarkdown.html"><a href="rmarkdown.html"><i class="fa fa-check"></i><b>25</b> R Markdown [基礎]</a>
 <ul>
@@ -808,8 +818,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1367-7"><a href="visualization3.html#cb1367-7"></a>                                          <span class="st">&quot;Full Democracy&quot;</span>)))</span>
 <span id="cb1367-8"><a href="visualization3.html#cb1367-8"></a></span>
 <span id="cb1367-9"><a href="visualization3.html#cb1367-9"></a>Scale_df1<span class="op">$</span>Polity_Type</span></code></pre></div>
-<pre><code>## [1] Autocracy       Closed Anocracy Democracy      
-## [4] Full Democracy  Open Anocracy   &lt;NA&gt;           
+<pre><code>## [1] Autocracy       Closed Anocracy
+## [3] Democracy       Full Democracy 
+## [5] Open Anocracy   &lt;NA&gt;           
 ## 5 Levels: Autocracy &lt; ... &lt; Full Democracy</code></pre>
 <p>　問題なくfactor化も出来たので、それでは作図をしてみましょう。</p>
 <div class="sourceCode" id="cb1369"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1369-1"><a href="visualization3.html#cb1369-1"></a>Scale_df1 <span class="op">%&gt;%</span><span class="st"> </span></span>
@@ -855,22 +866,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-703-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>　このような書き方だとどのような色名で使えるかを事前に知っておく必要があります。使える色名のリストは<code>colors()</code>から確認できます。全部で657種類がありますが、ここでは最初の50個のみを出力します。</p>
 <div class="sourceCode" id="cb1373"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1373-1"><a href="visualization3.html#cb1373-1"></a><span class="kw">head</span>(<span class="kw">colors</span>(), <span class="dv">50</span>)</span></code></pre></div>
-<pre><code>##  [1] &quot;white&quot;          &quot;aliceblue&quot;      &quot;antiquewhite&quot;  
-##  [4] &quot;antiquewhite1&quot;  &quot;antiquewhite2&quot;  &quot;antiquewhite3&quot; 
-##  [7] &quot;antiquewhite4&quot;  &quot;aquamarine&quot;     &quot;aquamarine1&quot;   
-## [10] &quot;aquamarine2&quot;    &quot;aquamarine3&quot;    &quot;aquamarine4&quot;   
-## [13] &quot;azure&quot;          &quot;azure1&quot;         &quot;azure2&quot;        
-## [16] &quot;azure3&quot;         &quot;azure4&quot;         &quot;beige&quot;         
-## [19] &quot;bisque&quot;         &quot;bisque1&quot;        &quot;bisque2&quot;       
-## [22] &quot;bisque3&quot;        &quot;bisque4&quot;        &quot;black&quot;         
-## [25] &quot;blanchedalmond&quot; &quot;blue&quot;           &quot;blue1&quot;         
-## [28] &quot;blue2&quot;          &quot;blue3&quot;          &quot;blue4&quot;         
-## [31] &quot;blueviolet&quot;     &quot;brown&quot;          &quot;brown1&quot;        
-## [34] &quot;brown2&quot;         &quot;brown3&quot;         &quot;brown4&quot;        
-## [37] &quot;burlywood&quot;      &quot;burlywood1&quot;     &quot;burlywood2&quot;    
-## [40] &quot;burlywood3&quot;     &quot;burlywood4&quot;     &quot;cadetblue&quot;     
-## [43] &quot;cadetblue1&quot;     &quot;cadetblue2&quot;     &quot;cadetblue3&quot;    
-## [46] &quot;cadetblue4&quot;     &quot;chartreuse&quot;     &quot;chartreuse1&quot;   
+<pre><code>##  [1] &quot;white&quot;          &quot;aliceblue&quot;     
+##  [3] &quot;antiquewhite&quot;   &quot;antiquewhite1&quot; 
+##  [5] &quot;antiquewhite2&quot;  &quot;antiquewhite3&quot; 
+##  [7] &quot;antiquewhite4&quot;  &quot;aquamarine&quot;    
+##  [9] &quot;aquamarine1&quot;    &quot;aquamarine2&quot;   
+## [11] &quot;aquamarine3&quot;    &quot;aquamarine4&quot;   
+## [13] &quot;azure&quot;          &quot;azure1&quot;        
+## [15] &quot;azure2&quot;         &quot;azure3&quot;        
+## [17] &quot;azure4&quot;         &quot;beige&quot;         
+## [19] &quot;bisque&quot;         &quot;bisque1&quot;       
+## [21] &quot;bisque2&quot;        &quot;bisque3&quot;       
+## [23] &quot;bisque4&quot;        &quot;black&quot;         
+## [25] &quot;blanchedalmond&quot; &quot;blue&quot;          
+## [27] &quot;blue1&quot;          &quot;blue2&quot;         
+## [29] &quot;blue3&quot;          &quot;blue4&quot;         
+## [31] &quot;blueviolet&quot;     &quot;brown&quot;         
+## [33] &quot;brown1&quot;         &quot;brown2&quot;        
+## [35] &quot;brown3&quot;         &quot;brown4&quot;        
+## [37] &quot;burlywood&quot;      &quot;burlywood1&quot;    
+## [39] &quot;burlywood2&quot;     &quot;burlywood3&quot;    
+## [41] &quot;burlywood4&quot;     &quot;cadetblue&quot;     
+## [43] &quot;cadetblue1&quot;     &quot;cadetblue2&quot;    
+## [45] &quot;cadetblue3&quot;     &quot;cadetblue4&quot;    
+## [47] &quot;chartreuse&quot;     &quot;chartreuse1&quot;   
 ## [49] &quot;chartreuse2&quot;    &quot;chartreuse3&quot;</code></pre>
 <p><code>scale_x_gradient()</code>から派生した関数として<code>scale_x_gradient2()</code>というものもあります。これは最小値と最大値だけでなく、<code>mid</code>引数を使って中間における色も指定可能な関数です。例えば、先ほどの例で真ん中を<span style="color:#00AC97;font-weight:bold;">seagreen</span>にしてみましょう。</p>
 <div class="sourceCode" id="cb1375"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1375-1"><a href="visualization3.html#cb1375-1"></a>Scale_Fig2 <span class="op">+</span></span>
