@@ -494,7 +494,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="24.1" data-path="iteration.html"><a href="iteration.html#iteration-abstract"><i class="fa fa-check"></i><b>24.1</b> 概要</a></li>
 <li class="chapter" data-level="24.2" data-path="iteration.html"><a href="iteration.html#iteration-intro"><i class="fa fa-check"></i><b>24.2</b> <code>*apply()</code>関数群と<code>map_*()</code>関数群</a></li>
 <li class="chapter" data-level="24.3" data-path="iteration.html"><a href="iteration.html#iteration-two-arguments"><i class="fa fa-check"></i><b>24.3</b> 引数が2つ以上の場合</a></li>
-<li class="chapter" data-level="24.4" data-path="iteration.html"><a href="iteration.html#iteration-df"><i class="fa fa-check"></i><b>24.4</b> データフレームと{purrr}</a></li>
+<li class="chapter" data-level="24.4" data-path="iteration.html"><a href="iteration.html#iteration-df"><i class="fa fa-check"></i><b>24.4</b> データフレームと{purrr}</a>
+<ul>
+<li class="chapter" data-level="24.4.1" data-path="iteration.html"><a href="iteration.html#iteration-tibble"><i class="fa fa-check"></i><b>24.4.1</b> tibbleの話</a></li>
+</ul></li>
 <li class="chapter" data-level="24.5" data-path="iteration.html"><a href="iteration.html#iteration-model1"><i class="fa fa-check"></i><b>24.5</b> モデルの反復推定</a>
 <ul>
 <li class="chapter" data-level="24.5.1" data-path="iteration.html"><a href="iteration.html#iteration-split1"><i class="fa fa-check"></i><b>24.5.1</b> サンプルの分割とモデル推定（<code>split()</code>利用）</a></li>
@@ -781,19 +784,180 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="iteration-df" class="section level2" number="24.4">
 <h2><span class="header-section-number">24.4</span> データフレームと{purrr}</h2>
+<p><code>map_*()</code>関数のデータとしてデータフレームを渡すことも可能です。ここでは5行3列のデータフレームを作成してみましょう。</p>
+<div class="sourceCode" id="cb1484"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1484-1"><a href="iteration.html#cb1484-1"></a>Dummy_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">X =</span> <span class="kw">seq</span>(<span class="dv">1</span>,  <span class="dv">5</span>,  <span class="dt">by =</span> <span class="dv">1</span>),</span>
+<span id="cb1484-2"><a href="iteration.html#cb1484-2"></a>                       <span class="dt">Y =</span> <span class="kw">seq</span>(<span class="dv">10</span>, <span class="dv">50</span>, <span class="dt">by =</span> <span class="dv">10</span>),</span>
+<span id="cb1484-3"><a href="iteration.html#cb1484-3"></a>                       <span class="dt">Z =</span> <span class="kw">seq</span>(<span class="dv">2</span>,  <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</span></code></pre></div>
+<p>各行の<code>X</code>、<code>Y</code>、<code>Z</code>の合計を計算するには{dplyr}の<code>rowwise()</code>と<code>mutate()</code>を組み合わせることで計算出来ることを第<a href="datahandling2.html#handling2-rowwise">14.4</a>章で紹介しました。</p>
+<div class="sourceCode" id="cb1485"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1485-1"><a href="iteration.html#cb1485-1"></a>Dummy_df <span class="op">%&gt;%</span></span>
+<span id="cb1485-2"><a href="iteration.html#cb1485-2"></a><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span></span>
+<span id="cb1485-3"><a href="iteration.html#cb1485-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Sum =</span> <span class="kw">sum</span>(X, Y, Z)) <span class="op">%&gt;%</span></span>
+<span id="cb1485-4"><a href="iteration.html#cb1485-4"></a><span class="st">  </span><span class="co"># rowwise()は1行を1グループとする関数であるため、最後にグループ化を解除</span></span>
+<span id="cb1485-5"><a href="iteration.html#cb1485-5"></a><span class="st">  </span><span class="kw">ungroup</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 5 x 4
+##       X     Y     Z   Sum
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     1    10     2    13
+## 2     2    20     4    26
+## 3     3    30     6    39
+## 4     4    40     8    52
+## 5     5    50    10    65</code></pre>
+<p>それでは各列の平均値を計算するにはどうすれば良いでしょうか。ここではR内蔵関数である<code>colMeans()</code>を使わないことにしましょう。</p>
+<div class="sourceCode" id="cb1487"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1487-1"><a href="iteration.html#cb1487-1"></a><span class="kw">colMeans</span>(Dummy_df)</span></code></pre></div>
+<pre><code>##  X  Y  Z 
+##  3 30  6</code></pre>
+<p>まず、<code>mean(Dummy_df$X)</code>を3回実行する方法や、{dplyr}の<code>summarise()</code>関数を使う方法があります。</p>
+<div class="sourceCode" id="cb1489"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1489-1"><a href="iteration.html#cb1489-1"></a>Dummy_df <span class="op">%&gt;%</span></span>
+<span id="cb1489-2"><a href="iteration.html#cb1489-2"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">X =</span> <span class="kw">mean</span>(X), </span>
+<span id="cb1489-3"><a href="iteration.html#cb1489-3"></a>            <span class="dt">Y =</span> <span class="kw">mean</span>(Y),</span>
+<span id="cb1489-4"><a href="iteration.html#cb1489-4"></a>            <span class="dt">Z =</span> <span class="kw">mean</span>(Z))</span></code></pre></div>
+<pre><code>##   X  Y Z
+## 1 3 30 6</code></pre>
+<p>実はこの操作、<code>map_dbl()</code>関数を使えば、より簡単です。</p>
+<div class="sourceCode" id="cb1491"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1491-1"><a href="iteration.html#cb1491-1"></a><span class="kw">map_dbl</span>(Dummy_df, mean)</span></code></pre></div>
+<pre><code>##  X  Y  Z 
+##  3 30  6</code></pre>
+<p><code>map_dbl()</code>はnumeric (double) 型ベクトルを返しますが、データフレーム（具体的にはtibble）に返すなら<code>map_df()</code>を使います。</p>
+<div class="sourceCode" id="cb1493"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1493-1"><a href="iteration.html#cb1493-1"></a><span class="kw">map_df</span>(Dummy_df, mean)</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 3
+##       X     Y     Z
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     3    30     6</code></pre>
+<p>なぜこれが出来るでしょうか。これを理解するためにはデータフレームとtibbleが本質的にはリスト型と同じであることを理解する必要があります。たとえば、以下のようなリストについて考えてみましょう。</p>
+<div class="sourceCode" id="cb1495"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1495-1"><a href="iteration.html#cb1495-1"></a>Dummy_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">X =</span> <span class="kw">seq</span>(<span class="dv">1</span>,  <span class="dv">5</span>,  <span class="dt">by =</span> <span class="dv">1</span>),</span>
+<span id="cb1495-2"><a href="iteration.html#cb1495-2"></a>                   <span class="dt">Y =</span> <span class="kw">seq</span>(<span class="dv">10</span>, <span class="dv">50</span>, <span class="dt">by =</span> <span class="dv">10</span>),</span>
+<span id="cb1495-3"><a href="iteration.html#cb1495-3"></a>                   <span class="dt">Z =</span> <span class="kw">seq</span>(<span class="dv">2</span>,  <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</span>
+<span id="cb1495-4"><a href="iteration.html#cb1495-4"></a></span>
+<span id="cb1495-5"><a href="iteration.html#cb1495-5"></a>Dummy_list</span></code></pre></div>
+<pre><code>## $X
+## [1] 1 2 3 4 5
+## 
+## $Y
+## [1] 10 20 30 40 50
+## 
+## $Z
+## [1]  2  4  6  8 10</code></pre>
+<p>この<code>Dummy_list</code>を<code>as.data.frame()</code>関数を使用して強制的にデータフレームに変換してみましょう。</p>
+<div class="sourceCode" id="cb1497"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1497-1"><a href="iteration.html#cb1497-1"></a><span class="kw">as.data.frame</span>(Dummy_list)</span></code></pre></div>
+<pre><code>##   X  Y  Z
+## 1 1 10  2
+## 2 2 20  4
+## 3 3 30  6
+## 4 4 40  8
+## 5 5 50 10</code></pre>
+<p><code>Dummy_df</code>と同じものが出てきました。逆に<code>Dummy_df</code>を、<code>as.list()</code>を使用してリストに変換すると<code>Dummy_list</code>と同じものが返されます。</p>
+<div class="sourceCode" id="cb1499"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1499-1"><a href="iteration.html#cb1499-1"></a><span class="kw">as.list</span>(Dummy_df)</span></code></pre></div>
+<pre><code>## $X
+## [1] 1 2 3 4 5
+## 
+## $Y
+## [1] 10 20 30 40 50
+## 
+## $Z
+## [1]  2  4  6  8 10</code></pre>
+<p>ここまで理解できれば、<code>map_*()</code>関数のデータがデータフレームの場合、内部ではリストとして扱われることが分かるでしょう。実際、<code>Dummy_list</code>をデータとして入れても<code>Dummy_df</code>を入れた結果と同じものが得られます。</p>
+<div class="sourceCode" id="cb1501"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1501-1"><a href="iteration.html#cb1501-1"></a><span class="kw">map_df</span>(Dummy_list, mean)</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 3
+##       X     Y     Z
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     3    30     6</code></pre>
+<div id="iteration-tibble" class="section level3" number="24.4.1">
+<h3><span class="header-section-number">24.4.1</span> tibbleの話</h3>
+<p>ここまで「データフレーム」と「tibble」を区別せずに説明してきましたが、これからの話しではこの2つを区別する必要があります。tibbleは{tidyverse}のコアパッケージの一つである{tibble}が提供するデータ構造であり、データフレームの上位互換です。tibbleもデータフレーム同様、本質的にはリストですが、リストの構造をより的確に表すことが出来ます。</p>
+<p>データフレームをリストとして考える場合、リストの各要素は<strong>必ずベクトル</strong>である必要があります。たとえば、<code>Dummy_list</code>には3つの要素があり、それぞれ長さ5のベクトルです。一方、リストの中にはリストを入れることも出来ます。たとえば、以下のような<code>Dummy_list2</code>について考えてみましょう。</p>
+<div class="sourceCode" id="cb1503"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1503-1"><a href="iteration.html#cb1503-1"></a>Dummy_list2 &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">ID   =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, </span>
+<span id="cb1503-2"><a href="iteration.html#cb1503-2"></a>                    <span class="dt">Data =</span> <span class="kw">list</span>(Dummy_df, Dummy_df, Dummy_df))</span>
+<span id="cb1503-3"><a href="iteration.html#cb1503-3"></a></span>
+<span id="cb1503-4"><a href="iteration.html#cb1503-4"></a>Dummy_list2</span></code></pre></div>
+<pre><code>## $ID
+## [1] 1 2 3
+## 
+## $Data
+## $Data[[1]]
+##   X  Y  Z
+## 1 1 10  2
+## 2 2 20  4
+## 3 3 30  6
+## 4 4 40  8
+## 5 5 50 10
+## 
+## $Data[[2]]
+##   X  Y  Z
+## 1 1 10  2
+## 2 2 20  4
+## 3 3 30  6
+## 4 4 40  8
+## 5 5 50 10
+## 
+## $Data[[3]]
+##   X  Y  Z
+## 1 1 10  2
+## 2 2 20  4
+## 3 3 30  6
+## 4 4 40  8
+## 5 5 50 10</code></pre>
+<p><code>Dummy_list2</code>には2つの要素があり、最初の要素は長さ3のベクトル、2つ目の要素は長さ3のリストです。2つ目の要素がベクトルでないため、<code>Dummy_list2</code>をデータフレームに変換することはできません。</p>
+<div class="sourceCode" id="cb1505"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1505-1"><a href="iteration.html#cb1505-1"></a>Dummy_df2 &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(Dummy_list2)</span></code></pre></div>
+<pre><code>## Error in (function (..., row.names = NULL, check.rows = FALSE, check.names = TRUE, : arguments imply differing number of rows: 3, 5</code></pre>
+<p>一方、<code>as_tibble()</code>を使用してtibble型に変換することは可能です。</p>
+<div class="sourceCode" id="cb1507"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1507-1"><a href="iteration.html#cb1507-1"></a>Dummy_tibble &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(Dummy_list2)</span>
+<span id="cb1507-2"><a href="iteration.html#cb1507-2"></a></span>
+<span id="cb1507-3"><a href="iteration.html#cb1507-3"></a>Dummy_tibble</span></code></pre></div>
+<pre><code>## # A tibble: 3 x 2
+##      ID Data            
+##   &lt;int&gt; &lt;list&gt;          
+## 1     1 &lt;df[,3] [5 × 3]&gt;
+## 2     2 &lt;df[,3] [5 × 3]&gt;
+## 3     3 &lt;df[,3] [5 × 3]&gt;</code></pre>
+<p>2列目の各セルには5行3列のデータフレーム（<code>df</code>）が格納されていることが分かります。たとえば、<code>Dummy_tibble</code>の<code>Data</code>列を抽出してみましょう。</p>
+<div class="sourceCode" id="cb1509"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1509-1"><a href="iteration.html#cb1509-1"></a>Dummy_tibble<span class="op">$</span>Data</span></code></pre></div>
+<pre><code>## [[1]]
+##   X  Y  Z
+## 1 1 10  2
+## 2 2 20  4
+## 3 3 30  6
+## 4 4 40  8
+## 5 5 50 10
+## 
+## [[2]]
+##   X  Y  Z
+## 1 1 10  2
+## 2 2 20  4
+## 3 3 30  6
+## 4 4 40  8
+## 5 5 50 10
+## 
+## [[3]]
+##   X  Y  Z
+## 1 1 10  2
+## 2 2 20  4
+## 3 3 30  6
+## 4 4 40  8
+## 5 5 50 10</code></pre>
+<p>長さ3のリスト出力されます。続いて、<code>Dummy_tibble$Data</code>の2番目のセルを抽出してみましょう。</p>
+<div class="sourceCode" id="cb1511"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1511-1"><a href="iteration.html#cb1511-1"></a>Dummy_tibble<span class="op">$</span>Data[<span class="dv">2</span>]</span></code></pre></div>
+<pre><code>## [[1]]
+##   X  Y  Z
+## 1 1 10  2
+## 2 2 20  4
+## 3 3 30  6
+## 4 4 40  8
+## 5 5 50 10</code></pre>
+<p>データフレームが出力されました。簡単にまとめるとtibbleはデータフレームの中にデータフレームを入れることが出来るデータ構造です。むろん、これまでの通り、データフレームのように使うことも可能です<a href="#fn89" class="footnote-ref" id="fnref89"><sup>89</sup></a>。これがtibbleの強みでもあり、{purrr}との相性も非常に高いです。たとえば、<code>Data</code>列を<code>map()</code>関数のデータとして渡せば、複数のデータセットに対して同じモデルの推定が出来るようになります。以下ではその例を紹介します。</p>
 <hr />
+</div>
 </div>
 <div id="iteration-model1" class="section level2" number="24.5">
 <h2><span class="header-section-number">24.5</span> モデルの反復推定</h2>
-<div class="sourceCode" id="cb1484"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1484-1"><a href="iteration.html#cb1484-1"></a>Country_df &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;Data/Countries.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1513"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1513-1"><a href="iteration.html#cb1513-1"></a>Country_df &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;Data/Countries.csv&quot;</span>)</span></code></pre></div>
 <div id="iteration-split1" class="section level3" number="24.5.1">
 <h3><span class="header-section-number">24.5.1</span> サンプルの分割とモデル推定（<code>split()</code>利用）</h3>
-<div class="sourceCode" id="cb1485"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1485-1"><a href="iteration.html#cb1485-1"></a>Split_Data &lt;-<span class="st"> </span><span class="kw">split</span>(Country_df, Country_df<span class="op">$</span>Continent)</span></code></pre></div>
+<div class="sourceCode" id="cb1514"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1514-1"><a href="iteration.html#cb1514-1"></a>Split_Data &lt;-<span class="st"> </span><span class="kw">split</span>(Country_df, Country_df<span class="op">$</span>Continent)</span></code></pre></div>
 <p>サンプルが分割された<code>Split_Data</code>のデータ構造はリスト型です。</p>
-<div class="sourceCode" id="cb1486"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1486-1"><a href="iteration.html#cb1486-1"></a><span class="kw">class</span>(Split_Data)</span></code></pre></div>
+<div class="sourceCode" id="cb1515"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1515-1"><a href="iteration.html#cb1515-1"></a><span class="kw">class</span>(Split_Data)</span></code></pre></div>
 <pre><code>## [1] &quot;list&quot;</code></pre>
 <p>中身を見るとリストの各要素としてtibble（データフレーム）が格納されています。リストの中にはあらゆるデータ型、データ構造を入れることができることが分かります。</p>
-<div class="sourceCode" id="cb1488"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1488-1"><a href="iteration.html#cb1488-1"></a>Split_Data</span></code></pre></div>
+<div class="sourceCode" id="cb1517"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1517-1"><a href="iteration.html#cb1517-1"></a>Split_Data</span></code></pre></div>
 <pre><code>## $Africa
 ## # A tibble: 54 x 18
 ##    Country Population   Area    GDP    PPP
@@ -898,14 +1062,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## #   FH_Total &lt;dbl&gt;, FH_Status &lt;chr&gt;,
 ## #   Continent &lt;chr&gt;</code></pre>
 <p>それでは分割された各サンプルに対して<code>Polity_Score</code>と<code>FH_Total</code>の相関係数を計算してみましょう。その前に相関分析の方法について調べてみましょう。Rには相関分析の関数が2つ用意されています。単純に相関係数のみを計算するなら<code>cor()</code>、係数の不確実性（標準誤差、信頼区間など）まで計算し、検定を行うなら<code>cor.test()</code>を使用します。ここではより汎用性の高い<code>cor.test()</code>の使い方について紹介します。</p>
-<div class="sourceCode" id="cb1490"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1490-1"><a href="iteration.html#cb1490-1"></a><span class="co"># 相関分析: 方法1</span></span>
-<span id="cb1490-2"><a href="iteration.html#cb1490-2"></a><span class="kw">cor.test</span>(<span class="op">~</span><span class="st"> </span>変数名1 <span class="op">+</span><span class="st"> </span>変数名2, <span class="dt">data =</span> データ名)</span>
-<span id="cb1490-3"><a href="iteration.html#cb1490-3"></a></span>
-<span id="cb1490-4"><a href="iteration.html#cb1490-4"></a><span class="co"># 相関分析: 方法2</span></span>
-<span id="cb1490-5"><a href="iteration.html#cb1490-5"></a><span class="kw">cor.test</span>(データ名<span class="op">$</span>変数名1, データ名<span class="op">$</span>変数名2)</span></code></pre></div>
+<div class="sourceCode" id="cb1519"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1519-1"><a href="iteration.html#cb1519-1"></a><span class="co"># 相関分析: 方法1</span></span>
+<span id="cb1519-2"><a href="iteration.html#cb1519-2"></a><span class="kw">cor.test</span>(<span class="op">~</span><span class="st"> </span>変数名1 <span class="op">+</span><span class="st"> </span>変数名2, <span class="dt">data =</span> データ名)</span>
+<span id="cb1519-3"><a href="iteration.html#cb1519-3"></a></span>
+<span id="cb1519-4"><a href="iteration.html#cb1519-4"></a><span class="co"># 相関分析: 方法2</span></span>
+<span id="cb1519-5"><a href="iteration.html#cb1519-5"></a><span class="kw">cor.test</span>(データ名<span class="op">$</span>変数名1, データ名<span class="op">$</span>変数名2)</span></code></pre></div>
 <p>それでは全サンプルに対して相関分析をしてみましょう。</p>
-<div class="sourceCode" id="cb1491"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1491-1"><a href="iteration.html#cb1491-1"></a>Cor_fit1 &lt;-<span class="st"> </span><span class="kw">cor.test</span>(<span class="op">~</span><span class="st"> </span>Polity_Score <span class="op">+</span><span class="st"> </span>FH_Total, <span class="dt">data =</span> Country_df)</span>
-<span id="cb1491-2"><a href="iteration.html#cb1491-2"></a>Cor_fit1</span></code></pre></div>
+<div class="sourceCode" id="cb1520"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1520-1"><a href="iteration.html#cb1520-1"></a>Cor_fit1 &lt;-<span class="st"> </span><span class="kw">cor.test</span>(<span class="op">~</span><span class="st"> </span>Polity_Score <span class="op">+</span><span class="st"> </span>FH_Total, <span class="dt">data =</span> Country_df)</span>
+<span id="cb1520-2"><a href="iteration.html#cb1520-2"></a>Cor_fit1</span></code></pre></div>
 <pre><code>## 
 ##  Pearson&#39;s product-moment correlation
 ## 
@@ -918,7 +1082,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##       cor 
 ## 0.8420031</code></pre>
 <p>ここから相関係数（0.8420031）のみを抽出するにはどうすれば良いでしょうか。それを確認するためには<code>Cor_fit1</code>というオブジェクトの構造を調べる必要があります。ここではR内蔵関数である<code>str()</code>を使って確認してみましょう。</p>
-<div class="sourceCode" id="cb1493"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1493-1"><a href="iteration.html#cb1493-1"></a><span class="kw">str</span>(Cor_fit1)</span></code></pre></div>
+<div class="sourceCode" id="cb1522"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1522-1"><a href="iteration.html#cb1522-1"></a><span class="kw">str</span>(Cor_fit1)</span></code></pre></div>
 <pre><code>## List of 9
 ##  $ statistic  : Named num 19.5
 ##   ..- attr(*, &quot;names&quot;)= chr &quot;t&quot;
@@ -936,34 +1100,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##   ..- attr(*, &quot;conf.level&quot;)= num 0.95
 ##  - attr(*, &quot;class&quot;)= chr &quot;htest&quot;</code></pre>
 <p>相関係数は<code>$estimate</code>で抽出できそうですね。実際に<code>Cor_fit1</code>から相関係数のみ抽出してみましょう。</p>
-<div class="sourceCode" id="cb1495"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1495-1"><a href="iteration.html#cb1495-1"></a>Cor_fit1<span class="op">$</span>estimate</span></code></pre></div>
+<div class="sourceCode" id="cb1524"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1524-1"><a href="iteration.html#cb1524-1"></a>Cor_fit1<span class="op">$</span>estimate</span></code></pre></div>
 <pre><code>##       cor 
 ## 0.8420031</code></pre>
 <p>それでは<code>map()</code>関数を利用して分割された各サンプルを対象に<code>Polity_Score</code>と<code>FH_Total</code>の相関係数を計算してみましょう。<code>map()</code>のデータは<code>Split_Data</code>とし、関数はラムダ式を書いてみましょう。<code>cor.test()</code>内<code>data</code>引数の実引数は<code>.x</code>、または<code>..1</code>となります。最後に<code>map_dbl("estimate")</code>を利用し、相関係数を抽出、numeric (double) 型ベクトルとして出力します。</p>
-<div class="sourceCode" id="cb1497"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1497-1"><a href="iteration.html#cb1497-1"></a>Cor_fit2 &lt;-<span class="st"> </span>Split_Data <span class="op">%&gt;%</span></span>
-<span id="cb1497-2"><a href="iteration.html#cb1497-2"></a><span class="st">  </span><span class="kw">map</span>(<span class="op">~</span><span class="kw">cor.test</span>(<span class="op">~</span><span class="st"> </span>Polity_Score <span class="op">+</span><span class="st"> </span>FH_Total, <span class="dt">data =</span> .x))</span></code></pre></div>
-<div class="sourceCode" id="cb1498"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1498-1"><a href="iteration.html#cb1498-1"></a><span class="kw">map_dbl</span>(Cor_fit2, <span class="st">&quot;estimate&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1526"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1526-1"><a href="iteration.html#cb1526-1"></a>Cor_fit2 &lt;-<span class="st"> </span>Split_Data <span class="op">%&gt;%</span></span>
+<span id="cb1526-2"><a href="iteration.html#cb1526-2"></a><span class="st">  </span><span class="kw">map</span>(<span class="op">~</span><span class="kw">cor.test</span>(<span class="op">~</span><span class="st"> </span>Polity_Score <span class="op">+</span><span class="st"> </span>FH_Total, <span class="dt">data =</span> .x))</span></code></pre></div>
+<div class="sourceCode" id="cb1527"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1527-1"><a href="iteration.html#cb1527-1"></a><span class="kw">map_dbl</span>(Cor_fit2, <span class="st">&quot;estimate&quot;</span>)</span></code></pre></div>
 <pre><code>##    Africa   America      Asia    Europe   Oceania 
 ## 0.7612138 0.8356899 0.8338172 0.8419547 0.9960776</code></pre>
-<div class="sourceCode" id="cb1500"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1500-1"><a href="iteration.html#cb1500-1"></a><span class="kw">map_dbl</span>(Cor_fit2, <span class="st">&quot;p.value&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">round</span>(<span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1529"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1529-1"><a href="iteration.html#cb1529-1"></a><span class="kw">map_dbl</span>(Cor_fit2, <span class="st">&quot;p.value&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">round</span>(<span class="dv">3</span>)</span></code></pre></div>
 <pre><code>##  Africa America    Asia  Europe Oceania 
 ##   0.000   0.000   0.000   0.000   0.004</code></pre>
 </div>
 <div id="iteration-split2" class="section level3" number="24.5.2">
 <h3><span class="header-section-number">24.5.2</span> サンプルの分割とモデル推定（<code>nest()</code>利用）</h3>
-<div class="sourceCode" id="cb1502"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1502-1"><a href="iteration.html#cb1502-1"></a>Nested_Data &lt;-<span class="st"> </span>Country_df <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb1502-2"><a href="iteration.html#cb1502-2"></a><span class="st">  </span><span class="kw">group_by</span>(Continent) <span class="op">%&gt;%</span></span>
-<span id="cb1502-3"><a href="iteration.html#cb1502-3"></a><span class="st">  </span><span class="kw">nest</span>()</span></code></pre></div>
-<div class="sourceCode" id="cb1503"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1503-1"><a href="iteration.html#cb1503-1"></a>Nested_Data</span></code></pre></div>
+<div class="sourceCode" id="cb1531"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1531-1"><a href="iteration.html#cb1531-1"></a>Nested_Data &lt;-<span class="st"> </span>Country_df <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1531-2"><a href="iteration.html#cb1531-2"></a><span class="st">  </span><span class="kw">group_by</span>(Continent) <span class="op">%&gt;%</span></span>
+<span id="cb1531-3"><a href="iteration.html#cb1531-3"></a><span class="st">  </span><span class="kw">nest</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb1532"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1532-1"><a href="iteration.html#cb1532-1"></a>Nested_Data</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["Continent"],"name":[1],"type":["chr"],"align":["left"]},{"label":["data"],"name":[2],"type":["list"],"align":["right"]}],"data":[{"1":"Asia","2":"<tbl_df[,17]>"},{"1":"Europe","2":"<tbl_df[,17]>"},{"1":"Africa","2":"<tbl_df[,17]>"},{"1":"America","2":"<tbl_df[,17]>"},{"1":"Oceania","2":"<tbl_df[,17]>"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<div class="sourceCode" id="cb1504"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1504-1"><a href="iteration.html#cb1504-1"></a>Nested_Data <span class="op">%&gt;%</span></span>
-<span id="cb1504-2"><a href="iteration.html#cb1504-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Cor_test =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="kw">cor.test</span>(<span class="op">~</span><span class="st"> </span>Polity_Score <span class="op">+</span><span class="st"> </span>FH_Total, <span class="dt">data =</span> .x)),</span>
-<span id="cb1504-3"><a href="iteration.html#cb1504-3"></a>         <span class="dt">Cor_coef =</span> <span class="kw">map</span>(Cor_test, <span class="st">&quot;estimate&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb1504-4"><a href="iteration.html#cb1504-4"></a><span class="st">  </span><span class="kw">unnest</span>(<span class="dt">cols =</span> Cor_coef)</span></code></pre></div>
+<div class="sourceCode" id="cb1533"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1533-1"><a href="iteration.html#cb1533-1"></a>Nested_Data <span class="op">%&gt;%</span></span>
+<span id="cb1533-2"><a href="iteration.html#cb1533-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Cor_test =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="kw">cor.test</span>(<span class="op">~</span><span class="st"> </span>Polity_Score <span class="op">+</span><span class="st"> </span>FH_Total, <span class="dt">data =</span> .x)),</span>
+<span id="cb1533-3"><a href="iteration.html#cb1533-3"></a>         <span class="dt">Cor_coef =</span> <span class="kw">map</span>(Cor_test, <span class="st">&quot;estimate&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb1533-4"><a href="iteration.html#cb1533-4"></a><span class="st">  </span><span class="kw">unnest</span>(<span class="dt">cols =</span> Cor_coef)</span></code></pre></div>
 <pre><code>## # A tibble: 5 x 4
 ## # Groups:   Continent [5]
 ##   Continent data               Cor_test Cor_coef
@@ -973,12 +1137,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 3 Africa    &lt;tibble [54 × 17]&gt; &lt;htest&gt;     0.761
 ## 4 America   &lt;tibble [36 × 17]&gt; &lt;htest&gt;     0.836
 ## 5 Oceania   &lt;tibble [4 × 17]&gt;  &lt;htest&gt;     0.996</code></pre>
-<div class="sourceCode" id="cb1506"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1506-1"><a href="iteration.html#cb1506-1"></a>Nested_Data <span class="op">%&gt;%</span></span>
-<span id="cb1506-2"><a href="iteration.html#cb1506-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Model =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="kw">lm</span>(PPP_per_capita <span class="op">~</span><span class="st"> </span>FH_Total, <span class="dt">data =</span> .x)),</span>
-<span id="cb1506-3"><a href="iteration.html#cb1506-3"></a>         <span class="dt">Model =</span> <span class="kw">map</span>(Model, broom<span class="op">::</span>tidy)) <span class="op">%&gt;%</span></span>
-<span id="cb1506-4"><a href="iteration.html#cb1506-4"></a><span class="st">  </span><span class="kw">unnest</span>(<span class="dt">cols =</span> Model) <span class="op">%&gt;%</span></span>
-<span id="cb1506-5"><a href="iteration.html#cb1506-5"></a><span class="st">  </span><span class="kw">filter</span>(term <span class="op">==</span><span class="st"> &quot;FH_Total&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb1506-6"><a href="iteration.html#cb1506-6"></a><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(data, term))</span></code></pre></div>
+<div class="sourceCode" id="cb1535"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1535-1"><a href="iteration.html#cb1535-1"></a>Nested_Data <span class="op">%&gt;%</span></span>
+<span id="cb1535-2"><a href="iteration.html#cb1535-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Model =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="kw">lm</span>(PPP_per_capita <span class="op">~</span><span class="st"> </span>FH_Total, <span class="dt">data =</span> .x)),</span>
+<span id="cb1535-3"><a href="iteration.html#cb1535-3"></a>         <span class="dt">Model =</span> <span class="kw">map</span>(Model, broom<span class="op">::</span>tidy)) <span class="op">%&gt;%</span></span>
+<span id="cb1535-4"><a href="iteration.html#cb1535-4"></a><span class="st">  </span><span class="kw">unnest</span>(<span class="dt">cols =</span> Model) <span class="op">%&gt;%</span></span>
+<span id="cb1535-5"><a href="iteration.html#cb1535-5"></a><span class="st">  </span><span class="kw">filter</span>(term <span class="op">==</span><span class="st"> &quot;FH_Total&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1535-6"><a href="iteration.html#cb1535-6"></a><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(data, term))</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["Continent"],"name":[1],"type":["chr"],"align":["left"]},{"label":["estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["std.error"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["statistic"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["p.value"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"Asia","2":"65.25075","3":"155.71501","4":"0.4190395","5":"6.774863e-01"},{"1":"Europe","2":"588.39972","3":"105.44583","4":"5.5801137","5":"1.392002e-06"},{"1":"Africa","2":"53.38066","3":"33.80454","4":"1.5790977","5":"1.206200e-01"},{"1":"America","2":"315.94989","3":"92.36997","4":"3.4204827","5":"1.682310e-03"},{"1":"Oceania","2":"1019.61879","3":"196.68056","4":"5.1841360","5":"3.525311e-02"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -1002,6 +1166,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li id="fn86"><p>引数が2つなら<code>.x</code>と<code>.y</code>を使用します。もし3つ以上なら<code>..1</code>、<code>..2</code>、<code>..3</code>、…と表記します。<a href="iteration.html#fnref86" class="footnote-back">↩︎</a></p></li>
 <li id="fn87"><p>実は今回の例のように要素を抽出する場合、<code>`[`</code>すら要りません。<code>map_dbl(num_list, 3)</code>だけで十分です。<a href="iteration.html#fnref87" class="footnote-back">↩︎</a></p></li>
 <li id="fn88"><p><code>paste()</code>関数は<code>sep =</code>以外はすべて結合の対象となります。引数が4つ以上になることもあります。たとえば、<code>paste("We", "love", "cats!", sep = " ")</code>です。<a href="iteration.html#fnref88" class="footnote-back">↩︎</a></p></li>
+<li id="fn89"><p>ただしtibbleは<code>tibble名[3, 2:4] &lt;- c("A", "B", "C")</code>のような、列をまたがった値の代入は出来ません。これによってtibbleに対応しない関数もまだあります。この場合、<code>as.data.frame()</code>を使って一旦データフレームに変換する必要があります。<a href="iteration.html#fnref89" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
