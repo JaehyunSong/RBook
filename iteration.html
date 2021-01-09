@@ -593,7 +593,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="iteration-abstract" class="section level2" number="24.1">
 <h2><span class="header-section-number">24.1</span> 概要</h2>
 <ul>
-<li>第<a href="iteration.html#iteration-intro">24.2</a>章: <code>*apply()</code>関数群と<code>map_*()</code>関数群</li>
+<li><a href="iteration.html#iteration-intro"><code>*apply()</code>関数群と<code>map_*()</code>関数群</a></li>
+<li><a href="iteration.html#iteration-two-arguments">引数が2つ以上の場合</a></li>
+<li><a href="iteration.html#iteration-df">データフレームと{purrr}</a></li>
+<li><a href="iteration.html#iteration-model1">モデルの反復推定</a>
+<ul>
+<li><a href="iteration.html#iteration-split1">サンプルの分割とモデル推定（<code>split()</code>利用）</a></li>
+<li><a href="iteration.html#iteration-split2">サンプルの分割とモデル推定（<code>nest()</code>利用）</a></li>
+</ul></li>
 </ul>
 <hr />
 </div>
@@ -979,11 +986,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 10 Chad      16425864 1.26e6 1.13e4 2.51e4
 ## # … with 44 more rows, and 13 more variables:
 ## #   GDP_per_capita &lt;dbl&gt;, PPP_per_capita &lt;dbl&gt;,
-## #   G7 &lt;dbl&gt;, G20 &lt;dbl&gt;, OECD &lt;dbl&gt;,
-## #   HDI_2018 &lt;dbl&gt;, Polity_Score &lt;dbl&gt;,
-## #   Polity_Type &lt;chr&gt;, FH_PR &lt;dbl&gt;, FH_CL &lt;dbl&gt;,
-## #   FH_Total &lt;dbl&gt;, FH_Status &lt;chr&gt;,
-## #   Continent &lt;chr&gt;
+## #   G7 &lt;dbl&gt;, G20 &lt;dbl&gt;, OECD &lt;dbl&gt;, HDI_2018 &lt;dbl&gt;,
+## #   Polity_Score &lt;dbl&gt;, Polity_Type &lt;chr&gt;,
+## #   FH_PR &lt;dbl&gt;, FH_CL &lt;dbl&gt;, FH_Total &lt;dbl&gt;,
+## #   FH_Status &lt;chr&gt;, Continent &lt;chr&gt;
 ## 
 ## $America
 ## # A tibble: 36 x 18
@@ -1001,11 +1007,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 10 Colomb…   50882891 1.11e6 3.24e5 7.37e5
 ## # … with 26 more rows, and 13 more variables:
 ## #   GDP_per_capita &lt;dbl&gt;, PPP_per_capita &lt;dbl&gt;,
-## #   G7 &lt;dbl&gt;, G20 &lt;dbl&gt;, OECD &lt;dbl&gt;,
-## #   HDI_2018 &lt;dbl&gt;, Polity_Score &lt;dbl&gt;,
-## #   Polity_Type &lt;chr&gt;, FH_PR &lt;dbl&gt;, FH_CL &lt;dbl&gt;,
-## #   FH_Total &lt;dbl&gt;, FH_Status &lt;chr&gt;,
-## #   Continent &lt;chr&gt;
+## #   G7 &lt;dbl&gt;, G20 &lt;dbl&gt;, OECD &lt;dbl&gt;, HDI_2018 &lt;dbl&gt;,
+## #   Polity_Score &lt;dbl&gt;, Polity_Type &lt;chr&gt;,
+## #   FH_PR &lt;dbl&gt;, FH_CL &lt;dbl&gt;, FH_Total &lt;dbl&gt;,
+## #   FH_Status &lt;chr&gt;, Continent &lt;chr&gt;
 ## 
 ## $Asia
 ## # A tibble: 42 x 18
@@ -1023,11 +1028,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 10 Indone…  273523615 1.81e6 1.12e6 3.12e6
 ## # … with 32 more rows, and 13 more variables:
 ## #   GDP_per_capita &lt;dbl&gt;, PPP_per_capita &lt;dbl&gt;,
-## #   G7 &lt;dbl&gt;, G20 &lt;dbl&gt;, OECD &lt;dbl&gt;,
-## #   HDI_2018 &lt;dbl&gt;, Polity_Score &lt;dbl&gt;,
-## #   Polity_Type &lt;chr&gt;, FH_PR &lt;dbl&gt;, FH_CL &lt;dbl&gt;,
-## #   FH_Total &lt;dbl&gt;, FH_Status &lt;chr&gt;,
-## #   Continent &lt;chr&gt;
+## #   G7 &lt;dbl&gt;, G20 &lt;dbl&gt;, OECD &lt;dbl&gt;, HDI_2018 &lt;dbl&gt;,
+## #   Polity_Score &lt;dbl&gt;, Polity_Type &lt;chr&gt;,
+## #   FH_PR &lt;dbl&gt;, FH_CL &lt;dbl&gt;, FH_Total &lt;dbl&gt;,
+## #   FH_Status &lt;chr&gt;, Continent &lt;chr&gt;
 ## 
 ## $Europe
 ## # A tibble: 50 x 18
@@ -1045,11 +1049,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 10 Croatia    4105267  55960 6.04e4 114932.
 ## # … with 40 more rows, and 13 more variables:
 ## #   GDP_per_capita &lt;dbl&gt;, PPP_per_capita &lt;dbl&gt;,
-## #   G7 &lt;dbl&gt;, G20 &lt;dbl&gt;, OECD &lt;dbl&gt;,
-## #   HDI_2018 &lt;dbl&gt;, Polity_Score &lt;dbl&gt;,
-## #   Polity_Type &lt;chr&gt;, FH_PR &lt;dbl&gt;, FH_CL &lt;dbl&gt;,
-## #   FH_Total &lt;dbl&gt;, FH_Status &lt;chr&gt;,
-## #   Continent &lt;chr&gt;
+## #   G7 &lt;dbl&gt;, G20 &lt;dbl&gt;, OECD &lt;dbl&gt;, HDI_2018 &lt;dbl&gt;,
+## #   Polity_Score &lt;dbl&gt;, Polity_Type &lt;chr&gt;,
+## #   FH_PR &lt;dbl&gt;, FH_CL &lt;dbl&gt;, FH_Total &lt;dbl&gt;,
+## #   FH_Status &lt;chr&gt;, Continent &lt;chr&gt;
 ## 
 ## $Oceania
 ## # A tibble: 4 x 18
@@ -1059,13 +1062,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 2 Fiji        896445 1.83e4 5.54e3 1.25e4
 ## 3 New Ze…    4842780 2.64e5 2.07e5 2.04e5
 ## 4 Papua …    8947024 4.53e5 2.50e4 3.73e4
-## # … with 13 more variables:
-## #   GDP_per_capita &lt;dbl&gt;, PPP_per_capita &lt;dbl&gt;,
-## #   G7 &lt;dbl&gt;, G20 &lt;dbl&gt;, OECD &lt;dbl&gt;,
-## #   HDI_2018 &lt;dbl&gt;, Polity_Score &lt;dbl&gt;,
+## # … with 13 more variables: GDP_per_capita &lt;dbl&gt;,
+## #   PPP_per_capita &lt;dbl&gt;, G7 &lt;dbl&gt;, G20 &lt;dbl&gt;,
+## #   OECD &lt;dbl&gt;, HDI_2018 &lt;dbl&gt;, Polity_Score &lt;dbl&gt;,
 ## #   Polity_Type &lt;chr&gt;, FH_PR &lt;dbl&gt;, FH_CL &lt;dbl&gt;,
-## #   FH_Total &lt;dbl&gt;, FH_Status &lt;chr&gt;,
-## #   Continent &lt;chr&gt;</code></pre>
+## #   FH_Total &lt;dbl&gt;, FH_Status &lt;chr&gt;, Continent &lt;chr&gt;</code></pre>
 <p>それでは分割された各サンプルに対して<code>Polity_Score</code>と<code>FH_Total</code>の相関係数を計算してみましょう。その前に相関分析の方法について調べてみましょう。Rには相関分析の関数が2つ用意されています。単純に相関係数のみを計算するなら<code>cor()</code>、係数の不確実性（標準誤差、信頼区間など）まで計算し、検定を行うなら<code>cor.test()</code>を使用します。ここではより汎用性の高い<code>cor.test()</code>の使い方について紹介します。</p>
 <div class="sourceCode" id="cb1520"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1520-1"><a href="iteration.html#cb1520-1"></a><span class="co"># 相関分析: 方法1</span></span>
 <span id="cb1520-2"><a href="iteration.html#cb1520-2"></a><span class="kw">cor.test</span>(<span class="op">~</span><span class="st"> </span>変数名1 <span class="op">+</span><span class="st"> </span>変数名2, <span class="dt">data =</span> データ名)</span>
@@ -1113,10 +1114,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1527-2"><a href="iteration.html#cb1527-2"></a><span class="st">  </span><span class="kw">map</span>(<span class="op">~</span><span class="kw">cor.test</span>(<span class="op">~</span><span class="st"> </span>Polity_Score <span class="op">+</span><span class="st"> </span>FH_Total, <span class="dt">data =</span> .x))</span></code></pre></div>
 <div class="sourceCode" id="cb1528"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1528-1"><a href="iteration.html#cb1528-1"></a><span class="co"># Cor_fit2から相関係数のみ出力</span></span>
 <span id="cb1528-2"><a href="iteration.html#cb1528-2"></a><span class="kw">map_dbl</span>(Cor_fit2, <span class="st">&quot;estimate&quot;</span>)</span></code></pre></div>
-<pre><code>##    Africa   America      Asia    Europe 
-## 0.7612138 0.8356899 0.8338172 0.8419547 
-##   Oceania 
-## 0.9960776</code></pre>
+<pre><code>##    Africa   America      Asia    Europe   Oceania 
+## 0.7612138 0.8356899 0.8338172 0.8419547 0.9960776</code></pre>
 <p>もし、小数点3位までの<em>p</em>値が欲しい場合は以下のように入力します。</p>
 <div class="sourceCode" id="cb1530"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1530-1"><a href="iteration.html#cb1530-1"></a><span class="co"># Cor_fit2から相関係数のp値を抽出し、小数点3位に丸める</span></span>
 <span id="cb1530-2"><a href="iteration.html#cb1530-2"></a><span class="kw">map_dbl</span>(Cor_fit2, <span class="st">&quot;p.value&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">round</span>(<span class="dv">3</span>)</span></code></pre></div>
@@ -1319,7 +1318,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 {"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Estimate"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Std. Error"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["t value"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Pr(>|t|)"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"1.929308e+03","2":"3.229792e+03","3":"0.5973473","4":"5.510476e-01","_rn_":"(Intercept)"},{"1":"3.256660e+02","2":"4.871626e+01","3":"6.6849553","4":"2.979474e-10","_rn_":"FH_Total"},{"1":"-2.217793e-06","2":"9.193256e-06","3":"-0.2412413","4":"8.096505e-01","_rn_":"Population"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<p>もっと簡単な方法は{broom}の<code>tidy()</code>関数を使う方法です。<code>tidy()</code>関数は推定値に関する様々な情報をデータフレームとして返す便利な関数です。デフォルトだと95%信頼区間は出力されませんが、<code>conf.int = TRUE</code>を指定すると信頼区間も出力されます。</p>
+<p>もっと簡単な方法は{broom}の<code>tidy()</code>関数を使う方法です。<code>tidy()</code>関数は推定値に関する様々な情報をデータフレームとして返す便利な関数です。デフォルトだと95%信頼区間は出力されませんが、<code>conf.int = TRUE</code>を指定すると信頼区間も出力されます。<code>tidy()</code>関数を提供する{broom}パッケージは{tidyverse}の一部ですが、{tidyverse}読み込みの際に一緒に読み込まれるものではないため、予め{broom}パッケージを読み込んでおくか、<code>broom::tidy()</code>で使うことができます。</p>
 <div class="sourceCode" id="cb1551"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1551-1"><a href="iteration.html#cb1551-1"></a>broom<span class="op">::</span><span class="kw">tidy</span>(lm_fit1, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
