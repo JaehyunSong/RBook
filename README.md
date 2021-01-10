@@ -7,8 +7,22 @@ R Not for Everyone: An Esoteric Guide.
 
 ## 著者
 
-* [Jaehyun Song](https://www.jaysong.net)
-* [Yuki Yanai](https://yukiyanai.github.io)
+**Song Jaehyun**（宋 財泫 [ソン ジェヒョン]）はR黒帯の大学教員。猫好き。
+主な著書：[真に驚くべき業績を残しているが、この余白はそれを書くには狭すぎる](https://ja.wikipedia.org/wiki/フェルマーの最終定理)。
+公開したRパッケージ: [BalanceR](https://github.com/JaehyunSong/BalanceR), [PRcalc](https://github.com/JaehyunSong/PRcalc), [SimpleConjoint](https://github.com/JaehyunSong/SimpleConjoint) など
+
+* Email: jasong@mail.doshisha.ac.jp
+* Webpage: https://www.jaysong.net
+* Twitter: [\@Tintstyle](https://twitter.com/Tintstyle)
+* GitHub: https://github.com/JaehyunSong
+
+**矢内勇生**（やない ゆうき）はR歴15年の大学教員。猫好き。主な著書：『[Rによる計量政治学](https://github.com/yukiyanai/quant-methods-R)』（共著, オーム社, 2018年）, 『[政治経済学](http://www.yuhikaku.co.jp/books/detail/9784641150799)』（共著, 有斐閣, 2020年）
+公開したRパッケージ：[rgamer](https://github.com/yukiyanai/rgamer)
+
+* Email: yanai.yuki@kochi-tech.ac.jp
+* Webpage: https://yukiyanai.github.io
+* Twitter: [\@yuki871](https://twitter.com/yuki871)
+* GitHub: https://github.com/yukiyanai
 
 ---
 
