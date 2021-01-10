@@ -688,7 +688,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb1440"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1440-1"><a href="iteration.html#cb1440-1"></a><span class="kw">map_dbl</span>(num_vec, add_two_divide_three)</span></code></pre></div>
 <pre><code>## [1] 1.666667 1.333333 2.333333 2.000000 3.000000</code></pre>
 <p>ここまでの例だと<code>sapply()</code>と<code>map_dbl()</code>はほぼ同じ関数です。なぜわざわざ{purrr}パッケージを読み込んでまで<code>map_dbl()</code>関数を使う必要があるでしょうか。それは<code>map_dbl()</code>の内部にはラムダ（lambda）式、あるいは無名関数（anonymous function）と呼ばれるものが使用可能だからです。ラムダ式は第<a href="datahandling2.html#handling2-summarise">14.1</a>章でも説明しましたが、もう一回解説します。ラムダ式は使い捨ての関数で、<code>map_dbl()</code>内部での処理が終わるとメモリ上から削除される関数です。使い捨てですので、関数の名前（オブジェクト名）も与えられておりません。</p>
-<p>このラムダ式の作り方ですが、<code>~</code>で始まり、引数の部分には<code>.x</code>が入ります<a href="#fn86" class="footnote-ref" id="fnref86"><sup>86</sup></a>。したがって、<code>~(.x + 2) / 3</code>は<code>function(x){(x + 2) / 3}</code>の簡略したものとなります。ただし、後者だと無名関数の引数に該当する<code>x</code>を<code>y</code>や<code>j</code>などに書き換えても問題ありませんが、ラムダ式では必ず<code>.x</code>と表記する必要があります。</p>
+<p>このラムダ式の作り方ですが、<code>~</code>で始まり、引数の部分には<code>.x</code>が入ります<a href="#fn87" class="footnote-ref" id="fnref87"><sup>87</sup></a>。したがって、<code>~(.x + 2) / 3</code>は<code>function(x){(x + 2) / 3}</code>の簡略したものとなります。ただし、後者だと無名関数の引数に該当する<code>x</code>を<code>y</code>や<code>j</code>などに書き換えても問題ありませんが、ラムダ式では必ず<code>.x</code>と表記する必要があります。</p>
 <div class="sourceCode" id="cb1442"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1442-1"><a href="iteration.html#cb1442-1"></a><span class="kw">map_dbl</span>(num_vec, <span class="op">~</span>(.x <span class="op">+</span><span class="st"> </span><span class="dv">2</span>) <span class="op">/</span><span class="st"> </span><span class="dv">3</span>)</span></code></pre></div>
 <pre><code>## [1] 1.666667 1.333333 2.333333 2.000000 3.000000</code></pre>
 <p>かなり短めなコードで「<code>num_vec</code>の全要素に2を足して3で割る」処理ができました。一方、<code>sapply()</code>や<code>lapply()</code>のような<code>*apply()</code>関数群だとラムダ式を使うことはできません。現在のメモリ上にある関数のみしか使うことができません。</p>
@@ -729,7 +729,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb1459"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1459-1"><a href="iteration.html#cb1459-1"></a><span class="kw">map_dbl</span>(num_list, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <pre><code>##    List1    List2    List3 
 ## 5.000000 6.571429 4.666667</code></pre>
-<p><code>*apply()</code>も<code>map_*()</code>も、それぞれの要素に対して同じ処理を行うことを得意とする関数です。他の応用としては、各ベクトルからn番目の要素を抽出することもできます。ベクトルからn番目の要素を抽出するには<code>ベクトル名[n]</code>と入力しますが、実はこの<code>[</code>も関数です。関数として使う場合は<code>+</code>と同様、<code>`[`</code>と表記します。<code>num_list</code>内の3つのベクトルから3番目の要素を抽出してみましょう<a href="#fn87" class="footnote-ref" id="fnref87"><sup>87</sup></a>。</p>
+<p><code>*apply()</code>も<code>map_*()</code>も、それぞれの要素に対して同じ処理を行うことを得意とする関数です。他の応用としては、各ベクトルからn番目の要素を抽出することもできます。ベクトルからn番目の要素を抽出するには<code>ベクトル名[n]</code>と入力しますが、実はこの<code>[</code>も関数です。関数として使う場合は<code>+</code>と同様、<code>`[`</code>と表記します。<code>num_list</code>内の3つのベクトルから3番目の要素を抽出してみましょう<a href="#fn88" class="footnote-ref" id="fnref88"><sup>88</sup></a>。</p>
 <div class="sourceCode" id="cb1461"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1461-1"><a href="iteration.html#cb1461-1"></a><span class="kw">map_dbl</span>(num_list, <span class="st">`</span><span class="dt">[</span><span class="st">`</span>, <span class="dv">3</span>)</span></code></pre></div>
 <pre><code>## List1 List2 List3 
 ##     5     6    NA</code></pre>
@@ -764,7 +764,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>それでは3つ以上の引数について考えてみましょう。たとえば、<code>num_vec</code>の前に<code>"ID"</code>を付けるとします。そして<code>"ID"</code>と<code>num_vec</code>の間に<code>":"</code>を入れたい場合はどうすればい良いでしょう。むろん、賢い解決方法は単純に<code>paste()</code>関数を使うだけです。</p>
 <div class="sourceCode" id="cb1471"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1471-1"><a href="iteration.html#cb1471-1"></a><span class="kw">paste</span>(<span class="st">&quot;ID&quot;</span>, num_vec, <span class="dt">sep =</span> <span class="st">&quot;:&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;ID:3&quot; &quot;ID:2&quot; &quot;ID:5&quot; &quot;ID:4&quot; &quot;ID:7&quot;</code></pre>
-<p>この場合、引数は3つです<a href="#fn88" class="footnote-ref" id="fnref88"><sup>88</sup></a>。この場合の書き方はどうなるでしょうか。<code>map2_*()</code>はデータを2つまでしか指定できません。3つ目以降は関数/ラムダ式の後ろに書くこととなります。ただし、関数/ラムダ式の後ろに指定される引数は長さ1のベクトルでなければなりません。また、ラムダ式内の引数は<code>.x</code>と<code>.y</code>でなく、<code>..1</code>、<code>..2</code>、<code>..3</code>、…となります。</p>
+<p>この場合、引数は3つです<a href="#fn89" class="footnote-ref" id="fnref89"><sup>89</sup></a>。この場合の書き方はどうなるでしょうか。<code>map2_*()</code>はデータを2つまでしか指定できません。3つ目以降は関数/ラムダ式の後ろに書くこととなります。ただし、関数/ラムダ式の後ろに指定される引数は長さ1のベクトルでなければなりません。また、ラムダ式内の引数は<code>.x</code>と<code>.y</code>でなく、<code>..1</code>、<code>..2</code>、<code>..3</code>、…となります。</p>
 <p>今回の例だと<code>map2_chr()</code>内に<code>num_vec</code>がデータ1、<code>"ID"</code>がデータ2です。そして、期待される結果は、「“ID” + <code>sep</code>の実引数 + <code>num_vec</code>の値」となります。したがって、ラムダ式は<code>paste(..2, ..1, sep = ..3)</code>となります。</p>
 <div class="sourceCode" id="cb1473"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1473-1"><a href="iteration.html#cb1473-1"></a><span class="kw">map2_chr</span>(num_vec, <span class="st">&quot;ID&quot;</span>, <span class="op">~</span><span class="kw">paste</span>(..<span class="dv">2</span>, ..<span class="dv">1</span>, <span class="dt">sep =</span> ..<span class="dv">3</span>), <span class="st">&quot;-&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;ID-3&quot; &quot;ID-2&quot; &quot;ID-5&quot; &quot;ID-4&quot; &quot;ID-7&quot;</code></pre>
@@ -950,13 +950,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 3 3 30  6
 ## 4 4 40  8
 ## 5 5 50 10</code></pre>
-<p>データフレームが出力されました。簡単にまとめるとtibbleはデータフレームの中にデータフレームを入れることが出来るデータ構造です。むろん、これまでの通り、データフレームのように使うことも可能です<a href="#fn89" class="footnote-ref" id="fnref89"><sup>89</sup></a>。これがtibbleの強みでもあり、{purrr}との相性も非常に高いです。たとえば、<code>Data</code>列を<code>map()</code>関数のデータとして渡せば、複数のデータセットに対して同じモデルの推定が出来るようになります。以下ではその例を紹介します。</p>
+<p>データフレームが出力されました。簡単にまとめるとtibbleはデータフレームの中にデータフレームを入れることが出来るデータ構造です。むろん、これまでの通り、データフレームのように使うことも可能です<a href="#fn90" class="footnote-ref" id="fnref90"><sup>90</sup></a>。これがtibbleの強みでもあり、{purrr}との相性も非常に高いです。たとえば、<code>Data</code>列を<code>map()</code>関数のデータとして渡せば、複数のデータセットに対して同じモデルの推定が出来るようになります。以下ではその例を紹介します。</p>
 <hr />
 </div>
 </div>
 <div id="iteration-model1" class="section level2" number="24.5">
 <h2><span class="header-section-number">24.5</span> モデルの反復推定</h2>
-<p>ここからは<code>map_*()</code>関数群を使って複数のモデルを素早く推定する方法について解説します。サンプルデータは第<a href="visualization2.html#visualization2">18</a>章で使いました各国の政治経済データ（<code>Countries.csv</code>）を使用します。csv形式データ読み込みの際、これまではR内蔵関数である<code>read.csv()</code>と{readr}<a href="#fn90" class="footnote-ref" id="fnref90"><sup>90</sup></a>の<code>read_csv()</code>を区別せずに使用してきました。しかし、ここからは<code>read_csv()</code>を使用します。2つの使い方はほぼ同じですが、<code>read_csv()</code>は各列のデータ型を自動的に指定してくれるだけではなく、tibble構造として読み込みます。<code>read.csv()</code>を使用する場合、<code>as.tibble(データフレーム名)</code>でデータフレームをtibbleに変換してください。</p>
+<p>ここからは<code>map_*()</code>関数群を使って複数のモデルを素早く推定する方法について解説します。サンプルデータは第<a href="visualization2.html#visualization2">18</a>章で使いました各国の政治経済データ（<code>Countries.csv</code>）を使用します。csv形式データ読み込みの際、これまではR内蔵関数である<code>read.csv()</code>と{readr}<a href="#fn91" class="footnote-ref" id="fnref91"><sup>91</sup></a>の<code>read_csv()</code>を区別せずに使用してきました。しかし、ここからは<code>read_csv()</code>を使用します。2つの使い方はほぼ同じですが、<code>read_csv()</code>は各列のデータ型を自動的に指定してくれるだけではなく、tibble構造として読み込みます。<code>read.csv()</code>を使用する場合、<code>as.tibble(データフレーム名)</code>でデータフレームをtibbleに変換してください。</p>
 <div class="sourceCode" id="cb1513"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1513-1"><a href="iteration.html#cb1513-1"></a>Country_df &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;Data/Countries.csv&quot;</span>)</span></code></pre></div>
 <div id="iteration-split1" class="section level3" number="24.5.1">
 <h3><span class="header-section-number">24.5.1</span> サンプルの分割とモデル推定（<code>split()</code>利用）</h3>
@@ -986,11 +986,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 10 Chad      16425864 1.26e6 1.13e4 2.51e4
 ## # … with 44 more rows, and 13 more variables:
 ## #   GDP_per_capita &lt;dbl&gt;, PPP_per_capita &lt;dbl&gt;,
-## #   G7 &lt;dbl&gt;, G20 &lt;dbl&gt;, OECD &lt;dbl&gt;,
-## #   HDI_2018 &lt;dbl&gt;, Polity_Score &lt;dbl&gt;,
-## #   Polity_Type &lt;chr&gt;, FH_PR &lt;dbl&gt;, FH_CL &lt;dbl&gt;,
-## #   FH_Total &lt;dbl&gt;, FH_Status &lt;chr&gt;,
-## #   Continent &lt;chr&gt;
+## #   G7 &lt;dbl&gt;, G20 &lt;dbl&gt;, OECD &lt;dbl&gt;, HDI_2018 &lt;dbl&gt;,
+## #   Polity_Score &lt;dbl&gt;, Polity_Type &lt;chr&gt;,
+## #   FH_PR &lt;dbl&gt;, FH_CL &lt;dbl&gt;, FH_Total &lt;dbl&gt;,
+## #   FH_Status &lt;chr&gt;, Continent &lt;chr&gt;
 ## 
 ## $America
 ## # A tibble: 36 x 18
@@ -1008,11 +1007,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 10 Colomb…   50882891 1.11e6 3.24e5 7.37e5
 ## # … with 26 more rows, and 13 more variables:
 ## #   GDP_per_capita &lt;dbl&gt;, PPP_per_capita &lt;dbl&gt;,
-## #   G7 &lt;dbl&gt;, G20 &lt;dbl&gt;, OECD &lt;dbl&gt;,
-## #   HDI_2018 &lt;dbl&gt;, Polity_Score &lt;dbl&gt;,
-## #   Polity_Type &lt;chr&gt;, FH_PR &lt;dbl&gt;, FH_CL &lt;dbl&gt;,
-## #   FH_Total &lt;dbl&gt;, FH_Status &lt;chr&gt;,
-## #   Continent &lt;chr&gt;
+## #   G7 &lt;dbl&gt;, G20 &lt;dbl&gt;, OECD &lt;dbl&gt;, HDI_2018 &lt;dbl&gt;,
+## #   Polity_Score &lt;dbl&gt;, Polity_Type &lt;chr&gt;,
+## #   FH_PR &lt;dbl&gt;, FH_CL &lt;dbl&gt;, FH_Total &lt;dbl&gt;,
+## #   FH_Status &lt;chr&gt;, Continent &lt;chr&gt;
 ## 
 ## $Asia
 ## # A tibble: 42 x 18
@@ -1030,11 +1028,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 10 Indone…  273523615 1.81e6 1.12e6 3.12e6
 ## # … with 32 more rows, and 13 more variables:
 ## #   GDP_per_capita &lt;dbl&gt;, PPP_per_capita &lt;dbl&gt;,
-## #   G7 &lt;dbl&gt;, G20 &lt;dbl&gt;, OECD &lt;dbl&gt;,
-## #   HDI_2018 &lt;dbl&gt;, Polity_Score &lt;dbl&gt;,
-## #   Polity_Type &lt;chr&gt;, FH_PR &lt;dbl&gt;, FH_CL &lt;dbl&gt;,
-## #   FH_Total &lt;dbl&gt;, FH_Status &lt;chr&gt;,
-## #   Continent &lt;chr&gt;
+## #   G7 &lt;dbl&gt;, G20 &lt;dbl&gt;, OECD &lt;dbl&gt;, HDI_2018 &lt;dbl&gt;,
+## #   Polity_Score &lt;dbl&gt;, Polity_Type &lt;chr&gt;,
+## #   FH_PR &lt;dbl&gt;, FH_CL &lt;dbl&gt;, FH_Total &lt;dbl&gt;,
+## #   FH_Status &lt;chr&gt;, Continent &lt;chr&gt;
 ## 
 ## $Europe
 ## # A tibble: 50 x 18
@@ -1052,11 +1049,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 10 Croatia    4105267  55960 6.04e4 114932.
 ## # … with 40 more rows, and 13 more variables:
 ## #   GDP_per_capita &lt;dbl&gt;, PPP_per_capita &lt;dbl&gt;,
-## #   G7 &lt;dbl&gt;, G20 &lt;dbl&gt;, OECD &lt;dbl&gt;,
-## #   HDI_2018 &lt;dbl&gt;, Polity_Score &lt;dbl&gt;,
-## #   Polity_Type &lt;chr&gt;, FH_PR &lt;dbl&gt;, FH_CL &lt;dbl&gt;,
-## #   FH_Total &lt;dbl&gt;, FH_Status &lt;chr&gt;,
-## #   Continent &lt;chr&gt;
+## #   G7 &lt;dbl&gt;, G20 &lt;dbl&gt;, OECD &lt;dbl&gt;, HDI_2018 &lt;dbl&gt;,
+## #   Polity_Score &lt;dbl&gt;, Polity_Type &lt;chr&gt;,
+## #   FH_PR &lt;dbl&gt;, FH_CL &lt;dbl&gt;, FH_Total &lt;dbl&gt;,
+## #   FH_Status &lt;chr&gt;, Continent &lt;chr&gt;
 ## 
 ## $Oceania
 ## # A tibble: 4 x 18
@@ -1066,13 +1062,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 2 Fiji        896445 1.83e4 5.54e3 1.25e4
 ## 3 New Ze…    4842780 2.64e5 2.07e5 2.04e5
 ## 4 Papua …    8947024 4.53e5 2.50e4 3.73e4
-## # … with 13 more variables:
-## #   GDP_per_capita &lt;dbl&gt;, PPP_per_capita &lt;dbl&gt;,
-## #   G7 &lt;dbl&gt;, G20 &lt;dbl&gt;, OECD &lt;dbl&gt;,
-## #   HDI_2018 &lt;dbl&gt;, Polity_Score &lt;dbl&gt;,
+## # … with 13 more variables: GDP_per_capita &lt;dbl&gt;,
+## #   PPP_per_capita &lt;dbl&gt;, G7 &lt;dbl&gt;, G20 &lt;dbl&gt;,
+## #   OECD &lt;dbl&gt;, HDI_2018 &lt;dbl&gt;, Polity_Score &lt;dbl&gt;,
 ## #   Polity_Type &lt;chr&gt;, FH_PR &lt;dbl&gt;, FH_CL &lt;dbl&gt;,
-## #   FH_Total &lt;dbl&gt;, FH_Status &lt;chr&gt;,
-## #   Continent &lt;chr&gt;</code></pre>
+## #   FH_Total &lt;dbl&gt;, FH_Status &lt;chr&gt;, Continent &lt;chr&gt;</code></pre>
 <p>それでは分割された各サンプルに対して<code>Polity_Score</code>と<code>FH_Total</code>の相関係数を計算してみましょう。その前に相関分析の方法について調べてみましょう。Rには相関分析の関数が2つ用意されています。単純に相関係数のみを計算するなら<code>cor()</code>、係数の不確実性（標準誤差、信頼区間など）まで計算し、検定を行うなら<code>cor.test()</code>を使用します。ここではより汎用性の高い<code>cor.test()</code>の使い方について紹介します。</p>
 <div class="sourceCode" id="cb1520"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1520-1"><a href="iteration.html#cb1520-1"></a><span class="co"># 相関分析: 方法1</span></span>
 <span id="cb1520-2"><a href="iteration.html#cb1520-2"></a><span class="kw">cor.test</span>(<span class="op">~</span><span class="st"> </span>変数名1 <span class="op">+</span><span class="st"> </span>変数名2, <span class="dt">data =</span> データ名)</span>
@@ -1120,10 +1114,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1527-2"><a href="iteration.html#cb1527-2"></a><span class="st">  </span><span class="kw">map</span>(<span class="op">~</span><span class="kw">cor.test</span>(<span class="op">~</span><span class="st"> </span>Polity_Score <span class="op">+</span><span class="st"> </span>FH_Total, <span class="dt">data =</span> .x))</span></code></pre></div>
 <div class="sourceCode" id="cb1528"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1528-1"><a href="iteration.html#cb1528-1"></a><span class="co"># Cor_fit2から相関係数のみ出力</span></span>
 <span id="cb1528-2"><a href="iteration.html#cb1528-2"></a><span class="kw">map_dbl</span>(Cor_fit2, <span class="st">&quot;estimate&quot;</span>)</span></code></pre></div>
-<pre><code>##    Africa   America      Asia    Europe 
-## 0.7612138 0.8356899 0.8338172 0.8419547 
-##   Oceania 
-## 0.9960776</code></pre>
+<pre><code>##    Africa   America      Asia    Europe   Oceania 
+## 0.7612138 0.8356899 0.8338172 0.8419547 0.9960776</code></pre>
 <p>もし、小数点3位までの<em>p</em>値が欲しい場合は以下のように入力します。</p>
 <div class="sourceCode" id="cb1530"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1530-1"><a href="iteration.html#cb1530-1"></a><span class="co"># Cor_fit2から相関係数のp値を抽出し、小数点3位に丸める</span></span>
 <span id="cb1530-2"><a href="iteration.html#cb1530-2"></a><span class="kw">map_dbl</span>(Cor_fit2, <span class="st">&quot;p.value&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">round</span>(<span class="dv">3</span>)</span></code></pre></div>
@@ -1288,7 +1280,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 3 Africa    &lt;tibble [54 × 17]&gt; &lt;htest&gt;     0.761
 ## 4 America   &lt;tibble [36 × 17]&gt; &lt;htest&gt;     0.836
 ## 5 Oceania   &lt;tibble [4 × 17]&gt;  &lt;htest&gt;     0.996</code></pre>
-<p>たった5行のコードで大陸ごとの相関分析が出来ました。これを<code>map_*()</code>を使わずに処理するなら以下のようなコードとなります<a href="#fn91" class="footnote-ref" id="fnref91"><sup>91</sup></a>。</p>
+<p>たった5行のコードで大陸ごとの相関分析が出来ました。これを<code>map_*()</code>を使わずに処理するなら以下のようなコードとなります<a href="#fn92" class="footnote-ref" id="fnref92"><sup>92</sup></a>。</p>
 <div class="sourceCode" id="cb1547"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1547-1"><a href="iteration.html#cb1547-1"></a>Cor_Test1 &lt;-<span class="st"> </span><span class="kw">cor.test</span>(<span class="op">~</span><span class="st"> </span>Polity_Score <span class="op">+</span><span class="st"> </span>FH_Total, </span>
 <span id="cb1547-2"><a href="iteration.html#cb1547-2"></a>                      <span class="dt">data =</span> <span class="kw">subset</span>(Country_df, Country_df<span class="op">$</span>Continent <span class="op">==</span><span class="st"> &quot;Asia&quot;</span>))</span>
 <span id="cb1547-3"><a href="iteration.html#cb1547-3"></a>Cor_Test2 &lt;-<span class="st"> </span><span class="kw">cor.test</span>(<span class="op">~</span><span class="st"> </span>Polity_Score <span class="op">+</span><span class="st"> </span>FH_Total, </span>
@@ -1403,163 +1395,209 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="iteration-range" class="section level3" number="24.5.3">
 <h3><span class="header-section-number">24.5.3</span> データの範囲を指定したモデル推定</h3>
-<p><code>FH_Score</code>が一定値以上のSub-sampleに対して回帰分析を実行</p>
-<div class="sourceCode" id="cb1557"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1557-1"><a href="iteration.html#cb1557-1"></a>Range_df &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">Min_FH =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">80</span>, <span class="dt">by =</span> <span class="dv">10</span>))</span>
-<span id="cb1557-2"><a href="iteration.html#cb1557-2"></a></span>
-<span id="cb1557-3"><a href="iteration.html#cb1557-3"></a>Range_df &lt;-<span class="st"> </span>Range_df <span class="op">%&gt;%</span></span>
-<span id="cb1557-4"><a href="iteration.html#cb1557-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Subset =</span> <span class="kw">map</span>(Min_FH, <span class="op">~</span><span class="kw">filter</span>(Country_df, FH_Total <span class="op">&gt;=</span><span class="st"> </span>.x)),</span>
-<span id="cb1557-5"><a href="iteration.html#cb1557-5"></a>         <span class="dt">Model  =</span> <span class="kw">map</span>(Subset, <span class="op">~</span><span class="kw">lm</span>(PPP_per_capita <span class="op">~</span><span class="st"> </span>Population, <span class="dt">data =</span> .x)),</span>
-<span id="cb1557-6"><a href="iteration.html#cb1557-6"></a>         <span class="dt">Model  =</span> <span class="kw">map</span>(Model,  broom<span class="op">::</span>tidy, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb1557-7"><a href="iteration.html#cb1557-7"></a><span class="st">  </span><span class="kw">unnest</span>(<span class="dt">cols =</span> Model) <span class="op">%&gt;%</span></span>
-<span id="cb1557-8"><a href="iteration.html#cb1557-8"></a><span class="st">  </span><span class="kw">filter</span>(term <span class="op">==</span><span class="st"> &quot;Population&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb1557-9"><a href="iteration.html#cb1557-9"></a><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(Subset, term))</span>
+<p>これまでの例は名目変数でグループ化を行いましたが、連続変数を使うことも可能です。たとえば、人口1千万未満の国、1千万以上5千万未満、5千万以上1億未満、1億以上でサンプルを分割することです。</p>
+<div class="sourceCode" id="cb1557"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1557-1"><a href="iteration.html#cb1557-1"></a>Country_df2 &lt;-<span class="st"> </span>Country_df <span class="op">%&gt;%</span></span>
+<span id="cb1557-2"><a href="iteration.html#cb1557-2"></a><span class="st">  </span><span class="kw">select</span>(PPP_per_capita, FH_Total, Population)</span>
+<span id="cb1557-3"><a href="iteration.html#cb1557-3"></a></span>
+<span id="cb1557-4"><a href="iteration.html#cb1557-4"></a></span>
+<span id="cb1557-5"><a href="iteration.html#cb1557-5"></a>Country_df2 &lt;-<span class="st"> </span>Country_df2 <span class="op">%&gt;%</span></span>
+<span id="cb1557-6"><a href="iteration.html#cb1557-6"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Group =</span> <span class="kw">case_when</span>(Population <span class="op">&lt;</span><span class="st">  </span><span class="dv">10000000</span>  <span class="op">~</span><span class="st"> &quot;1千万未満&quot;</span>,</span>
+<span id="cb1557-7"><a href="iteration.html#cb1557-7"></a>                           Population <span class="op">&lt;</span><span class="st">  </span><span class="dv">50000000</span>  <span class="op">~</span><span class="st"> &quot;1千万以上5千万未満&quot;</span>,</span>
+<span id="cb1557-8"><a href="iteration.html#cb1557-8"></a>                           Population <span class="op">&lt;</span><span class="st">  </span><span class="dv">100000000</span> <span class="op">~</span><span class="st"> &quot;5千万以上1億未満&quot;</span>,</span>
+<span id="cb1557-9"><a href="iteration.html#cb1557-9"></a>                           Population <span class="op">&gt;=</span><span class="st"> </span><span class="dv">100000000</span> <span class="op">~</span><span class="st"> &quot;1億以上&quot;</span>))</span>
 <span id="cb1557-10"><a href="iteration.html#cb1557-10"></a></span>
-<span id="cb1557-11"><a href="iteration.html#cb1557-11"></a>Range_df <span class="op">%&gt;%</span></span>
-<span id="cb1557-12"><a href="iteration.html#cb1557-12"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb1557-13"><a href="iteration.html#cb1557-13"></a><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></span>
-<span id="cb1557-14"><a href="iteration.html#cb1557-14"></a><span class="st">  </span><span class="kw">geom_pointrange</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Min_FH, <span class="dt">y =</span> estimate, </span>
-<span id="cb1557-15"><a href="iteration.html#cb1557-15"></a>                      <span class="dt">ymin =</span> conf.low, <span class="dt">ymax =</span> conf.high)) <span class="op">+</span></span>
-<span id="cb1557-16"><a href="iteration.html#cb1557-16"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;データ内FH_Scoreの最小値&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Populationの係数&quot;</span>) <span class="op">+</span></span>
-<span id="cb1557-17"><a href="iteration.html#cb1557-17"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">80</span>, <span class="dt">by =</span> <span class="dv">10</span>),</span>
-<span id="cb1557-18"><a href="iteration.html#cb1557-18"></a>                     <span class="dt">labels =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">80</span>, <span class="dt">by =</span> <span class="dv">10</span>)) <span class="op">+</span></span>
-<span id="cb1557-19"><a href="iteration.html#cb1557-19"></a><span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
+<span id="cb1557-11"><a href="iteration.html#cb1557-11"></a>Country_df2 &lt;-<span class="st"> </span>Country_df2 <span class="op">%&gt;%</span></span>
+<span id="cb1557-12"><a href="iteration.html#cb1557-12"></a><span class="st">  </span><span class="kw">group_by</span>(Group) <span class="op">%&gt;%</span></span>
+<span id="cb1557-13"><a href="iteration.html#cb1557-13"></a><span class="st">  </span><span class="kw">nest</span>()</span>
+<span id="cb1557-14"><a href="iteration.html#cb1557-14"></a></span>
+<span id="cb1557-15"><a href="iteration.html#cb1557-15"></a>Country_df2 &lt;-<span class="st"> </span>Country_df2 <span class="op">%&gt;%</span></span>
+<span id="cb1557-16"><a href="iteration.html#cb1557-16"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Model =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="kw">lm</span>(PPP_per_capita <span class="op">~</span><span class="st"> </span>FH_Total, <span class="dt">data =</span> .x)),</span>
+<span id="cb1557-17"><a href="iteration.html#cb1557-17"></a>         <span class="dt">Est   =</span> <span class="kw">map</span>(Model, broom<span class="op">::</span>tidy, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb1557-18"><a href="iteration.html#cb1557-18"></a><span class="st">  </span><span class="kw">unnest</span>(Est) <span class="op">%&gt;%</span></span>
+<span id="cb1557-19"><a href="iteration.html#cb1557-19"></a><span class="st">  </span><span class="kw">filter</span>(term <span class="op">==</span><span class="st"> &quot;FH_Total&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1557-20"><a href="iteration.html#cb1557-20"></a><span class="st">  </span><span class="kw">select</span>(<span class="op">!</span>term)</span>
+<span id="cb1557-21"><a href="iteration.html#cb1557-21"></a></span>
+<span id="cb1557-22"><a href="iteration.html#cb1557-22"></a>Country_df2 <span class="op">%&gt;%</span></span>
+<span id="cb1557-23"><a href="iteration.html#cb1557-23"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Group =</span> <span class="kw">factor</span>(Group, </span>
+<span id="cb1557-24"><a href="iteration.html#cb1557-24"></a>                        <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;1千万未満&quot;</span>, <span class="st">&quot;1千万以上5千万未満&quot;</span>,</span>
+<span id="cb1557-25"><a href="iteration.html#cb1557-25"></a>                                   <span class="st">&quot;5千万以上1億未満&quot;</span>, <span class="st">&quot;1億以上&quot;</span>)),</span>
+<span id="cb1557-26"><a href="iteration.html#cb1557-26"></a>         <span class="dt">Sig   =</span> <span class="kw">if_else</span>(conf.low <span class="op">*</span><span class="st"> </span>conf.high <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>, <span class="st">&quot;統計的有意&quot;</span>, <span class="st">&quot;統計的非有意&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb1557-27"><a href="iteration.html#cb1557-27"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb1557-28"><a href="iteration.html#cb1557-28"></a><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></span>
+<span id="cb1557-29"><a href="iteration.html#cb1557-29"></a><span class="st">  </span><span class="kw">geom_pointrange</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Group, <span class="dt">y =</span> estimate, </span>
+<span id="cb1557-30"><a href="iteration.html#cb1557-30"></a>                      <span class="dt">ymin =</span> conf.low, <span class="dt">ymax =</span> conf.high, <span class="dt">color =</span> Sig), </span>
+<span id="cb1557-31"><a href="iteration.html#cb1557-31"></a>                  <span class="dt">size =</span> <span class="fl">0.75</span>) <span class="op">+</span></span>
+<span id="cb1557-32"><a href="iteration.html#cb1557-32"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;人口&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;政治的自由度が所得に与える影響&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;&quot;</span>) <span class="op">+</span></span>
+<span id="cb1557-33"><a href="iteration.html#cb1557-33"></a><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;統計的有意&quot;</span> =<span class="st"> &quot;black&quot;</span>,</span>
+<span id="cb1557-34"><a href="iteration.html#cb1557-34"></a>                                <span class="st">&quot;統計的非有意&quot;</span> =<span class="st"> &quot;gray70&quot;</span>)) <span class="op">+</span></span>
+<span id="cb1557-35"><a href="iteration.html#cb1557-35"></a><span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>,</span>
+<span id="cb1557-36"><a href="iteration.html#cb1557-36"></a>                <span class="dt">base_size   =</span> <span class="dv">12</span>) <span class="op">+</span></span>
+<span id="cb1557-37"><a href="iteration.html#cb1557-37"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-848-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>RDDの例（バンド幅を変えながら推定）</p>
-<div class="sourceCode" id="cb1558"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1558-1"><a href="iteration.html#cb1558-1"></a><span class="kw">library</span>(rdrobust)</span>
-<span id="cb1558-2"><a href="iteration.html#cb1558-2"></a><span class="kw">data</span>(<span class="st">&quot;rdrobust_RDsenate&quot;</span>)</span>
-<span id="cb1558-3"><a href="iteration.html#cb1558-3"></a></span>
-<span id="cb1558-4"><a href="iteration.html#cb1558-4"></a>Senate_df &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(rdrobust_RDsenate)</span>
-<span id="cb1558-5"><a href="iteration.html#cb1558-5"></a></span>
-<span id="cb1558-6"><a href="iteration.html#cb1558-6"></a><span class="co"># バンド幅を指定したRDD推定</span></span>
-<span id="cb1558-7"><a href="iteration.html#cb1558-7"></a>RDD_Fit &lt;-<span class="st"> </span><span class="kw">rdrobust</span>(<span class="dt">y =</span> Senate_df<span class="op">$</span>vote, <span class="dt">x =</span> Senate_df<span class="op">$</span>margin, </span>
-<span id="cb1558-8"><a href="iteration.html#cb1558-8"></a>                    <span class="dt">h =</span> <span class="dv">25</span>)</span>
-<span id="cb1558-9"><a href="iteration.html#cb1558-9"></a></span>
-<span id="cb1558-10"><a href="iteration.html#cb1558-10"></a><span class="co"># RDDの推定結果を見る</span></span>
-<span id="cb1558-11"><a href="iteration.html#cb1558-11"></a><span class="kw">summary</span>(RDD_Fit)</span></code></pre></div>
-<pre><code>## Call: rdrobust
-## 
-## Number of Obs.                 1297
-## BW type                      Manual
-## Kernel                   Triangular
-## VCE method                       NN
-## 
-## Number of Obs.                 595         702
-## Eff. Number of Obs.            440         405
-## Order est. (p)                   1           1
-## Order bias  (q)                  2           2
-## BW est. (h)                 25.000      25.000
-## BW bias (b)                 25.000      25.000
-## rho (h/b)                    1.000       1.000
-## Unique Obs.                    595         665
-## 
-## =============================================================================
-##         Method     Coef. Std. Err.         z     P&gt;|z|      [ 95% C.I. ]       
-## =============================================================================
-##   Conventional     7.104     1.263     5.625     0.000     [4.629 , 9.579]     
-##         Robust         -         -     4.370     0.000     [4.328 , 11.368]    
-## =============================================================================</code></pre>
-<div class="sourceCode" id="cb1560"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1560-1"><a href="iteration.html#cb1560-1"></a><span class="co"># 推定値の情報がどこに格納されているかを確認</span></span>
-<span id="cb1560-2"><a href="iteration.html#cb1560-2"></a><span class="kw">str</span>(RDD_Fit)</span></code></pre></div>
-<pre><code>## List of 30
-##  $ Estimate  : num [1, 1:4] 7.1 7.85 1.26 1.8
-##   ..- attr(*, &quot;dimnames&quot;)=List of 2
-##   .. ..$ : NULL
-##   .. ..$ : chr [1:4] &quot;tau.us&quot; &quot;tau.bc&quot; &quot;se.us&quot; &quot;se.rb&quot;
-##  $ bws       : num [1:2, 1:2] 25 25 25 25
-##   ..- attr(*, &quot;dimnames&quot;)=List of 2
-##   .. ..$ : chr [1:2] &quot;h&quot; &quot;b&quot;
-##   .. ..$ : chr [1:2] &quot;left&quot; &quot;right&quot;
-##  $ coef      : num [1:3, 1] 7.1 7.85 7.85
-##   ..- attr(*, &quot;dimnames&quot;)=List of 2
-##   .. ..$ : chr [1:3] &quot;Conventional&quot; &quot;Bias-Corrected&quot; &quot;Robust&quot;
-##   .. ..$ : chr &quot;Coeff&quot;
-##  $ se        : num [1:3, 1] 1.26 1.26 1.8
-##   ..- attr(*, &quot;dimnames&quot;)=List of 2
-##   .. ..$ : chr [1:3] &quot;Conventional&quot; &quot;Bias-Corrected&quot; &quot;Robust&quot;
-##   .. ..$ : chr &quot;Std. Err.&quot;
-##  $ z         : num [1:3, 1] 5.62 6.21 4.37
-##   ..- attr(*, &quot;dimnames&quot;)=List of 2
-##   .. ..$ : chr [1:3] &quot;Conventional&quot; &quot;Bias-Corrected&quot; &quot;Robust&quot;
-##   .. ..$ : chr &quot;z&quot;
-##  $ pv        : num [1:3, 1] 1.86e-08 5.16e-10 1.24e-05
-##   ..- attr(*, &quot;dimnames&quot;)=List of 2
-##   .. ..$ : chr [1:3] &quot;Conventional&quot; &quot;Bias-Corrected&quot; &quot;Robust&quot;
-##   .. ..$ : chr &quot;P&gt;|z|&quot;
-##  $ ci        : num [1:3, 1:2] 4.63 5.37 4.33 9.58 10.32 ...
-##   ..- attr(*, &quot;dimnames&quot;)=List of 2
-##   .. ..$ : chr [1:3] &quot;Conventional&quot; &quot;Bias-Corrected&quot; &quot;Robust&quot;
-##   .. ..$ : chr [1:2] &quot;CI Lower&quot; &quot;CI Upper&quot;
-##  $ beta_p_l  : num [1:2, 1] 45.453 0.222
-##  $ beta_p_r  : num [1:2, 1] 52.557 0.269
-##  $ V_cl_l    : num [1:2, 1:2] 0.90164 0.07467 0.07467 0.00849
-##  $ V_cl_r    : num [1:2, 1:2] 0.69345 -0.05441 -0.05441 0.00637
-##  $ V_rb_l    : num [1:2, 1:2] 2.0022 0.3958 0.3958 0.0991
-##  $ V_rb_r    : num [1:2, 1:2] 1.2226 -0.2305 -0.2305 0.0646
-##  $ N         : int [1:2] 595 702
-##  $ N_h       : int [1:2] 440 405
-##  $ N_b       : int [1:2] 440 405
-##  $ M         : int [1:2] 595 665
-##  $ tau_cl    : num [1:2] 45.5 52.6
-##  $ tau_bc    : num [1:2] 44.5 52.4
-##  $ c         : num 0
-##  $ p         : num 1
-##  $ q         : num 2
-##  $ bias      : num [1:2] 0.938 0.194
-##  $ kernel    : chr &quot;Triangular&quot;
-##  $ all       : NULL
-##  $ vce       : chr &quot;NN&quot;
-##  $ bwselect  : chr &quot;Manual&quot;
-##  $ level     : num 95
-##  $ masspoints: chr &quot;adjust&quot;
-##  $ call      : language rdrobust(y = Senate_df$vote, x = Senate_df$margin,      h = 25)
-##  - attr(*, &quot;class&quot;)= chr &quot;rdrobust&quot;</code></pre>
-<div class="sourceCode" id="cb1562"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1562-1"><a href="iteration.html#cb1562-1"></a><span class="co"># Estimate要素の1, 3番目の要素がLATEとその標準誤差</span></span>
-<span id="cb1562-2"><a href="iteration.html#cb1562-2"></a>RDD_Fit<span class="op">$</span>Estimate</span></code></pre></div>
-<pre><code>##        tau.us   tau.bc    se.us    se.rb
-## [1,] 7.104054 7.848113 1.262967 1.795784</code></pre>
-<div class="sourceCode" id="cb1564"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1564-1"><a href="iteration.html#cb1564-1"></a>RDD_df &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">BW =</span> <span class="kw">seq</span>(<span class="dv">100</span>, <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">-5</span>))</span>
-<span id="cb1564-2"><a href="iteration.html#cb1564-2"></a></span>
-<span id="cb1564-3"><a href="iteration.html#cb1564-3"></a>RDD_df &lt;-<span class="st"> </span>RDD_df <span class="op">%&gt;%</span></span>
-<span id="cb1564-4"><a href="iteration.html#cb1564-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">RDD      =</span> <span class="kw">map</span>(BW, <span class="op">~</span><span class="kw">rdrobust</span>(<span class="dt">y =</span> Senate_df<span class="op">$</span>vote, <span class="dt">x =</span> Senate_df<span class="op">$</span>margin, </span>
-<span id="cb1564-5"><a href="iteration.html#cb1564-5"></a>                                      <span class="dt">h =</span> .x)),</span>
-<span id="cb1564-6"><a href="iteration.html#cb1564-6"></a>         <span class="dt">Estimate =</span> <span class="kw">map</span>(RDD, <span class="st">&quot;Estimate&quot;</span>),</span>
-<span id="cb1564-7"><a href="iteration.html#cb1564-7"></a>         <span class="dt">LATE     =</span> <span class="kw">map_dbl</span>(Estimate, <span class="dv">1</span>),</span>
-<span id="cb1564-8"><a href="iteration.html#cb1564-8"></a>         <span class="dt">SE       =</span> <span class="kw">map_dbl</span>(Estimate, <span class="dv">3</span>))</span>
-<span id="cb1564-9"><a href="iteration.html#cb1564-9"></a></span>
-<span id="cb1564-10"><a href="iteration.html#cb1564-10"></a>RDD_df</span></code></pre></div>
-<pre><code>## # A tibble: 19 x 5
-##       BW RDD        Estimate           LATE    SE
-##    &lt;dbl&gt; &lt;list&gt;     &lt;list&gt;            &lt;dbl&gt; &lt;dbl&gt;
-##  1   100 &lt;rdrobust&gt; &lt;dbl[,4] [1 × 4]&gt;  5.64 0.881
-##  2    95 &lt;rdrobust&gt; &lt;dbl[,4] [1 × 4]&gt;  5.64 0.888
-##  3    90 &lt;rdrobust&gt; &lt;dbl[,4] [1 × 4]&gt;  5.63 0.897
-##  4    85 &lt;rdrobust&gt; &lt;dbl[,4] [1 × 4]&gt;  5.61 0.905
-##  5    80 &lt;rdrobust&gt; &lt;dbl[,4] [1 × 4]&gt;  5.65 0.913
-##  6    75 &lt;rdrobust&gt; &lt;dbl[,4] [1 × 4]&gt;  5.75 0.922
-##  7    70 &lt;rdrobust&gt; &lt;dbl[,4] [1 × 4]&gt;  5.81 0.933
-##  8    65 &lt;rdrobust&gt; &lt;dbl[,4] [1 × 4]&gt;  5.91 0.947
-##  9    60 &lt;rdrobust&gt; &lt;dbl[,4] [1 × 4]&gt;  6.07 0.961
-## 10    55 &lt;rdrobust&gt; &lt;dbl[,4] [1 × 4]&gt;  6.29 0.979
-## 11    50 &lt;rdrobust&gt; &lt;dbl[,4] [1 × 4]&gt;  6.48 0.999
-## 12    45 &lt;rdrobust&gt; &lt;dbl[,4] [1 × 4]&gt;  6.67 1.03 
-## 13    40 &lt;rdrobust&gt; &lt;dbl[,4] [1 × 4]&gt;  6.91 1.06 
-## 14    35 &lt;rdrobust&gt; &lt;dbl[,4] [1 × 4]&gt;  7.19 1.11 
-## 15    30 &lt;rdrobust&gt; &lt;dbl[,4] [1 × 4]&gt;  7.28 1.17 
-## 16    25 &lt;rdrobust&gt; &lt;dbl[,4] [1 × 4]&gt;  7.10 1.26 
-## 17    20 &lt;rdrobust&gt; &lt;dbl[,4] [1 × 4]&gt;  7.27 1.38 
-## 18    15 &lt;rdrobust&gt; &lt;dbl[,4] [1 × 4]&gt;  7.49 1.56 
-## 19    10 &lt;rdrobust&gt; &lt;dbl[,4] [1 × 4]&gt;  7.98 1.84</code></pre>
-<div class="sourceCode" id="cb1566"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1566-1"><a href="iteration.html#cb1566-1"></a>RDD_df <span class="op">%&gt;%</span></span>
-<span id="cb1566-2"><a href="iteration.html#cb1566-2"></a><span class="st">  </span><span class="kw">select</span>(<span class="op">!</span><span class="kw">c</span>(RDD, Estimate)) <span class="op">%&gt;%</span></span>
-<span id="cb1566-3"><a href="iteration.html#cb1566-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">CI_lwr =</span> LATE <span class="op">+</span><span class="st"> </span><span class="kw">qnorm</span>(<span class="fl">0.025</span>) <span class="op">*</span><span class="st"> </span>SE,</span>
-<span id="cb1566-4"><a href="iteration.html#cb1566-4"></a>         <span class="dt">CI_upr =</span> LATE <span class="op">+</span><span class="st"> </span><span class="kw">qnorm</span>(<span class="fl">0.975</span>) <span class="op">*</span><span class="st"> </span>SE) <span class="op">%&gt;%</span></span>
-<span id="cb1566-5"><a href="iteration.html#cb1566-5"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb1566-6"><a href="iteration.html#cb1566-6"></a><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></span>
-<span id="cb1566-7"><a href="iteration.html#cb1566-7"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">x =</span> BW, <span class="dt">ymin =</span> CI_lwr, <span class="dt">ymax =</span> CI_upr), <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span></span>
-<span id="cb1566-8"><a href="iteration.html#cb1566-8"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> BW, <span class="dt">y =</span> LATE), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></span>
-<span id="cb1566-9"><a href="iteration.html#cb1566-9"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Bandwidth&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Local Average Treatment Effect (%p)&quot;</span>) <span class="op">+</span></span>
-<span id="cb1566-10"><a href="iteration.html#cb1566-10"></a><span class="st">  </span><span class="kw">theme_minimal</span>()</span></code></pre></div>
+<p>上記の例は、ある行は一つのグループに属するケースです。しかし、ある行が複数のグループに属するケースもあるでしょう。たとえば、ある変数の値が一定値以上である行のみでグループ化する場合です。<code>FH_Score</code>が一定値以上のSub-sampleに対して回帰分析を行う場合、<code>FH_Score</code>が最大値（100）である国はすべてのSub-sampleに属することになります。</p>
+<div class="sourceCode" id="cb1558"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1558-1"><a href="iteration.html#cb1558-1"></a>Range_df &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">Min_FH =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">80</span>, <span class="dt">by =</span> <span class="dv">10</span>))</span>
+<span id="cb1558-2"><a href="iteration.html#cb1558-2"></a></span>
+<span id="cb1558-3"><a href="iteration.html#cb1558-3"></a>Range_df &lt;-<span class="st"> </span>Range_df <span class="op">%&gt;%</span></span>
+<span id="cb1558-4"><a href="iteration.html#cb1558-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Subset =</span> <span class="kw">map</span>(Min_FH, <span class="op">~</span><span class="kw">filter</span>(Country_df, FH_Total <span class="op">&gt;=</span><span class="st"> </span>.x)),</span>
+<span id="cb1558-5"><a href="iteration.html#cb1558-5"></a>         <span class="dt">Model  =</span> <span class="kw">map</span>(Subset, <span class="op">~</span><span class="kw">lm</span>(PPP_per_capita <span class="op">~</span><span class="st"> </span>Population, <span class="dt">data =</span> .x)),</span>
+<span id="cb1558-6"><a href="iteration.html#cb1558-6"></a>         <span class="dt">Model  =</span> <span class="kw">map</span>(Model,  broom<span class="op">::</span>tidy, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb1558-7"><a href="iteration.html#cb1558-7"></a><span class="st">  </span><span class="kw">unnest</span>(<span class="dt">cols =</span> Model) <span class="op">%&gt;%</span></span>
+<span id="cb1558-8"><a href="iteration.html#cb1558-8"></a><span class="st">  </span><span class="kw">filter</span>(term <span class="op">==</span><span class="st"> &quot;Population&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1558-9"><a href="iteration.html#cb1558-9"></a><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(Subset, term))</span>
+<span id="cb1558-10"><a href="iteration.html#cb1558-10"></a></span>
+<span id="cb1558-11"><a href="iteration.html#cb1558-11"></a>Range_df <span class="op">%&gt;%</span></span>
+<span id="cb1558-12"><a href="iteration.html#cb1558-12"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb1558-13"><a href="iteration.html#cb1558-13"></a><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></span>
+<span id="cb1558-14"><a href="iteration.html#cb1558-14"></a><span class="st">  </span><span class="kw">geom_pointrange</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Min_FH, <span class="dt">y =</span> estimate, </span>
+<span id="cb1558-15"><a href="iteration.html#cb1558-15"></a>                      <span class="dt">ymin =</span> conf.low, <span class="dt">ymax =</span> conf.high)) <span class="op">+</span></span>
+<span id="cb1558-16"><a href="iteration.html#cb1558-16"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;データ内FH_Scoreの最小値&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Populationの係数&quot;</span>) <span class="op">+</span></span>
+<span id="cb1558-17"><a href="iteration.html#cb1558-17"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">80</span>, <span class="dt">by =</span> <span class="dv">10</span>),</span>
+<span id="cb1558-18"><a href="iteration.html#cb1558-18"></a>                     <span class="dt">labels =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">80</span>, <span class="dt">by =</span> <span class="dv">10</span>)) <span class="op">+</span></span>
+<span id="cb1558-19"><a href="iteration.html#cb1558-19"></a><span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dt">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-849-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>以上の例は実際の分析では多く使われる方法ではないかも知れません。しかし、ノンパラメトリック回帰不連続デザイン（Regression Discontinuity Design; RDD）の場合、感度分析を行う際、バンド幅を色々と調整しながら局所処置効果を推定します。RDDの詳細については〜〜〜〜〜などに譲りますが、ハンド幅の調整はデータの範囲を少しずつ拡張（縮小）させながら同じ分析を繰り返すことです。以下ではアメリカ上院選挙のデータを例に、方法を紹介します。</p>
+<div class="sourceCode" id="cb1559"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1559-1"><a href="iteration.html#cb1559-1"></a><span class="kw">library</span>(rdrobust)</span>
+<span id="cb1559-2"><a href="iteration.html#cb1559-2"></a><span class="kw">data</span>(<span class="st">&quot;rdrobust_RDsenate&quot;</span>)</span>
+<span id="cb1559-3"><a href="iteration.html#cb1559-3"></a></span>
+<span id="cb1559-4"><a href="iteration.html#cb1559-4"></a>Senate_df &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(rdrobust_RDsenate)</span>
+<span id="cb1559-5"><a href="iteration.html#cb1559-5"></a></span>
+<span id="cb1559-6"><a href="iteration.html#cb1559-6"></a>RDD_df &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">BW =</span> <span class="kw">seq</span>(<span class="dv">100</span>, <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">-5</span>))</span>
+<span id="cb1559-7"><a href="iteration.html#cb1559-7"></a></span>
+<span id="cb1559-8"><a href="iteration.html#cb1559-8"></a>RDD_df <span class="op">%&gt;%</span></span>
+<span id="cb1559-9"><a href="iteration.html#cb1559-9"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Subset =</span> <span class="kw">map</span>(BW, <span class="op">~</span><span class="kw">filter</span>(Senate_df, margin <span class="op">&gt;=</span><span class="st"> </span><span class="op">-</span>.x <span class="op">&amp;</span><span class="st"> </span>margin <span class="op">&lt;=</span><span class="st"> </span>.x)),</span>
+<span id="cb1559-10"><a href="iteration.html#cb1559-10"></a>         <span class="dt">Model  =</span> <span class="kw">map</span>(Subset, <span class="op">~</span><span class="kw">lm</span>(vote <span class="op">~</span><span class="st"> </span>margin <span class="op">*</span><span class="st"> </span><span class="kw">I</span>(margin <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>), <span class="dt">data =</span> .x)),</span>
+<span id="cb1559-11"><a href="iteration.html#cb1559-11"></a>         <span class="dt">Est    =</span> <span class="kw">map</span>(Model, broom<span class="op">::</span>tidy, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb1559-12"><a href="iteration.html#cb1559-12"></a><span class="st">  </span><span class="kw">unnest</span>(Est) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1559-13"><a href="iteration.html#cb1559-13"></a><span class="st">  </span><span class="kw">filter</span>(term <span class="op">==</span><span class="st"> &quot;I(margin &gt; 0)TRUE&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1559-14"><a href="iteration.html#cb1559-14"></a><span class="st">  </span><span class="kw">select</span>(<span class="op">!</span><span class="kw">c</span>(Subset, Model, term))</span></code></pre></div>
+<pre><code>## # A tibble: 19 x 7
+##       BW estimate std.error statistic  p.value conf.low
+##    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+##  1   100     6.04     0.942      6.41 1.98e-10     4.20
+##  2    95     5.76     0.975      5.90 4.58e- 9     3.85
+##  3    90     5.90     0.981      6.02 2.37e- 9     3.98
+##  4    85     5.80     0.993      5.84 6.64e- 9     3.85
+##  5    80     5.10     0.999      5.11 3.84e- 7     3.14
+##  6    75     5.18     1.01       5.16 2.96e- 7     3.21
+##  7    70     5.57     1.01       5.51 4.44e- 8     3.58
+##  8    65     5.21     1.03       5.08 4.28e- 7     3.20
+##  9    60     4.89     1.04       4.72 2.71e- 6     2.86
+## 10    55     5.23     1.05       4.98 7.36e- 7     3.17
+## 11    50     5.73     1.07       5.37 9.38e- 8     3.64
+## 12    45     5.94     1.09       5.44 6.45e- 8     3.80
+## 13    40     6.12     1.12       5.45 6.24e- 8     3.92
+## 14    35     6.34     1.15       5.53 4.09e- 8     4.09
+## 15    30     7.18     1.18       6.08 1.75e- 9     4.86
+## 16    25     7.38     1.21       6.09 1.72e- 9     5.00
+## 17    20     7.03     1.32       5.31 1.42e- 7     4.43
+## 18    15     6.96     1.50       4.63 4.47e- 6     4.01
+## 19    10     6.90     1.75       3.94 9.45e- 5     3.46
+## # … with 1 more variable: conf.high &lt;dbl&gt;</code></pre>
+<p>以上の例は、交互作用ありの線形回帰分析による局所処置効果の推定例です。しかし、ノンパラメトリックRDDでは、割当変数（running variable）の二乗項を入れる場合が多いです。今回の割当変数は<code>margin</code>です。また、閾値（cutpoint）に近いケースには高い重みを付けることが一般的な作法であり、多く使われるのが三角（triangular）カーネルです。上記の例はすべてのケースに同じ重みを付ける矩形（rectagular）カーネルを使った例です。</p>
+<p>以上の理由により、やはりRDDは専用のパッケージを使った方が良いかも知れません。既に読み込んである{rdrobust}も推定可能ですが、ここでは{rdd}パッケージを使ってみましょう。</p>
+<div class="sourceCode" id="cb1561"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1561-1"><a href="iteration.html#cb1561-1"></a><span class="co"># cutpoint引数の既定値は0であるため、今回の例では省略可能</span></span>
+<span id="cb1561-2"><a href="iteration.html#cb1561-2"></a><span class="kw">RDestimate</span>(応答変数 <span class="op">~</span><span class="st"> </span>割当変数, <span class="dt">data =</span> データオブジェクト, </span>
+<span id="cb1561-3"><a href="iteration.html#cb1561-3"></a>               <span class="dt">cutpoint =</span> 閾値, <span class="dt">bw =</span> バンド幅)</span></code></pre></div>
+<div class="sourceCode" id="cb1562"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1562-1"><a href="iteration.html#cb1562-1"></a><span class="kw">library</span>(rdd)</span>
+<span id="cb1562-2"><a href="iteration.html#cb1562-2"></a></span>
+<span id="cb1562-3"><a href="iteration.html#cb1562-3"></a><span class="co"># バンド幅を指定したRDD推定</span></span>
+<span id="cb1562-4"><a href="iteration.html#cb1562-4"></a>RDD_Fit &lt;-<span class="st"> </span><span class="kw">RDestimate</span>(vote <span class="op">~</span><span class="st"> </span>margin, <span class="dt">data =</span> Senate_df, <span class="dt">bw =</span> <span class="dv">25</span>)</span>
+<span id="cb1562-5"><a href="iteration.html#cb1562-5"></a></span>
+<span id="cb1562-6"><a href="iteration.html#cb1562-6"></a><span class="co"># RDDの推定結果を見る</span></span>
+<span id="cb1562-7"><a href="iteration.html#cb1562-7"></a><span class="kw">summary</span>(RDD_Fit)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## RDestimate(formula = vote ~ margin, data = Senate_df, bw = 25)
+## 
+## Type:
+## sharp 
+## 
+## Estimates:
+##            Bandwidth  Observations  Estimate
+## LATE       25.0        845          7.104   
+## Half-BW    12.5        536          7.620   
+## Double-BW  50.0       1127          6.480   
+##            Std. Error  z value  Pr(&gt;|z|)      
+## LATE       1.260       5.640    1.699e-08  ***
+## Half-BW    1.682       4.531    5.859e-06  ***
+## Double-BW  1.004       6.455    1.084e-10  ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## F-statistics:
+##            F       Num. DoF  Denom. DoF  p
+## LATE        90.20  3          841        0
+## Half-BW     42.75  3          532        0
+## Double-BW  179.75  3         1123        0</code></pre>
+<div class="sourceCode" id="cb1564"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1564-1"><a href="iteration.html#cb1564-1"></a><span class="co"># 推定値の情報がどこに格納されているかを確認</span></span>
+<span id="cb1564-2"><a href="iteration.html#cb1564-2"></a><span class="kw">str</span>(RDD_Fit)</span></code></pre></div>
+<pre><code>## List of 12
+##  $ type     : chr &quot;sharp&quot;
+##  $ call     : language RDestimate(formula = vote ~ margin, data = Senate_df,      bw = 25)
+##  $ est      : Named num [1:3] 7.1 7.62 6.48
+##   ..- attr(*, &quot;names&quot;)= chr [1:3] &quot;LATE&quot; &quot;Half-BW&quot; &quot;Double-BW&quot;
+##  $ bw       : num [1:3] 25 12.5 50
+##  $ se       : num [1:3] 1.26 1.68 1
+##  $ z        : num [1:3] 5.64 4.53 6.45
+##  $ p        : num [1:3] 1.70e-08 5.86e-06 1.08e-10
+##  $ obs      : num [1:3] 845 536 1127
+##  $ ci       : num [1:3, 1:2] 4.64 4.32 4.51 9.57 10.92 ...
+##  $ model    : list()
+##  $ frame    : list()
+##  $ na.action: int [1:93] 28 29 57 58 86 113 114 142 143 168 ...
+##  - attr(*, &quot;class&quot;)= chr &quot;RD&quot;</code></pre>
+<div class="sourceCode" id="cb1566"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1566-1"><a href="iteration.html#cb1566-1"></a><span class="co"># est要素の1番目の要素がLATE</span></span>
+<span id="cb1566-2"><a href="iteration.html#cb1566-2"></a>RDD_Fit<span class="op">$</span>est</span></code></pre></div>
+<pre><code>##      LATE   Half-BW Double-BW 
+##  7.104054  7.619927  6.480344</code></pre>
+<div class="sourceCode" id="cb1568"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1568-1"><a href="iteration.html#cb1568-1"></a><span class="co"># se要素の1番目の要素がLATEの標準誤差</span></span>
+<span id="cb1568-2"><a href="iteration.html#cb1568-2"></a>RDD_Fit<span class="op">$</span>se</span></code></pre></div>
+<pre><code>## [1] 1.259550 1.681578 1.003973</code></pre>
+<div class="sourceCode" id="cb1570"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1570-1"><a href="iteration.html#cb1570-1"></a>RDD_df &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">BW =</span> <span class="kw">seq</span>(<span class="dv">100</span>, <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">-5</span>))</span>
+<span id="cb1570-2"><a href="iteration.html#cb1570-2"></a></span>
+<span id="cb1570-3"><a href="iteration.html#cb1570-3"></a>RDD_Func &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
+<span id="cb1570-4"><a href="iteration.html#cb1570-4"></a>  Temp_Est &lt;-<span class="st"> </span><span class="kw">RDestimate</span>(vote <span class="op">~</span><span class="st"> </span>margin, <span class="dt">data =</span> Senate_df, <span class="dt">bw =</span> x)</span>
+<span id="cb1570-5"><a href="iteration.html#cb1570-5"></a>  <span class="kw">tibble</span>(<span class="dt">LATE =</span> Temp_Est<span class="op">$</span>est[<span class="dv">1</span>],</span>
+<span id="cb1570-6"><a href="iteration.html#cb1570-6"></a>         <span class="dt">SE   =</span> Temp_Est<span class="op">$</span>se[<span class="dv">1</span>])</span>
+<span id="cb1570-7"><a href="iteration.html#cb1570-7"></a>}</span>
+<span id="cb1570-8"><a href="iteration.html#cb1570-8"></a></span>
+<span id="cb1570-9"><a href="iteration.html#cb1570-9"></a>RDD_df &lt;-<span class="st"> </span>RDD_df <span class="op">%&gt;%</span></span>
+<span id="cb1570-10"><a href="iteration.html#cb1570-10"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">RDD  =</span> <span class="kw">map</span>(BW, RDD_Func)) <span class="op">%&gt;%</span></span>
+<span id="cb1570-11"><a href="iteration.html#cb1570-11"></a><span class="st">  </span><span class="kw">unnest</span>(RDD)</span>
+<span id="cb1570-12"><a href="iteration.html#cb1570-12"></a></span>
+<span id="cb1570-13"><a href="iteration.html#cb1570-13"></a>RDD_df</span></code></pre></div>
+<pre><code>## # A tibble: 19 x 3
+##       BW  LATE    SE
+##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1   100  5.64 0.884
+##  2    95  5.64 0.890
+##  3    90  5.63 0.897
+##  4    85  5.61 0.905
+##  5    80  5.65 0.913
+##  6    75  5.75 0.922
+##  7    70  5.81 0.934
+##  8    65  5.91 0.949
+##  9    60  6.07 0.963
+## 10    55  6.29 0.982
+## 11    50  6.48 1.00 
+## 12    45  6.67 1.03 
+## 13    40  6.91 1.07 
+## 14    35  7.19 1.11 
+## 15    30  7.28 1.17 
+## 16    25  7.10 1.26 
+## 17    20  7.27 1.38 
+## 18    15  7.49 1.57 
+## 19    10  7.98 1.84</code></pre>
+<div class="sourceCode" id="cb1572"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1572-1"><a href="iteration.html#cb1572-1"></a>RDD_df <span class="op">%&gt;%</span></span>
+<span id="cb1572-2"><a href="iteration.html#cb1572-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">CI_lwr =</span> LATE <span class="op">+</span><span class="st"> </span><span class="kw">qnorm</span>(<span class="fl">0.025</span>) <span class="op">*</span><span class="st"> </span>SE,</span>
+<span id="cb1572-3"><a href="iteration.html#cb1572-3"></a>         <span class="dt">CI_upr =</span> LATE <span class="op">+</span><span class="st"> </span><span class="kw">qnorm</span>(<span class="fl">0.975</span>) <span class="op">*</span><span class="st"> </span>SE) <span class="op">%&gt;%</span></span>
+<span id="cb1572-4"><a href="iteration.html#cb1572-4"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb1572-5"><a href="iteration.html#cb1572-5"></a><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></span>
+<span id="cb1572-6"><a href="iteration.html#cb1572-6"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">x =</span> BW, <span class="dt">ymin =</span> CI_lwr, <span class="dt">ymax =</span> CI_upr), <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span></span>
+<span id="cb1572-7"><a href="iteration.html#cb1572-7"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> BW, <span class="dt">y =</span> LATE), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></span>
+<span id="cb1572-8"><a href="iteration.html#cb1572-8"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Bandwidth&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Local Average Treatment Effect (%p)&quot;</span>) <span class="op">+</span></span>
+<span id="cb1572-9"><a href="iteration.html#cb1572-9"></a><span class="st">  </span><span class="kw">theme_minimal</span>()</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-852-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="iteration-variables" class="section level3" number="24.5.4">
 <h3><span class="header-section-number">24.5.4</span> 説明・応答変数を指定したモデル推定</h3>
@@ -1570,13 +1608,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div class="footnotes">
 <hr />
-<ol start="86">
-<li id="fn86"><p>引数が2つなら<code>.x</code>と<code>.y</code>を使用します。もし3つ以上なら<code>..1</code>、<code>..2</code>、<code>..3</code>、…と表記します。<a href="iteration.html#fnref86" class="footnote-back">↩︎</a></p></li>
-<li id="fn87"><p>実は今回の例のように要素を抽出する場合、<code>`[`</code>すら要りません。<code>map_dbl(num_list, 3)</code>だけで十分です。<a href="iteration.html#fnref87" class="footnote-back">↩︎</a></p></li>
-<li id="fn88"><p><code>paste()</code>関数は<code>sep =</code>以外はすべて結合の対象となります。引数が4つ以上になることもあります。たとえば、<code>paste("We", "love", "cats!", sep = " ")</code>です。<a href="iteration.html#fnref88" class="footnote-back">↩︎</a></p></li>
-<li id="fn89"><p>ただしtibbleは<code>tibble名[3, 2:4] &lt;- c("A", "B", "C")</code>のような、列をまたがった値の代入は出来ません。これによってtibbleに対応しない関数もまだあります。この場合、<code>as.data.frame()</code>を使って一旦データフレームに変換する必要があります。<a href="iteration.html#fnref89" class="footnote-back">↩︎</a></p></li>
-<li id="fn90"><p>{tidyverse}のコア・パッケージであるため、別途読み込む必要はございません。<a href="iteration.html#fnref90" class="footnote-back">↩︎</a></p></li>
-<li id="fn91"><p><code>cor.test()$estimate</code>で直接相関係数を抽出することも可能ですが、コードの可読性が著しく低下します。またオブジェクトの再利用（例えば、「今度は<em>p</em>値を抽出しよう！」）が出来なくなります。<a href="iteration.html#fnref91" class="footnote-back">↩︎</a></p></li>
+<ol start="87">
+<li id="fn87"><p>引数が2つなら<code>.x</code>と<code>.y</code>を使用します。もし3つ以上なら<code>..1</code>、<code>..2</code>、<code>..3</code>、…と表記します。<a href="iteration.html#fnref87" class="footnote-back">↩︎</a></p></li>
+<li id="fn88"><p>実は今回の例のように要素を抽出する場合、<code>`[`</code>すら要りません。<code>map_dbl(num_list, 3)</code>だけで十分です。<a href="iteration.html#fnref88" class="footnote-back">↩︎</a></p></li>
+<li id="fn89"><p><code>paste()</code>関数は<code>sep =</code>以外はすべて結合の対象となります。引数が4つ以上になることもあります。たとえば、<code>paste("We", "love", "cats!", sep = " ")</code>です。<a href="iteration.html#fnref89" class="footnote-back">↩︎</a></p></li>
+<li id="fn90"><p>ただしtibbleは<code>tibble名[3, 2:4] &lt;- c("A", "B", "C")</code>のような、列をまたがった値の代入は出来ません。これによってtibbleに対応しない関数もまだあります。この場合、<code>as.data.frame()</code>を使って一旦データフレームに変換する必要があります。<a href="iteration.html#fnref90" class="footnote-back">↩︎</a></p></li>
+<li id="fn91"><p>{tidyverse}のコア・パッケージであるため、別途読み込む必要はございません。<a href="iteration.html#fnref91" class="footnote-back">↩︎</a></p></li>
+<li id="fn92"><p><code>cor.test()$estimate</code>で直接相関係数を抽出することも可能ですが、コードの可読性が著しく低下します。またオブジェクトの再利用（例えば、「今度は<em>p</em>値を抽出しよう！」）が出来なくなります。<a href="iteration.html#fnref92" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
