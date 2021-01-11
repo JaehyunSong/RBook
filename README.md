@@ -67,3 +67,12 @@ R Not for Everyone: An Esoteric Guide.
 |99 |モンテカルロシミュレーション |5||
 |99 | MCMC |0||
 |99 |オブジェクト指向プログラミング |0||
+
+---
+
+## サンプルデータ
+
+* データの入出力
+    * [`Vote_ShiftJIS.csv`](https://www.jaysong.net/RBook/Data/Vote_ShiftJIS.csv)
+    * [`Vote.csv`](https://www.jaysong.net/RBook/Data/Vote.csv)
+    * [`Soccre.xlsx`](https://www.jaysong.net/RBook/Data/Soccre.xlsx)
