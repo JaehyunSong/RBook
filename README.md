@@ -73,6 +73,15 @@ R Not for Everyone: An Esoteric Guide.
 ## サンプルデータ
 
 * データの入出力
-    * [`Vote_ShiftJIS.csv`](https://www.jaysong.net/RBook/Data/Vote_ShiftJIS.csv)
-    * [`Vote.csv`](https://www.jaysong.net/RBook/Data/Vote.csv)
+    * [`Scores.RData`](https://www.jaysong.net/RBook/Data/Scores.RData)
     * [`Soccre.xlsx`](https://www.jaysong.net/RBook/Data/Soccre.xlsx)
+    * [`Vote.csv`](https://www.jaysong.net/RBook/Data/Vote.csv)
+    * [`Vote_ShiftJIS.csv`](https://www.jaysong.net/RBook/Data/Vote_ShiftJIS.csv)
+* データ構造
+    * [`FIFA_Men.csv`](https://www.jaysong.net/RBook/Data/FIFA_Men.csv)
+    * [`FIFA_Women.csv`](https://www.jaysong.net/RBook/Data/FIFA_Women.csv)
+    * [`Vote.csv`](https://www.jaysong.net/RBook/Data/Vote.csv)
+* Rプログラミングの基礎
+    * [`FIFA_Men.csv`](https://www.jaysong.net/RBook/Data/FIFA_Men.csv)
+* データハンドリング[基礎編: 抽出]
+    * [`Ramen.csv`](https://www.jaysong.net/RBook/Data/Ramen.csv)

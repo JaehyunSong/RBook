@@ -674,8 +674,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb345-1"><a href="datastructure.html#cb345-1"></a>(myVec5 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">10</span>))</span></code></pre></div>
 <pre><code>## [1]  1 10</code></pre>
 <div class="sourceCode" id="cb347"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb347-1"><a href="datastructure.html#cb347-1"></a>(myVec6 &lt;-<span class="st"> </span>myVec2 <span class="op">+</span><span class="st"> </span>myVec5)</span></code></pre></div>
-<pre><code>## Warning in myVec2 + myVec5: 長いオブジェクトの長さが短
-## いオブジェクトの長さの倍数になっていません</code></pre>
+<pre><code>## Warning in myVec2 + myVec5: 長いオブジェクトの長
+## さが短いオブジェクトの長さの倍数になっていません</code></pre>
 <pre><code>## [1]  2 13  6 16  8</code></pre>
 <p>警告メッセージは表示されますが、計算自体はできます。同じ長さのベクトル同士なら、同じ位置の要素同士の計算になりますが、この場合は、短い方のベクトルを繰り返すことにより、長さを合わせることになります。<code>myVec5</code>の例だと、<code>c(1, 10, 1, 10, 1)</code>のように扱われます。具体的には以下の表のような関係となります。</p>
 <table>
@@ -1214,9 +1214,11 @@ Tani
 <pre><code>## [1] &quot;Ramen&quot; &quot;Udon&quot;  &quot;Ramen&quot; &quot;Udon&quot;</code></pre>
 <p>列を抽出する場合は、列名を指定することも可能です。やり方は<code>[, "列名"]</code>による方法、<code>$列名</code>による方法があります。<code>Name</code>列を抽出してみましょう。</p>
 <div class="sourceCode" id="cb452"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb452-1"><a href="datastructure.html#cb452-1"></a>myDF4[, <span class="st">&quot;Name&quot;</span>]</span></code></pre></div>
-<pre><code>## [1] &quot;Yanai&quot;     &quot;Song&quot;      &quot;Shigemura&quot; &quot;Tani&quot;</code></pre>
+<pre><code>## [1] &quot;Yanai&quot;     &quot;Song&quot;      &quot;Shigemura&quot;
+## [4] &quot;Tani&quot;</code></pre>
 <div class="sourceCode" id="cb454"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb454-1"><a href="datastructure.html#cb454-1"></a>myDF4<span class="op">$</span>Name</span></code></pre></div>
-<pre><code>## [1] &quot;Yanai&quot;     &quot;Song&quot;      &quot;Shigemura&quot; &quot;Tani&quot;</code></pre>
+<pre><code>## [1] &quot;Yanai&quot;     &quot;Song&quot;      &quot;Shigemura&quot;
+## [4] &quot;Tani&quot;</code></pre>
 <p>どれも同じ結果が返されます。後者の方が簡単ですが、一つの列しか抽出できない限界があります。それに比べ、前者は<code>c()</code>を使うことで複数の列を同時に抽出することも可能です。それぞれの場面に応じて使い分けていきましょう。</p>
 <p>また、<code>$</code>で列を抽出した場合、抽出されたものはベクトル扱いになるため、<code>[]</code>を使った要素の抽出が可能です。例えば<code>myDF4</code>の<code>Name</code>列の2番目の要素を抽出してみましょう。</p>
 <div class="sourceCode" id="cb456"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb456-1"><a href="datastructure.html#cb456-1"></a>myDF4<span class="op">$</span>Name[<span class="dv">2</span>]</span></code></pre></div>
@@ -1368,126 +1370,127 @@ myDF4[5, ]  &lt;- Hakiai_Data</code></pre>
 <pre><code>## [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
 <p>全く同じデータですが、<code>VoteDF2</code>には<code>tbl</code>と<code>tbl_df</code>というクラスが追加されていることが分かります。それではデータの中身を覗いてみましょう。まずは、<code>data.frame</code>がたから</p>
 <div class="sourceCode" id="cb486"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb486-1"><a href="datastructure.html#cb486-1"></a>VoteDF1</span></code></pre></div>
-<pre><code>##    ID     Pref  Zaisei Over65 Under30   LDP   DPJ
-## 1   1   北海道 0.41903  29.09   24.70 32.82 30.62
-## 2   2   青森県 0.33190  30.14   23.92 40.44 24.61
-## 3   3   岩手県 0.34116  30.38   24.48 34.90 22.44
-## 4   4   宮城県 0.59597  25.75   27.29 36.68 25.40
-## 5   5   秋田県 0.29862  33.84   21.35 43.46 22.72
-## 6   6   山形県 0.34237  30.76   24.75 42.49 21.47
-## 7   7   福島県 0.50947  28.68   25.23 33.82 28.31
-## 8   8   茨城県 0.63309  26.76   26.60 40.64 18.95
-## 9   9   栃木県 0.62166  25.87   26.78 38.78 21.63
-## 10 10   群馬県 0.60277  27.60   26.59 42.06 19.31
-## 11 11   埼玉県 0.76548  24.82   27.66 32.30 20.40
-## 12 12   千葉県 0.77694  25.86   26.71 37.79 21.70
-## 13 13   東京都 1.00321  22.67   27.39 34.37 19.76
-## 14 14 神奈川県 0.91745  23.86   27.84 34.92 21.49
-## 15 15   新潟県 0.43519  29.86   25.23 43.66 25.25
-## 16 16   富山県 0.45307  30.54   24.88 44.16 24.22
-## 17 17   石川県 0.46812  27.87   27.25 48.09 18.54
-## 18 18   福井県 0.37820  28.63   26.70 45.29 17.52
-## 19 19   山梨県 0.37876  28.41   26.37 37.36 28.04
-## 20 20   長野県 0.47586  30.06   25.52 35.27 27.69
-## 21 21   岐阜県 0.52358  28.10   27.22 39.71 23.62
-## 22 22   静岡県 0.70999  27.79   26.28 37.47 24.13
-## 23 23   愛知県 0.92052  23.79   29.44 34.32 29.27
-## 24 24   三重県 0.57544  27.90   26.74 33.67 34.23
-## 25 25   滋賀県 0.53932  24.15   29.96 37.85 22.25
-## 26 26   京都府 0.56713  27.51   27.76 31.18 19.93
-## 27 27   大阪府 0.74980  26.15   27.55 22.12  9.30
-## 28 28   兵庫県 0.62062  27.09   26.94 31.71 15.84
-## 29 29   奈良県 0.41269  28.70   26.86 33.51 18.41
-## 30 30 和歌山県 0.31955  30.89   25.08 39.61 12.10
-## 31 31   鳥取県 0.25486  29.71   25.86 41.62 20.93
-## 32 32   島根県 0.24170  32.48   24.59 48.24 19.14
-## 33 33   岡山県 0.50096  28.66   27.44 37.87 19.91
-## 34 34   広島県 0.58581  27.53   27.46 39.93 18.53
-## 35 35   山口県 0.42560  32.07   24.91 46.75 17.27
-## 36 36   徳島県 0.32018  30.95   24.31 38.44 17.72
-## 37 37   香川県 0.46060  29.93   25.29 44.07 16.60
-## 38 38   愛媛県 0.41181  30.62   24.75 43.57 19.28
-## 39 39   高知県 0.24472  32.85   23.60 37.01 16.95
-## 40 40   福岡県 0.61836  25.90   28.21 36.52 19.08
-## 41 41   佐賀県 0.32938  27.68   27.97 43.53 21.10
-## 42 42   長崎県 0.31562  29.60   25.84 41.70 20.68
-## 43 43   熊本県 0.38688  28.78   27.18 46.54 19.29
-## 44 44   大分県 0.35828  30.45   25.65 39.44 18.37
-## 45 45   宮崎県 0.32034  29.49   26.26 40.11 14.50
-## 46 46 鹿児島県 0.32140  29.43   26.04 45.97 16.19
-## 47 47   沖縄県 0.31535  19.63   33.37 27.82 13.29
-##    Komei Ishin   JCP   SDP
-## 1  13.41  3.43 11.44  1.68
-## 2  12.76  3.82  8.92  3.41
-## 3   8.61  5.16 11.24  5.29
-## 4  13.42  3.97  9.99  3.62
-## 5  11.19  5.17  7.56  5.12
-## 6  11.78  4.30  7.60  5.20
-## 7  10.96  3.43 10.45  3.24
-## 8  15.05  6.67 10.07  2.88
-## 9  12.42 10.88  7.00  2.05
-## 10 13.85  5.61 10.00  2.44
-## 11 16.00  7.23 13.94  1.91
-## 12 13.98  5.46 11.34  2.01
-## 13 11.44  7.34 14.21  2.82
-## 14 12.18  7.77 12.46  2.79
-## 15  8.27  4.39  8.00  3.76
-## 16  9.81  5.06  5.79  5.02
-## 17 11.00  6.36  7.07  2.36
-## 18 10.91 13.09  5.66  2.09
-## 19 12.83  4.32  9.20  1.67
-## 20 10.70  4.23 12.61  3.59
-## 21 12.33  5.51  9.41  1.98
-## 22 12.68  7.99  9.59  2.22
-## 23 11.67  6.41  9.55  2.14
-## 24 13.07  5.09  7.59  1.76
-## 25  9.57 12.82 11.44  1.41
-## 26 12.25 11.16 18.50  1.55
-## 27 16.39 34.86 11.37  1.25
-## 28 15.37 19.50 10.30  2.01
-## 29 13.44 18.94  9.17  1.66
-## 30 18.00 13.51 10.43  1.23
-## 31 16.71  5.98  7.14  2.56
-## 32 13.43  4.75  7.50  2.51
-## 33 17.18 10.67  7.87  1.60
-## 34 15.20  9.69  8.52  2.35
-## 35 16.50  5.31  7.39  1.78
-## 36 16.87  9.46  9.10  1.81
-## 37 15.14  6.20  7.56  5.07
-## 38 14.82  6.77  6.97  2.40
-## 39 15.83  3.93 17.41  2.91
-## 40 17.15  7.03 10.78  3.33
-## 41 15.48  4.85  5.67  4.16
-## 42 16.86  5.12  6.27  3.48
-## 43 15.27  4.53  6.32  2.60
-## 44 13.26  4.42  6.85 13.05
-## 45 17.11  5.74  7.27  6.81
-## 46 14.49  6.47  6.52  3.62
-## 47 15.09  7.66 15.64 12.13</code></pre>
+<pre><code>##    ID     Pref  Zaisei Over65 Under30   LDP
+## 1   1   北海道 0.41903  29.09   24.70 32.82
+## 2   2   青森県 0.33190  30.14   23.92 40.44
+## 3   3   岩手県 0.34116  30.38   24.48 34.90
+## 4   4   宮城県 0.59597  25.75   27.29 36.68
+## 5   5   秋田県 0.29862  33.84   21.35 43.46
+## 6   6   山形県 0.34237  30.76   24.75 42.49
+## 7   7   福島県 0.50947  28.68   25.23 33.82
+## 8   8   茨城県 0.63309  26.76   26.60 40.64
+## 9   9   栃木県 0.62166  25.87   26.78 38.78
+## 10 10   群馬県 0.60277  27.60   26.59 42.06
+## 11 11   埼玉県 0.76548  24.82   27.66 32.30
+## 12 12   千葉県 0.77694  25.86   26.71 37.79
+## 13 13   東京都 1.00321  22.67   27.39 34.37
+## 14 14 神奈川県 0.91745  23.86   27.84 34.92
+## 15 15   新潟県 0.43519  29.86   25.23 43.66
+## 16 16   富山県 0.45307  30.54   24.88 44.16
+## 17 17   石川県 0.46812  27.87   27.25 48.09
+## 18 18   福井県 0.37820  28.63   26.70 45.29
+## 19 19   山梨県 0.37876  28.41   26.37 37.36
+## 20 20   長野県 0.47586  30.06   25.52 35.27
+## 21 21   岐阜県 0.52358  28.10   27.22 39.71
+## 22 22   静岡県 0.70999  27.79   26.28 37.47
+## 23 23   愛知県 0.92052  23.79   29.44 34.32
+## 24 24   三重県 0.57544  27.90   26.74 33.67
+## 25 25   滋賀県 0.53932  24.15   29.96 37.85
+## 26 26   京都府 0.56713  27.51   27.76 31.18
+## 27 27   大阪府 0.74980  26.15   27.55 22.12
+## 28 28   兵庫県 0.62062  27.09   26.94 31.71
+## 29 29   奈良県 0.41269  28.70   26.86 33.51
+## 30 30 和歌山県 0.31955  30.89   25.08 39.61
+## 31 31   鳥取県 0.25486  29.71   25.86 41.62
+## 32 32   島根県 0.24170  32.48   24.59 48.24
+## 33 33   岡山県 0.50096  28.66   27.44 37.87
+## 34 34   広島県 0.58581  27.53   27.46 39.93
+## 35 35   山口県 0.42560  32.07   24.91 46.75
+## 36 36   徳島県 0.32018  30.95   24.31 38.44
+## 37 37   香川県 0.46060  29.93   25.29 44.07
+## 38 38   愛媛県 0.41181  30.62   24.75 43.57
+## 39 39   高知県 0.24472  32.85   23.60 37.01
+## 40 40   福岡県 0.61836  25.90   28.21 36.52
+## 41 41   佐賀県 0.32938  27.68   27.97 43.53
+## 42 42   長崎県 0.31562  29.60   25.84 41.70
+## 43 43   熊本県 0.38688  28.78   27.18 46.54
+## 44 44   大分県 0.35828  30.45   25.65 39.44
+## 45 45   宮崎県 0.32034  29.49   26.26 40.11
+## 46 46 鹿児島県 0.32140  29.43   26.04 45.97
+## 47 47   沖縄県 0.31535  19.63   33.37 27.82
+##      DPJ Komei Ishin   JCP   SDP
+## 1  30.62 13.41  3.43 11.44  1.68
+## 2  24.61 12.76  3.82  8.92  3.41
+## 3  22.44  8.61  5.16 11.24  5.29
+## 4  25.40 13.42  3.97  9.99  3.62
+## 5  22.72 11.19  5.17  7.56  5.12
+## 6  21.47 11.78  4.30  7.60  5.20
+## 7  28.31 10.96  3.43 10.45  3.24
+## 8  18.95 15.05  6.67 10.07  2.88
+## 9  21.63 12.42 10.88  7.00  2.05
+## 10 19.31 13.85  5.61 10.00  2.44
+## 11 20.40 16.00  7.23 13.94  1.91
+## 12 21.70 13.98  5.46 11.34  2.01
+## 13 19.76 11.44  7.34 14.21  2.82
+## 14 21.49 12.18  7.77 12.46  2.79
+## 15 25.25  8.27  4.39  8.00  3.76
+## 16 24.22  9.81  5.06  5.79  5.02
+## 17 18.54 11.00  6.36  7.07  2.36
+## 18 17.52 10.91 13.09  5.66  2.09
+## 19 28.04 12.83  4.32  9.20  1.67
+## 20 27.69 10.70  4.23 12.61  3.59
+## 21 23.62 12.33  5.51  9.41  1.98
+## 22 24.13 12.68  7.99  9.59  2.22
+## 23 29.27 11.67  6.41  9.55  2.14
+## 24 34.23 13.07  5.09  7.59  1.76
+## 25 22.25  9.57 12.82 11.44  1.41
+## 26 19.93 12.25 11.16 18.50  1.55
+## 27  9.30 16.39 34.86 11.37  1.25
+## 28 15.84 15.37 19.50 10.30  2.01
+## 29 18.41 13.44 18.94  9.17  1.66
+## 30 12.10 18.00 13.51 10.43  1.23
+## 31 20.93 16.71  5.98  7.14  2.56
+## 32 19.14 13.43  4.75  7.50  2.51
+## 33 19.91 17.18 10.67  7.87  1.60
+## 34 18.53 15.20  9.69  8.52  2.35
+## 35 17.27 16.50  5.31  7.39  1.78
+## 36 17.72 16.87  9.46  9.10  1.81
+## 37 16.60 15.14  6.20  7.56  5.07
+## 38 19.28 14.82  6.77  6.97  2.40
+## 39 16.95 15.83  3.93 17.41  2.91
+## 40 19.08 17.15  7.03 10.78  3.33
+## 41 21.10 15.48  4.85  5.67  4.16
+## 42 20.68 16.86  5.12  6.27  3.48
+## 43 19.29 15.27  4.53  6.32  2.60
+## 44 18.37 13.26  4.42  6.85 13.05
+## 45 14.50 17.11  5.74  7.27  6.81
+## 46 16.19 14.49  6.47  6.52  3.62
+## 47 13.29 15.09  7.66 15.64 12.13</code></pre>
 <p>つづいて、<code>tibble</code>型</p>
 <div class="sourceCode" id="cb488"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb488-1"><a href="datastructure.html#cb488-1"></a>VoteDF2</span></code></pre></div>
 <pre><code>## # A tibble: 47 x 11
-##       ID Pref   Zaisei Over65 Under30   LDP   DPJ Komei
-##    &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1     1 北海道  0.419   29.1    24.7  32.8  30.6 13.4 
-##  2     2 青森県  0.332   30.1    23.9  40.4  24.6 12.8 
-##  3     3 岩手県  0.341   30.4    24.5  34.9  22.4  8.61
-##  4     4 宮城県  0.596   25.8    27.3  36.7  25.4 13.4 
-##  5     5 秋田県  0.299   33.8    21.4  43.5  22.7 11.2 
-##  6     6 山形県  0.342   30.8    24.8  42.5  21.5 11.8 
-##  7     7 福島県  0.509   28.7    25.2  33.8  28.3 11.0 
-##  8     8 茨城県  0.633   26.8    26.6  40.6  19.0 15.0 
-##  9     9 栃木県  0.622   25.9    26.8  38.8  21.6 12.4 
-## 10    10 群馬県  0.603   27.6    26.6  42.1  19.3 13.8 
-## # … with 37 more rows, and 3 more variables:
-## #   Ishin &lt;dbl&gt;, JCP &lt;dbl&gt;, SDP &lt;dbl&gt;</code></pre>
+##       ID Pref   Zaisei Over65 Under30   LDP   DPJ
+##    &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1     1 北海道  0.419   29.1    24.7  32.8  30.6
+##  2     2 青森県  0.332   30.1    23.9  40.4  24.6
+##  3     3 岩手県  0.341   30.4    24.5  34.9  22.4
+##  4     4 宮城県  0.596   25.8    27.3  36.7  25.4
+##  5     5 秋田県  0.299   33.8    21.4  43.5  22.7
+##  6     6 山形県  0.342   30.8    24.8  42.5  21.5
+##  7     7 福島県  0.509   28.7    25.2  33.8  28.3
+##  8     8 茨城県  0.633   26.8    26.6  40.6  19.0
+##  9     9 栃木県  0.622   25.9    26.8  38.8  21.6
+## 10    10 群馬県  0.603   27.6    26.6  42.1  19.3
+## # … with 37 more rows, and 4 more variables:
+## #   Komei &lt;dbl&gt;, Ishin &lt;dbl&gt;, JCP &lt;dbl&gt;,
+## #   SDP &lt;dbl&gt;</code></pre>
 <p>同じデータですが、表示画面がやや異なります。<code>data.frame</code>は全ての列と行が表示されましたが、<code>tibble</code>の場合、「画面に収まる」程度しか表示されません。表示されなかった行や列に関しては最後に表示されています。たとえば、<code>VoteDF2</code>の場合、下段にこのように書かれていますね (画面の大きさによって変わります)。</p>
 <pre><code>## # … with 37 more rows, and 1 more variable: SDP &lt;dbl&gt;</code></pre>
 <p>これは表示されなかった行が37行あり、<code>SDP</code>という変数も表示されていないということです。他の違いとしては、<code>tibble</code>の場合、最初にデータのサイズ (47行11列)が、各変数名の下にデータ型 (<code>&lt;int&gt;</code>、<code>&lt;chr&gt;</code>、<code>&lt;dbl&gt;</code>など)が表示されるという点です。</p>
 <p>本書は<code>tibble</code>と<code>data.frame</code>を区別して解説はしませんが、一部の章・節においては<code>tibble</code>を念頭において解説をします。<code>tibble</code>型の作り方は先ほどのように<code>as_tibble()</code>使う方法もありますが、<code>readr::read_csv()</code>を使う方法もあります<a href="#fn44" class="footnote-ref" id="fnref44"><sup>44</sup></a>。<code>read_csv()</code>を使うと各列がどのようなデータ型として読み込まれたかも表示されるので便利です。<code>readr</code>パッケージはtidyverseに含まれているため、普段では以下のような使い方で十分です。</p>
 <div class="sourceCode" id="cb491"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb491-1"><a href="datastructure.html#cb491-1"></a>VoteDF3 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;Data/Vote.csv&quot;</span>)</span></code></pre></div>
 <pre><code>## 
-## ─ Column specification ────────────────
+## ─ Column specification ─────────────
 ## cols(
 ##   ID = col_double(),
 ##   Pref = col_character(),
@@ -1526,102 +1529,102 @@ myDF4[5, ]  &lt;- Hakiai_Data</code></pre>
 <pre><code>## [1] &quot;list&quot;</code></pre>
 <div class="sourceCode" id="cb498"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb498-1"><a href="datastructure.html#cb498-1"></a>List1</span></code></pre></div>
 <pre><code>## [[1]]
-##    ID                Team Rank Points Prev_Points
-## 1   1             Albania   75   1325        1316
-## 2   2             Algeria   85   1271        1271
-## 3   3      American Samoa  133   1030        1030
-## 4   4             Andorra  155    749         749
-## 5   5              Angola  121   1117        1117
-## 6   6 Antigua and Barbuda  153    787         787
-## 7   7           Argentina   32   1659        1659
-## 8   8             Armenia  126   1103        1104
-## 9   9               Aruba  157    724         724
-## 10 10           Australia    7   1963        1963
-##    Confederation
-## 1           UEFA
-## 2            CAF
-## 3            OFC
-## 4           UEFA
-## 5            CAF
-## 6       CONCACAF
-## 7       CONMEBOL
-## 8           UEFA
-## 9       CONCACAF
-## 10           AFC
+##    ID                Team Rank Points
+## 1   1             Albania   75   1325
+## 2   2             Algeria   85   1271
+## 3   3      American Samoa  133   1030
+## 4   4             Andorra  155    749
+## 5   5              Angola  121   1117
+## 6   6 Antigua and Barbuda  153    787
+## 7   7           Argentina   32   1659
+## 8   8             Armenia  126   1103
+## 9   9               Aruba  157    724
+## 10 10           Australia    7   1963
+##    Prev_Points Confederation
+## 1         1316          UEFA
+## 2         1271           CAF
+## 3         1030           OFC
+## 4          749          UEFA
+## 5         1117           CAF
+## 6          787      CONCACAF
+## 7         1659      CONMEBOL
+## 8         1104          UEFA
+## 9          724      CONCACAF
+## 10        1963           AFC
 ## 
 ## [[2]]
-##    ID                Team Rank Points Prev_Points
-## 1   1         Afghanistan  149   1052        1052
-## 2   2             Albania   66   1356        1356
-## 3   3             Algeria   35   1482        1482
-## 4   4      American Samoa  192    900         900
-## 5   5             Andorra  135   1082        1082
-## 6   6              Angola  124   1136        1136
-## 7   7            Anguilla  210    821         821
-## 8   8 Antigua and Barbuda  126   1127        1127
-## 9   9           Argentina    9   1623        1623
-## 10 10             Armenia  102   1213        1213
-##    Confederation
-## 1            AFC
-## 2           UEFA
-## 3            CAF
-## 4            OFC
-## 5           UEFA
-## 6            CAF
-## 7       CONCACAF
-## 8       CONCACAF
-## 9       CONMEBOL
-## 10          UEFA</code></pre>
+##    ID                Team Rank Points
+## 1   1         Afghanistan  149   1052
+## 2   2             Albania   66   1356
+## 3   3             Algeria   35   1482
+## 4   4      American Samoa  192    900
+## 5   5             Andorra  135   1082
+## 6   6              Angola  124   1136
+## 7   7            Anguilla  210    821
+## 8   8 Antigua and Barbuda  126   1127
+## 9   9           Argentina    9   1623
+## 10 10             Armenia  102   1213
+##    Prev_Points Confederation
+## 1         1052           AFC
+## 2         1356          UEFA
+## 3         1482           CAF
+## 4          900           OFC
+## 5         1082          UEFA
+## 6         1136           CAF
+## 7          821      CONCACAF
+## 8         1127      CONCACAF
+## 9         1623      CONMEBOL
+## 10        1213          UEFA</code></pre>
 <p>一つのオブジェクトに2つのデータフレームが入っていますね。これは2つのデータフレームで構成された長さ2のリストです。ただし、どちらが女性ランキングで、どちらが男子ランキングか区別が難しいです。この場合、各データフレームに名前を付けることも可能です。</p>
 <div class="sourceCode" id="cb500"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb500-1"><a href="datastructure.html#cb500-1"></a>List2 &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">Women =</span> Soccer_W, <span class="dt">Men =</span> Soccer_M)</span>
 <span id="cb500-2"><a href="datastructure.html#cb500-2"></a>List2</span></code></pre></div>
 <pre><code>## $Women
-##    ID                Team Rank Points Prev_Points
-## 1   1             Albania   75   1325        1316
-## 2   2             Algeria   85   1271        1271
-## 3   3      American Samoa  133   1030        1030
-## 4   4             Andorra  155    749         749
-## 5   5              Angola  121   1117        1117
-## 6   6 Antigua and Barbuda  153    787         787
-## 7   7           Argentina   32   1659        1659
-## 8   8             Armenia  126   1103        1104
-## 9   9               Aruba  157    724         724
-## 10 10           Australia    7   1963        1963
-##    Confederation
-## 1           UEFA
-## 2            CAF
-## 3            OFC
-## 4           UEFA
-## 5            CAF
-## 6       CONCACAF
-## 7       CONMEBOL
-## 8           UEFA
-## 9       CONCACAF
-## 10           AFC
+##    ID                Team Rank Points
+## 1   1             Albania   75   1325
+## 2   2             Algeria   85   1271
+## 3   3      American Samoa  133   1030
+## 4   4             Andorra  155    749
+## 5   5              Angola  121   1117
+## 6   6 Antigua and Barbuda  153    787
+## 7   7           Argentina   32   1659
+## 8   8             Armenia  126   1103
+## 9   9               Aruba  157    724
+## 10 10           Australia    7   1963
+##    Prev_Points Confederation
+## 1         1316          UEFA
+## 2         1271           CAF
+## 3         1030           OFC
+## 4          749          UEFA
+## 5         1117           CAF
+## 6          787      CONCACAF
+## 7         1659      CONMEBOL
+## 8         1104          UEFA
+## 9          724      CONCACAF
+## 10        1963           AFC
 ## 
 ## $Men
-##    ID                Team Rank Points Prev_Points
-## 1   1         Afghanistan  149   1052        1052
-## 2   2             Albania   66   1356        1356
-## 3   3             Algeria   35   1482        1482
-## 4   4      American Samoa  192    900         900
-## 5   5             Andorra  135   1082        1082
-## 6   6              Angola  124   1136        1136
-## 7   7            Anguilla  210    821         821
-## 8   8 Antigua and Barbuda  126   1127        1127
-## 9   9           Argentina    9   1623        1623
-## 10 10             Armenia  102   1213        1213
-##    Confederation
-## 1            AFC
-## 2           UEFA
-## 3            CAF
-## 4            OFC
-## 5           UEFA
-## 6            CAF
-## 7       CONCACAF
-## 8       CONCACAF
-## 9       CONMEBOL
-## 10          UEFA</code></pre>
+##    ID                Team Rank Points
+## 1   1         Afghanistan  149   1052
+## 2   2             Albania   66   1356
+## 3   3             Algeria   35   1482
+## 4   4      American Samoa  192    900
+## 5   5             Andorra  135   1082
+## 6   6              Angola  124   1136
+## 7   7            Anguilla  210    821
+## 8   8 Antigua and Barbuda  126   1127
+## 9   9           Argentina    9   1623
+## 10 10             Armenia  102   1213
+##    Prev_Points Confederation
+## 1         1052           AFC
+## 2         1356          UEFA
+## 3         1482           CAF
+## 4          900           OFC
+## 5         1082          UEFA
+## 6         1136           CAF
+## 7          821      CONCACAF
+## 8         1127      CONCACAF
+## 9         1623      CONMEBOL
+## 10        1213          UEFA</code></pre>
 <p>これでどれが女性ランキングか、男性ランキングかが区別しやすくなりました。ここでは2つのデータフレームを入れましたが、様々なデータ構造が混在したリストも可能です。様々なデータ構造が混在したリストを自分で作成する場面はあまりありません。自分で作成した独自クラスを利用するパッケージを開発する際はよく使いますが、ここでは省略します。ただし、様々なデータ構造が含まれたリスト型を見ることはよくあります。たとえば、<code>lm()</code>関数で回帰分析を行った際、その結果はリスト型であり、中にはベクトル、データフレーム、リストなどが混在しています。これについては今後詳細に解説していきたいと思います。</p>
 </div>
 <div id="リスト型データの操作" class="section level3" number="10.5.2">
@@ -1630,28 +1633,28 @@ myDF4[5, ]  &lt;- Hakiai_Data</code></pre>
 <p><strong>要素の番号を利用する方法</strong></p>
 <p><code>List1</code>は各要素に名前が付いていないため、番号で抽出します。たとえば、あるリストの<code>i</code>番目の要素を抽出するには<code>リスト名[[i]]</code>で抽出します。<code>[]</code>ではなく、<code>[[]]</code>であることに注意してください。それでは<code>List1</code>の1番目の要素を抽出してみましょう。</p>
 <div class="sourceCode" id="cb502"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb502-1"><a href="datastructure.html#cb502-1"></a>List1[[<span class="dv">1</span>]]</span></code></pre></div>
-<pre><code>##    ID                Team Rank Points Prev_Points
-## 1   1             Albania   75   1325        1316
-## 2   2             Algeria   85   1271        1271
-## 3   3      American Samoa  133   1030        1030
-## 4   4             Andorra  155    749         749
-## 5   5              Angola  121   1117        1117
-## 6   6 Antigua and Barbuda  153    787         787
-## 7   7           Argentina   32   1659        1659
-## 8   8             Armenia  126   1103        1104
-## 9   9               Aruba  157    724         724
-## 10 10           Australia    7   1963        1963
-##    Confederation
-## 1           UEFA
-## 2            CAF
-## 3            OFC
-## 4           UEFA
-## 5            CAF
-## 6       CONCACAF
-## 7       CONMEBOL
-## 8           UEFA
-## 9       CONCACAF
-## 10           AFC</code></pre>
+<pre><code>##    ID                Team Rank Points
+## 1   1             Albania   75   1325
+## 2   2             Algeria   85   1271
+## 3   3      American Samoa  133   1030
+## 4   4             Andorra  155    749
+## 5   5              Angola  121   1117
+## 6   6 Antigua and Barbuda  153    787
+## 7   7           Argentina   32   1659
+## 8   8             Armenia  126   1103
+## 9   9               Aruba  157    724
+## 10 10           Australia    7   1963
+##    Prev_Points Confederation
+## 1         1316          UEFA
+## 2         1271           CAF
+## 3         1030           OFC
+## 4          749          UEFA
+## 5         1117           CAF
+## 6          787      CONCACAF
+## 7         1659      CONMEBOL
+## 8         1104          UEFA
+## 9          724      CONCACAF
+## 10        1963           AFC</code></pre>
 <p>このように<code>List1</code>内の1番目のデータが抽出されました。こちらのデータ構造は何でしょうか。</p>
 <div class="sourceCode" id="cb504"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb504-1"><a href="datastructure.html#cb504-1"></a><span class="kw">class</span>(List1[[<span class="dv">1</span>]])</span></code></pre></div>
 <pre><code>## [1] &quot;data.frame&quot;</code></pre>
@@ -1664,28 +1667,28 @@ myDF4[5, ]  &lt;- Hakiai_Data</code></pre>
 <p>先ほどリストの要素の抽出には「<code>[]</code>でなく、<code>[[]]</code>です」と申しましたが、実は<code>[]</code>も使用可能です。やってみましょう。</p>
 <div class="sourceCode" id="cb508"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb508-1"><a href="datastructure.html#cb508-1"></a>List1[<span class="dv">1</span>]</span></code></pre></div>
 <pre><code>## [[1]]
-##    ID                Team Rank Points Prev_Points
-## 1   1             Albania   75   1325        1316
-## 2   2             Algeria   85   1271        1271
-## 3   3      American Samoa  133   1030        1030
-## 4   4             Andorra  155    749         749
-## 5   5              Angola  121   1117        1117
-## 6   6 Antigua and Barbuda  153    787         787
-## 7   7           Argentina   32   1659        1659
-## 8   8             Armenia  126   1103        1104
-## 9   9               Aruba  157    724         724
-## 10 10           Australia    7   1963        1963
-##    Confederation
-## 1           UEFA
-## 2            CAF
-## 3            OFC
-## 4           UEFA
-## 5            CAF
-## 6       CONCACAF
-## 7       CONMEBOL
-## 8           UEFA
-## 9       CONCACAF
-## 10           AFC</code></pre>
+##    ID                Team Rank Points
+## 1   1             Albania   75   1325
+## 2   2             Algeria   85   1271
+## 3   3      American Samoa  133   1030
+## 4   4             Andorra  155    749
+## 5   5              Angola  121   1117
+## 6   6 Antigua and Barbuda  153    787
+## 7   7           Argentina   32   1659
+## 8   8             Armenia  126   1103
+## 9   9               Aruba  157    724
+## 10 10           Australia    7   1963
+##    Prev_Points Confederation
+## 1         1316          UEFA
+## 2         1271           CAF
+## 3         1030           OFC
+## 4          749          UEFA
+## 5         1117           CAF
+## 6          787      CONCACAF
+## 7         1659      CONMEBOL
+## 8         1104          UEFA
+## 9          724      CONCACAF
+## 10        1963           AFC</code></pre>
 <p><code>[[]]</code>を使った抽出とあまり変わらないですね。しかし、重要な違いが一つあります。それはデータ構造です。</p>
 <div class="sourceCode" id="cb510"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb510-1"><a href="datastructure.html#cb510-1"></a><span class="kw">class</span>(List1[<span class="dv">1</span>])</span></code></pre></div>
 <pre><code>## [1] &quot;list&quot;</code></pre>
@@ -1696,51 +1699,51 @@ myDF4[5, ]  &lt;- Hakiai_Data</code></pre>
 <p><strong>要素の名前を利用する方法</strong></p>
 <p><code>List2</code>のようにリストの要素に名前を付けた場合、これまでの方法に加え<code>[["要素名"]]</code>と<code>$要素名</code>を使った操作が可能です<a href="#fn46" class="footnote-ref" id="fnref46"><sup>46</sup></a>。<code>List2</code>から男子ランキング (<code>Men</code>)を抽出してみましょう。</p>
 <div class="sourceCode" id="cb514"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb514-1"><a href="datastructure.html#cb514-1"></a>List2[[<span class="st">&quot;Men&quot;</span>]]</span></code></pre></div>
-<pre><code>##    ID                Team Rank Points Prev_Points
-## 1   1         Afghanistan  149   1052        1052
-## 2   2             Albania   66   1356        1356
-## 3   3             Algeria   35   1482        1482
-## 4   4      American Samoa  192    900         900
-## 5   5             Andorra  135   1082        1082
-## 6   6              Angola  124   1136        1136
-## 7   7            Anguilla  210    821         821
-## 8   8 Antigua and Barbuda  126   1127        1127
-## 9   9           Argentina    9   1623        1623
-## 10 10             Armenia  102   1213        1213
-##    Confederation
-## 1            AFC
-## 2           UEFA
-## 3            CAF
-## 4            OFC
-## 5           UEFA
-## 6            CAF
-## 7       CONCACAF
-## 8       CONCACAF
-## 9       CONMEBOL
-## 10          UEFA</code></pre>
+<pre><code>##    ID                Team Rank Points
+## 1   1         Afghanistan  149   1052
+## 2   2             Albania   66   1356
+## 3   3             Algeria   35   1482
+## 4   4      American Samoa  192    900
+## 5   5             Andorra  135   1082
+## 6   6              Angola  124   1136
+## 7   7            Anguilla  210    821
+## 8   8 Antigua and Barbuda  126   1127
+## 9   9           Argentina    9   1623
+## 10 10             Armenia  102   1213
+##    Prev_Points Confederation
+## 1         1052           AFC
+## 2         1356          UEFA
+## 3         1482           CAF
+## 4          900           OFC
+## 5         1082          UEFA
+## 6         1136           CAF
+## 7          821      CONCACAF
+## 8         1127      CONCACAF
+## 9         1623      CONMEBOL
+## 10        1213          UEFA</code></pre>
 <div class="sourceCode" id="cb516"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb516-1"><a href="datastructure.html#cb516-1"></a>List2<span class="op">$</span>Men</span></code></pre></div>
-<pre><code>##    ID                Team Rank Points Prev_Points
-## 1   1         Afghanistan  149   1052        1052
-## 2   2             Albania   66   1356        1356
-## 3   3             Algeria   35   1482        1482
-## 4   4      American Samoa  192    900         900
-## 5   5             Andorra  135   1082        1082
-## 6   6              Angola  124   1136        1136
-## 7   7            Anguilla  210    821         821
-## 8   8 Antigua and Barbuda  126   1127        1127
-## 9   9           Argentina    9   1623        1623
-## 10 10             Armenia  102   1213        1213
-##    Confederation
-## 1            AFC
-## 2           UEFA
-## 3            CAF
-## 4            OFC
-## 5           UEFA
-## 6            CAF
-## 7       CONCACAF
-## 8       CONCACAF
-## 9       CONMEBOL
-## 10          UEFA</code></pre>
+<pre><code>##    ID                Team Rank Points
+## 1   1         Afghanistan  149   1052
+## 2   2             Albania   66   1356
+## 3   3             Algeria   35   1482
+## 4   4      American Samoa  192    900
+## 5   5             Andorra  135   1082
+## 6   6              Angola  124   1136
+## 7   7            Anguilla  210    821
+## 8   8 Antigua and Barbuda  126   1127
+## 9   9           Argentina    9   1623
+## 10 10             Armenia  102   1213
+##    Prev_Points Confederation
+## 1         1052           AFC
+## 2         1356          UEFA
+## 3         1482           CAF
+## 4          900           OFC
+## 5         1082          UEFA
+## 6         1136           CAF
+## 7          821      CONCACAF
+## 8         1127      CONCACAF
+## 9         1623      CONMEBOL
+## 10        1213          UEFA</code></pre>
 <p>どれも結果は同じです。また、それぞれのデータ構造もデータフレームです。</p>
 <div class="sourceCode" id="cb518"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb518-1"><a href="datastructure.html#cb518-1"></a><span class="kw">class</span>(List2[[<span class="st">&quot;Men&quot;</span>]])</span></code></pre></div>
 <pre><code>## [1] &quot;data.frame&quot;</code></pre>
@@ -1748,11 +1751,15 @@ myDF4[5, ]  &lt;- Hakiai_Data</code></pre>
 <pre><code>## [1] &quot;data.frame&quot;</code></pre>
 <p>したがって、<code>[行番号, 列番号]</code>のようにデータフレームの操作が可能です。<code>Men</code>要素から10行目のデータを抽出してみましょう。</p>
 <div class="sourceCode" id="cb522"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb522-1"><a href="datastructure.html#cb522-1"></a>List2[[<span class="st">&quot;Men&quot;</span>]][<span class="dv">10</span>, ]</span></code></pre></div>
-<pre><code>##    ID    Team Rank Points Prev_Points Confederation
-## 10 10 Armenia  102   1213        1213          UEFA</code></pre>
+<pre><code>##    ID    Team Rank Points Prev_Points
+## 10 10 Armenia  102   1213        1213
+##    Confederation
+## 10          UEFA</code></pre>
 <div class="sourceCode" id="cb524"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb524-1"><a href="datastructure.html#cb524-1"></a>List2<span class="op">$</span>Men[<span class="dv">10</span>, ]</span></code></pre></div>
-<pre><code>##    ID    Team Rank Points Prev_Points Confederation
-## 10 10 Armenia  102   1213        1213          UEFA</code></pre>
+<pre><code>##    ID    Team Rank Points Prev_Points
+## 10 10 Armenia  102   1213        1213
+##    Confederation
+## 10          UEFA</code></pre>
 <p>もちろん、名前を付けた場合であっても、要素の番号を利用した操作も可能です。自分でリスト型を作成する際には各要素に名前を付けた方が分かりやすくて良いでしょう。</p>
 <hr />
 </div>
