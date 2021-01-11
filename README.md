@@ -57,11 +57,11 @@ R Not for Everyone: An Esoteric Guide.
 |21|データハンドリング [応用編]|0||
 |22|文字列の処理|0||
 |23|スクレイピング|0||
-|24| 反復処理 | 50 | 
+|24| 反復処理 | 50 |
 |25|R Markdown [基礎]|85||
 |26|R Markdown [応用]|0||
-|99 | モデルの可視化 | 0 | 
-|99 | API | 0 | 
+|99 | モデルの可視化 | 0 |
+|99 | API | 0 |
 |99 |線形代数 |5||
 |99 |最適化 |5||
 |99 |モンテカルロシミュレーション |5||
@@ -85,3 +85,17 @@ R Not for Everyone: An Esoteric Guide.
     * [`FIFA_Men.csv`](https://www.jaysong.net/RBook/Data/FIFA_Men.csv)
 * データハンドリング[基礎編: 抽出]
     * [`Ramen.csv`](https://www.jaysong.net/RBook/Data/Ramen.csv)
+* データハンドリング[基礎編: 拡張]
+    * [`Ramen.csv`](https://www.jaysong.net/RBook/Data/Ramen.csv)
+    * [`Ramen2.csv`](https://www.jaysong.net/RBook/Data/Ramen2.csv)
+* データハンドリング[基礎編: factor型]
+    * [`COVID19.csv`](https://www.jaysong.net/RBook/Data/COVID19.csv)
+    * [`Ramen.csv`](https://www.jaysong.net/RBook/Data/Ramen.csv)
+* 整然データ構造
+    * [`COVID19_JK.csv`](https://www.jaysong.net/RBook/Data/COVID19_JK.csv)
+    * [`Population2015.csv`](https://www.jaysong.net/RBook/Data/Population2015.csv)
+* 可視化[基礎]
+    * [`Countries.csv`](https://www.jaysong.net/RBook/Data/Countries.csv)
+    * [`COVID19_Worldwide.csv`](https://www.jaysong.net/RBook/Data/COVID19_Worldwide.csv)
+* 反復処理
+    * [`Countries.csv`](https://www.jaysong.net/RBook/Data/Countries.csv)
