@@ -185,7 +185,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="ide.html"><a href="ide.html"><i class="fa fa-check"></i><b>4</b> IDEの導入</a></li>
-<li class="chapter" data-level="5" data-path="R-Customize.html"><a href="R-Customize.html"><i class="fa fa-check"></i><b>5</b> 分析環境のカスタマイズ</a></li>
+<li class="chapter" data-level="5" data-path="R-Customize.html"><a href="R-Customize.html"><i class="fa fa-check"></i><b>5</b> 分析環境のカスタマイズ</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="R-Customize.html"><a href="R-Customize.html#Customize-rprofile"><i class="fa fa-check"></i><b>5.1</b> .Rprofileの設定</a></li>
+<li class="chapter" data-level="5.2" data-path="R-Customize.html"><a href="R-Customize.html#Customize-rstudio"><i class="fa fa-check"></i><b>5.2</b> RStudioのカスタマイズ</a></li>
+</ul></li>
 <li class="chapter" data-level="6" data-path="process.html"><a href="process.html"><i class="fa fa-check"></i><b>6</b> 分析の手順</a></li>
 <li class="chapter" data-level="7" data-path="rbasic.html"><a href="rbasic.html"><i class="fa fa-check"></i><b>7</b> 基本的な操作</a>
 <ul>
@@ -598,7 +602,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>&lt;a href=&quot;https://www.jaysong.net&quot;&gt;SONGのHP&lt;/a&gt;</code></pre>
 <p>　これをウェブブラウザが自動的に「<a href="https://www.jaysong.net">SONGのHP</a>」と変換し、画面に出力してくれます。これは、書式情報などが必要な箇所にコードを埋め込むことによって実現されます。そして、このMark<em>up</em>言語をより単純な文法で再構成したものがMark<em>down</em>です。例えば、以上のHTMLはMarkdownでは以下のように書きます。</p>
 <pre><code>[SONGのHP](https://www.jaysong.net)</code></pre>
-<p>　同じ意味のコードですが、Markdownの方がより簡潔に書けます。このMarkdownは最終的にHTMLやMicrosoft Word、PDF形式で変換されます。一般的にはHTML出力を使いますが、自分のPCに<span class="math inline">\(\LaTeX\)</span>環境が用意されている場合はPDF形式で出力することも可能であり、個人的には推奨しておりませんが、Microsoft Work文書ファイルへ変換することも可能です。また、HTML（+ JavaScript）へ出力可能であることを利用し、スライドショー、e-Book、ホームページの作成にもMarkdownが使えます。</p>
+<p>　同じ意味のコードですが、Markdownの方がより簡潔に書けます。このMarkdownは最終的にHTMLやMicrosoft Word、PDF形式で変換されます。一般的にはHTML出力を使いますが、自分のPCにLaTeX環境が用意されている場合はPDF形式で出力することも可能であり、個人的には推奨しておりませんが、Microsoft Work文書ファイルへ変換することも可能です。また、HTML（+ JavaScript）へ出力可能であることを利用し、スライドショー、e-Book、ホームページの作成にもMarkdownが使えます。</p>
 <p>　R MarkdownはMarkdownにRコードとその結果を同時に載せることができるMarkdownです。それでもピンと来ない方も多いでしょう。それでは、とりあえず、R Markdownをサンプルコードから体験してみましょう。</p>
 <hr />
 </div>
@@ -837,7 +841,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="数式" class="section level3" number="25.3.10">
 <h3><span class="header-section-number">25.3.10</span> 数式</h3>
-<p>　インライン数式は<code>$数式$</code>で埋め込むことができます。数式は<span class="math inline">\(\LaTeX\)</span>の書き方とほぼ同じです。ちなみに、R Markdownの数式は<a href="https://www.mathjax.org">MathJax</a>によってレンダリングされます。このMathJaxライブラリはHTMLに埋め込まれているのではないため、インターネットに接続せずにHTMLファイルを開くと数式が正しく出力されません。</p>
+<p>　インライン数式は<code>$数式$</code>で埋め込むことができます。数式はLaTeXの書き方とほぼ同じです。ちなみに、R Markdownの数式は<a href="https://www.mathjax.org">MathJax</a>によってレンダリングされます。このMathJaxライブラリはHTMLに埋め込まれているのではないため、インターネットに接続せずにHTMLファイルを開くと数式が正しく出力されません。</p>
 <p><strong>Input:</strong></p>
 <div class="sourceCode" id="cb1609"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb1609-1"><a href="rmarkdown.html#cb1609-1"></a>アインシュタインと言えば、$e = mc^2$でしょう。</span></code></pre></div>
 <p><strong>Output:</strong></p>
@@ -854,27 +858,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><span class="math display">\[
 y_i \sim \text{Normal}(\mathbf{X} \boldsymbol{\beta}, \sigma).
 \]</span></p>
-<p>　もし数式が複数の行で構成されている場合は<code>$$</code>内に<code>\begin{align}</code>を使用します。むろん、<span class="math inline">\(\LaTeX\)</span>と使い方は同じです。</p>
+<p>　もし数式が複数の行で構成されている場合は<code>$$</code>内にaligned環境（<code>\begin{aligned}</code>〜<code>\end{aligned}</code>）を使用します。むろん、LaTeXと使い方は同じです。</p>
 <p><strong>Input:</strong></p>
 <div class="sourceCode" id="cb1611"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb1611-1"><a href="rmarkdown.html#cb1611-1"></a>複数の行にわたる数式の書き方</span>
 <span id="cb1611-2"><a href="rmarkdown.html#cb1611-2"></a></span>
 <span id="cb1611-3"><a href="rmarkdown.html#cb1611-3"></a>$$</span>
-<span id="cb1611-4"><a href="rmarkdown.html#cb1611-4"></a>\begin{align}</span>
+<span id="cb1611-4"><a href="rmarkdown.html#cb1611-4"></a>\begin{aligned}</span>
 <span id="cb1611-5"><a href="rmarkdown.html#cb1611-5"></a>  Y_i      &amp; \sim \text{Bernoulli}(\theta_i), <span class="sc">\\</span></span>
 <span id="cb1611-6"><a href="rmarkdown.html#cb1611-6"></a>  \theta_i &amp; = \text{logit}^{-1}(y_i^*), <span class="sc">\\</span></span>
 <span id="cb1611-7"><a href="rmarkdown.html#cb1611-7"></a>  y_i^*    &amp; = \beta_0 + \beta_1 x_1 + \beta_2 z_1.</span>
-<span id="cb1611-8"><a href="rmarkdown.html#cb1611-8"></a>\end{align}</span>
+<span id="cb1611-8"><a href="rmarkdown.html#cb1611-8"></a>\end{aligned}</span>
 <span id="cb1611-9"><a href="rmarkdown.html#cb1611-9"></a>$$</span></code></pre></div>
 <p><strong>Output:</strong></p>
 <p>複数の行にわたる数式の書き方</p>
 <p><span class="math display">\[
-\begin{align}
+\begin{aligned}
   Y_i      &amp; \sim \text{Bernoulli}(\theta_i), \\
   \theta_i &amp; = \text{logit}^{-1}(y_i^*), \\
   y_i^*    &amp; = \beta_0 + \beta_1 x_1 + \beta_2 z_1.
-\end{align}
+\end{aligned}
 \]</span></p>
-<p>　ここまで見ればお分かりかと思いますが、<code>$$</code>の中には<span class="math inline">\(\LaTeX\)</span>コマンドが使用可能です。たとえば、行列を作成する際は以下のように<code>\begin{bmatrix}</code>環境を使います。</p>
+<p>　ここまで見ればお分かりかと思いますが、<code>$$</code>の中にはLaTeXコマンドが使用可能です。たとえば、行列を作成する際は以下のように<code>\begin{bmatrix}</code>環境を使います。</p>
 <p><strong>Input:</strong></p>
 <div class="sourceCode" id="cb1612"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb1612-1"><a href="rmarkdown.html#cb1612-1"></a>行列の書き方</span>
 <span id="cb1612-2"><a href="rmarkdown.html#cb1612-2"></a></span>

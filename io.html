@@ -185,7 +185,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="ide.html"><a href="ide.html"><i class="fa fa-check"></i><b>4</b> IDEの導入</a></li>
-<li class="chapter" data-level="5" data-path="R-Customize.html"><a href="R-Customize.html"><i class="fa fa-check"></i><b>5</b> 分析環境のカスタマイズ</a></li>
+<li class="chapter" data-level="5" data-path="R-Customize.html"><a href="R-Customize.html"><i class="fa fa-check"></i><b>5</b> 分析環境のカスタマイズ</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="R-Customize.html"><a href="R-Customize.html#Customize-rprofile"><i class="fa fa-check"></i><b>5.1</b> .Rprofileの設定</a></li>
+<li class="chapter" data-level="5.2" data-path="R-Customize.html"><a href="R-Customize.html#Customize-rstudio"><i class="fa fa-check"></i><b>5.2</b> RStudioのカスタマイズ</a></li>
+</ul></li>
 <li class="chapter" data-level="6" data-path="process.html"><a href="process.html"><i class="fa fa-check"></i><b>6</b> 分析の手順</a></li>
 <li class="chapter" data-level="7" data-path="rbasic.html"><a href="rbasic.html"><i class="fa fa-check"></i><b>7</b> 基本的な操作</a>
 <ul>
@@ -972,7 +976,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>　<code>Vote_ShiftJIS.csv</code> はShift-JIS でエンコーディングされた csvファイルである。このファイルを <code>read.csv()</code> 関数で読み込んでみよう。</p>
 <div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="io.html#cb90-1"></a>ShiftJIS_df &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;Data/Vote_ShiftJIS.csv&quot;</span>)</span></code></pre></div>
 <pre><code>## Error in type.convert.default(data[[i]], as.is = as.is[i], dec = dec, :  &#39;&lt;96&gt;k&lt;8a&gt;C&lt;93&gt;&lt;b9&gt;&#39; に不正なマルチバイト文字があります</code></pre>
-<p>このようにエラーが表示され、読み込めない。</p>
+<p>　このようにエラーが表示され、読み込めない。</p>
 <p>　このファイルは、<code>read.csv()</code>の代わりに <strong>readr</strong>パッケージの<code>read_csv()</code>を使えば読み込むことができる<a href="#fn29" class="footnote-ref" id="fnref29"><sup>29</sup></a>。<code>read_csv()</code>で読み込み、中身を確認してみよう。</p>
 <div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="io.html#cb92-1"></a>ShiftJIS_df1 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;Data/Vote_ShiftJIS.csv&quot;</span>)</span></code></pre></div>
 <pre><code>## 
@@ -1002,10 +1006,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 6     6 &quot;\x8…  0.342   30.8    24.8  42.5  21.5 11.8 
 ## # … with 3 more variables: Ishin &lt;dbl&gt;, JCP &lt;dbl&gt;,
 ## #   SDP &lt;dbl&gt;</code></pre>
-<p>2列目の<code>Pref</code>列には日本語で都道府県名が入っているはずだが、謎の文字列が表示される。</p>
+<p>　2列目の<code>Pref</code>列には日本語で都道府県名が入っているはずだが、謎の文字列が表示される。</p>
 <p>　正しい都道府県名を表示する方法はいくつかあるが、ここでは3つの方法を紹介する。</p>
 <p><strong>1. <code>read.csv()</code>関数の<code>fileEncoing</code>引数の指定</strong></p>
-<p>一つ目の方法は、<code>read.csv()</code>関数の <code>fileEncoding</code> 引数を追加するというものだる。この引数に、指定したファイルのエンコーディングを指定すればよいが、Shift-JISの場合、<code>"Shift_JIS"</code>　を指定する。ハイフン (<code>-</code>)ではなく、アンダーバー (<code>_</code>) であることに注意されたい。この<code>"Shift_JIS"</code>は<code>"cp932"</code> に書き換えても良い。それではやってみよう。</p>
+<p>　一つ目の方法は、<code>read.csv()</code>関数の <code>fileEncoding</code> 引数を追加するというものだる。この引数に、指定したファイルのエンコーディングを指定すればよいが、Shift-JISの場合、<code>"Shift_JIS"</code>　を指定する。ハイフン (<code>-</code>)ではなく、アンダーバー (<code>_</code>) であることに注意されたい。この<code>"Shift_JIS"</code>は<code>"cp932"</code> に書き換えても良い。それではやってみよう。</p>
 <div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="io.html#cb96-1"></a>ShiftJIS_df2 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;Data/Vote_ShiftJIS.csv&quot;</span>, </span>
 <span id="cb96-2"><a href="io.html#cb96-2"></a>                         <span class="dt">fileEncoding =</span> <span class="st">&quot;Shift_JIS&quot;</span>)</span>
 <span id="cb96-3"><a href="io.html#cb96-3"></a><span class="kw">head</span>(ShiftJIS_df2)</span></code></pre></div>
@@ -1023,7 +1027,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 4  3.97  9.99 3.62
 ## 5  5.17  7.56 5.12
 ## 6  4.30  7.60 5.20</code></pre>
-<p><code>Pref</code>列の日本語が正常に表示された。</p>
+<p>　<code>Pref</code>列の日本語が正常に表示された。</p>
 <p><strong>2. <code>read_csv()</code>関数の<code>locale</code>引数の指定</strong></p>
 <p>　二つ目の方法は <code>read_csv()</code> 関数の<code>locale</code> 引数を指定する方法である。<code>read_csv()</code>には　<code>fileEncoding</code>　引数がないが、代わりに <code>locale</code> があるので、<code>locale = locale(encoding = "Shift_JIS")</code>を追加すれば良い。</p>
 <div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="io.html#cb98-1"></a>ShiftJIS_df3 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;Data/Vote_ShiftJIS.csv&quot;</span>, </span>
@@ -1056,8 +1060,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## # … with 3 more variables: Ishin &lt;dbl&gt;, JCP &lt;dbl&gt;,
 ## #   SDP &lt;dbl&gt;</code></pre>
 <p><strong>3. LibreOfficeなどを利用した方法</strong></p>
-<p>　第三の方法は、そもそも Shift-JISでではなく、より一般的な UTF-8 でエンコーディングされたファイルを用意し、それを読み込むことである。ただし、この作業のためにはR以外のソフトが必要である。テキストエディタには文字コードを変更する機能がついているものが多いので、その機能を利用して文字コードを Shift-JISからUTF-8に変えれば良い。また、オープンソースのオフィススイートである <a href="https://ja.libreoffice.org/">LibreOffice</a> は、CSVを開く際に文字コードを尋ねてくれるので、Shift-JIS を指定して上で使った csv ファイルを開こう。その後、文字コードをUTF-8に変更し、別名でcsvファイルを保存すれ、文字コード以外の中身が同じファイルができる。そのようにして作ったのが、<code>Vote.csv</code> である。これを読み込んでみよう。
-　</p>
+<p>　第三の方法は、そもそも Shift-JISでではなく、より一般的な UTF-8 でエンコーディングされたファイルを用意し、それを読み込むことである。ただし、この作業のためにはR以外のソフトが必要である。テキストエディタには文字コードを変更する機能がついているものが多いので、その機能を利用して文字コードを Shift-JISからUTF-8に変えれば良い。また、オープンソースのオフィススイートである <a href="https://ja.libreoffice.org/">LibreOffice</a> は、CSVを開く際に文字コードを尋ねてくれるので、Shift-JIS を指定して上で使った csv ファイルを開こう。その後、文字コードをUTF-8に変更し、別名でcsvファイルを保存すれ、文字コード以外の中身が同じファイルができる。そのようにして作ったのが、<code>Vote.csv</code> である。これを読み込んでみよう。</p>
 <div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="io.html#cb102-1"></a>UTF8_df &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;Data/Vote.csv&quot;</span>)</span>
 <span id="cb102-2"><a href="io.html#cb102-2"></a><span class="kw">head</span>(UTF8_df)</span></code></pre></div>
 <pre><code>##   ID   Pref  Zaisei Over65 Under30   LDP   DPJ Komei
@@ -1074,7 +1077,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 4  3.97  9.99 3.62
 ## 5  5.17  7.56 5.12
 ## 6  4.30  7.60 5.20</code></pre>
-<p>第1引数以外の引数を何を指定しなくても、ファイルが正しく読み込まれ、都道府県名が日本語で表示されている。</p>
+<p>　第1引数以外の引数を何を指定しなくても、ファイルが正しく読み込まれ、都道府県名が日本語で表示されている。</p>
 </div>
 </div>
 <div id="その他のフォーマット" class="section level3" number="8.1.2">
@@ -1082,7 +1085,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>　データ分析で用いられるデータの多くは表の形で保存されている。表形式のデータは、<code>.csv</code>以外に、<code>.xlsx</code> (Excel)、<code>.dta</code> (Stata)、<code>.sav</code> (SPSS)、<code>.ods</code> (LibreOfficeなど)　などのファイル形式で保存されることがある。ここでは接する機会が多い Excel 形式のファイルと Stata 形式のファイルの読み込みについて説明しよう<a href="#fn30" class="footnote-ref" id="fnref30"><sup>30</sup></a>。</p>
 <p>　Excelファイルを読み込むためには<strong>xlsx</strong>パッケージを使う。インストールされていない場合、コンソール上で<code>install.packages("xlsx")</code>を入力し、インストールする（上で <code>pacman::p_load(xlsx)</code> を実行したのでインストールされているはずだが）。以下では<strong>xlsx</strong>パッケージがインストールされていると想定し、<code>Soccer.xlsx</code>ファイルを読み込み、<code>Excel_DF</code>と名付けてみよう。</p>
 <div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="io.html#cb104-1"></a>Excel_DF &lt;-<span class="st"> </span><span class="kw">read.xlsx</span>(<span class="st">&quot;Data/Soccer.xlsx&quot;</span>, <span class="dt">sheetIndex =</span> <span class="dv">1</span>)</span></code></pre></div>
-<p>Excelファイルには2つ以上のシートが含まれる場合が多いので、どのシートを読み込むかを<code>sheetIndex</code> で指定する。実際、<code>Soccer.xlsx</code>ファイルをExcelまたはLibreOffice Calc で開いてみると、シートが3つある。そのうち、必要なデータは1つ目のシートにあるので、ここでは<code>1</code>を指定した。きちんと読み込たか確認してみよう。</p>
+<p>　Excelファイルには2つ以上のシートが含まれる場合が多いので、どのシートを読み込むかを<code>sheetIndex</code> で指定する。実際、<code>Soccer.xlsx</code>ファイルをExcelまたはLibreOffice Calc で開いてみると、シートが3つある。そのうち、必要なデータは1つ目のシートにあるので、ここでは<code>1</code>を指定した。きちんと読み込たか確認してみよう。</p>
 <div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="io.html#cb105-1"></a><span class="kw">head</span>(Excel_DF)</span></code></pre></div>
 <pre><code>##   ID                Team Rank Points Prev_Points
 ## 1  1             Albania   75   1325        1316
@@ -1124,12 +1127,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>現在の実行環境に7個のオブジェクトがあることがわかる。</p>
 <p>　では、<code>Scores.RData</code>を読み込んでみよう。<code>.RData</code> は、<code>load()</code> 関数で読み込む。ただし、これまでのファイルの読み込みとは異なり、保存先のオブジェクト名は指定しない。なぜなら、<code>.Rdata</code> の中に既にオブジェクトが保存されているからだ。</p>
 <div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="io.html#cb111-1"></a><span class="kw">load</span>(<span class="st">&quot;Data/Scores.RData&quot;</span>)</span></code></pre></div>
-<p>ここでもう一度実行環境上にあるオブジェクトのリストを確認してみよう。</p>
+<p>　ここでもう一度実行環境上にあるオブジェクトのリストを確認してみよう。</p>
 <div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="io.html#cb112-1"></a><span class="kw">ls</span>()</span></code></pre></div>
 <pre><code>## [1] &quot;EnglishScore&quot; &quot;Excel_DF&quot;     &quot;MathScore&quot;   
 ## [4] &quot;my_df1&quot;       &quot;ShiftJIS_df1&quot; &quot;ShiftJIS_df2&quot;
 ## [7] &quot;ShiftJIS_df3&quot; &quot;Stata_DF&quot;     &quot;UTF8_df&quot;</code></pre>
-<p><code>MathScore</code>と<code>EnglishScore</code>という名前のオブジェクトが追加されていることが分かる。</p>
+<p>　<code>MathScore</code>と<code>EnglishScore</code>という名前のオブジェクトが追加されていることが分かる。</p>
 <p>　このように、<code>load()</code>による<code>.RData</code> の読み込みは、<code>.csv</code>ファイルや<code>.xlsx</code>ファイルの読み込みと異なる。以下の2点が重要な違いである。</p>
 <ol style="list-style-type: decimal">
 <li><code>.RData</code> は、1つのファイルに複数のデータを含むことができる。</li>
@@ -1166,10 +1169,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb118-3"><a href="io.html#cb118-3"></a>    <span class="dt">Name  =</span> <span class="kw">c</span>(<span class="st">&quot;Aさん&quot;</span>, <span class="st">&quot;Bさん&quot;</span>, <span class="st">&quot;Cさん&quot;</span>, <span class="st">&quot;Dさん&quot;</span>, <span class="st">&quot;Eさん&quot;</span>),</span>
 <span id="cb118-4"><a href="io.html#cb118-4"></a>    <span class="dt">Score =</span> <span class="kw">c</span>(<span class="dv">50</span>, <span class="dv">75</span>, <span class="dv">60</span>, <span class="dv">93</span>, <span class="dv">51</span>)</span>
 <span id="cb118-5"><a href="io.html#cb118-5"></a>)</span></code></pre></div>
-上のコードを実行すると、<code>my_data</code>というオブジェクトが生成され、中には表@ref(tab:my_data)のようなデータが保持される。
-<table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<p>　上のコードを実行すると、<code>my_data</code>というオブジェクトが生成され、中には表<a href="io.html#tab:my-data-inside">8.1</a>以下のようなデータが保持される。</p>
+<table class=" lightable-classic" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-(#tab:my_data)my_dataの中身
+<span id="tab:my-data-inside">表 8.1: </span><code>my_data</code>の中身
 </caption>
 <thead>
 <tr>
@@ -1244,7 +1247,7 @@ Eさん
 </table>
 <p>　このデータを<code>my_data.csv</code>という名前のcsvファイルで保存するには、<code>write.csv()</code>という関数を使う。必須の引数は2つで、1つ目の引数は保存するオブジェクト名、2つ目の引数 <code>file</code> は書き出すファイル名。もし、プロジェクトフォルダの下位フォルダ、たとえば、Dataフォルダーに保存するなら、ファイル名を<code>"Data/my_ata.csv"</code>のように指定する。他によく使う引数として<code>row.names</code>があり、デフォルトは<code>TRUE</code>だが、<code>FALSE</code>にすることを推奨する。<code>TRUE</code>のままだと、データの1列目に行番号が保存される。</p>
 <div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="io.html#cb119-1"></a><span class="kw">write.csv</span>(my_data, <span class="dt">file =</span> <span class="st">&quot;Data/my_data.csv&quot;</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
-<p>これを実行すると、プロジェクトのフォルダの中にある <code>Data</code> フォルダに<code>my_data.csv</code>が生成される。<code>LibreOffice</code>や<code>Numbers</code>、<code>Excel</code>などを使って<code>my_data.csv</code>を開いてみると、先ほど作成したデータが保存されていることが確認できる。</p>
+<p>　これを実行すると、プロジェクトのフォルダの中にある <code>Data</code> フォルダに<code>my_data.csv</code>が生成される。<code>LibreOffice</code>や<code>Numbers</code>、<code>Excel</code>などを使って<code>my_data.csv</code>を開いてみると、先ほど作成したデータが保存されていることが確認できる。</p>
 <div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-86"></span>
 <img src="figures/Rbasic/Export.png" alt="my_data.csvの中身" width="40%" />
 <p class="caption">
@@ -1260,14 +1263,14 @@ Eさん
 <span id="cb120-3"><a href="io.html#cb120-3"></a>character_vec &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;cat&#39;</span>, <span class="st">&#39;cheetah&#39;</span>, <span class="st">&#39;lion&#39;</span>,　<span class="st">&#39;tiger&#39;</span>)</span>
 <span id="cb120-4"><a href="io.html#cb120-4"></a><span class="kw">save</span>(my_data, numeric_vec1, numeric_vec2, character_vec, </span>
 <span id="cb120-5"><a href="io.html#cb120-5"></a>     <span class="dt">file =</span> <span class="st">&quot;Data/my_RData.RData&quot;</span>)</span></code></pre></div>
-<p>実際に<code>my_RData.Rdata</code>ファイルが生成されているかを確認してみよう。ファイルの保存がうまくいっていれば、<code>my_RData.Rdata</code>を読み込むだけで、<code>my_data</code>、<code>numeric_vec1</code>、<code>numeric_vec2</code>、<code>character_vec</code> という4つのオブジェクトを一挙に作業スペースに読み込むことができるはずだ。実際にできるか確認しよう。そのために、まず現在の実行環境上にある<code>my_ata</code>、<code>numeric_vec1</code>、<code>numeric_vec2</code>、<code>character_vec</code>を削除する。そのために <code>rm()</code> 関数を使う。</p>
+<p>　実際に<code>my_RData.Rdata</code>ファイルが生成されているかを確認してみよう。ファイルの保存がうまくいっていれば、<code>my_RData.Rdata</code>を読み込むだけで、<code>my_data</code>、<code>numeric_vec1</code>、<code>numeric_vec2</code>、<code>character_vec</code> という4つのオブジェクトを一挙に作業スペースに読み込むことができるはずだ。実際にできるか確認しよう。そのために、まず現在の実行環境上にある<code>my_ata</code>、<code>numeric_vec1</code>、<code>numeric_vec2</code>、<code>character_vec</code>を削除する。そのために <code>rm()</code> 関数を使う。</p>
 <div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="io.html#cb121-1"></a><span class="kw">rm</span>(my_data)</span>
 <span id="cb121-2"><a href="io.html#cb121-2"></a><span class="kw">rm</span>(numeric_vec1)</span>
 <span id="cb121-3"><a href="io.html#cb121-3"></a><span class="kw">rm</span>(numeric_vec2)</span>
 <span id="cb121-4"><a href="io.html#cb121-4"></a><span class="kw">rm</span>(character_vec)</span></code></pre></div>
-<p>このコードは以下のように1行のコードに書き換えられる。</p>
+<p>　このコードは以下のように1行のコードに書き換えられる。</p>
 <div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="io.html#cb122-1"></a><span class="kw">rm</span>(<span class="dt">list =</span> <span class="kw">c</span>(<span class="st">&quot;my_data&quot;</span>, <span class="st">&quot;numeric_vec1&quot;</span>, <span class="st">&quot;numeric_vec2&quot;</span>, <span class="st">&quot;character_vec&quot;</span>))</span></code></pre></div>
-<p>4のオブジェクトが削除されたか、<code>ls()</code>関数で確認しよう。</p>
+<p>　4のオブジェクトが削除されたか、<code>ls()</code>関数で確認しよう。</p>
 <div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="io.html#cb123-1"></a><span class="kw">ls</span>()</span></code></pre></div>
 <pre><code>## [1] &quot;EnglishScore&quot; &quot;Excel_DF&quot;     &quot;MathScore&quot;   
 ## [4] &quot;my_df1&quot;       &quot;ShiftJIS_df1&quot; &quot;ShiftJIS_df2&quot;
