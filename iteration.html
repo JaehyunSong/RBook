@@ -1586,7 +1586,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </script>
 </div>
 <p>19回の回帰分析が数行のコードで簡単に実施でき、必要な情報も素早く抽出することができました。</p>
-<p>以上の例は、交互作用ありの線形回帰分析による局所処置効果の推定例です。しかし、ノンパラメトリックRDDでは、割当変数（running variable）の二乗項を入れる場合が多いです。今回の割当変数は<code>margin</code>です。また、閾値（cutpoint）に近いケースには高い重みを付けることが一般的な作法であり、多く使われるのが三角（triangular）カーネルです。上記の例はすべてのケースに同じ重みを付ける矩形（rectagular）カーネルを使った例です。</p>
+<p>以上の例は、交互作用なしの線形回帰分析による局所処置効果の推定例です。しかし、ノンパラメトリックRDDでは、割当変数（running variable）処置変数の交差項や割当変数の二乗項を入れる場合が多いです。今回の割当変数は<code>margin</code>です。また、閾値（cutpoint）に近いケースには高い重みを付けることが一般的な作法であり、多く使われるのが三角（triangular）カーネルです。上記の例はすべてのケースに同じ重みを付ける矩形（rectagular）カーネルを使った例です。</p>
 <p>以上の理由により、やはりRDDは専用のパッケージを使った方が良いかも知れません。既に読み込んである{rdrobust}も推定可能ですが、ここでは{rdd}パッケージを使ってみましょう。{rdd}パッケージによるRDDは<code>RDestimate()</code>関数を使います。実際の例を確認してみましょう。<code>map()</code>を使う前に、オブジェクトの構造を把握しておくことは重要です。</p>
 <div class="sourceCode" id="cb1580"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1580-1"><a href="iteration.html#cb1580-1"></a><span class="co"># cutpoint引数の既定値は0であるため、今回の例では省略可能</span></span>
 <span id="cb1580-2"><a href="iteration.html#cb1580-2"></a><span class="fu">RDestimate</span>(応答変数 <span class="sc">~</span> 割当変数, <span class="at">data =</span> データオブジェクト, <span class="at">cutpoint =</span> 閾値, <span class="at">bw =</span> バンド幅)</span></code></pre></div>
@@ -1649,7 +1649,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## [1] 0.8844541 1.0039734 0.8568150</code></pre>
 <p>それでは分析に入ります。今回も<span class="math inline">\(h\)</span>を予め<code>BW</code>という名の列で格納した<code>RDD_df</code>を作成します。</p>
 <div class="sourceCode" id="cb1589"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1589-1"><a href="iteration.html#cb1589-1"></a>RDD_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">BW =</span> <span class="fu">seq</span>(<span class="dv">100</span>, <span class="dv">10</span>, <span class="at">by =</span> <span class="sc">-</span><span class="dv">5</span>))</span></code></pre></div>
-<p>今回はラムダ式を使わず、事前に関数を定義しておきましょう。関数の自作については第@(function)章を参照してください。</p>
+<p>今回はラムダ式を使わず、事前に関数を定義しておきましょう。関数の自作については第<a href="#function"><strong>??</strong></a>章を参照してください。</p>
 <div class="sourceCode" id="cb1590"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1590-1"><a href="iteration.html#cb1590-1"></a><span class="co"># 引数をxとするRDD_Func()の定義</span></span>
 <span id="cb1590-2"><a href="iteration.html#cb1590-2"></a>RDD_Func <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
 <span id="cb1590-3"><a href="iteration.html#cb1590-3"></a>  <span class="co"># バンド幅をxにしたRDD推定</span></span>
