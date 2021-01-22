@@ -488,6 +488,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="20" data-path="visualization4.html"><a href="visualization4.html"><i class="fa fa-check"></i><b>20</b> 可視化[発展]</a>
 <ul>
 <li class="chapter" data-level="20.1" data-path="visualization4.html"><a href="visualization4.html#visual4-violin"><i class="fa fa-check"></i><b>20.1</b> バイオリンプロット</a></li>
+<li class="chapter" data-level="20.2" data-path="visualization4.html"><a href="visualization4.html#visual4-rug"><i class="fa fa-check"></i><b>20.2</b> ラグプロット</a></li>
+<li class="chapter" data-level="20.3" data-path="visualization4.html"><a href="visualization4.html#visual4-pointrange"><i class="fa fa-check"></i><b>20.3</b> エラーバー付き散布図</a></li>
+<li class="chapter" data-level="20.4" data-path="visualization4.html"><a href="visualization4.html#visual4-smooth"><i class="fa fa-check"></i><b>20.4</b> 平滑化ライン</a></li>
+<li class="chapter" data-level="20.5" data-path="visualization4.html"><a href="visualization4.html#visual4-heatmap"><i class="fa fa-check"></i><b>20.5</b> ヒートマップ</a></li>
 </ul></li>
 <li class="chapter" data-level="21" data-path="datahandling3.html"><a href="datahandling3.html"><i class="fa fa-check"></i><b>21</b> データハンドリング[応用編]</a></li>
 <li class="chapter" data-level="22" data-path="string.html"><a href="string.html"><i class="fa fa-check"></i><b>22</b> 文字列の処理</a></li>
@@ -1174,18 +1178,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb628-5"><a href="programming.html#cb628-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb628-6"><a href="programming.html#cb628-6" aria-hidden="true" tabindex="-1"></a>my_df</span></code></pre></div>
 <pre><code>## # A tibble: 10 x 6
-##       ID Team     Rank Points Prev_Points Confederation
-##    &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;        
-##  1     4 Americ…   192    900         900 OFC          
-##  2    69 Fiji      163    996         996 OFC          
-##  3   135 New Ca…   156   1035        1035 OFC          
-##  4   136 New Ze…   122   1149        1149 OFC          
-##  5   147 Papua …   165    991         991 OFC          
-##  6   159 Samoa     194    894         894 OFC          
-##  7   171 Solomo…   141   1073        1073 OFC          
-##  8   185 Tahiti    161   1014        1014 OFC          
-##  9   191 Tonga     203    862         862 OFC          
-## 10   204 Vanuatu   163    996         996 OFC</code></pre>
+##       ID Team              Rank Points Prev_Points Confederation
+##    &lt;dbl&gt; &lt;chr&gt;            &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;        
+##  1     4 American Samoa     192    900         900 OFC          
+##  2    69 Fiji               163    996         996 OFC          
+##  3   135 New Caledonia      156   1035        1035 OFC          
+##  4   136 New Zealand        122   1149        1149 OFC          
+##  5   147 Papua New Guinea   165    991         991 OFC          
+##  6   159 Samoa              194    894         894 OFC          
+##  7   171 Solomon Islands    141   1073        1073 OFC          
+##  8   185 Tahiti             161   1014        1014 OFC          
+##  9   191 Tonga              203    862         862 OFC          
+## 10   204 Vanuatu            163    996         996 OFC</code></pre>
 <p>OFCに10チーム加盟していることがわかる。</p>
 <p>　以下のような内容が表示されるコードを書きたい。</p>
 <pre><code>=====1番目のチーム情報=====
@@ -1376,14 +1380,16 @@ Team: New Caledonia
 <span id="cb650-15"><a href="programming.html#cb650-15"></a>  </span>
 <span id="cb650-16"><a href="programming.html#cb650-16"></a>  trial <span class="ot">&lt;-</span> trial <span class="sc">+</span> <span class="dv">1</span></span>
 <span id="cb650-17"><a href="programming.html#cb650-17"></a>}</span></code></pre></div>
-<pre><code>## [1] &quot;1回目のサイコロ投げの結果: 3（これまでの総和: 3）&quot;
-## [1] &quot;2回目のサイコロ投げの結果: 3（これまでの総和: 6）&quot;
-## [1] &quot;3回目のサイコロ投げの結果: 4（これまでの総和: 10）&quot;
-## [1] &quot;4回目のサイコロ投げの結果: 6（これまでの総和: 16）&quot;
-## [1] &quot;5回目のサイコロ投げの結果: 1（これまでの総和: 17）&quot;
-## [1] &quot;6回目のサイコロ投げの結果: 6（これまでの総和: 23）&quot;
-## [1] &quot;7回目のサイコロ投げの結果: 1（これまでの総和: 24）&quot;
-## [1] &quot;8回目のサイコロ投げの結果: 6（これまでの総和: 30）&quot;</code></pre>
+<pre><code>## [1] &quot;1回目のサイコロ投げの結果: 1（これまでの総和: 1）&quot;
+## [1] &quot;2回目のサイコロ投げの結果: 6（これまでの総和: 7）&quot;
+## [1] &quot;3回目のサイコロ投げの結果: 2（これまでの総和: 9）&quot;
+## [1] &quot;4回目のサイコロ投げの結果: 1（これまでの総和: 10）&quot;
+## [1] &quot;5回目のサイコロ投げの結果: 1（これまでの総和: 11）&quot;
+## [1] &quot;6回目のサイコロ投げの結果: 4（これまでの総和: 15）&quot;
+## [1] &quot;7回目のサイコロ投げの結果: 6（これまでの総和: 21）&quot;
+## [1] &quot;8回目のサイコロ投げの結果: 5（これまでの総和: 26）&quot;
+## [1] &quot;9回目のサイコロ投げの結果: 3（これまでの総和: 29）&quot;
+## [1] &quot;10回目のサイコロ投げの結果: 1（これまでの総和: 30）&quot;</code></pre>
 <p>このコードの中身を説明しよう。まず、これまで出た目の和を記録する変数<code>total</code>を用意し、初期値として0を格納する。また、何回目のサイコロ投げかを記録するために<code>trial</code>という変数を用意し、初期値として1を格納する（コードの1、2行目）。</p>
 <p>　次に、<code>while</code>文を書く。反復する条件は<code>total</code>が30未満と設定する。つまり、<code>total</code>が30以上になったら反復を終了する（コードの4行目）。</p>
 <p>　続いて、サイコロを投げ、出た目を<code>die</code>という変数に格納します。サイコロ投げは1から6の間の整数から無作為に1つを値を抽出することでシミュレートできる。そこで使われるのが <code>sample()</code>関数である（コードの5行目）。<code>sample()</code> 関数は与えられたベクトル内の要素を無作為に抽出する。<code>sample(c(1, 2, 3, 4, 5, 6), size = 1)</code>は「<code>c(1, 2, 3, 4, 5, 6)</code>から1つの要素を無作為に抽出せよ」という意味である（乱数生成を利用したシミュレーションについては後の章で詳しく説明する）。サイコロの目が出たら、その目を<code>total</code>の値に足す (コードの6行目)。</p>
@@ -1403,18 +1409,16 @@ Team: New Caledonia
 <span id="cb652-11"><a href="programming.html#cb652-11"></a>  </span>
 <span id="cb652-12"><a href="programming.html#cb652-12"></a>  <span class="cf">if</span> (total <span class="sc">&gt;=</span> <span class="dv">30</span>)  <span class="cf">break</span>() <span class="co"># ()は省略可能</span></span>
 <span id="cb652-13"><a href="programming.html#cb652-13"></a>}</span></code></pre></div>
-<pre><code>## [1] &quot;1回目のサイコロ投げの結果: 5 （これまでの総和: 5）&quot;
-## [1] &quot;2回目のサイコロ投げの結果: 2 （これまでの総和: 7）&quot;
-## [1] &quot;3回目のサイコロ投げの結果: 2 （これまでの総和: 9）&quot;
-## [1] &quot;4回目のサイコロ投げの結果: 4 （これまでの総和: 13）&quot;
-## [1] &quot;5回目のサイコロ投げの結果: 2 （これまでの総和: 15）&quot;
-## [1] &quot;6回目のサイコロ投げの結果: 4 （これまでの総和: 19）&quot;
-## [1] &quot;7回目のサイコロ投げの結果: 4 （これまでの総和: 23）&quot;
-## [1] &quot;8回目のサイコロ投げの結果: 1 （これまでの総和: 24）&quot;
-## [1] &quot;9回目のサイコロ投げの結果: 1 （これまでの総和: 25）&quot;
-## [1] &quot;10回目のサイコロ投げの結果: 2 （これまでの総和: 27）&quot;
-## [1] &quot;11回目のサイコロ投げの結果: 2 （これまでの総和: 29）&quot;
-## [1] &quot;12回目のサイコロ投げの結果: 4 （これまでの総和: 33）&quot;</code></pre>
+<pre><code>## [1] &quot;1回目のサイコロ投げの結果: 1 （これまでの総和: 1）&quot;
+## [1] &quot;2回目のサイコロ投げの結果: 4 （これまでの総和: 5）&quot;
+## [1] &quot;3回目のサイコロ投げの結果: 4 （これまでの総和: 9）&quot;
+## [1] &quot;4回目のサイコロ投げの結果: 1 （これまでの総和: 10）&quot;
+## [1] &quot;5回目のサイコロ投げの結果: 1 （これまでの総和: 11）&quot;
+## [1] &quot;6回目のサイコロ投げの結果: 4 （これまでの総和: 15）&quot;
+## [1] &quot;7回目のサイコロ投げの結果: 5 （これまでの総和: 20）&quot;
+## [1] &quot;8回目のサイコロ投げの結果: 4 （これまでの総和: 24）&quot;
+## [1] &quot;9回目のサイコロ投げの結果: 3 （これまでの総和: 27）&quot;
+## [1] &quot;10回目のサイコロ投げの結果: 3 （これまでの総和: 30）&quot;</code></pre>
 <p>このコードの中身を説明しよう。事前にサイコロを投げる回数はわからないが、6面サイコロの場合30回以内には必ず合計が30になるので、<code>trial in 1:30</code>としておく。あとはwhileループの書き方とほぼ同じだが、forループでは<code>i</code>が自動的に更新されるので<code>i &lt;- i + 1</code>は不要である。さらに、一定の条件が満たされるときにループを停止する必要がある。そこで登場するのが条件 <code>if</code> と<code>break()</code>である。条件分岐は次節で説明するが、<code>if</code>から始まる行のコードは、「<code>total</code>が30以上になったらループから脱出せよ」ということを意味する。このようにループからの脱出を指示する関数が <code>break()</code>だ。<code>break()</code> 関数は<code>()</code>を省略して <code>break</code>と書いてもよい。</p>
 <p>　これは余談だが、結果の表示に今回はこれまで使ってきた<code>print()</code>と<code>paste0()</code>（または<code>paste()</code>）の代わりに、<code>sprintf()</code>を使っている。<code>sprintf()</code> 内の<code>%d</code>はその位置に指定された変数の値を整数として代入することを意味する。<code>sprintf()</code>にの引数にはまず出力する文字列を指定し、次に代入する変数を順番に入力する。<code>%s</code>は文字 (string) 型、<code>%f</code>は実数 (floating-point number) を意味する。<code>%f</code>では小数の桁数も指定可能であり、小数第2位まで表示させるには <code>%.2f</code> のように表記する。以下のコードは3つの変数の値と文字列を結合する処理を<code>print(paste0())</code>と<code>sprintf()</code>を用いて書いたもので、同じ結果が得られる。</p>
 <div class="sourceCode" id="cb654"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb654-1"><a href="programming.html#cb654-1" aria-hidden="true" tabindex="-1"></a>name   <span class="ot">&lt;-</span> <span class="st">&quot;Song&quot;</span></span>
@@ -1619,8 +1623,8 @@ Team: New Caledonia
 <p>このコードでは、<code>scores</code> を定義した後、中身が<code>NA</code>のみで構成される長さが<code>scores</code> と同じベクトル<code>pf</code>を定義する。<code>rep(NA, length(scores))</code>は<code>NA</code>を<code>length(Scores)</code>個（ここでは10個）並べたベクトルを生成する。
 続いて、点数によって条件分岐を行い、メッセージを出力するのではなく、<code>pf</code>の<code>i</code>番目に<code>"合格"</code>か<code>"不合格"</code>を入れる。結果を確認してみよう。</p>
 <div class="sourceCode" id="cb684"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb684-1"><a href="programming.html#cb684-1" aria-hidden="true" tabindex="-1"></a>pf</span></code></pre></div>
-<pre><code>##  [1] &quot;不合格&quot; &quot;合格&quot;   &quot;合格&quot;   &quot;合格&quot;   &quot;合格&quot;  
-##  [6] &quot;合格&quot;   &quot;不合格&quot; &quot;合格&quot;   &quot;合格&quot;   &quot;合格&quot;</code></pre>
+<pre><code>##  [1] &quot;不合格&quot; &quot;合格&quot;   &quot;合格&quot;   &quot;合格&quot;   &quot;合格&quot;   &quot;合格&quot;   &quot;不合格&quot;
+##  [8] &quot;合格&quot;   &quot;合格&quot;   &quot;合格&quot;</code></pre>
 <p>　このように、<code>if</code>文は反復処理を行う<code>for</code>ループまたは<code>while</code>ループと組み合わせることでその本領を発揮する。実は、今回の例については次に説明する<code>ifelse()</code>を使えば1行で処理することができる。しかし、複雑な処理を伴う反復と条件分岐を組み合わせるには、今回のように<code>for</code>ループと<code>if</code>文を組み合わせるのが有効である。</p>
 </div>
 <div id="ifelseによる条件分岐" class="section level3" number="11.4.2">
@@ -1631,8 +1635,8 @@ Team: New Caledonia
 <div class="sourceCode" id="cb687"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb687-1"><a href="programming.html#cb687-1" aria-hidden="true" tabindex="-1"></a>scores <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">58</span>, <span class="dv">100</span>, <span class="dv">81</span>, <span class="dv">97</span>, <span class="dv">71</span>, <span class="dv">61</span>, <span class="dv">47</span>, <span class="dv">60</span>, <span class="dv">73</span>, <span class="dv">85</span>)</span>
 <span id="cb687-2"><a href="programming.html#cb687-2" aria-hidden="true" tabindex="-1"></a>pf <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(scores <span class="sc">&gt;=</span> <span class="dv">60</span>, <span class="st">&quot;Pass&quot;</span>, <span class="st">&quot;Fail&quot;</span>)</span>
 <span id="cb687-3"><a href="programming.html#cb687-3" aria-hidden="true" tabindex="-1"></a>pf</span></code></pre></div>
-<pre><code>##  [1] &quot;Fail&quot; &quot;Pass&quot; &quot;Pass&quot; &quot;Pass&quot; &quot;Pass&quot; &quot;Pass&quot; &quot;Fail&quot;
-##  [8] &quot;Pass&quot; &quot;Pass&quot; &quot;Pass&quot;</code></pre>
+<pre><code>##  [1] &quot;Fail&quot; &quot;Pass&quot; &quot;Pass&quot; &quot;Pass&quot; &quot;Pass&quot; &quot;Pass&quot; &quot;Fail&quot; &quot;Pass&quot; &quot;Pass&quot;
+## [10] &quot;Pass&quot;</code></pre>
 <p>条件は<code>scores</code>の値が60以上か否かであり、60以上なら<code>"Pass"</code>を、それ以外なら<code>"Fail"</code>を返す。</p>
 <p>　返す値として新しい値を与える代わりに、一定の条件が満たされたら現状の値を保持し、それ以外なら指定した値に変更して返すこともできる。たとえば、世論調査では以下のように「答えたくない」または「わからない」を9や99などで記録することが多い。この値はこのままでは分析するのが難しいので、欠損値として扱いたいことがある。例として、次の質問を考えよう。</p>
 <p>Q. あなたはラーメンが好きですか。</p>

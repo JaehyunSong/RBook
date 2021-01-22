@@ -488,6 +488,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="20" data-path="visualization4.html"><a href="visualization4.html"><i class="fa fa-check"></i><b>20</b> 可視化[発展]</a>
 <ul>
 <li class="chapter" data-level="20.1" data-path="visualization4.html"><a href="visualization4.html#visual4-violin"><i class="fa fa-check"></i><b>20.1</b> バイオリンプロット</a></li>
+<li class="chapter" data-level="20.2" data-path="visualization4.html"><a href="visualization4.html#visual4-rug"><i class="fa fa-check"></i><b>20.2</b> ラグプロット</a></li>
+<li class="chapter" data-level="20.3" data-path="visualization4.html"><a href="visualization4.html#visual4-pointrange"><i class="fa fa-check"></i><b>20.3</b> エラーバー付き散布図</a></li>
+<li class="chapter" data-level="20.4" data-path="visualization4.html"><a href="visualization4.html#visual4-smooth"><i class="fa fa-check"></i><b>20.4</b> 平滑化ライン</a></li>
+<li class="chapter" data-level="20.5" data-path="visualization4.html"><a href="visualization4.html#visual4-heatmap"><i class="fa fa-check"></i><b>20.5</b> ヒートマップ</a></li>
 </ul></li>
 <li class="chapter" data-level="21" data-path="datahandling3.html"><a href="datahandling3.html"><i class="fa fa-check"></i><b>21</b> データハンドリング[応用編]</a></li>
 <li class="chapter" data-level="22" data-path="string.html"><a href="string.html"><i class="fa fa-check"></i><b>22</b> 文字列の処理</a></li>
@@ -594,8 +598,137 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="visualization4" class="section level1" number="20">
 <h1><span class="header-section-number">20.</span> 可視化[発展]</h1>
 <hr />
+<div class="sourceCode" id="cb1411"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1411-1"><a href="visualization4.html#cb1411-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse)</span></code></pre></div>
+<div class="sourceCode" id="cb1412"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1412-1"><a href="visualization4.html#cb1412-1"></a>Country_df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;Data/Countries.csv&quot;</span>)</span>
+<span id="cb1412-2"><a href="visualization4.html#cb1412-2"></a>COVID19_df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;Data/COVID19_Worldwide.csv&quot;</span>, <span class="at">guess_max =</span> <span class="dv">10000</span>)</span></code></pre></div>
+<hr />
 <div id="visual4-violin" class="section level2" number="20.1">
 <h2><span class="header-section-number">20.1</span> バイオリンプロット</h2>
+<div class="sourceCode" id="cb1413"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1413-1"><a href="visualization4.html#cb1413-1"></a>Country_df <span class="sc">%&gt;%</span></span>
+<span id="cb1413-2"><a href="visualization4.html#cb1413-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb1413-3"><a href="visualization4.html#cb1413-3"></a>    <span class="fu">geom_violin</span>(<span class="fu">aes</span>(<span class="at">x =</span> Continent, <span class="at">y =</span> PPP_per_capita, <span class="at">fill =</span> Continent)) <span class="sc">+</span></span>
+<span id="cb1413-4"><a href="visualization4.html#cb1413-4"></a>    <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Continent, <span class="at">y =</span> PPP_per_capita),</span>
+<span id="cb1413-5"><a href="visualization4.html#cb1413-5"></a>                 <span class="at">width =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb1413-6"><a href="visualization4.html#cb1413-6"></a>    <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;PPP per capita (USD)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1413-7"><a href="visualization4.html#cb1413-7"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1000</span>, <span class="dv">10000</span>, <span class="dv">100000</span>),</span>
+<span id="cb1413-8"><a href="visualization4.html#cb1413-8"></a>                       <span class="at">labels =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1000</span>, <span class="dv">10000</span>, <span class="dv">100000</span>),</span>
+<span id="cb1413-9"><a href="visualization4.html#cb1413-9"></a>                       <span class="at">trans =</span> <span class="st">&quot;log10&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1413-10"><a href="visualization4.html#cb1413-10"></a>    <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1413-11"><a href="visualization4.html#cb1413-11"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-753-1.png" width="672" style="display: block; margin: auto;" /></p>
+<hr />
+</div>
+<div id="visual4-rug" class="section level2" number="20.2">
+<h2><span class="header-section-number">20.2</span> ラグプロット</h2>
+<div class="sourceCode" id="cb1414"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1414-1"><a href="visualization4.html#cb1414-1"></a>Country_df <span class="sc">%&gt;%</span></span>
+<span id="cb1414-2"><a href="visualization4.html#cb1414-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb1414-3"><a href="visualization4.html#cb1414-3"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> FH_Total, <span class="at">y =</span> PPP_per_capita)) <span class="sc">+</span></span>
+<span id="cb1414-4"><a href="visualization4.html#cb1414-4"></a>    <span class="fu">geom_rug</span>(<span class="fu">aes</span>(<span class="at">x =</span> FH_Total, <span class="at">y =</span> PPP_per_capita))  <span class="sc">+</span></span>
+<span id="cb1414-5"><a href="visualization4.html#cb1414-5"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Freedom House Score&quot;</span>, <span class="at">y =</span> <span class="st">&quot;PPP per capita (USD)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1414-6"><a href="visualization4.html#cb1414-6"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">120000</span>, <span class="at">by =</span> <span class="dv">10000</span>),</span>
+<span id="cb1414-7"><a href="visualization4.html#cb1414-7"></a>                       <span class="at">labels =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">120000</span>, <span class="at">by =</span> <span class="dv">10000</span>)) <span class="sc">+</span></span>
+<span id="cb1414-8"><a href="visualization4.html#cb1414-8"></a>    <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1414-9"><a href="visualization4.html#cb1414-9"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-754-1.png" width="672" style="display: block; margin: auto;" /></p>
+<hr />
+</div>
+<div id="visual4-pointrange" class="section level2" number="20.3">
+<h2><span class="header-section-number">20.3</span> エラーバー付き散布図</h2>
+<div class="sourceCode" id="cb1415"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1415-1"><a href="visualization4.html#cb1415-1"></a>Pointrange_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb1415-2"><a href="visualization4.html#cb1415-2"></a>    <span class="at">Continent =</span> <span class="fu">c</span>(<span class="st">&quot;Asia&quot;</span>, <span class="st">&quot;Europe&quot;</span>, <span class="st">&quot;Africa&quot;</span>, <span class="st">&quot;America&quot;</span>),</span>
+<span id="cb1415-3"><a href="visualization4.html#cb1415-3"></a>    <span class="at">Coef      =</span> <span class="fu">c</span>(<span class="fl">65.3</span>, <span class="fl">588.0</span>, <span class="fl">53.4</span>, <span class="fl">316.0</span>),</span>
+<span id="cb1415-4"><a href="visualization4.html#cb1415-4"></a>    <span class="at">Conf_lwr  =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">250.0</span>, <span class="fl">376.0</span>, <span class="sc">-</span><span class="fl">14.5</span>, <span class="fl">128.0</span>),</span>
+<span id="cb1415-5"><a href="visualization4.html#cb1415-5"></a>    <span class="at">Conf_upr  =</span> <span class="fu">c</span>(<span class="fl">380.0</span>, <span class="fl">801.0</span>, <span class="fl">121.0</span>, <span class="fl">504.0</span>)</span>
+<span id="cb1415-6"><a href="visualization4.html#cb1415-6"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb1416"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1416-1"><a href="visualization4.html#cb1416-1"></a>Pointrange_df</span></code></pre></div>
+<pre><code>## # A tibble: 4 x 4
+## # Groups:   Continent [4]
+##   Continent  Coef Conf_lwr Conf_upr
+##   &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1 Asia       65.3   -250.      380.
+## 2 Europe    588.     376.      801.
+## 3 Africa     53.4    -14.5     121.
+## 4 America   316.     128.      504.</code></pre>
+<p>実は以上のデータは以下のようなコードで作成されています。{purrr}パッケージの使い方に慣れる必要があるので、第<a href="iteration.html#iteration">24</a>章を参照してください。</p>
+<div class="sourceCode" id="cb1418"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1418-1"><a href="visualization4.html#cb1418-1"></a>Pointrange_df <span class="ot">&lt;-</span> Country_df <span class="sc">%&gt;%</span></span>
+<span id="cb1418-2"><a href="visualization4.html#cb1418-2"></a>    <span class="fu">filter</span>(Continent <span class="sc">!=</span> <span class="st">&quot;Oceania&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1418-3"><a href="visualization4.html#cb1418-3"></a>    <span class="fu">group_by</span>(Continent) <span class="sc">%&gt;%</span></span>
+<span id="cb1418-4"><a href="visualization4.html#cb1418-4"></a>    <span class="fu">nest</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb1418-5"><a href="visualization4.html#cb1418-5"></a>    <span class="fu">mutate</span>(<span class="at">Fit =</span> <span class="fu">map</span>(data, <span class="sc">~</span><span class="fu">lm</span>(PPP_per_capita <span class="sc">~</span> FH_Total, <span class="at">data =</span> .)),</span>
+<span id="cb1418-6"><a href="visualization4.html#cb1418-6"></a>           <span class="at">Est =</span> <span class="fu">map</span>(Fit, broom<span class="sc">::</span>tidy, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb1418-7"><a href="visualization4.html#cb1418-7"></a>    <span class="fu">unnest</span>(Est) <span class="sc">%&gt;%</span></span>
+<span id="cb1418-8"><a href="visualization4.html#cb1418-8"></a>    <span class="fu">filter</span>(term <span class="sc">==</span> <span class="st">&quot;FH_Total&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1418-9"><a href="visualization4.html#cb1418-9"></a>    <span class="fu">select</span>(Continent, <span class="at">Coef =</span> estimate, </span>
+<span id="cb1418-10"><a href="visualization4.html#cb1418-10"></a>           <span class="at">Conf_lwr =</span> conf.low, <span class="at">Conf_upr =</span> conf.high) </span></code></pre></div>
+<div class="sourceCode" id="cb1419"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1419-1"><a href="visualization4.html#cb1419-1"></a>Country_df <span class="sc">%&gt;%</span></span>
+<span id="cb1419-2"><a href="visualization4.html#cb1419-2"></a>    <span class="fu">filter</span>(Continent <span class="sc">!=</span> <span class="st">&quot;Oceania&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1419-3"><a href="visualization4.html#cb1419-3"></a>    <span class="fu">group_by</span>(Continent) <span class="sc">%&gt;%</span></span>
+<span id="cb1419-4"><a href="visualization4.html#cb1419-4"></a>    <span class="fu">nest</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb1419-5"><a href="visualization4.html#cb1419-5"></a>    <span class="fu">mutate</span>(<span class="at">Fit =</span> <span class="fu">map</span>(data, <span class="sc">~</span><span class="fu">lm</span>(PPP_per_capita <span class="sc">~</span> FH_Total, <span class="at">data =</span> .)),</span>
+<span id="cb1419-6"><a href="visualization4.html#cb1419-6"></a>           <span class="at">Est =</span> <span class="fu">map</span>(Fit, broom<span class="sc">::</span>tidy, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb1419-7"><a href="visualization4.html#cb1419-7"></a>    <span class="fu">unnest</span>(Est) <span class="sc">%&gt;%</span></span>
+<span id="cb1419-8"><a href="visualization4.html#cb1419-8"></a>    <span class="fu">filter</span>(term <span class="sc">==</span> <span class="st">&quot;FH_Total&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1419-9"><a href="visualization4.html#cb1419-9"></a>    <span class="fu">select</span>(Continent, <span class="at">Coef =</span> estimate, </span>
+<span id="cb1419-10"><a href="visualization4.html#cb1419-10"></a>           <span class="at">Conf_lwr =</span> conf.low, <span class="at">Conf_upr =</span> conf.high) <span class="sc">%&gt;%</span></span>
+<span id="cb1419-11"><a href="visualization4.html#cb1419-11"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb1419-12"><a href="visualization4.html#cb1419-12"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb1419-13"><a href="visualization4.html#cb1419-13"></a>    <span class="fu">geom_pointrange</span>(<span class="fu">aes</span>(<span class="at">x =</span> Continent, <span class="at">y =</span> Coef, </span>
+<span id="cb1419-14"><a href="visualization4.html#cb1419-14"></a>                        <span class="at">ymin =</span> Conf_lwr, <span class="at">ymax =</span> Conf_upr),</span>
+<span id="cb1419-15"><a href="visualization4.html#cb1419-15"></a>                    <span class="at">size =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb1419-16"><a href="visualization4.html#cb1419-16"></a>    <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">expression</span>(<span class="fu">paste</span>(beta[<span class="dv">1</span>], <span class="st">&quot; with 95% CI&quot;</span>))) <span class="sc">+</span></span>
+<span id="cb1419-17"><a href="visualization4.html#cb1419-17"></a>    <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-759-1.png" width="672" style="display: block; margin: auto;" /></p>
+<hr />
+</div>
+<div id="visual4-smooth" class="section level2" number="20.4">
+<h2><span class="header-section-number">20.4</span> 平滑化ライン</h2>
+<div class="sourceCode" id="cb1420"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1420-1"><a href="visualization4.html#cb1420-1"></a>Country_df <span class="sc">%&gt;%</span></span>
+<span id="cb1420-2"><a href="visualization4.html#cb1420-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> FH_Total, <span class="at">y =</span> PPP_per_capita)) <span class="sc">+</span></span>
+<span id="cb1420-3"><a href="visualization4.html#cb1420-3"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb1420-4"><a href="visualization4.html#cb1420-4"></a>    <span class="fu">geom_smooth</span>(<span class="at">formula =</span> y <span class="sc">~</span> x,</span>
+<span id="cb1420-5"><a href="visualization4.html#cb1420-5"></a>                <span class="at">method =</span> <span class="st">&quot;loess&quot;</span>, <span class="at">se =</span> <span class="cn">TRUE</span>)  <span class="sc">+</span></span>
+<span id="cb1420-6"><a href="visualization4.html#cb1420-6"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Freedom House Score&quot;</span>, <span class="at">y =</span> <span class="st">&quot;PPP per capita (USD)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1420-7"><a href="visualization4.html#cb1420-7"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">120000</span>, <span class="at">by =</span> <span class="dv">10000</span>),</span>
+<span id="cb1420-8"><a href="visualization4.html#cb1420-8"></a>                       <span class="at">labels =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">120000</span>, <span class="at">by =</span> <span class="dv">10000</span>)) <span class="sc">+</span></span>
+<span id="cb1420-9"><a href="visualization4.html#cb1420-9"></a>    <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1420-10"><a href="visualization4.html#cb1420-10"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-760-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb1421"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1421-1"><a href="visualization4.html#cb1421-1"></a>Country_df <span class="sc">%&gt;%</span></span>
+<span id="cb1421-2"><a href="visualization4.html#cb1421-2"></a>    <span class="fu">mutate</span>(<span class="at">OECD =</span> <span class="fu">if_else</span>(OECD <span class="sc">==</span> <span class="dv">1</span>, <span class="st">&quot;加盟国&quot;</span>, <span class="st">&quot;非加盟国&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb1421-3"><a href="visualization4.html#cb1421-3"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> FH_Total, <span class="at">y =</span> PPP_per_capita, <span class="at">color =</span> OECD)) <span class="sc">+</span></span>
+<span id="cb1421-4"><a href="visualization4.html#cb1421-4"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb1421-5"><a href="visualization4.html#cb1421-5"></a>    <span class="fu">geom_smooth</span>(<span class="at">formula =</span> y <span class="sc">~</span> x,</span>
+<span id="cb1421-6"><a href="visualization4.html#cb1421-6"></a>                <span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">se =</span> <span class="cn">TRUE</span>)  <span class="sc">+</span></span>
+<span id="cb1421-7"><a href="visualization4.html#cb1421-7"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Freedom House Score&quot;</span>, <span class="at">y =</span> <span class="st">&quot;PPP per capita (USD)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1421-8"><a href="visualization4.html#cb1421-8"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">120000</span>, <span class="at">by =</span> <span class="dv">10000</span>),</span>
+<span id="cb1421-9"><a href="visualization4.html#cb1421-9"></a>                       <span class="at">labels =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">120000</span>, <span class="at">by =</span> <span class="dv">10000</span>)) <span class="sc">+</span></span>
+<span id="cb1421-10"><a href="visualization4.html#cb1421-10"></a>    <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">120000</span>)) <span class="sc">+</span></span>
+<span id="cb1421-11"><a href="visualization4.html#cb1421-11"></a>    <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1421-12"><a href="visualization4.html#cb1421-12"></a>    <span class="fu">theme_bw</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>,</span>
+<span id="cb1421-13"><a href="visualization4.html#cb1421-13"></a>             <span class="at">base_size =</span> <span class="dv">12</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-761-1.png" width="672" style="display: block; margin: auto;" /></p>
+<hr />
+</div>
+<div id="visual4-heatmap" class="section level2" number="20.5">
+<h2><span class="header-section-number">20.5</span> ヒートマップ</h2>
+<div class="sourceCode" id="cb1422"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1422-1"><a href="visualization4.html#cb1422-1"></a>COVID19_df <span class="sc">%&gt;%</span></span>
+<span id="cb1422-2"><a href="visualization4.html#cb1422-2"></a>    <span class="fu">left_join</span>(Country_df, <span class="at">by =</span> <span class="st">&quot;Country&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1422-3"><a href="visualization4.html#cb1422-3"></a>    <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">&quot;Asia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1422-4"><a href="visualization4.html#cb1422-4"></a>    <span class="fu">separate</span>(<span class="at">col =</span> Date, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">&quot;Year&quot;</span>, <span class="st">&quot;Month&quot;</span>, <span class="st">&quot;Day&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb1422-5"><a href="visualization4.html#cb1422-5"></a>    <span class="fu">group_by</span>(Country, Month) <span class="sc">%&gt;%</span></span>
+<span id="cb1422-6"><a href="visualization4.html#cb1422-6"></a>    <span class="fu">summarise</span>(<span class="at">Confirmed_New =</span> <span class="fu">sum</span>(Confirmed_Day),</span>
+<span id="cb1422-7"><a href="visualization4.html#cb1422-7"></a>              <span class="at">Death         =</span> <span class="fu">sum</span>(Death_Day),</span>
+<span id="cb1422-8"><a href="visualization4.html#cb1422-8"></a>              <span class="at">.groups       =</span> <span class="st">&quot;drop&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1422-9"><a href="visualization4.html#cb1422-9"></a>    <span class="fu">mutate</span>(<span class="at">Death   =</span> <span class="fu">log10</span>(Death <span class="sc">+</span> <span class="dv">1</span>),</span>
+<span id="cb1422-10"><a href="visualization4.html#cb1422-10"></a>           <span class="at">Country =</span> <span class="fu">fct_inorder</span>(Country),</span>
+<span id="cb1422-11"><a href="visualization4.html#cb1422-11"></a>           <span class="at">Country =</span> <span class="fu">fct_rev</span>(Country)) <span class="sc">%&gt;%</span></span>
+<span id="cb1422-12"><a href="visualization4.html#cb1422-12"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb1422-13"><a href="visualization4.html#cb1422-13"></a>    <span class="fu">geom_tile</span>(<span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> Country, <span class="at">fill =</span> Death)) <span class="sc">+</span></span>
+<span id="cb1422-14"><a href="visualization4.html#cb1422-14"></a>    <span class="fu">scale_fill_gradient2</span>(<span class="at">low  =</span> <span class="st">&quot;cornflowerblue&quot;</span>, </span>
+<span id="cb1422-15"><a href="visualization4.html#cb1422-15"></a>                         <span class="at">mid  =</span> <span class="st">&quot;cornsilk&quot;</span>,</span>
+<span id="cb1422-16"><a href="visualization4.html#cb1422-16"></a>                         <span class="at">high =</span> <span class="st">&quot;brown3&quot;</span>,</span>
+<span id="cb1422-17"><a href="visualization4.html#cb1422-17"></a>                         <span class="at">midpoint =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-762-1.png" width="672" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>
