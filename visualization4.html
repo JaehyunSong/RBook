@@ -930,6 +930,53 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="visual4-alluvial" class="section level2" number="20.13">
 <h2><span class="header-section-number">20.13</span> 沖積図</h2>
+<div class="sourceCode" id="cb28"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb28-1"><a href="visualization4.html#cb28-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggalluvial)</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb29-1"><a href="visualization4.html#cb29-1"></a>Vote_0910 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;Data/Vote_09_10.csv&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## ─ Column specification ────────────────────────────
+## cols(
+##   Vote1 = col_character(),
+##   Vote2 = col_character(),
+##   Freq = col_double()
+## )</code></pre>
+<div class="sourceCode" id="cb31"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb31-1"><a href="visualization4.html#cb31-1"></a>Vote_0910 <span class="ot">&lt;-</span> Vote_0910 <span class="sc">%&gt;%</span></span>
+<span id="cb31-2"><a href="visualization4.html#cb31-2"></a>  <span class="fu">mutate</span>(<span class="at">Vote1 =</span> <span class="fu">fct_inorder</span>(Vote1),</span>
+<span id="cb31-3"><a href="visualization4.html#cb31-3"></a>         <span class="at">Vote2 =</span> <span class="fu">fct_inorder</span>(Vote2))</span>
+<span id="cb31-4"><a href="visualization4.html#cb31-4"></a></span>
+<span id="cb31-5"><a href="visualization4.html#cb31-5"></a>Vote_0910 <span class="sc">%&gt;%</span></span>
+<span id="cb31-6"><a href="visualization4.html#cb31-6"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> Freq, <span class="at">axis1 =</span> Vote1, <span class="at">axis2 =</span> Vote2)) <span class="sc">+</span></span>
+<span id="cb31-7"><a href="visualization4.html#cb31-7"></a>    <span class="fu">geom_alluvium</span>() <span class="sc">+</span></span>
+<span id="cb31-8"><a href="visualization4.html#cb31-8"></a>    <span class="fu">geom_stratum</span>() <span class="sc">+</span></span>
+<span id="cb31-9"><a href="visualization4.html#cb31-9"></a>    <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">after_stat</span>(stratum)), <span class="at">stat =</span> <span class="st">&quot;stratum&quot;</span>,</span>
+<span id="cb31-10"><a href="visualization4.html#cb31-10"></a>              <span class="at">family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-29-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb32-1"><a href="visualization4.html#cb32-1"></a>Vote_0910 <span class="sc">%&gt;%</span></span>
+<span id="cb32-2"><a href="visualization4.html#cb32-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> Freq, <span class="at">axis1 =</span> Vote1, <span class="at">axis2 =</span> Vote2)) <span class="sc">+</span></span>
+<span id="cb32-3"><a href="visualization4.html#cb32-3"></a>    <span class="fu">geom_alluvium</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Vote1)) <span class="sc">+</span></span>
+<span id="cb32-4"><a href="visualization4.html#cb32-4"></a>    <span class="fu">geom_stratum</span>() <span class="sc">+</span></span>
+<span id="cb32-5"><a href="visualization4.html#cb32-5"></a>    <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">after_stat</span>(stratum)), <span class="at">stat =</span> <span class="st">&quot;stratum&quot;</span>,</span>
+<span id="cb32-6"><a href="visualization4.html#cb32-6"></a>              <span class="at">family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-30-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb33-1"><a href="visualization4.html#cb33-1"></a>Alluvial_Plot <span class="ot">&lt;-</span> Vote_0910 <span class="sc">%&gt;%</span></span>
+<span id="cb33-2"><a href="visualization4.html#cb33-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> Freq, <span class="at">axis1 =</span> Vote1, <span class="at">axis2 =</span> Vote2)) <span class="sc">+</span></span>
+<span id="cb33-3"><a href="visualization4.html#cb33-3"></a>    <span class="fu">geom_alluvium</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Vote2)) <span class="sc">+</span></span>
+<span id="cb33-4"><a href="visualization4.html#cb33-4"></a>    <span class="fu">geom_stratum</span>() <span class="sc">+</span></span>
+<span id="cb33-5"><a href="visualization4.html#cb33-5"></a>    <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">after_stat</span>(stratum)), <span class="at">stat =</span> <span class="st">&quot;stratum&quot;</span>,</span>
+<span id="cb33-6"><a href="visualization4.html#cb33-6"></a>              <span class="at">family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span>
+<span id="cb33-7"><a href="visualization4.html#cb33-7"></a></span>
+<span id="cb33-8"><a href="visualization4.html#cb33-8"></a>Alluvial_Plot</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-31-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb34-1"><a href="visualization4.html#cb34-1"></a>Alluvial_Plot <span class="sc">+</span></span>
+<span id="cb34-2"><a href="visualization4.html#cb34-2"></a>    <span class="fu">ggtitle</span>(<span class="st">&quot;個人レベルにおける投票先の変化&quot;</span>) <span class="sc">+</span></span>
+<span id="cb34-3"><a href="visualization4.html#cb34-3"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, </span>
+<span id="cb34-4"><a href="visualization4.html#cb34-4"></a>                       <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;2009年衆院選&quot;</span>, <span class="st">&quot;2010年参院選&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb34-5"><a href="visualization4.html#cb34-5"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>,</span>
+<span id="cb34-6"><a href="visualization4.html#cb34-6"></a>                  <span class="at">base_size   =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb34-7"><a href="visualization4.html#cb34-7"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb34-8"><a href="visualization4.html#cb34-8"></a>          <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb34-9"><a href="visualization4.html#cb34-9"></a>          <span class="at">axis.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb34-10"><a href="visualization4.html#cb34-10"></a>          <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>())</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-32-1.png" width="672" style="display: block; margin: auto;" /></p>
 <hr />
 </div>
 <div id="visual4-dendrogram" class="section level2" number="20.14">
@@ -938,40 +985,40 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="visual4-tree" class="section level2" number="20.15">
 <h2><span class="header-section-number">20.15</span> ツリーマップ</h2>
-<div class="sourceCode" id="cb28"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb28-1"><a href="visualization4.html#cb28-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(treemapify)</span></code></pre></div>
-<div class="sourceCode" id="cb29"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb29-1"><a href="visualization4.html#cb29-1"></a>Country_df <span class="sc">%&gt;%</span></span>
-<span id="cb29-2"><a href="visualization4.html#cb29-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">&quot;Asia&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb29-3"><a href="visualization4.html#cb29-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">label =</span> Country)) <span class="sc">+</span></span>
-<span id="cb29-4"><a href="visualization4.html#cb29-4"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
-<span id="cb29-5"><a href="visualization4.html#cb29-5"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="at">place =</span> <span class="st">&quot;centre&quot;</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-28-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb30-1"><a href="visualization4.html#cb30-1"></a>Country_df <span class="sc">%&gt;%</span></span>
-<span id="cb30-2"><a href="visualization4.html#cb30-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">&quot;Asia&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb30-3"><a href="visualization4.html#cb30-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">label =</span> Country)) <span class="sc">+</span></span>
-<span id="cb30-4"><a href="visualization4.html#cb30-4"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
-<span id="cb30-5"><a href="visualization4.html#cb30-5"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="at">place =</span> <span class="st">&quot;centre&quot;</span>,</span>
-<span id="cb30-6"><a href="visualization4.html#cb30-6"></a>                    <span class="at">grow =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-29-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb31-1"><a href="visualization4.html#cb31-1"></a>Country_df <span class="sc">%&gt;%</span></span>
-<span id="cb31-2"><a href="visualization4.html#cb31-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">&quot;Asia&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb31-3"><a href="visualization4.html#cb31-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">fill =</span> HDI_2018,</span>
-<span id="cb31-4"><a href="visualization4.html#cb31-4"></a>             <span class="at">label =</span> Country)) <span class="sc">+</span></span>
-<span id="cb31-5"><a href="visualization4.html#cb31-5"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
-<span id="cb31-6"><a href="visualization4.html#cb31-6"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="at">place =</span> <span class="st">&quot;centre&quot;</span>,</span>
-<span id="cb31-7"><a href="visualization4.html#cb31-7"></a>                    <span class="at">grow =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb31-8"><a href="visualization4.html#cb31-8"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">&quot;brown3&quot;</span>,</span>
-<span id="cb31-9"><a href="visualization4.html#cb31-9"></a>                       <span class="at">mid =</span> <span class="st">&quot;cornsilk&quot;</span>,</span>
-<span id="cb31-10"><a href="visualization4.html#cb31-10"></a>                       <span class="at">high =</span> <span class="st">&quot;cornflowerblue&quot;</span>,</span>
-<span id="cb31-11"><a href="visualization4.html#cb31-11"></a>                       <span class="at">midpoint =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb31-12"><a href="visualization4.html#cb31-12"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">&quot;UN Human Development Index (2018)&quot;</span>) <span class="sc">+</span></span>
-<span id="cb31-13"><a href="visualization4.html#cb31-13"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Population in Asia&quot;</span>) <span class="sc">+</span></span>
-<span id="cb31-14"><a href="visualization4.html#cb31-14"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-30-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb35-1"><a href="visualization4.html#cb35-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(treemapify)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb36-1"><a href="visualization4.html#cb36-1"></a>Country_df <span class="sc">%&gt;%</span></span>
+<span id="cb36-2"><a href="visualization4.html#cb36-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">&quot;Asia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb36-3"><a href="visualization4.html#cb36-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">label =</span> Country)) <span class="sc">+</span></span>
+<span id="cb36-4"><a href="visualization4.html#cb36-4"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
+<span id="cb36-5"><a href="visualization4.html#cb36-5"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="at">place =</span> <span class="st">&quot;centre&quot;</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-34-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb37-1"><a href="visualization4.html#cb37-1"></a>Country_df <span class="sc">%&gt;%</span></span>
+<span id="cb37-2"><a href="visualization4.html#cb37-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">&quot;Asia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb37-3"><a href="visualization4.html#cb37-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">label =</span> Country)) <span class="sc">+</span></span>
+<span id="cb37-4"><a href="visualization4.html#cb37-4"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
+<span id="cb37-5"><a href="visualization4.html#cb37-5"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="at">place =</span> <span class="st">&quot;centre&quot;</span>,</span>
+<span id="cb37-6"><a href="visualization4.html#cb37-6"></a>                    <span class="at">grow =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-35-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb38-1"><a href="visualization4.html#cb38-1"></a>Country_df <span class="sc">%&gt;%</span></span>
+<span id="cb38-2"><a href="visualization4.html#cb38-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">&quot;Asia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb38-3"><a href="visualization4.html#cb38-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">fill =</span> HDI_2018,</span>
+<span id="cb38-4"><a href="visualization4.html#cb38-4"></a>             <span class="at">label =</span> Country)) <span class="sc">+</span></span>
+<span id="cb38-5"><a href="visualization4.html#cb38-5"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
+<span id="cb38-6"><a href="visualization4.html#cb38-6"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="at">place =</span> <span class="st">&quot;centre&quot;</span>,</span>
+<span id="cb38-7"><a href="visualization4.html#cb38-7"></a>                    <span class="at">grow =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb38-8"><a href="visualization4.html#cb38-8"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">&quot;brown3&quot;</span>,</span>
+<span id="cb38-9"><a href="visualization4.html#cb38-9"></a>                       <span class="at">mid =</span> <span class="st">&quot;cornsilk&quot;</span>,</span>
+<span id="cb38-10"><a href="visualization4.html#cb38-10"></a>                       <span class="at">high =</span> <span class="st">&quot;cornflowerblue&quot;</span>,</span>
+<span id="cb38-11"><a href="visualization4.html#cb38-11"></a>                       <span class="at">midpoint =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb38-12"><a href="visualization4.html#cb38-12"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">&quot;UN Human Development Index (2018)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb38-13"><a href="visualization4.html#cb38-13"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Population in Asia&quot;</span>) <span class="sc">+</span></span>
+<span id="cb38-14"><a href="visualization4.html#cb38-14"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-36-1.png" width="672" style="display: block; margin: auto;" /></p>
 <hr />
 </div>
 <div id="visual4-mosaic" class="section level2" number="20.16">
 <h2><span class="header-section-number">20.16</span> モザイクプロット</h2>
-<div class="sourceCode" id="cb32"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb32-1"><a href="visualization4.html#cb32-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggmosaic)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb39-1"><a href="visualization4.html#cb39-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggmosaic)</span></code></pre></div>
 </div>
 <div id="visual4-further" class="section level2" number="20.17">
 <h2><span class="header-section-number">20.17</span> その他のグラフ</h2>
