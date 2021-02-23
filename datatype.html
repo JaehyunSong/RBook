@@ -32,7 +32,7 @@
   <link rel="shortcut icon" href="HTML/favicon.png" type="image/x-icon" />
 <link rel="prev" href="io.html"/>
 <link rel="next" href="datastructure.html"/>
-<script src="libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="libs/jquery-3.5.1/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -483,7 +483,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="19.3.4" data-path="visualization3.html"><a href="visualization3.html#sizeスケールの調整"><i class="fa fa-check"></i><b>19.3.4</b> <code>size</code>スケールの調整</a></li>
 <li class="chapter" data-level="19.3.5" data-path="visualization3.html"><a href="visualization3.html#shapelinetypeスケールの調整"><i class="fa fa-check"></i><b>19.3.5</b> <code>shape</code>、<code>linetype</code>スケールの調整</a></li>
 </ul></li>
-<li class="chapter" data-level="19.4" data-path="visualization3.html"><a href="visualization3.html#visual3-theme"><i class="fa fa-check"></i><b>19.4</b> <code>theme_*()</code>と<code>theme()</code>: テーマの指定</a></li>
+<li class="chapter" data-level="19.4" data-path="visualization3.html"><a href="visualization3.html#visual3-theme"><i class="fa fa-check"></i><b>19.4</b> <code>theme_*()</code>と<code>theme()</code>: テーマの指定</a>
+<ul>
+<li class="chapter" data-level="19.4.1" data-path="visualization3.html"><a href="visualization3.html#文字の大きさ"><i class="fa fa-check"></i><b>19.4.1</b> 文字の大きさ</a></li>
+<li class="chapter" data-level="19.4.2" data-path="visualization3.html"><a href="visualization3.html#背景のグリッド"><i class="fa fa-check"></i><b>19.4.2</b> 背景のグリッド</a></li>
+<li class="chapter" data-level="19.4.3" data-path="visualization3.html"><a href="visualization3.html#目盛りラベルの回転"><i class="fa fa-check"></i><b>19.4.3</b> 目盛りラベルの回転</a></li>
+<li class="chapter" data-level="19.4.4" data-path="visualization3.html"><a href="visualization3.html#scale__を用いたラベル重複の回避"><i class="fa fa-check"></i><b>19.4.4</b> <code>scale_*_*()</code>を用いたラベル重複の回避</a></li>
+<li class="chapter" data-level="19.4.5" data-path="visualization3.html"><a href="visualization3.html#凡例の位置"><i class="fa fa-check"></i><b>19.4.5</b> 凡例の位置</a></li>
+</ul></li>
 <li class="chapter" data-level="19.5" data-path="visualization3.html"><a href="visualization3.html#visual3-merge"><i class="fa fa-check"></i><b>19.5</b> 図の結合</a></li>
 </ul></li>
 <li class="chapter" data-level="20" data-path="visualization4.html"><a href="visualization4.html"><i class="fa fa-check"></i><b>20</b> 可視化[発展]</a>
@@ -642,20 +649,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## [1,]    2    5   11   17   23
 ## [2,]    3    7   13   19   29</code></pre>
 <p>表についても考えてみましょう。以下の表の3行2列目の要素は<code>"American Samoa"</code>という長さ1の文字型ベクトルです。また、6列目は<code>c("UEFA", "CAF", "OFC", "UEFA", "CAF", "CONCACAF")</code>であり、これは長さ6の文字型ベクトルです。このようにRで扱う全てのデータは複数のベクトルが集まっているものです。</p>
-<pre><code>##   ID                Team Rank Points Prev_Points
-## 1  1             Albania   75   1325        1316
-## 2  2             Algeria   85   1271        1271
-## 3  3      American Samoa  133   1030        1030
-## 4  4             Andorra  155    749         749
-## 5  5              Angola  121   1117        1117
-## 6  6 Antigua and Barbuda  153    787         787
-##   Confederation
-## 1          UEFA
-## 2           CAF
-## 3           OFC
-## 4          UEFA
-## 5           CAF
-## 6      CONCACAF</code></pre>
+<pre><code>##   ID                Team Rank Points Prev_Points Confederation
+## 1  1             Albania   75   1325        1316          UEFA
+## 2  2             Algeria   85   1271        1271           CAF
+## 3  3      American Samoa  133   1030        1030           OFC
+## 4  4             Andorra  155    749         749          UEFA
+## 5  5              Angola  121   1117        1117           CAF
+## 6  6 Antigua and Barbuda  153    787         787      CONCACAF</code></pre>
 <p>つまり、複数のベクトルを綺麗に、または分析しやすく集めたのが行列や表であり、これがデータ構造に該当します。データ型ごとの処理方法については本書を通じて紹介して行きますので、本章は軽く読んで頂いても構いません。ただし、Factor型とDate &amp; Datetime型の処理はやや特殊ですので、手を動かしながら読み進めることをおすすめします。</p>
 <p>ここではデータ型について紹介し、次章ではデータ構造について解説します。</p>
 <hr />
@@ -759,8 +759,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb179-3"><a href="datatype.html#cb179-3" aria-hidden="true" tabindex="-1"></a>Char.Vec3 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;1&quot;</span>, <span class="st">&quot;2&quot;</span>, <span class="st">&quot;3&quot;</span>, <span class="st">&quot;4&quot;</span>)</span>
 <span id="cb179-4"><a href="datatype.html#cb179-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb179-5"><a href="datatype.html#cb179-5" aria-hidden="true" tabindex="-1"></a>Char.Vec1</span></code></pre></div>
-<pre><code>## [1] &quot;Yanai&quot;     &quot;Song&quot;      &quot;Shigemura&quot;
-## [4] &quot;Tani&quot;</code></pre>
+<pre><code>## [1] &quot;Yanai&quot;     &quot;Song&quot;      &quot;Shigemura&quot; &quot;Tani&quot;</code></pre>
 <div class="sourceCode" id="cb181"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb181-1"><a href="datatype.html#cb181-1" aria-hidden="true" tabindex="-1"></a>Char.Vec2</span></code></pre></div>
 <pre><code>## [1] 1 2 3 4</code></pre>
 <div class="sourceCode" id="cb183"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb183-1"><a href="datatype.html#cb183-1" aria-hidden="true" tabindex="-1"></a>Char.Vec3</span></code></pre></div>
@@ -869,9 +868,9 @@ Hadley
 <span id="cb191-2"><a href="datatype.html#cb191-2" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;どちらかといえば好き&quot;</span>, <span class="st">&quot;めちゃ好き&quot;</span>, <span class="st">&quot;好き&quot;</span>)</span>
 <span id="cb191-3"><a href="datatype.html#cb191-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb191-4"><a href="datatype.html#cb191-4" aria-hidden="true" tabindex="-1"></a>Factor.Vec1</span></code></pre></div>
-<pre><code>## [1] &quot;めちゃめちゃ好き&quot;     &quot;めちゃめちゃ好き&quot;    
-## [3] &quot;どちらかといえば好き&quot; &quot;めちゃ好き&quot;          
-## [5] &quot;好き&quot;</code></pre>
+<pre><code>## [1] &quot;めちゃめちゃ\u597dき&quot;     &quot;めちゃめちゃ\u597dき&quot;    
+## [3] &quot;どちらかといえば\u597dき&quot; &quot;めちゃ\u597dき&quot;          
+## [5] &quot;\u597dき&quot;</code></pre>
 <div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb193-1"><a href="datatype.html#cb193-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(Factor.Vec1)</span></code></pre></div>
 <pre><code>## [1] &quot;character&quot;</code></pre>
 <p><code>Factor.Vec1</code>は普通の文字列ベクトルであることが分かります。これをfactor型に変換するためには<code>factor()</code>関数を使います。</p>
@@ -882,36 +881,36 @@ Hadley
 <pre><code>## [1] &quot;ordered&quot; &quot;factor&quot;</code></pre>
 <p>データ型がfactor型に変換されています。<code>"ordered"</code>というものも付いていますが、これについては後ほど説明します。それでは中身をみましょう。</p>
 <div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb197-1"><a href="datatype.html#cb197-1" aria-hidden="true" tabindex="-1"></a>Factor.Vec2</span></code></pre></div>
-<pre><code>## [1] めちゃめちゃ好き     めちゃめちゃ好き    
-## [3] どちらかといえば好き めちゃ好き          
-## [5] 好き                
-## 4 Levels: どちらかといえば好き &lt; ... &lt; めちゃめちゃ好き</code></pre>
+<pre><code>## [1] めちゃめちゃ\u597dき     めちゃめちゃ\u597dき    
+## [3] どちらかといえば\u597dき めちゃ\u597dき          
+## [5] \u597dき                
+## 4 Levels: どちらかといえば\u597dき &lt; \u597dき &lt; ... &lt; めちゃめちゃ\u597dき</code></pre>
 <p>いくつかの点で異なります。まず、文字列であるにもかかわらず、<code>"</code>で囲まれていいない点です。そして3行目に<code>4 Levels:</code>というのが追加されている点です。このlevelは「水準」と呼ばれるものです。<code>4 Levels</code>ですから、<code>Factor.Vec2</code>は4つの水準で構成されていることを意味します。Factor型の値は予め指定された水準以外の値を取ることはできません。たとえば、2番目の要素を「超好き」に変えてみましょう。</p>
 <div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb199-1"><a href="datatype.html#cb199-1" aria-hidden="true" tabindex="-1"></a>Factor.Vec2[<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="st">&quot;超好き&quot;</span></span></code></pre></div>
-<pre><code>## Warning in `[&lt;-.factor`(`*tmp*`, 2, value = &quot;超好
-## き&quot;): invalid factor level, NA generated</code></pre>
+<pre><code>## Warning in `[&lt;-.factor`(`*tmp*`, 2, value = &quot;\u8d85\u597dき&quot;): invalid
+## factor level, NA generated</code></pre>
 <div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="datatype.html#cb201-1" aria-hidden="true" tabindex="-1"></a>Factor.Vec2</span></code></pre></div>
-<pre><code>## [1] めちゃめちゃ好き     &lt;NA&gt;                
-## [3] どちらかといえば好き めちゃ好き          
-## [5] 好き                
-## 4 Levels: どちらかといえば好き &lt; ... &lt; めちゃめちゃ好き</code></pre>
+<pre><code>## [1] めちゃめちゃ\u597dき     &lt;NA&gt;                    
+## [3] どちらかといえば\u597dき めちゃ\u597dき          
+## [5] \u597dき                
+## 4 Levels: どちらかといえば\u597dき &lt; \u597dき &lt; ... &lt; めちゃめちゃ\u597dき</code></pre>
 <p>警告が表示され、2番目の要素が後ほど紹介する欠損値となっていることが分かります。それでは普通に「好き」を入れてみましょう。</p>
 <div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb203-1"><a href="datatype.html#cb203-1" aria-hidden="true" tabindex="-1"></a>Factor.Vec2[<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="st">&quot;好き&quot;</span></span>
 <span id="cb203-2"><a href="datatype.html#cb203-2" aria-hidden="true" tabindex="-1"></a>Factor.Vec2</span></code></pre></div>
-<pre><code>## [1] めちゃめちゃ好き     好き                
-## [3] どちらかといえば好き めちゃ好き          
-## [5] 好き                
-## 4 Levels: どちらかといえば好き &lt; ... &lt; めちゃめちゃ好き</code></pre>
+<pre><code>## [1] めちゃめちゃ\u597dき     \u597dき                
+## [3] どちらかといえば\u597dき めちゃ\u597dき          
+## [5] \u597dき                
+## 4 Levels: どちらかといえば\u597dき &lt; \u597dき &lt; ... &lt; めちゃめちゃ\u597dき</code></pre>
 <p>今回は問題なく置換できましたね。このようにfactor型の取りうる値は既に指定されています。また、<code>## 4 Levels: どちらかといえば好き &lt; 好き &lt; ... &lt; めちゃめちゃ好き</code>からも分かるように、その大小関係の情報も含まれています。猫好きの度合いは「どちらかといえば好き-好き-めちゃ好き-めちゃめちゃ好き」の順で高くなることをRも認識できるようになりました。</p>
 <p>Factor型はこのように順序付きデータを扱う際に便利なデータ型ですが、順序情報を含まないfactor型もあります。これは<code>factor()</code>を使う際、<code>ordered = TRUE</code>引数を削除するだけでできます。</p>
 <div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb205-1"><a href="datatype.html#cb205-1" aria-hidden="true" tabindex="-1"></a>Factor.Vec3 <span class="ot">&lt;-</span> <span class="fu">factor</span>(Factor.Vec1,</span>
 <span id="cb205-2"><a href="datatype.html#cb205-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;どちらかといえば好き&quot;</span>, <span class="st">&quot;好き&quot;</span>,</span>
 <span id="cb205-3"><a href="datatype.html#cb205-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&quot;めちゃ好き&quot;</span>, <span class="st">&quot;めちゃめちゃ好き&quot;</span>))</span>
 <span id="cb205-4"><a href="datatype.html#cb205-4" aria-hidden="true" tabindex="-1"></a>Factor.Vec3</span></code></pre></div>
-<pre><code>## [1] めちゃめちゃ好き     めちゃめちゃ好き    
-## [3] どちらかといえば好き めちゃ好き          
-## [5] 好き                
-## 4 Levels: どちらかといえば好き ... めちゃめちゃ好き</code></pre>
+<pre><code>## [1] めちゃめちゃ\u597dき     めちゃめちゃ\u597dき    
+## [3] どちらかといえば\u597dき めちゃ\u597dき          
+## [5] \u597dき                
+## 4 Levels: どちらかといえば\u597dき \u597dき ... めちゃめちゃ\u597dき</code></pre>
 <div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb207-1"><a href="datatype.html#cb207-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(Factor.Vec3)</span></code></pre></div>
 <pre><code>## [1] &quot;factor&quot;</code></pre>
 <p>今回は3行目が<code>## Levels: どちらかといえば好き 好き めちゃ好き めちゃめちゃ好き</code>となり、順序に関する情報がなくなりました。また、<code>class()</code>で確認しましたデータ型に<code>"ordered"</code>が付いていません。これは順序なしfactor型であることを意味します。「順序付けしないならfactor型は要らないのでは…?」と思うかも知れませんが、これはこれで便利です。その例を考えてみましょう。</p>
@@ -1122,8 +1121,7 @@ Fukuoka
 <span id="cb225-3"><a href="datatype.html#cb225-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
 <span id="cb225-4"><a href="datatype.html#cb225-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;日付&quot;</span>, <span class="at">y =</span> <span class="st">&quot;睡眠時間 (分)&quot;</span>) <span class="sc">+</span></span>
 <span id="cb225-5"><a href="datatype.html#cb225-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<pre><code>## Warning: Removed 1 rows containing missing values
-## (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
 <div class="figure"><span id="fig:sleep5"></span>
 <img src="R_Not_for_Everyone_files/figure-html/sleep5-1.png" alt="Songの睡眠時間" width="672" />
 <p class="caption">
