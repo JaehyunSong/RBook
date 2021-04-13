@@ -11,7 +11,7 @@ R Not for Everyone: An Esoteric Guide.
 主な著書：[真に驚くべき業績を残しているが、この余白はそれを書くには狭すぎる](https://ja.wikipedia.org/wiki/フェルマーの最終定理)。
 公開したRパッケージ: [BalanceR](https://github.com/JaehyunSong/BalanceR), [PRcalc](https://github.com/JaehyunSong/PRcalc), [SimpleConjoint](https://github.com/JaehyunSong/SimpleConjoint) など
 
-* Email: jasong@mail.doshisha.ac.jp
+* Email: song@kansai-u.ac.jp
 * Webpage: https://www.jaysong.net
 * Twitter: [\@Tintstyle](https://twitter.com/Tintstyle)
 * GitHub: https://github.com/JaehyunSong
