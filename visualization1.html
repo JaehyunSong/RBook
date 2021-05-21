@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>17. 可視化[理論] | 私たちのR: ベストプラクティスの探究</title>
   <meta name="description" content="R Not for Everyone: An Esoteric Guide." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
   <meta property="og:title" content="17. 可視化[理論] | 私たちのR: ベストプラクティスの探究" />
   <meta property="og:type" content="book" />
@@ -50,11 +50,13 @@
 
 
 
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.17/datatables.js"></script>
+<script src="libs/datatables-binding-0.18/datatables.js"></script>
 <link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
 <script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
@@ -79,6 +81,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -137,6 +140,29 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 <link rel="stylesheet" href="HTML/style.css" type="text/css" />
@@ -586,6 +612,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="26.2.4" data-path="rmarkdown2.html"><a href="rmarkdown2.html#rmakrdown2-operation"><i class="fa fa-check"></i><b>26.2.4</b> Xaringanスライドの操作</a></li>
 <li class="chapter" data-level="26.2.5" data-path="rmarkdown2.html"><a href="rmarkdown2.html#rmakrdown2-japanese"><i class="fa fa-check"></i><b>26.2.5</b> 日本語フォントの指定</a></li>
 <li class="chapter" data-level="26.2.6" data-path="rmarkdown2.html"><a href="rmarkdown2.html#スライドのpdf出力"><i class="fa fa-check"></i><b>26.2.6</b> スライドのPDF出力</a></li>
+<li class="chapter" data-level="26.2.7" data-path="rmarkdown2.html"><a href="rmarkdown2.html#もっと詳しく"><i class="fa fa-check"></i><b>26.2.7</b> もっと詳しく</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="27" data-path="solution.html"><a href="solution.html"><i class="fa fa-check"></i><b>27</b> 演習問題の回答</a>
@@ -796,13 +823,13 @@ Bahrain
 <h3><span class="header-section-number">17.1.1</span> Base R</h3>
 <p>Rは統計学、データ分析に特化したプログラミング言語であるため、別途のパッケージなしで作図が可能です。後ほど紹介する{lattice}や{ggplot2}を用いた作図とは違って、Base Rによる作図は、紙にペンでグラフを書くイメージに近いです。キャンバスを用意し、そこにペンで点や線を描く感じです。これはレイヤーという概念を導入した{ggplot2}に近いかも知れませんが、{ggplot2}はレイヤーを変更出来る一方、Base Rは図が気に入らない場合、一からやり直しです。つまり、キャンバスに引いた線や点は消すことができません。また、作成した図はオブジェクトとして保存することが出来ないため、もう一度図示するためには一から書く必要があります。Base Rによる作図は短所だけでなく、メリットもあります。まず、パッケージを必要としないため、Rインストール直後から使える点です。そして、{lattice}や{ggplot2}よりも速いです。他にも人によってはBase Rの方がシンプルでかっこいいという方もいますが、これは好みの問題でしょう。</p>
 <p>以下の図<a href="visualization1.html#fig:visual1-baser1">17.1</a>はBase Rを使った散布図の例です。</p>
-<div class="sourceCode" id="cb1235"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1235-1"><a href="visualization1.html#cb1235-1"></a><span class="co"># Base Rを用いた作図の例</span></span>
-<span id="cb1235-2"><a href="visualization1.html#cb1235-2"></a><span class="fu">plot</span>(<span class="at">x =</span> Country_df<span class="sc">$</span>PPP, <span class="at">y =</span> Country_df<span class="sc">$</span>HDI, <span class="at">pch =</span> <span class="dv">19</span>, </span>
-<span id="cb1235-3"><a href="visualization1.html#cb1235-3"></a>     <span class="at">col =</span> <span class="fu">ifelse</span>(Country_df<span class="sc">$</span>OECD <span class="sc">==</span> <span class="st">&quot;加盟国&quot;</span>, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>),</span>
-<span id="cb1235-4"><a href="visualization1.html#cb1235-4"></a>     <span class="at">xlab =</span> <span class="st">&quot;一人当たり購買力平価GDP (USD)&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;人間開発指数&quot;</span>)</span>
-<span id="cb1235-5"><a href="visualization1.html#cb1235-5"></a><span class="fu">legend</span>(<span class="st">&quot;bottomright&quot;</span>, <span class="at">pch =</span> <span class="dv">19</span>,</span>
-<span id="cb1235-6"><a href="visualization1.html#cb1235-6"></a>       <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;OECD加盟国&quot;</span>, <span class="st">&quot;OECD非加盟国&quot;</span>), </span>
-<span id="cb1235-7"><a href="visualization1.html#cb1235-7"></a>       <span class="at">col    =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb1234"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1234-1"><a href="visualization1.html#cb1234-1"></a><span class="co"># Base Rを用いた作図の例</span></span>
+<span id="cb1234-2"><a href="visualization1.html#cb1234-2"></a><span class="fu">plot</span>(<span class="at">x =</span> Country_df<span class="sc">$</span>PPP, <span class="at">y =</span> Country_df<span class="sc">$</span>HDI, <span class="at">pch =</span> <span class="dv">19</span>, </span>
+<span id="cb1234-3"><a href="visualization1.html#cb1234-3"></a>     <span class="at">col =</span> <span class="fu">ifelse</span>(Country_df<span class="sc">$</span>OECD <span class="sc">==</span> <span class="st">&quot;加盟国&quot;</span>, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>),</span>
+<span id="cb1234-4"><a href="visualization1.html#cb1234-4"></a>     <span class="at">xlab =</span> <span class="st">&quot;一人当たり購買力平価GDP (USD)&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;人間開発指数&quot;</span>)</span>
+<span id="cb1234-5"><a href="visualization1.html#cb1234-5"></a><span class="fu">legend</span>(<span class="st">&quot;bottomright&quot;</span>, <span class="at">pch =</span> <span class="dv">19</span>,</span>
+<span id="cb1234-6"><a href="visualization1.html#cb1234-6"></a>       <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;OECD加盟国&quot;</span>, <span class="st">&quot;OECD非加盟国&quot;</span>), </span>
+<span id="cb1234-7"><a href="visualization1.html#cb1234-7"></a>       <span class="at">col    =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>))</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:visual1-baser1"></span>
 <img src="R_Not_for_Everyone_files/figure-html/visual1-baser1-1.png" alt="Base Rによるグラフ" width="576" />
 <p class="caption">
@@ -814,17 +841,17 @@ Bahrain
 <h3><span class="header-section-number">17.1.2</span> {lattice}パッケージ</h3>
 <p>{lattice}は<a href="https://www.isid.ac.in/~deepayan/">Deepayan Sarkar</a>によって開発された可視化パッケージです。このパッケージの最大特徴は「1つの関数で可視化が出来る」点です。作図に必要な様々な情報が1つの関数内に全て入ります。むろん、指定しない情報に関しては多くの場合、自動的に処理してくれます。</p>
 <p>図<a href="visualization1.html#fig:visual1-baser1">17.1</a>を{lattice}を使って作る場合は以下のようなコードになります。</p>
-<div class="sourceCode" id="cb1236"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1236-1"><a href="visualization1.html#cb1236-1"></a><span class="co"># latticeを用いた作図の例</span></span>
-<span id="cb1236-2"><a href="visualization1.html#cb1236-2"></a><span class="fu">xyplot</span>(HDI <span class="sc">~</span> PPP, <span class="at">data =</span> Country_df,</span>
-<span id="cb1236-3"><a href="visualization1.html#cb1236-3"></a>       <span class="at">group =</span> OECD, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">grid =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb1236-4"><a href="visualization1.html#cb1236-4"></a>       <span class="at">auto.key =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb1236-5"><a href="visualization1.html#cb1236-5"></a>       <span class="at">key =</span> <span class="fu">list</span>(<span class="at">title     =</span> <span class="st">&quot;OECD加盟有無&quot;</span>,</span>
-<span id="cb1236-6"><a href="visualization1.html#cb1236-6"></a>                  <span class="at">cex.title =</span> <span class="dv">1</span>,</span>
-<span id="cb1236-7"><a href="visualization1.html#cb1236-7"></a>                  <span class="at">space     =</span> <span class="st">&quot;right&quot;</span>,</span>
-<span id="cb1236-8"><a href="visualization1.html#cb1236-8"></a>                  <span class="at">points    =</span> <span class="fu">list</span>(<span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;magenta&quot;</span>, <span class="st">&quot;cyan&quot;</span>),</span>
-<span id="cb1236-9"><a href="visualization1.html#cb1236-9"></a>                                   <span class="at">pch =</span> <span class="dv">19</span>),</span>
-<span id="cb1236-10"><a href="visualization1.html#cb1236-10"></a>                  <span class="at">text      =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;加盟国&quot;</span>, <span class="st">&quot;非加盟国&quot;</span>))), </span>
-<span id="cb1236-11"><a href="visualization1.html#cb1236-11"></a>       <span class="at">xlab =</span> <span class="st">&quot;一人当たり購買力平価GDP (USD)&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;人間開発指数&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1235"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1235-1"><a href="visualization1.html#cb1235-1"></a><span class="co"># latticeを用いた作図の例</span></span>
+<span id="cb1235-2"><a href="visualization1.html#cb1235-2"></a><span class="fu">xyplot</span>(HDI <span class="sc">~</span> PPP, <span class="at">data =</span> Country_df,</span>
+<span id="cb1235-3"><a href="visualization1.html#cb1235-3"></a>       <span class="at">group =</span> OECD, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">grid =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1235-4"><a href="visualization1.html#cb1235-4"></a>       <span class="at">auto.key =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1235-5"><a href="visualization1.html#cb1235-5"></a>       <span class="at">key =</span> <span class="fu">list</span>(<span class="at">title     =</span> <span class="st">&quot;OECD加盟有無&quot;</span>,</span>
+<span id="cb1235-6"><a href="visualization1.html#cb1235-6"></a>                  <span class="at">cex.title =</span> <span class="dv">1</span>,</span>
+<span id="cb1235-7"><a href="visualization1.html#cb1235-7"></a>                  <span class="at">space     =</span> <span class="st">&quot;right&quot;</span>,</span>
+<span id="cb1235-8"><a href="visualization1.html#cb1235-8"></a>                  <span class="at">points    =</span> <span class="fu">list</span>(<span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;magenta&quot;</span>, <span class="st">&quot;cyan&quot;</span>),</span>
+<span id="cb1235-9"><a href="visualization1.html#cb1235-9"></a>                                   <span class="at">pch =</span> <span class="dv">19</span>),</span>
+<span id="cb1235-10"><a href="visualization1.html#cb1235-10"></a>                  <span class="at">text      =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;加盟国&quot;</span>, <span class="st">&quot;非加盟国&quot;</span>))), </span>
+<span id="cb1235-11"><a href="visualization1.html#cb1235-11"></a>       <span class="at">xlab =</span> <span class="st">&quot;一人当たり購買力平価GDP (USD)&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;人間開発指数&quot;</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:visual1-lattice1"></span>
 <img src="R_Not_for_Everyone_files/figure-html/visual1-lattice1-1.png" alt="latticeによるグラフ" width="576" />
 <p class="caption">
@@ -835,14 +862,14 @@ Bahrain
 </div>
 <div id="ggplot2パッケージ" class="section level3" number="17.1.3">
 <h3><span class="header-section-number">17.1.3</span> {ggplot2}パッケージ</h3>
-<p>{ggplot2}はHadely Wickhamが大学院生の時に開発した可視化パッケージであり<a href="#fn78" class="footnote-ref" id="fnref78"><sup>78</sup></a>、 <span class="citation"><a href="reference.html#ref-Wilkinson:2005" role="doc-biblioref">Wilkinson</a> (<a href="reference.html#ref-Wilkinson:2005" role="doc-biblioref">2005</a>)</span> の「グラフィックの文法 (<strong>g</strong>rammer of <strong>g</strong>raphics)」の思想をR上で具現化したものです。グラフィックの文法という思想は今は{ggplot2}以外にも<a href="https://plotly.com">Plotly</a>や<a href="https://www.tableau.com/">Tableau</a>などでも採用されています。</p>
+<p>{ggplot2}はHadely Wickhamが大学院生の時に開発した可視化パッケージであり<a href="#fn78" class="footnote-ref" id="fnref78"><sup>78</sup></a>、 <span class="citation"><a href="#ref-Wilkinson:2005" role="doc-biblioref">Wilkinson</a> (<a href="#ref-Wilkinson:2005" role="doc-biblioref">2005</a>)</span> の「グラフィックの文法 (<strong>g</strong>rammer of <strong>g</strong>raphics)」の思想をR上で具現化したものです。グラフィックの文法という思想は今は{ggplot2}以外にも<a href="https://plotly.com">Plotly</a>や<a href="https://www.tableau.com/">Tableau</a>などでも採用されています。</p>
 <p>グラフィックの文法は後ほど詳細に解説しますが、{ggplot2}による作図の特徴は「レイヤーを重ねる」ことです。グラフの様々な要素をそれぞれ1つの層 (layer)と捉え、これを重ねられていくことでグラフが出来上がる仕組みです。これはBase Rの書き方に似ています。たとえば、{ggplot2}を使って図<a href="visualization1.html#fig:visual1-baser1">17.1</a>を作る場合、以下のようなコードになります。</p>
-<div class="sourceCode" id="cb1237"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1237-1"><a href="visualization1.html#cb1237-1"></a><span class="co"># ggplot2を用いた作図の例</span></span>
-<span id="cb1237-2"><a href="visualization1.html#cb1237-2"></a><span class="fu">ggplot</span>(<span class="at">data =</span> Country_df) <span class="sc">+</span></span>
-<span id="cb1237-3"><a href="visualization1.html#cb1237-3"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> PPP, <span class="at">y =</span> HDI, <span class="at">color =</span> OECD)) <span class="sc">+</span></span>
-<span id="cb1237-4"><a href="visualization1.html#cb1237-4"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;一人あたり購買力平価GDP (USD)&quot;</span>, <span class="at">y =</span> <span class="st">&quot;人間開発指数&quot;</span>,</span>
-<span id="cb1237-5"><a href="visualization1.html#cb1237-5"></a>       <span class="at">color =</span> <span class="st">&quot;OECD加盟有無&quot;</span>) <span class="sc">+</span></span>
-<span id="cb1237-6"><a href="visualization1.html#cb1237-6"></a>  <span class="fu">theme_bw</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1236"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1236-1"><a href="visualization1.html#cb1236-1"></a><span class="co"># ggplot2を用いた作図の例</span></span>
+<span id="cb1236-2"><a href="visualization1.html#cb1236-2"></a><span class="fu">ggplot</span>(<span class="at">data =</span> Country_df) <span class="sc">+</span></span>
+<span id="cb1236-3"><a href="visualization1.html#cb1236-3"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> PPP, <span class="at">y =</span> HDI, <span class="at">color =</span> OECD)) <span class="sc">+</span></span>
+<span id="cb1236-4"><a href="visualization1.html#cb1236-4"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;一人あたり購買力平価GDP (USD)&quot;</span>, <span class="at">y =</span> <span class="st">&quot;人間開発指数&quot;</span>,</span>
+<span id="cb1236-5"><a href="visualization1.html#cb1236-5"></a>       <span class="at">color =</span> <span class="st">&quot;OECD加盟有無&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1236-6"><a href="visualization1.html#cb1236-6"></a>  <span class="fu">theme_bw</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:visual1-ggplot1"></span>
 <img src="R_Not_for_Everyone_files/figure-html/visual1-ggplot1-1.png" alt="ggplot2によるグラフ" width="576" />
 <p class="caption">
@@ -857,14 +884,14 @@ Bahrain
 <h2><span class="header-section-number">17.2</span> グラフィックの文法</h2>
 <div id="グラフィックの文法" class="section level3" number="17.2.1">
 <h3><span class="header-section-number">17.2.1</span> グラフィックの文法</h3>
-<p>本書では特別な事情がない限り、{ggplot2}による可視化のみを扱います。既に{ggplot2}のggが「グラフィックの文法 (<strong>g</strong>rammar of <strong>g</strong>raphics)」だと説明しましたが、この概念は <span class="citation"><a href="reference.html#ref-Wilkinson:2005" role="doc-biblioref">Wilkinson</a> (<a href="reference.html#ref-Wilkinson:2005" role="doc-biblioref">2005</a>)</span> によって提唱された比較的新しいものであり、{ggplot2}はHadley先生がグラフィックの文法に則った作図のプロセスをRで具現化したものです。</p>
+<p>本書では特別な事情がない限り、{ggplot2}による可視化のみを扱います。既に{ggplot2}のggが「グラフィックの文法 (<strong>g</strong>rammar of <strong>g</strong>raphics)」だと説明しましたが、この概念は <span class="citation"><a href="#ref-Wilkinson:2005" role="doc-biblioref">Wilkinson</a> (<a href="#ref-Wilkinson:2005" role="doc-biblioref">2005</a>)</span> によって提唱された比較的新しいものであり、{ggplot2}はHadley先生がグラフィックの文法に則った作図のプロセスをRで具現化したものです。</p>
 <p>グラフィックスの文法とは、グラフを構造化された方法で記述し、レイヤーを積み重ねることによってグラフを構築するフレームワークです。グラフは様々な要素で構成されています。横軸と縦軸、点、線、グラフ、凡例、図のタイトルなどがあります。横軸や縦軸は線の太さ、目盛りの間隔、数字の大きさなどに分割することも可能です。このように1つのグラフは数十、数百以上の要素の集合です。これら一つ一つの要素をレイヤーとして捉え、それを積み重ねることでグラフを作成します。これが簡単な{ggplot2}による作図のイメージですが、以下でもうちょっと目に見える形でこれを解説していきます。</p>
 </div>
 <div id="ggplot2のイメージ" class="section level3" number="17.2.2">
 <h3><span class="header-section-number">17.2.2</span> ggplot2のイメージ</h3>
 <p>それでは{ggplot2}によるグラフが出来上がる過程を見ていきます。例えば、以下のようなデータセット<code>df</code>があるとします。変数は年度を表す<code>Year</code>、鉄道事業者のタイプを表す<code>Company_Type1</code>、一日利用者数の平均値を表す<code>P</code>があります。例えば、2行目は2011年度におけるJRが管理する駅の一日平均利用者数が約7399名であることを意味します。</p>
-<div id="htmlwidget-5482f51e959e206886e6" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-5482f51e959e206886e6">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28"],[2011,2011,2011,2011,2012,2012,2012,2012,2013,2013,2013,2013,2014,2014,2014,2014,2015,2015,2015,2015,2016,2016,2016,2016,2017,2017,2017,2017],["その他","JR","大手私鉄","準大手私鉄","その他","JR","大手私鉄","準大手私鉄","その他","JR","大手私鉄","準大手私鉄","その他","JR","大手私鉄","準大手私鉄","その他","JR","大手私鉄","準大手私鉄","その他","JR","大手私鉄","準大手私鉄","その他","JR","大手私鉄","準大手私鉄"],[4769,7399,19421,7683,5014,7289,21286,10471,5154,7383,21097,10652,5517,7469,21013,10569,5662,7495,21809,10740,5807,7622,22474,10767,5943,7707,22783,10862]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Year<\/th>\n      <th>Company_Type1<\/th>\n      <th>P<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,3]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-ce1ba1667d3ecd7feea0" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ce1ba1667d3ecd7feea0">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28"],[2011,2011,2011,2011,2012,2012,2012,2012,2013,2013,2013,2013,2014,2014,2014,2014,2015,2015,2015,2015,2016,2016,2016,2016,2017,2017,2017,2017],["その他","JR","大手私鉄","準大手私鉄","その他","JR","大手私鉄","準大手私鉄","その他","JR","大手私鉄","準大手私鉄","その他","JR","大手私鉄","準大手私鉄","その他","JR","大手私鉄","準大手私鉄","その他","JR","大手私鉄","準大手私鉄","その他","JR","大手私鉄","準大手私鉄"],[4769,7399,19421,7683,5014,7289,21286,10471,5154,7383,21097,10652,5517,7469,21013,10569,5662,7495,21809,10740,5807,7622,22474,10767,5943,7707,22783,10862]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Year<\/th>\n      <th>Company_Type1<\/th>\n      <th>P<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,3]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 <p>このデータ<code>df</code>を使って図<a href="visualization1.html#fig:visual1-fig1">17.4</a>のようなグラフを作成します。以下では作図のコードも載っていますが、詳しく理解しなくても結構です。理解しなくてもいいですが、必ずコードには目を通し、説明文との対応を自分で考えてください。</p>
 <div class="figure" style="text-align: center"><span id="fig:visual1-fig1"></span>
 <img src="R_Not_for_Everyone_files/figure-html/visual1-fig1-1.png" alt="鉄道駅の事業者区分による平均利用者数の推移" width="768" />
@@ -875,66 +902,66 @@ Bahrain
 <ol style="list-style-type: decimal">
 <li>まずは、グラフに使用するデータを指定し、空のキャンバスを用意します。</li>
 </ol>
-<div class="sourceCode" id="cb1238"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1238-1"><a href="visualization1.html#cb1238-1"></a><span class="co"># 第1層: キャンバスを用意し、使用するデータはdf</span></span>
-<span id="cb1238-2"><a href="visualization1.html#cb1238-2"></a><span class="fu">ggplot</span>(<span class="at">data =</span> df)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-598-1.png" width="768" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb1237"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1237-1"><a href="visualization1.html#cb1237-1"></a><span class="co"># 第1層: キャンバスを用意し、使用するデータはdf</span></span>
+<span id="cb1237-2"><a href="visualization1.html#cb1237-2"></a><span class="fu">ggplot</span>(<span class="at">data =</span> df)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-597-1.png" width="768" style="display: block; margin: auto;" /></p>
 <ol start="2" style="list-style-type: decimal">
 <li>折れ線グラフを作成します。折れ線グラフは点の位置を指定すると、勝手に点と点の間を線で繋いでぐれます。したがって、必要な情報は点の情報ですが、横軸 (X軸)は<code>Year</code>、縦軸 (Y軸)は<code>P</code>にした点を出力します。この点を<code>Company_Type1</code>ごとに色分けします。これで折れ線グラフが出来上がります。線の太さは1にします。</li>
 </ol>
-<div class="sourceCode" id="cb1239"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1239-1"><a href="visualization1.html#cb1239-1"></a><span class="co"># 第2層: X軸はYear、Y軸はPにし、Company_type1ごとに色分けした折れ線グラフを作成し、線の太さは1とする。</span></span>
-<span id="cb1239-2"><a href="visualization1.html#cb1239-2"></a><span class="fu">ggplot</span>(<span class="at">data =</span> df) <span class="sc">+</span></span>
-<span id="cb1239-3"><a href="visualization1.html#cb1239-3"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> P, <span class="at">color =</span> Company_Type1), </span>
-<span id="cb1239-4"><a href="visualization1.html#cb1239-4"></a>            <span class="at">size =</span> <span class="dv">1</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-599-1.png" width="768" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb1238"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1238-1"><a href="visualization1.html#cb1238-1"></a><span class="co"># 第2層: X軸はYear、Y軸はPにし、Company_type1ごとに色分けした折れ線グラフを作成し、線の太さは1とする。</span></span>
+<span id="cb1238-2"><a href="visualization1.html#cb1238-2"></a><span class="fu">ggplot</span>(<span class="at">data =</span> df) <span class="sc">+</span></span>
+<span id="cb1238-3"><a href="visualization1.html#cb1238-3"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> P, <span class="at">color =</span> Company_Type1), </span>
+<span id="cb1238-4"><a href="visualization1.html#cb1238-4"></a>            <span class="at">size =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-598-1.png" width="768" style="display: block; margin: auto;" /></p>
 <ol start="3" style="list-style-type: decimal">
 <li>続いて、折れ線グラフに散布図を載せます。これは線が引かれていない折れ線グラフと同じです。したがって、横軸、縦軸、色分けの情報は同じです。しかし、点と線が重なると点がよく見えないこともあるので、点の大きさを3にし、形は枠線付きの点にします。点の中身は白塗りをします。つまり、<code>Company_Type1</code>によって変わるのは、点の枠線です。</li>
 </ol>
-<div class="sourceCode" id="cb1240"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1240-1"><a href="visualization1.html#cb1240-1"></a><span class="co"># 第3層: X軸はYear、Y軸はPにし、Company_type1ごとに色分けした散布図を作成する。</span></span>
-<span id="cb1240-2"><a href="visualization1.html#cb1240-2"></a><span class="co">#        点の大きさは3、点のタイプは21 (外線付き)、点の中身の色は白よする</span></span>
+<div class="sourceCode" id="cb1239"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1239-1"><a href="visualization1.html#cb1239-1"></a><span class="co"># 第3層: X軸はYear、Y軸はPにし、Company_type1ごとに色分けした散布図を作成する。</span></span>
+<span id="cb1239-2"><a href="visualization1.html#cb1239-2"></a><span class="co">#        点の大きさは3、点のタイプは21 (外線付き)、点の中身の色は白よする</span></span>
+<span id="cb1239-3"><a href="visualization1.html#cb1239-3"></a><span class="fu">ggplot</span>(<span class="at">data =</span> df) <span class="sc">+</span></span>
+<span id="cb1239-4"><a href="visualization1.html#cb1239-4"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> P, <span class="at">color =</span> Company_Type1), </span>
+<span id="cb1239-5"><a href="visualization1.html#cb1239-5"></a>            <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb1239-6"><a href="visualization1.html#cb1239-6"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> P, <span class="at">color =</span> Company_Type1), </span>
+<span id="cb1239-7"><a href="visualization1.html#cb1239-7"></a>             <span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">21</span>, <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-599-1.png" width="768" style="display: block; margin: auto;" /></p>
+<ol start="4" style="list-style-type: decimal">
+<li>横軸と縦軸、そして凡例のタイトルを日本語に直します。日本語のレポート、論文なら図表も日本語にすべきです。横軸のラベルは<code>"年度"</code>、縦軸のラベルは<code>"平均利用者数 (人/日)"</code>にします。色の凡例タイトルは<code>"事業者区分"</code>にします。</li>
+</ol>
+<div class="sourceCode" id="cb1240"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1240-1"><a href="visualization1.html#cb1240-1"></a><span class="co"># 第4層: X軸、Y軸のラベルをそれぞれ「年度」、「平均利用者数 (人/日)」に</span></span>
+<span id="cb1240-2"><a href="visualization1.html#cb1240-2"></a><span class="co">#        凡例のcolorのラベルは「事業者区分」にする</span></span>
 <span id="cb1240-3"><a href="visualization1.html#cb1240-3"></a><span class="fu">ggplot</span>(<span class="at">data =</span> df) <span class="sc">+</span></span>
 <span id="cb1240-4"><a href="visualization1.html#cb1240-4"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> P, <span class="at">color =</span> Company_Type1), </span>
 <span id="cb1240-5"><a href="visualization1.html#cb1240-5"></a>            <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb1240-6"><a href="visualization1.html#cb1240-6"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> P, <span class="at">color =</span> Company_Type1), </span>
-<span id="cb1240-7"><a href="visualization1.html#cb1240-7"></a>             <span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">21</span>, <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>)</span></code></pre></div>
+<span id="cb1240-7"><a href="visualization1.html#cb1240-7"></a>             <span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">21</span>, <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1240-8"><a href="visualization1.html#cb1240-8"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年度&quot;</span>, <span class="at">y =</span> <span class="st">&quot;平均利用者数 (人/日)&quot;</span>, <span class="at">color =</span> <span class="st">&quot;事業者区分&quot;</span>)</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-600-1.png" width="768" style="display: block; margin: auto;" /></p>
-<ol start="4" style="list-style-type: decimal">
-<li>横軸と縦軸、そして凡例のタイトルを日本語に直します。日本語のレポート、論文なら図表も日本語にすべきです。横軸のラベルは<code>"年度"</code>、縦軸のラベルは<code>"平均利用者数 (人/日)"</code>にします。色の凡例タイトルは<code>"事業者区分"</code>にします。</li>
+<ol start="5" style="list-style-type: decimal">
+<li>横軸のスケールを修正します。横軸は連続 (continuous)変数です。今の目盛りは2012、2014、2016になっていますが、これを1年刻みにし、それぞれの目盛りのラベルも2011、2012、2013、…にします。</li>
 </ol>
-<div class="sourceCode" id="cb1241"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1241-1"><a href="visualization1.html#cb1241-1"></a><span class="co"># 第4層: X軸、Y軸のラベルをそれぞれ「年度」、「平均利用者数 (人/日)」に</span></span>
-<span id="cb1241-2"><a href="visualization1.html#cb1241-2"></a><span class="co">#        凡例のcolorのラベルは「事業者区分」にする</span></span>
+<div class="sourceCode" id="cb1241"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1241-1"><a href="visualization1.html#cb1241-1"></a><span class="co"># 第5層: 連続変数で構成されたX軸を調整する</span></span>
+<span id="cb1241-2"><a href="visualization1.html#cb1241-2"></a><span class="co">#        目盛りは2011, 2012, ..., 2017とし、ラベルも2011, 2012, ..., 2017に</span></span>
 <span id="cb1241-3"><a href="visualization1.html#cb1241-3"></a><span class="fu">ggplot</span>(<span class="at">data =</span> df) <span class="sc">+</span></span>
 <span id="cb1241-4"><a href="visualization1.html#cb1241-4"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> P, <span class="at">color =</span> Company_Type1), </span>
 <span id="cb1241-5"><a href="visualization1.html#cb1241-5"></a>            <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb1241-6"><a href="visualization1.html#cb1241-6"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> P, <span class="at">color =</span> Company_Type1), </span>
 <span id="cb1241-7"><a href="visualization1.html#cb1241-7"></a>             <span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">21</span>, <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
-<span id="cb1241-8"><a href="visualization1.html#cb1241-8"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年度&quot;</span>, <span class="at">y =</span> <span class="st">&quot;平均利用者数 (人/日)&quot;</span>, <span class="at">color =</span> <span class="st">&quot;事業者区分&quot;</span>)</span></code></pre></div>
+<span id="cb1241-8"><a href="visualization1.html#cb1241-8"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年度&quot;</span>, <span class="at">y =</span> <span class="st">&quot;平均利用者数 (人/日)&quot;</span>, <span class="at">color =</span> <span class="st">&quot;事業者区分&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1241-9"><a href="visualization1.html#cb1241-9"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">2011</span><span class="sc">:</span><span class="dv">2017</span>, <span class="at">labels =</span> <span class="dv">2011</span><span class="sc">:</span><span class="dv">2017</span>)</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-601-1.png" width="768" style="display: block; margin: auto;" /></p>
-<ol start="5" style="list-style-type: decimal">
-<li>横軸のスケールを修正します。横軸は連続 (continuous)変数です。今の目盛りは2012、2014、2016になっていますが、これを1年刻みにし、それぞれの目盛りのラベルも2011、2012、2013、…にします。</li>
-</ol>
-<div class="sourceCode" id="cb1242"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1242-1"><a href="visualization1.html#cb1242-1"></a><span class="co"># 第5層: 連続変数で構成されたX軸を調整する</span></span>
-<span id="cb1242-2"><a href="visualization1.html#cb1242-2"></a><span class="co">#        目盛りは2011, 2012, ..., 2017とし、ラベルも2011, 2012, ..., 2017に</span></span>
-<span id="cb1242-3"><a href="visualization1.html#cb1242-3"></a><span class="fu">ggplot</span>(<span class="at">data =</span> df) <span class="sc">+</span></span>
-<span id="cb1242-4"><a href="visualization1.html#cb1242-4"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> P, <span class="at">color =</span> Company_Type1), </span>
-<span id="cb1242-5"><a href="visualization1.html#cb1242-5"></a>            <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb1242-6"><a href="visualization1.html#cb1242-6"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> P, <span class="at">color =</span> Company_Type1), </span>
-<span id="cb1242-7"><a href="visualization1.html#cb1242-7"></a>             <span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">21</span>, <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
-<span id="cb1242-8"><a href="visualization1.html#cb1242-8"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年度&quot;</span>, <span class="at">y =</span> <span class="st">&quot;平均利用者数 (人/日)&quot;</span>, <span class="at">color =</span> <span class="st">&quot;事業者区分&quot;</span>) <span class="sc">+</span></span>
-<span id="cb1242-9"><a href="visualization1.html#cb1242-9"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">2011</span><span class="sc">:</span><span class="dv">2017</span>, <span class="at">labels =</span> <span class="dv">2011</span><span class="sc">:</span><span class="dv">2017</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-602-1.png" width="768" style="display: block; margin: auto;" /></p>
 <ol start="6" style="list-style-type: decimal">
 <li>日本語が表示されないため、日本語に対応したフォントを指定します。グラフのテーマも{ggplot2}が基本的に提供しているminimalに変更し、フォントはヒラギノ角ゴジックW3にします。</li>
 </ol>
-<div class="sourceCode" id="cb1243"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1243-1"><a href="visualization1.html#cb1243-1"></a><span class="co"># 第6層: テーマをminimalに指定し、フォント群はHiraKakuProN-W3に</span></span>
-<span id="cb1243-2"><a href="visualization1.html#cb1243-2"></a><span class="fu">ggplot</span>(<span class="at">data =</span> df) <span class="sc">+</span></span>
-<span id="cb1243-3"><a href="visualization1.html#cb1243-3"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> P, <span class="at">color =</span> Company_Type1), </span>
-<span id="cb1243-4"><a href="visualization1.html#cb1243-4"></a>            <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb1243-5"><a href="visualization1.html#cb1243-5"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> P, <span class="at">color =</span> Company_Type1), </span>
-<span id="cb1243-6"><a href="visualization1.html#cb1243-6"></a>             <span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">21</span>, <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
-<span id="cb1243-7"><a href="visualization1.html#cb1243-7"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年度&quot;</span>, <span class="at">y =</span> <span class="st">&quot;平均利用者数 (人/日)&quot;</span>, <span class="at">color =</span> <span class="st">&quot;事業者区分&quot;</span>) <span class="sc">+</span></span>
-<span id="cb1243-8"><a href="visualization1.html#cb1243-8"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">2011</span><span class="sc">:</span><span class="dv">2017</span>, <span class="at">labels =</span> <span class="dv">2011</span><span class="sc">:</span><span class="dv">2017</span>) <span class="sc">+</span></span>
-<span id="cb1243-9"><a href="visualization1.html#cb1243-9"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-603-1.png" width="768" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb1242"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1242-1"><a href="visualization1.html#cb1242-1"></a><span class="co"># 第6層: テーマをminimalに指定し、フォント群はHiraKakuProN-W3に</span></span>
+<span id="cb1242-2"><a href="visualization1.html#cb1242-2"></a><span class="fu">ggplot</span>(<span class="at">data =</span> df) <span class="sc">+</span></span>
+<span id="cb1242-3"><a href="visualization1.html#cb1242-3"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> P, <span class="at">color =</span> Company_Type1), </span>
+<span id="cb1242-4"><a href="visualization1.html#cb1242-4"></a>            <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb1242-5"><a href="visualization1.html#cb1242-5"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> P, <span class="at">color =</span> Company_Type1), </span>
+<span id="cb1242-6"><a href="visualization1.html#cb1242-6"></a>             <span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">21</span>, <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1242-7"><a href="visualization1.html#cb1242-7"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年度&quot;</span>, <span class="at">y =</span> <span class="st">&quot;平均利用者数 (人/日)&quot;</span>, <span class="at">color =</span> <span class="st">&quot;事業者区分&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1242-8"><a href="visualization1.html#cb1242-8"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">2011</span><span class="sc">:</span><span class="dv">2017</span>, <span class="at">labels =</span> <span class="dv">2011</span><span class="sc">:</span><span class="dv">2017</span>) <span class="sc">+</span></span>
+<span id="cb1242-9"><a href="visualization1.html#cb1242-9"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-602-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>これで図が出来上がりました。このように{ggplot2}では図の要素をレイヤーと捉えます。このレイヤーを生成する関数が<code>ggplot()</code>、<code>geom_line()</code>、<code>lab()</code>などであり、これらを<code>+</code>演算子を用いて重ねていきます。このイメージを図にすると図<a href="visualization1.html#fig:layer-example1">17.5</a>のように表現できます。</p>
 <div class="figure" style="text-align: center"><span id="fig:layer-example1"></span>
 <img src="figures/Visualization1/Layer_Example.png" alt="ggplot2の図が出来上がるまで (全体像)" width="85%" />
@@ -960,16 +987,16 @@ Bahrain
 </p>
 </div>
 <p>ただし、この中で座標系は適切だと判断される座標系に設定してくれるため、ユーザーが必ず指定すべきものはデータと幾何オブジェクトのみです。また、幾何オブジェクトはマッピングを含んでおり、これも必ず指定する必要があります。したがって、{ggplot2}で作図するための最小限のコードは以下のようになります。</p>
-<div class="sourceCode" id="cb1244"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1244-1"><a href="visualization1.html#cb1244-1"></a><span class="co"># ggplot2におけるプロットの基本形</span></span>
-<span id="cb1244-2"><a href="visualization1.html#cb1244-2"></a><span class="co"># データはggplotの第一引数と使う場合が多いため、「data =」は省略可能</span></span>
-<span id="cb1244-3"><a href="visualization1.html#cb1244-3"></a><span class="co"># マッピングは主に幾何オブジェクトの第一引数として使うため、「mapping =」は省略可能</span></span>
-<span id="cb1244-4"><a href="visualization1.html#cb1244-4"></a><span class="fu">ggplot</span>(<span class="at">data =</span> データ名) <span class="sc">+</span></span>
-<span id="cb1244-5"><a href="visualization1.html#cb1244-5"></a>  幾何オブジェクト関数(<span class="at">mapping =</span> <span class="fu">aes</span>(マッピング))</span>
-<span id="cb1244-6"><a href="visualization1.html#cb1244-6"></a></span>
-<span id="cb1244-7"><a href="visualization1.html#cb1244-7"></a><span class="co"># パイプを使う場合</span></span>
-<span id="cb1244-8"><a href="visualization1.html#cb1244-8"></a>データ名 <span class="sc">%&gt;%</span></span>
-<span id="cb1244-9"><a href="visualization1.html#cb1244-9"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb1244-10"><a href="visualization1.html#cb1244-10"></a>  幾何オブジェクト関数(<span class="at">mapping =</span> <span class="fu">aes</span>(マッピング))</span></code></pre></div>
+<div class="sourceCode" id="cb1243"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1243-1"><a href="visualization1.html#cb1243-1"></a><span class="co"># ggplot2におけるプロットの基本形</span></span>
+<span id="cb1243-2"><a href="visualization1.html#cb1243-2"></a><span class="co"># データはggplotの第一引数と使う場合が多いため、「data =」は省略可能</span></span>
+<span id="cb1243-3"><a href="visualization1.html#cb1243-3"></a><span class="co"># マッピングは主に幾何オブジェクトの第一引数として使うため、「mapping =」は省略可能</span></span>
+<span id="cb1243-4"><a href="visualization1.html#cb1243-4"></a><span class="fu">ggplot</span>(<span class="at">data =</span> データ名) <span class="sc">+</span></span>
+<span id="cb1243-5"><a href="visualization1.html#cb1243-5"></a>  幾何オブジェクト関数(<span class="at">mapping =</span> <span class="fu">aes</span>(マッピング))</span>
+<span id="cb1243-6"><a href="visualization1.html#cb1243-6"></a></span>
+<span id="cb1243-7"><a href="visualization1.html#cb1243-7"></a><span class="co"># パイプを使う場合</span></span>
+<span id="cb1243-8"><a href="visualization1.html#cb1243-8"></a>データ名 <span class="sc">%&gt;%</span></span>
+<span id="cb1243-9"><a href="visualization1.html#cb1243-9"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb1243-10"><a href="visualization1.html#cb1243-10"></a>  幾何オブジェクト関数(<span class="at">mapping =</span> <span class="fu">aes</span>(マッピング))</span></code></pre></div>
 <p>注意すべき点は{ggplot2}においてレイヤーを重ねる際は<code>%&gt;%</code>でなく、<code>+</code>を使う点です。パイプ演算子は左側の結果を右に渡す意味を持ちますが、{ggplot2}はデータを渡すよりも、<strong>レイヤーを足していく</strong>イメージですから、<code>+</code>を使います。</p>
 <p>以下は{ggplot2}の必須要素であるデータと幾何オブジェクト、マッピングなどについて解説し、続いて図は見栄を調整するための関数群を紹介します。</p>
 <div id="データ" class="section level3" number="17.3.1">
@@ -981,9 +1008,9 @@ Bahrain
 <div id="幾何オブジェクト" class="section level3" number="17.3.2">
 <h3><span class="header-section-number">17.3.2</span> 幾何オブジェクト</h3>
 <p>しかし、データを指定しただけで図が出来上がるわけではありません。指定したデータを使ってどのような図を作るかも指定する必要があります。この図のタイプが幾何オブジェクト (geometry object)であり、<code>geom_*()</code>関数で表記します。たとえば、散布図を作る場合、</p>
-<div class="sourceCode" id="cb1245"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1245-1"><a href="visualization1.html#cb1245-1"></a>データ名 <span class="sc">%&gt;%</span></span>
-<span id="cb1245-2"><a href="visualization1.html#cb1245-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb1245-3"><a href="visualization1.html#cb1245-3"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb1244"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1244-1"><a href="visualization1.html#cb1244-1"></a>データ名 <span class="sc">%&gt;%</span></span>
+<span id="cb1244-2"><a href="visualization1.html#cb1244-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb1244-3"><a href="visualization1.html#cb1244-3"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
 <p>のように指定します。以上のコードは「あるデータを使って (<code>データ名 %&gt;%</code>)、キャンバスを用意し (<code>ggplot() +</code>)、散布図を作成する (<code>geom_point()</code>)。」と読むことが出来ます。</p>
 <p>また、この幾何オブジェクトは重ねることも可能です。よく見る例としては、散布図の上に回帰曲線 (<code>geom_smooth()</code>)や折れ線グラフ (<code>geom_line()</code>)を重ねたものであり、これらの幾何オブジェクトは<code>+</code>で繋ぐことが可能です。</p>
 <p>{ggplot2}が提供する幾何オブジェクト関数は散布図だけでなく、棒グラフ (<code>geom_bar()</code>)、ヒストグラム (<code>geom_histogram()</code>)、折れ線グラフ (<code>geom_line()</code>)、ヒートマップ (<code>geom_tile()</code>)など、データ分析の場面で使われるほとんどの種類が含まれています。他にもユーザーが作成した幾何オブジェクトもパッケージとして多く公開されています（たとえば、非巡回有向グラフ作成のための<a href="https://cran.r-project.org/web/packages/ggdag/index.html">{ggdag}</a>、ネットワークの可視化のための<a href="https://cran.r-project.org/web/packages/ggnetwork/index.html">{ggnetwork}</a>など）。</p>
@@ -1017,7 +1044,7 @@ Bahrain
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left;vertical-align: top !important;" rowspan="3">
+<td style="text-align:left;">
 <code>geom_line</code>
 </td>
 <td style="text-align:left;">
@@ -1032,6 +1059,9 @@ X軸
 </tr>
 <tr>
 <td style="text-align:left;">
+<code>geom_line</code>
+</td>
+<td style="text-align:left;">
 Y軸
 </td>
 <td style="text-align:left;">
@@ -1043,6 +1073,9 @@ Y軸
 </tr>
 <tr>
 <td style="text-align:left;">
+<code>geom_line</code>
+</td>
+<td style="text-align:left;">
 線の色
 </td>
 <td style="text-align:left;">
@@ -1053,7 +1086,7 @@ Y軸
 </td>
 </tr>
 <tr>
-<td style="text-align:left;vertical-align: top !important;" rowspan="3">
+<td style="text-align:left;">
 <code>geom_point</code>
 </td>
 <td style="text-align:left;">
@@ -1068,6 +1101,9 @@ X軸
 </tr>
 <tr>
 <td style="text-align:left;">
+<code>geom_point</code>
+</td>
+<td style="text-align:left;">
 Y軸
 </td>
 <td style="text-align:left;">
@@ -1078,6 +1114,9 @@ Y軸
 </td>
 </tr>
 <tr>
+<td style="text-align:left;">
+<code>geom_point</code>
+</td>
 <td style="text-align:left;">
 枠線の色
 </td>
@@ -1091,25 +1130,25 @@ Y軸
 </tbody>
 </table>
 <p>先ほどマッピング引数は幾何オブジェクト関数内で指定すると言いましたが、実は<code>ggplot()</code>内に入れ、<code>geom_*()</code>内では省略することも可能です。幾何オブジェクトが1つのみならどっちでも問題ありません。しかし、幾何オブジェクトが2つ以上の場合は注意が必要です。全ての幾何オブジェクトがマッピングを共有する場合は<code>ggplot()</code>の方が書く手間が省きます。たとえば、表<a href="visualization1.html#tab:visual1-mapping1">17.2</a>を見ると、<code>geom_line()</code>と<code>geom_point()</code>は<code>x</code>、<code>y</code>、<code>color</code>引数の値が同じですから、<code>ggplot()</code>内に<code>aes()</code>を入れることも可能です。しかし、幾何オブジェクトがマッピングを共有しない場合は幾何オブジェクト関数内に別途指定する必要があります。あるいは、共有するところだけ、<code>ggplot()</code>に書いて、共有しない部分だけ幾何オブジェクトで指定することも可能です。したがって、上の図は以下のコードでも作成することができます。</p>
-<div class="sourceCode" id="cb1246"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1246-1"><a href="visualization1.html#cb1246-1"></a><span class="co"># geom_line()とgeom_point()はマッピング情報を共有しているため、</span></span>
-<span id="cb1246-2"><a href="visualization1.html#cb1246-2"></a><span class="co"># ggplot()内に指定</span></span>
-<span id="cb1246-3"><a href="visualization1.html#cb1246-3"></a>df <span class="sc">%&gt;%</span></span>
-<span id="cb1246-4"><a href="visualization1.html#cb1246-4"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> P, <span class="at">color =</span> Company_Type1)) <span class="sc">+</span></span>
-<span id="cb1246-5"><a href="visualization1.html#cb1246-5"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb1246-6"><a href="visualization1.html#cb1246-6"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">21</span>, <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
-<span id="cb1246-7"><a href="visualization1.html#cb1246-7"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年度&quot;</span>, <span class="at">y =</span> <span class="st">&quot;平均利用者数 (人/日)&quot;</span>, <span class="at">color =</span> <span class="st">&quot;事業者区分&quot;</span>) <span class="sc">+</span></span>
-<span id="cb1246-8"><a href="visualization1.html#cb1246-8"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">2011</span><span class="sc">:</span><span class="dv">2017</span>, <span class="at">labels =</span> <span class="dv">2011</span><span class="sc">:</span><span class="dv">2017</span>) <span class="sc">+</span></span>
-<span id="cb1246-9"><a href="visualization1.html#cb1246-9"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1245"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1245-1"><a href="visualization1.html#cb1245-1"></a><span class="co"># geom_line()とgeom_point()はマッピング情報を共有しているため、</span></span>
+<span id="cb1245-2"><a href="visualization1.html#cb1245-2"></a><span class="co"># ggplot()内に指定</span></span>
+<span id="cb1245-3"><a href="visualization1.html#cb1245-3"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb1245-4"><a href="visualization1.html#cb1245-4"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> P, <span class="at">color =</span> Company_Type1)) <span class="sc">+</span></span>
+<span id="cb1245-5"><a href="visualization1.html#cb1245-5"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb1245-6"><a href="visualization1.html#cb1245-6"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">21</span>, <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1245-7"><a href="visualization1.html#cb1245-7"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;年度&quot;</span>, <span class="at">y =</span> <span class="st">&quot;平均利用者数 (人/日)&quot;</span>, <span class="at">color =</span> <span class="st">&quot;事業者区分&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1245-8"><a href="visualization1.html#cb1245-8"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">2011</span><span class="sc">:</span><span class="dv">2017</span>, <span class="at">labels =</span> <span class="dv">2011</span><span class="sc">:</span><span class="dv">2017</span>) <span class="sc">+</span></span>
+<span id="cb1245-9"><a href="visualization1.html#cb1245-9"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
 </div>
 <div id="マッピング-その他" class="section level3" number="17.3.4">
 <h3><span class="header-section-number">17.3.4</span> マッピング: その他</h3>
 <p>以上のことさえ覚えれば、とりあえず図は作れます。最後に、必須要素ではありませんが、幾何オブジェクトに使う引数について説明します。先ほど説明しました<code>color</code>や<code>linetype</code>、<code>size</code>などはマッピングの情報として使うことも可能ですが、<code>aes()</code>の外側に置くことも可能です。しかし、その挙動はかなり異なります。<code>color</code>が<code>aes()</code>の外側にある場合は、幾何オブジェクトの全要素に対して反映されます。</p>
 <p>たとえば、横軸が「ゲームのプレイ時間」、縦軸が「身長」の散布図を作成しるとします (図<a href="visualization1.html#fig:visual1-mapping2">17.7</a>)。ここで<code>color</code>引数を追加しますが、まずは<code>aes()</code>の外側に入れます。</p>
-<div class="sourceCode" id="cb1247"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1247-1"><a href="visualization1.html#cb1247-1"></a><span class="co"># 例1: 全ての点の色が赤になる</span></span>
-<span id="cb1247-2"><a href="visualization1.html#cb1247-2"></a>データ <span class="sc">%&gt;%</span></span>
-<span id="cb1247-3"><a href="visualization1.html#cb1247-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb1247-4"><a href="visualization1.html#cb1247-4"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> ゲームのプレイ時間, <span class="at">y =</span> 身長),</span>
-<span id="cb1247-5"><a href="visualization1.html#cb1247-5"></a>             <span class="at">color =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1246"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1246-1"><a href="visualization1.html#cb1246-1"></a><span class="co"># 例1: 全ての点の色が赤になる</span></span>
+<span id="cb1246-2"><a href="visualization1.html#cb1246-2"></a>データ <span class="sc">%&gt;%</span></span>
+<span id="cb1246-3"><a href="visualization1.html#cb1246-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb1246-4"><a href="visualization1.html#cb1246-4"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> ゲームのプレイ時間, <span class="at">y =</span> 身長),</span>
+<span id="cb1246-5"><a href="visualization1.html#cb1246-5"></a>             <span class="at">color =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:visual1-mapping2"></span>
 <img src="R_Not_for_Everyone_files/figure-html/visual1-mapping2-1.png" alt="`color`を`aes()`外側に置いた場合" width="768" />
 <p class="caption">
@@ -1122,10 +1161,10 @@ Y軸
 <li><code>color</code>の引数は変数名でなく、具体的な色を指定する点</li>
 </ol>
 <p>以上の2点です。<code>aes()</code>の内側に<code>color</code>を指定する場合 (図<a href="visualization1.html#fig:visual1-mapping3">17.8</a>) は、以下のように変数名を指定します。たとえば、性別ごとに異なる色を付けるとしたら、</p>
-<div class="sourceCode" id="cb1248"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1248-1"><a href="visualization1.html#cb1248-1"></a><span class="co"># 例2: 性別ごとに点の色が変わる</span></span>
-<span id="cb1248-2"><a href="visualization1.html#cb1248-2"></a>データ <span class="sc">%&gt;%</span></span>
-<span id="cb1248-3"><a href="visualization1.html#cb1248-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb1248-4"><a href="visualization1.html#cb1248-4"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> ゲームのプレイ時間, <span class="at">y =</span> 身長, <span class="at">color =</span> 性別))</span></code></pre></div>
+<div class="sourceCode" id="cb1247"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1247-1"><a href="visualization1.html#cb1247-1"></a><span class="co"># 例2: 性別ごとに点の色が変わる</span></span>
+<span id="cb1247-2"><a href="visualization1.html#cb1247-2"></a>データ <span class="sc">%&gt;%</span></span>
+<span id="cb1247-3"><a href="visualization1.html#cb1247-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb1247-4"><a href="visualization1.html#cb1247-4"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> ゲームのプレイ時間, <span class="at">y =</span> 身長, <span class="at">color =</span> 性別))</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:visual1-mapping3"></span>
 <img src="R_Not_for_Everyone_files/figure-html/visual1-mapping3-1.png" alt="`color`を`aes()`外側に置いた場合" width="768" />
 <p class="caption">
@@ -1159,19 +1198,19 @@ Y軸
 </p>
 </div>
 <p>こんな座標系を実際に使う機会は多くないかも知れませんが、極座標系は割と身近なところで見ることができます。それは積み上げ棒グラフと円グラフの関係です。図<a href="visualization1.html#fig:coord4">17.12</a>はデカルト座標系上の積み上げ棒グラフを極座標系に変換したものです。</p>
-<div class="sourceCode" id="cb1249"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1249-1"><a href="visualization1.html#cb1249-1"></a>Coord_Fig4 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;男性&quot;</span>, <span class="dv">4</span>), </span>
-<span id="cb1249-2"><a href="visualization1.html#cb1249-2"></a>                               <span class="fu">rep</span>(<span class="st">&quot;女性&quot;</span>, <span class="dv">5</span>), </span>
-<span id="cb1249-3"><a href="visualization1.html#cb1249-3"></a>                               <span class="fu">rep</span>(<span class="st">&quot;ニュータイプ&quot;</span>, <span class="dv">1</span>))) <span class="sc">%&gt;%</span></span>
-<span id="cb1249-4"><a href="visualization1.html#cb1249-4"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb1249-5"><a href="visualization1.html#cb1249-5"></a>    <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(<span class="st">&quot;&quot;</span>), <span class="at">fill =</span> <span class="fu">factor</span>(x)), <span class="at">width =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb1249-6"><a href="visualization1.html#cb1249-6"></a>    <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">&quot;性別&quot;</span>, <span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> <span class="st">&quot;人数&quot;</span>) <span class="sc">+</span></span>
-<span id="cb1249-7"><a href="visualization1.html#cb1249-7"></a>    <span class="fu">ggtitle</span>(<span class="st">&quot;直交座標系 (デカルト座標系)&quot;</span>) <span class="sc">+</span></span>
-<span id="cb1249-8"><a href="visualization1.html#cb1249-8"></a>    <span class="fu">theme_bw</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>) <span class="sc">+</span></span>
-<span id="cb1249-9"><a href="visualization1.html#cb1249-9"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span>
-<span id="cb1249-10"><a href="visualization1.html#cb1249-10"></a></span>
-<span id="cb1249-11"><a href="visualization1.html#cb1249-11"></a>Coord_Fig5 <span class="ot">&lt;-</span> Coord_Fig4 <span class="sc">+</span> </span>
-<span id="cb1249-12"><a href="visualization1.html#cb1249-12"></a>    <span class="fu">ggtitle</span>(<span class="st">&quot;極座標系&quot;</span>) <span class="sc">+</span></span>
-<span id="cb1249-13"><a href="visualization1.html#cb1249-13"></a>    <span class="fu">coord_polar</span>(<span class="at">theta =</span> <span class="st">&quot;y&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1248"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1248-1"><a href="visualization1.html#cb1248-1"></a>Coord_Fig4 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;男性&quot;</span>, <span class="dv">4</span>), </span>
+<span id="cb1248-2"><a href="visualization1.html#cb1248-2"></a>                               <span class="fu">rep</span>(<span class="st">&quot;女性&quot;</span>, <span class="dv">5</span>), </span>
+<span id="cb1248-3"><a href="visualization1.html#cb1248-3"></a>                               <span class="fu">rep</span>(<span class="st">&quot;ニュータイプ&quot;</span>, <span class="dv">1</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb1248-4"><a href="visualization1.html#cb1248-4"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb1248-5"><a href="visualization1.html#cb1248-5"></a>    <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(<span class="st">&quot;&quot;</span>), <span class="at">fill =</span> <span class="fu">factor</span>(x)), <span class="at">width =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb1248-6"><a href="visualization1.html#cb1248-6"></a>    <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">&quot;性別&quot;</span>, <span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> <span class="st">&quot;人数&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1248-7"><a href="visualization1.html#cb1248-7"></a>    <span class="fu">ggtitle</span>(<span class="st">&quot;直交座標系 (デカルト座標系)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1248-8"><a href="visualization1.html#cb1248-8"></a>    <span class="fu">theme_bw</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1248-9"><a href="visualization1.html#cb1248-9"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span>
+<span id="cb1248-10"><a href="visualization1.html#cb1248-10"></a></span>
+<span id="cb1248-11"><a href="visualization1.html#cb1248-11"></a>Coord_Fig5 <span class="ot">&lt;-</span> Coord_Fig4 <span class="sc">+</span> </span>
+<span id="cb1248-12"><a href="visualization1.html#cb1248-12"></a>    <span class="fu">ggtitle</span>(<span class="st">&quot;極座標系&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1248-13"><a href="visualization1.html#cb1248-13"></a>    <span class="fu">coord_polar</span>(<span class="at">theta =</span> <span class="st">&quot;y&quot;</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:coord4"></span>
 <img src="R_Not_for_Everyone_files/figure-html/coord4-1.png" alt="直交座標系と極座標系の比較 (2)" width="768" />
 <p class="caption">
@@ -1185,12 +1224,12 @@ Y軸
 <p>既に説明しました通り、{ggplot2}は様々な幾何オブジェクトがあり、これによってグラフ上におけるデータの示し方が変わります。例えば、散布図だとデータは点として表現され、折れ線グラフだと線、棒グラフやヒストグラムだと面で表現されます。これらの点、線、面などが持つ情報がスケール (scale)です。点だと縦軸上の位置、横軸上の位置が必ず含まれ、他にも点の形、点の大きさ、点の色、枠線の色、透明度などの情報を含むことが可能です。線も線が折れるポイントの横軸・縦軸上の位置、線の太さ、線の色などがあります。</p>
 <p>この形、色、大きさ、太さなどを調整するためには<code>scale_*_*()</code>関数群を使います。例えば、図<a href="visualization1.html#fig:visual1-mapping3">17.8</a>の場合、点は横軸上の位置、縦軸上の位置、色の3つのスケールを持っています。横軸と縦軸は連続変数 (時間と身長)、色は名目変数 (性別)です。ここで横軸のスケールを調整するためには<code>scale_x_continuous()</code>レイヤーを追加します。縦軸も同様に<code>scale_y_continuous()</code>を使います。ここの<code>x</code>と<code>y</code>はスケール、<code>continuous</code>は連続変数であることを意味します。それでは、色を調整するためにはどうすれば良いでしょうか。それは<code>scale_color_manual()</code>です。<code>color</code>は色を、<code>manual</code>は手動調整を意味しますが、主に性別や都道府県のような名目変数のスケール調整に使います。</p>
 <p>これらの<code>scale_*_*()</code>関数群は点、線、面が持つ位置情報や性別を変更することではなく、その見せ方を変更するだけです。図<a href="visualization1.html#fig:visual1-mapping3">17.8</a>の縦軸の目盛りは「150、160、170、180」となっていますが、<code>scale_y_continuous()</code>を使うとこの目盛りが変わります。点の位置が変わることはありません。たとえば、以下のコードは<code>scale_y_continuous()</code>を使って縦軸の目盛りを5cm刻みに変更するためのコードであり、図<a href="visualization1.html#fig:visual1-scale1">17.13</a>はその結果です。</p>
-<div class="sourceCode" id="cb1250"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1250-1"><a href="visualization1.html#cb1250-1"></a><span class="co"># scale_y_continuous()の例</span></span>
-<span id="cb1250-2"><a href="visualization1.html#cb1250-2"></a>データ <span class="sc">%&gt;%</span></span>
-<span id="cb1250-3"><a href="visualization1.html#cb1250-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb1250-4"><a href="visualization1.html#cb1250-4"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> ゲームのプレイ時間, <span class="at">y =</span> 身長, <span class="at">color =</span> 性別)) <span class="sc">+</span></span>
-<span id="cb1250-5"><a href="visualization1.html#cb1250-5"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">145</span>, <span class="dv">150</span>, <span class="dv">155</span>, <span class="dv">160</span>, <span class="dv">165</span>, <span class="dv">170</span>, <span class="dv">175</span>, <span class="dv">180</span>),</span>
-<span id="cb1250-6"><a href="visualization1.html#cb1250-6"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="dv">145</span>, <span class="dv">150</span>, <span class="dv">155</span>, <span class="dv">160</span>, <span class="dv">165</span>, <span class="dv">170</span>, <span class="dv">175</span>, <span class="dv">180</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb1249"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1249-1"><a href="visualization1.html#cb1249-1"></a><span class="co"># scale_y_continuous()の例</span></span>
+<span id="cb1249-2"><a href="visualization1.html#cb1249-2"></a>データ <span class="sc">%&gt;%</span></span>
+<span id="cb1249-3"><a href="visualization1.html#cb1249-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb1249-4"><a href="visualization1.html#cb1249-4"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> ゲームのプレイ時間, <span class="at">y =</span> 身長, <span class="at">color =</span> 性別)) <span class="sc">+</span></span>
+<span id="cb1249-5"><a href="visualization1.html#cb1249-5"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">145</span>, <span class="dv">150</span>, <span class="dv">155</span>, <span class="dv">160</span>, <span class="dv">165</span>, <span class="dv">170</span>, <span class="dv">175</span>, <span class="dv">180</span>),</span>
+<span id="cb1249-6"><a href="visualization1.html#cb1249-6"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="dv">145</span>, <span class="dv">150</span>, <span class="dv">155</span>, <span class="dv">160</span>, <span class="dv">165</span>, <span class="dv">170</span>, <span class="dv">175</span>, <span class="dv">180</span>))</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:visual1-scale1"></span>
 <img src="R_Not_for_Everyone_files/figure-html/visual1-scale1-1.png" alt="`scale_y_continuous()`を使って縦軸を5cm刻みに変更" width="768" />
 <p class="caption">
@@ -1198,13 +1237,13 @@ Y軸
 </p>
 </div>
 <p>また、性別ごとの色を変更する際は<code>scale_color_manual()</code>を使います（図<a href="visualization1.html#fig:visual1-scale2">17.14</a>）。</p>
-<div class="sourceCode" id="cb1251"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1251-1"><a href="visualization1.html#cb1251-1"></a><span class="co"># scale_color_manual()の例</span></span>
-<span id="cb1251-2"><a href="visualization1.html#cb1251-2"></a>データ <span class="sc">%&gt;%</span></span>
-<span id="cb1251-3"><a href="visualization1.html#cb1251-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb1251-4"><a href="visualization1.html#cb1251-4"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> ゲームのプレイ時間, <span class="at">y =</span> 身長, <span class="at">color =</span> 性別)) <span class="sc">+</span></span>
-<span id="cb1251-5"><a href="visualization1.html#cb1251-5"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">145</span>, <span class="dv">150</span>, <span class="dv">155</span>, <span class="dv">160</span>, <span class="dv">165</span>, <span class="dv">170</span>, <span class="dv">175</span>, <span class="dv">180</span>),</span>
-<span id="cb1251-6"><a href="visualization1.html#cb1251-6"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="dv">145</span>, <span class="dv">150</span>, <span class="dv">155</span>, <span class="dv">160</span>, <span class="dv">165</span>, <span class="dv">170</span>, <span class="dv">175</span>, <span class="dv">180</span>)) <span class="sc">+</span></span>
-<span id="cb1251-7"><a href="visualization1.html#cb1251-7"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;男性&quot;</span> <span class="ot">=</span> <span class="st">&quot;#ff9900&quot;</span>, <span class="st">&quot;女性&quot;</span> <span class="ot">=</span> <span class="st">&quot;#339900&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb1250"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1250-1"><a href="visualization1.html#cb1250-1"></a><span class="co"># scale_color_manual()の例</span></span>
+<span id="cb1250-2"><a href="visualization1.html#cb1250-2"></a>データ <span class="sc">%&gt;%</span></span>
+<span id="cb1250-3"><a href="visualization1.html#cb1250-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb1250-4"><a href="visualization1.html#cb1250-4"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> ゲームのプレイ時間, <span class="at">y =</span> 身長, <span class="at">color =</span> 性別)) <span class="sc">+</span></span>
+<span id="cb1250-5"><a href="visualization1.html#cb1250-5"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">145</span>, <span class="dv">150</span>, <span class="dv">155</span>, <span class="dv">160</span>, <span class="dv">165</span>, <span class="dv">170</span>, <span class="dv">175</span>, <span class="dv">180</span>),</span>
+<span id="cb1250-6"><a href="visualization1.html#cb1250-6"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="dv">145</span>, <span class="dv">150</span>, <span class="dv">155</span>, <span class="dv">160</span>, <span class="dv">165</span>, <span class="dv">170</span>, <span class="dv">175</span>, <span class="dv">180</span>)) <span class="sc">+</span></span>
+<span id="cb1250-7"><a href="visualization1.html#cb1250-7"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;男性&quot;</span> <span class="ot">=</span> <span class="st">&quot;#ff9900&quot;</span>, <span class="st">&quot;女性&quot;</span> <span class="ot">=</span> <span class="st">&quot;#339900&quot;</span>))</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:visual1-scale2"></span>
 <img src="R_Not_for_Everyone_files/figure-html/visual1-scale2-1.png" alt="さらに`scale_color_manual()`を使って色を指定" width="768" />
 <p class="caption">
@@ -1249,7 +1288,7 @@ Y軸
 </ul>
 <div id="データインク比" class="section level3" number="17.4.1">
 <h3><span class="header-section-number">17.4.1</span> データ・インク比</h3>
-<p>可視化が本格的に注目を浴びるようになったのはEdward R. Tufteの1983年著作、<em>The Visual Display of Quantitative Information</em>からですが、この本のメッセージは単純で、「<em>データ・インク比 (Data-ink ratio) を最大化せよ</em>」の一言に要約できます。データ・インク比は以下のように定義されます <span class="citation">(<a href="reference.html#ref-Tufte:2001" role="doc-biblioref">Tufte 2001</a>)</span>。</p>
+<p>可視化が本格的に注目を浴びるようになったのはEdward R. Tufteの1983年著作、<em>The Visual Display of Quantitative Information</em>からですが、この本のメッセージは単純で、「<em>データ・インク比 (Data-ink ratio) を最大化せよ</em>」の一言に要約できます。データ・インク比は以下のように定義されます <span class="citation">(<a href="#ref-Tufte:2001" role="doc-biblioref">Tufte 2001</a>)</span>。</p>
 <p><span class="math display">\[\begin{align}
 \text{Data-ink ratio} = &amp; \frac{\text{data-ink}}{\text{total ink used to print the graphic}} \\
 = &amp; \text{proportion of a graphic&#39;s ink devoted to the} \\
@@ -1273,14 +1312,14 @@ Y軸
 </p>
 </div>
 <p>こちらの方は多くの情報が失われています。アメリカや日本、韓国がどの線に該当するかが分かりません。しかし、図で示したいメッセージとは無関係でしょう。ここからもう一歩踏み込んで、「ならばインド以外の線を消せばいいじゃん」と思う方もいるかも知れません。しかし、インドの線のみ残している場合、比較対象がなくなるため、急増していることを示しにくくなります。この場合、示したい情報の損失が生じるため、インド以外の国の線はデータ・インクに含まれます。</p>
-<p>しかし、このデータ・インク比に基づく可視化は常に正しいとは言えません。そこでもう一つの例を紹介します。図<a href="visualization1.html#fig:dataink-ratio3">17.19</a>の左は <span class="citation"><a href="reference.html#ref-Kuznicki_McCutcheon:1979" role="doc-biblioref">Kuznicki and McCutcheon</a> (<a href="reference.html#ref-Kuznicki_McCutcheon:1979" role="doc-biblioref">1979</a>)</span> の論文に掲載された図であり、右はTufteによる改善案です。</p>
+<p>しかし、このデータ・インク比に基づく可視化は常に正しいとは言えません。そこでもう一つの例を紹介します。図<a href="visualization1.html#fig:dataink-ratio3">17.19</a>の左は <span class="citation"><a href="#ref-Kuznicki_McCutcheon:1979" role="doc-biblioref">Kuznicki and McCutcheon</a> (<a href="#ref-Kuznicki_McCutcheon:1979" role="doc-biblioref">1979</a>)</span> の論文に掲載された図であり、右はTufteによる改善案です。</p>
 <div class="figure" style="text-align: center"><span id="fig:dataink-ratio3"></span>
 <img src="figures/Visualization1/Dataink_ratio2.png" alt="データ・インク比改善の例" width="85%" />
 <p class="caption">
 図 17.19: データ・インク比改善の例
 </p>
 </div>
-<p>確かに棒グラフは面を使用しており、高さを示すには線のみで十分かも知れません。また、エラー・バーも線の位置を若干ずらすことによって表現できます。それでは、読者の皆さんから見て、どのグラフが見やすいと思いますか。これについて興味深い研究結果があります。<span class="citation"><a href="reference.html#ref-Inbar_et_al:2007" role="doc-biblioref">Inbar, Tractinsky, and Meyer</a> (<a href="reference.html#ref-Inbar_et_al:2007" role="doc-biblioref">2007</a>)</span> は87人の学部生を対象に3つのグループに分けました。そして、学生たちは図<a href="visualization1.html#fig:dataink-ratio4">17.20</a>を「美しさ」、「明瞭さ」、「簡潔さ」の3つの面で評価し、最後にどの図が最も好きかを尋ねました。</p>
+<p>確かに棒グラフは面を使用しており、高さを示すには線のみで十分かも知れません。また、エラー・バーも線の位置を若干ずらすことによって表現できます。それでは、読者の皆さんから見て、どのグラフが見やすいと思いますか。これについて興味深い研究結果があります。<span class="citation"><a href="#ref-Inbar_et_al:2007" role="doc-biblioref">Inbar, Tractinsky, and Meyer</a> (<a href="#ref-Inbar_et_al:2007" role="doc-biblioref">2007</a>)</span> は87人の学部生を対象に3つのグループに分けました。そして、学生たちは図<a href="visualization1.html#fig:dataink-ratio4">17.20</a>を「美しさ」、「明瞭さ」、「簡潔さ」の3つの面で評価し、最後にどの図が最も好きかを尋ねました。</p>
 <ul>
 <li><strong>グループ1:</strong> 図<a href="visualization1.html#fig:dataink-ratio4">17.20</a>のAとDを評価</li>
 <li><strong>グループ2:</strong> 図<a href="visualization1.html#fig:dataink-ratio4">17.20</a>のAとDを評価。
@@ -1292,13 +1331,13 @@ Y軸
 <div class="figure" style="text-align: center"><span id="fig:dataink-ratio4"></span>
 <img src="figures/Visualization1/Dataink_ratio3.png" alt="@Inbar_et_al:2007 から抜粋" width="65%" />
 <p class="caption">
-図 17.20: <span class="citation"><a href="reference.html#ref-Inbar_et_al:2007" role="doc-biblioref">Inbar, Tractinsky, and Meyer</a> (<a href="reference.html#ref-Inbar_et_al:2007" role="doc-biblioref">2007</a>)</span> から抜粋
+図 17.20: <span class="citation"><a href="#ref-Inbar_et_al:2007" role="doc-biblioref">Inbar, Tractinsky, and Meyer</a> (<a href="#ref-Inbar_et_al:2007" role="doc-biblioref">2007</a>)</span> から抜粋
 </p>
 </div>
 <p>皆さんもある程度は結果が予想できたかと思いますが、いずれのグループにおいても、Tufteが推奨する図<a href="visualization1.html#fig:dataink-ratio4">17.20</a>のDが「美しさ」、「明瞭さ」、「簡潔さ」のすべての点において最下位でした。また、どの図が最も好きかに対しても表<a href="visualization1.html#tab:dataink-ratio5">17.3</a>のような結果が得られました。</p>
 <table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:dataink-ratio5">表 17.3: </span><span class="citation"><a href="reference.html#ref-Inbar_et_al:2007" role="doc-biblioref">Inbar, Tractinsky, and Meyer</a> (<a href="reference.html#ref-Inbar_et_al:2007" role="doc-biblioref">2007</a>)</span> の実験結果
+<span id="tab:dataink-ratio5">表 17.3: </span><span class="citation"><a href="#ref-Inbar_et_al:2007" role="doc-biblioref">Inbar, Tractinsky, and Meyer</a> (<a href="#ref-Inbar_et_al:2007" role="doc-biblioref">2007</a>)</span> の実験結果
 </caption>
 <thead>
 <tr>
@@ -1373,7 +1412,7 @@ NA
 </tr>
 </tbody>
 </table>
-<p>図<a href="visualization1.html#fig:dataink-ratio4">17.20</a>のDはデータ・インク比の観点から見れば最も優れた図ですが、それが分かりやすさを意味するわけではありません。今は、人々の認知の観点からも図を評価するようになり、近年の可視化の教科書ではこれらに関しても詳しく触れているものが多いです。<span class="citation"><a href="reference.html#ref-Tufte:2001" role="doc-biblioref">Tufte</a> (<a href="reference.html#ref-Tufte:2001" role="doc-biblioref">2001</a>)</span> の本は可視化を勉強する人にとって必読の書かも知れませんが、これだけでは十分ではなく、近年の教科書も合わせて読むことをおすすめします。</p>
+<p>図<a href="visualization1.html#fig:dataink-ratio4">17.20</a>のDはデータ・インク比の観点から見れば最も優れた図ですが、それが分かりやすさを意味するわけではありません。今は、人々の認知の観点からも図を評価するようになり、近年の可視化の教科書ではこれらに関しても詳しく触れているものが多いです。<span class="citation"><a href="#ref-Tufte:2001" role="doc-biblioref">Tufte</a> (<a href="#ref-Tufte:2001" role="doc-biblioref">2001</a>)</span> の本は可視化を勉強する人にとって必読の書かも知れませんが、これだけでは十分ではなく、近年の教科書も合わせて読むことをおすすめします。</p>
 </div>
 <div id="次元プロット" class="section level3" number="17.4.2">
 <h3><span class="header-section-number">17.4.2</span> 3次元プロット</h3>
@@ -1424,6 +1463,21 @@ NA
 </div>
 </div>
 </div>
+<h3> 参考資料</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Inbar_et_al:2007" class="csl-entry">
+Inbar, Ohad, Noam Tractinsky, and Joachim Meyer. 2007. <span>“Minimalism in Information Visualization: Attitudes Towards Maximizing the Data-Ink Ratio.”</span> In <em>ECCE ’07: Proceedings of the 14th European Conference on Cognitive Ergonomics: Invent! Explore!</em>, 185–88.
+</div>
+<div id="ref-Kuznicki_McCutcheon:1979" class="csl-entry">
+Kuznicki, James T., and N. Bruce McCutcheon. 1979. <span>“Cross-Enhancement of the Sour Taste on Single Human Taste Papillae.”</span> <em>Journal of Experimental Psychology: General</em> 108: 68–89.
+</div>
+<div id="ref-Tufte:2001" class="csl-entry">
+Tufte, Edward R. 2001. <em>The Visual Display of Quantitative Information (2nd Ed.)</em>. Graphics Press.
+</div>
+<div id="ref-Wilkinson:2005" class="csl-entry">
+Wilkinson, Leland. 2005. <em>The Grammar of Graphics</em>. Springer.
+</div>
+</div>
 <div class="footnotes">
 <hr />
 <ol start="78">
@@ -1461,6 +1515,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
