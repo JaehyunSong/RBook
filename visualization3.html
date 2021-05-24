@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>19. 可視化[応用] | 私たちのR: ベストプラクティスの探究</title>
   <meta name="description" content="R Not for Everyone: An Esoteric Guide." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
   <meta property="og:title" content="19. 可視化[応用] | 私たちのR: ベストプラクティスの探究" />
   <meta property="og:type" content="book" />
@@ -50,11 +50,13 @@
 
 
 
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.17/datatables.js"></script>
+<script src="libs/datatables-binding-0.18/datatables.js"></script>
 <link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
 <script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
@@ -79,6 +81,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -137,6 +140,29 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 <link rel="stylesheet" href="HTML/style.css" type="text/css" />
@@ -869,9 +895,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1371-7"><a href="visualization3.html#cb1371-7"></a>                                          <span class="st">&quot;Full Democracy&quot;</span>)))</span>
 <span id="cb1371-8"><a href="visualization3.html#cb1371-8"></a></span>
 <span id="cb1371-9"><a href="visualization3.html#cb1371-9"></a>Scale_df1<span class="sc">$</span>Polity_Type</span></code></pre></div>
-<pre><code>## [1] Autocracy       Closed Anocracy Democracy      
-## [4] Full Democracy  Open Anocracy   &lt;NA&gt;           
-## 5 Levels: Autocracy &lt; Closed Anocracy &lt; ... &lt; Full Democracy</code></pre>
+<pre><code>## [1] Autocracy       Closed Anocracy Democracy       Full Democracy 
+## [5] Open Anocracy   &lt;NA&gt;           
+## 5 Levels: Autocracy &lt; Closed Anocracy &lt; Open Anocracy &lt; ... &lt; Full Democracy</code></pre>
 <p>　問題なくfactor化も出来たので、それでは作図をしてみましょう。</p>
 <div class="sourceCode" id="cb1373"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1373-1"><a href="visualization3.html#cb1373-1"></a>Scale_df1 <span class="sc">%&gt;%</span> </span>
 <span id="cb1373-2"><a href="visualization3.html#cb1373-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
@@ -916,22 +942,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-707-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>　このような書き方だとどのような色名で使えるかを事前に知っておく必要があります。使える色名のリストは<code>colors()</code>から確認できます。全部で657種類がありますが、ここでは最初の50個のみを出力します。</p>
 <div class="sourceCode" id="cb1377"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1377-1"><a href="visualization3.html#cb1377-1"></a><span class="fu">head</span>(<span class="fu">colors</span>(), <span class="dv">50</span>)</span></code></pre></div>
-<pre><code>##  [1] &quot;white&quot;          &quot;aliceblue&quot;      &quot;antiquewhite&quot;  
-##  [4] &quot;antiquewhite1&quot;  &quot;antiquewhite2&quot;  &quot;antiquewhite3&quot; 
-##  [7] &quot;antiquewhite4&quot;  &quot;aquamarine&quot;     &quot;aquamarine1&quot;   
-## [10] &quot;aquamarine2&quot;    &quot;aquamarine3&quot;    &quot;aquamarine4&quot;   
-## [13] &quot;azure&quot;          &quot;azure1&quot;         &quot;azure2&quot;        
-## [16] &quot;azure3&quot;         &quot;azure4&quot;         &quot;beige&quot;         
-## [19] &quot;bisque&quot;         &quot;bisque1&quot;        &quot;bisque2&quot;       
-## [22] &quot;bisque3&quot;        &quot;bisque4&quot;        &quot;black&quot;         
-## [25] &quot;blanchedalmond&quot; &quot;blue&quot;           &quot;blue1&quot;         
-## [28] &quot;blue2&quot;          &quot;blue3&quot;          &quot;blue4&quot;         
-## [31] &quot;blueviolet&quot;     &quot;brown&quot;          &quot;brown1&quot;        
-## [34] &quot;brown2&quot;         &quot;brown3&quot;         &quot;brown4&quot;        
-## [37] &quot;burlywood&quot;      &quot;burlywood1&quot;     &quot;burlywood2&quot;    
-## [40] &quot;burlywood3&quot;     &quot;burlywood4&quot;     &quot;cadetblue&quot;     
-## [43] &quot;cadetblue1&quot;     &quot;cadetblue2&quot;     &quot;cadetblue3&quot;    
-## [46] &quot;cadetblue4&quot;     &quot;chartreuse&quot;     &quot;chartreuse1&quot;   
+<pre><code>##  [1] &quot;white&quot;          &quot;aliceblue&quot;      &quot;antiquewhite&quot;   &quot;antiquewhite1&quot; 
+##  [5] &quot;antiquewhite2&quot;  &quot;antiquewhite3&quot;  &quot;antiquewhite4&quot;  &quot;aquamarine&quot;    
+##  [9] &quot;aquamarine1&quot;    &quot;aquamarine2&quot;    &quot;aquamarine3&quot;    &quot;aquamarine4&quot;   
+## [13] &quot;azure&quot;          &quot;azure1&quot;         &quot;azure2&quot;         &quot;azure3&quot;        
+## [17] &quot;azure4&quot;         &quot;beige&quot;          &quot;bisque&quot;         &quot;bisque1&quot;       
+## [21] &quot;bisque2&quot;        &quot;bisque3&quot;        &quot;bisque4&quot;        &quot;black&quot;         
+## [25] &quot;blanchedalmond&quot; &quot;blue&quot;           &quot;blue1&quot;          &quot;blue2&quot;         
+## [29] &quot;blue3&quot;          &quot;blue4&quot;          &quot;blueviolet&quot;     &quot;brown&quot;         
+## [33] &quot;brown1&quot;         &quot;brown2&quot;         &quot;brown3&quot;         &quot;brown4&quot;        
+## [37] &quot;burlywood&quot;      &quot;burlywood1&quot;     &quot;burlywood2&quot;     &quot;burlywood3&quot;    
+## [41] &quot;burlywood4&quot;     &quot;cadetblue&quot;      &quot;cadetblue1&quot;     &quot;cadetblue2&quot;    
+## [45] &quot;cadetblue3&quot;     &quot;cadetblue4&quot;     &quot;chartreuse&quot;     &quot;chartreuse1&quot;   
 ## [49] &quot;chartreuse2&quot;    &quot;chartreuse3&quot;</code></pre>
 <p><code>scale_x_gradient()</code>から派生した関数として<code>scale_x_gradient2()</code>というものもあります。これは最小値と最大値だけでなく、<code>mid</code>引数を使って中間における色も指定可能な関数です。例えば、先ほどの例で真ん中を<span style="color:#00AC97;font-weight:bold;">seagreen</span>にしてみましょう。</p>
 <div class="sourceCode" id="cb1379"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1379-1"><a href="visualization3.html#cb1379-1"></a>Scale_Fig2 <span class="sc">+</span></span>
@@ -1463,6 +1485,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {

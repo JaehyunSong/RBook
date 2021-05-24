@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>12. 関数の自作 | 私たちのR: ベストプラクティスの探究</title>
   <meta name="description" content="R Not for Everyone: An Esoteric Guide." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
   <meta property="og:title" content="12. 関数の自作 | 私たちのR: ベストプラクティスの探究" />
   <meta property="og:type" content="book" />
@@ -50,11 +50,13 @@
 
 
 
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.17/datatables.js"></script>
+<script src="libs/datatables-binding-0.18/datatables.js"></script>
 <link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
 <script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
@@ -79,6 +81,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -137,6 +140,29 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 <link rel="stylesheet" href="HTML/style.css" type="text/css" />
@@ -640,7 +666,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">12.</span> 関数の自作</h1>
 <div id="func-intro" class="section level2" number="12.1">
 <h2><span class="header-section-number">12.1</span> 関数の作成</h2>
-<p>　これまで<code>class()</code>や、<code>sum()</code>、<code>print()</code>など、様々な<strong>関数 (functions)</strong> を使ってきた。「Rで起こるあらゆることは関数の呼び出しである (Everything that happens in R is a function call)」(<span class="citation"><a href="reference.html#ref-Chambers:2016" role="doc-biblioref">Chambers</a> (<a href="reference.html#ref-Chambers:2016" role="doc-biblioref">2016, 4</a>)</span>) と言われるように、「Rを使う」ということは、「Rの関数を使う」ということである。</p>
+<p>　これまで<code>class()</code>や、<code>sum()</code>、<code>print()</code>など、様々な<strong>関数 (functions)</strong> を使ってきた。「Rで起こるあらゆることは関数の呼び出しである (Everything that happens in R is a function call)」(<span class="citation"><a href="#ref-Chambers:2016" role="doc-biblioref">Chambers</a> (<a href="#ref-Chambers:2016" role="doc-biblioref">2016, 4</a>)</span>) と言われるように、「Rを使う」ということは、「Rの関数を使う」ということである。</p>
 <p>　関数は<code>関数名()</code> ように括弧とセットで表記されることが多い。1つの関数でも、括弧の中に異なる引数を指定することで、さまざまな結果を出すことができる。例として、第<a href="rbasic.html#rbasic">7</a>章でも説明した<code>seq()</code>関数について考えてみよう。この関数を使うと、一連の数字からなるベクトルを作ることができる。<code>from</code> で数列の初項を、<code>to</code> で数列の最終項を指定し、<code>by</code> で要素間の差（第2要素は第1要素に <code>by</code> を加えた値になる ）を指定するか、<code>length.out</code> で最終的にできるベクトルの要素の数を指定する。</p>
 <p>　
 　
@@ -724,8 +750,8 @@ Rでは、1つの関数で使う引数の数が複数あることが多いので
 <pre><code>## [1] 11</code></pre>
 <p>ただし、順番を逆にすると、以下のようにわけのわからない結果が返されます。</p>
 <div class="sourceCode" id="cb745"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb745-1"><a href="functions.html#cb745-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mySum</span>(<span class="cn">TRUE</span>, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="cn">NA</span>, <span class="dv">5</span>))</span></code></pre></div>
-<pre><code>## Warning in if (na.rm == TRUE) {: 条件が長さが 2 以上なので、最初の
-## 1 つだけが使われます</code></pre>
+<pre><code>## Warning in if (na.rm == TRUE) {: the condition has length &gt; 1 and only the first
+## element will be used</code></pre>
 <pre><code>## [1] 1</code></pre>
 <p>任意の順番で引数を指定する場合、引数名を指定する必要があります。</p>
 <div class="sourceCode" id="cb748"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb748-1"><a href="functions.html#cb748-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mySum</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="cn">NA</span>, <span class="dv">5</span>))</span></code></pre></div>
@@ -955,10 +981,10 @@ X_{n+1} = (aX_n + c) \text{ mod } m
 <p>それでは、<code>seed</code>を<a href="https://www.jaysong.net">19861008</a>とした疑似乱数10000個を生成し、<code>LCG_Numbers</code>という名のベクトルに格納してみましょう。結果を全て表示させるのは無理があるので、最初の20個のみを確認してみます。</p>
 <div class="sourceCode" id="cb763"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb763-1"><a href="functions.html#cb763-1" aria-hidden="true" tabindex="-1"></a>LCG_Numbers <span class="ot">&lt;-</span> <span class="fu">LCG</span>(<span class="dv">10000</span>, <span class="dv">19861008</span>)</span>
 <span id="cb763-2"><a href="functions.html#cb763-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(LCG_Numbers, <span class="dv">20</span>)</span></code></pre></div>
-<pre><code>##  [1] 0.58848246 0.09900449 0.21707060 0.89462981 0.23421890
-##  [6] 0.72341249 0.55965400 0.59552685 0.96594972 0.69050965
-## [11] 0.98383344 0.20136551 0.25856502 0.37569497 0.50086451
-## [16] 0.03986446 0.89291806 0.24760102 0.27912510 0.24493750</code></pre>
+<pre><code>##  [1] 0.58848246 0.09900449 0.21707060 0.89462981 0.23421890 0.72341249
+##  [7] 0.55965400 0.59552685 0.96594972 0.69050965 0.98383344 0.20136551
+## [13] 0.25856502 0.37569497 0.50086451 0.03986446 0.89291806 0.24760102
+## [19] 0.27912510 0.24493750</code></pre>
 <p>正直、これが乱数かどうかは見るだけでは分かりませんね。簡単な確認方法としては、これらの乱数列のヒストグラムを見れば分かります。得られた数列が本当に乱数(に近いもの)なら、その分布は一様分布に従っているからです。ただし、一様分布に従っていることが乱数を意味するものではありません。</p>
 <p>可視化については第<a href="visualization1.html#visualization1">17</a>章以降で解説しますが、ここでは簡単に<code>hist()</code>関数を使ってみましょう。必要な引数はnumeric型のベクトルのみです。以下のコードにある<code>xlab =</code>などはラベルを指定する引数ですが、省略しても構いません。</p>
 <div class="sourceCode" id="cb765"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb765-1"><a href="functions.html#cb765-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(LCG_Numbers, <span class="at">xlab =</span> <span class="st">&quot;乱数&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;度数&quot;</span>, </span>
@@ -1046,6 +1072,12 @@ X_{n+1} = (aX_n + c) \text{ mod } m
 
 </div>
 </div>
+<h3> 参考資料</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Chambers:2016" class="csl-entry">
+Chambers, John M. 2016. <em>Extending r</em>. Boca Raton, FL: CRC Press.
+</div>
+</div>
 <div class="footnotes">
 <hr />
 <ol start="61">
@@ -1085,6 +1117,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {

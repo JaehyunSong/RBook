@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>10. データの構造 | 私たちのR: ベストプラクティスの探究</title>
   <meta name="description" content="R Not for Everyone: An Esoteric Guide." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
   <meta property="og:title" content="10. データの構造 | 私たちのR: ベストプラクティスの探究" />
   <meta property="og:type" content="book" />
@@ -50,11 +50,13 @@
 
 
 
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.17/datatables.js"></script>
+<script src="libs/datatables-binding-0.18/datatables.js"></script>
 <link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
 <script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
@@ -79,6 +81,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -137,6 +140,29 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 <link rel="stylesheet" href="HTML/style.css" type="text/css" />
@@ -722,8 +748,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb346"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb346-1"><a href="datastructure.html#cb346-1" aria-hidden="true" tabindex="-1"></a>(myVec5 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>))</span></code></pre></div>
 <pre><code>## [1]  1 10</code></pre>
 <div class="sourceCode" id="cb348"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb348-1"><a href="datastructure.html#cb348-1" aria-hidden="true" tabindex="-1"></a>(myVec6 <span class="ot">&lt;-</span> myVec2 <span class="sc">+</span> myVec5)</span></code></pre></div>
-<pre><code>## Warning in myVec2 + myVec5: 長いオブジェクトの長さが短いオブジェク
-## トの長さの倍数になっていません</code></pre>
+<pre><code>## Warning in myVec2 + myVec5: longer object length is not a multiple of shorter
+## object length</code></pre>
 <pre><code>## [1]  2 13  6 16  8</code></pre>
 <p>警告メッセージは表示されますが、計算自体はできます。同じ長さのベクトル同士なら、同じ位置の要素同士の計算になりますが、この場合は、短い方のベクトルを繰り返すことにより、長さを合わせることになります。<code>myVec5</code>の例だと、<code>c(1, 10, 1, 10, 1)</code>のように扱われます。具体的には以下の表のような関係となります。</p>
 <table>
@@ -921,7 +947,7 @@ A = \left[
 ## [2,]    5    9    7
 ## [3,]    6   12    8</code></pre>
 <div class="sourceCode" id="cb398"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb398-1"><a href="datastructure.html#cb398-1" aria-hidden="true" tabindex="-1"></a>A <span class="sc">+</span> C</span></code></pre></div>
-<pre><code>## Error in A + C:  適切な配列ではありません</code></pre>
+<pre><code>## Error in A + C: non-conformable arrays</code></pre>
 <p>このように足し算ができなくなり、これは引き算でも同じです。</p>
 <p><strong>行列の掛け算</strong></p>
 <p>やや特殊なのは行列の掛け算です。行列<code>A</code>の全要素を2倍にしたい場合、これは足し算・引き算と同じやり方で十分です。</p>
@@ -1417,125 +1443,77 @@ myDF4[5, ]  &lt;- Hakiai_Data</code></pre>
 <pre><code>## [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
 <p>全く同じデータですが、<code>VoteDF2</code>には<code>tbl</code>と<code>tbl_df</code>というクラスが追加されていることが分かります。それではデータの中身を覗いてみましょう。まずは、<code>data.frame</code>型から</p>
 <div class="sourceCode" id="cb488"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb488-1"><a href="datastructure.html#cb488-1" aria-hidden="true" tabindex="-1"></a>VoteDF1</span></code></pre></div>
-<pre><code>##    ID     Pref  Zaisei Over65 Under30   LDP   DPJ Komei Ishin
-## 1   1   北海道 0.41903  29.09   24.70 32.82 30.62 13.41  3.43
-## 2   2   青森県 0.33190  30.14   23.92 40.44 24.61 12.76  3.82
-## 3   3   岩手県 0.34116  30.38   24.48 34.90 22.44  8.61  5.16
-## 4   4   宮城県 0.59597  25.75   27.29 36.68 25.40 13.42  3.97
-## 5   5   秋田県 0.29862  33.84   21.35 43.46 22.72 11.19  5.17
-## 6   6   山形県 0.34237  30.76   24.75 42.49 21.47 11.78  4.30
-## 7   7   福島県 0.50947  28.68   25.23 33.82 28.31 10.96  3.43
-## 8   8   茨城県 0.63309  26.76   26.60 40.64 18.95 15.05  6.67
-## 9   9   栃木県 0.62166  25.87   26.78 38.78 21.63 12.42 10.88
-## 10 10   群馬県 0.60277  27.60   26.59 42.06 19.31 13.85  5.61
-## 11 11   埼玉県 0.76548  24.82   27.66 32.30 20.40 16.00  7.23
-## 12 12   千葉県 0.77694  25.86   26.71 37.79 21.70 13.98  5.46
-## 13 13   東京都 1.00321  22.67   27.39 34.37 19.76 11.44  7.34
-## 14 14 神奈川県 0.91745  23.86   27.84 34.92 21.49 12.18  7.77
-## 15 15   新潟県 0.43519  29.86   25.23 43.66 25.25  8.27  4.39
-## 16 16   富山県 0.45307  30.54   24.88 44.16 24.22  9.81  5.06
-## 17 17   石川県 0.46812  27.87   27.25 48.09 18.54 11.00  6.36
-## 18 18   福井県 0.37820  28.63   26.70 45.29 17.52 10.91 13.09
-## 19 19   山梨県 0.37876  28.41   26.37 37.36 28.04 12.83  4.32
-## 20 20   長野県 0.47586  30.06   25.52 35.27 27.69 10.70  4.23
-## 21 21   岐阜県 0.52358  28.10   27.22 39.71 23.62 12.33  5.51
-## 22 22   静岡県 0.70999  27.79   26.28 37.47 24.13 12.68  7.99
-## 23 23   愛知県 0.92052  23.79   29.44 34.32 29.27 11.67  6.41
-## 24 24   三重県 0.57544  27.90   26.74 33.67 34.23 13.07  5.09
-## 25 25   滋賀県 0.53932  24.15   29.96 37.85 22.25  9.57 12.82
-## 26 26   京都府 0.56713  27.51   27.76 31.18 19.93 12.25 11.16
-## 27 27   大阪府 0.74980  26.15   27.55 22.12  9.30 16.39 34.86
-## 28 28   兵庫県 0.62062  27.09   26.94 31.71 15.84 15.37 19.50
-## 29 29   奈良県 0.41269  28.70   26.86 33.51 18.41 13.44 18.94
-## 30 30 和歌山県 0.31955  30.89   25.08 39.61 12.10 18.00 13.51
-## 31 31   鳥取県 0.25486  29.71   25.86 41.62 20.93 16.71  5.98
-## 32 32   島根県 0.24170  32.48   24.59 48.24 19.14 13.43  4.75
-## 33 33   岡山県 0.50096  28.66   27.44 37.87 19.91 17.18 10.67
-## 34 34   広島県 0.58581  27.53   27.46 39.93 18.53 15.20  9.69
-## 35 35   山口県 0.42560  32.07   24.91 46.75 17.27 16.50  5.31
-## 36 36   徳島県 0.32018  30.95   24.31 38.44 17.72 16.87  9.46
-## 37 37   香川県 0.46060  29.93   25.29 44.07 16.60 15.14  6.20
-## 38 38   愛媛県 0.41181  30.62   24.75 43.57 19.28 14.82  6.77
-## 39 39   高知県 0.24472  32.85   23.60 37.01 16.95 15.83  3.93
-## 40 40   福岡県 0.61836  25.90   28.21 36.52 19.08 17.15  7.03
-## 41 41   佐賀県 0.32938  27.68   27.97 43.53 21.10 15.48  4.85
-## 42 42   長崎県 0.31562  29.60   25.84 41.70 20.68 16.86  5.12
-## 43 43   熊本県 0.38688  28.78   27.18 46.54 19.29 15.27  4.53
-## 44 44   大分県 0.35828  30.45   25.65 39.44 18.37 13.26  4.42
-## 45 45   宮崎県 0.32034  29.49   26.26 40.11 14.50 17.11  5.74
-## 46 46 鹿児島県 0.32140  29.43   26.04 45.97 16.19 14.49  6.47
-## 47 47   沖縄県 0.31535  19.63   33.37 27.82 13.29 15.09  7.66
-##      JCP   SDP
-## 1  11.44  1.68
-## 2   8.92  3.41
-## 3  11.24  5.29
-## 4   9.99  3.62
-## 5   7.56  5.12
-## 6   7.60  5.20
-## 7  10.45  3.24
-## 8  10.07  2.88
-## 9   7.00  2.05
-## 10 10.00  2.44
-## 11 13.94  1.91
-## 12 11.34  2.01
-## 13 14.21  2.82
-## 14 12.46  2.79
-## 15  8.00  3.76
-## 16  5.79  5.02
-## 17  7.07  2.36
-## 18  5.66  2.09
-## 19  9.20  1.67
-## 20 12.61  3.59
-## 21  9.41  1.98
-## 22  9.59  2.22
-## 23  9.55  2.14
-## 24  7.59  1.76
-## 25 11.44  1.41
-## 26 18.50  1.55
-## 27 11.37  1.25
-## 28 10.30  2.01
-## 29  9.17  1.66
-## 30 10.43  1.23
-## 31  7.14  2.56
-## 32  7.50  2.51
-## 33  7.87  1.60
-## 34  8.52  2.35
-## 35  7.39  1.78
-## 36  9.10  1.81
-## 37  7.56  5.07
-## 38  6.97  2.40
-## 39 17.41  2.91
-## 40 10.78  3.33
-## 41  5.67  4.16
-## 42  6.27  3.48
-## 43  6.32  2.60
-## 44  6.85 13.05
-## 45  7.27  6.81
-## 46  6.52  3.62
-## 47 15.64 12.13</code></pre>
+<pre><code>##    ID     Pref  Zaisei Over65 Under30   LDP   DPJ Komei Ishin   JCP   SDP
+## 1   1   北海道 0.41903  29.09   24.70 32.82 30.62 13.41  3.43 11.44  1.68
+## 2   2   青森県 0.33190  30.14   23.92 40.44 24.61 12.76  3.82  8.92  3.41
+## 3   3   岩手県 0.34116  30.38   24.48 34.90 22.44  8.61  5.16 11.24  5.29
+## 4   4   宮城県 0.59597  25.75   27.29 36.68 25.40 13.42  3.97  9.99  3.62
+## 5   5   秋田県 0.29862  33.84   21.35 43.46 22.72 11.19  5.17  7.56  5.12
+## 6   6   山形県 0.34237  30.76   24.75 42.49 21.47 11.78  4.30  7.60  5.20
+## 7   7   福島県 0.50947  28.68   25.23 33.82 28.31 10.96  3.43 10.45  3.24
+## 8   8   茨城県 0.63309  26.76   26.60 40.64 18.95 15.05  6.67 10.07  2.88
+## 9   9   栃木県 0.62166  25.87   26.78 38.78 21.63 12.42 10.88  7.00  2.05
+## 10 10   群馬県 0.60277  27.60   26.59 42.06 19.31 13.85  5.61 10.00  2.44
+## 11 11   埼玉県 0.76548  24.82   27.66 32.30 20.40 16.00  7.23 13.94  1.91
+## 12 12   千葉県 0.77694  25.86   26.71 37.79 21.70 13.98  5.46 11.34  2.01
+## 13 13   東京都 1.00321  22.67   27.39 34.37 19.76 11.44  7.34 14.21  2.82
+## 14 14 神奈川県 0.91745  23.86   27.84 34.92 21.49 12.18  7.77 12.46  2.79
+## 15 15   新潟県 0.43519  29.86   25.23 43.66 25.25  8.27  4.39  8.00  3.76
+## 16 16   富山県 0.45307  30.54   24.88 44.16 24.22  9.81  5.06  5.79  5.02
+## 17 17   石川県 0.46812  27.87   27.25 48.09 18.54 11.00  6.36  7.07  2.36
+## 18 18   福井県 0.37820  28.63   26.70 45.29 17.52 10.91 13.09  5.66  2.09
+## 19 19   山梨県 0.37876  28.41   26.37 37.36 28.04 12.83  4.32  9.20  1.67
+## 20 20   長野県 0.47586  30.06   25.52 35.27 27.69 10.70  4.23 12.61  3.59
+## 21 21   岐阜県 0.52358  28.10   27.22 39.71 23.62 12.33  5.51  9.41  1.98
+## 22 22   静岡県 0.70999  27.79   26.28 37.47 24.13 12.68  7.99  9.59  2.22
+## 23 23   愛知県 0.92052  23.79   29.44 34.32 29.27 11.67  6.41  9.55  2.14
+## 24 24   三重県 0.57544  27.90   26.74 33.67 34.23 13.07  5.09  7.59  1.76
+## 25 25   滋賀県 0.53932  24.15   29.96 37.85 22.25  9.57 12.82 11.44  1.41
+## 26 26   京都府 0.56713  27.51   27.76 31.18 19.93 12.25 11.16 18.50  1.55
+## 27 27   大阪府 0.74980  26.15   27.55 22.12  9.30 16.39 34.86 11.37  1.25
+## 28 28   兵庫県 0.62062  27.09   26.94 31.71 15.84 15.37 19.50 10.30  2.01
+## 29 29   奈良県 0.41269  28.70   26.86 33.51 18.41 13.44 18.94  9.17  1.66
+## 30 30 和歌山県 0.31955  30.89   25.08 39.61 12.10 18.00 13.51 10.43  1.23
+## 31 31   鳥取県 0.25486  29.71   25.86 41.62 20.93 16.71  5.98  7.14  2.56
+## 32 32   島根県 0.24170  32.48   24.59 48.24 19.14 13.43  4.75  7.50  2.51
+## 33 33   岡山県 0.50096  28.66   27.44 37.87 19.91 17.18 10.67  7.87  1.60
+## 34 34   広島県 0.58581  27.53   27.46 39.93 18.53 15.20  9.69  8.52  2.35
+## 35 35   山口県 0.42560  32.07   24.91 46.75 17.27 16.50  5.31  7.39  1.78
+## 36 36   徳島県 0.32018  30.95   24.31 38.44 17.72 16.87  9.46  9.10  1.81
+## 37 37   香川県 0.46060  29.93   25.29 44.07 16.60 15.14  6.20  7.56  5.07
+## 38 38   愛媛県 0.41181  30.62   24.75 43.57 19.28 14.82  6.77  6.97  2.40
+## 39 39   高知県 0.24472  32.85   23.60 37.01 16.95 15.83  3.93 17.41  2.91
+## 40 40   福岡県 0.61836  25.90   28.21 36.52 19.08 17.15  7.03 10.78  3.33
+## 41 41   佐賀県 0.32938  27.68   27.97 43.53 21.10 15.48  4.85  5.67  4.16
+## 42 42   長崎県 0.31562  29.60   25.84 41.70 20.68 16.86  5.12  6.27  3.48
+## 43 43   熊本県 0.38688  28.78   27.18 46.54 19.29 15.27  4.53  6.32  2.60
+## 44 44   大分県 0.35828  30.45   25.65 39.44 18.37 13.26  4.42  6.85 13.05
+## 45 45   宮崎県 0.32034  29.49   26.26 40.11 14.50 17.11  5.74  7.27  6.81
+## 46 46 鹿児島県 0.32140  29.43   26.04 45.97 16.19 14.49  6.47  6.52  3.62
+## 47 47   沖縄県 0.31535  19.63   33.37 27.82 13.29 15.09  7.66 15.64 12.13</code></pre>
 <p>つづいて、<code>tibble</code>型</p>
 <div class="sourceCode" id="cb490"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb490-1"><a href="datastructure.html#cb490-1" aria-hidden="true" tabindex="-1"></a>VoteDF2</span></code></pre></div>
 <pre><code>## # A tibble: 47 x 11
-##       ID Pref  Zaisei Over65 Under30   LDP   DPJ Komei Ishin   JCP
-##    &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1     1 北海道…  0.419   29.1    24.7  32.8  30.6 13.4   3.43 11.4 
-##  2     2 青森県…  0.332   30.1    23.9  40.4  24.6 12.8   3.82  8.92
-##  3     3 岩手県…  0.341   30.4    24.5  34.9  22.4  8.61  5.16 11.2 
-##  4     4 宮城県…  0.596   25.8    27.3  36.7  25.4 13.4   3.97  9.99
-##  5     5 秋田県…  0.299   33.8    21.4  43.5  22.7 11.2   5.17  7.56
-##  6     6 山形県…  0.342   30.8    24.8  42.5  21.5 11.8   4.3   7.6 
-##  7     7 福島県…  0.509   28.7    25.2  33.8  28.3 11.0   3.43 10.4 
-##  8     8 茨城県…  0.633   26.8    26.6  40.6  19.0 15.0   6.67 10.1 
-##  9     9 栃木県…  0.622   25.9    26.8  38.8  21.6 12.4  10.9   7   
-## 10    10 群馬県…  0.603   27.6    26.6  42.1  19.3 13.8   5.61 10   
-## # … with 37 more rows, and 1 more variable: SDP &lt;dbl&gt;</code></pre>
+##       ID Pref   Zaisei Over65 Under30   LDP   DPJ Komei Ishin   JCP   SDP
+##    &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1     1 北海道  0.419   29.1    24.7  32.8  30.6 13.4   3.43 11.4   1.68
+##  2     2 青森県  0.332   30.1    23.9  40.4  24.6 12.8   3.82  8.92  3.41
+##  3     3 岩手県  0.341   30.4    24.5  34.9  22.4  8.61  5.16 11.2   5.29
+##  4     4 宮城県  0.596   25.8    27.3  36.7  25.4 13.4   3.97  9.99  3.62
+##  5     5 秋田県  0.299   33.8    21.4  43.5  22.7 11.2   5.17  7.56  5.12
+##  6     6 山形県  0.342   30.8    24.8  42.5  21.5 11.8   4.3   7.6   5.2 
+##  7     7 福島県  0.509   28.7    25.2  33.8  28.3 11.0   3.43 10.4   3.24
+##  8     8 茨城県  0.633   26.8    26.6  40.6  19.0 15.0   6.67 10.1   2.88
+##  9     9 栃木県  0.622   25.9    26.8  38.8  21.6 12.4  10.9   7     2.05
+## 10    10 群馬県  0.603   27.6    26.6  42.1  19.3 13.8   5.61 10     2.44
+## # … with 37 more rows</code></pre>
 <p>同じデータですが、表示画面がやや異なります。<code>data.frame</code>は全ての列と行が表示されましたが、<code>tibble</code>の場合、「画面に収まる」程度しか表示されません。表示されなかった行や列に関しては最後に表示されています。たとえば、<code>VoteDF2</code>の場合、下段にこのように書かれていますね (画面の大きさによって変わります)。</p>
 <pre><code>## # … with 37 more rows, and 1 more variable: SDP &lt;dbl&gt;</code></pre>
 <p>これは表示されなかった行が37行あり、<code>SDP</code>という変数も表示されていないということです。他の違いとしては、<code>tibble</code>の場合、最初にデータのサイズ (47行11列)が、各変数名の下にデータ型 (<code>&lt;int&gt;</code>、<code>&lt;chr&gt;</code>、<code>&lt;dbl&gt;</code>など)が表示されるという点です。</p>
 <p>本書は<code>tibble</code>と<code>data.frame</code>を区別して解説はしませんが、一部の章・節においては<code>tibble</code>を念頭において解説をします。<code>tibble</code>型の作り方は先ほどのように<code>as_tibble()</code>使う方法もありますが、<code>readr::read_csv()</code>を使う方法もあります<a href="#fn44" class="footnote-ref" id="fnref44"><sup>44</sup></a>。<code>read_csv()</code>を使うと各列がどのようなデータ型として読み込まれたかも表示されるので便利です。<code>readr</code>パッケージはtidyverseに含まれているため、普段では以下のような使い方で十分です。</p>
 <div class="sourceCode" id="cb493"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb493-1"><a href="datastructure.html#cb493-1" aria-hidden="true" tabindex="-1"></a>VoteDF3 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;Data/Vote.csv&quot;</span>)</span></code></pre></div>
 <pre><code>## 
-## ─ Column specification ─────────────────────
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   ID = col_double(),
 ##   Pref = col_character(),
@@ -1670,7 +1648,7 @@ myDF4[5, ]  &lt;- Hakiai_Data</code></pre>
 <pre><code>## [1] &quot;list&quot;</code></pre>
 <p><code>[]</code>で抽出したリストの要素のデータ構造もまたリスト型です。この場合、先ほどのように<code>[x, ]</code>を使って、<code>x</code>行目のデータを抽出することはできません。なぜなら、<code>[行, 列]</code>による要素の抽出はデータフレームのためのものであって、リスト型のためのものではないからです。</p>
 <div class="sourceCode" id="cb514"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb514-1"><a href="datastructure.html#cb514-1" aria-hidden="true" tabindex="-1"></a>List1[<span class="dv">1</span>][<span class="dv">3</span>, ]</span></code></pre></div>
-<pre><code>## Error in List1[1][3, ]:  次元数が正しくありません</code></pre>
+<pre><code>## Error in List1[1][3, ]: incorrect number of dimensions</code></pre>
 <p>このようにエラーが表示されます。</p>
 <p><strong>要素の名前を利用する方法</strong></p>
 <p><code>List2</code>のようにリストの要素に名前を付けた場合、これまでの方法に加え<code>[["要素名"]]</code>と<code>$要素名</code>を使った操作が可能です<a href="#fn46" class="footnote-ref" id="fnref46"><sup>46</sup></a>。<code>List2</code>から男子ランキング (<code>Men</code>)を抽出してみましょう。</p>
@@ -1736,24 +1714,24 @@ myDF4[5, ]  &lt;- Hakiai_Data</code></pre>
 <p><code>sample()</code>関数は初めてですね。これは与えられたベクトルの要素から無作為に要素を抽出する関数です。<code>sample(1:12, n)</code>なら<code>c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,1 2)</code>から無作為に<code>n</code>個の要素を抽出するという意味です。<code>replace = TRUE</code>を指定すると、反復抽出、つまり、一回抽出された要素であっても抽出される可能性があることを意味します。デフォルトは<code>FALSE</code>ですが、この場合、一旦抽出された要素は二度と抽出されません。それではそれぞれの行列の中身を見てみましょう。</p>
 <div class="sourceCode" id="cb529"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb529-1"><a href="datastructure.html#cb529-1" aria-hidden="true" tabindex="-1"></a>Mat1</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]   12    5   10    2
-## [2,]    9   11    1    5
-## [3,]    2    5    3    7</code></pre>
+## [1,]   11   12   12    5
+## [2,]   11    2   12    2
+## [3,]   10   11    2    7</code></pre>
 <div class="sourceCode" id="cb531"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb531-1"><a href="datastructure.html#cb531-1" aria-hidden="true" tabindex="-1"></a>Mat2</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]    4   11    7    6
-## [2,]    7    4   12   10
-## [3,]    4    7    3   12</code></pre>
+## [1,]    1    5    8    2
+## [2,]    4    8    8    1
+## [3,]    3   12    1    3</code></pre>
 <div class="sourceCode" id="cb533"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb533-1"><a href="datastructure.html#cb533-1" aria-hidden="true" tabindex="-1"></a>Mat3</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]   11   11    2   11
-## [2,]    6    6    7    1
-## [3,]   10   11    3    7</code></pre>
+## [1,]   10   10    2    2
+## [2,]    4    3    7   12
+## [3,]    5    6   11   12</code></pre>
 <div class="sourceCode" id="cb535"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb535-1"><a href="datastructure.html#cb535-1" aria-hidden="true" tabindex="-1"></a>Mat4</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]    3    2    7   10
-## [2,]    5   11    7   11
-## [3,]    1   10    8    3</code></pre>
+## [1,]    2    2    7    9
+## [2,]    1   12    6    1
+## [3,]   10   12    6    4</code></pre>
 <p>配列型データを作成するには<code>array()</code>関数を使います。引数としては行列名を<code>c()</code>で繋ぎ<a href="#fn47" class="footnote-ref" id="fnref47"><sup>47</sup></a>、<code>dim =</code>でarrayの大きさを指定するだけです。配列を作成した後はそのデータ構造も確認してみましょう。</p>
 <div class="sourceCode" id="cb537"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb537-1"><a href="datastructure.html#cb537-1" aria-hidden="true" tabindex="-1"></a>Array1 <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="fu">c</span>(Mat1, Mat2, Mat3, Mat4), <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">4</span>))</span>
 <span id="cb537-2"><a href="datastructure.html#cb537-2" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(Array1)</span></code></pre></div>
@@ -1763,30 +1741,30 @@ myDF4[5, ]  &lt;- Hakiai_Data</code></pre>
 <pre><code>## , , 1
 ## 
 ##      [,1] [,2] [,3] [,4]
-## [1,]   12    5   10    2
-## [2,]    9   11    1    5
-## [3,]    2    5    3    7
+## [1,]   11   12   12    5
+## [2,]   11    2   12    2
+## [3,]   10   11    2    7
 ## 
 ## , , 2
 ## 
 ##      [,1] [,2] [,3] [,4]
-## [1,]    4   11    7    6
-## [2,]    7    4   12   10
-## [3,]    4    7    3   12
+## [1,]    1    5    8    2
+## [2,]    4    8    8    1
+## [3,]    3   12    1    3
 ## 
 ## , , 3
 ## 
 ##      [,1] [,2] [,3] [,4]
-## [1,]   11   11    2   11
-## [2,]    6    6    7    1
-## [3,]   10   11    3    7
+## [1,]   10   10    2    2
+## [2,]    4    3    7   12
+## [3,]    5    6   11   12
 ## 
 ## , , 4
 ## 
 ##      [,1] [,2] [,3] [,4]
-## [1,]    3    2    7   10
-## [2,]    5   11    7   11
-## [3,]    1   10    8    3</code></pre>
+## [1,]    2    2    7    9
+## [2,]    1   12    6    1
+## [3,]   10   12    6    4</code></pre>
 <p>このように一つのオブジェクト内に複数の行列が格納されたオブジェクトが生成されます。</p>
 </div>
 <div id="配列型データの操作" class="section level3" number="10.7.2">
@@ -1794,45 +1772,45 @@ myDF4[5, ]  &lt;- Hakiai_Data</code></pre>
 <p>配列型データの操作は行列型に似ていますが、層というもう一つの次元があるため、<code>行列名[行番号, 列番号]</code>ではなく、<code>配列名[行番号, 列番号, 層番号]</code>を使います。たとえば、<code>Array1</code>の3番目の行列を抽出したい場合、<code>Array1[, , 3]</code>と入力します。</p>
 <div class="sourceCode" id="cb541"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb541-1"><a href="datastructure.html#cb541-1" aria-hidden="true" tabindex="-1"></a>Array1[, , <span class="dv">3</span>]</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]   11   11    2   11
-## [2,]    6    6    7    1
-## [3,]   10   11    3    7</code></pre>
+## [1,]   10   10    2    2
+## [2,]    4    3    7   12
+## [3,]    5    6   11   12</code></pre>
 <p>また、2番目の行列の3行目・1列目の要素を抽出するなら<code>Array1[3, 1, 2]</code>と入力します。</p>
 <div class="sourceCode" id="cb543"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb543-1"><a href="datastructure.html#cb543-1" aria-hidden="true" tabindex="-1"></a>Array1[<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">2</span>]</span></code></pre></div>
-<pre><code>## [1] 4</code></pre>
+<pre><code>## [1] 3</code></pre>
 <p>配列型における操作の特徴の一つは全ての行列が同じ大きさを持つため、層を貫通した操作ができるという点です。たとえば、全ての層の2行目を抽出するなら、層番号を指定せず、行番号のみで抽出します。</p>
 <div class="sourceCode" id="cb545"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb545-1"><a href="datastructure.html#cb545-1" aria-hidden="true" tabindex="-1"></a>Array1[<span class="dv">2</span>, , ]</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]    9    7    6    5
-## [2,]   11    4    6   11
-## [3,]    1   12    7    7
-## [4,]    5   10    1   11</code></pre>
-<p>ただ、返された結果は配列型でなく行列型であることに注意しましょう。たとえば、1番目の行列の2行目の要素は9, 11, 1, 5ですが、これは先ほど抽出された行列の1列目に該当します。また、2番目の行列の2行目の要素は7, 4, 12, 10であり、これは先ほどの抽出された行列の2列目となります。全層において特定の一列を抽出しても同じです。これは各層において抽出されたデータが行列でなく、ベクトルだからです。</p>
+## [1,]   11    4    4    1
+## [2,]    2    8    3   12
+## [3,]   12    8    7    6
+## [4,]    2    1   12    1</code></pre>
+<p>ただ、返された結果は配列型でなく行列型であることに注意しましょう。たとえば、1番目の行列の2行目の要素は11, 2, 12, 2ですが、これは先ほど抽出された行列の1列目に該当します。また、2番目の行列の2行目の要素は4, 8, 8, 1であり、これは先ほどの抽出された行列の2列目となります。全層において特定の一列を抽出しても同じです。これは各層において抽出されたデータが行列でなく、ベクトルだからです。</p>
 <p>一方、<strong>複数</strong>の行または列を抽出した場合、結果は配列型です。<code>Array1</code>の各層から1・2行目と1・2列目の要素、つまり大きさが2 <span class="math inline">\(\times\)</span> 2の行列を抽出してみましょう。</p>
 <div class="sourceCode" id="cb547"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb547-1"><a href="datastructure.html#cb547-1" aria-hidden="true" tabindex="-1"></a>Array1[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, ]</span></code></pre></div>
 <pre><code>## , , 1
 ## 
 ##      [,1] [,2]
-## [1,]   12    5
-## [2,]    9   11
+## [1,]   11   12
+## [2,]   11    2
 ## 
 ## , , 2
 ## 
 ##      [,1] [,2]
-## [1,]    4   11
-## [2,]    7    4
+## [1,]    1    5
+## [2,]    4    8
 ## 
 ## , , 3
 ## 
 ##      [,1] [,2]
-## [1,]   11   11
-## [2,]    6    6
+## [1,]   10   10
+## [2,]    4    3
 ## 
 ## , , 4
 ## 
 ##      [,1] [,2]
-## [1,]    3    2
-## [2,]    5   11</code></pre>
+## [1,]    2    2
+## [2,]    1   12</code></pre>
 <p>このように各層において抽出されたデータが行列だからです。自分の操作から得られた結果がどのようなデータ型・データ構造かを予め知っておくことで分析の効率が上がるでしょう。</p>
 <p><strong>行列に名前を付けたい</strong></p>
 <p>今回は各行列に1, 2, 3, 4という番号のみ割り当てましたが、実は行列に名前を付けることも可能です。そのためには配列データ作成時、<code>dimnames =</code>引数を指定する必要があります。</p>
@@ -1844,15 +1822,15 @@ myDF4[5, ]  &lt;- Hakiai_Data</code></pre>
 <p><code>dimnames =</code>引数は必ず長さ3のリスト型である必要があります。1番目と2番目の要素は行名と列名ですが、行列において一般的に使われないため、ここでは<code>NULL</code>にし、3番目の要素、つまり各層の名前だけを指定します。ここではそれぞれの層を<code>M1</code>、<code>M2</code>、<code>M3</code>、<code>M4</code>と名付けました。ここで<code>M4</code>のみを抽出する場合は、以下のように操作します。</p>
 <div class="sourceCode" id="cb550"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb550-1"><a href="datastructure.html#cb550-1" aria-hidden="true" tabindex="-1"></a>Array2[, , <span class="st">&quot;M4&quot;</span>]</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]    3    2    7   10
-## [2,]    5   11    7   11
-## [3,]    1   10    8    3</code></pre>
+## [1,]    2    2    7    9
+## [2,]    1   12    6    1
+## [3,]   10   12    6    4</code></pre>
 <p>むろん、これまでと同様、番号で抽出することも可能です。</p>
 <div class="sourceCode" id="cb552"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb552-1"><a href="datastructure.html#cb552-1" aria-hidden="true" tabindex="-1"></a>Array2[, , <span class="dv">4</span>]</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]    3    2    7   10
-## [2,]    5   11    7   11
-## [3,]    1   10    8    3</code></pre>
+## [1,]    2    2    7    9
+## [2,]    1   12    6    1
+## [3,]   10   12    6    4</code></pre>
 <hr />
 </div>
 </div>
@@ -2142,6 +2120,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {

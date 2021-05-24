@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>9. データの型 | 私たちのR: ベストプラクティスの探究</title>
   <meta name="description" content="R Not for Everyone: An Esoteric Guide." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
   <meta property="og:title" content="9. データの型 | 私たちのR: ベストプラクティスの探究" />
   <meta property="og:type" content="book" />
@@ -50,11 +50,13 @@
 
 
 
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.17/datatables.js"></script>
+<script src="libs/datatables-binding-0.18/datatables.js"></script>
 <link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
 <script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
@@ -79,6 +81,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -137,6 +140,29 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 <link rel="stylesheet" href="HTML/style.css" type="text/css" />
@@ -881,9 +907,8 @@ Hadley
 <span id="cb192-2"><a href="datatype.html#cb192-2" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;どちらかといえば好き&quot;</span>, <span class="st">&quot;めちゃ好き&quot;</span>, <span class="st">&quot;好き&quot;</span>)</span>
 <span id="cb192-3"><a href="datatype.html#cb192-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb192-4"><a href="datatype.html#cb192-4" aria-hidden="true" tabindex="-1"></a>Factor.Vec1</span></code></pre></div>
-<pre><code>## [1] &quot;めちゃめちゃ好き&quot;     &quot;めちゃめちゃ好き&quot;    
-## [3] &quot;どちらかといえば好き&quot; &quot;めちゃ好き&quot;          
-## [5] &quot;好き&quot;</code></pre>
+<pre><code>## [1] &quot;めちゃめちゃ好き&quot;     &quot;めちゃめちゃ好き&quot;     &quot;どちらかといえば好き&quot;
+## [4] &quot;めちゃ好き&quot;           &quot;好き&quot;</code></pre>
 <div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="datatype.html#cb194-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(Factor.Vec1)</span></code></pre></div>
 <pre><code>## [1] &quot;character&quot;</code></pre>
 <p><code>Factor.Vec1</code>は普通の文字列ベクトルであることが分かります。これをfactor型に変換するためには<code>factor()</code>関数を使います。</p>
@@ -896,21 +921,21 @@ Hadley
 <div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="datatype.html#cb198-1" aria-hidden="true" tabindex="-1"></a>Factor.Vec2</span></code></pre></div>
 <pre><code>## [1] めちゃめちゃ好き     めちゃめちゃ好き     どちらかといえば好き
 ## [4] めちゃ好き           好き                
-## 4 Levels: どちらかといえば好き &lt; 好き &lt; ... &lt; めちゃめちゃ好き</code></pre>
+## Levels: どちらかといえば好き &lt; 好き &lt; めちゃ好き &lt; めちゃめちゃ好き</code></pre>
 <p>いくつかの点で異なります。まず、文字列であるにもかかわらず、<code>"</code>で囲まれていいない点です。そして3行目に<code>4 Levels:</code>というのが追加されている点です。このlevelは「水準」と呼ばれるものです。<code>4 Levels</code>ですから、<code>Factor.Vec2</code>は4つの水準で構成されていることを意味します。Factor型の値は予め指定された水準以外の値を取ることはできません。たとえば、2番目の要素を「超好き」に変えてみましょう。</p>
 <div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb200-1"><a href="datatype.html#cb200-1" aria-hidden="true" tabindex="-1"></a>Factor.Vec2[<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="st">&quot;超好き&quot;</span></span></code></pre></div>
-<pre><code>## Warning in `[&lt;-.factor`(`*tmp*`, 2, value = &quot;超好き&quot;): invalid
-## factor level, NA generated</code></pre>
+<pre><code>## Warning in `[&lt;-.factor`(`*tmp*`, 2, value = &quot;超好き&quot;): invalid factor level, NA
+## generated</code></pre>
 <div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="datatype.html#cb202-1" aria-hidden="true" tabindex="-1"></a>Factor.Vec2</span></code></pre></div>
 <pre><code>## [1] めちゃめちゃ好き     &lt;NA&gt;                 どちらかといえば好き
 ## [4] めちゃ好き           好き                
-## 4 Levels: どちらかといえば好き &lt; 好き &lt; ... &lt; めちゃめちゃ好き</code></pre>
+## Levels: どちらかといえば好き &lt; 好き &lt; めちゃ好き &lt; めちゃめちゃ好き</code></pre>
 <p>警告が表示され、2番目の要素が後ほど紹介する欠損値となっていることが分かります。それでは普通に「好き」を入れてみましょう。</p>
 <div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb204-1"><a href="datatype.html#cb204-1" aria-hidden="true" tabindex="-1"></a>Factor.Vec2[<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="st">&quot;好き&quot;</span></span>
 <span id="cb204-2"><a href="datatype.html#cb204-2" aria-hidden="true" tabindex="-1"></a>Factor.Vec2</span></code></pre></div>
 <pre><code>## [1] めちゃめちゃ好き     好き                 どちらかといえば好き
 ## [4] めちゃ好き           好き                
-## 4 Levels: どちらかといえば好き &lt; 好き &lt; ... &lt; めちゃめちゃ好き</code></pre>
+## Levels: どちらかといえば好き &lt; 好き &lt; めちゃ好き &lt; めちゃめちゃ好き</code></pre>
 <p>今回は問題なく置換できましたね。このようにfactor型の取りうる値は既に指定されています。また、<code>## 4 Levels: どちらかといえば好き &lt; 好き &lt; ... &lt; めちゃめちゃ好き</code>からも分かるように、その大小関係の情報も含まれています。猫好きの度合いは「どちらかといえば好き-好き-めちゃ好き-めちゃめちゃ好き」の順で高くなることをRも認識できるようになりました。</p>
 <p>Factor型はこのように順序付きデータを扱う際に便利なデータ型ですが、順序情報を含まないfactor型もあります。これは<code>factor()</code>を使う際、<code>ordered = TRUE</code>引数を削除するだけでできます。</p>
 <div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="datatype.html#cb206-1" aria-hidden="true" tabindex="-1"></a>Factor.Vec3 <span class="ot">&lt;-</span> <span class="fu">factor</span>(Factor.Vec1,</span>
@@ -919,7 +944,7 @@ Hadley
 <span id="cb206-4"><a href="datatype.html#cb206-4" aria-hidden="true" tabindex="-1"></a>Factor.Vec3</span></code></pre></div>
 <pre><code>## [1] めちゃめちゃ好き     めちゃめちゃ好き     どちらかといえば好き
 ## [4] めちゃ好き           好き                
-## 4 Levels: どちらかといえば好き 好き ... めちゃめちゃ好き</code></pre>
+## Levels: どちらかといえば好き 好き めちゃ好き めちゃめちゃ好き</code></pre>
 <div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="datatype.html#cb208-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(Factor.Vec3)</span></code></pre></div>
 <pre><code>## [1] &quot;factor&quot;</code></pre>
 <p>今回は3行目が<code>## Levels: どちらかといえば好き 好き めちゃ好き めちゃめちゃ好き</code>となり、順序に関する情報がなくなりました。また、<code>class()</code>で確認しましたデータ型に<code>"ordered"</code>が付いていません。これは順序なしfactor型であることを意味します。「順序付けしないならfactor型は要らないのでは…?」と思うかも知れませんが、これはこれで便利です。その例を考えてみましょう。</p>
@@ -1214,12 +1239,12 @@ Fukuoka
 <p>他にも様々な表記法がありますが、詳細は<code>?strptime</code>で確認してみてください。</p>
 <p>他にも、日本では使わない表記法ですが、月を英語で表記したり、日月年の順で表記する場合があります。後者は<code>format =</code>引数の順番を変えるだけで問題有りませんが、問題は前者です。そこで使うのが<code>%b</code>または<code>%B</code>です。<code>%b</code>は3文字の月表記で、<code>%B</code>はフルネームです。</p>
 <div class="sourceCode" id="cb243"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb243-1"><a href="datatype.html#cb243-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.Date</span>(<span class="st">&quot;21may2020&quot;</span>,   <span class="at">format =</span> <span class="st">&quot;%d%b%Y&quot;</span>)</span></code></pre></div>
-<pre><code>## [1] NA</code></pre>
+<pre><code>## [1] &quot;2020-05-21&quot;</code></pre>
 <div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb245-1"><a href="datatype.html#cb245-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.Date</span>(<span class="st">&quot;May/21/2020&quot;</span>, <span class="at">format =</span> <span class="st">&quot;%b/%d/%Y&quot;</span>)</span></code></pre></div>
-<pre><code>## [1] NA</code></pre>
+<pre><code>## [1] &quot;2020-05-21&quot;</code></pre>
 <p>うまくいかないですね。これはシステムの時間ロケールが日本になっているのが原因です。ロケール設定は<code>Sys.getlocale()</code>で確認できます。</p>
 <div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="datatype.html#cb247-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.getlocale</span>(<span class="at">category =</span> <span class="st">&quot;LC_TIME&quot;</span>)</span></code></pre></div>
-<pre><code>## [1] &quot;ja_JP.UTF-8&quot;</code></pre>
+<pre><code>## [1] &quot;en_US.UTF-8&quot;</code></pre>
 <p>これを<code>Sys.setlocale()</code>を使って、<code>"C"</code>に変更します。</p>
 <div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="datatype.html#cb249-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.setlocale</span>(<span class="at">category =</span> <span class="st">&quot;LC_TIME&quot;</span>, <span class="at">locale =</span> <span class="st">&quot;C&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;C&quot;</code></pre>
@@ -1501,6 +1526,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {

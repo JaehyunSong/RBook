@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>27. オブジェクト指向型プログラミング | 私たちのR: ベストプラクティスの探究</title>
   <meta name="description" content="R Not for Everyone: An Esoteric Guide." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
   <meta property="og:title" content="27. オブジェクト指向型プログラミング | 私たちのR: ベストプラクティスの探究" />
   <meta property="og:type" content="book" />
@@ -50,11 +50,13 @@
 
 
 
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.17/datatables.js"></script>
+<script src="libs/datatables-binding-0.18/datatables.js"></script>
 <link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
 <script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
@@ -79,6 +81,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -137,6 +140,29 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 <link rel="stylesheet" href="HTML/style.css" type="text/css" />
@@ -705,12 +731,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1755-13"><a href="oop.html#cb1755-13"></a></span>
 <span id="cb1755-14"><a href="oop.html#cb1755-14"></a>My_Score1 <span class="co"># My_Score1の内部を見る</span></span></code></pre></div>
 <pre><code>## $Score1
-##  [1] 43.98692 39.95806 45.00159 56.61278 46.76058 35.78282
-##  [7] 47.39019 46.88513 53.08336 55.96456
+##  [1] 43.98692 39.95806 45.00159 56.61278 46.76058 35.78282 47.39019 46.88513
+##  [9] 53.08336 55.96456
 ## 
 ## $Score2
-##  [1] 57.32655 47.98879 61.35263 58.91463 58.60180 32.86233
-##  [7] 37.64517 59.46836 44.10342 47.46254
+##  [1] 57.32655 47.98879 61.35263 58.91463 58.60180 32.86233 37.64517 59.46836
+##  [9] 44.10342 47.46254
 ## 
 ## attr(,&quot;class&quot;)
 ## [1] &quot;Score&quot;</code></pre>
@@ -730,12 +756,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1759-11"><a href="oop.html#cb1759-11"></a></span>
 <span id="cb1759-12"><a href="oop.html#cb1759-12"></a>My_Score2 <span class="co"># My_Score2の内部を見る</span></span></code></pre></div>
 <pre><code>## $Score1
-##  [1] 48.08681 55.98671 48.90309 45.63518 45.93150 55.20510
-##  [7] 54.99882 71.64469 61.22282 67.58888
+##  [1] 48.08681 55.98671 48.90309 45.63518 45.93150 55.20510 54.99882 71.64469
+##  [9] 61.22282 67.58888
 ## 
 ## $Score2
-##  [1] 48.45761 53.63647 50.74802 52.52767 67.27592 27.64798
-##  [7] 51.43928 54.63300 48.45175 48.76124
+##  [1] 48.45761 53.63647 50.74802 52.52767 67.27592 27.64798 51.43928 54.63300
+##  [9] 48.45175 48.76124
 ## 
 ## attr(,&quot;class&quot;)
 ## [1] &quot;Score&quot;</code></pre>
@@ -762,15 +788,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## [1] 50.57262</code></pre>
 <p><code>mean(c(1, 3, 5, 7, 9, 11))</code>は引数がnumeric型ベクトルであるため、既存の<code>mean()</code>関数が使用されます。一方、<code>mean(My_Score1)</code>は引数がScoreクラスであるため、<code>mean.Score()</code>が使用されます。このように<code>mean_Score()</code>のような別途の関数を作る必要なく、既存の関数名が利用できます。実際、<code>methods(mean)</code>を実行すると、Scoreクラスのメソッドとして<code>mean()</code>関数が用意されたことを確認できます。</p>
 <div class="sourceCode" id="cb1767"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1767-1"><a href="oop.html#cb1767-1"></a><span class="fu">methods</span>(mean)</span></code></pre></div>
-<pre><code>##  [1] mean,ANY-method          mean,Matrix-method      
-##  [3] mean,sparseMatrix-method mean,sparseVector-method
-##  [5] mean.Date                mean.default            
-##  [7] mean.difftime            mean.IDate*             
-##  [9] mean.ITime*              mean.POSIXct            
-## [11] mean.POSIXlt             mean.quosure*           
-## [13] mean.Score               mean.units*             
-## [15] mean.vctrs_vctr*         mean.yearmon*           
-## [17] mean.yearqtr*            mean.zoo*               
+<pre><code>##  [1] mean,ANY-method          mean,Matrix-method       mean,sparseMatrix-method
+##  [4] mean,sparseVector-method mean.Date                mean.default            
+##  [7] mean.difftime            mean.IDate*              mean.ITime*             
+## [10] mean.POSIXct             mean.POSIXlt             mean.quosure*           
+## [13] mean.Score               mean.units*              mean.vctrs_vctr*        
+## [16] mean.yearmon*            mean.yearqtr*            mean.zoo*               
 ## see &#39;?methods&#39; for accessing help and source code</code></pre>
 </div>
 <div id="新しい関数を作る" class="section level4" number="27.3.2.2">
@@ -908,7 +931,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 相関係数: -0.287 [-0.647, 0.178]</code></pre>
 <div class="sourceCode" id="cb1801"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1801-1"><a href="oop.html#cb1801-1"></a><span class="fu">plot</span>(Cor_Obj)</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/My_Cor_Object_Exam1-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>既存の<code>cor.test()</code>で作成される<code>"htest"</code>クラスに比べ、<code>"My_Cor_Object"</code>クラスは各変数の平均値が名前と一緒に表示され、<code>plot()</code>で簡単に散布図が作成できる大変便利なクラスです。それでは一つずつ作っていきましょう。まずは、<code>"My_Cor_Object"</code>クラスのオブジェクトを作成する<code>My_Cor()</code>関数からです。</p>
+<p>既存の<code>cor.test()</code>で作成される<code>"htest"</code>クラスに比べ、<code>"My_Cor_Object"</code>クラスは各変数の平均値が名前と一緒に表示され、<code>plot()</code>で簡単に散布図が作成できる大変便利なクラスです。このMy_Cor_Objectクラスとそのメソッドの構造を図示したものが以下の図です。</p>
+<p><img src="figures/OOP/My_Cor_Object.png" alt="My_Cor_Objectクラスの構造" /></p>
+<p>それでは一つずつ作っていきましょう。まずは、<code>"My_Cor_Object"</code>クラスのオブジェクトを作成する<code>My_Cor()</code>関数からです。</p>
 <div class="sourceCode" id="cb1802"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1802-1"><a href="oop.html#cb1802-1"></a>My_Cor <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y, x.name, y.name) {</span>
 <span id="cb1802-2"><a href="oop.html#cb1802-2"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.numeric</span>(x) <span class="sc">|</span> <span class="sc">!</span><span class="fu">is.numeric</span>(y)) {</span>
 <span id="cb1802-3"><a href="oop.html#cb1802-3"></a>        <span class="fu">stop</span>(<span class="st">&quot;xまたはyがnumeric型ではありません。&quot;</span>)</span>
@@ -1031,6 +1056,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
