@@ -693,7 +693,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##        10 character character</code></pre>
 <p>データの中身は変わっていませんが、<code>summary()</code>関数の動き方が変わりました。このように、Rで頻繁に使う<code>summary()</code>、<code>print()</code>、<code>plot()</code>などの関数は様々なクラスの対応しております。<code>lm()</code>関数を使った回帰分析の結果オブジェクトのクラス名は<code>lm</code>であり、その結果を見るためにも<code>summary()</code>関数を使います。他にも<code>plot(lmオブジェクト名)</code>をすると回帰診断の図が表示されます。これができないと、各クラスに応じた関数を作成する必要がありますね。numeric型専用の<code>numeric_print()</code>、character型専用の<code>character_print()</code>、lm型専用の<code>lm_plot()</code>など…、覚えなきゃいけない関数が増えてきます。ユーザー側でも大変ですが、コードを作成する側も大変です。実際、下の図<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>を見ると、プログラマーにとって最も大変な仕事は「名付け」であることが分かります。</p>
 <p><img src="https://images.techhive.com/images/idge/imported/article/itw/2013/10/23/programmers_hardest_tasks-600x700-100521914-orig.jpg" style="display: block; margin: auto;" /></p>
-<p>OOPの多態性にはこのような煩わしい仕事を軽減する機能があります。OOPにはここで紹介した多態性以外にも、「<strong>継承</strong> (inheritance)」、「<strong>カプセル化</strong> (encapsulation)」のような特徴があります。他にも人によっては「メッセージパッシング (message passing)」、「動的バインディング (dynamic binding)」などの特徴を述べたりしますが、詳しい話は専門書に譲り合いと思います。また、ここではRのS3クラスについて解説しますが、S3はカプセル化に対応しておりません。したがって、ここでは以下の概念について例と一緒に解説していきたいと思います。</p>
+<p>OOPの多態性にはこのような煩わしい仕事を軽減する機能があります。OOPにはここで紹介した多態性以外にも、「<strong>継承</strong> (inheritance)」、「<strong>カプセル化</strong> (encapsulation)」のような特徴があります。他にも人によっては「メッセージパッシング (message passing)」、「動的バインディング (dynamic binding)」などの特徴を述べたりしますが、詳しい話は専門書に譲りたいと思います。また、ここではRのS3クラスについて解説しますが、S3はカプセル化に対応しておりません。したがって、ここでは以下の概念について例と一緒に解説していきたいと思います。</p>
 <ol style="list-style-type: decimal">
 <li>オブジェクト (object)</li>
 <li>クラス (class)</li>
@@ -787,7 +787,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb33"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb33-1"><a href="oop.html#cb33-1"></a>summary</span></code></pre></div>
 <pre><code>## function (object, ...) 
 ## UseMethod(&quot;summary&quot;)
-## &lt;bytecode: 0x7fa962431ce8&gt;
+## &lt;bytecode: 0x7f9f7857bcd0&gt;
 ## &lt;environment: namespace:base&gt;</code></pre>
 <p>しかし、多態性を持つ関数の内部を見ることはできません。そもそも<code>summary()</code>関数はクラスごとに異なるコードを持っているため、<code>summary</code>だけでは「どのクラスの<code>summary()</code>か」が分かりません。それでもRには<code>summary()</code>関数が存在し、それをジェネリック関数（generic function）と呼びます。内部には<code>UseMethod("summary")</code>のみが書かれており、これは「この<code>summary()</code>関数は様々なクラスのメソッドとして機能するぞ」と宣言しているだけです。各クラスに対応したメソッドの内部を見るには<code>getS3method("メソッド名", "クラス名")</code>を使います。<code>summary()</code>メソッドは<code>numeric</code>型が別途指定されていないため、<code>"defualt"</code>となります。</p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb35-1"><a href="oop.html#cb35-1"></a><span class="fu">getS3method</span>(<span class="st">&quot;summary&quot;</span>, <span class="st">&quot;default&quot;</span>)</span></code></pre></div>
@@ -842,7 +842,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##     class(value) &lt;- c(&quot;summaryDefault&quot;, &quot;table&quot;)
 ##     value
 ## }
-## &lt;bytecode: 0x7fa962435178&gt;
+## &lt;bytecode: 0x7f9f7857b138&gt;
 ## &lt;environment: namespace:base&gt;</code></pre>
 <p>Rにはメソッドがクラス内部で定義されず、別途の<code>メソッド名.クラス名()</code>といった関数として作成されています。そしてジェネリック関数によって一つの関数の「ように」まとまっています。このように、ジェネリック関数経由でメソッドを呼び出すことをメソッド・ディスパッチ（method dispatch）と呼びます。</p>
 </div>
@@ -853,7 +853,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb37-2"><a href="oop.html#cb37-2"></a>my_tibble <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">X =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">Y =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span>
 <span id="cb37-3"><a href="oop.html#cb37-3"></a><span class="fu">class</span>(my_tibble)</span></code></pre></div>
 <pre><code>## [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
-<p>この<code>my_tibble</code>は<code>tlb_df</code>と<code>tbl</code>、<code>data.frame</code>といった3つのクラスを持っており、先に出てきたものが子クラス、後に出てくるものが親クラスです。<code>tbl</code>クラスと<code>data.frame</code>クラス両方に同じメソッドが定義されている場合、まず子クラスである<code>メソッド.tbl()</code>が実行されます。もし、子クラスにメソッドが定義されていない場合は<code>tbl</code>の親クラスである<code>data.frame</code>のメソッドが実行されます。tibbleはデータフレームとは異なるクラスのオブジェクトですが、データフレームと（ほぼ）同じ操作ができるのは、クラスが継承されるからです。クラスの継承ができないと、tibbleで使える全ての関数（列や行の抽出に使う<code>[</code>や<code>$</code>なども！）を全て一から定義する必要がありますが、継承を使うことによってこのような手間を省くことが出来ます。</p>
+<p>この<code>my_tibble</code>は<code>tlb_df</code>と<code>tbl</code>、<code>data.frame</code>といった3つのクラスを持っており、先に出てきたものが子クラス、後に出てくるものが親クラスです。<code>tbl</code>クラスと<code>data.frame</code>クラス両方に同じメソッドが定義されている場合、まず子クラスである<code>メソッド.tbl()</code>が実行されます。もし、子クラスにメソッドが定義されていない場合は<code>tbl</code>の親クラスである<code>data.frame</code>のメソッドが実行されます。tibbleはデータフレームとは異なるクラスのオブジェクトですが、データフレームと（ほぼ）同じ操作ができるのは、クラスが継承されるからです。クラスの継承ができないと、tibbleで使える全ての関数（列や行の抽出に使う<code>[</code>や<code>$</code>なども！）を全て一から定義する必要がありますが<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>、継承を使うことによってこのような手間を省くことが出来ます。</p>
 <hr />
 </div>
 </div>
@@ -888,12 +888,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb40-14"><a href="oop.html#cb40-14"></a></span>
 <span id="cb40-15"><a href="oop.html#cb40-15"></a>My_Score1 <span class="co"># My_Score1の内部を見る</span></span></code></pre></div>
 <pre><code>## $Score1
-##  [1] 54.02952 60.97109 46.01649 62.07562 61.13789 30.81348 55.72754 54.04973
-##  [9] 49.48212 38.80930
+##  [1] 51.28760 47.99261 55.92842 42.21448 42.35783 57.30760 44.91022 37.07091
+##  [9] 49.00466 42.40232
 ## 
 ## $Score2
-##  [1] 68.65344 29.04014 57.68173 60.04043 52.12027 56.80772 57.10806 41.64410
-##  [9] 53.29856 51.54230
+##  [1] 51.52752 34.81920 44.83089 55.79051 60.37444 34.64265 37.75735 64.74876
+##  [9] 40.66765 55.76629
 ## 
 ## attr(,&quot;class&quot;)
 ## [1] &quot;Score&quot;</code></pre>
@@ -913,12 +913,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb44-11"><a href="oop.html#cb44-11"></a></span>
 <span id="cb44-12"><a href="oop.html#cb44-12"></a>My_Score2 <span class="co"># My_Score2の内部を見る</span></span></code></pre></div>
 <pre><code>## $Score1
-##  [1] 64.02526 40.82820 49.92667 50.61518 48.88681 52.03541 63.18942 61.65158
-##  [9] 47.83062 55.88818
+##  [1] 46.13119 56.47838 49.24237 56.10984 36.89329 63.56410 45.29585 45.56788
+##  [9] 32.15114 50.84475
 ## 
 ## $Score2
-##  [1] 55.05862 41.02223 63.72443 51.09245 47.35460 26.04985 44.20143 57.04018
-##  [9] 59.81749 56.21922
+##  [1] 43.85195 57.35256 38.51274 42.37935 43.92746 45.09571 51.91584 52.12420
+##  [9] 32.43244 69.06847
 ## 
 ## attr(,&quot;class&quot;)
 ## [1] &quot;Score&quot;</code></pre>
@@ -941,8 +941,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb48-6"><a href="oop.html#cb48-6"></a><span class="fu">mean</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>)) <span class="co"># R内蔵関数のmean()を使う</span></span></code></pre></div>
 <pre><code>## [1] 6</code></pre>
 <div class="sourceCode" id="cb50"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb50-1"><a href="oop.html#cb50-1"></a><span class="fu">mean</span>(My_Score1) <span class="co"># Scoreクラスのメソッドであるmean()を使う</span></span></code></pre></div>
-<pre><code>## [1] 51.31128
-## [1] 52.79368</code></pre>
+<pre><code>## [1] 47.04766
+## [1] 48.09253</code></pre>
 <p><code>mean(c(1, 3, 5, 7, 9, 11))</code>は引数がnumeric型ベクトルであるため、既存の<code>mean()</code>関数が使用されます。一方、<code>mean(My_Score1)</code>は引数がScoreクラスであるため、<code>mean.Score()</code>が使用されます。このように<code>mean_Score()</code>のような別途の関数を作る必要なく、既存の関数名が利用できます。実際、<code>methods(mean)</code>を実行すると、Scoreクラスのメソッドとして<code>mean()</code>関数が用意されたことを確認できます。</p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb52-1"><a href="oop.html#cb52-1"></a><span class="fu">methods</span>(mean)</span></code></pre></div>
 <pre><code>## [1] mean.Date        mean.default     mean.difftime    mean.POSIXct    
@@ -994,8 +994,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## see &#39;?methods&#39; for accessing help and source code</code></pre>
 <p><code>my_func()</code>関数はScoreとCatといった2種類のクラスで使われることが確認できます。それでは問題なく作動するかを確認してみましょう。<code>My_Score1</code>と<code>My_Cat</code>を、それぞれ<code>my_func()</code>に渡します。</p>
 <div class="sourceCode" id="cb64"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb64-1"><a href="oop.html#cb64-1"></a><span class="fu">my_func</span>(My_Score1)</span></code></pre></div>
-<pre><code>## [1] 51.31128
-## [1] 52.79368</code></pre>
+<pre><code>## [1] 47.04766
+## [1] 48.09253</code></pre>
 <div class="sourceCode" id="cb66"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb66-1"><a href="oop.html#cb66-1"></a><span class="fu">my_func</span>(My_Cat)</span></code></pre></div>
 <pre><code>## [1] &quot;矢内: にゃーにゃー&quot;</code></pre>
 <p>同じ関数名でも、オブジェクトのクラスによって異なる処理が行われることが分かります。</p>
@@ -1064,24 +1064,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb80"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb80-1"><a href="oop.html#cb80-1"></a><span class="fu">str</span>(Cor_Obj)</span></code></pre></div>
 <pre><code>## List of 4
 ##  $ data    :&#39;data.frame&#39;:    20 obs. of  2 variables:
-##   ..$ x: num [1:20] 2.19 1.42 1.89 1.52 1.66 ...
-##   ..$ y: num [1:20] 176 166 161 174 170 ...
+##   ..$ x: num [1:20] 2.03 2.06 2.17 2.37 1.22 ...
+##   ..$ y: num [1:20] 165 168 167 167 163 ...
 ##  $ var_name: chr [1:2] &quot;1日当たりゲーム時間&quot; &quot;身長&quot;
-##  $ cor     : Named num 0.413
+##  $ cor     : Named num 0.2
 ##   ..- attr(*, &quot;names&quot;)= chr &quot;cor&quot;
-##  $ cor_ci  : num [1:2] -0.0363 0.7233
+##  $ cor_ci  : num [1:2] -0.266 0.59
 ##   ..- attr(*, &quot;conf.level&quot;)= num 0.95
 ##  - attr(*, &quot;class&quot;)= chr &quot;My_Cor_Object&quot;</code></pre>
 <p><code>Cor_Obj</code>には元のデータがデータフレームとして格納され（<code>$data</code>）、それぞれの変数名（<code>$var_name</code>）、相関係数（<code>$cor</code>）、相関係数の95%信頼区間（<code>$cor_ci</code>）が<code>Cor_Obj</code>の中に入っています。本質的にはリスト型のデータ構造ですが、クラス名が<code>My_Cor_Object</code>になっているだけです。</p>
 <p>この<code>My_Cor_Object</code>クラスには3つのメソッド（専用関数）が用意されており、<code>print()</code>、<code>summary()</code>、<code>plot()</code>です。<code>print()</code>と<code>summary()</code>は同じ関数で、<code>x</code>と<code>y</code>の平均値、そして相関係数と信頼区間を出力します。<code>plot()</code>は散布図と相関係数を出力します。実際の例を見てみましょう。</p>
 <div class="sourceCode" id="cb82"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb82-1"><a href="oop.html#cb82-1"></a><span class="fu">print</span>(Cor_Obj)</span></code></pre></div>
-<pre><code>## 1日当たりゲーム時間の平均値: 1.895
-## 身長の平均値: 167.297
-## 相関係数: 0.413 [-0.036, 0.723]</code></pre>
+<pre><code>## 1日当たりゲーム時間の平均値: 1.966
+## 身長の平均値: 166.298
+## 相関係数: 0.200 [-0.266, 0.590]</code></pre>
 <div class="sourceCode" id="cb84"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb84-1"><a href="oop.html#cb84-1"></a><span class="fu">summary</span>(Cor_Obj) <span class="co"># summary()はprint()と同じ</span></span></code></pre></div>
-<pre><code>## 1日当たりゲーム時間の平均値: 1.895
-## 身長の平均値: 167.297
-## 相関係数: 0.413 [-0.036, 0.723]</code></pre>
+<pre><code>## 1日当たりゲーム時間の平均値: 1.966
+## 身長の平均値: 166.298
+## 相関係数: 0.200 [-0.266, 0.590]</code></pre>
 <div class="sourceCode" id="cb86"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb86-1"><a href="oop.html#cb86-1"></a><span class="fu">plot</span>(Cor_Obj)</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/My_Cor_Object_Exam1-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>既存の<code>cor.test()</code>で作成される<code>"htest"</code>クラスに比べ、<code>"My_Cor_Object"</code>クラスは各変数の平均値が名前と一緒に表示され、<code>plot()</code>で簡単に散布図が作成できる大変便利なクラスです。このMy_Cor_Objectクラスとそのメソッドの構造を図示したものが以下の図です。</p>
@@ -1179,6 +1179,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ol start="1">
 <li id="fn1"><p>図の出典は<a href="https://www.itworld.com/article/2833265/don-t-go-into-programming-if-you-don-t-have-a-good-thesaurus.html">IT WORLD</a>です (アクセス: 2020-05-21)。<a href="oop.html#fnref1" class="footnote-back">↩︎</a></p></li>
 <li id="fn2"><p>逆に特定のクラスで使用可能なメソッドを確認するときは<code>methods(class = "クラス名")</code>を入力します。<a href="oop.html#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>ただし、実際の場合、<code>[</code>や<code>[&lt;-</code>などは<code>tbl</code>または<code>tbl_df</code>用のメソッドが別途用意されています。<code>data.frame</code>クラスから継承されているメソッドとしては<code>dim()</code>や<code>t()</code>などがあります。<a href="oop.html#fnref3" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
