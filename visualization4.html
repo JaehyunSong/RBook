@@ -920,6 +920,7 @@ div.csl-indent {
 </div>
 <div id="visual4-pointrange" class="section level2" number="20.5">
 <h2><span class="header-section-number">20.5</span> エラーバー付き散布図</h2>
+<p>　エラーバー付きの散布図は推定結果の点推定値とその不確実性（信頼区間など）を示す際によく使われる図です。以下の表は<code>Country_df</code>を用い、大陸（オセアニアを除く）ごとにフリーダムハウス・スコア（<code>FH_Total</code>）を一人当たりPPP GDP（<code>PPP_per_capita</code>）に回帰させた分析から得られたフリーダムハウス・スコア（<code>FH_Total</code>）の係数の点推定値と95%信頼区間です。</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="visualization4.html#cb25-1" aria-hidden="true" tabindex="-1"></a>Pointrange_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
 <span id="cb25-2"><a href="visualization4.html#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">Continent =</span> <span class="fu">c</span>(<span class="st">&quot;Asia&quot;</span>, <span class="st">&quot;Europe&quot;</span>, <span class="st">&quot;Africa&quot;</span>, <span class="st">&quot;America&quot;</span>),</span>
 <span id="cb25-3"><a href="visualization4.html#cb25-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">Coef      =</span> <span class="fu">c</span>(<span class="fl">65.3</span>, <span class="fl">588.0</span>, <span class="fl">53.4</span>, <span class="fl">316.0</span>),</span>
@@ -935,7 +936,7 @@ div.csl-indent {
 ## 2 Europe    588.     376.      801.
 ## 3 Africa     53.4    -14.5     121.
 ## 4 America   316.     128.      504.</code></pre>
-<p>実は以上のデータは以下のようなコードで作成されています。{purrr}パッケージの使い方に慣れる必要があるので、第<a href="iteration.html#iteration">24</a>章を参照してください。</p>
+<p>　実は以上のデータは以下のようなコードで作成されています。{purrr}パッケージの使い方に慣れる必要があるので、第<a href="iteration.html#iteration">24</a>章を参照してください。</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="visualization4.html#cb28-1" aria-hidden="true" tabindex="-1"></a>Pointrange_df <span class="ot">&lt;-</span> Country_df <span class="sc">%&gt;%</span></span>
 <span id="cb28-2"><a href="visualization4.html#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Continent <span class="sc">!=</span> <span class="st">&quot;Oceania&quot;</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb28-3"><a href="visualization4.html#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(Continent) <span class="sc">%&gt;%</span></span>
@@ -946,24 +947,16 @@ div.csl-indent {
 <span id="cb28-8"><a href="visualization4.html#cb28-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(term <span class="sc">==</span> <span class="st">&quot;FH_Total&quot;</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb28-9"><a href="visualization4.html#cb28-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(Continent, <span class="at">Coef =</span> estimate, </span>
 <span id="cb28-10"><a href="visualization4.html#cb28-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">Conf_lwr =</span> conf.low, <span class="at">Conf_upr =</span> conf.high) </span></code></pre></div>
-<div class="sourceCode" id="cb29"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb29-1"><a href="visualization4.html#cb29-1"></a>Country_df <span class="sc">%&gt;%</span></span>
-<span id="cb29-2"><a href="visualization4.html#cb29-2"></a>    <span class="fu">filter</span>(Continent <span class="sc">!=</span> <span class="st">&quot;Oceania&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb29-3"><a href="visualization4.html#cb29-3"></a>    <span class="fu">group_by</span>(Continent) <span class="sc">%&gt;%</span></span>
-<span id="cb29-4"><a href="visualization4.html#cb29-4"></a>    <span class="fu">nest</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb29-5"><a href="visualization4.html#cb29-5"></a>    <span class="fu">mutate</span>(<span class="at">Fit =</span> <span class="fu">map</span>(data, <span class="sc">~</span><span class="fu">lm</span>(PPP_per_capita <span class="sc">~</span> FH_Total, <span class="at">data =</span> .)),</span>
-<span id="cb29-6"><a href="visualization4.html#cb29-6"></a>           <span class="at">Est =</span> <span class="fu">map</span>(Fit, broom<span class="sc">::</span>tidy, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb29-7"><a href="visualization4.html#cb29-7"></a>    <span class="fu">unnest</span>(Est) <span class="sc">%&gt;%</span></span>
-<span id="cb29-8"><a href="visualization4.html#cb29-8"></a>    <span class="fu">filter</span>(term <span class="sc">==</span> <span class="st">&quot;FH_Total&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb29-9"><a href="visualization4.html#cb29-9"></a>    <span class="fu">select</span>(Continent, <span class="at">Coef =</span> estimate, </span>
-<span id="cb29-10"><a href="visualization4.html#cb29-10"></a>           <span class="at">Conf_lwr =</span> conf.low, <span class="at">Conf_upr =</span> conf.high) <span class="sc">%&gt;%</span></span>
-<span id="cb29-11"><a href="visualization4.html#cb29-11"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb29-12"><a href="visualization4.html#cb29-12"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb29-13"><a href="visualization4.html#cb29-13"></a>    <span class="fu">geom_pointrange</span>(<span class="fu">aes</span>(<span class="at">x =</span> Continent, <span class="at">y =</span> Coef, </span>
-<span id="cb29-14"><a href="visualization4.html#cb29-14"></a>                        <span class="at">ymin =</span> Conf_lwr, <span class="at">ymax =</span> Conf_upr),</span>
-<span id="cb29-15"><a href="visualization4.html#cb29-15"></a>                    <span class="at">size =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
-<span id="cb29-16"><a href="visualization4.html#cb29-16"></a>    <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">expression</span>(<span class="fu">paste</span>(beta[<span class="dv">1</span>], <span class="st">&quot; with 95% CI&quot;</span>))) <span class="sc">+</span></span>
-<span id="cb29-17"><a href="visualization4.html#cb29-17"></a>    <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>この<code>Pointrange_df</code>を用いて横軸は大陸（<code>Continent</code>）、縦軸には点推定値（<code>Coef</code>）と95%信頼区間（<code>Conf_lwr</code>と<code>Conf_upr</code>）を出力します。ここで使う幾何オブジェクトは<code>geom_pointrange()</code>です。横軸<code>x</code>と点推定値<code>y</code>、95%信頼区間の下限の<code>ymin</code>、上限の<code>ymax</code>にマッピングします。エラーバー付き散布図を立てに並べたい場合は<code>y</code>と<code>x</code>、<code>xmin</code>、<code>xmax</code>にマッピングします。</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb29-1"><a href="visualization4.html#cb29-1"></a>Pointrange_df <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="visualization4.html#cb29-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb29-3"><a href="visualization4.html#cb29-3"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb29-4"><a href="visualization4.html#cb29-4"></a>    <span class="fu">geom_pointrange</span>(<span class="fu">aes</span>(<span class="at">x =</span> Continent, <span class="at">y =</span> Coef, </span>
+<span id="cb29-5"><a href="visualization4.html#cb29-5"></a>                        <span class="at">ymin =</span> Conf_lwr, <span class="at">ymax =</span> Conf_upr),</span>
+<span id="cb29-6"><a href="visualization4.html#cb29-6"></a>                    <span class="at">size =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb29-7"><a href="visualization4.html#cb29-7"></a>    <span class="fu">labs</span>(<span class="at">y =</span> <span class="fu">expression</span>(<span class="fu">paste</span>(beta[<span class="dv">1</span>], <span class="st">&quot; with 95% CI&quot;</span>))) <span class="sc">+</span></span>
+<span id="cb29-8"><a href="visualization4.html#cb29-8"></a>    <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/visual4-pointrage3-1.png" width="672" style="display: block; margin: auto;" /></p>
 <hr />
 </div>
 <div id="visual4-lollipop" class="section level2" number="20.6">
@@ -1044,7 +1037,7 @@ div.csl-indent {
 <span id="cb34-8"><a href="visualization4.html#cb34-8"></a>                       <span class="at">labels =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">120000</span>, <span class="at">by =</span> <span class="dv">10000</span>)) <span class="sc">+</span></span>
 <span id="cb34-9"><a href="visualization4.html#cb34-9"></a>    <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
 <span id="cb34-10"><a href="visualization4.html#cb34-10"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb35-1"><a href="visualization4.html#cb35-1"></a>Country_df <span class="sc">%&gt;%</span></span>
 <span id="cb35-2"><a href="visualization4.html#cb35-2"></a>    <span class="fu">mutate</span>(<span class="at">OECD =</span> <span class="fu">if_else</span>(OECD <span class="sc">==</span> <span class="dv">1</span>, <span class="st">&quot;加盟国&quot;</span>, <span class="st">&quot;非加盟国&quot;</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb35-3"><a href="visualization4.html#cb35-3"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> FH_Total, <span class="at">y =</span> PPP_per_capita, <span class="at">color =</span> OECD)) <span class="sc">+</span></span>
@@ -1058,7 +1051,7 @@ div.csl-indent {
 <span id="cb35-11"><a href="visualization4.html#cb35-11"></a>    <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
 <span id="cb35-12"><a href="visualization4.html#cb35-12"></a>    <span class="fu">theme_bw</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>,</span>
 <span id="cb35-13"><a href="visualization4.html#cb35-13"></a>             <span class="at">base_size =</span> <span class="dv">12</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
 <hr />
 </div>
 <div id="visual4-heatmap" class="section level2" number="20.8">
@@ -1081,7 +1074,7 @@ div.csl-indent {
 <span id="cb36-15"><a href="visualization4.html#cb36-15"></a>                         <span class="at">mid  =</span> <span class="st">&quot;cornsilk&quot;</span>,</span>
 <span id="cb36-16"><a href="visualization4.html#cb36-16"></a>                         <span class="at">high =</span> <span class="st">&quot;brown3&quot;</span>,</span>
 <span id="cb36-17"><a href="visualization4.html#cb36-17"></a>                         <span class="at">midpoint =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
 <hr />
 </div>
 <div id="visual4-contour" class="section level2" number="20.9">
@@ -1105,7 +1098,7 @@ div.csl-indent {
 <span id="cb40-5"><a href="visualization4.html#cb40-5"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">&quot;人口&quot;</span>) <span class="sc">+</span></span>
 <span id="cb40-6"><a href="visualization4.html#cb40-6"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>) <span class="sc">+</span></span>
 <span id="cb40-7"><a href="visualization4.html#cb40-7"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb41"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb41-1"><a href="visualization4.html#cb41-1"></a>world_map <span class="sc">%&gt;%</span> </span>
 <span id="cb41-2"><a href="visualization4.html#cb41-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb41-3"><a href="visualization4.html#cb41-3"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> pop_est)) <span class="sc">+</span></span>
@@ -1114,7 +1107,7 @@ div.csl-indent {
 <span id="cb41-6"><a href="visualization4.html#cb41-6"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">90</span>, <span class="dv">150</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">50</span>)) <span class="sc">+</span></span>
 <span id="cb41-7"><a href="visualization4.html#cb41-7"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>) <span class="sc">+</span></span>
 <span id="cb41-8"><a href="visualization4.html#cb41-8"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb42"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb42-1"><a href="visualization4.html#cb42-1"></a>world_map2 <span class="ot">&lt;-</span> <span class="fu">ne_countries</span>(<span class="at">scale =</span> <span class="st">&quot;medium&quot;</span>, <span class="at">returnclass =</span> <span class="st">&quot;sf&quot;</span>)</span>
 <span id="cb42-2"><a href="visualization4.html#cb42-2"></a></span>
 <span id="cb42-3"><a href="visualization4.html#cb42-3"></a>world_map2 <span class="sc">%&gt;%</span> </span>
@@ -1133,11 +1126,11 @@ div.csl-indent {
 <span id="cb42-16"><a href="visualization4.html#cb42-16"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">90</span>, <span class="dv">150</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">50</span>)) <span class="sc">+</span></span>
 <span id="cb42-17"><a href="visualization4.html#cb42-17"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>) <span class="sc">+</span></span>
 <span id="cb42-18"><a href="visualization4.html#cb42-18"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p><code>scale_fill_brewer()</code>の<code>palette</code>引数は{RColorBrewer}パッケージが提供するパレート名を指定する。パレート一覧は<code>RColorBrewer::display.brewer.all()</code>で確認可能。自分で作成したパレートを使いたい場合は<code>scale_fill_manual()</code>を使用する。</p>
 <div class="sourceCode" id="cb43"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb43-1"><a href="visualization4.html#cb43-1"></a>RColorBrewer<span class="sc">::</span><span class="fu">display.brewer.all</span>()</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-16"></span>
-<img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-16-1.png" alt="{RColorBrewer}が提供するパレート一覧" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-13"></span>
+<img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-13-1.png" alt="{RColorBrewer}が提供するパレート一覧" width="672" />
 <p class="caption">
 図 20.1: {RColorBrewer}が提供するパレート一覧
 </p>
@@ -1174,7 +1167,7 @@ div.csl-indent {
 <span id="cb50-2"><a href="visualization4.html#cb50-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb50-3"><a href="visualization4.html#cb50-3"></a>  <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
 <span id="cb50-4"><a href="visualization4.html#cb50-4"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
 <hr />
 </div>
 </div>
@@ -1188,10 +1181,10 @@ div.csl-indent {
 <span id="cb52-5"><a href="visualization4.html#cb52-5"></a>                    <span class="at">outcome  =</span> <span class="st">&quot;Y&quot;</span>)</span>
 <span id="cb52-6"><a href="visualization4.html#cb52-6"></a></span>
 <span id="cb52-7"><a href="visualization4.html#cb52-7"></a><span class="fu">ggdag</span>(DAG_data1)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-22-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb53"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb53-1"><a href="visualization4.html#cb53-1"></a><span class="fu">ggdag</span>(DAG_data1) <span class="sc">+</span></span>
 <span id="cb53-2"><a href="visualization4.html#cb53-2"></a>  <span class="fu">theme_dag_blank</span>()</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-23-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div id="ノードの位置を指定する" class="section level3" number="20.11.1">
 <h3><span class="header-section-number">20.11.1</span> ノードの位置を指定する</h3>
 <div class="sourceCode" id="cb54"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb54-1"><a href="visualization4.html#cb54-1"></a>DAG_Pos2  <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="at">X =</span> <span class="dv">1</span>, <span class="at">Y =</span> <span class="dv">3</span>, <span class="at">Z =</span> <span class="dv">2</span>),</span>
@@ -1205,7 +1198,7 @@ div.csl-indent {
 <span id="cb54-9"><a href="visualization4.html#cb54-9"></a></span>
 <span id="cb54-10"><a href="visualization4.html#cb54-10"></a><span class="fu">ggdag</span>(DAG_data2) <span class="sc">+</span></span>
 <span id="cb54-11"><a href="visualization4.html#cb54-11"></a>  <span class="fu">theme_dag_blank</span>()</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-24-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb55"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb55-1"><a href="visualization4.html#cb55-1"></a>DAG_Pos3  <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="at">X1 =</span> <span class="dv">3</span>, <span class="at">X2 =</span> <span class="dv">3</span>, <span class="at">X3 =</span> <span class="dv">1</span>, <span class="at">T =</span> <span class="dv">2</span>, <span class="at">Y =</span> <span class="dv">4</span>),</span>
 <span id="cb55-2"><a href="visualization4.html#cb55-2"></a>                  <span class="at">y =</span> <span class="fu">c</span>(<span class="at">X1 =</span> <span class="dv">1</span>, <span class="at">X2 =</span> <span class="dv">2</span>, <span class="at">X3 =</span> <span class="dv">2</span>, <span class="at">T =</span> <span class="dv">3</span>, <span class="at">Y =</span> <span class="dv">3</span>))</span>
 <span id="cb55-3"><a href="visualization4.html#cb55-3"></a></span>
@@ -1218,7 +1211,7 @@ div.csl-indent {
 <span id="cb55-10"><a href="visualization4.html#cb55-10"></a></span>
 <span id="cb55-11"><a href="visualization4.html#cb55-11"></a><span class="fu">ggdag</span>(DAG_data3, <span class="at">stylized =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
 <span id="cb55-12"><a href="visualization4.html#cb55-12"></a>  <span class="fu">theme_dag_blank</span>()</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-25-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-22-1.png" width="672" style="display: block; margin: auto;" /></p>
 <hr />
 </div>
 </div>
@@ -1292,14 +1285,14 @@ div.csl-indent {
 <span id="cb61-10"><a href="visualization4.html#cb61-10"></a>    <span class="fu">geom_stratum</span>() <span class="sc">+</span></span>
 <span id="cb61-11"><a href="visualization4.html#cb61-11"></a>    <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">after_stat</span>(stratum)), <span class="at">stat =</span> <span class="st">&quot;stratum&quot;</span>,</span>
 <span id="cb61-12"><a href="visualization4.html#cb61-12"></a>              <span class="at">family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-30-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-27-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb62"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb62-1"><a href="visualization4.html#cb62-1"></a>Vote_0910 <span class="sc">%&gt;%</span></span>
 <span id="cb62-2"><a href="visualization4.html#cb62-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> Freq, <span class="at">axis1 =</span> Vote09, <span class="at">axis2 =</span> Vote10)) <span class="sc">+</span></span>
 <span id="cb62-3"><a href="visualization4.html#cb62-3"></a>    <span class="fu">geom_alluvium</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Vote09)) <span class="sc">+</span></span>
 <span id="cb62-4"><a href="visualization4.html#cb62-4"></a>    <span class="fu">geom_stratum</span>() <span class="sc">+</span></span>
 <span id="cb62-5"><a href="visualization4.html#cb62-5"></a>    <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">after_stat</span>(stratum)), <span class="at">stat =</span> <span class="st">&quot;stratum&quot;</span>,</span>
 <span id="cb62-6"><a href="visualization4.html#cb62-6"></a>              <span class="at">family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-31-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-28-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb63"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb63-1"><a href="visualization4.html#cb63-1"></a>Alluvial_Plot <span class="ot">&lt;-</span> Vote_0910 <span class="sc">%&gt;%</span></span>
 <span id="cb63-2"><a href="visualization4.html#cb63-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> Freq, <span class="at">axis1 =</span> Vote09, <span class="at">axis2 =</span> Vote10)) <span class="sc">+</span></span>
 <span id="cb63-3"><a href="visualization4.html#cb63-3"></a>    <span class="fu">geom_alluvium</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Vote10)) <span class="sc">+</span></span>
@@ -1308,7 +1301,7 @@ div.csl-indent {
 <span id="cb63-6"><a href="visualization4.html#cb63-6"></a>              <span class="at">family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span>
 <span id="cb63-7"><a href="visualization4.html#cb63-7"></a></span>
 <span id="cb63-8"><a href="visualization4.html#cb63-8"></a>Alluvial_Plot</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-32-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-29-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb64"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb64-1"><a href="visualization4.html#cb64-1"></a>Alluvial_Plot <span class="sc">+</span></span>
 <span id="cb64-2"><a href="visualization4.html#cb64-2"></a>    <span class="fu">ggtitle</span>(<span class="st">&quot;個人レベルにおける投票先の変化&quot;</span>) <span class="sc">+</span></span>
 <span id="cb64-3"><a href="visualization4.html#cb64-3"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, </span>
@@ -1319,7 +1312,7 @@ div.csl-indent {
 <span id="cb64-8"><a href="visualization4.html#cb64-8"></a>          <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
 <span id="cb64-9"><a href="visualization4.html#cb64-9"></a>          <span class="at">axis.title =</span> <span class="fu">element_blank</span>(),</span>
 <span id="cb64-10"><a href="visualization4.html#cb64-10"></a>          <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>())</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-33-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-30-1.png" width="672" style="display: block; margin: auto;" /></p>
 <hr />
 </div>
 <div id="visual4-dendrogram" class="section level2" number="20.14">
@@ -1334,14 +1327,14 @@ div.csl-indent {
 <span id="cb66-3"><a href="visualization4.html#cb66-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">label =</span> Country)) <span class="sc">+</span></span>
 <span id="cb66-4"><a href="visualization4.html#cb66-4"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
 <span id="cb66-5"><a href="visualization4.html#cb66-5"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="at">place =</span> <span class="st">&quot;centre&quot;</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-35-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-32-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb67"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb67-1"><a href="visualization4.html#cb67-1"></a>Country_df <span class="sc">%&gt;%</span></span>
 <span id="cb67-2"><a href="visualization4.html#cb67-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">&quot;Asia&quot;</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb67-3"><a href="visualization4.html#cb67-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">label =</span> Country)) <span class="sc">+</span></span>
 <span id="cb67-4"><a href="visualization4.html#cb67-4"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
 <span id="cb67-5"><a href="visualization4.html#cb67-5"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="at">place =</span> <span class="st">&quot;centre&quot;</span>,</span>
 <span id="cb67-6"><a href="visualization4.html#cb67-6"></a>                    <span class="at">grow =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-36-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-33-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb68"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb68-1"><a href="visualization4.html#cb68-1"></a>Country_df <span class="sc">%&gt;%</span></span>
 <span id="cb68-2"><a href="visualization4.html#cb68-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">&quot;Asia&quot;</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb68-3"><a href="visualization4.html#cb68-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">fill =</span> HDI_2018,</span>
@@ -1356,7 +1349,7 @@ div.csl-indent {
 <span id="cb68-12"><a href="visualization4.html#cb68-12"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">&quot;UN Human Development Index (2018)&quot;</span>) <span class="sc">+</span></span>
 <span id="cb68-13"><a href="visualization4.html#cb68-13"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Population in Asia&quot;</span>) <span class="sc">+</span></span>
 <span id="cb68-14"><a href="visualization4.html#cb68-14"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-37-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-34-1.png" width="672" style="display: block; margin: auto;" /></p>
 <hr />
 </div>
 <div id="visual4-mosaic" class="section level2" number="20.16">
@@ -1397,7 +1390,7 @@ div.csl-indent {
 ##   3等室  372  119</code></pre>
 <div class="sourceCode" id="cb78"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb78-1"><a href="visualization4.html#cb78-1"></a><span class="fu">table</span>(Titanic_df<span class="sc">$</span>Class, Titanic_df<span class="sc">$</span>Survived) <span class="sc">%&gt;%</span> </span>
 <span id="cb78-2"><a href="visualization4.html#cb78-2"></a>  <span class="fu">plot</span>()</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-43-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-40-1.png" width="480" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb79"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb79-1"><a href="visualization4.html#cb79-1"></a>Titanic_df <span class="ot">&lt;-</span> Titanic_df <span class="sc">%&gt;%</span></span>
 <span id="cb79-2"><a href="visualization4.html#cb79-2"></a>  <span class="fu">mutate</span>(<span class="at">Class    =</span> <span class="fu">factor</span>(Class, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;1等室&quot;</span>, <span class="st">&quot;2等室&quot;</span>, <span class="st">&quot;3等室&quot;</span>)),</span>
 <span id="cb79-3"><a href="visualization4.html#cb79-3"></a>         <span class="at">Survived =</span> <span class="fu">factor</span>(Survived, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;死亡&quot;</span>, <span class="st">&quot;生存&quot;</span>)),</span>
@@ -1408,7 +1401,7 @@ div.csl-indent {
 <span id="cb80-4"><a href="visualization4.html#cb80-4"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;等級&quot;</span>, <span class="at">y =</span> <span class="st">&quot;生存有無&quot;</span>) <span class="sc">+</span></span>
 <span id="cb80-5"><a href="visualization4.html#cb80-5"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>) <span class="sc">+</span></span>
 <span id="cb80-6"><a href="visualization4.html#cb80-6"></a>  <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-45-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-42-1.png" width="480" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb81"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb81-1"><a href="visualization4.html#cb81-1"></a>Titanic_df <span class="sc">%&gt;%</span></span>
 <span id="cb81-2"><a href="visualization4.html#cb81-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb81-3"><a href="visualization4.html#cb81-3"></a>  <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Survived, Class), <span class="at">fill =</span> Survived), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
@@ -1418,7 +1411,7 @@ div.csl-indent {
 <span id="cb81-7"><a href="visualization4.html#cb81-7"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>,</span>
 <span id="cb81-8"><a href="visualization4.html#cb81-8"></a>        <span class="at">panel.grid      =</span> <span class="fu">element_blank</span>(),</span>
 <span id="cb81-9"><a href="visualization4.html#cb81-9"></a>        <span class="at">axis.text.x     =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-46-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-43-1.png" width="480" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb82"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb82-1"><a href="visualization4.html#cb82-1"></a>Titanic_df <span class="sc">%&gt;%</span></span>
 <span id="cb82-2"><a href="visualization4.html#cb82-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb82-3"><a href="visualization4.html#cb82-3"></a>  <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Survived, Class), <span class="at">fill =</span> Survived), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
@@ -1429,7 +1422,7 @@ div.csl-indent {
 <span id="cb82-8"><a href="visualization4.html#cb82-8"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>,</span>
 <span id="cb82-9"><a href="visualization4.html#cb82-9"></a>        <span class="at">panel.grid      =</span> <span class="fu">element_blank</span>(),</span>
 <span id="cb82-10"><a href="visualization4.html#cb82-10"></a>        <span class="at">axis.text.x     =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-47-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-44-1.png" width="768" style="display: block; margin: auto;" /></p>
 <hr />
 </div>
 <div id="visual4-further" class="section level2" number="20.17">
