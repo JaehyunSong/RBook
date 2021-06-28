@@ -1472,112 +1472,192 @@ div.csl-indent {
 </div>
 <div id="visual4-dendrogram" class="section level2" number="20.14">
 <h2><span class="header-section-number">20.14</span> デンドログラム</h2>
+<div class="sourceCode" id="cb80"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb80-1"><a href="visualization4.html#cb80-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(dendextend)</span>
+<span id="cb80-2"><a href="visualization4.html#cb80-2"></a></span>
+<span id="cb80-3"><a href="visualization4.html#cb80-3"></a>Asia_df <span class="ot">&lt;-</span> Country_df <span class="sc">%&gt;%</span></span>
+<span id="cb80-4"><a href="visualization4.html#cb80-4"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">&quot;Asia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb80-5"><a href="visualization4.html#cb80-5"></a>  <span class="fu">select</span>(Country, PPP_per_capita, HDI_2018, Polity_Score, FH_Total) <span class="sc">%&gt;%</span></span>
+<span id="cb80-6"><a href="visualization4.html#cb80-6"></a>  <span class="fu">drop_na</span>()</span>
+<span id="cb80-7"><a href="visualization4.html#cb80-7"></a></span>
+<span id="cb80-8"><a href="visualization4.html#cb80-8"></a>Asia_df <span class="ot">&lt;-</span> Asia_df <span class="sc">%&gt;%</span></span>
+<span id="cb80-9"><a href="visualization4.html#cb80-9"></a>  <span class="fu">column_to_rownames</span>(<span class="st">&quot;Country&quot;</span>)</span>
+<span id="cb80-10"><a href="visualization4.html#cb80-10"></a></span>
+<span id="cb80-11"><a href="visualization4.html#cb80-11"></a>Asia_df</span></code></pre></div>
+<pre><code>##                      PPP_per_capita HDI_2018 Polity_Score FH_Total
+## Afghanistan                2125.363    0.496           -1       27
+## Bahrain                   43624.136    0.838          -10       11
+## Bangladesh                 4457.529    0.614           -6       39
+## Bhutan                    11362.544    0.617            7       59
+## Burma                      4931.585    0.584            8       30
+## Cambodia                   4142.204    0.581           -4       25
+## China                     15176.568    0.758           -7       10
+## India                      6564.248    0.647            9       71
+## Indonesia                 11396.947    0.707            9       61
+## Iran                      13961.476    0.797           -7       17
+## Iraq                      10434.202    0.689            6       31
+## Israel                    41318.464    0.906            6       76
+## Japan                     41490.573    0.915           10       96
+## Jordan                     9849.485    0.723           -3       37
+## Kazakhstan                25469.454    0.817           -6       23
+## South Korea               39921.960    0.906            8       83
+## Kuwait                    50094.732    0.808           -7       36
+## Kyrgyzstan                 5083.211    0.674            8       39
+## Laos                       7548.949    0.604           -7       14
+## Lebanon                   16473.367    0.730            6       44
+## Malaysia                  27477.879    0.804            7       52
+## Mongolia                  11801.134    0.735           10       84
+## Nepal                      3210.718    0.579            7       56
+## Oman                      27700.112    0.834           -8       23
+## Pakistan                   4664.227    0.560            7       38
+## Philippines                8098.786    0.712            8       59
+## Qatar                     93465.650    0.848          -10       25
+## Saudi Arabia              47196.131    0.857          -10        7
+## Singapore                 95251.768    0.935           -2       50
+## Sri Lanka                 13413.583    0.780            6       56
+## Tajikistan                 3161.765    0.656           -3        9
+## Thailand                  18383.526    0.765           -3       32
+## Timor-Leste                3034.142    0.626            8       71
+## United Arab Emirates      65777.677    0.866           -8       17
+## Uzbekistan                 6792.995    0.710           -9       10
+## Vietnam                    7627.625    0.693           -7       20</code></pre>
+<div class="sourceCode" id="cb82"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb82-1"><a href="visualization4.html#cb82-1"></a>Asia_Cluster <span class="ot">&lt;-</span> Asia_df <span class="sc">%&gt;%</span></span>
+<span id="cb82-2"><a href="visualization4.html#cb82-2"></a>  <span class="fu">dist</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb82-3"><a href="visualization4.html#cb82-3"></a>  <span class="fu">hclust</span>()</span></code></pre></div>
+<p>{ggplot2}を使わずにデンドログラムを出力</p>
+<div class="sourceCode" id="cb83"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb83-1"><a href="visualization4.html#cb83-1"></a>Asia_Cluster_Dend <span class="ot">&lt;-</span> Asia_Cluster <span class="sc">%&gt;%</span></span>
+<span id="cb83-2"><a href="visualization4.html#cb83-2"></a>  <span class="fu">as.dendrogram</span>()</span>
+<span id="cb83-3"><a href="visualization4.html#cb83-3"></a></span>
+<span id="cb83-4"><a href="visualization4.html#cb83-4"></a><span class="fu">plot</span>(Asia_Cluster_Dend)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/visual4-dendro3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb84"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb84-1"><a href="visualization4.html#cb84-1"></a>Asia_Cluster_Dend <span class="sc">%&gt;%</span></span>
+<span id="cb84-2"><a href="visualization4.html#cb84-2"></a>  <span class="fu">set</span>(<span class="st">&quot;branches_k_color&quot;</span>, <span class="at">k =</span> <span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb84-3"><a href="visualization4.html#cb84-3"></a>  <span class="fu">plot</span>()</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/visual4-dendro4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb85"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb85-1"><a href="visualization4.html#cb85-1"></a>Asia_Cluster_gg <span class="ot">&lt;-</span> Asia_Cluster_Dend <span class="sc">%&gt;%</span></span>
+<span id="cb85-2"><a href="visualization4.html#cb85-2"></a>  <span class="fu">set</span>(<span class="st">&quot;branches_k_color&quot;</span>, <span class="at">k =</span> <span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb85-3"><a href="visualization4.html#cb85-3"></a>  <span class="fu">as.ggdend</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb86"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb86-1"><a href="visualization4.html#cb86-1"></a>Cluster_ID <span class="ot">&lt;-</span> <span class="fu">cutree</span>(Asia_Cluster, <span class="at">k =</span> <span class="dv">5</span>)</span>
+<span id="cb86-2"><a href="visualization4.html#cb86-2"></a>Cluster_ID <span class="ot">&lt;-</span> Cluster_ID[<span class="fu">order.dendrogram</span>(Asia_Cluster_Dend)]</span>
+<span id="cb86-3"><a href="visualization4.html#cb86-3"></a><span class="co">#Asia_Cluster_gg$labels$col &lt;- Cluster_ID</span></span></code></pre></div>
+<div class="sourceCode" id="cb87"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb87-1"><a href="visualization4.html#cb87-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb87-2"><a href="visualization4.html#cb87-2"></a>  <span class="fu">geom_segment</span>(<span class="at">data =</span> Asia_Cluster_gg<span class="sc">$</span>segments,</span>
+<span id="cb87-3"><a href="visualization4.html#cb87-3"></a>               <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">xend =</span> xend, <span class="at">yend =</span> yend, <span class="at">color =</span> col)) <span class="sc">+</span></span>
+<span id="cb87-4"><a href="visualization4.html#cb87-4"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> Asia_Cluster_gg<span class="sc">$</span>labels,</span>
+<span id="cb87-5"><a href="visualization4.html#cb87-5"></a>            <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">label =</span> label), </span>
+<span id="cb87-6"><a href="visualization4.html#cb87-6"></a>            <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="fl">1.2</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb87-7"><a href="visualization4.html#cb87-7"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">28000</span>, <span class="dv">100000</span>)) <span class="sc">+</span></span>
+<span id="cb87-8"><a href="visualization4.html#cb87-8"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb87-9"><a href="visualization4.html#cb87-9"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb87-10"><a href="visualization4.html#cb87-10"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb87-11"><a href="visualization4.html#cb87-11"></a>  <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb87-12"><a href="visualization4.html#cb87-12"></a>        <span class="at">axis.text  =</span> <span class="fu">element_blank</span>())</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/visual4-dendro7-1.png" width="672" style="display: block; margin: auto;" /></p>
 <hr />
 </div>
 <div id="visual4-tree" class="section level2" number="20.15">
 <h2><span class="header-section-number">20.15</span> ツリーマップ</h2>
-<div class="sourceCode" id="cb80"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb80-1"><a href="visualization4.html#cb80-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(treemapify)</span></code></pre></div>
-<div class="sourceCode" id="cb81"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb81-1"><a href="visualization4.html#cb81-1"></a>Country_df <span class="sc">%&gt;%</span></span>
-<span id="cb81-2"><a href="visualization4.html#cb81-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">&quot;Asia&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb81-3"><a href="visualization4.html#cb81-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">label =</span> Country)) <span class="sc">+</span></span>
-<span id="cb81-4"><a href="visualization4.html#cb81-4"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
-<span id="cb81-5"><a href="visualization4.html#cb81-5"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="at">place =</span> <span class="st">&quot;centre&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb88"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb88-1"><a href="visualization4.html#cb88-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(treemapify)</span></code></pre></div>
+<div class="sourceCode" id="cb89"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb89-1"><a href="visualization4.html#cb89-1"></a>Country_df <span class="sc">%&gt;%</span></span>
+<span id="cb89-2"><a href="visualization4.html#cb89-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">&quot;Asia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb89-3"><a href="visualization4.html#cb89-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">label =</span> Country)) <span class="sc">+</span></span>
+<span id="cb89-4"><a href="visualization4.html#cb89-4"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
+<span id="cb89-5"><a href="visualization4.html#cb89-5"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="at">place =</span> <span class="st">&quot;centre&quot;</span>)</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-32-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb82"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb82-1"><a href="visualization4.html#cb82-1"></a>Country_df <span class="sc">%&gt;%</span></span>
-<span id="cb82-2"><a href="visualization4.html#cb82-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">&quot;Asia&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb82-3"><a href="visualization4.html#cb82-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">label =</span> Country)) <span class="sc">+</span></span>
-<span id="cb82-4"><a href="visualization4.html#cb82-4"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
-<span id="cb82-5"><a href="visualization4.html#cb82-5"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="at">place =</span> <span class="st">&quot;centre&quot;</span>,</span>
-<span id="cb82-6"><a href="visualization4.html#cb82-6"></a>                    <span class="at">grow =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb90"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb90-1"><a href="visualization4.html#cb90-1"></a>Country_df <span class="sc">%&gt;%</span></span>
+<span id="cb90-2"><a href="visualization4.html#cb90-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">&quot;Asia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb90-3"><a href="visualization4.html#cb90-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">label =</span> Country)) <span class="sc">+</span></span>
+<span id="cb90-4"><a href="visualization4.html#cb90-4"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
+<span id="cb90-5"><a href="visualization4.html#cb90-5"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="at">place =</span> <span class="st">&quot;centre&quot;</span>,</span>
+<span id="cb90-6"><a href="visualization4.html#cb90-6"></a>                    <span class="at">grow =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-33-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb83"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb83-1"><a href="visualization4.html#cb83-1"></a>Country_df <span class="sc">%&gt;%</span></span>
-<span id="cb83-2"><a href="visualization4.html#cb83-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">&quot;Asia&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb83-3"><a href="visualization4.html#cb83-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">fill =</span> HDI_2018,</span>
-<span id="cb83-4"><a href="visualization4.html#cb83-4"></a>             <span class="at">label =</span> Country)) <span class="sc">+</span></span>
-<span id="cb83-5"><a href="visualization4.html#cb83-5"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
-<span id="cb83-6"><a href="visualization4.html#cb83-6"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="at">place =</span> <span class="st">&quot;centre&quot;</span>,</span>
-<span id="cb83-7"><a href="visualization4.html#cb83-7"></a>                    <span class="at">grow =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb83-8"><a href="visualization4.html#cb83-8"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">&quot;brown3&quot;</span>,</span>
-<span id="cb83-9"><a href="visualization4.html#cb83-9"></a>                       <span class="at">mid =</span> <span class="st">&quot;cornsilk&quot;</span>,</span>
-<span id="cb83-10"><a href="visualization4.html#cb83-10"></a>                       <span class="at">high =</span> <span class="st">&quot;cornflowerblue&quot;</span>,</span>
-<span id="cb83-11"><a href="visualization4.html#cb83-11"></a>                       <span class="at">midpoint =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb83-12"><a href="visualization4.html#cb83-12"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">&quot;UN Human Development Index (2018)&quot;</span>) <span class="sc">+</span></span>
-<span id="cb83-13"><a href="visualization4.html#cb83-13"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Population in Asia&quot;</span>) <span class="sc">+</span></span>
-<span id="cb83-14"><a href="visualization4.html#cb83-14"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb91"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb91-1"><a href="visualization4.html#cb91-1"></a>Country_df <span class="sc">%&gt;%</span></span>
+<span id="cb91-2"><a href="visualization4.html#cb91-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">&quot;Asia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb91-3"><a href="visualization4.html#cb91-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">fill =</span> HDI_2018,</span>
+<span id="cb91-4"><a href="visualization4.html#cb91-4"></a>             <span class="at">label =</span> Country)) <span class="sc">+</span></span>
+<span id="cb91-5"><a href="visualization4.html#cb91-5"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
+<span id="cb91-6"><a href="visualization4.html#cb91-6"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="at">place =</span> <span class="st">&quot;centre&quot;</span>,</span>
+<span id="cb91-7"><a href="visualization4.html#cb91-7"></a>                    <span class="at">grow =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb91-8"><a href="visualization4.html#cb91-8"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">&quot;brown3&quot;</span>,</span>
+<span id="cb91-9"><a href="visualization4.html#cb91-9"></a>                       <span class="at">mid =</span> <span class="st">&quot;cornsilk&quot;</span>,</span>
+<span id="cb91-10"><a href="visualization4.html#cb91-10"></a>                       <span class="at">high =</span> <span class="st">&quot;cornflowerblue&quot;</span>,</span>
+<span id="cb91-11"><a href="visualization4.html#cb91-11"></a>                       <span class="at">midpoint =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb91-12"><a href="visualization4.html#cb91-12"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">&quot;UN Human Development Index (2018)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb91-13"><a href="visualization4.html#cb91-13"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Population in Asia&quot;</span>) <span class="sc">+</span></span>
+<span id="cb91-14"><a href="visualization4.html#cb91-14"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-34-1.png" width="672" style="display: block; margin: auto;" /></p>
 <hr />
 </div>
 <div id="visual4-mosaic" class="section level2" number="20.16">
 <h2><span class="header-section-number">20.16</span> モザイクプロット</h2>
 <p>モザイクプロットは2つの離散変数（おもに名目変数）の関係を可視化するために <span class="citation"><a href="#ref-Hargian_Kleiner:1984" role="doc-biblioref">Hartigan and Kleiner</a> (<a href="#ref-Hargian_Kleiner:1984" role="doc-biblioref">1984</a>)</span> が考案した図です。2つの名目変数間の関係を見る際によく使われるものはクロス表（クロス集計表）でしょう。</p>
-<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="visualization4.html#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CRANでなくGitHub経由でインストール</span></span>
-<span id="cb84-2"><a href="visualization4.html#cb84-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;haleyjeppson/ggmosaic&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb85"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb85-1"><a href="visualization4.html#cb85-1"></a><span class="fu">library</span>(ggmosaic)</span></code></pre></div>
-<div class="sourceCode" id="cb86"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb86-1"><a href="visualization4.html#cb86-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(titanic)</span>
-<span id="cb86-2"><a href="visualization4.html#cb86-2"></a>Titanic_df <span class="ot">&lt;-</span> titanic_train</span>
-<span id="cb86-3"><a href="visualization4.html#cb86-3"></a></span>
-<span id="cb86-4"><a href="visualization4.html#cb86-4"></a><span class="fu">names</span>(Titanic_df)</span></code></pre></div>
-<pre><code>##  [1] &quot;PassengerId&quot; &quot;Survived&quot;    &quot;Pclass&quot;      &quot;Name&quot;        &quot;Sex&quot;        
-##  [6] &quot;Age&quot;         &quot;SibSp&quot;       &quot;Parch&quot;       &quot;Ticket&quot;      &quot;Fare&quot;       
-## [11] &quot;Cabin&quot;       &quot;Embarked&quot;</code></pre>
-<div class="sourceCode" id="cb88"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb88-1"><a href="visualization4.html#cb88-1"></a>Titanic_df <span class="ot">&lt;-</span> Titanic_df <span class="sc">%&gt;%</span></span>
-<span id="cb88-2"><a href="visualization4.html#cb88-2"></a>  <span class="fu">select</span>(<span class="at">Class =</span> Pclass, Survived, Sex) <span class="sc">%&gt;%</span></span>
-<span id="cb88-3"><a href="visualization4.html#cb88-3"></a>  <span class="fu">mutate</span>(<span class="at">Class    =</span> <span class="fu">case_when</span>(Class <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">&quot;1等室&quot;</span>,</span>
-<span id="cb88-4"><a href="visualization4.html#cb88-4"></a>                              Class <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">&quot;2等室&quot;</span>,</span>
-<span id="cb88-5"><a href="visualization4.html#cb88-5"></a>                              <span class="cn">TRUE</span>       <span class="sc">~</span> <span class="st">&quot;3等室&quot;</span>),</span>
-<span id="cb88-6"><a href="visualization4.html#cb88-6"></a>         <span class="at">Survived =</span> <span class="fu">case_when</span>(Survived <span class="sc">==</span> <span class="dv">0</span> <span class="sc">~</span> <span class="st">&quot;死亡&quot;</span>,</span>
-<span id="cb88-7"><a href="visualization4.html#cb88-7"></a>                              <span class="cn">TRUE</span>          <span class="sc">~</span> <span class="st">&quot;生存&quot;</span>),</span>
-<span id="cb88-8"><a href="visualization4.html#cb88-8"></a>         <span class="at">Sex      =</span> <span class="fu">case_when</span>(Sex <span class="sc">==</span> <span class="st">&quot;male&quot;</span> <span class="sc">~</span> <span class="st">&quot;男性&quot;</span>,</span>
-<span id="cb88-9"><a href="visualization4.html#cb88-9"></a>                              <span class="cn">TRUE</span>          <span class="sc">~</span> <span class="st">&quot;女性&quot;</span>))</span></code></pre></div>
-<div class="sourceCode" id="cb89"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb89-1"><a href="visualization4.html#cb89-1"></a><span class="fu">head</span>(Titanic_df)</span></code></pre></div>
-<pre><code>##   Class Survived  Sex
-## 1 3等室     死亡 男性
-## 2 1等室     生存 女性
-## 3 3等室     生存 女性
-## 4 1等室     生存 女性
-## 5 3等室     死亡 男性
-## 6 3等室     死亡 男性</code></pre>
-<div class="sourceCode" id="cb91"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb91-1"><a href="visualization4.html#cb91-1"></a><span class="fu">table</span>(Titanic_df<span class="sc">$</span>Class, Titanic_df<span class="sc">$</span>Survived)</span></code></pre></div>
-<pre><code>##        
-##         死亡 生存
-##   1等室   80  136
-##   2等室   97   87
-##   3等室  372  119</code></pre>
-<div class="sourceCode" id="cb93"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb93-1"><a href="visualization4.html#cb93-1"></a><span class="fu">table</span>(Titanic_df<span class="sc">$</span>Class, Titanic_df<span class="sc">$</span>Survived) <span class="sc">%&gt;%</span> </span>
-<span id="cb93-2"><a href="visualization4.html#cb93-2"></a>  <span class="fu">plot</span>()</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-40-1.png" width="480" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb94"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb94-1"><a href="visualization4.html#cb94-1"></a>Titanic_df <span class="ot">&lt;-</span> Titanic_df <span class="sc">%&gt;%</span></span>
-<span id="cb94-2"><a href="visualization4.html#cb94-2"></a>  <span class="fu">mutate</span>(<span class="at">Class    =</span> <span class="fu">factor</span>(Class, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;1等室&quot;</span>, <span class="st">&quot;2等室&quot;</span>, <span class="st">&quot;3等室&quot;</span>)),</span>
-<span id="cb94-3"><a href="visualization4.html#cb94-3"></a>         <span class="at">Survived =</span> <span class="fu">factor</span>(Survived, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;死亡&quot;</span>, <span class="st">&quot;生存&quot;</span>)),</span>
-<span id="cb94-4"><a href="visualization4.html#cb94-4"></a>         <span class="at">Sex      =</span> <span class="fu">factor</span>(Sex, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;男性&quot;</span>, <span class="st">&quot;女性&quot;</span>)))</span></code></pre></div>
-<div class="sourceCode" id="cb95"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb95-1"><a href="visualization4.html#cb95-1"></a>Titanic_df <span class="sc">%&gt;%</span></span>
-<span id="cb95-2"><a href="visualization4.html#cb95-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb95-3"><a href="visualization4.html#cb95-3"></a>  <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Survived, Class)), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb95-4"><a href="visualization4.html#cb95-4"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;等級&quot;</span>, <span class="at">y =</span> <span class="st">&quot;生存有無&quot;</span>) <span class="sc">+</span></span>
-<span id="cb95-5"><a href="visualization4.html#cb95-5"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>) <span class="sc">+</span></span>
-<span id="cb95-6"><a href="visualization4.html#cb95-6"></a>  <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-42-1.png" width="480" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb96"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb96-1"><a href="visualization4.html#cb96-1"></a>Titanic_df <span class="sc">%&gt;%</span></span>
-<span id="cb96-2"><a href="visualization4.html#cb96-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb96-3"><a href="visualization4.html#cb96-3"></a>  <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Survived, Class), <span class="at">fill =</span> Survived), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb96-4"><a href="visualization4.html#cb96-4"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;等級&quot;</span>, <span class="at">y =</span> <span class="st">&quot;生存有無&quot;</span>) <span class="sc">+</span></span>
-<span id="cb96-5"><a href="visualization4.html#cb96-5"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>,</span>
-<span id="cb96-6"><a href="visualization4.html#cb96-6"></a>                <span class="at">base_size   =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
-<span id="cb96-7"><a href="visualization4.html#cb96-7"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>,</span>
-<span id="cb96-8"><a href="visualization4.html#cb96-8"></a>        <span class="at">panel.grid      =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb96-9"><a href="visualization4.html#cb96-9"></a>        <span class="at">axis.text.x     =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-43-1.png" width="480" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb97"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb97-1"><a href="visualization4.html#cb97-1"></a>Titanic_df <span class="sc">%&gt;%</span></span>
-<span id="cb97-2"><a href="visualization4.html#cb97-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb97-3"><a href="visualization4.html#cb97-3"></a>  <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Survived, Class), <span class="at">fill =</span> Survived), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb97-4"><a href="visualization4.html#cb97-4"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;等級&quot;</span>, <span class="at">y =</span> <span class="st">&quot;生存有無&quot;</span>) <span class="sc">+</span></span>
-<span id="cb97-5"><a href="visualization4.html#cb97-5"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Sex, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb97-6"><a href="visualization4.html#cb97-6"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>,</span>
-<span id="cb97-7"><a href="visualization4.html#cb97-7"></a>                <span class="at">base_size   =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
-<span id="cb97-8"><a href="visualization4.html#cb97-8"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>,</span>
-<span id="cb97-9"><a href="visualization4.html#cb97-9"></a>        <span class="at">panel.grid      =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb97-10"><a href="visualization4.html#cb97-10"></a>        <span class="at">axis.text.x     =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-44-1.png" width="768" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb92"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb92-1"><a href="visualization4.html#cb92-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggmosaic)</span></code></pre></div>
+<div class="sourceCode" id="cb93"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb93-1"><a href="visualization4.html#cb93-1"></a>Mosaic_df <span class="ot">&lt;-</span> Country_df <span class="sc">%&gt;%</span></span>
+<span id="cb93-2"><a href="visualization4.html#cb93-2"></a>    <span class="fu">select</span>(Country, Continent, <span class="at">Polity =</span> Polity_Type, <span class="at">PPP =</span> PPP_per_capita) <span class="sc">%&gt;%</span></span>
+<span id="cb93-3"><a href="visualization4.html#cb93-3"></a>    <span class="fu">mutate</span>(<span class="at">Continent =</span> <span class="fu">factor</span>(Continent, </span>
+<span id="cb93-4"><a href="visualization4.html#cb93-4"></a>                              <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Africa&quot;</span>, <span class="st">&quot;America&quot;</span>, <span class="st">&quot;Asia&quot;</span>,</span>
+<span id="cb93-5"><a href="visualization4.html#cb93-5"></a>                                         <span class="st">&quot;Europe&quot;</span>, <span class="st">&quot;Oceania&quot;</span>)),</span>
+<span id="cb93-6"><a href="visualization4.html#cb93-6"></a>           <span class="at">Polity    =</span> <span class="fu">factor</span>(Polity,</span>
+<span id="cb93-7"><a href="visualization4.html#cb93-7"></a>                              <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Autocracy&quot;</span>, <span class="st">&quot;Closed Anocracy&quot;</span>,</span>
+<span id="cb93-8"><a href="visualization4.html#cb93-8"></a>                                         <span class="st">&quot;Open Anocracy&quot;</span>, <span class="st">&quot;Democracy&quot;</span>,</span>
+<span id="cb93-9"><a href="visualization4.html#cb93-9"></a>                                         <span class="st">&quot;Full Democracy&quot;</span>)),</span>
+<span id="cb93-10"><a href="visualization4.html#cb93-10"></a>           <span class="at">PPP       =</span> <span class="fu">if_else</span>(PPP <span class="sc">&gt;=</span> <span class="dv">15000</span>, <span class="st">&quot;High PPP&quot;</span>, <span class="st">&quot;Low PPP&quot;</span>),</span>
+<span id="cb93-11"><a href="visualization4.html#cb93-11"></a>           <span class="at">PPP       =</span> <span class="fu">factor</span>(PPP, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Low PPP&quot;</span>, <span class="st">&quot;High PPP&quot;</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb93-12"><a href="visualization4.html#cb93-12"></a>    <span class="fu">drop_na</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb94"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb94-1"><a href="visualization4.html#cb94-1"></a><span class="fu">head</span>(Mosaic_df)</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 4
+##   Country     Continent Polity          PPP     
+##   &lt;chr&gt;       &lt;fct&gt;     &lt;fct&gt;           &lt;fct&gt;   
+## 1 Afghanistan Asia      Closed Anocracy Low PPP 
+## 2 Albania     Europe    Democracy       Low PPP 
+## 3 Algeria     Africa    Open Anocracy   Low PPP 
+## 4 Angola      Africa    Closed Anocracy Low PPP 
+## 5 Argentina   America   Democracy       High PPP
+## 6 Armenia     Europe    Democracy       Low PPP</code></pre>
+<p>　クロス表を作成する内蔵関数としては<code>table()</code>があります。2つの変数が必要となり、第一引数が行、第二引数が列を表します。</p>
+<div class="sourceCode" id="cb96"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb96-1"><a href="visualization4.html#cb96-1"></a>Mosaic_Tab <span class="ot">&lt;-</span> <span class="fu">table</span>(Mosaic_df<span class="sc">$</span>Continent, Mosaic_df<span class="sc">$</span>Polity)</span>
+<span id="cb96-2"><a href="visualization4.html#cb96-2"></a>Mosaic_Tab</span></code></pre></div>
+<pre><code>##          
+##           Autocracy Closed Anocracy Open Anocracy Democracy Full Democracy
+##   Africa          3              14            11        18              1
+##   America         0               1             4        16              5
+##   Asia           13               6             0        15              3
+##   Europe          2               1             2        16             20
+##   Oceania         0               0             2         0              2</code></pre>
+<p>　この<code>Mosaic_Tab</code>のクラスは<code>"table"</code>ですが、<code>"table"</code>クラスのオブジェクトを<code>plot()</code>に渡すと別途のパッケージを使わずモザイクプロットを作成することができます。</p>
+<div class="sourceCode" id="cb98"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb98-1"><a href="visualization4.html#cb98-1"></a><span class="fu">plot</span>(Mosaic_Tab)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/visual4-mosaic6-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>　やや地味ではありますが、モザイクプロットが出来ました。ここからはより読みやすいモザイクプロットを作成するために{ggmosaic}パッケージの<code>geom_mosaic()</code>関数を使います。</p>
+<p>　<code>geom_mosaic()</code>の場合、<code>x</code>のみのマッピングで十分です。ただし、特定の変数を指定するのではなく、<code>product(変数1, 変数2)</code>を<code>x</code>にマッピングする必要があります。<code>table()</code>関数同様、変数1は行、変数2は列です。また、欠損値が含まれている行がある場合は、<code>aes()</code>の外側に<code>na.rm = TRUE</code>を指定する必要があります。今回は<code>drop_na()</code>で欠損値をすべて除外しましたが、念の為に指定しておきます。</p>
+<div class="sourceCode" id="cb99"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb99-1"><a href="visualization4.html#cb99-1"></a>Mosaic_df <span class="sc">%&gt;%</span></span>
+<span id="cb99-2"><a href="visualization4.html#cb99-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb99-3"><a href="visualization4.html#cb99-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent)), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb99-4"><a href="visualization4.html#cb99-4"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Continent&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Polity Type&quot;</span>) <span class="sc">+</span></span>
+<span id="cb99-5"><a href="visualization4.html#cb99-5"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb99-6"><a href="visualization4.html#cb99-6"></a>    <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/visual4-mosaic7-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>　これで出来上がりですが、<code>"table"</code>オブジェクトを<code>plot()</code>に渡した結果とあまり変わらないですね。続いて、この図を少し改良してみましょう。まずはセルの色分けですが、これは<code>fill</code>に色分けする変数をマッピングするだけです。今回は政治体制ごとにセルを色分けしましょう。また、文字を大きめにし、横軸の目盛りラベルを回転します。</p>
+<div class="sourceCode" id="cb100"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb100-1"><a href="visualization4.html#cb100-1"></a>Mosaic_df <span class="sc">%&gt;%</span></span>
+<span id="cb100-2"><a href="visualization4.html#cb100-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb100-3"><a href="visualization4.html#cb100-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent), <span class="at">fill =</span> Polity), </span>
+<span id="cb100-4"><a href="visualization4.html#cb100-4"></a>                <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb100-5"><a href="visualization4.html#cb100-5"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Continent&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Polity Type&quot;</span>) <span class="sc">+</span></span>
+<span id="cb100-6"><a href="visualization4.html#cb100-6"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size   =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb100-7"><a href="visualization4.html#cb100-7"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb100-8"><a href="visualization4.html#cb100-8"></a>          <span class="at">panel.grid      =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb100-9"><a href="visualization4.html#cb100-9"></a>          <span class="at">axis.text.x     =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/visual4-mosaic8-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>　次元を追加するためにはファセット分割を使います。たとえば、一人当たりPPP GDPの高低（<code>PPP</code>）でファセットを分割する場合、<code>facet_wrap(~PPP)</code>レイヤーを足すだけです。</p>
+<div class="sourceCode" id="cb101"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb101-1"><a href="visualization4.html#cb101-1"></a>Mosaic_df <span class="sc">%&gt;%</span></span>
+<span id="cb101-2"><a href="visualization4.html#cb101-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb101-3"><a href="visualization4.html#cb101-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent), <span class="at">fill =</span> Polity), </span>
+<span id="cb101-4"><a href="visualization4.html#cb101-4"></a>                <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb101-5"><a href="visualization4.html#cb101-5"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Continent&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Polity Type&quot;</span>) <span class="sc">+</span></span>
+<span id="cb101-6"><a href="visualization4.html#cb101-6"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>PPP, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb101-7"><a href="visualization4.html#cb101-7"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size   =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb101-8"><a href="visualization4.html#cb101-8"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb101-9"><a href="visualization4.html#cb101-9"></a>          <span class="at">panel.grid      =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb101-10"><a href="visualization4.html#cb101-10"></a>          <span class="at">axis.text.x     =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/visual4-mosaic9-1.png" width="768" style="display: block; margin: auto;" /></p>
 <hr />
 </div>
 <div id="visual4-further" class="section level2" number="20.17">
