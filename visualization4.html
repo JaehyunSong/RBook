@@ -1556,54 +1556,104 @@ div.csl-indent {
 </div>
 <div id="visual4-tree" class="section level2" number="20.15">
 <h2><span class="header-section-number">20.15</span> ツリーマップ</h2>
+<p>　ツリーマップ（tree map）は変数の値の大きさを長方形の面積として表すグラフです。全体におけるシェアを示す時に使う点で、円グラフの代替案の一つになります。円グラフは項目が多すぎると読みにくいデメリットがありますが、ツリーマップは項目が多い場合でも有効です。むろん、多すぎると読みにくいことは同じですので、注意が必要です。</p>
+<p>　ツリーマップを作成するためには{treemapify}パッケージの<code>geom_treemap()</code>幾何オブジェクトを使用します。まず、{treemapify}をインストールし、読み込みます。</p>
 <div class="sourceCode" id="cb88"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb88-1"><a href="visualization4.html#cb88-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(treemapify)</span></code></pre></div>
+<p>　ここでは<code>Country_df</code>からアジア諸国の人口（<code>Population</code>）をツリーマップをして可視化したいと思います。<code>geom_treemap()</code>の場合、各長方形は面積の情報のみを持ちます。この面積の情報を<code>area</code>にマッピングします。</p>
 <div class="sourceCode" id="cb89"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb89-1"><a href="visualization4.html#cb89-1"></a>Country_df <span class="sc">%&gt;%</span></span>
 <span id="cb89-2"><a href="visualization4.html#cb89-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">&quot;Asia&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb89-3"><a href="visualization4.html#cb89-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">label =</span> Country)) <span class="sc">+</span></span>
-<span id="cb89-4"><a href="visualization4.html#cb89-4"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
-<span id="cb89-5"><a href="visualization4.html#cb89-5"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="at">place =</span> <span class="st">&quot;centre&quot;</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-32-1.png" width="672" style="display: block; margin: auto;" /></p>
+<span id="cb89-3"><a href="visualization4.html#cb89-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb89-4"><a href="visualization4.html#cb89-4"></a>  <span class="fu">geom_treemap</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population))</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/visual4-tree2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>　これだけだと各長方形がどの国を指しているのかが分かりませんね。長方形の上に国名（<code>Country</code>）を追加するためには<code>geom_treemap_text()</code>幾何オブジェクトを使用します。マッピングは<code>area</code>と<code>label</code>に対し、それぞれ面積を表す<code>Population</code>と国名を表す<code>Country</code>を指定します。<code>area</code>は<code>geom_treemap()</code>と<code>geom_treemap_text()</code>両方で使われるので<code>ggplot()</code>の内部でマッピングしても問題ありません<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>。また、<code>aes()</code>の外側に<code>color = "white"</code>で文字を白に指定し、<code>place = "center"</code>で長方形の真ん中にラベルが付くようにします。</p>
 <div class="sourceCode" id="cb90"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb90-1"><a href="visualization4.html#cb90-1"></a>Country_df <span class="sc">%&gt;%</span></span>
 <span id="cb90-2"><a href="visualization4.html#cb90-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">&quot;Asia&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb90-3"><a href="visualization4.html#cb90-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">label =</span> Country)) <span class="sc">+</span></span>
+<span id="cb90-3"><a href="visualization4.html#cb90-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population)) <span class="sc">+</span></span>
 <span id="cb90-4"><a href="visualization4.html#cb90-4"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
-<span id="cb90-5"><a href="visualization4.html#cb90-5"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="at">place =</span> <span class="st">&quot;centre&quot;</span>,</span>
-<span id="cb90-6"><a href="visualization4.html#cb90-6"></a>                    <span class="at">grow =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-33-1.png" width="672" style="display: block; margin: auto;" /></p>
+<span id="cb90-5"><a href="visualization4.html#cb90-5"></a>  <span class="fu">geom_treemap_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> Country), <span class="at">color =</span> <span class="st">&quot;white&quot;</span>, <span class="at">place =</span> <span class="st">&quot;center&quot;</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/visual4-tree3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>　これでツリーマップが完成しました。インドと中国の存在感がかなり大きいですね。更にラベルのサイズを長方形に合わせると、その存在感をより高めることができます。ラベルの大きさを長方形に合わせるには<code>geom_treepmap_text()</code>の内部に<code>grow = TRUE</code>を指定します。</p>
 <div class="sourceCode" id="cb91"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb91-1"><a href="visualization4.html#cb91-1"></a>Country_df <span class="sc">%&gt;%</span></span>
 <span id="cb91-2"><a href="visualization4.html#cb91-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">&quot;Asia&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb91-3"><a href="visualization4.html#cb91-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">fill =</span> HDI_2018,</span>
-<span id="cb91-4"><a href="visualization4.html#cb91-4"></a>             <span class="at">label =</span> Country)) <span class="sc">+</span></span>
-<span id="cb91-5"><a href="visualization4.html#cb91-5"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
-<span id="cb91-6"><a href="visualization4.html#cb91-6"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">colour =</span> <span class="st">&quot;white&quot;</span>, <span class="at">place =</span> <span class="st">&quot;centre&quot;</span>,</span>
-<span id="cb91-7"><a href="visualization4.html#cb91-7"></a>                    <span class="at">grow =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb91-8"><a href="visualization4.html#cb91-8"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">&quot;brown3&quot;</span>,</span>
-<span id="cb91-9"><a href="visualization4.html#cb91-9"></a>                       <span class="at">mid =</span> <span class="st">&quot;cornsilk&quot;</span>,</span>
-<span id="cb91-10"><a href="visualization4.html#cb91-10"></a>                       <span class="at">high =</span> <span class="st">&quot;cornflowerblue&quot;</span>,</span>
-<span id="cb91-11"><a href="visualization4.html#cb91-11"></a>                       <span class="at">midpoint =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb91-12"><a href="visualization4.html#cb91-12"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">&quot;UN Human Development Index (2018)&quot;</span>) <span class="sc">+</span></span>
-<span id="cb91-13"><a href="visualization4.html#cb91-13"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Population in Asia&quot;</span>) <span class="sc">+</span></span>
-<span id="cb91-14"><a href="visualization4.html#cb91-14"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-34-1.png" width="672" style="display: block; margin: auto;" /></p>
+<span id="cb91-3"><a href="visualization4.html#cb91-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">label =</span> Country)) <span class="sc">+</span></span>
+<span id="cb91-4"><a href="visualization4.html#cb91-4"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
+<span id="cb91-5"><a href="visualization4.html#cb91-5"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">color =</span> <span class="st">&quot;white&quot;</span>, <span class="at">place =</span> <span class="st">&quot;center&quot;</span>,</span>
+<span id="cb91-6"><a href="visualization4.html#cb91-6"></a>                    <span class="at">grow =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/visual4-tree4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>　ここで更に次元を追加するために、色塗りをしてみましょう。たとえば、G20加盟国か否かで色分けをしたい場合、<code>fill</code>に<code>G20</code>をマッピングします。ただし、今のままだと<code>G20</code>は連続変数扱いになりますので、character型、またはfactor型に変換します。</p>
+<div class="sourceCode" id="cb92"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb92-1"><a href="visualization4.html#cb92-1"></a>Country_df <span class="sc">%&gt;%</span></span>
+<span id="cb92-2"><a href="visualization4.html#cb92-2"></a>  <span class="fu">mutate</span>(<span class="at">G20 =</span> <span class="fu">if_else</span>(G20 <span class="sc">==</span> <span class="dv">1</span>, <span class="st">&quot;Member&quot;</span>, <span class="st">&quot;Non-member&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb92-3"><a href="visualization4.html#cb92-3"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">&quot;Asia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb92-4"><a href="visualization4.html#cb92-4"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">fill =</span> G20,</span>
+<span id="cb92-5"><a href="visualization4.html#cb92-5"></a>             <span class="at">label =</span> Country)) <span class="sc">+</span></span>
+<span id="cb92-6"><a href="visualization4.html#cb92-6"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
+<span id="cb92-7"><a href="visualization4.html#cb92-7"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">color =</span> <span class="st">&quot;white&quot;</span>, <span class="at">place =</span> <span class="st">&quot;centre&quot;</span>,</span>
+<span id="cb92-8"><a href="visualization4.html#cb92-8"></a>                    <span class="at">grow =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb92-9"><a href="visualization4.html#cb92-9"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">&quot;G20&quot;</span>) <span class="sc">+</span></span>
+<span id="cb92-10"><a href="visualization4.html#cb92-10"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Population in Asia&quot;</span>) <span class="sc">+</span></span>
+<span id="cb92-11"><a href="visualization4.html#cb92-11"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/visual4-tree5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>　色塗りは連続変数に対して行うことも可能です。ここでは2018年人間開発指数（<code>HDI_2108</code>）の値に応じて色塗りをしてみます。また、<code>HDI_2018</code>が低い（<code>low</code>）と<span style="color:#CD3333;"><strong>brown3</strong></span>、高い（<code>high</code>）と<span style="color:#6495ED;"><strong>cornflowerblue</strong></span>色にします。真ん中の値（<code>midpoint</code>）は0.7とし、色（<code>mid</code>）は<span style="color:#FFF8DC;background-color:#7F7F7F;"><strong>cornsilk</strong></span>を使います。</p>
+<p>　連続変数でマッピングされた色塗り（<code>fill</code>）の調整には<code>scale_fill_gradient()</code>、または<code>scale_fill_gradient2()</code>を使います。前者は中間点なし、後者は中間点ありです。これらの使い方は第<a href="visualization3.html#visualization3">19</a>章で紹介しました<code>scale_color_gradient()</code>と同じです。</p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb93-1"><a href="visualization4.html#cb93-1"></a>Country_df <span class="sc">%&gt;%</span></span>
+<span id="cb93-2"><a href="visualization4.html#cb93-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">&quot;Asia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb93-3"><a href="visualization4.html#cb93-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">fill =</span> HDI_2018,</span>
+<span id="cb93-4"><a href="visualization4.html#cb93-4"></a>             <span class="at">label =</span> Country)) <span class="sc">+</span></span>
+<span id="cb93-5"><a href="visualization4.html#cb93-5"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
+<span id="cb93-6"><a href="visualization4.html#cb93-6"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">color =</span> <span class="st">&quot;white&quot;</span>, <span class="at">place =</span> <span class="st">&quot;centre&quot;</span>,</span>
+<span id="cb93-7"><a href="visualization4.html#cb93-7"></a>                    <span class="at">grow =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb93-8"><a href="visualization4.html#cb93-8"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">&quot;brown3&quot;</span>,</span>
+<span id="cb93-9"><a href="visualization4.html#cb93-9"></a>                       <span class="at">mid =</span> <span class="st">&quot;cornsilk&quot;</span>,</span>
+<span id="cb93-10"><a href="visualization4.html#cb93-10"></a>                       <span class="at">high =</span> <span class="st">&quot;cornflowerblue&quot;</span>,</span>
+<span id="cb93-11"><a href="visualization4.html#cb93-11"></a>                       <span class="at">midpoint =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb93-12"><a href="visualization4.html#cb93-12"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">&quot;UN Human Development Index (2018)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb93-13"><a href="visualization4.html#cb93-13"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Population in Asia&quot;</span>) <span class="sc">+</span></span>
+<span id="cb93-14"><a href="visualization4.html#cb93-14"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/visual4-tree6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>　ちなみに以上の図を円グラフにすると以下のようになります（国名は人口の割合が2.5%を超える国のみ表示）。ツリーマップと比較してかなり読みにくいことが分かります。</p>
+<div class="sourceCode" id="cb94"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb94-1"><a href="visualization4.html#cb94-1"></a>Country_df <span class="sc">%&gt;%</span></span>
+<span id="cb94-2"><a href="visualization4.html#cb94-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">&quot;Asia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb94-3"><a href="visualization4.html#cb94-3"></a>  <span class="fu">arrange</span>(Population) <span class="sc">%&gt;%</span></span>
+<span id="cb94-4"><a href="visualization4.html#cb94-4"></a>  <span class="fu">mutate</span>(<span class="at">Prop        =</span> Population <span class="sc">/</span> <span class="fu">sum</span>(Population) <span class="sc">*</span> <span class="dv">100</span>,</span>
+<span id="cb94-5"><a href="visualization4.html#cb94-5"></a>         <span class="at">LabelY      =</span> <span class="dv">100</span> <span class="sc">-</span> (<span class="fu">cumsum</span>(Prop) <span class="sc">-</span> <span class="fl">0.5</span> <span class="sc">*</span> Prop),</span>
+<span id="cb94-6"><a href="visualization4.html#cb94-6"></a>         <span class="at">CountryName =</span> <span class="fu">if_else</span>(Prop <span class="sc">&lt;</span> <span class="fl">2.5</span>, <span class="st">&quot;&quot;</span>, Country),</span>
+<span id="cb94-7"><a href="visualization4.html#cb94-7"></a>         <span class="at">Country     =</span> <span class="fu">fct_inorder</span>(Country)) <span class="sc">%&gt;%</span></span>
+<span id="cb94-8"><a href="visualization4.html#cb94-8"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb94-9"><a href="visualization4.html#cb94-9"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1</span>, <span class="at">y =</span> Prop, <span class="at">group =</span> Country, <span class="at">fill =</span> HDI_2018), </span>
+<span id="cb94-10"><a href="visualization4.html#cb94-10"></a>           <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="at">width =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb94-11"><a href="visualization4.html#cb94-11"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1</span>, <span class="at">y =</span> LabelY, <span class="at">label =</span> CountryName)) <span class="sc">+</span></span>
+<span id="cb94-12"><a href="visualization4.html#cb94-12"></a>  <span class="fu">coord_polar</span>(<span class="st">&quot;y&quot;</span>, <span class="at">start =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb94-13"><a href="visualization4.html#cb94-13"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">&quot;brown3&quot;</span>,</span>
+<span id="cb94-14"><a href="visualization4.html#cb94-14"></a>                       <span class="at">mid =</span> <span class="st">&quot;cornsilk&quot;</span>,</span>
+<span id="cb94-15"><a href="visualization4.html#cb94-15"></a>                       <span class="at">high =</span> <span class="st">&quot;cornflowerblue&quot;</span>,</span>
+<span id="cb94-16"><a href="visualization4.html#cb94-16"></a>                       <span class="at">midpoint =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb94-17"><a href="visualization4.html#cb94-17"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">&quot;UN Human Development Index (2018)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb94-18"><a href="visualization4.html#cb94-18"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Population in Asia&quot;</span>) <span class="sc">+</span></span>
+<span id="cb94-19"><a href="visualization4.html#cb94-19"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb94-20"><a href="visualization4.html#cb94-20"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
+<span id="cb94-21"><a href="visualization4.html#cb94-21"></a>        <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb94-22"><a href="visualization4.html#cb94-22"></a>        <span class="at">axis.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb94-23"><a href="visualization4.html#cb94-23"></a>        <span class="at">axis.text  =</span> <span class="fu">element_blank</span>())</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/visual4-tree7-1.png" width="672" style="display: block; margin: auto;" /></p>
 <hr />
 </div>
 <div id="visual4-mosaic" class="section level2" number="20.16">
 <h2><span class="header-section-number">20.16</span> モザイクプロット</h2>
 <p>モザイクプロットは2つの離散変数（おもに名目変数）の関係を可視化するために <span class="citation"><a href="#ref-Hargian_Kleiner:1984" role="doc-biblioref">Hartigan and Kleiner</a> (<a href="#ref-Hargian_Kleiner:1984" role="doc-biblioref">1984</a>)</span> が考案した図です。2つの名目変数間の関係を見る際によく使われるものはクロス表（クロス集計表）でしょう。</p>
-<div class="sourceCode" id="cb92"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb92-1"><a href="visualization4.html#cb92-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggmosaic)</span></code></pre></div>
-<div class="sourceCode" id="cb93"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb93-1"><a href="visualization4.html#cb93-1"></a>Mosaic_df <span class="ot">&lt;-</span> Country_df <span class="sc">%&gt;%</span></span>
-<span id="cb93-2"><a href="visualization4.html#cb93-2"></a>    <span class="fu">select</span>(Country, Continent, <span class="at">Polity =</span> Polity_Type, <span class="at">PPP =</span> PPP_per_capita) <span class="sc">%&gt;%</span></span>
-<span id="cb93-3"><a href="visualization4.html#cb93-3"></a>    <span class="fu">mutate</span>(<span class="at">Continent =</span> <span class="fu">factor</span>(Continent, </span>
-<span id="cb93-4"><a href="visualization4.html#cb93-4"></a>                              <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Africa&quot;</span>, <span class="st">&quot;America&quot;</span>, <span class="st">&quot;Asia&quot;</span>,</span>
-<span id="cb93-5"><a href="visualization4.html#cb93-5"></a>                                         <span class="st">&quot;Europe&quot;</span>, <span class="st">&quot;Oceania&quot;</span>)),</span>
-<span id="cb93-6"><a href="visualization4.html#cb93-6"></a>           <span class="at">Polity    =</span> <span class="fu">factor</span>(Polity,</span>
-<span id="cb93-7"><a href="visualization4.html#cb93-7"></a>                              <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Autocracy&quot;</span>, <span class="st">&quot;Closed Anocracy&quot;</span>,</span>
-<span id="cb93-8"><a href="visualization4.html#cb93-8"></a>                                         <span class="st">&quot;Open Anocracy&quot;</span>, <span class="st">&quot;Democracy&quot;</span>,</span>
-<span id="cb93-9"><a href="visualization4.html#cb93-9"></a>                                         <span class="st">&quot;Full Democracy&quot;</span>)),</span>
-<span id="cb93-10"><a href="visualization4.html#cb93-10"></a>           <span class="at">PPP       =</span> <span class="fu">if_else</span>(PPP <span class="sc">&gt;=</span> <span class="dv">15000</span>, <span class="st">&quot;High PPP&quot;</span>, <span class="st">&quot;Low PPP&quot;</span>),</span>
-<span id="cb93-11"><a href="visualization4.html#cb93-11"></a>           <span class="at">PPP       =</span> <span class="fu">factor</span>(PPP, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Low PPP&quot;</span>, <span class="st">&quot;High PPP&quot;</span>))) <span class="sc">%&gt;%</span></span>
-<span id="cb93-12"><a href="visualization4.html#cb93-12"></a>    <span class="fu">drop_na</span>()</span></code></pre></div>
-<div class="sourceCode" id="cb94"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb94-1"><a href="visualization4.html#cb94-1"></a><span class="fu">head</span>(Mosaic_df)</span></code></pre></div>
+<div class="sourceCode" id="cb95"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb95-1"><a href="visualization4.html#cb95-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggmosaic)</span></code></pre></div>
+<div class="sourceCode" id="cb96"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb96-1"><a href="visualization4.html#cb96-1"></a>Mosaic_df <span class="ot">&lt;-</span> Country_df <span class="sc">%&gt;%</span></span>
+<span id="cb96-2"><a href="visualization4.html#cb96-2"></a>    <span class="fu">select</span>(Country, Continent, <span class="at">Polity =</span> Polity_Type, <span class="at">PPP =</span> PPP_per_capita) <span class="sc">%&gt;%</span></span>
+<span id="cb96-3"><a href="visualization4.html#cb96-3"></a>    <span class="fu">mutate</span>(<span class="at">Continent =</span> <span class="fu">factor</span>(Continent, </span>
+<span id="cb96-4"><a href="visualization4.html#cb96-4"></a>                              <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Africa&quot;</span>, <span class="st">&quot;America&quot;</span>, <span class="st">&quot;Asia&quot;</span>,</span>
+<span id="cb96-5"><a href="visualization4.html#cb96-5"></a>                                         <span class="st">&quot;Europe&quot;</span>, <span class="st">&quot;Oceania&quot;</span>)),</span>
+<span id="cb96-6"><a href="visualization4.html#cb96-6"></a>           <span class="at">Polity    =</span> <span class="fu">factor</span>(Polity,</span>
+<span id="cb96-7"><a href="visualization4.html#cb96-7"></a>                              <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Autocracy&quot;</span>, <span class="st">&quot;Closed Anocracy&quot;</span>,</span>
+<span id="cb96-8"><a href="visualization4.html#cb96-8"></a>                                         <span class="st">&quot;Open Anocracy&quot;</span>, <span class="st">&quot;Democracy&quot;</span>,</span>
+<span id="cb96-9"><a href="visualization4.html#cb96-9"></a>                                         <span class="st">&quot;Full Democracy&quot;</span>)),</span>
+<span id="cb96-10"><a href="visualization4.html#cb96-10"></a>           <span class="at">PPP       =</span> <span class="fu">if_else</span>(PPP <span class="sc">&gt;=</span> <span class="dv">15000</span>, <span class="st">&quot;High PPP&quot;</span>, <span class="st">&quot;Low PPP&quot;</span>),</span>
+<span id="cb96-11"><a href="visualization4.html#cb96-11"></a>           <span class="at">PPP       =</span> <span class="fu">factor</span>(PPP, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Low PPP&quot;</span>, <span class="st">&quot;High PPP&quot;</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb96-12"><a href="visualization4.html#cb96-12"></a>    <span class="fu">drop_na</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb97-1"><a href="visualization4.html#cb97-1"></a><span class="fu">head</span>(Mosaic_df)</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 4
 ##   Country     Continent Polity          PPP     
 ##   &lt;chr&gt;       &lt;fct&gt;     &lt;fct&gt;           &lt;fct&gt;   
@@ -1614,8 +1664,8 @@ div.csl-indent {
 ## 5 Argentina   America   Democracy       High PPP
 ## 6 Armenia     Europe    Democracy       Low PPP</code></pre>
 <p>　クロス表を作成する内蔵関数としては<code>table()</code>があります。2つの変数が必要となり、第一引数が行、第二引数が列を表します。</p>
-<div class="sourceCode" id="cb96"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb96-1"><a href="visualization4.html#cb96-1"></a>Mosaic_Tab <span class="ot">&lt;-</span> <span class="fu">table</span>(Mosaic_df<span class="sc">$</span>Continent, Mosaic_df<span class="sc">$</span>Polity)</span>
-<span id="cb96-2"><a href="visualization4.html#cb96-2"></a>Mosaic_Tab</span></code></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb99-1"><a href="visualization4.html#cb99-1"></a>Mosaic_Tab <span class="ot">&lt;-</span> <span class="fu">table</span>(Mosaic_df<span class="sc">$</span>Continent, Mosaic_df<span class="sc">$</span>Polity)</span>
+<span id="cb99-2"><a href="visualization4.html#cb99-2"></a>Mosaic_Tab</span></code></pre></div>
 <pre><code>##          
 ##           Autocracy Closed Anocracy Open Anocracy Democracy Full Democracy
 ##   Africa          3              14            11        18              1
@@ -1624,40 +1674,64 @@ div.csl-indent {
 ##   Europe          2               1             2        16             20
 ##   Oceania         0               0             2         0              2</code></pre>
 <p>　この<code>Mosaic_Tab</code>のクラスは<code>"table"</code>ですが、<code>"table"</code>クラスのオブジェクトを<code>plot()</code>に渡すと別途のパッケージを使わずモザイクプロットを作成することができます。</p>
-<div class="sourceCode" id="cb98"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb98-1"><a href="visualization4.html#cb98-1"></a><span class="fu">plot</span>(Mosaic_Tab)</span></code></pre></div>
+<div class="sourceCode" id="cb101"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb101-1"><a href="visualization4.html#cb101-1"></a><span class="fu">plot</span>(Mosaic_Tab)</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/visual4-mosaic6-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>　やや地味ではありますが、モザイクプロットが出来ました。ここからはより読みやすいモザイクプロットを作成するために{ggmosaic}パッケージの<code>geom_mosaic()</code>関数を使います。</p>
 <p>　<code>geom_mosaic()</code>の場合、<code>x</code>のみのマッピングで十分です。ただし、特定の変数を指定するのではなく、<code>product(変数1, 変数2)</code>を<code>x</code>にマッピングする必要があります。<code>table()</code>関数同様、変数1は行、変数2は列です。また、欠損値が含まれている行がある場合は、<code>aes()</code>の外側に<code>na.rm = TRUE</code>を指定する必要があります。今回は<code>drop_na()</code>で欠損値をすべて除外しましたが、念の為に指定しておきます。</p>
-<div class="sourceCode" id="cb99"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb99-1"><a href="visualization4.html#cb99-1"></a>Mosaic_df <span class="sc">%&gt;%</span></span>
-<span id="cb99-2"><a href="visualization4.html#cb99-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb99-3"><a href="visualization4.html#cb99-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent)), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb99-4"><a href="visualization4.html#cb99-4"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Continent&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Polity Type&quot;</span>) <span class="sc">+</span></span>
-<span id="cb99-5"><a href="visualization4.html#cb99-5"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb99-6"><a href="visualization4.html#cb99-6"></a>    <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb102"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb102-1"><a href="visualization4.html#cb102-1"></a>Mosaic_df <span class="sc">%&gt;%</span></span>
+<span id="cb102-2"><a href="visualization4.html#cb102-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb102-3"><a href="visualization4.html#cb102-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent)), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb102-4"><a href="visualization4.html#cb102-4"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Continent&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Polity Type&quot;</span>) <span class="sc">+</span></span>
+<span id="cb102-5"><a href="visualization4.html#cb102-5"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb102-6"><a href="visualization4.html#cb102-6"></a>    <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/visual4-mosaic7-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>　これで出来上がりですが、<code>"table"</code>オブジェクトを<code>plot()</code>に渡した結果とあまり変わらないですね。続いて、この図を少し改良してみましょう。まずはセルの色分けですが、これは<code>fill</code>に色分けする変数をマッピングするだけです。今回は政治体制ごとにセルを色分けしましょう。また、文字を大きめにし、横軸の目盛りラベルを回転します。</p>
-<div class="sourceCode" id="cb100"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb100-1"><a href="visualization4.html#cb100-1"></a>Mosaic_df <span class="sc">%&gt;%</span></span>
-<span id="cb100-2"><a href="visualization4.html#cb100-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb100-3"><a href="visualization4.html#cb100-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent), <span class="at">fill =</span> Polity), </span>
-<span id="cb100-4"><a href="visualization4.html#cb100-4"></a>                <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb100-5"><a href="visualization4.html#cb100-5"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Continent&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Polity Type&quot;</span>) <span class="sc">+</span></span>
-<span id="cb100-6"><a href="visualization4.html#cb100-6"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size   =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
-<span id="cb100-7"><a href="visualization4.html#cb100-7"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>,</span>
-<span id="cb100-8"><a href="visualization4.html#cb100-8"></a>          <span class="at">panel.grid      =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb100-9"><a href="visualization4.html#cb100-9"></a>          <span class="at">axis.text.x     =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb103"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb103-1"><a href="visualization4.html#cb103-1"></a>Mosaic_df <span class="sc">%&gt;%</span></span>
+<span id="cb103-2"><a href="visualization4.html#cb103-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb103-3"><a href="visualization4.html#cb103-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent), <span class="at">fill =</span> Polity), </span>
+<span id="cb103-4"><a href="visualization4.html#cb103-4"></a>                <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb103-5"><a href="visualization4.html#cb103-5"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Continent&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Polity Type&quot;</span>) <span class="sc">+</span></span>
+<span id="cb103-6"><a href="visualization4.html#cb103-6"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size   =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb103-7"><a href="visualization4.html#cb103-7"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb103-8"><a href="visualization4.html#cb103-8"></a>          <span class="at">panel.grid      =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb103-9"><a href="visualization4.html#cb103-9"></a>          <span class="at">axis.text.x     =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/visual4-mosaic8-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>　次元を追加するためにはファセット分割を使います。たとえば、一人当たりPPP GDPの高低（<code>PPP</code>）でファセットを分割する場合、<code>facet_wrap(~PPP)</code>レイヤーを足すだけです。</p>
-<div class="sourceCode" id="cb101"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb101-1"><a href="visualization4.html#cb101-1"></a>Mosaic_df <span class="sc">%&gt;%</span></span>
-<span id="cb101-2"><a href="visualization4.html#cb101-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb101-3"><a href="visualization4.html#cb101-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent), <span class="at">fill =</span> Polity), </span>
-<span id="cb101-4"><a href="visualization4.html#cb101-4"></a>                <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb101-5"><a href="visualization4.html#cb101-5"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Continent&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Polity Type&quot;</span>) <span class="sc">+</span></span>
-<span id="cb101-6"><a href="visualization4.html#cb101-6"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>PPP, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb101-7"><a href="visualization4.html#cb101-7"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size   =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
-<span id="cb101-8"><a href="visualization4.html#cb101-8"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>,</span>
-<span id="cb101-9"><a href="visualization4.html#cb101-9"></a>          <span class="at">panel.grid      =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb101-10"><a href="visualization4.html#cb101-10"></a>          <span class="at">axis.text.x     =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb104"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb104-1"><a href="visualization4.html#cb104-1"></a>Mosaic_df <span class="sc">%&gt;%</span></span>
+<span id="cb104-2"><a href="visualization4.html#cb104-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb104-3"><a href="visualization4.html#cb104-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent), <span class="at">fill =</span> Polity), </span>
+<span id="cb104-4"><a href="visualization4.html#cb104-4"></a>                <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb104-5"><a href="visualization4.html#cb104-5"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Continent&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Polity Type&quot;</span>) <span class="sc">+</span></span>
+<span id="cb104-6"><a href="visualization4.html#cb104-6"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>PPP, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb104-7"><a href="visualization4.html#cb104-7"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size   =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb104-8"><a href="visualization4.html#cb104-8"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb104-9"><a href="visualization4.html#cb104-9"></a>          <span class="at">panel.grid      =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb104-10"><a href="visualization4.html#cb104-10"></a>          <span class="at">axis.text.x     =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/visual4-mosaic9-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>　ただし、一つ問題があります。それは目盛りラベルの位置です。例えば、右側の横軸目盛りラベルの場合、セルの位置とラベルの位置がずれています。これは2つのファセットが同じ目盛りを共有し、左側の方に合わせられたため生じるものです。よく見ると横軸も縦軸も目盛りラベルに位置が同じであることが分かります。これを解消するためには、<code>facet_wrap()</code>の内部に<code>scale = "free"</code>を指定します<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>。これは各ファセットが独自のスケールを有することを意味します。</p>
+<div class="sourceCode" id="cb105"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb105-1"><a href="visualization4.html#cb105-1"></a>Mosaic_df <span class="sc">%&gt;%</span></span>
+<span id="cb105-2"><a href="visualization4.html#cb105-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb105-3"><a href="visualization4.html#cb105-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent), <span class="at">fill =</span> Polity), </span>
+<span id="cb105-4"><a href="visualization4.html#cb105-4"></a>                <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb105-5"><a href="visualization4.html#cb105-5"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Continent&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Polity Type&quot;</span>) <span class="sc">+</span></span>
+<span id="cb105-6"><a href="visualization4.html#cb105-6"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>PPP, <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">scale =</span> <span class="st">&quot;free&quot;</span>) <span class="sc">+</span></span>
+<span id="cb105-7"><a href="visualization4.html#cb105-7"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size   =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb105-8"><a href="visualization4.html#cb105-8"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb105-9"><a href="visualization4.html#cb105-9"></a>          <span class="at">panel.grid      =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb105-10"><a href="visualization4.html#cb105-10"></a>          <span class="at">axis.text.x     =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/visual4-mosaic10-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>　右側ファセットの横軸ラベルが重なってしまいましたが、これでとりあえず完成です。アフリカにおけるOpen AnocracyとClosed Anocracyの頻度が0であるため、これは仕方ありません。一つの対処方法としては以下のように縦軸目盛りを削除し、凡例で代替することが考えられます。</p>
+<div class="sourceCode" id="cb106"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb106-1"><a href="visualization4.html#cb106-1"></a>Mosaic_df <span class="sc">%&gt;%</span></span>
+<span id="cb106-2"><a href="visualization4.html#cb106-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb106-3"><a href="visualization4.html#cb106-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent), <span class="at">fill =</span> Polity), </span>
+<span id="cb106-4"><a href="visualization4.html#cb106-4"></a>                <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb106-5"><a href="visualization4.html#cb106-5"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Continent&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Polity Type&quot;</span>, <span class="at">fill =</span> <span class="st">&quot;Polity Type&quot;</span>) <span class="sc">+</span></span>
+<span id="cb106-6"><a href="visualization4.html#cb106-6"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>PPP, <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">scale =</span> <span class="st">&quot;free_x&quot;</span>) <span class="sc">+</span></span>
+<span id="cb106-7"><a href="visualization4.html#cb106-7"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size   =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb106-8"><a href="visualization4.html#cb106-8"></a>    <span class="fu">theme</span>(<span class="at">panel.grid  =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb106-9"><a href="visualization4.html#cb106-9"></a>          <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb106-10"><a href="visualization4.html#cb106-10"></a>          <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/visual4-mosaic11-1.png" width="864" style="display: block; margin: auto;" /></p>
 <hr />
 </div>
 <div id="visual4-further" class="section level2" number="20.17">
@@ -1679,6 +1753,8 @@ Hartigan, J. A., and Beat Kleiner. 1984. <span>“A Mosaic of Television Ratings
 <hr />
 <ol start="1">
 <li id="fn1"><p>最後の<code>_c</code>はマッピングする変数（ここでは<code>HDI_2018</code>）が連続変数（<strong>c</strong>ontinuous）であることを意味します。<a href="visualization4.html#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>今回の例だと、<code>label</code>も<code>ggplot()</code>内部でマッピング可能です。<a href="visualization4.html#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>他にも<strong>縦</strong>軸のみ共有する<code>"free_x"</code>、横軸のみ共有する<code>"free_y"</code>があり、既定値は<code>"fixed"</code>です。<a href="visualization4.html#fnref3" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
