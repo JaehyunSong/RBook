@@ -97,5 +97,12 @@ R Not for Everyone: An Esoteric Guide.
 * 可視化[基礎]
     * [`Countries.csv`](https://www.jaysong.net/RBook/Data/Countries.csv)
     * [`COVID19_Worldwide.csv`](https://www.jaysong.net/RBook/Data/COVID19_Worldwide.csv)
+* 可視化[応用]
+    * [`Countries.csv`](https://www.jaysong.net/RBook/Data/Countries.csv)
+    * [`COVID19_Worldwide.csv`](https://www.jaysong.net/RBook/Data/COVID19_Worldwide.csv)
+* 可視化[発展]
+    * [`Countries.csv`](https://www.jaysong.net/RBook/Data/Countries.csv)
+    * [`COVID19_Worldwide.csv`](https://www.jaysong.net/RBook/Data/COVID19_Worldwide.csv)
+    * [`Vote_09_10.csv`](https://www.jaysong.net/RBook/Data/Vote_09_10.csv)
 * 反復処理
     * [`Countries.csv`](https://www.jaysong.net/RBook/Data/Countries.csv)
