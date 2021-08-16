@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>2. R? | 私たちのR: ベストプラクティスの探究</title>
+  <title>28. モンテカルロシミュレーション | 私たちのR: ベストプラクティスの探究</title>
   <meta name="description" content="R Not for Everyone: An Esoteric Guide." />
   <meta name="generator" content="bookdown 0.23 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="2. R? | 私たちのR: ベストプラクティスの探究" />
+  <meta property="og:title" content="28. モンテカルロシミュレーション | 私たちのR: ベストプラクティスの探究" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="JaehyunSong/RBook" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="2. R? | 私たちのR: ベストプラクティスの探究" />
+  <meta name="twitter:title" content="28. モンテカルロシミュレーション | 私たちのR: ベストプラクティスの探究" />
   
   <meta name="twitter:description" content="R Not for Everyone: An Esoteric Guide." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <link rel="apple-touch-icon-precomposed" sizes="152x152" href="HTML/apple-favicon.png" />
   <link rel="shortcut icon" href="HTML/favicon.png" type="image/x-icon" />
-<link rel="prev" href="index.html"/>
-<link rel="next" href="installation.html"/>
+<link rel="prev" href="oop.html"/>
+<link rel="next" href="solution.html"/>
 <script src="libs/header-attrs-2.10/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -679,294 +679,29 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="aboutR" class="section level1" number="2">
-<h1><span class="header-section-number">2.</span> R?</h1>
-<div id="WhatIsR" class="section level2" number="2.1">
-<h2><span class="header-section-number">2.1</span> Rとは</h2>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-6"></span>
-<img src="figures/AboutR/Rlogo.png" alt="R Logo" width="100pt" />
-<p class="caption">
-図 2.1: R Logo
-</p>
-</div>
-<p>　Rは統計、データ分析、作図のためのインタープリタープログラミング言語である。Rという名前は二人の開発者 Ross Ihaka と Robert Clifford Gentleman のイニシャルに由来する。R言語は完全にゼロベースから開発されたものではなく、1976年に開発されたS言語に起源をもつ。S言語もR言語同様、統計やデータ分析に特化した言語であり、S言語の開発が中止された現在、RはSの正当な後継者であると言ってよいだろう。</p>
-<p>　R以外にも、統計・データ分析のために利用可能なソフトウェアはたくさんある。社会科学におけるデータ分析の授業を履修したことがあるなら、<a href="https://www.ibm.com/products/spss-statistics">SPSS</a> や <a href="https://www.stata.com">Stata</a> という名前をきいたことがあるかもしれない。工学系なら<a href="https://www.mathworks.com/products/matlab.html">MATLAB</a> が有名かもしれない。企業では<a href="www.sas.com/">SAS</a> という高価なソフトもよく使われる<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>。</p>
-<p>　これらのソフト（アプリ）は基本的に有料だが、お金がないとデータ分析のソフトウェアが使えないわけではない。無料でありながら優れたソフトウェアも多く公開されている。以下にその一部を示す。</p>
-<table>
-<thead>
-<tr class="header">
-<th>ソフト・言語名</th>
-<th>備考</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><a href="https://www.gnu.org/software/pspp/">PSPP</a></td>
-<td>SPSSにとてもよく似た無料ソフトウェア。</td>
-</tr>
-<tr class="even">
-<td><a href="https://jasp-stats.org">JASP</a>/<a href="https://www.jamovi.org">jamovi</a></td>
-<td>裏で動いているのはR。詳細は本章の後半で</td>
-</tr>
-<tr class="odd">
-<td><a href="http://gretl.sourceforge.net">gretl</a></td>
-<td>時系列分析など、計量経済学で利用される手法に特化したソフト。</td>
-</tr>
-<tr class="even">
-<td><a href="https://www.gnu.org/software/octave/">GNU Octave</a></td>
-<td><a href="https://www.mathworks.com/products/matlab.html">MATLAB</a> とほぼ同じ文法をもつ無料言語</td>
-</tr>
-<tr class="odd">
-<td><a href="https://norimune.net/had">HAD</a></td>
-<td><a href="https://norimune.net">清水裕士</a> 先生が開発しているExcelベースのデータ分析マクロ</td>
-</tr>
-</tbody>
-</table>
-<p>　統計分析に特化したプログラミング言語としてRの競合相手になるのは <a href="https://julialang.org">Julia</a> と <a href="https://www.python.org">Python</a> だろう。Julia言語は一見Rによく似ているが、計算速度が Rより速いと言われている<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>。ただし、比較的新しい言語であるため、パッケージと解説書がRよりも少ないという難点がある。Pythonは現在のデータサイエンス界隈において、Rとともに最も広く使われている言語である<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>。Pythonは統計・データ分析に特化した言語ではないが、統計・データ分析のライブラリが非常に充実しており、機械学習（とくに、コンピュータービジョン）ではRよりも広く使われている。Python以外の言語、たとえば C や Java、Ruby、Fortranでも統計・データ分析は可能ある。実際、RやPythonのパッケージの一部はCやJavaで作成されている。ただし、RやPythonに比べると、データ分析の方法を解説したマニュアル・参考書があまりないのがつらいところだ。ひとつの言語だけでなく、複数の言語を使えるようになったほうが良いことは言うまでもない。本書はRについて解説するが、他の言語にもぜひ挑戦してほしい。</p>
+<div id="monte" class="section level1" number="28">
+<h1><span class="header-section-number">28.</span> モンテカルロシミュレーション</h1>
+<hr />
+<div id="monte-intro" class="section level2" number="28.1">
+<h2><span class="header-section-number">28.1</span> モンテカルロシミュレーションとは</h2>
 <hr />
 </div>
-<div id="WhyR" class="section level2" number="2.2">
-<h2><span class="header-section-number">2.2</span> Why R?</h2>
-<p>　私たちRユーザにとっての神のような存在である<a href="http://hadley.nz">Hadley Wickham</a>（通称：羽鳥先生）は <a href="https://adv-r.hadley.nz">Advanced R (2nd Ed.)</a> で次のように仰せられた。</p>
-<blockquote>
-<ul>
-<li>It’s free, open source, and available on every major platform. As a result, if you do your analysis in R, anyone can easily replicate it, regardless of where they live or how much money they earn.</li>
-</ul>
-</blockquote>
-<ol style="list-style-type: decimal">
-<li>Rは無料で、オープンソースで、多くのプラットフォーム（訳注: macOS, Linux, Windowsなど）で利用できます。よって、Rを使って分析すれば、どこに住んでいるか、いくらお金を稼いでいるかに関係なく、誰でも簡単にその分析を再現できることができます。</li>
-</ol>
-<blockquote>
-<ul>
-<li>R has a diverse and welcoming community, both online (e.g. the #rstats twitter community) and in person (like the many R meetups). Two particularly inspiring community groups are rweekly newsletter which makes it easy to keep up to date with R, and R-Ladies which has made a wonderfully welcoming community for women and other minority genders.</li>
-</ul>
-</blockquote>
-<ol start="2" style="list-style-type: decimal">
-<li>オンライン (twitterの<a href="https://twitter.com/hashtag/rstat?src=hashtag_click">#rstat</a>など)、オフライン (訳注：日本では <a href="https://tokyor.connpass.com/">Tokyo.R</a> が有名。筆者たちが開催している <a href="https://github.com/yukiyanai/KUT_R">KUT.R</a> もある)　の両方で、多様なRコミュニティがあります。他にも最新のRをキャッチアップするためのニュースレターである<a href="https://rweekly.org/">rweekly</a>や、女性や性的マイノリティーにやさしい <a href="http://r-ladies.org/">R-Ladies</a> も活発に活動しています。</li>
-</ol>
-<blockquote>
-<ul>
-<li>A massive set of packages for statistical modelling, machine learning, visualisation, and importing and manipulating data. Whatever model or graphic you’re trying to do, chances are that someone has already tried to do it and you can learn from their efforts.</li>
-</ul>
-</blockquote>
-<ol start="3" style="list-style-type: decimal">
-<li>統計モデリング、機械学習、可視化、データ読み込みおよびハンドリングのための膨大なパッケージが用意されています。どのようなモデルやグラフでも、既に誰かがその実装を試みた可能性が高く、先人らの努力に学ことができます。</li>
-</ol>
-<blockquote>
-<ul>
-<li>Powerful tools for communicating your results. R Markdown makes it easy to turn your results into HTML files, PDFs, Word documents, PowerPoint presentations, dashboards and more. Shiny allows you to make beautiful interactive apps without any knowledge of HTML or javascript.</li>
-</ul>
-</blockquote>
-<ol start="4" style="list-style-type: decimal">
-<li>分析結果を伝達する強力なツールを提供しています。R Makrdownは分析結果をHTML、PDF、Word、PowerPoint、Dashboard 形式に変換してくれます。HTMLや JavaScript の知識がなくても、Shinyを使って美しい対話型のアプリケーションを開発することができます。</li>
-</ol>
-<blockquote>
-<ul>
-<li>RStudio, the IDE, provides an integrated development environment, tailored to the needs of data science, interactive data analysis, and statistical programming.</li>
-</ul>
-</blockquote>
-<ol start="5" style="list-style-type: decimal">
-<li>代表的な統合開発環境であるRStudioはデータサイエンス、対話型のデータ分析、そして統計的プログラミングが必要とするものに最適化されています。</li>
-</ol>
-<blockquote>
-<ul>
-<li>Cutting edge tools. Researchers in statistics and machine learning will often publish an R package to accompany their articles. This means immediate access to the very latest statistical techniques and implementations.</li>
-</ul>
-</blockquote>
-<ol start="6" style="list-style-type: decimal">
-<li>Rは最先端のツールです。多くの統計学や機械学習の研究者は自分の研究成果とRパッケージを同時に公開しています。これは最先端の方法を誰よりも早く実施可能にします。</li>
-</ol>
-<blockquote>
-<ul>
-<li>Deep-seated language support for data analysis. This includes features like missing values, data frames, and vectorisation.</li>
-</ul>
-</blockquote>
-<ol start="7" style="list-style-type: decimal">
-<li>データ分析を根強くサポートする言語です。欠損値、データフレーム、ベクトル化などがその例です。</li>
-</ol>
-<blockquote>
-<ul>
-<li>A strong foundation of functional programming. The ideas of functional programming are well suited to the challenges of data science, and the R language is functional at heart, and provides many primitives needed for effective functional programming.</li>
-</ul>
-</blockquote>
-<ol start="8" style="list-style-type: decimal">
-<li>Rはデータサイエンスに非常に有効である関数型プログラミングのための最適な環境を提供しています。</li>
-</ol>
-<blockquote>
-<ul>
-<li>RStudio, the company, which makes money by selling professional products to teams of R users, and turns around and invests much of that money back into the open source community (over 50% of software engineers at RStudio work on open source projects). I work for RStudio because I fundamentally believe in its mission.</li>
-</ul>
-</blockquote>
-<ol start="9" style="list-style-type: decimal">
-<li>RStudio社は営利企業ですが、その収益の多くをオープンソースコミュニティーに投資しています。</li>
-</ol>
-<blockquote>
-<ul>
-<li>Powerful metaprogramming facilities. R’s metaprogramming capabilities allow you to write magically succinct and concise functions and provide an excellent environment for designing domain-specific languages like ggplot2, dplyr, data.table, and more.</li>
-</ul>
-</blockquote>
-<ol start="10" style="list-style-type: decimal">
-<li>メタプログラミングが強力です。Rが持つメタプログラミング能力はあなたのコードを劇的に簡潔にするだけでなく、統計/データ分析に特化した<code>ggplot2</code>、<code>dplyr</code>、<code>data.table</code>などの開発も可能にしました。</li>
-</ol>
-<blockquote>
-<ul>
-<li>The ease with which R can connect to high-performance programming languages like C, Fortran, and C++.</li>
-</ul>
-</blockquote>
-<ol start="11" style="list-style-type: decimal">
-<li>RはC、C++、Fortranのようなハイパフォーマンス言語と容易に結合できるように設計されています。</li>
-</ol>
-<p>　しかし、他のプログラミング言語と同様、Rは完璧な言語ではありません。以下はR言語の短所の一部です。その多くはRそのものの問題というよりも、(プログラマーではなく)データ分析の研究者が中心となっているRユーザーから起因する問題です。</p>
-<blockquote>
-<ul>
-<li>Much of the R code you’ll see in the wild is written in haste to solve a pressing problem. As a result, code is not very elegant, fast, or easy to understand. Most users do not revise their code to address these shortcomings.</li>
-</ul>
-</blockquote>
-<ol style="list-style-type: decimal">
-<li>あなたが普段見る多くのRコードは「今の」問題を解決するために迅速に書かれたものです。この場合、コードはあまりエレガントでも、速くも、読みやすくありません。ほとんどのユーザーはこの短所を克服するためのコード修正を行っておりません。</li>
-</ol>
-<blockquote>
-<ul>
-<li>Compared to other programming languages, the R community is more focussed on results than processes. Knowledge of software engineering best practices is patchy. For example, not enough R programmers use source code control or automated testing.</li>
-</ul>
-</blockquote>
-<ol start="2" style="list-style-type: decimal">
-<li>他のプログラミング言語に比べ、Rコミュニティーは過程よりも結果に注目する傾向があります。多くのユーザーにおいて、ソフトウェアエンジニアリングの知識を蓄えるための方法が不完全です。たとえば、(GitHubなどの) コード管理システムや自動化された検証を使用するRプログラマーは多くありません。</li>
-</ol>
-<blockquote>
-<ul>
-<li>Metaprogramming is a double-edged sword. Too many R functions use tricks to reduce the amount of typing at the cost of making code that is hard to understand and that can fail in unexpected ways.</li>
-</ul>
-</blockquote>
-<ol start="3" style="list-style-type: decimal">
-<li>Rの長所でもあるメタプログラミングは諸刃の剣です。あまりにも多くのR関数はコーディングのコストを減らすようなトリックを使用しており、その代償としてコードの理解が難しく、予期せぬ失敗の可能性があります。</li>
-</ol>
-<blockquote>
-<ul>
-<li>Inconsistency is rife across contributed packages, and even within base R. You are confronted with over 25 years of evolution every time you use R, and this can make learning R tough because there are so many special cases to remember.</li>
-</ul>
-</blockquote>
-<ol start="4" style="list-style-type: decimal">
-<li>開発されたパッケージは、R内蔵のパッケージさえも一貫性が乏しいです。あなたはRを使う度にこの25年を超えるRの進化に直面することになります。また、Rには覚えておくべきの特殊なケースが多く、これはR学習の妨げとなっています。</li>
-</ol>
-<blockquote>
-<ul>
-<li>R is not a particularly fast programming language, and poorly written R code can be terribly slow. R is also a profligate user of memory.</li>
-</ul>
-</blockquote>
-<ol start="5" style="list-style-type: decimal">
-<li>Rは格別に速い言語ではありません。下手に書かれたコードは驚くほど遅いです。また、Rはメモリの浪費が激しい言語と知られています。</li>
-</ol>
+<div id="応用-誕生日問題" class="section level2" number="28.2">
+<h2><span class="header-section-number">28.2</span> 応用: 誕生日問題</h2>
 <hr />
 </div>
-<div id="GUI_IDE" class="section level2" number="2.3">
-<h2><span class="header-section-number">2.3</span> GUIとIDE</h2>
-<div id="gui" class="section level3" number="2.3.1">
-<h3><span class="header-section-number">2.3.1</span> GUI</h3>
-<p><strong>CUIとGUI</strong></p>
-<p>　現在、多くのソフトウェアはGUIを採用している。GUI とは Graphical User Interface の略で、ソフトウェア上の入力および出力にグラフィックを利用する。単純にいうと「マウスでポチポチするだけで操作できる環境」のことだ。一方、Rでは基本的にCUI (Character User Interface) を利用する<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>。これは全ての操作を文字列ベースで行う、つまりキーボードで行うことを意味する<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>。</p>
-<p>　身近な例として、あるラーメン屋での注文（呪文）システムを考えてみよう。無料トッピングを指定するときに「決まった言い方」で指定するのがCUI方式である。一文字でも間違うとオーダーは通りらない。たとえば、「野菜マッシマッシ!」とか「野菜MashMash!」と言ってしまうと、店長さんに「は？」と言われ、周りの客から白い目で見られる<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>。他方、食券の自動発売機でトッピングを指定できるのがGUI方式だ<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a>。この場合、そもそも間違いは起きない。誰でも簡単に注文できるのがGUI式のメリットだが、自分で注文するものが決まっていて、注文の仕方を知っているなら CUI式のほうが早い。毎回同じ注文をするなら、注文内容を録音しておいて、次回はそれを再生することも可能である。GUI方式では、注文方法を再現するのは難しい。</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-7"></span>
-<img src="figures/AboutR/CUI_GUI.png" alt="CUIとGUIの比較" width="75%" />
-<p class="caption">
-図 2.2: CUIとGUIの比較
-</p>
-</div>
-<p>　CUIとGUIを比べたとき、一見するとGUIのほうが優れているように見える。マウスでポチポチするだけで操作できるほうが楽に見えるし、間違いの心配もなさそうな気がする。キーボードで長いコマンドを打つCUIよりも、ボタンをクリックしたほうが手早く済みそうにも思える<a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a>。そして、CUIのコマンドを覚えるのはしんどい<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a>。</p>
-<p>　しかし、CUIにはCUIなりの長所がある。まず、コードが記録できる。マウスでポチポチした操作は、パソコンの画面全体を録画しない限り記録できない。よって、GUIでは自分の分析プロセスを記録することが難しい。他方、すべてコマンドで操作した場合、入力したコマンドを文字列として記録することは容易である。また、CUIはGUIよりも柔軟である。先ほどのラーメン屋の例で考えると、CUIでは「一応」野菜ちょいマシのような注文（呪文）のカスタマイズもできる<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a>。しかし、GUI（券売機）だと注文の自由なカスタマイズはできない。店が用意したボタンしか押せない（ソフトがメニューに表示しているコマンドしか実行できない）。また、コマンドの入力の時間や暗記も、それほど難しくはない。後で説明するように、Rユーザにとっての超有能な秘書であるRStudio (IDEの1種) がコマンド入力を助けてくれる。スペルが間違っていたり、うろ覚えのコマンドなどがあっても、RStudio （あるいはその他のIDE）が瞬時に正解に導いてくれる。</p>
-<p>　本書はCUIとしてのRについて解説する。Rは統計ソフトでありながら、言語でもある。外国語の勉強に喩えるなら、CUIを使うのは単語や熟語を覚え、文法やよく使う表現を学習して自分で考えて話すことであるのに対し、GUIを使うのは AI に翻訳を頼み、外国語については自分で一切考えないことに似ている。たいして興味のない国になぜか旅行で訪れることになった場合にはGUI方式で済ますのも良いだろう。しかし、それでその言語を「勉強した」とか「理解した」などという人はいないはずだ。Rを「理解」したいなら、CUI以外の選択肢はない<a href="#fn12" class="footnote-ref" id="fnref12"><sup>12</sup></a>。</p>
-<p>　それでもやはりGUIのほうがとっつきやすいという頑固なあなたのために代表的なRの GUI を紹介するので、以下のリストを確認したらこの本は閉じていただきたい。またいつかどこかでお会いしましょう。CUIを使う覚悟ができたあなたは、以下のリストを読みとばし、引き続き一緒にRの世界を楽しみましょう！</p>
-<ul>
-<li><a href="https://socialsciences.mcmaster.ca/jfox/Misc/Rcmdr/">R Commander</a></li>
-</ul>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-8"></span>
-<img src="figures/AboutR/GUI_Rcmdr.png" alt="R Commander" width="75%" />
-<p class="caption">
-図 2.3: R Commander
-</p>
-</div>
-<ul>
-<li><a href="https://rkward.kde.org">RKWard</a></li>
-</ul>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-9"></span>
-<img src="figures/AboutR/GUI_RKWard.png" alt="RKWard" width="75%" />
-<p class="caption">
-図 2.4: RKWard
-</p>
-</div>
-<ul>
-<li><a href="https://jasp-stats.org">JASP</a></li>
-</ul>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-10"></span>
-<img src="figures/AboutR/GUI_JASP.png" alt="JASP" width="75%" />
-<p class="caption">
-図 2.5: JASP
-</p>
-</div>
-<ul>
-<li><a href="https://www.jamovi.org">jamovi</a></li>
-</ul>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-11"></span>
-<img src="figures/AboutR/GUI_jamovi.png" alt="jamovi" width="75%" />
-<p class="caption">
-図 2.6: jamovi
-</p>
-</div>
-<ul>
-<li><a href="https://r.analyticflow.com">R AnalyticFlow</a></li>
-</ul>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-12"></span>
-<img src="figures/AboutR/GUI_RAnalyticFlow.png" alt="RAnalyticFlow (画像は公式ホームページから)" width="75%" />
-<p class="caption">
-図 2.7: RAnalyticFlow (画像は公式ホームページから)
-</p>
-</div>
-</div>
-<div id="aboutR-IDE" class="section level3" number="2.3.2">
-<h3><span class="header-section-number">2.3.2</span> IDE</h3>
-<p>　プログラミングは基本的にコードを書く作業の連続だが、コードを書く他にも様々な作業を行うことになる。たとえば、自分が書いたコードの結果が正しく動作するかの確認作業や、なにか問題がある場合の対処（デバッグ）などがある。また、コードを書く際、誤字やミスなどがないかも確認する必要がある。他にもプログラムで使用されるファイルを管理しなければならない。これらの仕事を手助けしてくれるのが統合開発環境 (integrated development environment; IDE) と呼ばれるものである。</p>
-<p>　プログラマにとって優れたIDEを使うということは、優れた秘書を雇用するようなものだ。ファイルの管理、うろ覚えのコマンドの補完入力、コードの色分けなどを自動的に行ってくれる。さらに、コードの実行結果の画面をコードと同時に表示してくれたり、これまでの作業を記録してくれるなど、多くの作業を手助けしてくれる。Rにはいくつかの優れたIDEが用意されている。本書では代表的なIDEである <a href="https://rstudio.com">RStudio</a> を使うことにする。ただし、プログラミングにIDEは必須ではない。IDEをインストールしなくても、本書を読む上で特に問題はない（RStudioに関する説明の部分を除く）が、Rの実行環境に特にこだわりがないなら RStudioの導入を強く推奨する。</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-13"></span>
-<img src="figures/AboutR/IDE_RStudio.png" alt="RStudio" width="75%" />
-<p class="caption">
-図 2.8: RStudio
-</p>
-</div>
-<p>　RStudio以外にもRのIDEはある。魔界において圧倒的なシェアを誇ると噂されるWindowsという名のOSを使用しているなら、<a href="https://docs.microsoft.com/ja-jp/visualstudio/rtvs/installer?view=vs-2017">R Tools for Visual Studio</a> がRStudioの代替候補として有力だ。</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-14"></span>
-<img src="figures/AboutR/IDE_RTVS.png" alt="R Tools for Visual Studio" width="75%" />
-<p class="caption">
-図 2.9: R Tools for Visual Studio
-</p>
-</div>
-<p>　自分が使い慣れたテキストエディタをIDEとして使うことも可能である。<a href="https://www.sublimetext.com">Sublime Text</a> や <a href="https://atom.io">Atom</a> はむろん、伝統のある <a href="https://www.gnu.org/software/emacs/">Emacs</a> や <a href="https://www.vim.org">Vim</a> を使うこともできる。</p>
+<div id="応用-円周率" class="section level2" number="28.3">
+<h2><span class="header-section-number">28.3</span> 応用: 円周率</h2>
 
 </div>
-</div>
-</div>
-<div class="footnotes">
-<hr />
-<ol start="2">
-<li id="fn2"><p>最近、アカデミック版が無料で使えるようになった。<a href="aboutR.html#fnref2" class="footnote-back">↩︎</a></p></li>
-<li id="fn3"><p>Rもコードの書き方によってパフォーマンス向上ができる。<a href="aboutR.html#fnref3" class="footnote-back">↩︎</a></p></li>
-<li id="fn4"><p>Pythonは統計分析以外でも利用されるので、Python自体のユーザはRのユーザより多いだろう。<a href="aboutR.html#fnref4" class="footnote-back">↩︎</a></p></li>
-<li id="fn5"><p>CLI (Command Line Interface) とも呼ばれる。<a href="aboutR.html#fnref5" class="footnote-back">↩︎</a></p></li>
-<li id="fn6"><p>多くの人が片手に5本もつ指を有効に利用できないマウスという不便な機器から解放される。<a href="aboutR.html#fnref6" class="footnote-back">↩︎</a></p></li>
-<li id="fn7"><p>すべての「ラーメン◯郎」がそうだというわけではない。<a href="aboutR.html#fnref7" class="footnote-back">↩︎</a></p></li>
-<li id="fn8"><p>たとえば、「◯蘭」の注文システムのように。<a href="aboutR.html#fnref8" class="footnote-back">↩︎</a></p></li>
-<li id="fn9"><p>これらはすべて錯覚である。<a href="aboutR.html#fnref9" class="footnote-back">↩︎</a></p></li>
-<li id="fn10"><p>これは錯覚ではない。<a href="aboutR.html#fnref10" class="footnote-back">↩︎</a></p></li>
-<li id="fn11"><p>通るかどうかは別だが…<a href="aboutR.html#fnref11" class="footnote-back">↩︎</a></p></li>
-<li id="fn12"><p>macOS にRをインストールする場合は、途中で「GUIをインストールする」というチェックを外すことができるので、外しておこう。RのGUIは不要である。あっても困りはしないが。<a href="aboutR.html#fnref12" class="footnote-back">↩︎</a></p></li>
-</ol>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="installation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="oop.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="solution.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
