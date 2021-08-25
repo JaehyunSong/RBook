@@ -641,7 +641,12 @@ div.csl-indent {
 <li class="chapter" data-level="28" data-path="monte.html"><a href="monte.html"><i class="fa fa-check"></i><b>28</b> モンテカルロシミュレーション</a>
 <ul>
 <li class="chapter" data-level="28.1" data-path="monte.html"><a href="monte.html#monte-intro"><i class="fa fa-check"></i><b>28.1</b> モンテカルロシミュレーションとは</a></li>
-<li class="chapter" data-level="28.2" data-path="monte.html"><a href="monte.html#monte-rng"><i class="fa fa-check"></i><b>28.2</b> 乱数生成</a></li>
+<li class="chapter" data-level="28.2" data-path="monte.html"><a href="monte.html#monte-rng"><i class="fa fa-check"></i><b>28.2</b> 乱数生成</a>
+<ul>
+<li class="chapter" data-level="28.2.1" data-path="monte.html"><a href="monte.html#sampleによるサンプリング"><i class="fa fa-check"></i><b>28.2.1</b> <code>sample()</code>によるサンプリング</a></li>
+<li class="chapter" data-level="28.2.2" data-path="monte.html"><a href="monte.html#確率分布からの乱数制制"><i class="fa fa-check"></i><b>28.2.2</b> 確率分布からの乱数制制</a></li>
+<li class="chapter" data-level="28.2.3" data-path="monte.html"><a href="monte.html#シードについて"><i class="fa fa-check"></i><b>28.2.3</b> シードについて</a></li>
+</ul></li>
 <li class="chapter" data-level="28.3" data-path="monte.html"><a href="monte.html#例-誕生日問題"><i class="fa fa-check"></i><b>28.3</b> 例: 誕生日問題</a></li>
 <li class="chapter" data-level="28.4" data-path="monte.html"><a href="monte.html#応用-円周率"><i class="fa fa-check"></i><b>28.4</b> 応用: 円周率</a></li>
 </ul></li>
@@ -690,112 +695,156 @@ div.csl-indent {
 </div>
 <div id="monte-rng" class="section level2" number="28.2">
 <h2><span class="header-section-number">28.2</span> 乱数生成</h2>
+<div id="sampleによるサンプリング" class="section level3" number="28.2.1">
+<h3><span class="header-section-number">28.2.1</span> <code>sample()</code>によるサンプリング</h3>
+<p>　無作為に値を抽出する方法には2つが考えられます。一つは<strong>値の集合から</strong>無作為に値を抽出する方法、もう一つは正規分布などの<strong>確率分布から</strong>値を抽出する方法です。ここではまず<code>sample()</code>関数を用い、値の集合から無作為に値を抽出する方法について説明します。</p>
+<div class="sourceCode" id="cb1915"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1915-1"><a href="monte.html#cb1915-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(<span class="at">x =</span> 値の集合ベクトル, <span class="at">size =</span> 抽出の回数, </span>
+<span id="cb1915-2"><a href="monte.html#cb1915-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">replace =</span> 復元抽出の有無, <span class="at">prob =</span> 各要素が抽出される確率)</span></code></pre></div>
+<p>　<code>replace</code>は復元抽出の有無を指定する引数であり、既定値は<code>FALSE</code>、つまり非復元抽出がデフォルトとなっています。これは一度抽出された要素は、二度と抽出されないことを意味します。値の集合が{0, 1}で、5個の値を抽出する（=<code>size</code>が<code>x</code>の長さより大きい）ならば、<code>replace</code>は必ず<code>TRUE</code>に設定する必要があります。抽選などは非復元抽出であるため、<code>replace</code>引数は省略可能です。しかし、対数の法則やブートストラップなどは復元抽出を仮定している場合が多く、意識的に<code>replace</code>関数は指定することを推奨します。<code>prob</code>は各要素が抽出される確率を意味し、<code>x</code>の実引数と同じ長さのnumeric型ベクトルを指定します。<code>prob</code>の実引数の総和は1であることが望ましいですが、総和が1でない場合、自動的に総和が1になるよう正則化を行います。つまり、<code>c(1, 3)</code>は<code>c(0.25, 0.75)</code>と同じことを意味します。</p>
+<p>　サイコロを3回振るコードを書くなら、値の集合（<code>x</code>）は<code>c(1, 2, 3, 4, 5, 6)</code>、または<code>1:6</code>で、抽出の回数（<code>size</code>）は3となります。また、一回出た目も抽出される可能性があるため、復元抽出を行う必要があります（<code>replace = TRUE</code>）。そして各目が出る確率は1/6ですが、各値が抽出される確率が等しい場合、省略可能です。</p>
+<div class="sourceCode" id="cb1916"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1916-1"><a href="monte.html#cb1916-1"></a><span class="co"># この場合、prob引数は省略可能</span></span>
+<span id="cb1916-2"><a href="monte.html#cb1916-2"></a><span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">3</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">6</span>, <span class="dv">6</span>))</span></code></pre></div>
+<pre><code>## [1] 2 3 6</code></pre>
+<p>　今回はサイコロを1万回振り、それぞれの目が出た回数を棒グラフとして示してみます。無作為に抽出された値であれば、各目が出る回数は等しいはずです。ベクトルに対して<code>table()</code>関数を使うと、各要素が出現した回数が出力され、このオブジェクトを<code>barplot()</code>関数に渡すと棒グラフを作成することができます。</p>
+<div class="sourceCode" id="cb1918"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1918-1"><a href="monte.html#cb1918-1"></a>Dice_vec <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">10</span><span class="sc">^</span><span class="dv">4</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1918-2"><a href="monte.html#cb1918-2"></a><span class="fu">table</span>(Dice_vec) <span class="sc">%&gt;%</span> <span class="fu">barplot</span>()</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-951-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>　1から6までの目が出た回数がほぼ同じであることが確認できます。この6つの棒の高さがすべて同じになることはありえませんが（そもそも1万を6で割ったら余りが出ますね）、ほぼ同じ割合であることから、疑似乱数とは言え、シミュレーション用としては十分でしょう。</p>
+</div>
+<div id="確率分布からの乱数制制" class="section level3" number="28.2.2">
+<h3><span class="header-section-number">28.2.2</span> 確率分布からの乱数制制</h3>
+</div>
+<div id="シードについて" class="section level3" number="28.2.3">
+<h3><span class="header-section-number">28.2.3</span> シードについて</h3>
+<p>　特定の分布から乱数を抽出する場合、当たり前ですが、抽出の度に値が変わります。たとえば、平均0、標準偏差1の正規分布（標準正規分布）から5つの値を抽出し、小数点3桁に丸める作業を3回繰り返しみましょう。</p>
+<div class="sourceCode" id="cb1919"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1919-1"><a href="monte.html#cb1919-1"></a><span class="fu">rnorm</span>(<span class="dv">5</span>) <span class="sc">%&gt;%</span> <span class="fu">round</span>(<span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## [1] -0.207  0.984 -1.936  0.025  0.729</code></pre>
+<div class="sourceCode" id="cb1921"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1921-1"><a href="monte.html#cb1921-1"></a><span class="fu">rnorm</span>(<span class="dv">5</span>) <span class="sc">%&gt;%</span> <span class="fu">round</span>(<span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## [1] -0.499  1.404  0.731  1.569 -0.863</code></pre>
+<div class="sourceCode" id="cb1923"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1923-1"><a href="monte.html#cb1923-1"></a><span class="fu">rnorm</span>(<span class="dv">5</span>) <span class="sc">%&gt;%</span> <span class="fu">round</span>(<span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## [1] -0.371 -0.297  0.611  0.802  0.600</code></pre>
+<p>　このように、抽出の度に結果が変わります。1回きりのシミュレーションではこれで問題ないでしょうが、同じシミュレーションから同じ結果を得るためには、乱数を固定する必要があります。そこで使うのがシード（seed）です。シードが同じなら抽出される乱数は同じ値を取ります。シードの指定は<code>set.seed(numeric型スカラー)</code>です。たとえば、シードを19861009にし、同じ作業をやってみましょう。</p>
+<div class="sourceCode" id="cb1925"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1925-1"><a href="monte.html#cb1925-1"></a><span class="fu">set.seed</span>(<span class="dv">19861008</span>)</span>
+<span id="cb1925-2"><a href="monte.html#cb1925-2"></a><span class="fu">rnorm</span>(<span class="dv">5</span>) <span class="sc">%&gt;%</span> <span class="fu">round</span>(<span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## [1] -0.086  0.396 -1.330  0.574  0.152</code></pre>
+<div class="sourceCode" id="cb1927"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1927-1"><a href="monte.html#cb1927-1"></a><span class="fu">rnorm</span>(<span class="dv">5</span>) <span class="sc">%&gt;%</span> <span class="fu">round</span>(<span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## [1]  0.555  0.620 -1.133  0.572  0.900</code></pre>
+<p>　シードを指定しても2つのベクトルは異なる値を取りますが、もう一度シードを指定してから乱数抽出をしてみましょう。</p>
+<div class="sourceCode" id="cb1929"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1929-1"><a href="monte.html#cb1929-1"></a><span class="fu">set.seed</span>(<span class="dv">19861008</span>)</span>
+<span id="cb1929-2"><a href="monte.html#cb1929-2"></a><span class="fu">rnorm</span>(<span class="dv">5</span>) <span class="sc">%&gt;%</span> <span class="fu">round</span>(<span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## [1] -0.086  0.396 -1.330  0.574  0.152</code></pre>
+<p>　先ほどのコードでシードを指定した直後に抽出した乱数と同じ乱数が得られました。モンテカルロ・シミュレーションにおいて乱数は非常に重要ですが、これはシミュレーションの度に異なる結果が得られることを意味します。つまり、自分が書いたコードから100%同じ結果が得られないだけでなく、自分も同じ結果を再現できないことを意味します。この場合、シードを指定すると乱数が固定され、シミュレーション結果の再現ができるようになります。</p>
+<p>　一つ注意すべき点は乱数を固定した後、複数回抽出を繰り返す場合、その順番も固定されるという点です。たとえば、シードを固定せずにもう一回5つの値を抽出してみましょう。</p>
+<div class="sourceCode" id="cb1931"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1931-1"><a href="monte.html#cb1931-1"></a><span class="fu">rnorm</span>(<span class="dv">5</span>) <span class="sc">%&gt;%</span> <span class="fu">round</span>(<span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## [1]  0.555  0.620 -1.133  0.572  0.900</code></pre>
+<p>　この結果は先ほどシード指定後、2回目の抽出結果と同じ結果となります。結果を再現するという点では大きな問題はないはずですが、仕様を理解しておくことは重要でしょう。</p>
 <hr />
+</div>
 </div>
 <div id="例-誕生日問題" class="section level2" number="28.3">
 <h2><span class="header-section-number">28.3</span> 例: 誕生日問題</h2>
-<div class="sourceCode" id="cb1915"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1915-1"><a href="monte.html#cb1915-1"></a>n_student <span class="ot">&lt;-</span> <span class="dv">30</span></span>
-<span id="cb1915-2"><a href="monte.html#cb1915-2"></a>Birth_vec <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">365</span>, n_student, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1915-3"><a href="monte.html#cb1915-3"></a><span class="fu">any</span>(<span class="fu">duplicated</span>(Birth_vec))</span></code></pre></div>
+<div class="sourceCode" id="cb1933"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1933-1"><a href="monte.html#cb1933-1"></a>n_student <span class="ot">&lt;-</span> <span class="dv">30</span></span>
+<span id="cb1933-2"><a href="monte.html#cb1933-2"></a>Birth_vec <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">365</span>, n_student, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1933-3"><a href="monte.html#cb1933-3"></a><span class="fu">any</span>(<span class="fu">duplicated</span>(Birth_vec))</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode" id="cb1917"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1917-1"><a href="monte.html#cb1917-1"></a>n_student <span class="ot">&lt;-</span> <span class="dv">30</span></span>
-<span id="cb1917-2"><a href="monte.html#cb1917-2"></a>n_trials  <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb1917-3"><a href="monte.html#cb1917-3"></a></span>
-<span id="cb1917-4"><a href="monte.html#cb1917-4"></a>Result_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_trials)</span>
-<span id="cb1917-5"><a href="monte.html#cb1917-5"></a></span>
-<span id="cb1917-6"><a href="monte.html#cb1917-6"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_trials) {</span>
-<span id="cb1917-7"><a href="monte.html#cb1917-7"></a>    Birth_vec     <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">365</span>, n_student, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1917-8"><a href="monte.html#cb1917-8"></a>    Result_vec[i] <span class="ot">&lt;-</span> <span class="fu">any</span>(<span class="fu">duplicated</span>(Birth_vec))</span>
-<span id="cb1917-9"><a href="monte.html#cb1917-9"></a>}</span>
-<span id="cb1917-10"><a href="monte.html#cb1917-10"></a></span>
-<span id="cb1917-11"><a href="monte.html#cb1917-11"></a><span class="fu">mean</span>(Result_vec)</span></code></pre></div>
-<pre><code>## [1] 0.7057</code></pre>
-<div class="sourceCode" id="cb1919"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1919-1"><a href="monte.html#cb1919-1"></a>n_trials  <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb1919-2"><a href="monte.html#cb1919-2"></a></span>
-<span id="cb1919-3"><a href="monte.html#cb1919-3"></a>Prob_df   <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Students =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">100</span>,</span>
-<span id="cb1919-4"><a href="monte.html#cb1919-4"></a>                    <span class="at">Probs    =</span> <span class="cn">NA</span>)</span>
-<span id="cb1919-5"><a href="monte.html#cb1919-5"></a></span>
-<span id="cb1919-6"><a href="monte.html#cb1919-6"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(Prob_df)) {</span>
-<span id="cb1919-7"><a href="monte.html#cb1919-7"></a>    </span>
-<span id="cb1919-8"><a href="monte.html#cb1919-8"></a>    Result_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_trials)</span>
-<span id="cb1919-9"><a href="monte.html#cb1919-9"></a>    </span>
-<span id="cb1919-10"><a href="monte.html#cb1919-10"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_trials) {</span>
-<span id="cb1919-11"><a href="monte.html#cb1919-11"></a>        Birth_vec     <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">365</span>, Prob_df<span class="sc">$</span>Students[i], <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1919-12"><a href="monte.html#cb1919-12"></a>        Result_vec[j] <span class="ot">&lt;-</span> <span class="fu">any</span>(<span class="fu">duplicated</span>(Birth_vec))</span>
-<span id="cb1919-13"><a href="monte.html#cb1919-13"></a>    }</span>
-<span id="cb1919-14"><a href="monte.html#cb1919-14"></a>    </span>
-<span id="cb1919-15"><a href="monte.html#cb1919-15"></a>    Prob_df<span class="sc">$</span>Probs[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(Result_vec)</span>
-<span id="cb1919-16"><a href="monte.html#cb1919-16"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb1920"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1920-1"><a href="monte.html#cb1920-1"></a>Prob_df</span></code></pre></div>
+<div class="sourceCode" id="cb1935"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1935-1"><a href="monte.html#cb1935-1"></a>n_student <span class="ot">&lt;-</span> <span class="dv">30</span></span>
+<span id="cb1935-2"><a href="monte.html#cb1935-2"></a>n_trials  <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb1935-3"><a href="monte.html#cb1935-3"></a></span>
+<span id="cb1935-4"><a href="monte.html#cb1935-4"></a>Result_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_trials)</span>
+<span id="cb1935-5"><a href="monte.html#cb1935-5"></a></span>
+<span id="cb1935-6"><a href="monte.html#cb1935-6"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_trials) {</span>
+<span id="cb1935-7"><a href="monte.html#cb1935-7"></a>    Birth_vec     <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">365</span>, n_student, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1935-8"><a href="monte.html#cb1935-8"></a>    Result_vec[i] <span class="ot">&lt;-</span> <span class="fu">any</span>(<span class="fu">duplicated</span>(Birth_vec))</span>
+<span id="cb1935-9"><a href="monte.html#cb1935-9"></a>}</span>
+<span id="cb1935-10"><a href="monte.html#cb1935-10"></a></span>
+<span id="cb1935-11"><a href="monte.html#cb1935-11"></a><span class="fu">mean</span>(Result_vec)</span></code></pre></div>
+<pre><code>## [1] 0.6996</code></pre>
+<div class="sourceCode" id="cb1937"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1937-1"><a href="monte.html#cb1937-1"></a>n_trials  <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb1937-2"><a href="monte.html#cb1937-2"></a></span>
+<span id="cb1937-3"><a href="monte.html#cb1937-3"></a>Prob_df   <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Students =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">100</span>,</span>
+<span id="cb1937-4"><a href="monte.html#cb1937-4"></a>                    <span class="at">Probs    =</span> <span class="cn">NA</span>)</span>
+<span id="cb1937-5"><a href="monte.html#cb1937-5"></a></span>
+<span id="cb1937-6"><a href="monte.html#cb1937-6"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(Prob_df)) {</span>
+<span id="cb1937-7"><a href="monte.html#cb1937-7"></a>    </span>
+<span id="cb1937-8"><a href="monte.html#cb1937-8"></a>    Result_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_trials)</span>
+<span id="cb1937-9"><a href="monte.html#cb1937-9"></a>    </span>
+<span id="cb1937-10"><a href="monte.html#cb1937-10"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_trials) {</span>
+<span id="cb1937-11"><a href="monte.html#cb1937-11"></a>        Birth_vec     <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">365</span>, Prob_df<span class="sc">$</span>Students[i], <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1937-12"><a href="monte.html#cb1937-12"></a>        Result_vec[j] <span class="ot">&lt;-</span> <span class="fu">any</span>(<span class="fu">duplicated</span>(Birth_vec))</span>
+<span id="cb1937-13"><a href="monte.html#cb1937-13"></a>    }</span>
+<span id="cb1937-14"><a href="monte.html#cb1937-14"></a>    </span>
+<span id="cb1937-15"><a href="monte.html#cb1937-15"></a>    Prob_df<span class="sc">$</span>Probs[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(Result_vec)</span>
+<span id="cb1937-16"><a href="monte.html#cb1937-16"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb1938"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1938-1"><a href="monte.html#cb1938-1"></a>Prob_df</span></code></pre></div>
 <pre><code>## # A tibble: 99 × 2
 ##    Students Probs
 ##       &lt;int&gt; &lt;dbl&gt;
 ##  1        2  0   
-##  2        3  0.02
-##  3        4  0.03
-##  4        5  0.03
+##  2        3  0.03
+##  3        4  0.01
+##  4        5  0.05
 ##  5        6  0.07
-##  6        7  0.05
-##  7        8  0.04
+##  6        7  0.1 
+##  7        8  0.08
 ##  8        9  0.08
-##  9       10  0.11
-## 10       11  0.13
+##  9       10  0.15
+## 10       11  0.17
 ## # … with 89 more rows</code></pre>
-<div class="sourceCode" id="cb1922"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1922-1"><a href="monte.html#cb1922-1"></a>Prob_df <span class="sc">%&gt;%</span></span>
-<span id="cb1922-2"><a href="monte.html#cb1922-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb1922-3"><a href="monte.html#cb1922-3"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Students, <span class="at">y =</span> Probs), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb1922-4"><a href="monte.html#cb1922-4"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Number of Students&quot;</span>,</span>
-<span id="cb1922-5"><a href="monte.html#cb1922-5"></a>         <span class="at">y =</span> <span class="st">&quot;Probability two students have the same birthday&quot;</span>) <span class="sc">+</span></span>
-<span id="cb1922-6"><a href="monte.html#cb1922-6"></a>    <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-954-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb1923"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1923-1"><a href="monte.html#cb1923-1"></a><span class="dv">1</span> <span class="sc">-</span> (<span class="fu">factorial</span>(<span class="dv">365</span>) <span class="sc">/</span> (<span class="fu">factorial</span>(<span class="dv">365</span> <span class="sc">-</span> <span class="dv">30</span>) <span class="sc">*</span> <span class="dv">365</span><span class="sc">^</span>(<span class="dv">30</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb1940"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1940-1"><a href="monte.html#cb1940-1"></a>Prob_df <span class="sc">%&gt;%</span></span>
+<span id="cb1940-2"><a href="monte.html#cb1940-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb1940-3"><a href="monte.html#cb1940-3"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Students, <span class="at">y =</span> Probs), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb1940-4"><a href="monte.html#cb1940-4"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Number of Students&quot;</span>,</span>
+<span id="cb1940-5"><a href="monte.html#cb1940-5"></a>         <span class="at">y =</span> <span class="st">&quot;Probability two students have the same birthday&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1940-6"><a href="monte.html#cb1940-6"></a>    <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-960-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb1941"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1941-1"><a href="monte.html#cb1941-1"></a><span class="dv">1</span> <span class="sc">-</span> (<span class="fu">factorial</span>(<span class="dv">365</span>) <span class="sc">/</span> (<span class="fu">factorial</span>(<span class="dv">365</span> <span class="sc">-</span> <span class="dv">30</span>) <span class="sc">*</span> <span class="dv">365</span><span class="sc">^</span>(<span class="dv">30</span>)))</span></code></pre></div>
 <pre><code>## [1] NaN</code></pre>
-<div class="sourceCode" id="cb1925"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1925-1"><a href="monte.html#cb1925-1"></a><span class="dv">1</span> <span class="sc">-</span> (<span class="fu">choose</span>(<span class="dv">365</span>, <span class="dv">365</span> <span class="sc">-</span> <span class="dv">30</span>) <span class="sc">*</span> <span class="fu">factorial</span>(<span class="dv">30</span>) <span class="sc">/</span> <span class="dv">365</span><span class="sc">^</span><span class="dv">30</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1943"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1943-1"><a href="monte.html#cb1943-1"></a><span class="dv">1</span> <span class="sc">-</span> (<span class="fu">choose</span>(<span class="dv">365</span>, <span class="dv">365</span> <span class="sc">-</span> <span class="dv">30</span>) <span class="sc">*</span> <span class="fu">factorial</span>(<span class="dv">30</span>) <span class="sc">/</span> <span class="dv">365</span><span class="sc">^</span><span class="dv">30</span>)</span></code></pre></div>
 <pre><code>## [1] 0.7063162</code></pre>
-<div class="sourceCode" id="cb1927"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1927-1"><a href="monte.html#cb1927-1"></a>Prob_df<span class="sc">$</span>Expectation <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> (<span class="fu">choose</span>(<span class="dv">365</span>, <span class="dv">365</span> <span class="sc">-</span> Prob_df<span class="sc">$</span>Students) <span class="sc">*</span> </span>
-<span id="cb1927-2"><a href="monte.html#cb1927-2"></a>                                <span class="fu">factorial</span>(Prob_df<span class="sc">$</span>Students) <span class="sc">/</span> <span class="dv">365</span><span class="sc">^</span>Prob_df<span class="sc">$</span>Students)</span></code></pre></div>
-<div class="sourceCode" id="cb1928"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1928-1"><a href="monte.html#cb1928-1"></a>Prob_df <span class="sc">%&gt;%</span></span>
-<span id="cb1928-2"><a href="monte.html#cb1928-2"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols      =</span> Probs<span class="sc">:</span>Expectation,</span>
-<span id="cb1928-3"><a href="monte.html#cb1928-3"></a>                 <span class="at">names_to  =</span> <span class="st">&quot;Type&quot;</span>,</span>
-<span id="cb1928-4"><a href="monte.html#cb1928-4"></a>                 <span class="at">values_to =</span> <span class="st">&quot;Prob&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb1928-5"><a href="monte.html#cb1928-5"></a>    <span class="fu">mutate</span>(<span class="at">Type =</span> <span class="fu">if_else</span>(Type <span class="sc">==</span> <span class="st">&quot;Probs&quot;</span>, <span class="st">&quot;Simulation&quot;</span>, <span class="st">&quot;Theoretical&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb1928-6"><a href="monte.html#cb1928-6"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb1928-7"><a href="monte.html#cb1928-7"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Students, <span class="at">y =</span> Prob, <span class="at">color =</span> Type), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb1928-8"><a href="monte.html#cb1928-8"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Number of Students&quot;</span>,</span>
-<span id="cb1928-9"><a href="monte.html#cb1928-9"></a>         <span class="at">y =</span> <span class="st">&quot;Probability two students have the same birthday&quot;</span>) <span class="sc">+</span></span>
-<span id="cb1928-10"><a href="monte.html#cb1928-10"></a>    <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-958-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb1929"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1929-1"><a href="monte.html#cb1929-1"></a>n_trials  <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb1929-2"><a href="monte.html#cb1929-2"></a></span>
-<span id="cb1929-3"><a href="monte.html#cb1929-3"></a>Prob_df   <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Students =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">100</span>,</span>
-<span id="cb1929-4"><a href="monte.html#cb1929-4"></a>                    <span class="at">Probs    =</span> <span class="cn">NA</span>)</span>
-<span id="cb1929-5"><a href="monte.html#cb1929-5"></a></span>
-<span id="cb1929-6"><a href="monte.html#cb1929-6"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(Prob_df)) {</span>
-<span id="cb1929-7"><a href="monte.html#cb1929-7"></a>    </span>
-<span id="cb1929-8"><a href="monte.html#cb1929-8"></a>    Result_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_trials)</span>
-<span id="cb1929-9"><a href="monte.html#cb1929-9"></a>    </span>
-<span id="cb1929-10"><a href="monte.html#cb1929-10"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_trials) {</span>
-<span id="cb1929-11"><a href="monte.html#cb1929-11"></a>        Birth_vec     <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">365</span>, Prob_df<span class="sc">$</span>Students[i], <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1929-12"><a href="monte.html#cb1929-12"></a>        Result_vec[j] <span class="ot">&lt;-</span> <span class="fu">any</span>(<span class="fu">duplicated</span>(Birth_vec))</span>
-<span id="cb1929-13"><a href="monte.html#cb1929-13"></a>    }</span>
-<span id="cb1929-14"><a href="monte.html#cb1929-14"></a>    </span>
-<span id="cb1929-15"><a href="monte.html#cb1929-15"></a>    Prob_df<span class="sc">$</span>Probs[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(Result_vec)</span>
-<span id="cb1929-16"><a href="monte.html#cb1929-16"></a>}</span>
-<span id="cb1929-17"><a href="monte.html#cb1929-17"></a></span>
-<span id="cb1929-18"><a href="monte.html#cb1929-18"></a>Prob_df<span class="sc">$</span>Expectation <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> (<span class="fu">choose</span>(<span class="dv">365</span>, <span class="dv">365</span> <span class="sc">-</span> Prob_df<span class="sc">$</span>Students) <span class="sc">*</span> </span>
-<span id="cb1929-19"><a href="monte.html#cb1929-19"></a>                                <span class="fu">factorial</span>(Prob_df<span class="sc">$</span>Students) <span class="sc">/</span> <span class="dv">365</span><span class="sc">^</span>Prob_df<span class="sc">$</span>Students)</span>
-<span id="cb1929-20"><a href="monte.html#cb1929-20"></a></span>
-<span id="cb1929-21"><a href="monte.html#cb1929-21"></a>Prob_df <span class="sc">%&gt;%</span></span>
-<span id="cb1929-22"><a href="monte.html#cb1929-22"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols      =</span> Probs<span class="sc">:</span>Expectation,</span>
-<span id="cb1929-23"><a href="monte.html#cb1929-23"></a>                 <span class="at">names_to  =</span> <span class="st">&quot;Type&quot;</span>,</span>
-<span id="cb1929-24"><a href="monte.html#cb1929-24"></a>                 <span class="at">values_to =</span> <span class="st">&quot;Prob&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb1929-25"><a href="monte.html#cb1929-25"></a>    <span class="fu">mutate</span>(<span class="at">Type =</span> <span class="fu">if_else</span>(Type <span class="sc">==</span> <span class="st">&quot;Probs&quot;</span>, <span class="st">&quot;Simulation&quot;</span>, <span class="st">&quot;Theoretical&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb1929-26"><a href="monte.html#cb1929-26"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb1929-27"><a href="monte.html#cb1929-27"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Students, <span class="at">y =</span> Prob, <span class="at">color =</span> Type), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb1929-28"><a href="monte.html#cb1929-28"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Number of Students&quot;</span>,</span>
-<span id="cb1929-29"><a href="monte.html#cb1929-29"></a>         <span class="at">y =</span> <span class="st">&quot;Probability two students have the same birthday&quot;</span>) <span class="sc">+</span></span>
-<span id="cb1929-30"><a href="monte.html#cb1929-30"></a>    <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-959-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb1945"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1945-1"><a href="monte.html#cb1945-1"></a>Prob_df<span class="sc">$</span>Expectation <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> (<span class="fu">choose</span>(<span class="dv">365</span>, <span class="dv">365</span> <span class="sc">-</span> Prob_df<span class="sc">$</span>Students) <span class="sc">*</span> </span>
+<span id="cb1945-2"><a href="monte.html#cb1945-2"></a>                                <span class="fu">factorial</span>(Prob_df<span class="sc">$</span>Students) <span class="sc">/</span> <span class="dv">365</span><span class="sc">^</span>Prob_df<span class="sc">$</span>Students)</span></code></pre></div>
+<div class="sourceCode" id="cb1946"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1946-1"><a href="monte.html#cb1946-1"></a>Prob_df <span class="sc">%&gt;%</span></span>
+<span id="cb1946-2"><a href="monte.html#cb1946-2"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols      =</span> Probs<span class="sc">:</span>Expectation,</span>
+<span id="cb1946-3"><a href="monte.html#cb1946-3"></a>                 <span class="at">names_to  =</span> <span class="st">&quot;Type&quot;</span>,</span>
+<span id="cb1946-4"><a href="monte.html#cb1946-4"></a>                 <span class="at">values_to =</span> <span class="st">&quot;Prob&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1946-5"><a href="monte.html#cb1946-5"></a>    <span class="fu">mutate</span>(<span class="at">Type =</span> <span class="fu">if_else</span>(Type <span class="sc">==</span> <span class="st">&quot;Probs&quot;</span>, <span class="st">&quot;Simulation&quot;</span>, <span class="st">&quot;Theoretical&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb1946-6"><a href="monte.html#cb1946-6"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb1946-7"><a href="monte.html#cb1946-7"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Students, <span class="at">y =</span> Prob, <span class="at">color =</span> Type), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb1946-8"><a href="monte.html#cb1946-8"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Number of Students&quot;</span>,</span>
+<span id="cb1946-9"><a href="monte.html#cb1946-9"></a>         <span class="at">y =</span> <span class="st">&quot;Probability two students have the same birthday&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1946-10"><a href="monte.html#cb1946-10"></a>    <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-964-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb1947"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1947-1"><a href="monte.html#cb1947-1"></a>n_trials  <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb1947-2"><a href="monte.html#cb1947-2"></a></span>
+<span id="cb1947-3"><a href="monte.html#cb1947-3"></a>Prob_df   <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Students =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">100</span>,</span>
+<span id="cb1947-4"><a href="monte.html#cb1947-4"></a>                    <span class="at">Probs    =</span> <span class="cn">NA</span>)</span>
+<span id="cb1947-5"><a href="monte.html#cb1947-5"></a></span>
+<span id="cb1947-6"><a href="monte.html#cb1947-6"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(Prob_df)) {</span>
+<span id="cb1947-7"><a href="monte.html#cb1947-7"></a>    </span>
+<span id="cb1947-8"><a href="monte.html#cb1947-8"></a>    Result_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_trials)</span>
+<span id="cb1947-9"><a href="monte.html#cb1947-9"></a>    </span>
+<span id="cb1947-10"><a href="monte.html#cb1947-10"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_trials) {</span>
+<span id="cb1947-11"><a href="monte.html#cb1947-11"></a>        Birth_vec     <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">365</span>, Prob_df<span class="sc">$</span>Students[i], <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1947-12"><a href="monte.html#cb1947-12"></a>        Result_vec[j] <span class="ot">&lt;-</span> <span class="fu">any</span>(<span class="fu">duplicated</span>(Birth_vec))</span>
+<span id="cb1947-13"><a href="monte.html#cb1947-13"></a>    }</span>
+<span id="cb1947-14"><a href="monte.html#cb1947-14"></a>    </span>
+<span id="cb1947-15"><a href="monte.html#cb1947-15"></a>    Prob_df<span class="sc">$</span>Probs[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(Result_vec)</span>
+<span id="cb1947-16"><a href="monte.html#cb1947-16"></a>}</span>
+<span id="cb1947-17"><a href="monte.html#cb1947-17"></a></span>
+<span id="cb1947-18"><a href="monte.html#cb1947-18"></a>Prob_df<span class="sc">$</span>Expectation <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> (<span class="fu">choose</span>(<span class="dv">365</span>, <span class="dv">365</span> <span class="sc">-</span> Prob_df<span class="sc">$</span>Students) <span class="sc">*</span> </span>
+<span id="cb1947-19"><a href="monte.html#cb1947-19"></a>                                <span class="fu">factorial</span>(Prob_df<span class="sc">$</span>Students) <span class="sc">/</span> <span class="dv">365</span><span class="sc">^</span>Prob_df<span class="sc">$</span>Students)</span>
+<span id="cb1947-20"><a href="monte.html#cb1947-20"></a></span>
+<span id="cb1947-21"><a href="monte.html#cb1947-21"></a>Prob_df <span class="sc">%&gt;%</span></span>
+<span id="cb1947-22"><a href="monte.html#cb1947-22"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols      =</span> Probs<span class="sc">:</span>Expectation,</span>
+<span id="cb1947-23"><a href="monte.html#cb1947-23"></a>                 <span class="at">names_to  =</span> <span class="st">&quot;Type&quot;</span>,</span>
+<span id="cb1947-24"><a href="monte.html#cb1947-24"></a>                 <span class="at">values_to =</span> <span class="st">&quot;Prob&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1947-25"><a href="monte.html#cb1947-25"></a>    <span class="fu">mutate</span>(<span class="at">Type =</span> <span class="fu">if_else</span>(Type <span class="sc">==</span> <span class="st">&quot;Probs&quot;</span>, <span class="st">&quot;Simulation&quot;</span>, <span class="st">&quot;Theoretical&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb1947-26"><a href="monte.html#cb1947-26"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb1947-27"><a href="monte.html#cb1947-27"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Students, <span class="at">y =</span> Prob, <span class="at">color =</span> Type), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb1947-28"><a href="monte.html#cb1947-28"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Number of Students&quot;</span>,</span>
+<span id="cb1947-29"><a href="monte.html#cb1947-29"></a>         <span class="at">y =</span> <span class="st">&quot;Probability two students have the same birthday&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1947-30"><a href="monte.html#cb1947-30"></a>    <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-965-1.png" width="672" style="display: block; margin: auto;" /></p>
 <hr />
 </div>
 <div id="応用-円周率" class="section level2" number="28.4">
