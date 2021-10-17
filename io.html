@@ -649,6 +649,7 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="29.3" data-path="monte.html"><a href="monte.html#例-誕生日問題"><i class="fa fa-check"></i><b>29.3</b> 例: 誕生日問題</a></li>
 <li class="chapter" data-level="29.4" data-path="monte.html"><a href="monte.html#応用-円周率"><i class="fa fa-check"></i><b>29.4</b> 応用: 円周率</a></li>
+<li class="chapter" data-level="29.5" data-path="monte.html"><a href="monte.html#応用-ブートストラッピング法による標準誤差の推定"><i class="fa fa-check"></i><b>29.5</b> 応用: ブートストラッピング法による標準誤差の推定</a></li>
 </ul></li>
 <li class="chapter" data-level="30" data-path="solution.html"><a href="solution.html"><i class="fa fa-check"></i><b>30</b> 演習問題の回答</a>
 <ul>
@@ -706,215 +707,394 @@ div.csl-indent {
 <div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="io.html#cb82-1" aria-hidden="true" tabindex="-1"></a>my_df1 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/FIFA_Women.csv&quot;</span>)</span></code></pre></div>
 <p>　読み込まれたデータの中身を見るには、ベクトルの場合と同様に<code>print()</code>関数を使うか、オブジェクト名を入力する。</p>
 <div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="io.html#cb83-1" aria-hidden="true" tabindex="-1"></a>my_df1</span></code></pre></div>
-<pre><code>##      ID                   Team Rank Points Prev_Points Confederation
-## 1     1                Albania   75   1325        1316          UEFA
-## 2     2                Algeria   85   1271        1271           CAF
-## 3     3         American Samoa  133   1030        1030           OFC
-## 4     4                Andorra  155    749         749          UEFA
-## 5     5                 Angola  121   1117        1117           CAF
-## 6     6    Antigua and Barbuda  153    787         787      CONCACAF
-## 7     7              Argentina   32   1659        1659      CONMEBOL
-## 8     8                Armenia  126   1103        1104          UEFA
-## 9     9                  Aruba  157    724         724      CONCACAF
-## 10   10              Australia    7   1963        1963           AFC
-## 11   11                Austria   22   1792        1797          UEFA
-## 12   12             Azerbaijan   76   1321        1326          UEFA
-## 13   13                Bahrain   84   1274        1274           AFC
-## 14   14             Bangladesh  134   1008        1008           AFC
-## 15   15               Barbados  135   1002        1002      CONCACAF
-## 16   16                Belarus   53   1434        1437          UEFA
-## 17   17                Belgium   17   1819        1824          UEFA
-## 18   18                 Belize  150    824         824      CONCACAF
-## 19   19                Bermuda  136    987         987      CONCACAF
-## 20   20                 Bhutan  154    769         769           AFC
-## 21   21                Bolivia   91   1236        1236      CONMEBOL
-## 22   22 Bosnia and Herzegovina   59   1411        1397          UEFA
-## 23   23               Botswana  148    848         848           CAF
-## 24   24                 Brazil    8   1958        1956      CONMEBOL
-## 25   25               Bulgaria   79   1303        1303          UEFA
-## 26   26               Cameroon   51   1455        1486           CAF
-## 27   27                 Canada    8   1958        1958      CONCACAF
-## 28   28                  Chile   37   1640        1637      CONMEBOL
-## 29   29               China PR   15   1867        1842           AFC
-## 30   30         Chinese Taipei   40   1589        1584           AFC
-## 31   31               Colombia   25   1700        1700      CONMEBOL
-## 32   32                Comoros  156    731         731           CAF
-## 33   33                  Congo  104   1178        1178           CAF
-## 34   34               Congo DR  110   1159        1159           CAF
-## 35   35           Cook Islands  103   1194        1194           OFC
-## 36   36             Costa Rica   36   1644        1630      CONCACAF
-## 37   37          Côte d&#39;Ivoire   63   1392        1392           CAF
-## 38   38                Croatia   52   1453        1439          UEFA
-## 39   39                   Cuba   88   1240        1240      CONCACAF
-## 40   40                 Cyprus  123   1114        1123          UEFA
-## 41   41         Czech Republic   29   1678        1678          UEFA
-## 42   42                Denmark   16   1851        1839          UEFA
-## 43   43     Dominican Republic  105   1173        1173      CONCACAF
-## 44   44            El Salvador  109   1164        1164      CONCACAF
-## 45   45                England    6   1999        2001          UEFA
-## 46   46      Equatorial Guinea   71   1356        1356           CAF
-## 47   47                Estonia   95   1210        1206          UEFA
-## 48   48               Eswatini  151    822         822           CAF
-## 49   49               Ethiopia  111   1151        1151           CAF
-## 50   50          Faroe Islands   86   1259        1262          UEFA
-## 51   51                   Fiji   66   1373        1373           OFC
-## 52   52                Finland   30   1671        1678          UEFA
-## 53   53                 France    3   2036        2033          UEFA
-## 54   54                  Gabon  130   1066        1066           CAF
-## 55   55                 Gambia  113   1143        1183           CAF
-## 56   56                Georgia  115   1138        1145          UEFA
-## 57   57                Germany    2   2090        2078          UEFA
-## 58   58                  Ghana   60   1401        1404           CAF
-## 59   59                 Greece   62   1396        1395          UEFA
-## 60   60                   Guam   82   1282        1282           AFC
-## 61   61              Guatemala   80   1290        1290      CONCACAF
-## 62   62                  Haiti   64   1391        1368      CONCACAF
-## 63   63               Honduras  116   1136        1136      CONCACAF
-## 64   64              Hong Kong   74   1329        1335           AFC
-## 65   65                Hungary   43   1537        1526          UEFA
-## 66   66                Iceland   19   1817        1821          UEFA
-## 67   67                  India   55   1432        1432           AFC
-## 68   68              Indonesia   94   1222        1222           AFC
-## 69   69                IR Iran   70   1358        1358           AFC
-## 70   70                 Israel   67   1369        1371          UEFA
-## 71   71                  Italy   14   1889        1882          UEFA
-## 72   72                Jamaica   50   1460        1461      CONCACAF
-## 73   73                  Japan   11   1937        1942           AFC
-## 74   74                 Jordan   58   1419        1419           AFC
-## 75   75             Kazakhstan   77   1318        1318          UEFA
-## 76   76                  Kenya  137    986         986           CAF
-## 77   77              Korea DPR   10   1940        1940           AFC
-## 78   78         Korea Republic   18   1818        1812           AFC
-## 79   79                 Kosovo  125   1104        1109          UEFA
-## 80   80        Kyrgyz Republic  120   1118        1118           AFC
-## 81   81                 Latvia   93   1223        1223          UEFA
-## 82   82                Lebanon  141    967         967           AFC
-## 83   83                Lesotho  147    850         850           CAF
-## 84   84              Lithuania  107   1169        1168          UEFA
-## 85   85             Luxembourg  119   1124        1124          UEFA
-## 86   86             Madagascar  158    691         691           CAF
-## 87   87                 Malawi  145    887         887           CAF
-## 88   88               Malaysia   90   1238        1238           AFC
-## 89   89               Maldives  142    966         966           AFC
-## 90   90                   Mali   83   1276        1276           CAF
-## 91   91                  Malta  101   1197        1195          UEFA
-## 92   92              Mauritius  159    357         357           CAF
-## 93   93                 Mexico   27   1686        1699      CONCACAF
-## 94   94                Moldova   92   1228        1229          UEFA
-## 95   95               Mongolia  123   1114        1114           AFC
-## 96   96             Montenegro   97   1201        1206          UEFA
-## 97   97                Morocco   81   1289        1280           CAF
-## 98   98             Mozambique  152    814         814           CAF
-## 99   99                Myanmar   45   1511        1527           AFC
-## 100 100                Namibia  143    956         956           CAF
-## 101 101                  Nepal   99   1200        1200           AFC
-## 102 102            Netherlands    4   2032        2035          UEFA
-## 103 103          New Caledonia   96   1208        1208           OFC
-## 104 104            New Zealand   23   1757        1760           OFC
-## 105 105              Nicaragua  122   1116        1116      CONCACAF
-## 106 106                Nigeria   38   1614        1614           CAF
-## 107 107        North Macedonia  129   1072        1073          UEFA
-## 108 108       Northern Ireland   55   1432        1433          UEFA
-## 109 109                 Norway   12   1930        1929          UEFA
-## 110 110              Palestine  117   1131        1131           AFC
-## 111 111                 Panama   60   1401        1437      CONCACAF
-## 112 112       Papua New Guinea   46   1504        1504           OFC
-## 113 113               Paraguay   48   1490        1490      CONMEBOL
-## 114 114                   Peru   65   1376        1376      CONMEBOL
-## 115 115            Philippines   67   1369        1369           AFC
-## 116 116                 Poland   28   1683        1677          UEFA
-## 117 117               Portugal   32   1659        1667          UEFA
-## 118 118            Puerto Rico  106   1172        1172      CONCACAF
-## 119 119    Republic of Ireland   31   1666        1665          UEFA
-## 120 120                Romania   44   1535        1542          UEFA
-## 121 121                 Russia   24   1708        1708          UEFA
-## 122 122                 Rwanda  144    899         899           CAF
-## 123 123                  Samoa  107   1169        1169           OFC
-## 124 124               Scotland   21   1804        1794          UEFA
-## 125 125                Senegal   87   1247        1245           CAF
-## 126 126                 Serbia   41   1558        1553          UEFA
-## 127 127              Singapore  128   1089        1089           AFC
-## 128 128               Slovakia   47   1501        1500          UEFA
-## 129 129               Slovenia   49   1471        1467          UEFA
-## 130 130        Solomon Islands  114   1140        1140           OFC
-## 131 131           South Africa   53   1434        1434           CAF
-## 132 132                  Spain   13   1915        1900          UEFA
-## 133 133              Sri Lanka  140    968         968           AFC
-## 134 134    St. Kitts and Nevis  131   1050        1054      CONCACAF
-## 135 135              St. Lucia  138    982         982      CONCACAF
-## 136 136               Suriname  127   1093        1093      CONCACAF
-## 137 137                 Sweden    5   2007        2022          UEFA
-## 138 138            Switzerland   20   1815        1817          UEFA
-## 139 139                 Tahiti  102   1196        1196           OFC
-## 140 140             Tajikistan  132   1035        1035           AFC
-## 141 141               Tanzania  139    978         978           CAF
-## 142 142               Thailand   39   1596        1620           AFC
-## 143 143                  Tonga   88   1240        1240           OFC
-## 144 144    Trinidad and Tobago   72   1354        1354      CONCACAF
-## 145 145                Tunisia   78   1304        1313           CAF
-## 146 146                 Turkey   69   1365        1361          UEFA
-## 147 147                 Uganda  146    868         868           CAF
-## 148 148                Ukraine   26   1692        1697          UEFA
-## 149 149   United Arab Emirates   97   1201        1201           AFC
-## 150 150                Uruguay   73   1346        1346      CONMEBOL
-## 151 151      US Virgin Islands  149    843         843      CONCACAF
-## 152 152                    USA    1   2181        2174      CONCACAF
-## 153 153             Uzbekistan   42   1543        1543           AFC
-## 154 154                Vanuatu  117   1131        1131           OFC
-## 155 155              Venezuela   57   1425        1425      CONMEBOL
-## 156 156                Vietnam   35   1657        1665           AFC
-## 157 157                  Wales   34   1658        1659          UEFA
-## 158 158                 Zambia  100   1198        1167           CAF
-## 159 159               Zimbabwe  111   1151        1151           CAF</code></pre>
+<pre><code>##      ID                   Team Rank Points Prev_Points
+## 1     1                Albania   75   1325        1316
+## 2     2                Algeria   85   1271        1271
+## 3     3         American Samoa  133   1030        1030
+## 4     4                Andorra  155    749         749
+## 5     5                 Angola  121   1117        1117
+## 6     6    Antigua and Barbuda  153    787         787
+## 7     7              Argentina   32   1659        1659
+## 8     8                Armenia  126   1103        1104
+## 9     9                  Aruba  157    724         724
+## 10   10              Australia    7   1963        1963
+## 11   11                Austria   22   1792        1797
+## 12   12             Azerbaijan   76   1321        1326
+## 13   13                Bahrain   84   1274        1274
+## 14   14             Bangladesh  134   1008        1008
+## 15   15               Barbados  135   1002        1002
+## 16   16                Belarus   53   1434        1437
+## 17   17                Belgium   17   1819        1824
+## 18   18                 Belize  150    824         824
+## 19   19                Bermuda  136    987         987
+## 20   20                 Bhutan  154    769         769
+## 21   21                Bolivia   91   1236        1236
+## 22   22 Bosnia and Herzegovina   59   1411        1397
+## 23   23               Botswana  148    848         848
+## 24   24                 Brazil    8   1958        1956
+## 25   25               Bulgaria   79   1303        1303
+## 26   26               Cameroon   51   1455        1486
+## 27   27                 Canada    8   1958        1958
+## 28   28                  Chile   37   1640        1637
+## 29   29               China PR   15   1867        1842
+## 30   30         Chinese Taipei   40   1589        1584
+## 31   31               Colombia   25   1700        1700
+## 32   32                Comoros  156    731         731
+## 33   33                  Congo  104   1178        1178
+## 34   34               Congo DR  110   1159        1159
+## 35   35           Cook Islands  103   1194        1194
+## 36   36             Costa Rica   36   1644        1630
+## 37   37         Côte d&#39;Ivoire   63   1392        1392
+## 38   38                Croatia   52   1453        1439
+## 39   39                   Cuba   88   1240        1240
+## 40   40                 Cyprus  123   1114        1123
+## 41   41         Czech Republic   29   1678        1678
+## 42   42                Denmark   16   1851        1839
+## 43   43     Dominican Republic  105   1173        1173
+## 44   44            El Salvador  109   1164        1164
+## 45   45                England    6   1999        2001
+## 46   46      Equatorial Guinea   71   1356        1356
+## 47   47                Estonia   95   1210        1206
+## 48   48               Eswatini  151    822         822
+## 49   49               Ethiopia  111   1151        1151
+## 50   50          Faroe Islands   86   1259        1262
+## 51   51                   Fiji   66   1373        1373
+## 52   52                Finland   30   1671        1678
+## 53   53                 France    3   2036        2033
+## 54   54                  Gabon  130   1066        1066
+## 55   55                 Gambia  113   1143        1183
+## 56   56                Georgia  115   1138        1145
+## 57   57                Germany    2   2090        2078
+## 58   58                  Ghana   60   1401        1404
+## 59   59                 Greece   62   1396        1395
+## 60   60                   Guam   82   1282        1282
+## 61   61              Guatemala   80   1290        1290
+## 62   62                  Haiti   64   1391        1368
+## 63   63               Honduras  116   1136        1136
+## 64   64              Hong Kong   74   1329        1335
+## 65   65                Hungary   43   1537        1526
+## 66   66                Iceland   19   1817        1821
+## 67   67                  India   55   1432        1432
+## 68   68              Indonesia   94   1222        1222
+## 69   69                IR Iran   70   1358        1358
+## 70   70                 Israel   67   1369        1371
+## 71   71                  Italy   14   1889        1882
+## 72   72                Jamaica   50   1460        1461
+## 73   73                  Japan   11   1937        1942
+## 74   74                 Jordan   58   1419        1419
+## 75   75             Kazakhstan   77   1318        1318
+## 76   76                  Kenya  137    986         986
+## 77   77              Korea DPR   10   1940        1940
+## 78   78         Korea Republic   18   1818        1812
+## 79   79                 Kosovo  125   1104        1109
+## 80   80        Kyrgyz Republic  120   1118        1118
+## 81   81                 Latvia   93   1223        1223
+## 82   82                Lebanon  141    967         967
+## 83   83                Lesotho  147    850         850
+## 84   84              Lithuania  107   1169        1168
+## 85   85             Luxembourg  119   1124        1124
+## 86   86             Madagascar  158    691         691
+## 87   87                 Malawi  145    887         887
+## 88   88               Malaysia   90   1238        1238
+## 89   89               Maldives  142    966         966
+## 90   90                   Mali   83   1276        1276
+## 91   91                  Malta  101   1197        1195
+## 92   92              Mauritius  159    357         357
+## 93   93                 Mexico   27   1686        1699
+## 94   94                Moldova   92   1228        1229
+## 95   95               Mongolia  123   1114        1114
+## 96   96             Montenegro   97   1201        1206
+## 97   97                Morocco   81   1289        1280
+## 98   98             Mozambique  152    814         814
+## 99   99                Myanmar   45   1511        1527
+## 100 100                Namibia  143    956         956
+## 101 101                  Nepal   99   1200        1200
+## 102 102            Netherlands    4   2032        2035
+## 103 103          New Caledonia   96   1208        1208
+## 104 104            New Zealand   23   1757        1760
+## 105 105              Nicaragua  122   1116        1116
+## 106 106                Nigeria   38   1614        1614
+## 107 107        North Macedonia  129   1072        1073
+## 108 108       Northern Ireland   55   1432        1433
+## 109 109                 Norway   12   1930        1929
+## 110 110              Palestine  117   1131        1131
+## 111 111                 Panama   60   1401        1437
+## 112 112       Papua New Guinea   46   1504        1504
+## 113 113               Paraguay   48   1490        1490
+## 114 114                   Peru   65   1376        1376
+## 115 115            Philippines   67   1369        1369
+## 116 116                 Poland   28   1683        1677
+## 117 117               Portugal   32   1659        1667
+## 118 118            Puerto Rico  106   1172        1172
+## 119 119    Republic of Ireland   31   1666        1665
+## 120 120                Romania   44   1535        1542
+## 121 121                 Russia   24   1708        1708
+## 122 122                 Rwanda  144    899         899
+## 123 123                  Samoa  107   1169        1169
+## 124 124               Scotland   21   1804        1794
+## 125 125                Senegal   87   1247        1245
+## 126 126                 Serbia   41   1558        1553
+## 127 127              Singapore  128   1089        1089
+## 128 128               Slovakia   47   1501        1500
+## 129 129               Slovenia   49   1471        1467
+## 130 130        Solomon Islands  114   1140        1140
+## 131 131           South Africa   53   1434        1434
+## 132 132                  Spain   13   1915        1900
+## 133 133              Sri Lanka  140    968         968
+## 134 134    St. Kitts and Nevis  131   1050        1054
+## 135 135              St. Lucia  138    982         982
+## 136 136               Suriname  127   1093        1093
+## 137 137                 Sweden    5   2007        2022
+## 138 138            Switzerland   20   1815        1817
+## 139 139                 Tahiti  102   1196        1196
+## 140 140             Tajikistan  132   1035        1035
+## 141 141               Tanzania  139    978         978
+## 142 142               Thailand   39   1596        1620
+## 143 143                  Tonga   88   1240        1240
+## 144 144    Trinidad and Tobago   72   1354        1354
+## 145 145                Tunisia   78   1304        1313
+## 146 146                 Turkey   69   1365        1361
+## 147 147                 Uganda  146    868         868
+## 148 148                Ukraine   26   1692        1697
+## 149 149   United Arab Emirates   97   1201        1201
+## 150 150                Uruguay   73   1346        1346
+## 151 151      US Virgin Islands  149    843         843
+## 152 152                    USA    1   2181        2174
+## 153 153             Uzbekistan   42   1543        1543
+## 154 154                Vanuatu  117   1131        1131
+## 155 155              Venezuela   57   1425        1425
+## 156 156                Vietnam   35   1657        1665
+## 157 157                  Wales   34   1658        1659
+## 158 158                 Zambia  100   1198        1167
+## 159 159               Zimbabwe  111   1151        1151
+##     Confederation
+## 1            UEFA
+## 2             CAF
+## 3             OFC
+## 4            UEFA
+## 5             CAF
+## 6        CONCACAF
+## 7        CONMEBOL
+## 8            UEFA
+## 9        CONCACAF
+## 10            AFC
+## 11           UEFA
+## 12           UEFA
+## 13            AFC
+## 14            AFC
+## 15       CONCACAF
+## 16           UEFA
+## 17           UEFA
+## 18       CONCACAF
+## 19       CONCACAF
+## 20            AFC
+## 21       CONMEBOL
+## 22           UEFA
+## 23            CAF
+## 24       CONMEBOL
+## 25           UEFA
+## 26            CAF
+## 27       CONCACAF
+## 28       CONMEBOL
+## 29            AFC
+## 30            AFC
+## 31       CONMEBOL
+## 32            CAF
+## 33            CAF
+## 34            CAF
+## 35            OFC
+## 36       CONCACAF
+## 37            CAF
+## 38           UEFA
+## 39       CONCACAF
+## 40           UEFA
+## 41           UEFA
+## 42           UEFA
+## 43       CONCACAF
+## 44       CONCACAF
+## 45           UEFA
+## 46            CAF
+## 47           UEFA
+## 48            CAF
+## 49            CAF
+## 50           UEFA
+## 51            OFC
+## 52           UEFA
+## 53           UEFA
+## 54            CAF
+## 55            CAF
+## 56           UEFA
+## 57           UEFA
+## 58            CAF
+## 59           UEFA
+## 60            AFC
+## 61       CONCACAF
+## 62       CONCACAF
+## 63       CONCACAF
+## 64            AFC
+## 65           UEFA
+## 66           UEFA
+## 67            AFC
+## 68            AFC
+## 69            AFC
+## 70           UEFA
+## 71           UEFA
+## 72       CONCACAF
+## 73            AFC
+## 74            AFC
+## 75           UEFA
+## 76            CAF
+## 77            AFC
+## 78            AFC
+## 79           UEFA
+## 80            AFC
+## 81           UEFA
+## 82            AFC
+## 83            CAF
+## 84           UEFA
+## 85           UEFA
+## 86            CAF
+## 87            CAF
+## 88            AFC
+## 89            AFC
+## 90            CAF
+## 91           UEFA
+## 92            CAF
+## 93       CONCACAF
+## 94           UEFA
+## 95            AFC
+## 96           UEFA
+## 97            CAF
+## 98            CAF
+## 99            AFC
+## 100           CAF
+## 101           AFC
+## 102          UEFA
+## 103           OFC
+## 104           OFC
+## 105      CONCACAF
+## 106           CAF
+## 107          UEFA
+## 108          UEFA
+## 109          UEFA
+## 110           AFC
+## 111      CONCACAF
+## 112           OFC
+## 113      CONMEBOL
+## 114      CONMEBOL
+## 115           AFC
+## 116          UEFA
+## 117          UEFA
+## 118      CONCACAF
+## 119          UEFA
+## 120          UEFA
+## 121          UEFA
+## 122           CAF
+## 123           OFC
+## 124          UEFA
+## 125           CAF
+## 126          UEFA
+## 127           AFC
+## 128          UEFA
+## 129          UEFA
+## 130           OFC
+## 131           CAF
+## 132          UEFA
+## 133           AFC
+## 134      CONCACAF
+## 135      CONCACAF
+## 136      CONCACAF
+## 137          UEFA
+## 138          UEFA
+## 139           OFC
+## 140           AFC
+## 141           CAF
+## 142           AFC
+## 143           OFC
+## 144      CONCACAF
+## 145           CAF
+## 146          UEFA
+## 147           CAF
+## 148          UEFA
+## 149           AFC
+## 150      CONMEBOL
+## 151      CONCACAF
+## 152      CONCACAF
+## 153           AFC
+## 154           OFC
+## 155      CONMEBOL
+## 156           AFC
+## 157          UEFA
+## 158           CAF
+## 159           CAF</code></pre>
 <p>　しかし、通常はデータが読み込まれているかどうかを確認するためにデータ全体を見る必要はない。最初の数行のみで問題ないはずだ。そのために、<code>head()</code> 関数を使う。これは最初の6行 (<code>n</code> で表示行数を変える) を表示してくれる。</p>
 <div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="io.html#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(my_df1)</span></code></pre></div>
-<pre><code>##   ID                Team Rank Points Prev_Points Confederation
-## 1  1             Albania   75   1325        1316          UEFA
-## 2  2             Algeria   85   1271        1271           CAF
-## 3  3      American Samoa  133   1030        1030           OFC
-## 4  4             Andorra  155    749         749          UEFA
-## 5  5              Angola  121   1117        1117           CAF
-## 6  6 Antigua and Barbuda  153    787         787      CONCACAF</code></pre>
+<pre><code>##   ID                Team Rank Points Prev_Points
+## 1  1             Albania   75   1325        1316
+## 2  2             Algeria   85   1271        1271
+## 3  3      American Samoa  133   1030        1030
+## 4  4             Andorra  155    749         749
+## 5  5              Angola  121   1117        1117
+## 6  6 Antigua and Barbuda  153    787         787
+##   Confederation
+## 1          UEFA
+## 2           CAF
+## 3           OFC
+## 4          UEFA
+## 5           CAF
+## 6      CONCACAF</code></pre>
 <p>　同様に、最後の <code>n</code>行は<code>tail()</code> で表示する。</p>
 <div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="io.html#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(my_df1, <span class="at">n =</span> <span class="dv">9</span>)</span></code></pre></div>
-<pre><code>##      ID              Team Rank Points Prev_Points Confederation
-## 151 151 US Virgin Islands  149    843         843      CONCACAF
-## 152 152               USA    1   2181        2174      CONCACAF
-## 153 153        Uzbekistan   42   1543        1543           AFC
-## 154 154           Vanuatu  117   1131        1131           OFC
-## 155 155         Venezuela   57   1425        1425      CONMEBOL
-## 156 156           Vietnam   35   1657        1665           AFC
-## 157 157             Wales   34   1658        1659          UEFA
-## 158 158            Zambia  100   1198        1167           CAF
-## 159 159          Zimbabwe  111   1151        1151           CAF</code></pre>
+<pre><code>##      ID              Team Rank Points Prev_Points
+## 151 151 US Virgin Islands  149    843         843
+## 152 152               USA    1   2181        2174
+## 153 153        Uzbekistan   42   1543        1543
+## 154 154           Vanuatu  117   1131        1131
+## 155 155         Venezuela   57   1425        1425
+## 156 156           Vietnam   35   1657        1665
+## 157 157             Wales   34   1658        1659
+## 158 158            Zambia  100   1198        1167
+## 159 159          Zimbabwe  111   1151        1151
+##     Confederation
+## 151      CONCACAF
+## 152      CONCACAF
+## 153           AFC
+## 154           OFC
+## 155      CONMEBOL
+## 156           AFC
+## 157          UEFA
+## 158           CAF
+## 159           CAF</code></pre>
 </div>
 <div id="エンコーディングの話" class="section level3" number="8.2.2">
 <h3><span class="header-section-number">8.2.2</span> エンコーディングの話</h3>
 <p>　<code>Vote_ShiftJIS.csv</code> はShift-JIS でエンコーディングされた csvファイルである。このファイルを <code>read.csv()</code> 関数で読み込んでみよう。</p>
 <div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="io.html#cb89-1" aria-hidden="true" tabindex="-1"></a>ShiftJIS_df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/Vote_ShiftJIS.csv&quot;</span>)</span></code></pre></div>
-<pre><code>## Error in type.convert.default(data[[i]], as.is = as.is[i], dec = dec, : invalid multibyte string at &#39;&lt;96&gt;k&lt;8a&gt;C&lt;93&gt;&lt;b9&gt;&#39;</code></pre>
+<pre><code>## Error in type.convert.default(data[[i]], as.is = as.is[i], dec = dec, :  &#39;&lt;96&gt;k&lt;8a&gt;C&lt;93&gt;&lt;b9&gt;&#39; に不正なマルチバイト文字があります</code></pre>
 <p>　Windowsならなんの問題なく読み込まれるだろう。しかし、macOSの場合、以下のようなエラーが表示され、読み込めない。</p>
 <pre><code>## Error in type.convert.default(data[[i]], as.is = as.is[i], dec = dec, :  &#39;&lt;96&gt;k&lt;8a&gt;C&lt;93&gt;&lt;b9&gt;&#39; に不正なマルチバイト文字があります</code></pre>
 <p>　このファイルは、<code>read.csv()</code>の代わりに <strong>readr</strong>パッケージの<code>read_csv()</code>を使えば読み込むことができる<a href="#fn30" class="footnote-ref" id="fnref30"><sup>30</sup></a>。<code>read_csv()</code>で読み込み、中身を確認してみよう。</p>
 <div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="io.html#cb92-1" aria-hidden="true" tabindex="-1"></a>ShiftJIS_df1 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;Data/Vote_ShiftJIS.csv&quot;</span>)</span></code></pre></div>
 <pre><code>## Rows: 47 Columns: 11</code></pre>
-<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+<pre><code>## ─ Column specification ─────────────────
 ## Delimiter: &quot;,&quot;
 ## chr  (1): Pref
-## dbl (10): ID, Zaisei, Over65, Under30, LDP, DPJ, Komei, Ishin, JCP, SDP</code></pre>
+## dbl (10): ID, Zaisei, Over65, Under30, LDP, DPJ, Kome...</code></pre>
 <pre><code>## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 <div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="io.html#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ShiftJIS_df1)</span></code></pre></div>
 <pre><code>## # A tibble: 6 × 11
-##      ID Pref           Zaisei Over65 Under30   LDP   DPJ Komei Ishin   JCP   SDP
-##   &lt;dbl&gt; &lt;chr&gt;           &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1     1 &quot;\x96k\x8aC\x…  0.419   29.1    24.7  32.8  30.6 13.4   3.43 11.4   1.68
-## 2     2 &quot;\x90\xc2\x90…  0.332   30.1    23.9  40.4  24.6 12.8   3.82  8.92  3.41
-## 3     3 &quot;\x8a\xe2\x8e…  0.341   30.4    24.5  34.9  22.4  8.61  5.16 11.2   5.29
-## 4     4 &quot;\x8b{\x8f\xe…  0.596   25.8    27.3  36.7  25.4 13.4   3.97  9.99  3.62
-## 5     5 &quot;\x8fH\x93c\x…  0.299   33.8    21.4  43.5  22.7 11.2   5.17  7.56  5.12
-## 6     6 &quot;\x8eR\x8c`\x…  0.342   30.8    24.8  42.5  21.5 11.8   4.3   7.6   5.2</code></pre>
+##      ID Pref      Zaisei Over65 Under30   LDP   DPJ Komei
+##   &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     1 &quot;\x96k\x…  0.419   29.1    24.7  32.8  30.6 13.4 
+## 2     2 &quot;\x90\xc…  0.332   30.1    23.9  40.4  24.6 12.8 
+## 3     3 &quot;\x8a\xe…  0.341   30.4    24.5  34.9  22.4  8.61
+## 4     4 &quot;\x8b{\x…  0.596   25.8    27.3  36.7  25.4 13.4 
+## 5     5 &quot;\x8fH\x…  0.299   33.8    21.4  43.5  22.7 11.2 
+## 6     6 &quot;\x8eR\x…  0.342   30.8    24.8  42.5  21.5 11.8 
+## # … with 3 more variables: Ishin &lt;dbl&gt;, JCP &lt;dbl&gt;,
+## #   SDP &lt;dbl&gt;</code></pre>
 <p>　2列目の<code>Pref</code>列には日本語で都道府県名が入っているはずだが、謎の文字列が表示される。<code>read.csv()</code>の場合、少なくともWindowsでは問題なく読み込めたはずだ。なぜなら<code>read.csv()</code>はWindowsの場合、Shift-JISで、macOSの場合UTF-8でファイルを読み込む。一方、<code>read_csv()</code>はOSと関係なく世界標準であるUTF-8でファイルを読み込むからだ。</p>
 <p>　正しい都道府県名を表示する方法はいくつかあるが、ここでは3つの方法を紹介する。</p>
 <p><strong>1. <code>read.csv()</code>関数の<code>fileEncoing</code>引数の指定</strong></p>
@@ -922,48 +1102,64 @@ div.csl-indent {
 <div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="io.html#cb98-1" aria-hidden="true" tabindex="-1"></a>ShiftJIS_df2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/Vote_ShiftJIS.csv&quot;</span>, </span>
 <span id="cb98-2"><a href="io.html#cb98-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">fileEncoding =</span> <span class="st">&quot;Shift_JIS&quot;</span>)</span>
 <span id="cb98-3"><a href="io.html#cb98-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ShiftJIS_df2)</span></code></pre></div>
-<pre><code>##   ID   Pref  Zaisei Over65 Under30   LDP   DPJ Komei Ishin   JCP  SDP
-## 1  1 北海道 0.41903  29.09   24.70 32.82 30.62 13.41  3.43 11.44 1.68
-## 2  2 青森県 0.33190  30.14   23.92 40.44 24.61 12.76  3.82  8.92 3.41
-## 3  3 岩手県 0.34116  30.38   24.48 34.90 22.44  8.61  5.16 11.24 5.29
-## 4  4 宮城県 0.59597  25.75   27.29 36.68 25.40 13.42  3.97  9.99 3.62
-## 5  5 秋田県 0.29862  33.84   21.35 43.46 22.72 11.19  5.17  7.56 5.12
-## 6  6 山形県 0.34237  30.76   24.75 42.49 21.47 11.78  4.30  7.60 5.20</code></pre>
+<pre><code>##   ID   Pref  Zaisei Over65 Under30   LDP   DPJ Komei
+## 1  1 北海道 0.41903  29.09   24.70 32.82 30.62 13.41
+## 2  2 青森県 0.33190  30.14   23.92 40.44 24.61 12.76
+## 3  3 岩手県 0.34116  30.38   24.48 34.90 22.44  8.61
+## 4  4 宮城県 0.59597  25.75   27.29 36.68 25.40 13.42
+## 5  5 秋田県 0.29862  33.84   21.35 43.46 22.72 11.19
+## 6  6 山形県 0.34237  30.76   24.75 42.49 21.47 11.78
+##   Ishin   JCP  SDP
+## 1  3.43 11.44 1.68
+## 2  3.82  8.92 3.41
+## 3  5.16 11.24 5.29
+## 4  3.97  9.99 3.62
+## 5  5.17  7.56 5.12
+## 6  4.30  7.60 5.20</code></pre>
 <p>　<code>Pref</code>列の日本語が正常に表示された。むろん、Windowsなら<code>fileEncoding</code>引数がなくても読み込める。むしろ、UTF-8で書かれたファイルが読み込めない可能性がある。この場合は<code>fileEncoding = "UTF-8"</code>を指定すれば良い。</p>
 <p><strong>2. <code>read_csv()</code>関数の<code>locale</code>引数の指定</strong></p>
 <p>　二つ目の方法は <code>read_csv()</code> 関数の<code>locale</code> 引数を指定する方法である。<code>read_csv()</code>には　<code>fileEncoding</code>　引数がないが、代わりに <code>locale</code> があるので、<code>locale = locale(encoding = "Shift_JIS")</code>を追加すれば良い。</p>
 <div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="io.html#cb100-1" aria-hidden="true" tabindex="-1"></a>ShiftJIS_df3 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;Data/Vote_ShiftJIS.csv&quot;</span>, </span>
 <span id="cb100-2"><a href="io.html#cb100-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">locale =</span> <span class="fu">locale</span>(<span class="at">encoding =</span> <span class="st">&quot;Shift_JIS&quot;</span>))</span></code></pre></div>
 <pre><code>## Rows: 47 Columns: 11</code></pre>
-<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+<pre><code>## ─ Column specification ─────────────────
 ## Delimiter: &quot;,&quot;
 ## chr  (1): Pref
-## dbl (10): ID, Zaisei, Over65, Under30, LDP, DPJ, Komei, Ishin, JCP, SDP</code></pre>
+## dbl (10): ID, Zaisei, Over65, Under30, LDP, DPJ, Kome...</code></pre>
 <pre><code>## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 <div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="io.html#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ShiftJIS_df3)</span></code></pre></div>
 <pre><code>## # A tibble: 6 × 11
-##      ID Pref   Zaisei Over65 Under30   LDP   DPJ Komei Ishin   JCP   SDP
-##   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1     1 北海道  0.419   29.1    24.7  32.8  30.6 13.4   3.43 11.4   1.68
-## 2     2 青森県  0.332   30.1    23.9  40.4  24.6 12.8   3.82  8.92  3.41
-## 3     3 岩手県  0.341   30.4    24.5  34.9  22.4  8.61  5.16 11.2   5.29
-## 4     4 宮城県  0.596   25.8    27.3  36.7  25.4 13.4   3.97  9.99  3.62
-## 5     5 秋田県  0.299   33.8    21.4  43.5  22.7 11.2   5.17  7.56  5.12
-## 6     6 山形県  0.342   30.8    24.8  42.5  21.5 11.8   4.3   7.6   5.2</code></pre>
+##      ID Pref   Zaisei Over65 Under30   LDP   DPJ Komei
+##   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     1 北海道  0.419   29.1    24.7  32.8  30.6 13.4 
+## 2     2 青森県  0.332   30.1    23.9  40.4  24.6 12.8 
+## 3     3 岩手県  0.341   30.4    24.5  34.9  22.4  8.61
+## 4     4 宮城県  0.596   25.8    27.3  36.7  25.4 13.4 
+## 5     5 秋田県  0.299   33.8    21.4  43.5  22.7 11.2 
+## 6     6 山形県  0.342   30.8    24.8  42.5  21.5 11.8 
+## # … with 3 more variables: Ishin &lt;dbl&gt;, JCP &lt;dbl&gt;,
+## #   SDP &lt;dbl&gt;</code></pre>
 <p><strong>3. LibreOfficeなどを利用した方法</strong></p>
 <p>　第三の方法は、そもそも Shift-JISでではなく、より一般的な UTF-8 でエンコーディングされたファイルを用意し、それを読み込むことである。ただし、この作業のためにはR以外のソフトが必要である。テキストエディタには文字コードを変更する機能がついているものが多いので、その機能を利用して文字コードを Shift-JISからUTF-8に変えれば良い。また、オープンソースのオフィススイートである <a href="https://ja.libreoffice.org/">LibreOffice</a> は、CSVを開く際に文字コードを尋ねてくれるので、Shift-JIS を指定して上で使った csv ファイルを開こう。その後、文字コードをUTF-8に変更し、別名でcsvファイルを保存すれ、文字コード以外の中身が同じファイルができる。そのようにして作ったのが、<code>Vote.csv</code> である。これを読み込んでみよう。</p>
 <div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="io.html#cb106-1" aria-hidden="true" tabindex="-1"></a>UTF8_df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/Vote.csv&quot;</span>) <span class="co"># macOSの場合</span></span>
 <span id="cb106-2"><a href="io.html#cb106-2" aria-hidden="true" tabindex="-1"></a>UTF8_df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/Vote.csv&quot;</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>) <span class="co"># Windowsの場合</span></span></code></pre></div>
 <div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="io.html#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(UTF8_df)</span></code></pre></div>
-<pre><code>##   ID   Pref  Zaisei Over65 Under30   LDP   DPJ Komei Ishin   JCP  SDP
-## 1  1 北海道 0.41903  29.09   24.70 32.82 30.62 13.41  3.43 11.44 1.68
-## 2  2 青森県 0.33190  30.14   23.92 40.44 24.61 12.76  3.82  8.92 3.41
-## 3  3 岩手県 0.34116  30.38   24.48 34.90 22.44  8.61  5.16 11.24 5.29
-## 4  4 宮城県 0.59597  25.75   27.29 36.68 25.40 13.42  3.97  9.99 3.62
-## 5  5 秋田県 0.29862  33.84   21.35 43.46 22.72 11.19  5.17  7.56 5.12
-## 6  6 山形県 0.34237  30.76   24.75 42.49 21.47 11.78  4.30  7.60 5.20</code></pre>
+<pre><code>##   ID   Pref  Zaisei Over65 Under30   LDP   DPJ Komei
+## 1  1 北海道 0.41903  29.09   24.70 32.82 30.62 13.41
+## 2  2 青森県 0.33190  30.14   23.92 40.44 24.61 12.76
+## 3  3 岩手県 0.34116  30.38   24.48 34.90 22.44  8.61
+## 4  4 宮城県 0.59597  25.75   27.29 36.68 25.40 13.42
+## 5  5 秋田県 0.29862  33.84   21.35 43.46 22.72 11.19
+## 6  6 山形県 0.34237  30.76   24.75 42.49 21.47 11.78
+##   Ishin   JCP  SDP
+## 1  3.43 11.44 1.68
+## 2  3.82  8.92 3.41
+## 3  5.16 11.24 5.29
+## 4  3.97  9.99 3.62
+## 5  5.17  7.56 5.12
+## 6  4.30  7.60 5.20</code></pre>
 <p>　第1引数以外の引数を何を指定しなくても、ファイルが正しく読み込まれ、都道府県名が日本語で表示されている。ただし、Windowsで文字化けが生じる場合はファイルのエンコーディングをUTF-8に指定して読み込もう。</p>
 </div>
 <div id="その他のフォーマット" class="section level3" number="8.2.3">
@@ -973,25 +1169,32 @@ div.csl-indent {
 <div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="io.html#cb109-1" aria-hidden="true" tabindex="-1"></a>Excel_DF <span class="ot">&lt;-</span> <span class="fu">read.xlsx</span>(<span class="st">&quot;Data/Soccer.xlsx&quot;</span>, <span class="at">sheetIndex =</span> <span class="dv">1</span>)</span></code></pre></div>
 <p>　Excelファイルには2つ以上のシートが含まれる場合が多いので、どのシートを読み込むかを<code>sheetIndex</code> で指定する。実際、<code>Soccer.xlsx</code>ファイルをExcelまたはLibreOffice Calc で開いてみると、シートが3つある。そのうち、必要なデータは1つ目のシートにあるので、ここでは<code>1</code>を指定した。きちんと読み込たか確認してみよう。</p>
 <div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="io.html#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Excel_DF)</span></code></pre></div>
-<pre><code>##   ID                Team Rank Points Prev_Points Confederation
-## 1  1             Albania   75   1325        1316          UEFA
-## 2  2             Algeria   85   1271        1271           CAF
-## 3  3      American Samoa  133   1030        1030           OFC
-## 4  4             Andorra  155    749         749          UEFA
-## 5  5              Angola  121   1117        1117           CAF
-## 6  6 Antigua and Barbuda  153    787         787      CONCACAF</code></pre>
+<pre><code>##   ID                Team Rank Points Prev_Points
+## 1  1             Albania   75   1325        1316
+## 2  2             Algeria   85   1271        1271
+## 3  3      American Samoa  133   1030        1030
+## 4  4             Andorra  155    749         749
+## 5  5              Angola  121   1117        1117
+## 6  6 Antigua and Barbuda  153    787         787
+##   Confederation
+## 1          UEFA
+## 2           CAF
+## 3           OFC
+## 4          UEFA
+## 5           CAF
+## 6      CONCACAF</code></pre>
 <p>　Stataの<code>.dta</code>ファイルは<strong>haven</strong>パッケージの<code>read_dta()</code> 関数を使って読み込む。Stata形式で保存された <code>Soccer.dta</code> を読み込み、<code>Stata_DF</code>と名付けてみよう。</p>
 <div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="io.html#cb112-1" aria-hidden="true" tabindex="-1"></a>Stata_DF <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">&quot;Data/Soccer.dta&quot;</span>)</span>
 <span id="cb112-2"><a href="io.html#cb112-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Stata_DF)</span></code></pre></div>
 <pre><code>## # A tibble: 6 × 6
-##      id team                 rank points prev_points confederation
-##   &lt;dbl&gt; &lt;chr&gt;               &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;        
-## 1     1 Albania                75   1325        1316 UEFA         
-## 2     2 Algeria                85   1271        1271 CAF          
-## 3     3 American Samoa        133   1030        1030 OFC          
-## 4     4 Andorra               155    749         749 UEFA         
-## 5     5 Angola                121   1117        1117 CAF          
-## 6     6 Antigua and Barbuda   153    787         787 CONCACAF</code></pre>
+##      id team        rank points prev_points confederation
+##   &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;        
+## 1     1 Albania       75   1325        1316 UEFA         
+## 2     2 Algeria       85   1271        1271 CAF          
+## 3     3 American …   133   1030        1030 OFC          
+## 4     4 Andorra      155    749         749 UEFA         
+## 5     5 Angola       121   1117        1117 CAF          
+## 6     6 Antigua a…   153    787         787 CONCACAF</code></pre>
 <p>Excel形式のデータと同じ内容のデータであること確認できる（ただし、変数名は少し異なる）。</p>
 <p>　実際の社会科学の場合、入手するデータの多くは<code>.csv</code>、<code>.xlsx</code> (または<code>.xls</code>)、<code>.dta</code>であるため、以上のやり方で多くのデータの読み込みができる。</p>
 </div>
@@ -1000,15 +1203,17 @@ div.csl-indent {
 <p>　データ分析には表形式以外のデータも使われる。データ分析でよく使われるデータの形として、ベクトルや行列のほかに<code>list</code>型とがある。表形式だけでなく、Rで扱える様々なデータを含むファイル形式の1つが<code>.RData</code>フォーマットである。<code>.RData</code>にはRが扱える形式のデータを格納するだけでなく、表形式のデータを<strong>複数</strong>格納することができる。また、データだけでなく、分析結果も保存することができる。<code>.RData</code>形式のファイルはRでしか読み込めないため、データの保存方法としては推奨できないが、1つのファイルにさまざまなデータが格納できるという大きな長所があるため、分析の途中経過を保存するためにしばしば利用される。</p>
 <p>　ここでは<code>Data</code>フォルダにある<code>Scores.RData</code>を読み込んでみよう。このファイルには学生5人の数学と英語の成績に関するデータがそれぞれ<code>MathScore</code>と<code>EnglishScore</code>という名で保存されている。このデータを読み込む前に、現在の実行環境にどのようなオブジェクトがあるかを <code>ls()</code> 関数を使って確認してみよう<a href="#fn32" class="footnote-ref" id="fnref32"><sup>32</sup></a>。</p>
 <div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="io.html#cb114-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span>()</span></code></pre></div>
-<pre><code>## [1] &quot;Excel_DF&quot;     &quot;my_df1&quot;       &quot;ShiftJIS_df1&quot; &quot;ShiftJIS_df2&quot; &quot;ShiftJIS_df3&quot;
-## [6] &quot;Stata_DF&quot;     &quot;UTF8_df&quot;</code></pre>
+<pre><code>## [1] &quot;Excel_DF&quot;     &quot;my_df1&quot;       &quot;ShiftJIS_df1&quot;
+## [4] &quot;ShiftJIS_df2&quot; &quot;ShiftJIS_df3&quot; &quot;Stata_DF&quot;    
+## [7] &quot;UTF8_df&quot;</code></pre>
 <p>　現在の実行環境に7個のオブジェクトがあることがわかる。</p>
 <p>　では、<code>Scores.RData</code>を読み込んでみよう。<code>.RData</code> は、<code>load()</code> 関数で読み込む。ただし、これまでのファイルの読み込みとは異なり、保存先のオブジェクト名は指定しない。なぜなら、<code>.Rdata</code> の中に既にオブジェクトが保存されているからだ。</p>
 <div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="io.html#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;Data/Scores.RData&quot;</span>)</span></code></pre></div>
 <p>　ここでもう一度実行環境上にあるオブジェクトのリストを確認してみよう。</p>
 <div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="io.html#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span>()</span></code></pre></div>
-<pre><code>## [1] &quot;EnglishScore&quot; &quot;Excel_DF&quot;     &quot;MathScore&quot;    &quot;my_df1&quot;       &quot;ShiftJIS_df1&quot;
-## [6] &quot;ShiftJIS_df2&quot; &quot;ShiftJIS_df3&quot; &quot;Stata_DF&quot;     &quot;UTF8_df&quot;</code></pre>
+<pre><code>## [1] &quot;EnglishScore&quot; &quot;Excel_DF&quot;     &quot;MathScore&quot;   
+## [4] &quot;my_df1&quot;       &quot;ShiftJIS_df1&quot; &quot;ShiftJIS_df2&quot;
+## [7] &quot;ShiftJIS_df3&quot; &quot;Stata_DF&quot;     &quot;UTF8_df&quot;</code></pre>
 <p>　<code>MathScore</code>と<code>EnglishScore</code>という名前のオブジェクトが追加されていることが分かる。</p>
 <p>　このように、<code>load()</code>による<code>.RData</code> の読み込みは、<code>.csv</code>ファイルや<code>.xlsx</code>ファイルの読み込みと異なる。以下の2点が重要な違いである。</p>
 <ol style="list-style-type: decimal">
@@ -1149,14 +1354,16 @@ Eさん
 <div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb127-1"><a href="io.html#cb127-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">c</span>(<span class="st">&quot;my_data&quot;</span>, <span class="st">&quot;numeric_vec1&quot;</span>, <span class="st">&quot;numeric_vec2&quot;</span>, <span class="st">&quot;character_vec&quot;</span>))</span></code></pre></div>
 <p>　4のオブジェクトが削除されたか、<code>ls()</code>関数で確認しよう。</p>
 <div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="io.html#cb128-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span>()</span></code></pre></div>
-<pre><code>## [1] &quot;EnglishScore&quot; &quot;Excel_DF&quot;     &quot;MathScore&quot;    &quot;my_df1&quot;       &quot;ShiftJIS_df1&quot;
-## [6] &quot;ShiftJIS_df2&quot; &quot;ShiftJIS_df3&quot; &quot;Stata_DF&quot;     &quot;UTF8_df&quot;</code></pre>
+<pre><code>## [1] &quot;EnglishScore&quot; &quot;Excel_DF&quot;     &quot;MathScore&quot;   
+## [4] &quot;my_df1&quot;       &quot;ShiftJIS_df1&quot; &quot;ShiftJIS_df2&quot;
+## [7] &quot;ShiftJIS_df3&quot; &quot;Stata_DF&quot;     &quot;UTF8_df&quot;</code></pre>
 <p>それでは<code>Data</code>フォルダー内の<code>my_RData.RData</code>を読み込み、4つのオブジェクトが実行環境に読み込まれるか確認しよう。</p>
 <div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="io.html#cb130-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;Data/my_RData.RData&quot;</span>) <span class="co"># Dataフォルダー内のmy_RData.RDataを読み込む</span></span>
 <span id="cb130-2"><a href="io.html#cb130-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span>()                        <span class="co"># 作業スペース上のオブジェクトのリストを確認する</span></span></code></pre></div>
-<pre><code>##  [1] &quot;character_vec&quot; &quot;EnglishScore&quot;  &quot;Excel_DF&quot;      &quot;MathScore&quot;    
-##  [5] &quot;my_data&quot;       &quot;my_df1&quot;        &quot;numeric_vec1&quot;  &quot;numeric_vec2&quot; 
-##  [9] &quot;ShiftJIS_df1&quot;  &quot;ShiftJIS_df2&quot;  &quot;ShiftJIS_df3&quot;  &quot;Stata_DF&quot;     
+<pre><code>##  [1] &quot;character_vec&quot; &quot;EnglishScore&quot;  &quot;Excel_DF&quot;     
+##  [4] &quot;MathScore&quot;     &quot;my_data&quot;       &quot;my_df1&quot;       
+##  [7] &quot;numeric_vec1&quot;  &quot;numeric_vec2&quot;  &quot;ShiftJIS_df1&quot; 
+## [10] &quot;ShiftJIS_df2&quot;  &quot;ShiftJIS_df3&quot;  &quot;Stata_DF&quot;     
 ## [13] &quot;UTF8_df&quot;</code></pre>
 <hr />
 
