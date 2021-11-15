@@ -60,8 +60,8 @@
 <link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
 <script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
-<link href="libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
-<script src="libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
 <link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
 <script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -1896,7 +1896,7 @@ Stock
 <p>まずは、実習用データを読み込みます。</p>
 <div class="sourceCode" id="cb1211"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1211-1"><a href="tidydata.html#cb1211-1"></a>df3 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;Data/Population2015.csv&quot;</span>)</span></code></pre></div>
 <pre><code>## Rows: 94 Columns: 4</code></pre>
-<pre><code>## ─ Column specification ─────────────────
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
 ## chr (2): 都道府県, 区分
 ## dbl (2): 人口, 面積</code></pre>
@@ -2060,7 +2060,7 @@ Stock
 <p><a href="Data/COVID19_JK.csv">実習用データ</a>を読み込んでみましょう。</p>
 <div class="sourceCode" id="cb1226"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1226-1"><a href="tidydata.html#cb1226-1"></a>df4 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;Data/COVID19_JK.csv&quot;</span>)</span></code></pre></div>
 <pre><code>## Rows: 172 Columns: 5</code></pre>
-<pre><code>## ─ Column specification ─────────────────
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
 ## chr (4): Date, Week, Confirmed_Japan, Confirmed_Korea
 ## dbl (1): ID</code></pre>
@@ -2217,34 +2217,30 @@ Stock
 <span id="cb1239-2"><a href="tidydata.html#cb1239-2"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from  =</span> Country,</span>
 <span id="cb1239-3"><a href="tidydata.html#cb1239-3"></a>              <span class="at">values_from =</span> Sum<span class="sc">:</span>SD)</span></code></pre></div>
 <pre><code>## # A tibble: 7 × 7
-##   Week  Sum_Japan Sum_Korea Mean_Japan Mean_Korea
-##   &lt;fct&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
-## 1 月         2540      1609      106.        67.0
-## 2 火         2093      1641       87.2       68.4
-## 3 水         2531      1626      105.        67.8
-## 4 木         2704      1883      108.        78.5
-## 5 金         3083      2099      123.        87.5
-## 6 土         3327      2194      133.        91.4
-## 7 日         3244      2088      130.        87  
-## # … with 2 more variables: SD_Japan &lt;dbl&gt;,
-## #   SD_Korea &lt;dbl&gt;</code></pre>
+##   Week  Sum_Japan Sum_Korea Mean_Japan Mean_Korea SD_Japan SD_Korea
+##   &lt;fct&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1 月         2540      1609      106.        67.0     156.     126.
+## 2 火         2093      1641       87.2       68.4     111.     111.
+## 3 水         2531      1626      105.        67.8     133.     102.
+## 4 木         2704      1883      108.        78.5     151.     137.
+## 5 金         3083      2099      123.        87.5     172.     143.
+## 6 土         3327      2194      133.        91.4     189.     174.
+## 7 日         3244      2088      130.        87       179.     215.</code></pre>
 <p>これで人間にとって読みやすい表が出来ました。今は「日本の合計」、「韓国の合計」、「日本の平均」、…の順番ですが、これを日本と韓国それぞれまとめる場合は、<code>relocate()</code>を使います。</p>
 <div class="sourceCode" id="cb1241"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1241-1"><a href="tidydata.html#cb1241-1"></a>df4_S_Summary1 <span class="sc">%&gt;%</span></span>
 <span id="cb1241-2"><a href="tidydata.html#cb1241-2"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from  =</span> Country,</span>
 <span id="cb1241-3"><a href="tidydata.html#cb1241-3"></a>              <span class="at">values_from =</span> Sum<span class="sc">:</span>SD) <span class="sc">%&gt;%</span></span>
 <span id="cb1241-4"><a href="tidydata.html#cb1241-4"></a>  <span class="fu">relocate</span>(Week, <span class="fu">ends_with</span>(<span class="st">&quot;Japan&quot;</span>), <span class="fu">ends_with</span>(<span class="st">&quot;Korea&quot;</span>))</span></code></pre></div>
 <pre><code>## # A tibble: 7 × 7
-##   Week  Sum_Japan Mean_Japan SD_Japan Sum_Korea
-##   &lt;fct&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
-## 1 月         2540      106.      156.      1609
-## 2 火         2093       87.2     111.      1641
-## 3 水         2531      105.      133.      1626
-## 4 木         2704      108.      151.      1883
-## 5 金         3083      123.      172.      2099
-## 6 土         3327      133.      189.      2194
-## 7 日         3244      130.      179.      2088
-## # … with 2 more variables: Mean_Korea &lt;dbl&gt;,
-## #   SD_Korea &lt;dbl&gt;</code></pre>
+##   Week  Sum_Japan Mean_Japan SD_Japan Sum_Korea Mean_Korea SD_Korea
+##   &lt;fct&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;
+## 1 月         2540      106.      156.      1609       67.0     126.
+## 2 火         2093       87.2     111.      1641       68.4     111.
+## 3 水         2531      105.      133.      1626       67.8     102.
+## 4 木         2704      108.      151.      1883       78.5     137.
+## 5 金         3083      123.      172.      2099       87.5     143.
+## 6 土         3327      133.      189.      2194       91.4     174.
+## 7 日         3244      130.      179.      2088       87       215.</code></pre>
 <p>新規感染者が確認されるのは金〜日曜日が多いことが分かります。</p>
 <p>曜日ではなく、月ごとに記述統計料を計算する場合は、まず<code>Date</code>列を年、月、日に分割する必要があります。具体的には<code>Date</code>を<code>"/"</code>を基準に別ければいいです。そこで登場するのは<code>separate()</code>関数であり、使い方は以下の通りです。</p>
 <div class="sourceCode" id="cb1243"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1243-1"><a href="tidydata.html#cb1243-1"></a><span class="co"># separate()の使い方</span></span>
@@ -2302,17 +2298,15 @@ Stock
 <span id="cb1248-3"><a href="tidydata.html#cb1248-3"></a>              <span class="at">values_from =</span> Sum<span class="sc">:</span>SD) <span class="sc">%&gt;%</span></span>
 <span id="cb1248-4"><a href="tidydata.html#cb1248-4"></a>  <span class="fu">relocate</span>(Month, <span class="fu">ends_with</span>(<span class="st">&quot;Japan&quot;</span>), <span class="fu">ends_with</span>(<span class="st">&quot;Korea&quot;</span>))</span></code></pre></div>
 <pre><code>## # A tibble: 7 × 7
-##   Month Sum_Japan Mean_Japan SD_Japan Sum_Korea
-##   &lt;chr&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
-## 1 1            17       1.06     1.34        11
-## 2 2           213       7.34     7.81      3139
-## 3 3          1723      55.6     42.4       6737
-## 4 4         12135     404.     146.         887
-## 5 5          2763      89.1     73.0        729
-## 6 6          1742      58.1     23.0       1348
-## 7 7           929     186.      45.1        289
-## # … with 2 more variables: Mean_Korea &lt;dbl&gt;,
-## #   SD_Korea &lt;dbl&gt;</code></pre>
+##   Month Sum_Japan Mean_Japan SD_Japan Sum_Korea Mean_Korea SD_Korea
+##   &lt;chr&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;
+## 1 1            17       1.06     1.34        11      0.917     1.44
+## 2 2           213       7.34     7.81      3139    108.      203.  
+## 3 3          1723      55.6     42.4       6737    217.      222.  
+## 4 4         12135     404.     146.         887     29.6      26.6 
+## 5 5          2763      89.1     73.0        729     23.5      16.2 
+## 6 6          1742      58.1     23.0       1348     44.9      10.4 
+## 7 7           929     186.      45.1        289     57.8       6.61</code></pre>
 <p>平均値から見ると、日本は7都道府県を対象に緊急事態宣言が行われた4月がピークで緩やかに減少していますが、7月になって上がり気味です。韓国はカルト宗教団体におけるクラスターが発生した3月がピークで、6月からまた上がり気味ですね。傾向としては韓国が日本に1ヶ月先行しているように見えます。</p>
 <p>それでは<code>separate()</code>関数の他の引数についても簡単に紹介します。まず、<code>sep</code>引数はnumeric型でも可能です。この場合、文字列内の位置を基準に分割されます。年月日が<code>20200629</code>のように保存されている場合は、何らかの基準となる文字がありません。この場合、<code>sep = c(4, 6)</code>にすると、「<code>"20200629"</code>の4文字目と5文字目の間で分割、6文字目と7文字目の間で分割」となります。また、<code>sep = c(-4, -2)</code>のように負の値も指定可能であり、この場合は右からの位置順で分割します。</p>
 <p>また、<code>separate()</code>後は元の変数がなくなりますが、<code>remove = FALSE</code>の場合、元の変数 (ここでは<code>Date</code>)が残ります。他にも<code>convert</code>引数もあります。<code>convert = TRUE</code>の場合、適切なデータ型へ変換してくれます。デフォルト値は<code>FALSE</code>であり、この場合、character型として分割されます。先ほどの例だと<code>Year</code>も<code>Month</code>も<code>Day</code>も現在はcharacter型です。<code>separate()</code>内で<code>convert = TRUE</code>を追加すると、分割後の<code>Year</code>、<code>Month</code>、<code>Day</code>はnumeric型として保存されます。</p>

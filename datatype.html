@@ -60,8 +60,8 @@
 <link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
 <script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
-<link href="libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
-<script src="libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
 <link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
 <script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -712,20 +712,13 @@ div.csl-indent {
 ## [1,]    2    5   11   17   23
 ## [2,]    3    7   13   19   29</code></pre>
 <p>表についても考えてみましょう。以下の表の3行2列目の要素は<code>"American Samoa"</code>という長さ1の文字型ベクトルです。また、6列目は<code>c("UEFA", "CAF", "OFC", "UEFA", "CAF", "CONCACAF")</code>であり、これは長さ6の文字型ベクトルです。このようにRで扱う全てのデータは複数のベクトルが集まっているものです。</p>
-<pre><code>##   ID                Team Rank Points Prev_Points
-## 1  1             Albania   75   1325        1316
-## 2  2             Algeria   85   1271        1271
-## 3  3      American Samoa  133   1030        1030
-## 4  4             Andorra  155    749         749
-## 5  5              Angola  121   1117        1117
-## 6  6 Antigua and Barbuda  153    787         787
-##   Confederation
-## 1          UEFA
-## 2           CAF
-## 3           OFC
-## 4          UEFA
-## 5           CAF
-## 6      CONCACAF</code></pre>
+<pre><code>##   ID                Team Rank Points Prev_Points Confederation
+## 1  1             Albania   75   1325        1316          UEFA
+## 2  2             Algeria   85   1271        1271           CAF
+## 3  3      American Samoa  133   1030        1030           OFC
+## 4  4             Andorra  155    749         749          UEFA
+## 5  5              Angola  121   1117        1117           CAF
+## 6  6 Antigua and Barbuda  153    787         787      CONCACAF</code></pre>
 <p>つまり、複数のベクトルを綺麗に、または分析しやすく集めたのが行列や表であり、これがデータ構造に該当します。データ型ごとの処理方法については本書を通じて紹介して行きますので、本章は軽く読んで頂いても構いません。ただし、Factor型とDate &amp; Datetime型の処理はやや特殊ですので、手を動かしながら読み進めることをおすすめします。</p>
 <p>ここではデータ型について紹介し、次章ではデータ構造について解説します。</p>
 <hr />
@@ -938,9 +931,8 @@ Hadley
 <span id="cb196-2"><a href="datatype.html#cb196-2" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;どちらかといえば好き&quot;</span>, <span class="st">&quot;めちゃ好き&quot;</span>, <span class="st">&quot;好き&quot;</span>)</span>
 <span id="cb196-3"><a href="datatype.html#cb196-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb196-4"><a href="datatype.html#cb196-4" aria-hidden="true" tabindex="-1"></a>Factor.Vec1</span></code></pre></div>
-<pre><code>## [1] &quot;めちゃめちゃ好き&quot;     &quot;めちゃめちゃ好き&quot;    
-## [3] &quot;どちらかといえば好き&quot; &quot;めちゃ好き&quot;          
-## [5] &quot;好き&quot;</code></pre>
+<pre><code>## [1] &quot;めちゃめちゃ好き&quot;     &quot;めちゃめちゃ好き&quot;     &quot;どちらかといえば好き&quot;
+## [4] &quot;めちゃ好き&quot;           &quot;好き&quot;</code></pre>
 <div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="datatype.html#cb198-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(Factor.Vec1)</span></code></pre></div>
 <pre><code>## [1] &quot;character&quot;</code></pre>
 <p><code>Factor.Vec1</code>は普通の文字列ベクトルであることが分かります。これをfactor型に変換するためには<code>factor()</code>関数を使います。</p>
@@ -951,36 +943,32 @@ Hadley
 <pre><code>## [1] &quot;ordered&quot; &quot;factor&quot;</code></pre>
 <p>データ型がfactor型に変換されています。<code>"ordered"</code>というものも付いていますが、これについては後ほど説明します。それでは中身をみましょう。</p>
 <div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="datatype.html#cb202-1" aria-hidden="true" tabindex="-1"></a>Factor.Vec2</span></code></pre></div>
-<pre><code>## [1] めちゃめちゃ好き     めちゃめちゃ好き    
-## [3] どちらかといえば好き めちゃ好き          
-## [5] 好き                
-## 4 Levels: どちらかといえば好き &lt; ... &lt; めちゃめちゃ好き</code></pre>
+<pre><code>## [1] めちゃめちゃ好き     めちゃめちゃ好き     どちらかといえば好き
+## [4] めちゃ好き           好き                
+## Levels: どちらかといえば好き &lt; 好き &lt; めちゃ好き &lt; めちゃめちゃ好き</code></pre>
 <p>いくつかの点で異なります。まず、文字列であるにもかかわらず、<code>"</code>で囲まれていいない点です。そして3行目に<code>4 Levels:</code>というのが追加されている点です。このlevelは「水準」と呼ばれるものです。<code>4 Levels</code>ですから、<code>Factor.Vec2</code>は4つの水準で構成されていることを意味します。Factor型の値は予め指定された水準以外の値を取ることはできません。たとえば、2番目の要素を「超好き」に変えてみましょう。</p>
 <div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb204-1"><a href="datatype.html#cb204-1" aria-hidden="true" tabindex="-1"></a>Factor.Vec2[<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="st">&quot;超好き&quot;</span></span></code></pre></div>
-<pre><code>## Warning in `[&lt;-.factor`(`*tmp*`, 2, value = &quot;超好き&quot;): 不
-## 正な因子水準です。NA が発生しました</code></pre>
+<pre><code>## Warning in `[&lt;-.factor`(`*tmp*`, 2, value = &quot;超好き&quot;): invalid factor level, NA
+## generated</code></pre>
 <div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="datatype.html#cb206-1" aria-hidden="true" tabindex="-1"></a>Factor.Vec2</span></code></pre></div>
-<pre><code>## [1] めちゃめちゃ好き     &lt;NA&gt;                
-## [3] どちらかといえば好き めちゃ好き          
-## [5] 好き                
-## 4 Levels: どちらかといえば好き &lt; ... &lt; めちゃめちゃ好き</code></pre>
+<pre><code>## [1] めちゃめちゃ好き     &lt;NA&gt;                 どちらかといえば好き
+## [4] めちゃ好き           好き                
+## Levels: どちらかといえば好き &lt; 好き &lt; めちゃ好き &lt; めちゃめちゃ好き</code></pre>
 <p>警告が表示され、2番目の要素が後ほど紹介する欠損値となっていることが分かります。それでは普通に「好き」を入れてみましょう。</p>
 <div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="datatype.html#cb208-1" aria-hidden="true" tabindex="-1"></a>Factor.Vec2[<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="st">&quot;好き&quot;</span></span>
 <span id="cb208-2"><a href="datatype.html#cb208-2" aria-hidden="true" tabindex="-1"></a>Factor.Vec2</span></code></pre></div>
-<pre><code>## [1] めちゃめちゃ好き     好き                
-## [3] どちらかといえば好き めちゃ好き          
-## [5] 好き                
-## 4 Levels: どちらかといえば好き &lt; ... &lt; めちゃめちゃ好き</code></pre>
+<pre><code>## [1] めちゃめちゃ好き     好き                 どちらかといえば好き
+## [4] めちゃ好き           好き                
+## Levels: どちらかといえば好き &lt; 好き &lt; めちゃ好き &lt; めちゃめちゃ好き</code></pre>
 <p>今回は問題なく置換できましたね。このようにfactor型の取りうる値は既に指定されています。また、<code>## 4 Levels: どちらかといえば好き &lt; 好き &lt; ... &lt; めちゃめちゃ好き</code>からも分かるように、その大小関係の情報も含まれています。猫好きの度合いは「どちらかといえば好き-好き-めちゃ好き-めちゃめちゃ好き」の順で高くなることをRも認識できるようになりました。</p>
 <p>Factor型はこのように順序付きデータを扱う際に便利なデータ型ですが、順序情報を含まないfactor型もあります。これは<code>factor()</code>を使う際、<code>ordered = TRUE</code>引数を削除するだけでできます。</p>
 <div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb210-1"><a href="datatype.html#cb210-1" aria-hidden="true" tabindex="-1"></a>Factor.Vec3 <span class="ot">&lt;-</span> <span class="fu">factor</span>(Factor.Vec1,</span>
 <span id="cb210-2"><a href="datatype.html#cb210-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;どちらかといえば好き&quot;</span>, <span class="st">&quot;好き&quot;</span>,</span>
 <span id="cb210-3"><a href="datatype.html#cb210-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&quot;めちゃ好き&quot;</span>, <span class="st">&quot;めちゃめちゃ好き&quot;</span>))</span>
 <span id="cb210-4"><a href="datatype.html#cb210-4" aria-hidden="true" tabindex="-1"></a>Factor.Vec3</span></code></pre></div>
-<pre><code>## [1] めちゃめちゃ好き     めちゃめちゃ好き    
-## [3] どちらかといえば好き めちゃ好き          
-## [5] 好き                
-## 4 Levels: どちらかといえば好き 好き ... めちゃめちゃ好き</code></pre>
+<pre><code>## [1] めちゃめちゃ好き     めちゃめちゃ好き     どちらかといえば好き
+## [4] めちゃ好き           好き                
+## Levels: どちらかといえば好き 好き めちゃ好き めちゃめちゃ好き</code></pre>
 <div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="datatype.html#cb212-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(Factor.Vec3)</span></code></pre></div>
 <pre><code>## [1] &quot;factor&quot;</code></pre>
 <p>今回は3行目が<code>## Levels: どちらかといえば好き 好き めちゃ好き めちゃめちゃ好き</code>となり、順序に関する情報がなくなりました。また、<code>class()</code>で確認しましたデータ型に<code>"ordered"</code>が付いていません。これは順序なしfactor型であることを意味します。「順序付けしないならfactor型は要らないのでは…?」と思うかも知れませんが、これはこれで便利です。その例を考えてみましょう。</p>
@@ -1191,8 +1179,7 @@ Fukuoka
 <span id="cb230-3"><a href="datatype.html#cb230-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
 <span id="cb230-4"><a href="datatype.html#cb230-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;日付&quot;</span>, <span class="at">y =</span> <span class="st">&quot;睡眠時間 (分)&quot;</span>) <span class="sc">+</span></span>
 <span id="cb230-5"><a href="datatype.html#cb230-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>()</span></code></pre></div>
-<pre><code>## Warning: Removed 1 rows containing missing values
-## (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
 <div class="figure"><span style="display:block;" id="fig:sleep5"></span>
 <img src="R_Not_for_Everyone_files/figure-html/sleep5-1.png" alt="Songの睡眠時間" width="672" />
 <p class="caption">
@@ -1276,12 +1263,12 @@ Fukuoka
 <p>他にも様々な表記法がありますが、詳細は<code>?strptime</code>で確認してみてください。</p>
 <p>他にも、日本では使わない表記法ですが、月を英語で表記したり、日月年の順で表記する場合があります。後者は<code>format =</code>引数の順番を変えるだけで問題有りませんが、問題は前者です。そこで使うのが<code>%b</code>または<code>%B</code>です。<code>%b</code>は3文字の月表記で、<code>%B</code>はフルネームです。</p>
 <div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="datatype.html#cb247-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.Date</span>(<span class="st">&quot;21may2020&quot;</span>,   <span class="at">format =</span> <span class="st">&quot;%d%b%Y&quot;</span>)</span></code></pre></div>
-<pre><code>## [1] NA</code></pre>
+<pre><code>## [1] &quot;2020-05-21&quot;</code></pre>
 <div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="datatype.html#cb249-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.Date</span>(<span class="st">&quot;May/21/2020&quot;</span>, <span class="at">format =</span> <span class="st">&quot;%b/%d/%Y&quot;</span>)</span></code></pre></div>
-<pre><code>## [1] NA</code></pre>
+<pre><code>## [1] &quot;2020-05-21&quot;</code></pre>
 <p>うまくいかないですね。これはシステムの時間ロケールが日本になっているのが原因です。ロケール設定は<code>Sys.getlocale()</code>で確認できます。</p>
 <div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb251-1"><a href="datatype.html#cb251-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.getlocale</span>(<span class="at">category =</span> <span class="st">&quot;LC_TIME&quot;</span>)</span></code></pre></div>
-<pre><code>## [1] &quot;ja_JP.UTF-8&quot;</code></pre>
+<pre><code>## [1] &quot;en_US.UTF-8&quot;</code></pre>
 <p>これを<code>Sys.setlocale()</code>を使って、<code>"C"</code>に変更します。</p>
 <div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb253-1"><a href="datatype.html#cb253-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.setlocale</span>(<span class="at">category =</span> <span class="st">&quot;LC_TIME&quot;</span>, <span class="at">locale =</span> <span class="st">&quot;C&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;C&quot;</code></pre>
