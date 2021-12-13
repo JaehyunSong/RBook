@@ -56,10 +56,10 @@
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.19/datatables.js"></script>
-<link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
-<link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
-<script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="libs/datatables-binding-0.20/datatables.js"></script>
+<link href="libs/dt-core-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.11.3/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.11.3/js/jquery.dataTables.min.js"></script>
 <link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
 <script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
 <link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
@@ -696,7 +696,7 @@ div.csl-indent {
 <li><a href="#io-exercise"><strong>??</strong></a> 練習問題</li>
 </ul>
 <p>この章で使うパッケージを読み込む。</p>
-<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="io.html#cb81-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, xlsx, haven)</span></code></pre></div>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="io.html#cb81-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, readxl, haven)</span></code></pre></div>
 </div>
 <div id="io-read" class="section level2" number="8.2">
 <h2><span class="header-section-number">8.2</span> データの読み込み</h2>
@@ -970,17 +970,19 @@ div.csl-indent {
 <div id="その他のフォーマット" class="section level3" number="8.2.3">
 <h3><span class="header-section-number">8.2.3</span> その他のフォーマット</h3>
 <p>　データ分析で用いられるデータの多くは表の形で保存されている。表形式のデータは、<code>.csv</code>以外に、<code>.xlsx</code> (Excel)、<code>.dta</code> (Stata)、<code>.sav</code> (SPSS)、<code>.ods</code> (LibreOfficeなど)　などのファイル形式で保存されることがある。ここでは接する機会が多い Excel 形式のファイルと Stata 形式のファイルの読み込みについて説明しよう<a href="#fn31" class="footnote-ref" id="fnref31"><sup>31</sup></a>。</p>
-<p>　Excelファイルを読み込むためには<strong>xlsx</strong>パッケージを使う。インストールされていない場合、コンソール上で<code>install.packages("xlsx")</code>を入力し、インストールする（上で <code>pacman::p_load(xlsx)</code> を実行したのでインストールされているはずだが）。以下では<strong>xlsx</strong>パッケージがインストールされていると想定し、<code>Soccer.xlsx</code>ファイルを読み込み、<code>Excel_DF</code>と名付けてみよう。</p>
-<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="io.html#cb109-1" aria-hidden="true" tabindex="-1"></a>Excel_DF <span class="ot">&lt;-</span> <span class="fu">read.xlsx</span>(<span class="st">&quot;Data/Soccer.xlsx&quot;</span>, <span class="at">sheetIndex =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p>　Excelファイルを読み込むためには<strong>readxl</strong>パッケージを使う。インストールされていない場合、コンソール上で<code>install.packages("readxl")</code>を入力し、インストールする（上で <code>pacman::p_load(readxl)</code> を実行したのでインストールされているはずだが）。以下では<strong>readxl</strong>パッケージがインストールされていると想定し、<code>Soccer.xlsx</code>ファイルを読み込み、<code>Excel_DF</code>と名付けてみよう。</p>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="io.html#cb109-1" aria-hidden="true" tabindex="-1"></a>Excel_DF <span class="ot">&lt;-</span> <span class="fu">read_xlsx</span>(<span class="st">&quot;Data/Soccer.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="dv">1</span>)</span></code></pre></div>
 <p>　Excelファイルには2つ以上のシートが含まれる場合が多いので、どのシートを読み込むかを<code>sheetIndex</code> で指定する。実際、<code>Soccer.xlsx</code>ファイルをExcelまたはLibreOffice Calc で開いてみると、シートが3つある。そのうち、必要なデータは1つ目のシートにあるので、ここでは<code>1</code>を指定した。きちんと読み込たか確認してみよう。</p>
 <div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="io.html#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Excel_DF)</span></code></pre></div>
-<pre><code>##   ID                Team Rank Points Prev_Points Confederation
-## 1  1             Albania   75   1325        1316          UEFA
-## 2  2             Algeria   85   1271        1271           CAF
-## 3  3      American Samoa  133   1030        1030           OFC
-## 4  4             Andorra  155    749         749          UEFA
-## 5  5              Angola  121   1117        1117           CAF
-## 6  6 Antigua and Barbuda  153    787         787      CONCACAF</code></pre>
+<pre><code>## # A tibble: 6 × 6
+##      ID Team                 Rank Points Prev_Points Confederation
+##   &lt;dbl&gt; &lt;chr&gt;               &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;        
+## 1     1 Albania                75   1325        1316 UEFA         
+## 2     2 Algeria                85   1271        1271 CAF          
+## 3     3 American Samoa        133   1030        1030 OFC          
+## 4     4 Andorra               155    749         749 UEFA         
+## 5     5 Angola                121   1117        1117 CAF          
+## 6     6 Antigua and Barbuda   153    787         787 CONCACAF</code></pre>
 <p>　Stataの<code>.dta</code>ファイルは<strong>haven</strong>パッケージの<code>read_dta()</code> 関数を使って読み込む。Stata形式で保存された <code>Soccer.dta</code> を読み込み、<code>Stata_DF</code>と名付けてみよう。</p>
 <div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="io.html#cb112-1" aria-hidden="true" tabindex="-1"></a>Stata_DF <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">&quot;Data/Soccer.dta&quot;</span>)</span>
 <span id="cb112-2"><a href="io.html#cb112-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Stata_DF)</span></code></pre></div>
