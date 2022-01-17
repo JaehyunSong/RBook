@@ -793,7 +793,7 @@ div.csl-indent {
 <pre><code>## [1] 1.666667 1.333333 2.333333 2.000000 3.000000</code></pre>
 <p>かなり短めなコードで「<code>num_vec</code>の全要素に2を足して3で割る」処理ができました。一方、<code>sapply()</code>や<code>lapply()</code>のような<code>*apply()</code>関数群だとラムダ式を使うことはできません。現在のメモリ上にある関数のみしか使うことができません。</p>
 <div class="sourceCode" id="cb1639"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1639-1"><a href="iteration.html#cb1639-1"></a><span class="fu">sapply</span>(num_vec, <span class="sc">~</span>(.x <span class="sc">+</span> <span class="dv">2</span>) <span class="sc">/</span> <span class="dv">3</span>)</span></code></pre></div>
-<pre><code>## Error in match.fun(FUN):  &#39;~(.x + 2)/3&#39; は関数、文字、またはシンボルではありません</code></pre>
+<pre><code>## Error in match.fun(FUN): &#39;~(.x + 2)/3&#39; is not a function, character or symbol</code></pre>
 <p>これまでの例は<strong>正しい</strong>コードではありますが、<strong>良い</strong>コードとは言えないでしょう。なぜなら<code>num_vec + 2</code>という最適解が存在するからです。<code>*apply()</code>と<code>map_*()</code>はより複雑な処理に特化しています。たとえば、リスト型データの処理です。以下の例を考えてみましょう。</p>
 <div class="sourceCode" id="cb1641"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1641-1"><a href="iteration.html#cb1641-1"></a>num_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">List1 =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>),</span>
 <span id="cb1641-2"><a href="iteration.html#cb1641-2"></a>                 <span class="at">List2 =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">10</span>, <span class="dv">13</span>, <span class="dv">3</span>),</span>
@@ -1005,7 +1005,7 @@ div.csl-indent {
 ## 5 5 50 10</code></pre>
 <p><code>Dummy_list2</code>には2つの要素があり、最初の要素は長さ3のベクトル、2つ目の要素は長さ3のリストです。2つ目の要素がベクトルでないため、<code>Dummy_list2</code>をデータフレームに変換することはできません。</p>
 <div class="sourceCode" id="cb1700"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1700-1"><a href="iteration.html#cb1700-1"></a>Dummy_df2 <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(Dummy_list2)</span></code></pre></div>
-<pre><code>## Error in (function (..., row.names = NULL, check.rows = FALSE, check.names = TRUE, :  引数に異なる列数のデータフレームが含まれています: 3, 5</code></pre>
+<pre><code>## Error in (function (..., row.names = NULL, check.rows = FALSE, check.names = TRUE, : arguments imply differing number of rows: 3, 5</code></pre>
 <p>一方、<code>as_tibble()</code>を使用してtibble型に変換することは可能です。</p>
 <div class="sourceCode" id="cb1702"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1702-1"><a href="iteration.html#cb1702-1"></a>Dummy_tibble <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(Dummy_list2)</span>
 <span id="cb1702-2"><a href="iteration.html#cb1702-2"></a></span>
@@ -1628,13 +1628,15 @@ div.csl-indent {
 ## -46.930  -6.402   0.132   7.191  46.443 
 ## 
 ## Coefficients:
-##                   Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)       47.33084    0.54192  87.340  &lt; 2e-16
-## margin             0.34806    0.01335  26.078  &lt; 2e-16
-## I(margin &gt; 0)TRUE  4.78461    0.92290   5.184 2.51e-07
+##                   Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)       47.33084    0.54192  87.340  &lt; 2e-16 ***
+## margin             0.34806    0.01335  26.078  &lt; 2e-16 ***
+## I(margin &gt; 0)TRUE  4.78461    0.92290   5.184 2.51e-07 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Residual standard error: 11.78 on 1294 degrees of freedom
-##   ( 93 個の観測値が欠損のため削除されました )
+##   (93 observations deleted due to missingness)
 ## Multiple R-squared:  0.5781, Adjusted R-squared:  0.5774 
 ## F-statistic: 886.4 on 2 and 1294 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p><code>I(margin &gt; 0)TRUE</code>の係数4.785が現職効果です。この作業を<span class="math inline">\(h = 100\)</span>から<span class="math inline">\(h = 10\)</span>まで、5ずつ変えながら分析を繰り返してみます。まずは、<code>RDD_df</code>というtibbleを作成し、<code>BW</code>列には<code>c(100, 95, 90, ... 10)</code>を入れます。続いて、<code>filter()</code>関数を利用して<code>Senate_df</code>から<code>margin</code>が<code>-BW</code>以上、<code>BW</code>以下のデータを抽出し、<code>Subset</code>という名の列として格納します。</p>

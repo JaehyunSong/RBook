@@ -53,7 +53,7 @@ R Not for Everyone: An Esoteric Guide.
 |17|可視化[理論]|85||
 |18|可視化[基礎]|85||
 |19|可視化[応用]|85||
-|20|可視化[発展]|20||
+|20|可視化[発展]|80||
 |21|データハンドリング [応用編]|0||
 |22|文字列の処理|0||
 |23|スクレイピング|0||
@@ -65,7 +65,7 @@ R Not for Everyone: An Esoteric Guide.
 |99 | API | 0 |
 |99 |線形代数 |5||
 |99 |最適化 |5||
-|99 |モンテカルロシミュレーション |5||
+|99 |モンテカルロシミュレーション |15||
 |99 | MCMC |0||
 
 ---
@@ -103,6 +103,9 @@ R Not for Everyone: An Esoteric Guide.
 * 可視化[発展]
     * [`Countries.csv`](https://www.jaysong.net/RBook/Data/Countries.csv)
     * [`COVID19_Worldwide.csv`](https://www.jaysong.net/RBook/Data/COVID19_Worldwide.csv)
+    * [`Japan_Density.csv`](https://www.jaysong.net/RBook/Data/Japan_Density.csv)
+    * [`Osaka_Student.csv`](https://www.jaysong.net/RBook/Data/Osaka_Student.csv)
+    * [`Bumpchart.csv`](https://www.jaysong.net/RBook/Data/Bumpchart.csv)
     * [`Vote_09_10.csv`](https://www.jaysong.net/RBook/Data/Vote_09_10.csv)
 * 反復処理
     * [`Countries.csv`](https://www.jaysong.net/RBook/Data/Countries.csv)

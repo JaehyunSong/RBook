@@ -815,7 +815,7 @@ div.csl-indent {
 </tr>
 </tbody>
 </table>
-<p>以上の表に掲載されているパラメーター以外にも指定可能なパラメーターがあるため、詳細は各関数のヘルプを参照してください。たとえば、ガンマ分布の場合、<code>rate</code>で、負の二項分布の場合、<code>mu</code>で分布の形状を指定することができます。また、多変量正規分布の乱数を抽出するには{mvtnorm}パッケージの<code>rmvnorm()</code>を使いますが、ここでの<code>mean</code>は数値型ベクトル、<code>sigma</code>は行列構造の分散共分散行列を使います<a href="#fn108" class="footnote-ref" id="fnref108"><sup>108</sup></a>。</p>
+<p>　以上の表に掲載されているパラメーター以外にも指定可能なパラメーターがあるため、詳細は各関数のヘルプを参照してください。たとえば、ガンマ分布の場合、<code>rate</code>で、負の二項分布の場合、<code>mu</code>で分布の形状を指定することができます。また、多変量正規分布の乱数を抽出するには{mvtnorm}パッケージの<code>rmvnorm()</code>を使いますが、ここでの<code>mean</code>は数値型ベクトル、<code>sigma</code>は行列構造の分散共分散行列を使います<a href="#fn108" class="footnote-ref" id="fnref108"><sup>108</sup></a>。</p>
 </div>
 <div id="シードについて" class="section level3" number="29.2.3">
 <h3><span class="header-section-number">29.2.3</span> シードについて</h3>
@@ -846,167 +846,296 @@ div.csl-indent {
 </div>
 <div id="例-誕生日問題" class="section level2" number="29.3">
 <h2><span class="header-section-number">29.3</span> 例: 誕生日問題</h2>
-<div class="sourceCode" id="cb1967"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1967-1"><a href="monte.html#cb1967-1"></a>n_student <span class="ot">&lt;-</span> <span class="dv">30</span></span>
-<span id="cb1967-2"><a href="monte.html#cb1967-2"></a>Birth_vec <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">365</span>, n_student, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1967-3"><a href="monte.html#cb1967-3"></a><span class="fu">any</span>(<span class="fu">duplicated</span>(Birth_vec))</span></code></pre></div>
+<p>まず簡単な例として誕生日問題 (birthday problem)をシミュレーションで確認してみましょう。誕生日問題とは「何人いれば、その中に誕生日が同じ2人以上がいる確率が50%を超えるか。」といった問題です。1年を365日で考えると（2月29日生まれの皆さん、すみません…）、366人がいれば確実に (= 100%)同じ誕生日の人が2人以上いることになりますね。100%でなく、50%まで基準を下げるならその半分である183人は必要じゃないかと思うかも知れません。しかし、実はたった23人が集まれば、その中で同じ誕生日の人が2人以上いる確率が50%になります。誕生日のパラドックスとも呼ばれるものですが、これをシミュレーションで確認してたいと思います。</p>
+<p>　学生の数を<code>n_student</code>とし、1から365までの公差1の等差数列から、<code>n_student</code>個の値を<strong>復元</strong>抽出します。</p>
+<div class="sourceCode" id="cb1967"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1967-1"><a href="monte.html#cb1967-1"></a>n_student <span class="ot">&lt;-</span> <span class="dv">30</span> <span class="co"># 学生数</span></span>
+<span id="cb1967-2"><a href="monte.html#cb1967-2"></a><span class="co"># 「1から365までの公差1の等差数列」からn_student個の値を復元抽出</span></span>
+<span id="cb1967-3"><a href="monte.html#cb1967-3"></a>Birth_vec <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">365</span>, n_student, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1967-4"><a href="monte.html#cb1967-4"></a></span>
+<span id="cb1967-5"><a href="monte.html#cb1967-5"></a>Birth_vec</span></code></pre></div>
+<pre><code>##  [1] 340 122 230 148  12 136  87  46  16 310 104 351 137  53 361  65 106 361 108
+## [20] 281 299  67 342   4 338  88 156 254 192  37</code></pre>
+<p>　このベクトルの中で重複する要素があるかどうかを確認するには<code>duplicated()</code>関数を使います。ある要素が他の要素と重複するなら<code>TRUE</code>が、なければ<code>FALSE</code>が表示されます。</p>
+<div class="sourceCode" id="cb1969"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1969-1"><a href="monte.html#cb1969-1"></a><span class="fu">duplicated</span>(Birth_vec)</span></code></pre></div>
+<pre><code>##  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [13] FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE
+## [25] FALSE FALSE FALSE FALSE FALSE FALSE</code></pre>
+<p>　ただし、一つでも<code>TRUE</code>が含まれていれば、同じ誕生日の人が二人以上はいるということとなるので、更に<code>any()</code>関数を使います。<code>any()</code>内の条件文において、一つでも<code>TRUE</code>があれば返り値は<code>TRUE</code>となり、全て<code>FALSE</code>なら<code>FALSE</code>を返す関数です。</p>
+<div class="sourceCode" id="cb1971"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1971-1"><a href="monte.html#cb1971-1"></a><span class="fu">any</span>(<span class="fu">duplicated</span>(Birth_vec))</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode" id="cb1969"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1969-1"><a href="monte.html#cb1969-1"></a>n_student <span class="ot">&lt;-</span> <span class="dv">30</span></span>
-<span id="cb1969-2"><a href="monte.html#cb1969-2"></a>n_trials  <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb1969-3"><a href="monte.html#cb1969-3"></a></span>
-<span id="cb1969-4"><a href="monte.html#cb1969-4"></a>Result_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_trials)</span>
-<span id="cb1969-5"><a href="monte.html#cb1969-5"></a></span>
-<span id="cb1969-6"><a href="monte.html#cb1969-6"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_trials) {</span>
-<span id="cb1969-7"><a href="monte.html#cb1969-7"></a>    Birth_vec     <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">365</span>, n_student, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1969-8"><a href="monte.html#cb1969-8"></a>    Result_vec[i] <span class="ot">&lt;-</span> <span class="fu">any</span>(<span class="fu">duplicated</span>(Birth_vec))</span>
-<span id="cb1969-9"><a href="monte.html#cb1969-9"></a>}</span>
-<span id="cb1969-10"><a href="monte.html#cb1969-10"></a></span>
-<span id="cb1969-11"><a href="monte.html#cb1969-11"></a><span class="fu">mean</span>(Result_vec)</span></code></pre></div>
-<pre><code>## [1] 0.6996</code></pre>
-<div class="sourceCode" id="cb1971"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1971-1"><a href="monte.html#cb1971-1"></a>n_trials  <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb1971-2"><a href="monte.html#cb1971-2"></a></span>
-<span id="cb1971-3"><a href="monte.html#cb1971-3"></a>Prob_df   <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Students =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">100</span>,</span>
-<span id="cb1971-4"><a href="monte.html#cb1971-4"></a>                    <span class="at">Probs    =</span> <span class="cn">NA</span>)</span>
-<span id="cb1971-5"><a href="monte.html#cb1971-5"></a></span>
-<span id="cb1971-6"><a href="monte.html#cb1971-6"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(Prob_df)) {</span>
-<span id="cb1971-7"><a href="monte.html#cb1971-7"></a>    </span>
-<span id="cb1971-8"><a href="monte.html#cb1971-8"></a>    Result_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_trials)</span>
-<span id="cb1971-9"><a href="monte.html#cb1971-9"></a>    </span>
-<span id="cb1971-10"><a href="monte.html#cb1971-10"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_trials) {</span>
-<span id="cb1971-11"><a href="monte.html#cb1971-11"></a>        Birth_vec     <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">365</span>, Prob_df<span class="sc">$</span>Students[i], <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1971-12"><a href="monte.html#cb1971-12"></a>        Result_vec[j] <span class="ot">&lt;-</span> <span class="fu">any</span>(<span class="fu">duplicated</span>(Birth_vec))</span>
-<span id="cb1971-13"><a href="monte.html#cb1971-13"></a>    }</span>
-<span id="cb1971-14"><a href="monte.html#cb1971-14"></a>    </span>
-<span id="cb1971-15"><a href="monte.html#cb1971-15"></a>    Prob_df<span class="sc">$</span>Probs[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(Result_vec)</span>
-<span id="cb1971-16"><a href="monte.html#cb1971-16"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb1972"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1972-1"><a href="monte.html#cb1972-1"></a>Prob_df</span></code></pre></div>
+<p>　以上の作業を100回繰り返す場合、試行回数が100回となります。この場合、<code>TRUE</code>の結果が出る試行は何回でしょうか。</p>
+<div class="sourceCode" id="cb1973"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1973-1"><a href="monte.html#cb1973-1"></a>n_student <span class="ot">&lt;-</span> <span class="dv">10</span>   <span class="co"># 学生数</span></span>
+<span id="cb1973-2"><a href="monte.html#cb1973-2"></a>n_trials  <span class="ot">&lt;-</span> <span class="dv">100</span>  <span class="co"># 試行回数</span></span>
+<span id="cb1973-3"><a href="monte.html#cb1973-3"></a></span>
+<span id="cb1973-4"><a href="monte.html#cb1973-4"></a><span class="co"># 結果を格納する空ベクトルを用意する</span></span>
+<span id="cb1973-5"><a href="monte.html#cb1973-5"></a>Result_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_trials)</span>
+<span id="cb1973-6"><a href="monte.html#cb1973-6"></a></span>
+<span id="cb1973-7"><a href="monte.html#cb1973-7"></a><span class="co"># 反復処理</span></span>
+<span id="cb1973-8"><a href="monte.html#cb1973-8"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_trials) {</span>
+<span id="cb1973-9"><a href="monte.html#cb1973-9"></a>    Birth_vec     <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">365</span>, n_student, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1973-10"><a href="monte.html#cb1973-10"></a>    Result_vec[i] <span class="ot">&lt;-</span> <span class="fu">any</span>(<span class="fu">duplicated</span>(Birth_vec))</span>
+<span id="cb1973-11"><a href="monte.html#cb1973-11"></a>}</span>
+<span id="cb1973-12"><a href="monte.html#cb1973-12"></a></span>
+<span id="cb1973-13"><a href="monte.html#cb1973-13"></a>Result_vec</span></code></pre></div>
+<pre><code>##   [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE
+##  [13] FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE
+##  [25] FALSE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+##  [37] FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE
+##  [49] FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+##  [61] FALSE FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE FALSE FALSE FALSE FALSE
+##  [73] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+##  [85] FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+##  [97] FALSE FALSE FALSE FALSE</code></pre>
+<p>　100回の試行の中で<code>TRUE</code>が出たのは10回ですね。割合で考えると10%です。この試行回数を無限にすると確率として解釈できますが、無限回繰り返しは世の中が終わるまでやっても終わりませんね。ただし、十分に多い試行回数、たとえば1万回程度繰り返すと確率に近似できるでしょう。</p>
+<div class="sourceCode" id="cb1975"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1975-1"><a href="monte.html#cb1975-1"></a>n_student <span class="ot">&lt;-</span> <span class="dv">10</span>    <span class="co"># 学生数</span></span>
+<span id="cb1975-2"><a href="monte.html#cb1975-2"></a>n_trials  <span class="ot">&lt;-</span> <span class="dv">10000</span> <span class="co"># 試行回数</span></span>
+<span id="cb1975-3"><a href="monte.html#cb1975-3"></a></span>
+<span id="cb1975-4"><a href="monte.html#cb1975-4"></a><span class="co"># 結果を格納する空ベクトルを用意する</span></span>
+<span id="cb1975-5"><a href="monte.html#cb1975-5"></a>Result_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_trials)</span>
+<span id="cb1975-6"><a href="monte.html#cb1975-6"></a></span>
+<span id="cb1975-7"><a href="monte.html#cb1975-7"></a><span class="co"># 反復処理</span></span>
+<span id="cb1975-8"><a href="monte.html#cb1975-8"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_trials) {</span>
+<span id="cb1975-9"><a href="monte.html#cb1975-9"></a>    Birth_vec     <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">365</span>, n_student, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1975-10"><a href="monte.html#cb1975-10"></a>    Result_vec[i] <span class="ot">&lt;-</span> <span class="fu">any</span>(<span class="fu">duplicated</span>(Birth_vec))</span>
+<span id="cb1975-11"><a href="monte.html#cb1975-11"></a>}</span>
+<span id="cb1975-12"><a href="monte.html#cb1975-12"></a></span>
+<span id="cb1975-13"><a href="monte.html#cb1975-13"></a><span class="fu">sum</span>(Result_vec)</span></code></pre></div>
+<pre><code>## [1] 1147</code></pre>
+<p>　1万回の試行から<code>TRUE</code>が出た回数は1147回であり、11.5%ですね。つまり、人が10人集まれば誕生日が同じ人が2人以上いる確率は約11.5%ということになります。実はこの確率は厳密に計算可能であり、理論的な確率は約11.7%です。シミュレーションから得られた結果が理論値にかなり近似していることが分かります。</p>
+<p>　今回は試行回数は100に固定し、学生数を2から100まで調整しながら同じ誕生日の人が2人以上いる割合を計算してみましょう。以下では割合を計算する関数<code>Birthday_Func()</code>を作成し、{purrr}の<code>map_dbl()</code>関数を使用して反復処理を行います。関数の作成は第<a href="functions.html#functions">12</a>章を、{purrr}の使い方については第<a href="iteration.html#iteration">24</a>章を参照してください。</p>
+<div class="sourceCode" id="cb1977"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1977-1"><a href="monte.html#cb1977-1"></a><span class="co"># 割合を計算する関数を作成する</span></span>
+<span id="cb1977-2"><a href="monte.html#cb1977-2"></a>Birthday_Func <span class="ot">&lt;-</span> <span class="cf">function</span> (n, n_trials) {</span>
+<span id="cb1977-3"><a href="monte.html#cb1977-3"></a>    </span>
+<span id="cb1977-4"><a href="monte.html#cb1977-4"></a>    <span class="co"># 各試行の結果を格納する空ベクトルを用意する。</span></span>
+<span id="cb1977-5"><a href="monte.html#cb1977-5"></a>    Result_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_trials)</span>
+<span id="cb1977-6"><a href="monte.html#cb1977-6"></a>    </span>
+<span id="cb1977-7"><a href="monte.html#cb1977-7"></a>    <span class="co"># n_trials回だけ{}内コードを繰り返す。</span></span>
+<span id="cb1977-8"><a href="monte.html#cb1977-8"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_trials) {</span>
+<span id="cb1977-9"><a href="monte.html#cb1977-9"></a>        <span class="co"># 1:365からn個の値を復元抽出</span></span>
+<span id="cb1977-10"><a href="monte.html#cb1977-10"></a>        Birth_vec     <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">365</span>, n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1977-11"><a href="monte.html#cb1977-11"></a>        <span class="co"># 重複する要素があるかをチェックし、結果ベクトルのi番目に格納</span></span>
+<span id="cb1977-12"><a href="monte.html#cb1977-12"></a>        Result_vec[i] <span class="ot">&lt;-</span> <span class="fu">any</span>(<span class="fu">duplicated</span>(Birth_vec))</span>
+<span id="cb1977-13"><a href="monte.html#cb1977-13"></a>    }</span>
+<span id="cb1977-14"><a href="monte.html#cb1977-14"></a>    </span>
+<span id="cb1977-15"><a href="monte.html#cb1977-15"></a>    <span class="co"># 各試行結果が格納されたベクトルからTRUEの割合を返す</span></span>
+<span id="cb1977-16"><a href="monte.html#cb1977-16"></a>    <span class="fu">mean</span>(Result_vec)</span>
+<span id="cb1977-17"><a href="monte.html#cb1977-17"></a>}</span>
+<span id="cb1977-18"><a href="monte.html#cb1977-18"></a></span>
+<span id="cb1977-19"><a href="monte.html#cb1977-19"></a><span class="co"># 学生数をStudents列に格納したデータフレーム (tibble)を作成</span></span>
+<span id="cb1977-20"><a href="monte.html#cb1977-20"></a>Prob_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Students =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">100</span>)</span>
+<span id="cb1977-21"><a href="monte.html#cb1977-21"></a></span>
+<span id="cb1977-22"><a href="monte.html#cb1977-22"></a><span class="co"># Students列の値に応じてBirthday_Func()を実行</span></span>
+<span id="cb1977-23"><a href="monte.html#cb1977-23"></a>Prob_df <span class="ot">&lt;-</span> Prob_df <span class="sc">%&gt;%</span></span>
+<span id="cb1977-24"><a href="monte.html#cb1977-24"></a>    <span class="fu">mutate</span>(<span class="at">Probs =</span> <span class="fu">map_dbl</span>(Students, <span class="sc">~</span><span class="fu">Birthday_Func</span>(.x, <span class="dv">100</span>)))</span></code></pre></div>
+<p>　{purrr}関数を使わずに、<code>for()</code>文を使用した例は以下のようになります。</p>
+<div class="sourceCode" id="cb1978"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1978-1"><a href="monte.html#cb1978-1"></a><span class="co"># {purrr}を使わない方法</span></span>
+<span id="cb1978-2"><a href="monte.html#cb1978-2"></a>Prob_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Students =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">100</span>,</span>
+<span id="cb1978-3"><a href="monte.html#cb1978-3"></a>                  <span class="at">Probs    =</span> <span class="cn">NA</span>)</span>
+<span id="cb1978-4"><a href="monte.html#cb1978-4"></a></span>
+<span id="cb1978-5"><a href="monte.html#cb1978-5"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(Prob_df)) {</span>
+<span id="cb1978-6"><a href="monte.html#cb1978-6"></a>    </span>
+<span id="cb1978-7"><a href="monte.html#cb1978-7"></a>    Result_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_trials)</span>
+<span id="cb1978-8"><a href="monte.html#cb1978-8"></a>    </span>
+<span id="cb1978-9"><a href="monte.html#cb1978-9"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_trials) {</span>
+<span id="cb1978-10"><a href="monte.html#cb1978-10"></a>        Birth_vec     <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">365</span>, Prob_df<span class="sc">$</span>Students[i], <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1978-11"><a href="monte.html#cb1978-11"></a>        Result_vec[j] <span class="ot">&lt;-</span> <span class="fu">any</span>(<span class="fu">duplicated</span>(Birth_vec))</span>
+<span id="cb1978-12"><a href="monte.html#cb1978-12"></a>    }</span>
+<span id="cb1978-13"><a href="monte.html#cb1978-13"></a>    </span>
+<span id="cb1978-14"><a href="monte.html#cb1978-14"></a>    Prob_df<span class="sc">$</span>Probs[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(Result_vec)</span>
+<span id="cb1978-15"><a href="monte.html#cb1978-15"></a>}</span></code></pre></div>
+<p>　結果を確認してみましょう。</p>
+<div class="sourceCode" id="cb1979"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1979-1"><a href="monte.html#cb1979-1"></a>Prob_df</span></code></pre></div>
 <pre><code>## # A tibble: 99 × 2
 ##    Students Probs
 ##       &lt;int&gt; &lt;dbl&gt;
-##  1        2  0   
-##  2        3  0.03
-##  3        4  0.01
-##  4        5  0.05
-##  5        6  0.07
-##  6        7  0.1 
-##  7        8  0.08
-##  8        9  0.08
-##  9       10  0.15
-## 10       11  0.17
+##  1        2  0.01
+##  2        3  0.02
+##  3        4  0.06
+##  4        5  0.01
+##  5        6  0.02
+##  6        7  0.08
+##  7        8  0.06
+##  8        9  0.09
+##  9       10  0.12
+## 10       11  0.18
 ## # … with 89 more rows</code></pre>
-<div class="sourceCode" id="cb1974"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1974-1"><a href="monte.html#cb1974-1"></a>Prob_df <span class="sc">%&gt;%</span></span>
-<span id="cb1974-2"><a href="monte.html#cb1974-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb1974-3"><a href="monte.html#cb1974-3"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Students, <span class="at">y =</span> Probs), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb1974-4"><a href="monte.html#cb1974-4"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Number of Students&quot;</span>,</span>
-<span id="cb1974-5"><a href="monte.html#cb1974-5"></a>         <span class="at">y =</span> <span class="st">&quot;Probability two students have the same birthday&quot;</span>) <span class="sc">+</span></span>
-<span id="cb1974-6"><a href="monte.html#cb1974-6"></a>    <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-939-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb1975"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1975-1"><a href="monte.html#cb1975-1"></a><span class="dv">1</span> <span class="sc">-</span> (<span class="fu">factorial</span>(<span class="dv">365</span>) <span class="sc">/</span> (<span class="fu">factorial</span>(<span class="dv">365</span> <span class="sc">-</span> <span class="dv">30</span>) <span class="sc">*</span> <span class="dv">365</span><span class="sc">^</span>(<span class="dv">30</span>)))</span></code></pre></div>
+<p>　学生数が何人いれば、同じ誕生日の人が2人以上いる割合が50%になるのでしょうか。割合が0.4以上、0.6以下の行を抽出してみましょう。</p>
+<div class="sourceCode" id="cb1981"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1981-1"><a href="monte.html#cb1981-1"></a>Prob_df <span class="sc">%&gt;%</span></span>
+<span id="cb1981-2"><a href="monte.html#cb1981-2"></a>    <span class="fu">filter</span>(Probs <span class="sc">&gt;=</span> <span class="fl">0.4</span>, Probs <span class="sc">&lt;=</span> <span class="fl">0.6</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 7 × 2
+##   Students Probs
+##      &lt;int&gt; &lt;dbl&gt;
+## 1       18  0.41
+## 2       21  0.46
+## 3       22  0.41
+## 4       23  0.45
+## 5       24  0.52
+## 6       25  0.58
+## 7       27  0.56</code></pre>
+<p>　大体23人前後ですかね。試行回数を増やせばもう少し厳密に検証出来るかも知れませんが、とりあえず以上の結果を可視化してみましょう。</p>
+<div class="sourceCode" id="cb1983"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1983-1"><a href="monte.html#cb1983-1"></a>Prob_df <span class="sc">%&gt;%</span></span>
+<span id="cb1983-2"><a href="monte.html#cb1983-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb1983-3"><a href="monte.html#cb1983-3"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Students, <span class="at">y =</span> Probs <span class="sc">*</span> <span class="dv">100</span>), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb1983-4"><a href="monte.html#cb1983-4"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">50</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb1983-5"><a href="monte.html#cb1983-5"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;学生数&quot;</span>,</span>
+<span id="cb1983-6"><a href="monte.html#cb1983-6"></a>         <span class="at">y =</span> <span class="st">&quot;同じ誕生日の人が2人以上いる割合 (%)</span><span class="sc">\n</span><span class="st">(試行回数 = 100)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1983-7"><a href="monte.html#cb1983-7"></a>    <span class="fu">theme_bw</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraginoSans-W3&quot;</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/monte-birthday10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>　非常に直感に反する結果かも知れませんが、50人程度いれば、<strong>ほぼ</strong>確実に同じ誕生日の人が2人以上いることが分かります。この誕生日問題は以下のように解くことができます。人が<span class="math inline">\(n\)</span>人いる場合、同じ誕生日の人が2人以上いる確率<span class="math inline">\(p(n)\)</span>は、</p>
+<p><span class="math display">\[
+p(n) = 1 - \frac{365!}{365^n (365-n)!}
+\]</span></p>
+<p>　!は階乗を意味し、5!は<span class="math inline">\(5 \times 4 \times 3 \times 2 \times 1\)</span>を意味します。Rでは<code>factorial()</code>関数を使います。それでは<span class="math inline">\(p(50)\)</span>はいくらでしょうか。</p>
+<div class="sourceCode" id="cb1984"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1984-1"><a href="monte.html#cb1984-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">factorial</span>(<span class="dv">365</span>) <span class="sc">/</span> (<span class="dv">365</span><span class="sc">^</span><span class="dv">50</span> <span class="sc">*</span> <span class="fu">factorial</span>(<span class="dv">365</span> <span class="sc">-</span> <span class="dv">50</span>))</span></code></pre></div>
 <pre><code>## [1] NaN</code></pre>
-<div class="sourceCode" id="cb1977"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1977-1"><a href="monte.html#cb1977-1"></a><span class="dv">1</span> <span class="sc">-</span> (<span class="fu">choose</span>(<span class="dv">365</span>, <span class="dv">365</span> <span class="sc">-</span> <span class="dv">30</span>) <span class="sc">*</span> <span class="fu">factorial</span>(<span class="dv">30</span>) <span class="sc">/</span> <span class="dv">365</span><span class="sc">^</span><span class="dv">30</span>)</span></code></pre></div>
-<pre><code>## [1] 0.7063162</code></pre>
-<div class="sourceCode" id="cb1979"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1979-1"><a href="monte.html#cb1979-1"></a>Prob_df<span class="sc">$</span>Expectation <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> (<span class="fu">choose</span>(<span class="dv">365</span>, <span class="dv">365</span> <span class="sc">-</span> Prob_df<span class="sc">$</span>Students) <span class="sc">*</span> </span>
-<span id="cb1979-2"><a href="monte.html#cb1979-2"></a>                                <span class="fu">factorial</span>(Prob_df<span class="sc">$</span>Students) <span class="sc">/</span> <span class="dv">365</span><span class="sc">^</span>Prob_df<span class="sc">$</span>Students)</span></code></pre></div>
-<div class="sourceCode" id="cb1980"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1980-1"><a href="monte.html#cb1980-1"></a>Prob_df <span class="sc">%&gt;%</span></span>
-<span id="cb1980-2"><a href="monte.html#cb1980-2"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols      =</span> Probs<span class="sc">:</span>Expectation,</span>
-<span id="cb1980-3"><a href="monte.html#cb1980-3"></a>                 <span class="at">names_to  =</span> <span class="st">&quot;Type&quot;</span>,</span>
-<span id="cb1980-4"><a href="monte.html#cb1980-4"></a>                 <span class="at">values_to =</span> <span class="st">&quot;Prob&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb1980-5"><a href="monte.html#cb1980-5"></a>    <span class="fu">mutate</span>(<span class="at">Type =</span> <span class="fu">ifelse</span>(Type <span class="sc">==</span> <span class="st">&quot;Probs&quot;</span>, <span class="st">&quot;Simulation&quot;</span>, <span class="st">&quot;Theoretical&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb1980-6"><a href="monte.html#cb1980-6"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb1980-7"><a href="monte.html#cb1980-7"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Students, <span class="at">y =</span> Prob, <span class="at">color =</span> Type), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb1980-8"><a href="monte.html#cb1980-8"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Number of Students&quot;</span>,</span>
-<span id="cb1980-9"><a href="monte.html#cb1980-9"></a>         <span class="at">y =</span> <span class="st">&quot;Probability two students have the same birthday&quot;</span>) <span class="sc">+</span></span>
-<span id="cb1980-10"><a href="monte.html#cb1980-10"></a>    <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-943-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb1981"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1981-1"><a href="monte.html#cb1981-1"></a>n_trials  <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb1981-2"><a href="monte.html#cb1981-2"></a></span>
-<span id="cb1981-3"><a href="monte.html#cb1981-3"></a>Prob_df   <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Students =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">100</span>,</span>
-<span id="cb1981-4"><a href="monte.html#cb1981-4"></a>                    <span class="at">Probs    =</span> <span class="cn">NA</span>)</span>
-<span id="cb1981-5"><a href="monte.html#cb1981-5"></a></span>
-<span id="cb1981-6"><a href="monte.html#cb1981-6"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(Prob_df)) {</span>
-<span id="cb1981-7"><a href="monte.html#cb1981-7"></a>    </span>
-<span id="cb1981-8"><a href="monte.html#cb1981-8"></a>    Result_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_trials)</span>
-<span id="cb1981-9"><a href="monte.html#cb1981-9"></a>    </span>
-<span id="cb1981-10"><a href="monte.html#cb1981-10"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_trials) {</span>
-<span id="cb1981-11"><a href="monte.html#cb1981-11"></a>        Birth_vec     <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">365</span>, Prob_df<span class="sc">$</span>Students[i], <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1981-12"><a href="monte.html#cb1981-12"></a>        Result_vec[j] <span class="ot">&lt;-</span> <span class="fu">any</span>(<span class="fu">duplicated</span>(Birth_vec))</span>
-<span id="cb1981-13"><a href="monte.html#cb1981-13"></a>    }</span>
-<span id="cb1981-14"><a href="monte.html#cb1981-14"></a>    </span>
-<span id="cb1981-15"><a href="monte.html#cb1981-15"></a>    Prob_df<span class="sc">$</span>Probs[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(Result_vec)</span>
-<span id="cb1981-16"><a href="monte.html#cb1981-16"></a>}</span>
-<span id="cb1981-17"><a href="monte.html#cb1981-17"></a></span>
-<span id="cb1981-18"><a href="monte.html#cb1981-18"></a>Prob_df<span class="sc">$</span>Expectation <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> (<span class="fu">choose</span>(<span class="dv">365</span>, <span class="dv">365</span> <span class="sc">-</span> Prob_df<span class="sc">$</span>Students) <span class="sc">*</span> </span>
-<span id="cb1981-19"><a href="monte.html#cb1981-19"></a>                                <span class="fu">factorial</span>(Prob_df<span class="sc">$</span>Students) <span class="sc">/</span> <span class="dv">365</span><span class="sc">^</span>Prob_df<span class="sc">$</span>Students)</span>
-<span id="cb1981-20"><a href="monte.html#cb1981-20"></a></span>
-<span id="cb1981-21"><a href="monte.html#cb1981-21"></a>Prob_df <span class="sc">%&gt;%</span></span>
-<span id="cb1981-22"><a href="monte.html#cb1981-22"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols      =</span> Probs<span class="sc">:</span>Expectation,</span>
-<span id="cb1981-23"><a href="monte.html#cb1981-23"></a>                 <span class="at">names_to  =</span> <span class="st">&quot;Type&quot;</span>,</span>
-<span id="cb1981-24"><a href="monte.html#cb1981-24"></a>                 <span class="at">values_to =</span> <span class="st">&quot;Prob&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb1981-25"><a href="monte.html#cb1981-25"></a>    <span class="fu">mutate</span>(<span class="at">Type =</span> <span class="fu">ifelse</span>(Type <span class="sc">==</span> <span class="st">&quot;Probs&quot;</span>, <span class="st">&quot;Simulation&quot;</span>, <span class="st">&quot;Theoretical&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb1981-26"><a href="monte.html#cb1981-26"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb1981-27"><a href="monte.html#cb1981-27"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Students, <span class="at">y =</span> Prob, <span class="at">color =</span> Type), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb1981-28"><a href="monte.html#cb1981-28"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Number of Students&quot;</span>,</span>
-<span id="cb1981-29"><a href="monte.html#cb1981-29"></a>         <span class="at">y =</span> <span class="st">&quot;Probability two students have the same birthday&quot;</span>) <span class="sc">+</span></span>
-<span id="cb1981-30"><a href="monte.html#cb1981-30"></a>    <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-944-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>　あらら、<code>NaN</code>がでましたね。つまり、計算不可です。実際、<code>factorial(365)</code>だけでも計算結果は<code>Inf</code>が出ます。むろん、実際に無限ではありませんが、非常に大きい数値ということです。以上の式を計算可能な式に変形すると以下のようになります。</p>
+<p><span class="math display">\[
+p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
+\]</span></p>
+<div class="sourceCode" id="cb1986"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1986-1"><a href="monte.html#cb1986-1"></a><span class="dv">1</span> <span class="sc">-</span> ((<span class="fu">factorial</span>(<span class="dv">50</span>) <span class="sc">*</span> <span class="fu">choose</span>(<span class="dv">365</span>, <span class="dv">365</span> <span class="sc">-</span> <span class="dv">50</span>)) <span class="sc">/</span> <span class="dv">365</span><span class="sc">^</span><span class="dv">50</span>)</span></code></pre></div>
+<pre><code>## [1] 0.9703736</code></pre>
+<p>　結果は0.9703736です。つまり、人が50人いれば同じ誕生日の人が2人以上いる確率は約0.97%ということです。それでは、以上の式を関数化し、<code>p(22)</code>と<code>p(23)</code>を計算してみましょう。</p>
+<div class="sourceCode" id="cb1988"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1988-1"><a href="monte.html#cb1988-1"></a>Birth_Expect <span class="ot">&lt;-</span> <span class="cf">function</span> (n) {</span>
+<span id="cb1988-2"><a href="monte.html#cb1988-2"></a>    <span class="dv">1</span> <span class="sc">-</span> ((<span class="fu">factorial</span>(n) <span class="sc">*</span> <span class="fu">choose</span>(<span class="dv">365</span>, <span class="dv">365</span> <span class="sc">-</span> n)) <span class="sc">/</span> <span class="dv">365</span><span class="sc">^</span>n)</span>
+<span id="cb1988-3"><a href="monte.html#cb1988-3"></a>}</span>
+<span id="cb1988-4"><a href="monte.html#cb1988-4"></a></span>
+<span id="cb1988-5"><a href="monte.html#cb1988-5"></a><span class="fu">Birth_Expect</span>(<span class="dv">22</span>)</span></code></pre></div>
+<pre><code>## [1] 0.4756953</code></pre>
+<div class="sourceCode" id="cb1990"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1990-1"><a href="monte.html#cb1990-1"></a><span class="fu">Birth_Expect</span>(<span class="dv">23</span>)</span></code></pre></div>
+<pre><code>## [1] 0.5072972</code></pre>
+<p>　確率が50%を超える人数は23人であることが分かります。先ほどのデータフレーム (<code>Prob_df</code>)にこの理論値を<code>Expect</code>という名の列として追加してみましょう。</p>
+<div class="sourceCode" id="cb1992"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1992-1"><a href="monte.html#cb1992-1"></a>Prob_df <span class="ot">&lt;-</span> Prob_df <span class="sc">%&gt;%</span></span>
+<span id="cb1992-2"><a href="monte.html#cb1992-2"></a>    <span class="fu">mutate</span>(<span class="at">Expect =</span> <span class="fu">map_dbl</span>(Students, <span class="sc">~</span><span class="fu">Birth_Expect</span>(.x)))</span>
+<span id="cb1992-3"><a href="monte.html#cb1992-3"></a></span>
+<span id="cb1992-4"><a href="monte.html#cb1992-4"></a>Prob_df</span></code></pre></div>
+<pre><code>## # A tibble: 99 × 3
+##    Students Probs  Expect
+##       &lt;int&gt; &lt;dbl&gt;   &lt;dbl&gt;
+##  1        2  0.01 0.00274
+##  2        3  0.02 0.00820
+##  3        4  0.06 0.0164 
+##  4        5  0.01 0.0271 
+##  5        6  0.02 0.0405 
+##  6        7  0.08 0.0562 
+##  7        8  0.06 0.0743 
+##  8        9  0.09 0.0946 
+##  9       10  0.12 0.117  
+## 10       11  0.18 0.141  
+## # … with 89 more rows</code></pre>
+<p>　これは人間にとっては読みやすい表ですが、可視化まで考えると、tidyなデータといは言えません。したがって、<code>pivot_longer()</code>関数を使用してtidyなデータに整形します。{tidyr}パッケージの使い方は第<a href="tidydata.html#tidydata">16</a>章を参照してください。</p>
+<div class="sourceCode" id="cb1994"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1994-1"><a href="monte.html#cb1994-1"></a>Prob_df2 <span class="ot">&lt;-</span> Prob_df <span class="sc">%&gt;%</span></span>
+<span id="cb1994-2"><a href="monte.html#cb1994-2"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols      =</span> Probs<span class="sc">:</span>Expect,</span>
+<span id="cb1994-3"><a href="monte.html#cb1994-3"></a>                 <span class="at">names_to  =</span> <span class="st">&quot;Type&quot;</span>,</span>
+<span id="cb1994-4"><a href="monte.html#cb1994-4"></a>                 <span class="at">values_to =</span> <span class="st">&quot;Prob&quot;</span>) </span>
+<span id="cb1994-5"><a href="monte.html#cb1994-5"></a></span>
+<span id="cb1994-6"><a href="monte.html#cb1994-6"></a>Prob_df2</span></code></pre></div>
+<pre><code>## # A tibble: 198 × 3
+##    Students Type      Prob
+##       &lt;int&gt; &lt;chr&gt;    &lt;dbl&gt;
+##  1        2 Probs  0.01   
+##  2        2 Expect 0.00274
+##  3        3 Probs  0.02   
+##  4        3 Expect 0.00820
+##  5        4 Probs  0.06   
+##  6        4 Expect 0.0164 
+##  7        5 Probs  0.01   
+##  8        5 Expect 0.0271 
+##  9        6 Probs  0.02   
+## 10        6 Expect 0.0405 
+## # … with 188 more rows</code></pre>
+<p>　こちらのデータを使用し、シミュレーションから得られた結果と理論値を折れ線グラフで出力してみましょう。</p>
+<div class="sourceCode" id="cb1996"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1996-1"><a href="monte.html#cb1996-1"></a>Prob_df2 <span class="sc">%&gt;%</span></span>
+<span id="cb1996-2"><a href="monte.html#cb1996-2"></a>    <span class="fu">mutate</span>(<span class="at">Type =</span> <span class="fu">ifelse</span>(Type <span class="sc">==</span> <span class="st">&quot;Probs&quot;</span>, <span class="st">&quot;シミュレーション&quot;</span>, <span class="st">&quot;理論値&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb1996-3"><a href="monte.html#cb1996-3"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb1996-4"><a href="monte.html#cb1996-4"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Students, <span class="at">y =</span> Prob <span class="sc">*</span> <span class="dv">100</span>, <span class="at">color =</span> Type), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb1996-5"><a href="monte.html#cb1996-5"></a>    <span class="fu">labs</span>(<span class="at">x     =</span> <span class="st">&quot;学生数&quot;</span>,</span>
+<span id="cb1996-6"><a href="monte.html#cb1996-6"></a>         <span class="at">y     =</span> <span class="st">&quot;同じ誕生日の人が2人以上いる割合 (%)</span><span class="sc">\n</span><span class="st">(試行回数 = 100)&quot;</span>,</span>
+<span id="cb1996-7"><a href="monte.html#cb1996-7"></a>         <span class="at">color =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1996-8"><a href="monte.html#cb1996-8"></a>    <span class="fu">theme_bw</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraginoSans-W3&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1996-9"><a href="monte.html#cb1996-9"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/monte-birthday16-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>　最後に以上の作業を試行回数10000としてもう一回やってみましょう。</p>
+<div class="sourceCode" id="cb1997"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1997-1"><a href="monte.html#cb1997-1"></a><span class="co"># 学生数をStudents列に格納したデータフレーム (tibble)を作成</span></span>
+<span id="cb1997-2"><a href="monte.html#cb1997-2"></a>Prob_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Students =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">100</span>)</span>
+<span id="cb1997-3"><a href="monte.html#cb1997-3"></a></span>
+<span id="cb1997-4"><a href="monte.html#cb1997-4"></a><span class="co"># Students列の値に応じてBirthday_Func()を実行</span></span>
+<span id="cb1997-5"><a href="monte.html#cb1997-5"></a>Prob_df <span class="ot">&lt;-</span> Prob_df <span class="sc">%&gt;%</span></span>
+<span id="cb1997-6"><a href="monte.html#cb1997-6"></a>    <span class="fu">mutate</span>(<span class="at">Simul  =</span> <span class="fu">map_dbl</span>(Students, <span class="sc">~</span><span class="fu">Birthday_Func</span>(.x, <span class="dv">10000</span>)),</span>
+<span id="cb1997-7"><a href="monte.html#cb1997-7"></a>           <span class="at">Expect =</span> <span class="fu">map_dbl</span>(Students, <span class="sc">~</span><span class="fu">Birth_Expect</span>(.x)))</span>
+<span id="cb1997-8"><a href="monte.html#cb1997-8"></a></span>
+<span id="cb1997-9"><a href="monte.html#cb1997-9"></a>Prob_df <span class="sc">%&gt;%</span></span>
+<span id="cb1997-10"><a href="monte.html#cb1997-10"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols      =</span> Simul<span class="sc">:</span>Expect,</span>
+<span id="cb1997-11"><a href="monte.html#cb1997-11"></a>                 <span class="at">names_to  =</span> <span class="st">&quot;Type&quot;</span>,</span>
+<span id="cb1997-12"><a href="monte.html#cb1997-12"></a>                 <span class="at">values_to =</span> <span class="st">&quot;Prob&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1997-13"><a href="monte.html#cb1997-13"></a>    <span class="fu">mutate</span>(<span class="at">Type =</span> <span class="fu">ifelse</span>(Type <span class="sc">==</span> <span class="st">&quot;Simul&quot;</span>, <span class="st">&quot;シミュレーション&quot;</span>, <span class="st">&quot;理論値&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb1997-14"><a href="monte.html#cb1997-14"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb1997-15"><a href="monte.html#cb1997-15"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Students, <span class="at">y =</span> Prob <span class="sc">*</span> <span class="dv">100</span>, <span class="at">color =</span> Type), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb1997-16"><a href="monte.html#cb1997-16"></a>    <span class="fu">labs</span>(<span class="at">x     =</span> <span class="st">&quot;学生数&quot;</span>,</span>
+<span id="cb1997-17"><a href="monte.html#cb1997-17"></a>         <span class="at">y     =</span> <span class="st">&quot;同じ誕生日の人が2人以上いる割合 (%)</span><span class="sc">\n</span><span class="st">(試行回数 = 100)&quot;</span>,</span>
+<span id="cb1997-18"><a href="monte.html#cb1997-18"></a>         <span class="at">color =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1997-19"><a href="monte.html#cb1997-19"></a>    <span class="fu">theme_bw</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraginoSans-W3&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1997-20"><a href="monte.html#cb1997-20"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/monte-birthday17-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>　モンテカルロ・シミュレーションから得られた割合と理論上の確率が非常に近似していることが分かります。</p>
 <hr />
 </div>
 <div id="応用-円周率" class="section level2" number="29.4">
 <h2><span class="header-section-number">29.4</span> 応用: 円周率</h2>
-<div class="sourceCode" id="cb1982"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1982-1"><a href="monte.html#cb1982-1"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
-<span id="cb1982-2"><a href="monte.html#cb1982-2"></a>pi_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">runif</span>(<span class="dv">100</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>),</span>
-<span id="cb1982-3"><a href="monte.html#cb1982-3"></a>                <span class="at">y =</span> <span class="fu">runif</span>(<span class="dv">100</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>))</span>
-<span id="cb1982-4"><a href="monte.html#cb1982-4"></a></span>
-<span id="cb1982-5"><a href="monte.html#cb1982-5"></a>pi_df <span class="ot">&lt;-</span> pi_df <span class="sc">%&gt;%</span></span>
-<span id="cb1982-6"><a href="monte.html#cb1982-6"></a>    <span class="fu">mutate</span>(<span class="at">in_circle =</span> <span class="fu">if_else</span>(x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> y<span class="sc">^</span><span class="dv">2</span> <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="st">&quot;In Circle&quot;</span>, <span class="st">&quot;Out of Circle&quot;</span>))</span>
-<span id="cb1982-7"><a href="monte.html#cb1982-7"></a></span>
-<span id="cb1982-8"><a href="monte.html#cb1982-8"></a>pi_df <span class="sc">%&gt;%</span></span>
-<span id="cb1982-9"><a href="monte.html#cb1982-9"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb1982-10"><a href="monte.html#cb1982-10"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> in_circle)) <span class="sc">+</span></span>
-<span id="cb1982-11"><a href="monte.html#cb1982-11"></a>    <span class="fu">geom_circle</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">r =</span> <span class="dv">1</span>), <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb1982-12"><a href="monte.html#cb1982-12"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;X&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>, <span class="at">color =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb1982-13"><a href="monte.html#cb1982-13"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb1982-14"><a href="monte.html#cb1982-14"></a>    <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-945-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb1983"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1983-1"><a href="monte.html#cb1983-1"></a>pi_df <span class="sc">%&gt;%</span></span>
-<span id="cb1983-2"><a href="monte.html#cb1983-2"></a>    <span class="fu">group_by</span>(in_circle) <span class="sc">%&gt;%</span></span>
-<span id="cb1983-3"><a href="monte.html#cb1983-3"></a>    <span class="fu">summarise</span>(<span class="at">N =</span> <span class="fu">n</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb1998"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1998-1"><a href="monte.html#cb1998-1"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
+<span id="cb1998-2"><a href="monte.html#cb1998-2"></a>pi_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">runif</span>(<span class="dv">100</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb1998-3"><a href="monte.html#cb1998-3"></a>                <span class="at">y =</span> <span class="fu">runif</span>(<span class="dv">100</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb1998-4"><a href="monte.html#cb1998-4"></a></span>
+<span id="cb1998-5"><a href="monte.html#cb1998-5"></a>pi_df <span class="ot">&lt;-</span> pi_df <span class="sc">%&gt;%</span></span>
+<span id="cb1998-6"><a href="monte.html#cb1998-6"></a>    <span class="fu">mutate</span>(<span class="at">in_circle =</span> <span class="fu">if_else</span>(x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> y<span class="sc">^</span><span class="dv">2</span> <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="st">&quot;In Circle&quot;</span>, <span class="st">&quot;Out of Circle&quot;</span>))</span>
+<span id="cb1998-7"><a href="monte.html#cb1998-7"></a></span>
+<span id="cb1998-8"><a href="monte.html#cb1998-8"></a>pi_df <span class="sc">%&gt;%</span></span>
+<span id="cb1998-9"><a href="monte.html#cb1998-9"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb1998-10"><a href="monte.html#cb1998-10"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> in_circle)) <span class="sc">+</span></span>
+<span id="cb1998-11"><a href="monte.html#cb1998-11"></a>    <span class="fu">geom_circle</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">r =</span> <span class="dv">1</span>), <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb1998-12"><a href="monte.html#cb1998-12"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;X&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>, <span class="at">color =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1998-13"><a href="monte.html#cb1998-13"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb1998-14"><a href="monte.html#cb1998-14"></a>    <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-935-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb1999"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1999-1"><a href="monte.html#cb1999-1"></a>pi_df <span class="sc">%&gt;%</span></span>
+<span id="cb1999-2"><a href="monte.html#cb1999-2"></a>    <span class="fu">group_by</span>(in_circle) <span class="sc">%&gt;%</span></span>
+<span id="cb1999-3"><a href="monte.html#cb1999-3"></a>    <span class="fu">summarise</span>(<span class="at">N =</span> <span class="fu">n</span>())</span></code></pre></div>
 <pre><code>## # A tibble: 2 × 2
 ##   in_circle         N
 ##   &lt;chr&gt;         &lt;int&gt;
 ## 1 In Circle        82
 ## 2 Out of Circle    18</code></pre>
-<div class="sourceCode" id="cb1985"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1985-1"><a href="monte.html#cb1985-1"></a><span class="co"># 円の面積は4 * 0.82 = 3.28</span></span>
-<span id="cb1985-2"><a href="monte.html#cb1985-2"></a><span class="co"># 円の面積は半径^2 * piなので、piは</span></span>
-<span id="cb1985-3"><a href="monte.html#cb1985-3"></a><span class="fl">3.28</span> <span class="sc">/</span> (<span class="dv">1</span><span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2001"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2001-1"><a href="monte.html#cb2001-1"></a><span class="co"># 円の面積は4 * 0.82 = 3.28</span></span>
+<span id="cb2001-2"><a href="monte.html#cb2001-2"></a><span class="co"># 円の面積は半径^2 * piなので、piは</span></span>
+<span id="cb2001-3"><a href="monte.html#cb2001-3"></a><span class="fl">3.28</span> <span class="sc">/</span> (<span class="dv">1</span><span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div>
 <pre><code>## [1] 3.28</code></pre>
-<div class="sourceCode" id="cb1987"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1987-1"><a href="monte.html#cb1987-1"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
-<span id="cb1987-2"><a href="monte.html#cb1987-2"></a>pi_df2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">runif</span>(<span class="dv">10000</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>),</span>
-<span id="cb1987-3"><a href="monte.html#cb1987-3"></a>                 <span class="at">y =</span> <span class="fu">runif</span>(<span class="dv">10000</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>))</span>
-<span id="cb1987-4"><a href="monte.html#cb1987-4"></a></span>
-<span id="cb1987-5"><a href="monte.html#cb1987-5"></a>pi_df2 <span class="ot">&lt;-</span> pi_df2 <span class="sc">%&gt;%</span></span>
-<span id="cb1987-6"><a href="monte.html#cb1987-6"></a>    <span class="fu">mutate</span>(<span class="at">in_circle =</span> <span class="fu">if_else</span>(x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> y<span class="sc">^</span><span class="dv">2</span> <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="st">&quot;In Circle&quot;</span>, <span class="st">&quot;Out of Circle&quot;</span>))</span>
-<span id="cb1987-7"><a href="monte.html#cb1987-7"></a></span>
-<span id="cb1987-8"><a href="monte.html#cb1987-8"></a>pi_df2 <span class="sc">%&gt;%</span></span>
-<span id="cb1987-9"><a href="monte.html#cb1987-9"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb1987-10"><a href="monte.html#cb1987-10"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> in_circle)) <span class="sc">+</span></span>
-<span id="cb1987-11"><a href="monte.html#cb1987-11"></a>    <span class="fu">geom_circle</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">r =</span> <span class="dv">1</span>), <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb1987-12"><a href="monte.html#cb1987-12"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;X&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>, <span class="at">color =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb1987-13"><a href="monte.html#cb1987-13"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb1987-14"><a href="monte.html#cb1987-14"></a>    <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-946-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb1988"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1988-1"><a href="monte.html#cb1988-1"></a>pi_df2 <span class="sc">%&gt;%</span></span>
-<span id="cb1988-2"><a href="monte.html#cb1988-2"></a>    <span class="fu">group_by</span>(in_circle) <span class="sc">%&gt;%</span></span>
-<span id="cb1988-3"><a href="monte.html#cb1988-3"></a>    <span class="fu">summarise</span>(<span class="at">N =</span> <span class="fu">n</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb2003"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2003-1"><a href="monte.html#cb2003-1"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
+<span id="cb2003-2"><a href="monte.html#cb2003-2"></a>pi_df2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">runif</span>(<span class="dv">10000</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb2003-3"><a href="monte.html#cb2003-3"></a>                 <span class="at">y =</span> <span class="fu">runif</span>(<span class="dv">10000</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb2003-4"><a href="monte.html#cb2003-4"></a></span>
+<span id="cb2003-5"><a href="monte.html#cb2003-5"></a>pi_df2 <span class="ot">&lt;-</span> pi_df2 <span class="sc">%&gt;%</span></span>
+<span id="cb2003-6"><a href="monte.html#cb2003-6"></a>    <span class="fu">mutate</span>(<span class="at">in_circle =</span> <span class="fu">if_else</span>(x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> y<span class="sc">^</span><span class="dv">2</span> <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="st">&quot;In Circle&quot;</span>, <span class="st">&quot;Out of Circle&quot;</span>))</span>
+<span id="cb2003-7"><a href="monte.html#cb2003-7"></a></span>
+<span id="cb2003-8"><a href="monte.html#cb2003-8"></a>pi_df2 <span class="sc">%&gt;%</span></span>
+<span id="cb2003-9"><a href="monte.html#cb2003-9"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb2003-10"><a href="monte.html#cb2003-10"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> in_circle)) <span class="sc">+</span></span>
+<span id="cb2003-11"><a href="monte.html#cb2003-11"></a>    <span class="fu">geom_circle</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">r =</span> <span class="dv">1</span>), <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb2003-12"><a href="monte.html#cb2003-12"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;X&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>, <span class="at">color =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb2003-13"><a href="monte.html#cb2003-13"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb2003-14"><a href="monte.html#cb2003-14"></a>    <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-936-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb2004"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2004-1"><a href="monte.html#cb2004-1"></a>pi_df2 <span class="sc">%&gt;%</span></span>
+<span id="cb2004-2"><a href="monte.html#cb2004-2"></a>    <span class="fu">group_by</span>(in_circle) <span class="sc">%&gt;%</span></span>
+<span id="cb2004-3"><a href="monte.html#cb2004-3"></a>    <span class="fu">summarise</span>(<span class="at">N =</span> <span class="fu">n</span>())</span></code></pre></div>
 <pre><code>## # A tibble: 2 × 2
 ##   in_circle         N
 ##   &lt;chr&gt;         &lt;int&gt;
 ## 1 In Circle      7859
 ## 2 Out of Circle  2141</code></pre>
-<div class="sourceCode" id="cb1990"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1990-1"><a href="monte.html#cb1990-1"></a><span class="co"># 円の面積は4 * 0.7859 = 3.1436</span></span>
-<span id="cb1990-2"><a href="monte.html#cb1990-2"></a><span class="co"># 円の面積は半径^2 * piなので、piは</span></span>
-<span id="cb1990-3"><a href="monte.html#cb1990-3"></a><span class="fl">3.1436</span> <span class="sc">/</span> <span class="dv">1</span><span class="sc">^</span><span class="dv">2</span></span></code></pre></div>
+<div class="sourceCode" id="cb2006"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2006-1"><a href="monte.html#cb2006-1"></a><span class="co"># 円の面積は4 * 0.7859 = 3.1436</span></span>
+<span id="cb2006-2"><a href="monte.html#cb2006-2"></a><span class="co"># 円の面積は半径^2 * piなので、piは</span></span>
+<span id="cb2006-3"><a href="monte.html#cb2006-3"></a><span class="fl">3.1436</span> <span class="sc">/</span> <span class="dv">1</span><span class="sc">^</span><span class="dv">2</span></span></code></pre></div>
 <pre><code>## [1] 3.1436</code></pre>
-<div class="sourceCode" id="cb1992"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1992-1"><a href="monte.html#cb1992-1"></a><span class="co"># 実際の円周率は3.141593...</span></span></code></pre></div>
+<div class="sourceCode" id="cb2008"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2008-1"><a href="monte.html#cb2008-1"></a><span class="co"># 実際の円周率は3.141593...</span></span></code></pre></div>
 <hr />
 </div>
 <div id="応用-ブートストラッピング法による標準誤差の推定" class="section level2" number="29.5">
