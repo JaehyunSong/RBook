@@ -1082,61 +1082,95 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 </div>
 <div id="応用-円周率" class="section level2" number="29.4">
 <h2><span class="header-section-number">29.4</span> 応用: 円周率</h2>
-<div class="sourceCode" id="cb1998"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1998-1"><a href="monte.html#cb1998-1"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
-<span id="cb1998-2"><a href="monte.html#cb1998-2"></a>pi_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">runif</span>(<span class="dv">100</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>),</span>
-<span id="cb1998-3"><a href="monte.html#cb1998-3"></a>                <span class="at">y =</span> <span class="fu">runif</span>(<span class="dv">100</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>))</span>
-<span id="cb1998-4"><a href="monte.html#cb1998-4"></a></span>
-<span id="cb1998-5"><a href="monte.html#cb1998-5"></a>pi_df <span class="ot">&lt;-</span> pi_df <span class="sc">%&gt;%</span></span>
-<span id="cb1998-6"><a href="monte.html#cb1998-6"></a>    <span class="fu">mutate</span>(<span class="at">in_circle =</span> <span class="fu">if_else</span>(x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> y<span class="sc">^</span><span class="dv">2</span> <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="st">&quot;In Circle&quot;</span>, <span class="st">&quot;Out of Circle&quot;</span>))</span>
-<span id="cb1998-7"><a href="monte.html#cb1998-7"></a></span>
-<span id="cb1998-8"><a href="monte.html#cb1998-8"></a>pi_df <span class="sc">%&gt;%</span></span>
-<span id="cb1998-9"><a href="monte.html#cb1998-9"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb1998-10"><a href="monte.html#cb1998-10"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> in_circle)) <span class="sc">+</span></span>
-<span id="cb1998-11"><a href="monte.html#cb1998-11"></a>    <span class="fu">geom_circle</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">r =</span> <span class="dv">1</span>), <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb1998-12"><a href="monte.html#cb1998-12"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;X&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>, <span class="at">color =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb1998-13"><a href="monte.html#cb1998-13"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb1998-14"><a href="monte.html#cb1998-14"></a>    <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-935-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb1999"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1999-1"><a href="monte.html#cb1999-1"></a>pi_df <span class="sc">%&gt;%</span></span>
-<span id="cb1999-2"><a href="monte.html#cb1999-2"></a>    <span class="fu">group_by</span>(in_circle) <span class="sc">%&gt;%</span></span>
-<span id="cb1999-3"><a href="monte.html#cb1999-3"></a>    <span class="fu">summarise</span>(<span class="at">N =</span> <span class="fu">n</span>())</span></code></pre></div>
+<p>　今回はもう一つの例として、円周率 (<span class="math inline">\(\pi\)</span>)の計算を紹介したいと思います。<span class="math inline">\(\pi\)</span>は無理数であるため、厳密な計算は出来ませんが、モンテカルロ・シミュレーションである程度近似できます。たとえば、半径1 (<span class="math inline">\(r = 1\)</span>)の円を考えてみましょう。</p>
+<p><img src="R_Not_for_Everyone_files/figure-html/monte-pi1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>　円の面積は<span class="math inline">\(r^2\pi\)</span>であるため、この円の面積は<span class="math inline">\(\pi\)</span>です。また、四角形は辺の長さが2の正四角形ですから面積は4です。続いて、四角形の範囲内の点を付けます。無作為に20個を付けてみます。</p>
+<p><img src="R_Not_for_Everyone_files/figure-html/monte-pi2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>## List of 1
+##  $ legend.position: chr &quot;none&quot;
+##  - attr(*, &quot;class&quot;)= chr [1:2] &quot;theme&quot; &quot;gg&quot;
+##  - attr(*, &quot;complete&quot;)= logi FALSE
+##  - attr(*, &quot;validate&quot;)= logi TRUE</code></pre>
+<p>　20個点のうち、円の外側にあるのは5個、円の内側は15個です。つまり、75%の点が円内にあることを意味します。点の位置は無作為ですので、もし円の大きさが<span class="math inline">\(\pi\)</span>であれば、点が円内に入る確率は<span class="math inline">\(\frac{\pi}{4}\)</span>です。今回の例だと<span class="math inline">\(\frac{\pi}{4} = 0.75\)</span>であるため、<span class="math inline">\(\pi = 0.75 \times 4 = 3\)</span>となります。実際の円周率は3.141593…なので、そこそこ近似できていますね。</p>
+<p>　それではこれを実際にやってみましょう。今回は20個の点ではなく、100個にしてみましょう。まず、100個の点を無作為に抽出します。</p>
+<div class="sourceCode" id="cb1999"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1999-1"><a href="monte.html#cb1999-1"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
+<span id="cb1999-2"><a href="monte.html#cb1999-2"></a>pi_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">runif</span>(<span class="dv">100</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb1999-3"><a href="monte.html#cb1999-3"></a>                <span class="at">y =</span> <span class="fu">runif</span>(<span class="dv">100</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb1999-4"><a href="monte.html#cb1999-4"></a></span>
+<span id="cb1999-5"><a href="monte.html#cb1999-5"></a>pi_df</span></code></pre></div>
+<pre><code>## # A tibble: 100 × 2
+##          x      y
+##      &lt;dbl&gt;  &lt;dbl&gt;
+##  1 -0.950  -0.344
+##  2  0.0724  0.150
+##  3  0.874   0.971
+##  4  0.938   0.267
+##  5  0.205   0.469
+##  6 -0.343  -0.590
+##  7 -0.0245 -0.635
+##  8 -0.273  -0.886
+##  9 -0.405   0.701
+## 10  0.528  -0.547
+## # … with 90 more rows</code></pre>
+<p>つづいて、これらの点が円内に入っているかどうかを判定します。点(<span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span>)が原点が(0, 0)で、半径1の円内に入っている場合<span class="math inline">\(x^2 + y^2 &lt; 1\)</span>が成立します。この条件を満たしているかどうかを示す<code>in_circle</code>という変数を追加します。</p>
+<div class="sourceCode" id="cb2001"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2001-1"><a href="monte.html#cb2001-1"></a>pi_df <span class="ot">&lt;-</span> pi_df <span class="sc">%&gt;%</span></span>
+<span id="cb2001-2"><a href="monte.html#cb2001-2"></a>    <span class="fu">mutate</span>(<span class="at">in_circle =</span> <span class="fu">if_else</span>(x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> y<span class="sc">^</span><span class="dv">2</span> <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="st">&quot;円内&quot;</span>, <span class="st">&quot;円外&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb2002"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2002-1"><a href="monte.html#cb2002-1"></a>pi_df <span class="sc">%&gt;%</span></span>
+<span id="cb2002-2"><a href="monte.html#cb2002-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb2002-3"><a href="monte.html#cb2002-3"></a>    <span class="co"># 四角形の幾何オブジェクト</span></span>
+<span id="cb2002-4"><a href="monte.html#cb2002-4"></a>    <span class="co"># マッピング要素はxmin, xmax, ymin, ymax</span></span>
+<span id="cb2002-5"><a href="monte.html#cb2002-5"></a>    <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">ymin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">xmax =</span> <span class="dv">1</span>, <span class="at">ymax =</span> <span class="dv">1</span>),</span>
+<span id="cb2002-6"><a href="monte.html#cb2002-6"></a>              <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb2002-7"><a href="monte.html#cb2002-7"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> in_circle), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb2002-8"><a href="monte.html#cb2002-8"></a>    <span class="co"># 円の作成は{ggforce}のgeom_circle()を使用する。</span></span>
+<span id="cb2002-9"><a href="monte.html#cb2002-9"></a>    <span class="co"># マッピング要素は円の原点 (x0とy0)と半径 (r)</span></span>
+<span id="cb2002-10"><a href="monte.html#cb2002-10"></a>    <span class="fu">geom_circle</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">r =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb2002-11"><a href="monte.html#cb2002-11"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;X&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>, <span class="at">color =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb2002-12"><a href="monte.html#cb2002-12"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb2002-13"><a href="monte.html#cb2002-13"></a>    <span class="fu">theme_void</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraginoSans-W3&quot;</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/monte-pi5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>　実際に円内の点と円外の点の個数を数えてみましょう。</p>
+<div class="sourceCode" id="cb2003"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2003-1"><a href="monte.html#cb2003-1"></a>pi_df <span class="sc">%&gt;%</span></span>
+<span id="cb2003-2"><a href="monte.html#cb2003-2"></a>    <span class="fu">group_by</span>(in_circle) <span class="sc">%&gt;%</span></span>
+<span id="cb2003-3"><a href="monte.html#cb2003-3"></a>    <span class="fu">summarise</span>(<span class="at">N =</span> <span class="fu">n</span>())</span></code></pre></div>
 <pre><code>## # A tibble: 2 × 2
-##   in_circle         N
-##   &lt;chr&gt;         &lt;int&gt;
-## 1 In Circle        82
-## 2 Out of Circle    18</code></pre>
-<div class="sourceCode" id="cb2001"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2001-1"><a href="monte.html#cb2001-1"></a><span class="co"># 円の面積は4 * 0.82 = 3.28</span></span>
-<span id="cb2001-2"><a href="monte.html#cb2001-2"></a><span class="co"># 円の面積は半径^2 * piなので、piは</span></span>
-<span id="cb2001-3"><a href="monte.html#cb2001-3"></a><span class="fl">3.28</span> <span class="sc">/</span> (<span class="dv">1</span><span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div>
+##   in_circle     N
+##   &lt;chr&gt;     &lt;int&gt;
+## 1 円内         82
+## 2 円外         18</code></pre>
+<p>　円内の点は82個、円外の点は18ですね。つまり、<span class="math inline">\(\frac{\pi}{4} = 0.82\)</span>であり、<span class="math inline">\(\pi = 0.82 \times 4 = 3.28\)</span>です。</p>
+<div class="sourceCode" id="cb2005"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2005-1"><a href="monte.html#cb2005-1"></a><span class="dv">82</span> <span class="sc">/</span> <span class="dv">100</span> <span class="sc">*</span> <span class="dv">4</span></span></code></pre></div>
 <pre><code>## [1] 3.28</code></pre>
-<div class="sourceCode" id="cb2003"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2003-1"><a href="monte.html#cb2003-1"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
-<span id="cb2003-2"><a href="monte.html#cb2003-2"></a>pi_df2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">runif</span>(<span class="dv">10000</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>),</span>
-<span id="cb2003-3"><a href="monte.html#cb2003-3"></a>                 <span class="at">y =</span> <span class="fu">runif</span>(<span class="dv">10000</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>))</span>
-<span id="cb2003-4"><a href="monte.html#cb2003-4"></a></span>
-<span id="cb2003-5"><a href="monte.html#cb2003-5"></a>pi_df2 <span class="ot">&lt;-</span> pi_df2 <span class="sc">%&gt;%</span></span>
-<span id="cb2003-6"><a href="monte.html#cb2003-6"></a>    <span class="fu">mutate</span>(<span class="at">in_circle =</span> <span class="fu">if_else</span>(x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> y<span class="sc">^</span><span class="dv">2</span> <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="st">&quot;In Circle&quot;</span>, <span class="st">&quot;Out of Circle&quot;</span>))</span>
-<span id="cb2003-7"><a href="monte.html#cb2003-7"></a></span>
-<span id="cb2003-8"><a href="monte.html#cb2003-8"></a>pi_df2 <span class="sc">%&gt;%</span></span>
-<span id="cb2003-9"><a href="monte.html#cb2003-9"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb2003-10"><a href="monte.html#cb2003-10"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> in_circle)) <span class="sc">+</span></span>
-<span id="cb2003-11"><a href="monte.html#cb2003-11"></a>    <span class="fu">geom_circle</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">r =</span> <span class="dv">1</span>), <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb2003-12"><a href="monte.html#cb2003-12"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;X&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>, <span class="at">color =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb2003-13"><a href="monte.html#cb2003-13"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb2003-14"><a href="monte.html#cb2003-14"></a>    <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-936-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb2004"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2004-1"><a href="monte.html#cb2004-1"></a>pi_df2 <span class="sc">%&gt;%</span></span>
-<span id="cb2004-2"><a href="monte.html#cb2004-2"></a>    <span class="fu">group_by</span>(in_circle) <span class="sc">%&gt;%</span></span>
-<span id="cb2004-3"><a href="monte.html#cb2004-3"></a>    <span class="fu">summarise</span>(<span class="at">N =</span> <span class="fu">n</span>())</span></code></pre></div>
+<p>　今回は100個の点で円周率の近似値を計算しましたが、点の数を増やすとより正確な近似値が得られます。以下の例は10000個の点から得られた円周率の例です。</p>
+<div class="sourceCode" id="cb2007"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2007-1"><a href="monte.html#cb2007-1"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
+<span id="cb2007-2"><a href="monte.html#cb2007-2"></a>pi_df2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">runif</span>(<span class="dv">5000</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb2007-3"><a href="monte.html#cb2007-3"></a>                 <span class="at">y =</span> <span class="fu">runif</span>(<span class="dv">5000</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb2007-4"><a href="monte.html#cb2007-4"></a></span>
+<span id="cb2007-5"><a href="monte.html#cb2007-5"></a>pi_df2 <span class="ot">&lt;-</span> pi_df2 <span class="sc">%&gt;%</span></span>
+<span id="cb2007-6"><a href="monte.html#cb2007-6"></a>    <span class="fu">mutate</span>(<span class="at">in_circle =</span> <span class="fu">if_else</span>(x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> y<span class="sc">^</span><span class="dv">2</span> <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="st">&quot;円内&quot;</span>, <span class="st">&quot;円外&quot;</span>))</span>
+<span id="cb2007-7"><a href="monte.html#cb2007-7"></a></span>
+<span id="cb2007-8"><a href="monte.html#cb2007-8"></a>pi_df2 <span class="sc">%&gt;%</span></span>
+<span id="cb2007-9"><a href="monte.html#cb2007-9"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb2007-10"><a href="monte.html#cb2007-10"></a>    <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">ymin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">xmax =</span> <span class="dv">1</span>, <span class="at">ymax =</span> <span class="dv">1</span>),</span>
+<span id="cb2007-11"><a href="monte.html#cb2007-11"></a>              <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb2007-12"><a href="monte.html#cb2007-12"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> in_circle), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb2007-13"><a href="monte.html#cb2007-13"></a>    <span class="fu">geom_circle</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">r =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb2007-14"><a href="monte.html#cb2007-14"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;X&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>, <span class="at">color =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb2007-15"><a href="monte.html#cb2007-15"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb2007-16"><a href="monte.html#cb2007-16"></a>    <span class="fu">theme_void</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraginoSans-W3&quot;</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/monte-pi8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb2008"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2008-1"><a href="monte.html#cb2008-1"></a>pi_df2 <span class="sc">%&gt;%</span></span>
+<span id="cb2008-2"><a href="monte.html#cb2008-2"></a>    <span class="fu">group_by</span>(in_circle) <span class="sc">%&gt;%</span></span>
+<span id="cb2008-3"><a href="monte.html#cb2008-3"></a>    <span class="fu">summarise</span>(<span class="at">N =</span> <span class="fu">n</span>())</span></code></pre></div>
 <pre><code>## # A tibble: 2 × 2
-##   in_circle         N
-##   &lt;chr&gt;         &lt;int&gt;
-## 1 In Circle      7859
-## 2 Out of Circle  2141</code></pre>
-<div class="sourceCode" id="cb2006"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2006-1"><a href="monte.html#cb2006-1"></a><span class="co"># 円の面積は4 * 0.7859 = 3.1436</span></span>
-<span id="cb2006-2"><a href="monte.html#cb2006-2"></a><span class="co"># 円の面積は半径^2 * piなので、piは</span></span>
-<span id="cb2006-3"><a href="monte.html#cb2006-3"></a><span class="fl">3.1436</span> <span class="sc">/</span> <span class="dv">1</span><span class="sc">^</span><span class="dv">2</span></span></code></pre></div>
-<pre><code>## [1] 3.1436</code></pre>
-<div class="sourceCode" id="cb2008"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2008-1"><a href="monte.html#cb2008-1"></a><span class="co"># 実際の円周率は3.141593...</span></span></code></pre></div>
+##   in_circle     N
+##   &lt;chr&gt;     &lt;int&gt;
+## 1 円内       3919
+## 2 円外       1081</code></pre>
+<p>　円内の点は3919個、円外の点は1081ですね。この結果から円周率を計算してみましょう。</p>
+<div class="sourceCode" id="cb2010"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2010-1"><a href="monte.html#cb2010-1"></a><span class="dv">3919</span> <span class="sc">/</span> <span class="dv">5000</span> <span class="sc">*</span> <span class="dv">4</span></span></code></pre></div>
+<pre><code>## [1] 3.1352</code></pre>
+<p>　より実際の円周率に近い値が得られました。</p>
 <hr />
 </div>
 <div id="応用-ブートストラッピング法による標準誤差の推定" class="section level2" number="29.5">
