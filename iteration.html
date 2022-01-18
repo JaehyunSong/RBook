@@ -1542,7 +1542,7 @@ div.csl-indent {
 <span id="cb1760-17"><a href="iteration.html#cb1760-17"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>,</span>
 <span id="cb1760-18"><a href="iteration.html#cb1760-18"></a>                <span class="at">base_size   =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
 <span id="cb1760-19"><a href="iteration.html#cb1760-19"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-841-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-842-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>政治的自由度が高くなるほど所得水準も高くなる傾向が確認されますが、人口が1億人以上の国においてはそのような傾向が見られないことが分かります。</p>
 <p>上記の例は、ある行は一つのグループに属するケースです。しかし、ある行が複数のグループに属するケースもあるでしょう。たとえば、ある変数の値が一定値以上である行のみでグループ化する場合です。<code>FH_Score</code>が一定値以上のSub-sampleに対して回帰分析を行う場合、<code>FH_Score</code>が最大値（100）である国はすべてのSub-sampleに属することになります。この場合は<code>group_by()</code>でグループ化することが難しいかも知れません。しかし、{dplyr}の<code>filter()</code>を使えば簡単に処理することができます。</p>
 <p>ここでは人口を説明変数に、所得水準を応答変数とした単回帰分析を行います。データは政治的自由度が一定値以上の国家のみに限定します。<code>FH_Score</code>が0以上の国（すべてのケース）、10以上の国、20以上の国、…などにサンプルを分割してみましょう。まずは<code>FH_Score</code>の最小値のみを格納した<code>Rnage_df</code>を作成します。</p>
@@ -1595,7 +1595,7 @@ div.csl-indent {
 <span id="cb1767-7"><a href="iteration.html#cb1767-7"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">80</span>, <span class="at">by =</span> <span class="dv">10</span>),</span>
 <span id="cb1767-8"><a href="iteration.html#cb1767-8"></a>                     <span class="at">labels =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">80</span>, <span class="at">by =</span> <span class="dv">10</span>)) <span class="sc">+</span></span>
 <span id="cb1767-9"><a href="iteration.html#cb1767-9"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-847-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-848-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>以上の例は実際の分析では多く使われる方法ではないかも知れません。しかし、ノンパラメトリック回帰不連続デザイン（Regression Discontinuity Design; RDD）の場合、感度分析を行う際、バンド幅を色々と調整しながら局所処置効果を推定します。RDDの詳細については<a href="https://yukiyanai.github.io/econometrics2/regression-discontinuity.html">矢内の授業資料</a>、および<a href="https://www.jaysong.net/post/kobe2020-qpm1/">SONGの授業資料</a>などに譲りますが、ハンド幅の調整はデータの範囲を少しずつ拡張（縮小）させながら同じ分析を繰り返すことです。以下ではアメリカ上院選挙のデータを例に、方法を紹介します。</p>
 <p>使用するデータは{rdrobust}パッケージが提供する<code>rdrobust_RDsenate</code>というデータセットです。{pacman}パッケージの<code>p_load()</code>関数を使ってパッケージのインストールと読み込みを行い、<code>data()</code>関数を使って、データを読み込みます。</p>
 <div class="sourceCode" id="cb1768"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1768-1"><a href="iteration.html#cb1768-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(rdrobust)  <span class="co"># {rdrobust}のインストール &amp; 読み込み</span></span>
@@ -1768,7 +1768,7 @@ div.csl-indent {
 <span id="cb1791-7"><a href="iteration.html#cb1791-7"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> BW, <span class="at">y =</span> LATE), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb1791-8"><a href="iteration.html#cb1791-8"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Bandwidth&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Local Average Treatment Effect (%p)&quot;</span>) <span class="sc">+</span></span>
 <span id="cb1791-9"><a href="iteration.html#cb1791-9"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-863-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-864-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="iteration-variables" class="section level3" number="24.5.4">
 <h3><span class="header-section-number">24.5.4</span> 説明・応答変数を指定したモデル推定</h3>
@@ -1907,7 +1907,7 @@ div.csl-indent {
 <span id="cb1816-12"><a href="iteration.html#cb1816-12"></a>  <span class="fu">theme_bw</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraKakuProN-W3&quot;</span>,</span>
 <span id="cb1816-13"><a href="iteration.html#cb1816-13"></a>           <span class="at">base_size   =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
 <span id="cb1816-14"><a href="iteration.html#cb1816-14"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
-<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-879-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="R_Not_for_Everyone_files/figure-html/unnamed-chunk-880-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>以上の方法を応用すると応答変数を変えながら分析を繰り返すこともできます。他にも説明変数が2つ以上のケースにも応用可能です。</p>
 
 </div>
