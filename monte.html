@@ -648,8 +648,8 @@ div.csl-indent {
 <li class="chapter" data-level="29.2.3" data-path="monte.html"><a href="monte.html#シードについて"><i class="fa fa-check"></i><b>29.2.3</b> シードについて</a></li>
 </ul></li>
 <li class="chapter" data-level="29.3" data-path="monte.html"><a href="monte.html#例-誕生日問題"><i class="fa fa-check"></i><b>29.3</b> 例: 誕生日問題</a></li>
-<li class="chapter" data-level="29.4" data-path="monte.html"><a href="monte.html#応用-円周率"><i class="fa fa-check"></i><b>29.4</b> 応用: 円周率</a></li>
-<li class="chapter" data-level="29.5" data-path="monte.html"><a href="monte.html#応用-ブートストラッピング法による標準誤差の推定"><i class="fa fa-check"></i><b>29.5</b> 応用: ブートストラッピング法による標準誤差の推定</a></li>
+<li class="chapter" data-level="29.4" data-path="monte.html"><a href="monte.html#応用1-円周率の計算"><i class="fa fa-check"></i><b>29.4</b> 応用1: 円周率の計算</a></li>
+<li class="chapter" data-level="29.5" data-path="monte.html"><a href="monte.html#応用2-ブートストラッピング法"><i class="fa fa-check"></i><b>29.5</b> 応用2: ブートストラッピング法</a></li>
 </ul></li>
 <li class="chapter" data-level="30" data-path="solution.html"><a href="solution.html"><i class="fa fa-check"></i><b>30</b> 演習問題の回答</a>
 <ul>
@@ -961,7 +961,7 @@ div.csl-indent {
 ## # … with 89 more rows</code></pre>
 <p>　学生数が何人いれば、同じ誕生日の人が2人以上いる割合が50%になるのでしょうか。割合が0.4以上、0.6以下の行を抽出してみましょう。</p>
 <div class="sourceCode" id="cb1981"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1981-1"><a href="monte.html#cb1981-1"></a>Prob_df <span class="sc">%&gt;%</span></span>
-<span id="cb1981-2"><a href="monte.html#cb1981-2"></a>    <span class="fu">filter</span>(Probs <span class="sc">&gt;=</span> <span class="fl">0.4</span>, Probs <span class="sc">&lt;=</span> <span class="fl">0.6</span>)</span></code></pre></div>
+<span id="cb1981-2"><a href="monte.html#cb1981-2"></a>    <span class="fu">filter</span>(Probs <span class="sc">&gt;=</span> <span class="fl">0.4</span> <span class="sc">&amp;</span> Probs <span class="sc">&lt;=</span> <span class="fl">0.6</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 7 × 2
 ##   Students Probs
 ##      &lt;int&gt; &lt;dbl&gt;
@@ -1080,8 +1080,8 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <p>　モンテカルロ・シミュレーションから得られた割合と理論上の確率が非常に近似していることが分かります。</p>
 <hr />
 </div>
-<div id="応用-円周率" class="section level2" number="29.4">
-<h2><span class="header-section-number">29.4</span> 応用: 円周率</h2>
+<div id="応用1-円周率の計算" class="section level2" number="29.4">
+<h2><span class="header-section-number">29.4</span> 応用1: 円周率の計算</h2>
 <p>　今回はもう一つの例として、円周率 (<span class="math inline">\(\pi\)</span>)の計算を紹介したいと思います。<span class="math inline">\(\pi\)</span>は無理数であるため、厳密な計算は出来ませんが、モンテカルロ・シミュレーションである程度近似できます。たとえば、半径1 (<span class="math inline">\(r = 1\)</span>)の円を考えてみましょう。</p>
 <p><img src="R_Not_for_Everyone_files/figure-html/monte-pi1-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>　円の面積は<span class="math inline">\(r^2\pi\)</span>であるため、この円の面積は<span class="math inline">\(\pi\)</span>です。また、四角形は辺の長さが2の正四角形ですから面積は4です。続いて、四角形の範囲内の点を付けます。無作為に20個を付けてみます。</p>
@@ -1173,8 +1173,446 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <p>　より実際の円周率に近い値が得られました。</p>
 <hr />
 </div>
-<div id="応用-ブートストラッピング法による標準誤差の推定" class="section level2" number="29.5">
-<h2><span class="header-section-number">29.5</span> 応用: ブートストラッピング法による標準誤差の推定</h2>
+<div id="応用2-ブートストラッピング法" class="section level2" number="29.5">
+<h2><span class="header-section-number">29.5</span> 応用2: ブートストラッピング法</h2>
+<div class="sourceCode" id="cb2012"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2012-1"><a href="monte.html#cb2012-1"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
+<span id="cb2012-2"><a href="monte.html#cb2012-2"></a>Data1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="fl">0.7</span>, <span class="dv">1</span>)</span>
+<span id="cb2012-3"><a href="monte.html#cb2012-3"></a>Data2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="fl">0.9</span>, <span class="dv">1</span>)</span>
+<span id="cb2012-4"><a href="monte.html#cb2012-4"></a></span>
+<span id="cb2012-5"><a href="monte.html#cb2012-5"></a>ttest_result <span class="ot">&lt;-</span> <span class="fu">t.test</span>(Data1, Data2, <span class="at">var.equal =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2012-6"><a href="monte.html#cb2012-6"></a></span>
+<span id="cb2012-7"><a href="monte.html#cb2012-7"></a>ttest_result</span></code></pre></div>
+<pre><code>## 
+##  Two Sample t-test
+## 
+## data:  Data1 and Data2
+## t = -2.1707, df = 198, p-value = 0.03114
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.58521800 -0.02807095
+## sample estimates:
+## mean of x mean of y 
+## 0.6912143 0.9978588</code></pre>
+<div class="sourceCode" id="cb2014"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2014-1"><a href="monte.html#cb2014-1"></a>n_trials   <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb2014-2"><a href="monte.html#cb2014-2"></a>Result_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_trials)</span>
+<span id="cb2014-3"><a href="monte.html#cb2014-3"></a></span>
+<span id="cb2014-4"><a href="monte.html#cb2014-4"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_trials) {</span>
+<span id="cb2014-5"><a href="monte.html#cb2014-5"></a>    Sample1 <span class="ot">&lt;-</span> <span class="fu">sample</span>(Data1, <span class="dv">100</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2014-6"><a href="monte.html#cb2014-6"></a>    Sample2 <span class="ot">&lt;-</span> <span class="fu">sample</span>(Data2, <span class="dv">100</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2014-7"><a href="monte.html#cb2014-7"></a>    </span>
+<span id="cb2014-8"><a href="monte.html#cb2014-8"></a>    Result_vec[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(Sample1) <span class="sc">-</span> <span class="fu">mean</span>(Sample2)</span>
+<span id="cb2014-9"><a href="monte.html#cb2014-9"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb2015"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2015-1"><a href="monte.html#cb2015-1"></a><span class="fu">mean</span>(Result_vec) <span class="co"># 平均値の差分の平均値</span></span></code></pre></div>
+<pre><code>## [1] -0.3045563</code></pre>
+<div class="sourceCode" id="cb2017"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2017-1"><a href="monte.html#cb2017-1"></a><span class="fu">sd</span>(Result_vec) <span class="co"># 平均値の差分の標準偏差</span></span></code></pre></div>
+<pre><code>## [1] 0.1404988</code></pre>
+<div class="sourceCode" id="cb2019"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2019-1"><a href="monte.html#cb2019-1"></a><span class="co"># 平均値の差分の平均値 / 平均値の差分の標準偏差</span></span>
+<span id="cb2019-2"><a href="monte.html#cb2019-2"></a><span class="fu">mean</span>(Result_vec) <span class="sc">/</span> <span class="fu">sd</span>(Result_vec)</span></code></pre></div>
+<pre><code>## [1] -2.167679</code></pre>
+<div class="sourceCode" id="cb2021"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2021-1"><a href="monte.html#cb2021-1"></a><span class="co"># p値</span></span>
+<span id="cb2021-2"><a href="monte.html#cb2021-2"></a>(<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pt</span>(<span class="fu">abs</span>(<span class="fu">mean</span>(Result_vec) <span class="sc">/</span> <span class="fu">sd</span>(Result_vec)), <span class="at">df =</span> <span class="dv">198</span>)) <span class="sc">*</span> <span class="dv">2</span></span></code></pre></div>
+<pre><code>## [1] 0.03137631</code></pre>
+<div class="sourceCode" id="cb2023"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2023-1"><a href="monte.html#cb2023-1"></a><span class="co"># 95%信頼区間</span></span>
+<span id="cb2023-2"><a href="monte.html#cb2023-2"></a><span class="fu">quantile</span>(Result_vec, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span></code></pre></div>
+<pre><code>##        2.5%       97.5% 
+## -0.58084484 -0.02999534</code></pre>
+<div class="sourceCode" id="cb2025"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2025-1"><a href="monte.html#cb2025-1"></a><span class="fu">enframe</span>(Result_vec) <span class="sc">%&gt;%</span></span>
+<span id="cb2025-2"><a href="monte.html#cb2025-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb2025-3"><a href="monte.html#cb2025-3"></a>    <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">y =</span> ..density..), <span class="at">color =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
+<span id="cb2025-4"><a href="monte.html#cb2025-4"></a>    <span class="fu">stat_function</span>(<span class="fu">aes</span>(<span class="at">color =</span> <span class="st">&quot;Density&quot;</span>),</span>
+<span id="cb2025-5"><a href="monte.html#cb2025-5"></a>                  <span class="at">size =</span> <span class="dv">2</span>, <span class="at">fun =</span> dnorm, <span class="at">n =</span> <span class="dv">101</span>, </span>
+<span id="cb2025-6"><a href="monte.html#cb2025-6"></a>                  <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> <span class="sc">-</span><span class="fl">0.307</span>, <span class="at">sd =</span> <span class="fl">0.141</span>)) <span class="sc">+</span></span>
+<span id="cb2025-7"><a href="monte.html#cb2025-7"></a>    <span class="fu">scale_color_discrete</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Density&quot;</span> <span class="ot">=</span> <span class="fu">expression</span>(<span class="fu">paste</span>(mu <span class="sc">~</span> <span class="st">&quot;= -0.307, &quot;</span> <span class="sc">~</span> sigma <span class="sc">~</span> <span class="st">&quot;= 0.141 の正規分布&quot;</span>)))) <span class="sc">+</span></span>
+<span id="cb2025-8"><a href="monte.html#cb2025-8"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;平均値の差分&quot;</span>, <span class="at">y =</span> <span class="st">&quot;密度&quot;</span>, <span class="at">color =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb2025-9"><a href="monte.html#cb2025-9"></a>    <span class="fu">theme_bw</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraginoSans-W3&quot;</span>) <span class="sc">+</span></span>
+<span id="cb2025-10"><a href="monte.html#cb2025-10"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
+<p><img src="R_Not_for_Everyone_files/figure-html/monte-boot8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div id="nqkariscnw" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#nqkariscnw .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#nqkariscnw .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#nqkariscnw .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#nqkariscnw .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#nqkariscnw .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#nqkariscnw .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#nqkariscnw .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#nqkariscnw .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#nqkariscnw .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#nqkariscnw .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#nqkariscnw .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#nqkariscnw .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#nqkariscnw .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#nqkariscnw .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#nqkariscnw .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#nqkariscnw .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#nqkariscnw .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#nqkariscnw .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#nqkariscnw .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#nqkariscnw .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#nqkariscnw .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#nqkariscnw .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#nqkariscnw .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#nqkariscnw .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#nqkariscnw .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#nqkariscnw .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#nqkariscnw .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#nqkariscnw .gt_left {
+  text-align: left;
+}
+
+#nqkariscnw .gt_center {
+  text-align: center;
+}
+
+#nqkariscnw .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#nqkariscnw .gt_font_normal {
+  font-weight: normal;
+}
+
+#nqkariscnw .gt_font_bold {
+  font-weight: bold;
+}
+
+#nqkariscnw .gt_font_italic {
+  font-style: italic;
+}
+
+#nqkariscnw .gt_super {
+  font-size: 65%;
+}
+
+#nqkariscnw .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 65%;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2">
+        <span class="gt_column_spanner"><strong>t検定</strong></span>
+      </th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2">
+        <span class="gt_column_spanner"><strong>ブートストラップ法</strong></span>
+      </th>
+    </tr>
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">統計量</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">値</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">統計量</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">値</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_left">(1): 平均値の差分</td>
+<td class="gt_row gt_right">&minus;0.307</td>
+<td class="gt_row gt_left">(1): 平均値の差分の平均値</td>
+<td class="gt_row gt_right">&minus;0.305</td></tr>
+    <tr><td class="gt_row gt_left">(2): 標準誤差</td>
+<td class="gt_row gt_right">0.141</td>
+<td class="gt_row gt_left">(2): 平均値の差分の標準偏差</td>
+<td class="gt_row gt_right">0.140</td></tr>
+    <tr><td class="gt_row gt_left">(3): 検定統計量</td>
+<td class="gt_row gt_right">&minus;2.171</td>
+<td class="gt_row gt_left">(3): (1) / (2)</td>
+<td class="gt_row gt_right">&minus;2.168</td></tr>
+    <tr><td class="gt_row gt_left">(4): p値</td>
+<td class="gt_row gt_right">0.031</td>
+<td class="gt_row gt_left">(4): p値</td>
+<td class="gt_row gt_right">0.031</td></tr>
+    <tr><td class="gt_row gt_left">(5): 95%信頼区間の下限</td>
+<td class="gt_row gt_right">&minus;0.585</td>
+<td class="gt_row gt_left">(5): 95%信頼区間の下限</td>
+<td class="gt_row gt_right">&minus;0.581</td></tr>
+    <tr><td class="gt_row gt_left">(6): 95%信頼区間の上限</td>
+<td class="gt_row gt_right">&minus;0.028</td>
+<td class="gt_row gt_left">(6): 95%信頼区間の上限</td>
+<td class="gt_row gt_right">&minus;0.030</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
 
 </div>
 </div>
