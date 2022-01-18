@@ -647,9 +647,10 @@ div.csl-indent {
 <li class="chapter" data-level="29.2.2" data-path="monte.html"><a href="monte.html#確率分布からの乱数制制"><i class="fa fa-check"></i><b>29.2.2</b> 確率分布からの乱数制制</a></li>
 <li class="chapter" data-level="29.2.3" data-path="monte.html"><a href="monte.html#シードについて"><i class="fa fa-check"></i><b>29.2.3</b> シードについて</a></li>
 </ul></li>
-<li class="chapter" data-level="29.3" data-path="monte.html"><a href="monte.html#例-誕生日問題"><i class="fa fa-check"></i><b>29.3</b> 例: 誕生日問題</a></li>
-<li class="chapter" data-level="29.4" data-path="monte.html"><a href="monte.html#応用1-円周率の計算"><i class="fa fa-check"></i><b>29.4</b> 応用1: 円周率の計算</a></li>
-<li class="chapter" data-level="29.5" data-path="monte.html"><a href="monte.html#応用2-ブートストラッピング法"><i class="fa fa-check"></i><b>29.5</b> 応用2: ブートストラッピング法</a></li>
+<li class="chapter" data-level="29.3" data-path="monte.html"><a href="monte.html#例1-誕生日問題"><i class="fa fa-check"></i><b>29.3</b> 例1: 誕生日問題</a></li>
+<li class="chapter" data-level="29.4" data-path="monte.html"><a href="monte.html#例2-モンティホール問題"><i class="fa fa-check"></i><b>29.4</b> 例2: モンティ・ホール問題</a></li>
+<li class="chapter" data-level="29.5" data-path="monte.html"><a href="monte.html#応用1-円周率の計算"><i class="fa fa-check"></i><b>29.5</b> 応用1: 円周率の計算</a></li>
+<li class="chapter" data-level="29.6" data-path="monte.html"><a href="monte.html#応用2-ブートストラッピング法"><i class="fa fa-check"></i><b>29.6</b> 応用2: ブートストラッピング法</a></li>
 </ul></li>
 <li class="chapter" data-level="30" data-path="solution.html"><a href="solution.html"><i class="fa fa-check"></i><b>30</b> 演習問題の回答</a>
 <ul>
@@ -692,6 +693,10 @@ div.csl-indent {
 <div id="monte-intro" class="section level2" number="29.1">
 <h2><span class="header-section-number">29.1</span> モンテカルロシミュレーションとは</h2>
 <div class="sourceCode" id="cb1948"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1948-1"><a href="monte.html#cb1948-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, ggforce)</span></code></pre></div>
+<p>　モンテカルロ法 (Monte Carlo method)とは無作為に抽出された乱数を用い、数値計算やシミュレーションを行う手法を意味します。モンテカルロはヨーロッパのモナコ公国内の一つの地区であり、カジノで有名なところです。カジノではサイコロやルーレット、無作為に配られたカードなど、乱数が頻繁に使われることからこのように名付けられました。</p>
+<p>　モンテカルロ法を用いたシミュレーションがモンテカルロ・シミュレーションです。計算があまりにも複雑だったり、実質的に代数で解が得られない解析学上の問題などに強みを持つ手法です。一部、明快な例（共役事前分布が存在するなど）を除き、事後分布の計算が非常に複雑（実質、不可能）だと知られていたベイズ統計学もモンテカルロ法（マルコフ連鎖モンテカルロ法; MCMC）によって、ようやく使えるものになったなど、今になってモンテカルロ法は非常に広く用いられています。</p>
+<p>　モンテカルロ法から得られた結果には常に誤差が存在します。とりわけ、生成された乱数が少ない（= 試行回数が少ない）場合、この誤差は大きくなります。しかし、近年はパソコンの性能が飛躍的に発達しているため、かなり小さな誤差で、つまりより正確な結果が得られるようになりました。</p>
+<p>　以下ではまず、モンテカルロ法を理解するために必須知識である乱数生成について解説します。具体的には乱数生成のアルゴリズムでなく、Rで乱数を生成する方法について紹介します。続いて、モンテカルロ法を用いたシミュレーションの例として誕生日問題、モンティ・ホール問題、円周率の計算、ブートストラップ法を紹介します。</p>
 <hr />
 </div>
 <div id="monte-rng" class="section level2" number="29.2">
@@ -844,8 +849,8 @@ div.csl-indent {
 <hr />
 </div>
 </div>
-<div id="例-誕生日問題" class="section level2" number="29.3">
-<h2><span class="header-section-number">29.3</span> 例: 誕生日問題</h2>
+<div id="例1-誕生日問題" class="section level2" number="29.3">
+<h2><span class="header-section-number">29.3</span> 例1: 誕生日問題</h2>
 <p>まず簡単な例として誕生日問題 (birthday problem)をシミュレーションで確認してみましょう。誕生日問題とは「何人いれば、その中に誕生日が同じ2人以上がいる確率が50%を超えるか。」といった問題です。1年を365日で考えると（2月29日生まれの皆さん、すみません…）、366人がいれば確実に (= 100%)同じ誕生日の人が2人以上いることになりますね。100%でなく、50%まで基準を下げるならその半分である183人は必要じゃないかと思うかも知れません。しかし、実はたった23人が集まれば、その中で同じ誕生日の人が2人以上いる確率が50%になります。誕生日のパラドックスとも呼ばれるものですが、これをシミュレーションで確認してたいと思います。</p>
 <p>　学生の数を<code>n_student</code>とし、1から365までの公差1の等差数列から、<code>n_student</code>個の値を<strong>復元</strong>抽出します。</p>
 <div class="sourceCode" id="cb1967"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1967-1"><a href="monte.html#cb1967-1"></a>n_student <span class="ot">&lt;-</span> <span class="dv">30</span> <span class="co"># 学生数</span></span>
@@ -1080,19 +1085,73 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <p>　モンテカルロ・シミュレーションから得られた割合と理論上の確率が非常に近似していることが分かります。</p>
 <hr />
 </div>
-<div id="応用1-円周率の計算" class="section level2" number="29.4">
-<h2><span class="header-section-number">29.4</span> 応用1: 円周率の計算</h2>
+<div id="例2-モンティホール問題" class="section level2" number="29.4">
+<h2><span class="header-section-number">29.4</span> 例2: モンティ・ホール問題</h2>
+<p>　抽出される乱数が必ずしも数値である必要はありません。たとえば、コイン投げの表と裏、ポーカーで配られたカードなど、数値以外の乱数もあり得ます。ここでは「AとB、C」から一つを選ぶ例として、モンティ・ホール問題をモンテカルロ法で解いてみましょう。</p>
+<p>　モンティ・ホール問題はアメリカのテレビ番組「Let’s make a deal」の中のゲームであり、この番組の司会者の名前がモンティ・ホール (Monty Hall)さんです。このゲームのルールは非常にシンプルです。</p>
+<ol style="list-style-type: decimal">
+<li>3つのドアがあり、1つのドアの裏に商品 (車)がある。残りの2つは外れ（ヤギ）である。</li>
+<li>参加者はドアを選択する。</li>
+<li>司会者が残りのドア2つの中で商品がないドアを開けて中身を見せる。</li>
+<li>ここで参加者はドアの選択を変える機会が与えられる。</li>
+</ol>
+<p>　直観的に考えて、司会者が外れのドアを1つ教えてくれたなら、自分が選んだドアを含め、残りの2つのドアの1つに絶対に商品があります。直感的に考えてみると、当たる確率は半々であって、変えても、変えなくても当たる確率は同じだと考えられます。詳細は<a href="https://ja.wikipedia.org/wiki/%E3%83%A2%E3%83%B3%E3%83%86%E3%82%A3%E3%83%BB%E3%83%9B%E3%83%BC%E3%83%AB%E5%95%8F%E9%A1%8C">Wikipedia</a>などを参照してください。この問題を巡る論争とかも紹介されていてなかなか面白いです。</p>
+<p>　結論から申しますと選択を変えた方が、変えなかった場合より当たる確率が2倍になります。これは条件付き確率とベイズの定理を用いることで数学的に説明できますが、ここではあえてモンテカルロ法で調べてみたいと思います。シミュレーションの具体的な手順は以下の通りです。</p>
+<ol style="list-style-type: decimal">
+<li>結果を格納する長さ1万の空ベクトルを2つ用意する。 (<code>Switch_Yes</code>と<code>Switch_No</code>)。</li>
+<li><code>i</code>の初期値を1とする。</li>
+<li>当たり (車)の位置をA, B, Cの中から無作為に1つ決め、<code>Car_Position</code>に格納する。</li>
+<li>最初の選択肢をA, B, Cの中から無作為に1つ決め、<code>Choice</code>に格納する。</li>
+<li>選択肢を変更した場合の結果を<code>Switch_Yes</code>の<code>i</code>番目の要素としてに格納する。
+<ol style="list-style-type: decimal">
+<li>当たりの位置と最初の選択肢が同じなら (<code>Switch_Yes == Choice</code>)、結果は外れ (ヤギ)</li>
+<li>当たりの位置と最初の選択肢が同じでないなら (<code>Switch_Yes != Choice</code>)、結果は当たり (車)</li>
+</ol></li>
+<li>選択肢を変更しなかった場合の結果を<code>Switch_No</code>の<code>i</code>番目の要素として格納する。
+<ol style="list-style-type: decimal">
+<li>当たりの位置と最初の選択肢が同じなら (<code>Switch_Yes == Choice</code>)、結果は当たり (車)</li>
+<li>当たりの位置と最初の選択肢が同じでないなら (<code>Switch_Yes != Choice</code>)、結果は外れ (ヤギ)</li>
+</ol></li>
+<li><code>i</code>の値を1増やし、3に戻る。</li>
+<li>3〜7の手順を1万回繰り返す。</li>
+</ol>
+<p>　以上の手順をコードで書くと以下のようになります。</p>
+<div class="sourceCode" id="cb1998"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1998-1"><a href="monte.html#cb1998-1"></a>Switch_Yes <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">10000</span>)</span>
+<span id="cb1998-2"><a href="monte.html#cb1998-2"></a>Switch_No  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">10000</span>)</span>
+<span id="cb1998-3"><a href="monte.html#cb1998-3"></a></span>
+<span id="cb1998-4"><a href="monte.html#cb1998-4"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
+<span id="cb1998-5"><a href="monte.html#cb1998-5"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span>) {</span>
+<span id="cb1998-6"><a href="monte.html#cb1998-6"></a>    Car_Position <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>), <span class="dv">1</span>)</span>
+<span id="cb1998-7"><a href="monte.html#cb1998-7"></a>    Choice       <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>), <span class="dv">1</span>)</span>
+<span id="cb1998-8"><a href="monte.html#cb1998-8"></a>    </span>
+<span id="cb1998-9"><a href="monte.html#cb1998-9"></a>    Switch_Yes[i] <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(Car_Position <span class="sc">==</span> Choice, <span class="st">&quot;Goat&quot;</span>, <span class="st">&quot;Car&quot;</span>)</span>
+<span id="cb1998-10"><a href="monte.html#cb1998-10"></a>    Switch_No[i]  <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(Car_Position <span class="sc">==</span> Choice, <span class="st">&quot;Car&quot;</span>, <span class="st">&quot;Goat&quot;</span>)</span>
+<span id="cb1998-11"><a href="monte.html#cb1998-11"></a>}</span>
+<span id="cb1998-12"><a href="monte.html#cb1998-12"></a></span>
+<span id="cb1998-13"><a href="monte.html#cb1998-13"></a><span class="fu">table</span>(Switch_Yes)</span></code></pre></div>
+<pre><code>## Switch_Yes
+##  Car Goat 
+## 6737 3263</code></pre>
+<div class="sourceCode" id="cb2000"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2000-1"><a href="monte.html#cb2000-1"></a><span class="fu">table</span>(Switch_No)</span></code></pre></div>
+<pre><code>## Switch_No
+##  Car Goat 
+## 3263 6737</code></pre>
+<p>　選択肢を変更し、車を獲得した回数は10000回中、6737であり、約67%です。つまり、選択肢を変えた方が、変えなかった場合に比べ、車が当たる確率が約2倍高いことを意味します。むろん、車よりもヤギが重宝される地域に住んでいるなら、あえて選択肢を変えず、ヤギを狙った方が良いかも知れません。</p>
+<hr />
+</div>
+<div id="応用1-円周率の計算" class="section level2" number="29.5">
+<h2><span class="header-section-number">29.5</span> 応用1: 円周率の計算</h2>
 <p>　今回はもう一つの例として、円周率 (<span class="math inline">\(\pi\)</span>)の計算を紹介したいと思います。<span class="math inline">\(\pi\)</span>は無理数であるため、厳密な計算は出来ませんが、モンテカルロ・シミュレーションである程度近似できます。たとえば、半径1 (<span class="math inline">\(r = 1\)</span>)の円を考えてみましょう。</p>
 <p><img src="R_Not_for_Everyone_files/figure-html/monte-pi1-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>　円の面積は<span class="math inline">\(r^2\pi\)</span>であるため、この円の面積は<span class="math inline">\(\pi\)</span>です。また、四角形は辺の長さが2の正四角形ですから面積は4です。続いて、四角形の範囲内の点を付けます。無作為に20個を付けてみます。</p>
 <p><img src="R_Not_for_Everyone_files/figure-html/monte-pi2-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>　20個点のうち、円の外側にあるのは5個、円の内側は15個です。つまり、75%の点が円内にあることを意味します。点の位置は無作為ですので、もし円の大きさが<span class="math inline">\(\pi\)</span>であれば、点が円内に入る確率は<span class="math inline">\(\frac{\pi}{4}\)</span>です。今回の例だと<span class="math inline">\(\frac{\pi}{4} = 0.75\)</span>であるため、<span class="math inline">\(\pi = 0.75 \times 4 = 3\)</span>となります。実際の円周率は3.141593…なので、そこそこ近似できていますね。</p>
 <p>　それではこれを実際にやってみましょう。今回は20個の点ではなく、100個にしてみましょう。まず、100個の点を無作為に抽出します。</p>
-<div class="sourceCode" id="cb1998"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1998-1"><a href="monte.html#cb1998-1"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
-<span id="cb1998-2"><a href="monte.html#cb1998-2"></a>pi_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">runif</span>(<span class="dv">100</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>),</span>
-<span id="cb1998-3"><a href="monte.html#cb1998-3"></a>                <span class="at">y =</span> <span class="fu">runif</span>(<span class="dv">100</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>))</span>
-<span id="cb1998-4"><a href="monte.html#cb1998-4"></a></span>
-<span id="cb1998-5"><a href="monte.html#cb1998-5"></a>pi_df</span></code></pre></div>
+<div class="sourceCode" id="cb2002"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2002-1"><a href="monte.html#cb2002-1"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
+<span id="cb2002-2"><a href="monte.html#cb2002-2"></a>pi_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">runif</span>(<span class="dv">100</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb2002-3"><a href="monte.html#cb2002-3"></a>                <span class="at">y =</span> <span class="fu">runif</span>(<span class="dv">100</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb2002-4"><a href="monte.html#cb2002-4"></a></span>
+<span id="cb2002-5"><a href="monte.html#cb2002-5"></a>pi_df</span></code></pre></div>
 <pre><code>## # A tibble: 100 × 2
 ##          x      y
 ##      &lt;dbl&gt;  &lt;dbl&gt;
@@ -1108,92 +1167,92 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 ## 10  0.528  -0.547
 ## # … with 90 more rows</code></pre>
 <p>　まず、各辺の長さが2の正四角形と<code>pi_df</code>で生成した100個の点をプロットします。四角形を描くときには<code>geom_rect()</code>幾何オブジェクトを使用します。マッピングは四角形の左下の座標 (<code>xmin</code>と<code>ymin</code>)、右上の座標 (<code>xmax</code>と<code>ymax</code>)に行います。今回は原点が (0, 0)の半径1の円に接する四角形ですから、左下の座標は (-1, -1)、右上の座標は (1, 1)となります。</p>
-<div class="sourceCode" id="cb2000"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2000-1"><a href="monte.html#cb2000-1"></a>pi_df <span class="sc">%&gt;%</span></span>
-<span id="cb2000-2"><a href="monte.html#cb2000-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb2000-3"><a href="monte.html#cb2000-3"></a>    <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">ymin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">xmax =</span> <span class="dv">1</span>, <span class="at">ymax =</span> <span class="dv">1</span>),</span>
-<span id="cb2000-4"><a href="monte.html#cb2000-4"></a>              <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
-<span id="cb2000-5"><a href="monte.html#cb2000-5"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
-<span id="cb2000-6"><a href="monte.html#cb2000-6"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb2000-7"><a href="monte.html#cb2000-7"></a>    <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb2004"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2004-1"><a href="monte.html#cb2004-1"></a>pi_df <span class="sc">%&gt;%</span></span>
+<span id="cb2004-2"><a href="monte.html#cb2004-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb2004-3"><a href="monte.html#cb2004-3"></a>    <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">ymin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">xmax =</span> <span class="dv">1</span>, <span class="at">ymax =</span> <span class="dv">1</span>),</span>
+<span id="cb2004-4"><a href="monte.html#cb2004-4"></a>              <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb2004-5"><a href="monte.html#cb2004-5"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb2004-6"><a href="monte.html#cb2004-6"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb2004-7"><a href="monte.html#cb2004-7"></a>    <span class="fu">theme_minimal</span>()</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/monte-pi4-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>　ここに円を追加してみましょう。円を描くときには{ggforce}パッケージの<code>geom_circle()</code>幾何オブジェクトを使用します。マッピングは円の原点 (<code>x0</code>と<code>y0</code>)、円の半径 (<code>r</code>)です。原点は (0, 0)で半径は1の円を重ねます。</p>
-<div class="sourceCode" id="cb2001"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2001-1"><a href="monte.html#cb2001-1"></a>pi_df <span class="sc">%&gt;%</span></span>
-<span id="cb2001-2"><a href="monte.html#cb2001-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb2001-3"><a href="monte.html#cb2001-3"></a>    <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">ymin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">xmax =</span> <span class="dv">1</span>, <span class="at">ymax =</span> <span class="dv">1</span>),</span>
-<span id="cb2001-4"><a href="monte.html#cb2001-4"></a>              <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
-<span id="cb2001-5"><a href="monte.html#cb2001-5"></a>    <span class="fu">geom_circle</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">r =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb2001-6"><a href="monte.html#cb2001-6"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
-<span id="cb2001-7"><a href="monte.html#cb2001-7"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb2001-8"><a href="monte.html#cb2001-8"></a>    <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb2005"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2005-1"><a href="monte.html#cb2005-1"></a>pi_df <span class="sc">%&gt;%</span></span>
+<span id="cb2005-2"><a href="monte.html#cb2005-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb2005-3"><a href="monte.html#cb2005-3"></a>    <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">ymin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">xmax =</span> <span class="dv">1</span>, <span class="at">ymax =</span> <span class="dv">1</span>),</span>
+<span id="cb2005-4"><a href="monte.html#cb2005-4"></a>              <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb2005-5"><a href="monte.html#cb2005-5"></a>    <span class="fu">geom_circle</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">r =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb2005-6"><a href="monte.html#cb2005-6"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb2005-7"><a href="monte.html#cb2005-7"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb2005-8"><a href="monte.html#cb2005-8"></a>    <span class="fu">theme_minimal</span>()</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/monte-pi5-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>　これだけだと読みづらいので、円の中か外かで点の色分けをしてみましょう。そのためには各点が円内に入っているかどうかを判定した変数<code>in_circle</code>を追加します。点(<span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span>)が、原点が(<span class="math inline">\(x^\prime\)</span>, <span class="math inline">\(y^\prime\)</span>)、かつ半径<span class="math inline">\(r\)</span>の円内に入っている場合、<span class="math inline">\((x - x^\prime)^2 + (y - y^\prime)^2 &lt; r^2\)</span>が成立します。今回は原点が (0, 0)で、半径が1であるため、<span class="math inline">\(x^2 + y^2 &lt; 1\)</span>か否かを判定します。この条件を満たしているかどうかを示す<code>in_circle</code>という変数を追加します。</p>
-<div class="sourceCode" id="cb2002"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2002-1"><a href="monte.html#cb2002-1"></a>pi_df <span class="ot">&lt;-</span> pi_df <span class="sc">%&gt;%</span></span>
-<span id="cb2002-2"><a href="monte.html#cb2002-2"></a>    <span class="fu">mutate</span>(<span class="at">in_circle =</span> <span class="fu">if_else</span>(x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> y<span class="sc">^</span><span class="dv">2</span> <span class="sc">&lt;</span> <span class="dv">1</span><span class="sc">^</span><span class="dv">2</span>, <span class="st">&quot;円内&quot;</span>, <span class="st">&quot;円外&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb2006"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2006-1"><a href="monte.html#cb2006-1"></a>pi_df <span class="ot">&lt;-</span> pi_df <span class="sc">%&gt;%</span></span>
+<span id="cb2006-2"><a href="monte.html#cb2006-2"></a>    <span class="fu">mutate</span>(<span class="at">in_circle =</span> <span class="fu">if_else</span>(x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> y<span class="sc">^</span><span class="dv">2</span> <span class="sc">&lt;</span> <span class="dv">1</span><span class="sc">^</span><span class="dv">2</span>, <span class="st">&quot;円内&quot;</span>, <span class="st">&quot;円外&quot;</span>))</span></code></pre></div>
 <p>　散布図レイヤー (<code>geom_point()</code>)内に<code>color</code>を<code>in_circle</code>変数でマッピングします。</p>
-<div class="sourceCode" id="cb2003"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2003-1"><a href="monte.html#cb2003-1"></a>pi_df <span class="sc">%&gt;%</span></span>
-<span id="cb2003-2"><a href="monte.html#cb2003-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb2003-3"><a href="monte.html#cb2003-3"></a>    <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">ymin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">xmax =</span> <span class="dv">1</span>, <span class="at">ymax =</span> <span class="dv">1</span>),</span>
-<span id="cb2003-4"><a href="monte.html#cb2003-4"></a>              <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
-<span id="cb2003-5"><a href="monte.html#cb2003-5"></a>    <span class="co"># 円の内側か外側かで色分け</span></span>
-<span id="cb2003-6"><a href="monte.html#cb2003-6"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> in_circle), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb2003-7"><a href="monte.html#cb2003-7"></a>    <span class="fu">geom_circle</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">r =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb2003-8"><a href="monte.html#cb2003-8"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;X&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>, <span class="at">color =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb2003-9"><a href="monte.html#cb2003-9"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb2003-10"><a href="monte.html#cb2003-10"></a>    <span class="fu">theme_void</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraginoSans-W3&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2007"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2007-1"><a href="monte.html#cb2007-1"></a>pi_df <span class="sc">%&gt;%</span></span>
+<span id="cb2007-2"><a href="monte.html#cb2007-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb2007-3"><a href="monte.html#cb2007-3"></a>    <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">ymin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">xmax =</span> <span class="dv">1</span>, <span class="at">ymax =</span> <span class="dv">1</span>),</span>
+<span id="cb2007-4"><a href="monte.html#cb2007-4"></a>              <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb2007-5"><a href="monte.html#cb2007-5"></a>    <span class="co"># 円の内側か外側かで色分け</span></span>
+<span id="cb2007-6"><a href="monte.html#cb2007-6"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> in_circle), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb2007-7"><a href="monte.html#cb2007-7"></a>    <span class="fu">geom_circle</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">r =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb2007-8"><a href="monte.html#cb2007-8"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;X&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>, <span class="at">color =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb2007-9"><a href="monte.html#cb2007-9"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb2007-10"><a href="monte.html#cb2007-10"></a>    <span class="fu">theme_void</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraginoSans-W3&quot;</span>)</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/monte-pi7-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>　実際に円内の点と円外の点の個数を数えてみましょう。</p>
-<div class="sourceCode" id="cb2004"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2004-1"><a href="monte.html#cb2004-1"></a>pi_df <span class="sc">%&gt;%</span></span>
-<span id="cb2004-2"><a href="monte.html#cb2004-2"></a>    <span class="fu">group_by</span>(in_circle) <span class="sc">%&gt;%</span></span>
-<span id="cb2004-3"><a href="monte.html#cb2004-3"></a>    <span class="fu">summarise</span>(<span class="at">N =</span> <span class="fu">n</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb2008"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2008-1"><a href="monte.html#cb2008-1"></a>pi_df <span class="sc">%&gt;%</span></span>
+<span id="cb2008-2"><a href="monte.html#cb2008-2"></a>    <span class="fu">group_by</span>(in_circle) <span class="sc">%&gt;%</span></span>
+<span id="cb2008-3"><a href="monte.html#cb2008-3"></a>    <span class="fu">summarise</span>(<span class="at">N =</span> <span class="fu">n</span>())</span></code></pre></div>
 <pre><code>## # A tibble: 2 × 2
 ##   in_circle     N
 ##   &lt;chr&gt;     &lt;int&gt;
 ## 1 円内         82
 ## 2 円外         18</code></pre>
 <p>　円内の点は82個、円外の点は18ですね。つまり、<span class="math inline">\(\frac{\pi}{4} = 0.82\)</span>であり、<span class="math inline">\(\pi = 0.82 \times 4 = 3.28\)</span>です。</p>
-<div class="sourceCode" id="cb2006"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2006-1"><a href="monte.html#cb2006-1"></a><span class="dv">82</span> <span class="sc">/</span> <span class="dv">100</span> <span class="sc">*</span> <span class="dv">4</span></span></code></pre></div>
+<div class="sourceCode" id="cb2010"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2010-1"><a href="monte.html#cb2010-1"></a><span class="dv">82</span> <span class="sc">/</span> <span class="dv">100</span> <span class="sc">*</span> <span class="dv">4</span></span></code></pre></div>
 <pre><code>## [1] 3.28</code></pre>
 <p>　今回は100個の点で円周率の近似値を計算しましたが、点の数を増やすとより正確な近似値が得られます。以下の例は10000個の点から得られた円周率の例です。</p>
-<div class="sourceCode" id="cb2008"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2008-1"><a href="monte.html#cb2008-1"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
-<span id="cb2008-2"><a href="monte.html#cb2008-2"></a>pi_df2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">runif</span>(<span class="dv">5000</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>),</span>
-<span id="cb2008-3"><a href="monte.html#cb2008-3"></a>                 <span class="at">y =</span> <span class="fu">runif</span>(<span class="dv">5000</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>))</span>
-<span id="cb2008-4"><a href="monte.html#cb2008-4"></a></span>
-<span id="cb2008-5"><a href="monte.html#cb2008-5"></a>pi_df2 <span class="ot">&lt;-</span> pi_df2 <span class="sc">%&gt;%</span></span>
-<span id="cb2008-6"><a href="monte.html#cb2008-6"></a>    <span class="fu">mutate</span>(<span class="at">in_circle =</span> <span class="fu">if_else</span>(x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> y<span class="sc">^</span><span class="dv">2</span> <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="st">&quot;円内&quot;</span>, <span class="st">&quot;円外&quot;</span>))</span>
-<span id="cb2008-7"><a href="monte.html#cb2008-7"></a></span>
-<span id="cb2008-8"><a href="monte.html#cb2008-8"></a>pi_df2 <span class="sc">%&gt;%</span></span>
-<span id="cb2008-9"><a href="monte.html#cb2008-9"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb2008-10"><a href="monte.html#cb2008-10"></a>    <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">ymin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">xmax =</span> <span class="dv">1</span>, <span class="at">ymax =</span> <span class="dv">1</span>),</span>
-<span id="cb2008-11"><a href="monte.html#cb2008-11"></a>              <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
-<span id="cb2008-12"><a href="monte.html#cb2008-12"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> in_circle), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb2008-13"><a href="monte.html#cb2008-13"></a>    <span class="fu">geom_circle</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">r =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb2008-14"><a href="monte.html#cb2008-14"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;X&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>, <span class="at">color =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb2008-15"><a href="monte.html#cb2008-15"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb2008-16"><a href="monte.html#cb2008-16"></a>    <span class="fu">theme_void</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraginoSans-W3&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2012"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2012-1"><a href="monte.html#cb2012-1"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
+<span id="cb2012-2"><a href="monte.html#cb2012-2"></a>pi_df2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">runif</span>(<span class="dv">5000</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb2012-3"><a href="monte.html#cb2012-3"></a>                 <span class="at">y =</span> <span class="fu">runif</span>(<span class="dv">5000</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb2012-4"><a href="monte.html#cb2012-4"></a></span>
+<span id="cb2012-5"><a href="monte.html#cb2012-5"></a>pi_df2 <span class="ot">&lt;-</span> pi_df2 <span class="sc">%&gt;%</span></span>
+<span id="cb2012-6"><a href="monte.html#cb2012-6"></a>    <span class="fu">mutate</span>(<span class="at">in_circle =</span> <span class="fu">if_else</span>(x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> y<span class="sc">^</span><span class="dv">2</span> <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="st">&quot;円内&quot;</span>, <span class="st">&quot;円外&quot;</span>))</span>
+<span id="cb2012-7"><a href="monte.html#cb2012-7"></a></span>
+<span id="cb2012-8"><a href="monte.html#cb2012-8"></a>pi_df2 <span class="sc">%&gt;%</span></span>
+<span id="cb2012-9"><a href="monte.html#cb2012-9"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb2012-10"><a href="monte.html#cb2012-10"></a>    <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">ymin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">xmax =</span> <span class="dv">1</span>, <span class="at">ymax =</span> <span class="dv">1</span>),</span>
+<span id="cb2012-11"><a href="monte.html#cb2012-11"></a>              <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb2012-12"><a href="monte.html#cb2012-12"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> in_circle), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb2012-13"><a href="monte.html#cb2012-13"></a>    <span class="fu">geom_circle</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">r =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb2012-14"><a href="monte.html#cb2012-14"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;X&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>, <span class="at">color =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb2012-15"><a href="monte.html#cb2012-15"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb2012-16"><a href="monte.html#cb2012-16"></a>    <span class="fu">theme_void</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraginoSans-W3&quot;</span>)</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/monte-pi10-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb2009"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2009-1"><a href="monte.html#cb2009-1"></a>pi_df2 <span class="sc">%&gt;%</span></span>
-<span id="cb2009-2"><a href="monte.html#cb2009-2"></a>    <span class="fu">group_by</span>(in_circle) <span class="sc">%&gt;%</span></span>
-<span id="cb2009-3"><a href="monte.html#cb2009-3"></a>    <span class="fu">summarise</span>(<span class="at">N =</span> <span class="fu">n</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb2013"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2013-1"><a href="monte.html#cb2013-1"></a>pi_df2 <span class="sc">%&gt;%</span></span>
+<span id="cb2013-2"><a href="monte.html#cb2013-2"></a>    <span class="fu">group_by</span>(in_circle) <span class="sc">%&gt;%</span></span>
+<span id="cb2013-3"><a href="monte.html#cb2013-3"></a>    <span class="fu">summarise</span>(<span class="at">N =</span> <span class="fu">n</span>())</span></code></pre></div>
 <pre><code>## # A tibble: 2 × 2
 ##   in_circle     N
 ##   &lt;chr&gt;     &lt;int&gt;
 ## 1 円内       3919
 ## 2 円外       1081</code></pre>
 <p>　円内の点は3919個、円外の点は1081ですね。この結果から円周率を計算してみましょう。</p>
-<div class="sourceCode" id="cb2011"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2011-1"><a href="monte.html#cb2011-1"></a><span class="dv">3919</span> <span class="sc">/</span> <span class="dv">5000</span> <span class="sc">*</span> <span class="dv">4</span></span></code></pre></div>
+<div class="sourceCode" id="cb2015"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2015-1"><a href="monte.html#cb2015-1"></a><span class="dv">3919</span> <span class="sc">/</span> <span class="dv">5000</span> <span class="sc">*</span> <span class="dv">4</span></span></code></pre></div>
 <pre><code>## [1] 3.1352</code></pre>
 <p>　より実際の円周率に近い値が得られました。</p>
 <hr />
 </div>
-<div id="応用2-ブートストラッピング法" class="section level2" number="29.5">
-<h2><span class="header-section-number">29.5</span> 応用2: ブートストラッピング法</h2>
-<div class="sourceCode" id="cb2013"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2013-1"><a href="monte.html#cb2013-1"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
-<span id="cb2013-2"><a href="monte.html#cb2013-2"></a>Data1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="fl">0.7</span>, <span class="dv">1</span>)</span>
-<span id="cb2013-3"><a href="monte.html#cb2013-3"></a>Data2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="fl">0.9</span>, <span class="dv">1</span>)</span>
-<span id="cb2013-4"><a href="monte.html#cb2013-4"></a></span>
-<span id="cb2013-5"><a href="monte.html#cb2013-5"></a>ttest_result <span class="ot">&lt;-</span> <span class="fu">t.test</span>(Data1, Data2, <span class="at">var.equal =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2013-6"><a href="monte.html#cb2013-6"></a></span>
-<span id="cb2013-7"><a href="monte.html#cb2013-7"></a>ttest_result</span></code></pre></div>
+<div id="応用2-ブートストラッピング法" class="section level2" number="29.6">
+<h2><span class="header-section-number">29.6</span> 応用2: ブートストラッピング法</h2>
+<div class="sourceCode" id="cb2017"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2017-1"><a href="monte.html#cb2017-1"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
+<span id="cb2017-2"><a href="monte.html#cb2017-2"></a>Data1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="fl">0.7</span>, <span class="dv">1</span>)</span>
+<span id="cb2017-3"><a href="monte.html#cb2017-3"></a>Data2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="fl">0.9</span>, <span class="dv">1</span>)</span>
+<span id="cb2017-4"><a href="monte.html#cb2017-4"></a></span>
+<span id="cb2017-5"><a href="monte.html#cb2017-5"></a>ttest_result <span class="ot">&lt;-</span> <span class="fu">t.test</span>(Data1, Data2, <span class="at">var.equal =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2017-6"><a href="monte.html#cb2017-6"></a></span>
+<span id="cb2017-7"><a href="monte.html#cb2017-7"></a>ttest_result</span></code></pre></div>
 <pre><code>## 
 ##  Two Sample t-test
 ## 
@@ -1205,39 +1264,39 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 ## sample estimates:
 ## mean of x mean of y 
 ## 0.6912143 0.9978588</code></pre>
-<div class="sourceCode" id="cb2015"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2015-1"><a href="monte.html#cb2015-1"></a>n_trials   <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb2015-2"><a href="monte.html#cb2015-2"></a>Result_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_trials)</span>
-<span id="cb2015-3"><a href="monte.html#cb2015-3"></a></span>
-<span id="cb2015-4"><a href="monte.html#cb2015-4"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_trials) {</span>
-<span id="cb2015-5"><a href="monte.html#cb2015-5"></a>    Sample1 <span class="ot">&lt;-</span> <span class="fu">sample</span>(Data1, <span class="dv">100</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2015-6"><a href="monte.html#cb2015-6"></a>    Sample2 <span class="ot">&lt;-</span> <span class="fu">sample</span>(Data2, <span class="dv">100</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2015-7"><a href="monte.html#cb2015-7"></a>    </span>
-<span id="cb2015-8"><a href="monte.html#cb2015-8"></a>    Result_vec[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(Sample1) <span class="sc">-</span> <span class="fu">mean</span>(Sample2)</span>
-<span id="cb2015-9"><a href="monte.html#cb2015-9"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb2016"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2016-1"><a href="monte.html#cb2016-1"></a><span class="fu">mean</span>(Result_vec) <span class="co"># 平均値の差分の平均値</span></span></code></pre></div>
+<div class="sourceCode" id="cb2019"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2019-1"><a href="monte.html#cb2019-1"></a>n_trials   <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb2019-2"><a href="monte.html#cb2019-2"></a>Result_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_trials)</span>
+<span id="cb2019-3"><a href="monte.html#cb2019-3"></a></span>
+<span id="cb2019-4"><a href="monte.html#cb2019-4"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_trials) {</span>
+<span id="cb2019-5"><a href="monte.html#cb2019-5"></a>    Sample1 <span class="ot">&lt;-</span> <span class="fu">sample</span>(Data1, <span class="dv">100</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2019-6"><a href="monte.html#cb2019-6"></a>    Sample2 <span class="ot">&lt;-</span> <span class="fu">sample</span>(Data2, <span class="dv">100</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2019-7"><a href="monte.html#cb2019-7"></a>    </span>
+<span id="cb2019-8"><a href="monte.html#cb2019-8"></a>    Result_vec[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(Sample1) <span class="sc">-</span> <span class="fu">mean</span>(Sample2)</span>
+<span id="cb2019-9"><a href="monte.html#cb2019-9"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb2020"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2020-1"><a href="monte.html#cb2020-1"></a><span class="fu">mean</span>(Result_vec) <span class="co"># 平均値の差分の平均値</span></span></code></pre></div>
 <pre><code>## [1] -0.3045563</code></pre>
-<div class="sourceCode" id="cb2018"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2018-1"><a href="monte.html#cb2018-1"></a><span class="fu">sd</span>(Result_vec) <span class="co"># 平均値の差分の標準偏差</span></span></code></pre></div>
+<div class="sourceCode" id="cb2022"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2022-1"><a href="monte.html#cb2022-1"></a><span class="fu">sd</span>(Result_vec) <span class="co"># 平均値の差分の標準偏差</span></span></code></pre></div>
 <pre><code>## [1] 0.1404988</code></pre>
-<div class="sourceCode" id="cb2020"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2020-1"><a href="monte.html#cb2020-1"></a><span class="co"># 平均値の差分の平均値 / 平均値の差分の標準偏差</span></span>
-<span id="cb2020-2"><a href="monte.html#cb2020-2"></a><span class="fu">mean</span>(Result_vec) <span class="sc">/</span> <span class="fu">sd</span>(Result_vec)</span></code></pre></div>
+<div class="sourceCode" id="cb2024"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2024-1"><a href="monte.html#cb2024-1"></a><span class="co"># 平均値の差分の平均値 / 平均値の差分の標準偏差</span></span>
+<span id="cb2024-2"><a href="monte.html#cb2024-2"></a><span class="fu">mean</span>(Result_vec) <span class="sc">/</span> <span class="fu">sd</span>(Result_vec)</span></code></pre></div>
 <pre><code>## [1] -2.167679</code></pre>
-<div class="sourceCode" id="cb2022"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2022-1"><a href="monte.html#cb2022-1"></a><span class="co"># p値</span></span>
-<span id="cb2022-2"><a href="monte.html#cb2022-2"></a>(<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pt</span>(<span class="fu">abs</span>(<span class="fu">mean</span>(Result_vec) <span class="sc">/</span> <span class="fu">sd</span>(Result_vec)), <span class="at">df =</span> <span class="dv">198</span>)) <span class="sc">*</span> <span class="dv">2</span></span></code></pre></div>
+<div class="sourceCode" id="cb2026"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2026-1"><a href="monte.html#cb2026-1"></a><span class="co"># p値</span></span>
+<span id="cb2026-2"><a href="monte.html#cb2026-2"></a>(<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pt</span>(<span class="fu">abs</span>(<span class="fu">mean</span>(Result_vec) <span class="sc">/</span> <span class="fu">sd</span>(Result_vec)), <span class="at">df =</span> <span class="dv">198</span>)) <span class="sc">*</span> <span class="dv">2</span></span></code></pre></div>
 <pre><code>## [1] 0.03137631</code></pre>
-<div class="sourceCode" id="cb2024"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2024-1"><a href="monte.html#cb2024-1"></a><span class="co"># 95%信頼区間</span></span>
-<span id="cb2024-2"><a href="monte.html#cb2024-2"></a><span class="fu">quantile</span>(Result_vec, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb2028"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2028-1"><a href="monte.html#cb2028-1"></a><span class="co"># 95%信頼区間</span></span>
+<span id="cb2028-2"><a href="monte.html#cb2028-2"></a><span class="fu">quantile</span>(Result_vec, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span></code></pre></div>
 <pre><code>##        2.5%       97.5% 
 ## -0.58084484 -0.02999534</code></pre>
-<div class="sourceCode" id="cb2026"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2026-1"><a href="monte.html#cb2026-1"></a><span class="fu">enframe</span>(Result_vec) <span class="sc">%&gt;%</span></span>
-<span id="cb2026-2"><a href="monte.html#cb2026-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb2026-3"><a href="monte.html#cb2026-3"></a>    <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">y =</span> ..density..), <span class="at">color =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
-<span id="cb2026-4"><a href="monte.html#cb2026-4"></a>    <span class="fu">stat_function</span>(<span class="fu">aes</span>(<span class="at">color =</span> <span class="st">&quot;Density&quot;</span>),</span>
-<span id="cb2026-5"><a href="monte.html#cb2026-5"></a>                  <span class="at">size =</span> <span class="dv">2</span>, <span class="at">fun =</span> dnorm, <span class="at">n =</span> <span class="dv">101</span>, </span>
-<span id="cb2026-6"><a href="monte.html#cb2026-6"></a>                  <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> <span class="sc">-</span><span class="fl">0.307</span>, <span class="at">sd =</span> <span class="fl">0.141</span>)) <span class="sc">+</span></span>
-<span id="cb2026-7"><a href="monte.html#cb2026-7"></a>    <span class="fu">scale_color_discrete</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Density&quot;</span> <span class="ot">=</span> <span class="fu">expression</span>(<span class="fu">paste</span>(mu <span class="sc">~</span> <span class="st">&quot;= -0.307, &quot;</span> <span class="sc">~</span> sigma <span class="sc">~</span> <span class="st">&quot;= 0.141 の正規分布&quot;</span>)))) <span class="sc">+</span></span>
-<span id="cb2026-8"><a href="monte.html#cb2026-8"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;平均値の差分&quot;</span>, <span class="at">y =</span> <span class="st">&quot;密度&quot;</span>, <span class="at">color =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb2026-9"><a href="monte.html#cb2026-9"></a>    <span class="fu">theme_bw</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraginoSans-W3&quot;</span>) <span class="sc">+</span></span>
-<span id="cb2026-10"><a href="monte.html#cb2026-10"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2030"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2030-1"><a href="monte.html#cb2030-1"></a><span class="fu">enframe</span>(Result_vec) <span class="sc">%&gt;%</span></span>
+<span id="cb2030-2"><a href="monte.html#cb2030-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb2030-3"><a href="monte.html#cb2030-3"></a>    <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">y =</span> ..density..), <span class="at">color =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
+<span id="cb2030-4"><a href="monte.html#cb2030-4"></a>    <span class="fu">stat_function</span>(<span class="fu">aes</span>(<span class="at">color =</span> <span class="st">&quot;Density&quot;</span>),</span>
+<span id="cb2030-5"><a href="monte.html#cb2030-5"></a>                  <span class="at">size =</span> <span class="dv">2</span>, <span class="at">fun =</span> dnorm, <span class="at">n =</span> <span class="dv">101</span>, </span>
+<span id="cb2030-6"><a href="monte.html#cb2030-6"></a>                  <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> <span class="sc">-</span><span class="fl">0.307</span>, <span class="at">sd =</span> <span class="fl">0.141</span>)) <span class="sc">+</span></span>
+<span id="cb2030-7"><a href="monte.html#cb2030-7"></a>    <span class="fu">scale_color_discrete</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Density&quot;</span> <span class="ot">=</span> <span class="fu">expression</span>(<span class="fu">paste</span>(mu <span class="sc">~</span> <span class="st">&quot;= -0.307, &quot;</span> <span class="sc">~</span> sigma <span class="sc">~</span> <span class="st">&quot;= 0.141 の正規分布&quot;</span>)))) <span class="sc">+</span></span>
+<span id="cb2030-8"><a href="monte.html#cb2030-8"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;平均値の差分&quot;</span>, <span class="at">y =</span> <span class="st">&quot;密度&quot;</span>, <span class="at">color =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb2030-9"><a href="monte.html#cb2030-9"></a>    <span class="fu">theme_bw</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraginoSans-W3&quot;</span>) <span class="sc">+</span></span>
+<span id="cb2030-10"><a href="monte.html#cb2030-10"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/monte-boot8-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div id="nqkariscnw" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
