@@ -650,7 +650,7 @@ div.csl-indent {
 <li class="chapter" data-level="29.3" data-path="monte.html"><a href="monte.html#例1-誕生日問題"><i class="fa fa-check"></i><b>29.3</b> 例1: 誕生日問題</a></li>
 <li class="chapter" data-level="29.4" data-path="monte.html"><a href="monte.html#例2-モンティホール問題"><i class="fa fa-check"></i><b>29.4</b> 例2: モンティ・ホール問題</a></li>
 <li class="chapter" data-level="29.5" data-path="monte.html"><a href="monte.html#応用1-円周率の計算"><i class="fa fa-check"></i><b>29.5</b> 応用1: 円周率の計算</a></li>
-<li class="chapter" data-level="29.6" data-path="monte.html"><a href="monte.html#応用2-ブートストラッピング法"><i class="fa fa-check"></i><b>29.6</b> 応用2: ブートストラッピング法</a></li>
+<li class="chapter" data-level="29.6" data-path="monte.html"><a href="monte.html#応用2-ブートストラップ法"><i class="fa fa-check"></i><b>29.6</b> 応用2: ブートストラップ法</a></li>
 </ul></li>
 <li class="chapter" data-level="30" data-path="solution.html"><a href="solution.html"><i class="fa fa-check"></i><b>30</b> 演習問題の回答</a>
 <ul>
@@ -1000,7 +1000,7 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <p>　<span class="math inline">\(C\)</span>は二項係数を意味し<span class="math inline">\(_nC_k\)</span>は<span class="math inline">\(\frac{n!}{k!(n-k)!}\)</span>です。Rでは<code>choose(n, k)</code>で計算可能です。</p>
 <div class="sourceCode" id="cb1986"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1986-1"><a href="monte.html#cb1986-1"></a><span class="dv">1</span> <span class="sc">-</span> ((<span class="fu">factorial</span>(<span class="dv">50</span>) <span class="sc">*</span> <span class="fu">choose</span>(<span class="dv">365</span>, <span class="dv">50</span>)) <span class="sc">/</span> <span class="dv">365</span><span class="sc">^</span><span class="dv">50</span>)</span></code></pre></div>
 <pre><code>## [1] 0.9703736</code></pre>
-<p>　結果は0.9703736です。つまり、人が50人いれば同じ誕生日の人が2人以上いる確率は約0.97%ということです。それでは、以上の式を関数化し、<code>p(22)</code>と<code>p(23)</code>を計算してみましょう。</p>
+<p>　結果は0.9703736です。つまり、人が50人いれば同じ誕生日の人が2人以上いる確率は約97%ということです。それでは、以上の式を関数化し、<code>p(22)</code>と<code>p(23)</code>を計算してみましょう。</p>
 <div class="sourceCode" id="cb1988"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1988-1"><a href="monte.html#cb1988-1"></a>Birth_Expect <span class="ot">&lt;-</span> <span class="cf">function</span> (n) {</span>
 <span id="cb1988-2"><a href="monte.html#cb1988-2"></a>    <span class="dv">1</span> <span class="sc">-</span> ((<span class="fu">factorial</span>(n) <span class="sc">*</span> <span class="fu">choose</span>(<span class="dv">365</span>, n)) <span class="sc">/</span> <span class="dv">365</span><span class="sc">^</span>n)</span>
 <span id="cb1988-3"><a href="monte.html#cb1988-3"></a>}</span>
@@ -1244,8 +1244,19 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <p>　より実際の円周率に近い値が得られました。</p>
 <hr />
 </div>
-<div id="応用2-ブートストラッピング法" class="section level2" number="29.6">
-<h2><span class="header-section-number">29.6</span> 応用2: ブートストラッピング法</h2>
+<div id="応用2-ブートストラップ法" class="section level2" number="29.6">
+<h2><span class="header-section-number">29.6</span> 応用2: ブートストラップ法</h2>
+<p>　最後に、様々な分析から得られた統計量の不確実性を計算する方法の一つであるブートストラップ法 (bootstrapping)について説明します。たとえば、平均値の差分の検定 (<em>t</em>検定)差、回帰分析における標準誤差などはRの<code>t.test()</code>、<code>lm()</code>関数を使用すれば瞬時に計算できます。こちらの標準誤差はデータを与えられれば、常に同じ値が得られるもので、何らかの計算式があります。しかし、世の中にはモデルが複雑すぎて、統計量の標準誤差がうまく計算できないケースもあります。そこで登場するのがブートストラップ法を用いると、不確実性の近似値が得られます。ブートストラップ法は <span class="citation"><a href="#ref-Efron:1979" role="doc-biblioref">Efron</a> (<a href="#ref-Efron:1979" role="doc-biblioref">1979</a>)</span> が提案した以来、データ分析において広く使われています。ブートストラップ法については優れた教科書が多くあるので詳細な説明は割愛し、以下ではブートストラップ法の簡単な例を紹介します。</p>
+<p>ほいほい〜</p>
+<p>架空のデータを生成</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mbox{Data1} &amp; \sim \mbox{Normal}(\mu = 0.7, \sigma = 1) \\
+\mbox{Data2} &amp; \sim \mbox{Normal}(\mu = 0.9, \sigma = 1) 
+\end{aligned}
+\]</span></p>
+<p>2つの標本の平均値の差分は約0.2と考えられる。</p>
+<p>t検定をやってみる。今回は標準誤差が同じ2つの分布から得られたひょうほんであるため、等分散を仮定する<span class="math inline">\(t\)</span>検定 (<code>var.equal = TRUE</code>を追加)</p>
 <div class="sourceCode" id="cb2017"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2017-1"><a href="monte.html#cb2017-1"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
 <span id="cb2017-2"><a href="monte.html#cb2017-2"></a>Data1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="fl">0.7</span>, <span class="dv">1</span>)</span>
 <span id="cb2017-3"><a href="monte.html#cb2017-3"></a>Data2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="fl">0.9</span>, <span class="dv">1</span>)</span>
@@ -1264,6 +1275,19 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 ## sample estimates:
 ## mean of x mean of y 
 ## 0.6912143 0.9978588</code></pre>
+<p>検定統計量<span class="math inline">\(t\)</span>は平均値の差分を標準誤差で割ったもの</p>
+<p>標準誤差は<code>ttest_result$stderr</code>で抽出可能であり、今回は約0.141。平均値の差分は0.6912143 - 0.9978588 = -0.3066445であるため、<span class="math inline">\(t\)</span>統計量は-2.1707313</p>
+<p>ここではブートストラップ法で標準誤差の近似値を計算</p>
+<p>試行回数は1万</p>
+<ol style="list-style-type: decimal">
+<li>結果を格納する長さ1万の空ベクトル<code>Result_vec</code>を作成する。</li>
+<li><code>i</code>の初期値を1と設定する。</li>
+<li><code>Data1</code>から100個 (= <code>Data1</code>の大きさ)の値を無作為抽出 (<strong>復元抽出</strong>)し、<code>Sample1</code>に格納する。</li>
+<li><code>Data2</code>から100個 (= <code>Data2</code>の大きさ)の値を無作為抽出 (<strong>復元抽出</strong>)し、<code>Sample2</code>に格納する。</li>
+<li><code>Result_vec</code>の<code>i</code>番目の位置に<code>Sample1</code>の平均値と<code>Sample2</code>の平均値の差分を格納する。</li>
+<li><code>i</code>を1増加させる。</li>
+<li>3~6の手順を1万回繰り返す。</li>
+</ol>
 <div class="sourceCode" id="cb2019"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2019-1"><a href="monte.html#cb2019-1"></a>n_trials   <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
 <span id="cb2019-2"><a href="monte.html#cb2019-2"></a>Result_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_trials)</span>
 <span id="cb2019-3"><a href="monte.html#cb2019-3"></a></span>
@@ -1287,6 +1311,7 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <span id="cb2028-2"><a href="monte.html#cb2028-2"></a><span class="fu">quantile</span>(Result_vec, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span></code></pre></div>
 <pre><code>##        2.5%       97.5% 
 ## -0.58084484 -0.02999534</code></pre>
+<p><code>Result_vec</code>のヒストグラムと<span class="math inline">\(\mu\)</span> = -0.307、<span class="math inline">\(\sigma\)</span> = 0.141の正規分布を重ねて見る（-0.307と0.141は<span class="math inline">\(t\)</span>検定から得られた数値）。</p>
 <div class="sourceCode" id="cb2030"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2030-1"><a href="monte.html#cb2030-1"></a><span class="fu">enframe</span>(Result_vec) <span class="sc">%&gt;%</span></span>
 <span id="cb2030-2"><a href="monte.html#cb2030-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb2030-3"><a href="monte.html#cb2030-3"></a>    <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">y =</span> ..density..), <span class="at">color =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
@@ -1298,6 +1323,7 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <span id="cb2030-9"><a href="monte.html#cb2030-9"></a>    <span class="fu">theme_bw</span>(<span class="at">base_family =</span> <span class="st">&quot;HiraginoSans-W3&quot;</span>) <span class="sc">+</span></span>
 <span id="cb2030-10"><a href="monte.html#cb2030-10"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
 <p><img src="R_Not_for_Everyone_files/figure-html/monte-boot8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><span class="math inline">\(t\)</span>検定とブートストラップ法の比較</p>
 <div id="nqkariscnw" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
@@ -1685,6 +1711,12 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 </table>
 </div>
 
+</div>
+</div>
+<h3> 参考資料</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Efron:1979" class="csl-entry">
+Efron, Bradley. 1979. <span>“Bootstrap Methods: Another Look at the Jackknife.”</span> <em>The Annals of Statistics</em> 7: 1–26.
 </div>
 </div>
 <div class="footnotes">
