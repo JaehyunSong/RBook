@@ -1,23 +1,8 @@
----
-output: html_document
-editor_options: 
-  chunk_output_type: console
----
-
 # (PART) Rの基礎 {-}
 
 # 基本的な操作 {#rbasic}
 
 
-
-## 目次 {-}
-
-* \@ref(rbasic-compbasic) 「コンピュータの基礎知識」
-* \@ref(rbasic-project) 「プロジェクト」のすゝめ
-* \@ref(rbasic-calc) 電卓としてのR
-* \@ref(rbasic-input) 格納（代入）
-* \@ref(rbasic-extract) 要素の抽出
-* \@ref(rbasic-exercise) 練習問題
 
 ## コンピュータの基礎知識 {#rbasic-compbasic}
 

@@ -1,11 +1,3 @@
----
-output:
-  pdf_document: default
-  html_document: default
-editor_options:
-  chunk_output_type: console
----
-
 # オブジェクト指向型プログラミング {#oop}
 
 
@@ -205,11 +197,9 @@ summary(lm_class)
 ##  1.3333 -0.2667 -1.8667 -0.4667  0.9333  0.3333 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value Pr(>|t|)   
-## (Intercept)  -1.6333     1.0546  -1.549  0.19637   
-## X             1.3000     0.1528   8.510  0.00105 **
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+##             Estimate Std. Error t value Pr(>|t|)
+## (Intercept)  -1.6333     1.0546  -1.549  0.19637
+## X             1.3000     0.1528   8.510  0.00105
 ## 
 ## Residual standard error: 1.278 on 4 degrees of freedom
 ## Multiple R-squared:  0.9477,	Adjusted R-squared:  0.9346 
@@ -263,7 +253,7 @@ summary
 ```
 ## function (object, ...) 
 ## UseMethod("summary")
-## <bytecode: 0x7fed177d89c0>
+## <bytecode: 0x7fe781b52e30>
 ## <environment: namespace:base>
 ```
 
@@ -326,7 +316,7 @@ getS3method("summary", "default")
 ##     class(value) <- c("summaryDefault", "table")
 ##     value
 ## }
-## <bytecode: 0x7fed103aeb18>
+## <bytecode: 0x7fe7862609e0>
 ## <environment: namespace:base>
 ```
 
@@ -338,7 +328,6 @@ Rにはメソッドがクラス内部で定義されず、別途の`メソッド
 
 
 ```{.r .numberLines}
-library(tidyverse)
 my_tibble <- tibble(X = 1:5, Y = 1:5)
 class(my_tibble)
 ```
@@ -394,12 +383,12 @@ My_Score1 # My_Score1の内部を見る
 
 ```
 ## $Score1
-##  [1] 36.28194 37.60101 60.84626 57.71535 48.46923 33.89019 47.65819 32.09616
-##  [9] 49.21206 46.56777
+##  [1] 56.45364 51.99117 37.45474 20.64189 49.57580 50.66165 36.27437 60.10513
+##  [9] 54.22433 51.83265
 ## 
 ## $Score2
-##  [1] 47.44474 52.18650 41.42395 47.13256 59.43572 61.24334 36.35009 48.49058
-##  [9] 50.05019 52.90977
+##  [1] 36.09373 34.68378 44.15172 41.97138 62.37084 64.75162 55.17412 46.95446
+##  [9] 48.58500 56.23961
 ## 
 ## attr(,"class")
 ## [1] "Score"
@@ -433,12 +422,12 @@ My_Score2 # My_Score2の内部を見る
 
 ```
 ## $Score1
-##  [1] 59.29454 51.85335 49.93539 49.42163 53.68016 39.50795 52.51603 52.49884
-##  [9] 64.21701 51.31394
+##  [1] 27.45942 59.62985 41.86419 28.05938 46.56411 42.89365 58.61204 42.74961
+##  [9] 58.65479 16.44744
 ## 
 ## $Score2
-##  [1] 54.32249 63.04625 57.65333 42.31850 35.88054 63.79912 47.18752 51.89531
-##  [9] 62.74222 57.65706
+##  [1] 58.50899 60.71316 54.29077 53.19949 61.58064 52.19745 39.77958 59.64218
+##  [9] 61.02709 49.23582
 ## 
 ## attr(,"class")
 ## [1] "Score"
@@ -483,8 +472,8 @@ mean(My_Score1) # Scoreクラスのメソッドであるmean()を使う
 ```
 
 ```
-## [1] 45.03382
-## [1] 49.66674
+## [1] 46.92154
+## [1] 49.09763
 ```
 
 `mean(c(1, 3, 5, 7, 9, 11))`は引数がnumeric型ベクトルであるため、既存の`mean()`関数が使用されます。一方、`mean(My_Score1)`は引数がScoreクラスであるため、`mean.Score()`が使用されます。このように`mean_Score()`のような別途の関数を作る必要なく、既存の関数名が利用できます。実際、`methods(mean)`を実行すると、Scoreクラスのメソッドとして`mean()`関数が用意されたことを確認できます。
@@ -590,8 +579,8 @@ my_func(My_Score1)
 ```
 
 ```
-## [1] 45.03382
-## [1] 49.66674
+## [1] 46.92154
+## [1] 49.09763
 ```
 
 ```{.r .numberLines}
@@ -702,7 +691,7 @@ my_func(My_Cat2)
 
 
 ```{.r .numberLines}
-library(tidyverse)
+pacman::p_load(tidyverse)
 
 Cor_Obj <- My_Cor(x      = rnorm(20, 2, 0.5), 
                   y      = rnorm(20, 165, 6), 
@@ -726,12 +715,12 @@ str(Cor_Obj)
 ```
 ## List of 4
 ##  $ data    :'data.frame':	20 obs. of  2 variables:
-##   ..$ x: num [1:20] 3.28 2.03 1.95 2.77 2.12 ...
-##   ..$ y: num [1:20] 172 168 165 163 155 ...
+##   ..$ x: num [1:20] 1.05 1.66 2.15 1.7 1.94 ...
+##   ..$ y: num [1:20] 175 171 168 163 165 ...
 ##  $ var_name: chr [1:2] "1日当たりゲーム時間" "身長"
-##  $ cor     : Named num 0.187
+##  $ cor     : Named num 0.0601
 ##   ..- attr(*, "names")= chr "cor"
-##  $ cor_ci  : num [1:2] -0.278 0.582
+##  $ cor_ci  : num [1:2] -0.393 0.49
 ##   ..- attr(*, "conf.level")= num 0.95
 ##  - attr(*, "class")= chr "My_Cor_Object"
 ```
@@ -746,9 +735,9 @@ print(Cor_Obj)
 ```
 
 ```
-## 1日当たりゲーム時間の平均値: 2.130
-## 身長の平均値: 163.588
-## 相関係数: 0.187 [-0.278, 0.582]
+## 1日当たりゲーム時間の平均値: 1.833
+## 身長の平均値: 166.062
+## 相関係数: 0.060 [-0.393, 0.490]
 ```
 
 ```{.r .numberLines}
@@ -756,9 +745,9 @@ summary(Cor_Obj) # summary()はprint()と同じ
 ```
 
 ```
-## 1日当たりゲーム時間の平均値: 2.130
-## 身長の平均値: 163.588
-## 相関係数: 0.187 [-0.278, 0.582]
+## 1日当たりゲーム時間の平均値: 1.833
+## 身長の平均値: 166.062
+## 相関係数: 0.060 [-0.393, 0.490]
 ```
 
 ```{.r .numberLines}
@@ -877,7 +866,7 @@ plot.My_Cor_Object <- function(data) {
       geom_point() +
       labs(x = data$var_name[1], y = data$var_name[2]) +
       ggtitle(sprintf("相関係数 = %.3f", data[["cor"]])) +
-      theme_minimal(base_family = "HiraKakuProN-W3")
+      theme_minimal(base_size = 12)
 }
 ```
 

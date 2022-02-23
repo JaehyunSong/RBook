@@ -1,8 +1,3 @@
----
-output: html_document
-editor_options: 
-  chunk_output_type: console
----
 # 可視化[応用] {#visualization3}
 
 
@@ -19,7 +14,7 @@ editor_options:
 
 
 ```{.r .numberLines}
-library(tidyverse)
+pacman::p_load(tidyverse)
 Country_df <- read_csv("Data/Countries.csv")
 COVID19_df <- read_csv("Data/COVID19_Worldwide.csv", guess_max = 10000)
 ```
@@ -546,24 +541,6 @@ Scale_Fig3
 　今回は紫（独裁）から黄色（完全な民主主義）の順で色分けがされ、その間のカテゴリーも紫と黄色の間の値をとります。実は順序付き離散変数の場合、色のスケールを調整することはあまりありませんし、これまでの方法に比べてやや複雑です。ここでは色相（Hue）の範囲と強度、明るさを調整する方法について紹介します。
 
 　まずは、色相について知る必要があります。{ggplot2}において色相の範囲は0から360です。そして、色には強度（intensity）、または彩度という概念があり、0に近いほどグレイへ近づき、色間の区別がしにくくなります。{ggplot2}では彩度のデフォルト値は100であり、我々が普段{ggplot2}で見る図の色です。最後に明るさ（luminance）があり、0から100までの値を取ります。値が大きいほど明るくなり、{ggplot2}のデフォルト値は65です。重要なのは色相のところであり、Hueの具体的な数値がどの色なのかを確認する必要があります。そのためには、{scales}パッケージの`hue_pal()`と`show_col()`関数を使用します。
-
-
-```
-## 
-## Attaching package: 'scales'
-```
-
-```
-## The following object is masked from 'package:purrr':
-## 
-##     discard
-```
-
-```
-## The following object is masked from 'package:readr':
-## 
-##     col_factor
-```
 
 <img src="visualization3_files/figure-html/unnamed-chunk-35-1.png" width="672" style="display: block; margin: auto;" />
 
@@ -1198,7 +1175,7 @@ Grid_Fig4 <- Country_df %>%
 
 
 ```{.r .numberLines}
-library(ggpubr)
+pacman::p_load(ggpubr)
 ```
 
 　図を並べる際は`ggarrange()`関数を使用し、まず、結合したい図のオブジェクトを入力します。また、2つの図を横に並べることは1行2列のレイアウトであることを意味するため、`nrow`と`ncol`引数の実引数としてそれぞれ1と2を指定します。

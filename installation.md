@@ -29,7 +29,7 @@ Linuxの場合、ディストリビューション (distribution)[^dist]によ�
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Installation/R_Ubuntu1.png" alt="Terminalの起動" width="100%" />
-<p class="caption">(\#fig:unnamed-chunk-2)Terminalの起動</p>
+<p class="caption">(\#fig:unnamed-chunk-1)Terminalの起動</p>
 </div>
 
 まず、Terminal (端末)を立ち上げます。Terminalはデスクトップ画面で右クリックし、「Open Terminal (端末を開く)」を選択します。Terminalプロンプト上に以下のように入力します。
@@ -48,14 +48,14 @@ R
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Installation/R_Ubuntu2.png" alt="Applicationから起動1" width="100%" />
-<p class="caption">(\#fig:unnamed-chunk-3)Applicationから起動1</p>
+<p class="caption">(\#fig:unnamed-chunk-2)Applicationから起動1</p>
 </div>
 
 2つ目の方法はApplicationから開く方法です。Ubuntuの左上の「Activities (アクティビティ)」または、左下のボタンをクリックします。
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Installation/R_Ubuntu3.png" alt="Applicationから起動2" width="100%" />
-<p class="caption">(\#fig:unnamed-chunk-4)Applicationから起動2</p>
+<p class="caption">(\#fig:unnamed-chunk-3)Applicationから起動2</p>
 </div>
 
 上段中央の検索で「R」を入力し、検索結果からRを選択します。
@@ -111,21 +111,21 @@ Rをインストールする前に以下の2点を確認します。
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Installation/R_Windows1.png" alt="Rのインストール1 (Windows)" width="100%" />
-<p class="caption">(\#fig:unnamed-chunk-5)Rのインストール1 (Windows)</p>
+<p class="caption">(\#fig:unnamed-chunk-4)Rのインストール1 (Windows)</p>
 </div>
 
 CRAN (https://cran.r-project.org/)にアクセスし、「Download R for Windows」を選択します。
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Installation/R_Windows2.png" alt="Rのインストール2 (Windows)" width="100%" />
-<p class="caption">(\#fig:unnamed-chunk-6)Rのインストール2 (Windows)</p>
+<p class="caption">(\#fig:unnamed-chunk-5)Rのインストール2 (Windows)</p>
 </div>
 
 「base」を選択します。
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Installation/R_Windows3.png" alt="Rのインストール3 (Windows)" width="100%" />
-<p class="caption">(\#fig:unnamed-chunk-7)Rのインストール3 (Windows)</p>
+<p class="caption">(\#fig:unnamed-chunk-6)Rのインストール3 (Windows)</p>
 </div>
 
 「Download R x.x.x for Windows」を選択し、インストーラーをダウンロードします。
@@ -134,14 +134,14 @@ CRAN (https://cran.r-project.org/)にアクセスし、「Download R for Windows
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Installation/R_Windows_Pre1.png" alt="bitの確認 (1)" width="50%" />
-<p class="caption">(\#fig:unnamed-chunk-8)bitの確認 (1)</p>
+<p class="caption">(\#fig:unnamed-chunk-7)bitの確認 (1)</p>
 </div>
 
 1. デスクトップ画面のPCを**右クリック**し、「プロパティ」を選択
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Installation/R_Windows_Pre2.png" alt="bitの確認 (2)" width="100%" />
-<p class="caption">(\#fig:unnamed-chunk-9)bitの確認 (2)</p>
+<p class="caption">(\#fig:unnamed-chunk-8)bitの確認 (2)</p>
 </div>
 
 2. 「システムの種類」を確認
@@ -162,21 +162,21 @@ RStudioのインストール方法はもっと簡単です。
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Installation/RStudio1.png" alt="RStudioのインストール1" width="100%" />
-<p class="caption">(\#fig:unnamed-chunk-10)RStudioのインストール1</p>
+<p class="caption">(\#fig:unnamed-chunk-9)RStudioのインストール1</p>
 </div>
 
 まず、RStudioのホームページ (https://rstudio.com)にアクセスし、「Download」をクリックします。
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Installation/RStudio2.png" alt="RStudioのインストール2" width="100%" />
-<p class="caption">(\#fig:unnamed-chunk-11)RStudioのインストール2</p>
+<p class="caption">(\#fig:unnamed-chunk-10)RStudioのインストール2</p>
 </div>
 
 RStudio Desktopの「Download」を選択します。
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Installation/RStudio3.png" alt="RStudioのインストール3" width="100%" />
-<p class="caption">(\#fig:unnamed-chunk-12)RStudioのインストール3</p>
+<p class="caption">(\#fig:unnamed-chunk-11)RStudioのインストール3</p>
 </div>
 
 自分のOSに合ったインストーラーをダウンロードします[^rstudio-ubuntu]。

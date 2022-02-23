@@ -1,9 +1,6 @@
 ---
-output: html_document
-editor_options: 
-  chunk_output_type: console
+always_allow_html: true
 ---
-
 # 可視化[発展] {#visualization4}
 
 
@@ -32,10 +29,7 @@ editor_options:
 
 ```{.r .numberLines}
 pacman::p_load(tidyverse)
-```
 
-
-```{.r .numberLines}
 Country_df <- read_csv("Data/Countries.csv")
 COVID19_df <- read_csv("Data/COVID19_Worldwide.csv", guess_max = 10000)
 ```
@@ -1259,12 +1253,11 @@ ne_countries(scale = "large", country = "Japan", returnclass = "sf") %>%
 
 <img src="visualization4_files/figure-html/visual4-map11-1.png" width="672" style="display: block; margin: auto;" />
 
-　ただ、日本地図を出すという場合、多くは都道府県レベルでマッピングが目的でしょう。世界地図のマッピングならこれで問題ありませんが、一国だけなら、その下の自治体の境界線も必要です。したがって、先ほど使用しましたパッケージのより高解像度の地図が含まれている{rnaturalearthhires}をインストールし、読み込みましょう。
+　ただ、日本地図を出すという場合、多くは都道府県レベルでマッピングが目的でしょう。世界地図のマッピングならこれで問題ありませんが、一国だけなら、その下の自治体の境界線も必要です。したがって、先ほど使用しましたパッケージのより高解像度の地図が含まれている{rnaturalearthhires}をインストールし、読み込みましょう。2022年 2月23日現在、{rnaturalearthhires}はCRANに登録されておらず、GitHubの[ropensciレポジトリー](https://github.com/ropensci)のみで公開されているため、今回は{pacman}の`p_load()`でなく、`p_load_gh()`を使用します。
 
 
 ```{.r .numberLines}
-# remotes::install_github("ropensci/rnaturalearthhires")
-library(rnaturalearthhires)
+pacman::p_load_gh("ropensci/rnaturalearthhires")
 ```
 
 　地図データの抽出には`ne_states()`関数を使用します。第一引数として国家名を指定し、地図データのクラスはsfとします。抽出したデータの使い方は世界地図の時と同じです。
@@ -1458,7 +1451,7 @@ Japan_Map
 ## 8      <NA>         1      jpn     JA39       <NA>         7        11        3
 ## 9      <NA>         1      jpn     JA17       <NA>         7        11        3
 ## 10     <NA>         1      jpn     JA05       <NA>         7        11        3
-##    wikidataid name_ar name_bn             name_de              name_en
+##    wikidataid name_ar name_bn              name_de              name_en
 ## 1      Q15701    <NA>    <NA> Präfektur Kagoshima Kagoshima Prefecture
 ## 2     Q133924    <NA>    <NA>      Präfektur Oita      Oita Prefecture
 ## 3     Q123258    <NA>    <NA>   Präfektur Fukuoka   Fukuoka Prefecture
@@ -1469,7 +1462,7 @@ Japan_Map
 ## 8     Q160734    <NA>    <NA> Präfektur Tokushima Tokushima Prefecture
 ## 9     Q161454    <NA>    <NA>    Präfektur Kagawa    Kagawa Prefecture
 ## 10    Q123376    <NA>    <NA>     Präfektur Ehime     Ehime Prefecture
-##                    name_es                 name_fr name_el name_hi
+##                    name_es                  name_fr name_el name_hi
 ## 1  Prefectura de Kagoshima Préfecture de Kagoshima    <NA>    <NA>
 ## 2       Prefectura de Oita       Préfecture d'Oita    <NA>    <NA>
 ## 3    Prefectura de Fukuoka   Préfecture de Fukuoka    <NA>    <NA>
@@ -1480,9 +1473,9 @@ Japan_Map
 ## 8  Prefectura de Tokushima Préfecture de Tokushima    <NA>    <NA>
 ## 9     Prefectura de Kagawa    Préfecture de Kagawa    <NA>    <NA>
 ## 10     Prefectura de Ehime      Préfecture d'Ehime    <NA>    <NA>
-##                 name_hu             name_id                 name_it name_ja
+##                  name_hu             name_id                 name_it name_ja
 ## 1   Kagosima prefektúra Prefektur Kagoshima prefettura di Kagoshima    <NA>
-## 2       Óita prefektúra      Prefektur Oita      prefettura di Oita    <NA>
+## 2      Óita prefektúra      Prefektur Oita      prefettura di Oita    <NA>
 ## 3    Fukuoka prefektúra   Prefektur Fukuoka   prefettura di Fukuoka    <NA>
 ## 4      Szaga prefektúra      Prefektur Saga      Prefettura di Saga    <NA>
 ## 5  Nagaszaki prefektúra  Prefektur Nagasaki  prefettura di Nagasaki    <NA>
@@ -1551,16 +1544,11 @@ Japan_Map %>%
 
 ### 日本地図（特定の都道府県）
 
-　また日本地図のマッピングですが、今回は市区町村レベルまで見てみましょう。`ne_states()`では市区町村までマッピングすることはできませんので、今回は徳島大学の[瓜生真也](https://twitter.com/u_ribo)先生が公開しました{jpndistrict}を使います。こちらのパッケージはCRANでなく、GihHub経由で配布されているため、{remotes}、または{devtools}の`install_github()`でインストールします。
+　また日本地図のマッピングですが、今回は市区町村レベルまで見てみましょう。`ne_states()`では市区町村までマッピングすることはできませんので、今回は徳島大学の[瓜生真也](https://twitter.com/u_ribo)先生が公開しました{jpndistrict}を使います。
 
 
 ```{.r .numberLines}
-remotes::install_github("uribo/jpndistrict")
-```
-
-
-```{.r .numberLines}
-library(jpndistrict)
+pacman::p_load_gh("uribo/jpndistrict")
 ```
 
 　今回は大阪府の地図を出力してみましょう。特定の都道府県の地図を読み込むためには`jpn_pref()`関数を使用します。都道府県は`pref_code`または`admin_name`で指定します。大阪のコードは27であるため、`pref_code = 27`でも良いですし、`admin_name = "大阪府"`でも同じです。
@@ -1587,7 +1575,7 @@ Osaka_map %>%
   theme_minimal()
 ```
 
-<img src="visualization4_files/figure-html/visual4-map22-1.png" width="672" style="display: block; margin: auto;" />
+<img src="visualization4_files/figure-html/visual4-map21-1.png" width="672" style="display: block; margin: auto;" />
 
 　ここでもデータの結合&マッピングが可能です。大阪府内自治体の人口と学生数が格納された[データ](data/Osaka_Student.csv)を読み込んでみましょう。こちらは2015年国勢調査の結果から取得したデータです。
 
@@ -1652,7 +1640,7 @@ Osaka_map %>%
   theme(legend.position = "bottom")
 ```
 
-<img src="visualization4_files/figure-html/visual4-map25-1.png" width="672" style="display: block; margin: auto;" />
+<img src="visualization4_files/figure-html/visual4-map24-1.png" width="672" style="display: block; margin: auto;" />
 
 ---
 
@@ -2027,14 +2015,14 @@ Vote_0910
 ##    <chr>  <chr>      <int>
 ##  1 DK     DK           111
 ##  2 DK     その他         8
-##  3 DK     公明           7
+##  3 DK     棄権          57
 ##  4 DK     共産・社民    15
-##  5 DK     棄権          57
-##  6 DK     民主         116
-##  7 DK     自民          29
+##  5 DK     公明           7
+##  6 DK     自民          29
+##  7 DK     民主         116
 ##  8 その他 DK            18
 ##  9 その他 その他        73
-## 10 その他 公明           4
+## 10 その他 棄権          18
 ## # … with 37 more rows
 ```
 

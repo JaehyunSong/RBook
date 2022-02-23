@@ -13,7 +13,7 @@
 ## LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib
 ## 
 ## locale:
-## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## [1] ja_JP.UTF-8/ja_JP.UTF-8/ja_JP.UTF-8/C/ja_JP.UTF-8/ja_JP.UTF-8
 ## 
 ## attached base packages:
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
@@ -31,7 +31,7 @@
 
 
 ```
-## # A tibble: 389 × 3
+## # A tibble: 388 × 3
 ##    Package     Version  Built
 ##    <chr>       <chr>    <chr>
 ##  1 abind       1.4-5    4.1.0
@@ -40,9 +40,9 @@
 ##  4 AsioHeaders 1.16.1-1 4.1.0
 ##  5 askpass     1.1      4.1.0
 ##  6 assertthat  0.2.1    4.1.0
-##  7 attachment  0.2.4    4.1.0
-##  8 attempt     0.3.1    4.1.0
-##  9 backports   1.4.1    4.1.0
-## 10 BalanceR    0.7.6    4.1.2
-## # … with 379 more rows
+##  7 attempt     0.3.1    4.1.0
+##  8 backports   1.4.1    4.1.0
+##  9 BalanceR    0.7.6    4.1.1
+## 10 base        4.1.2    4.1.2
+## # … with 378 more rows
 ```

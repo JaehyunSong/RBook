@@ -1,9 +1,6 @@
 ---
-output: html_document
-editor_options: 
-  chunk_output_type: console
+always_allow_html: true
 ---
-
 # (PART) 可視化 {-}
 
 # 可視化[理論] {#visualization1}
@@ -12,7 +9,7 @@ editor_options:
 
 ## 可視化のためのパッケージ {#visual-packages}
 
-Rによる可視化は様々な方法がありますが、可視化のために使うパッケージとして代表的なものは (1) パッケージを使わない方法、(2) {latticeパッケージ、(3) {ggplot2}パッケージがあります。ここでは、以下のデータ (表\@ref(tab:visual1-sampledata))を可視化しながら、それぞれの特徴について簡単に解説します。
+Rによる可視化は様々な方法がありますが、可視化のために使うパッケージとして代表的なものは (1) パッケージを使わない方法、(2) {lattice}パッケージ、(3) {ggplot2}パッケージがあります。ここでは、以下のデータ (表\@ref(tab:visual1-sampledata))を可視化しながら、それぞれの特徴について簡単に解説します。
 
 
 
@@ -165,7 +162,7 @@ ggplot(data = Country_df) +
 <p class="caption">(\#fig:visual1-ggplot1)ggplot2によるグラフ</p>
 </div>
 
-このように{ggplot2}による作図コードはBase Rや{lattice}に比べ、読みやすいのが特徴です。また、書く手間も大きく省かれる場合が多く、結果として出力されるグラフも綺麗です（これは好みによりますが）。しかし、{ggplot2}にも限界はあり、代表的なものとして (1) 3次元グラフが作成でないこと、(2) 処理速度が遅い点があります。後者は多くの場合においてあまり気にならない程度ですが、3次元プロットが必要な場合はlatticeや別途のパッケージを使う必要があります。しかし、社会科学において3次元プロットが使われる機会は少なく、2次元平面であっても3次元以上のデータを表現することも可能です。本書では{ggplot2}を用いた可視化方法のみについて解説していきます。
+このように{ggplot2}による作図コードはBase Rや{lattice}に比べ、読みやすいのが特徴です。また、書く手間も大きく省かれる場合が多く、結果として出力されるグラフも綺麗です（これは好みによりますが）。しかし、{ggplot2}にも限界はあり、代表的なものとして (1) 3次元グラフが作成でないこと、(2) 処理速度が遅い点があります。後者は多くの場合においてあまり気にならない程度ですが、3次元プロットが必要な場合は{lattice}や別途のパッケージを使う必要があります。しかし、社会科学において3次元プロットが使われる機会は少なく、2次元平面であっても3次元以上のデータを表現することも可能です。本書では{ggplot2}を用いた可視化方法のみについて解説していきます。
 
 ---
 
@@ -264,7 +261,7 @@ ggplot(data = df) +
 
 <img src="visualization1_files/figure-html/unnamed-chunk-8-1.png" width="768" style="display: block; margin: auto;" />
 
-6. 日本語が表示されないため、日本語に対応したフォントを指定します。グラフのテーマも{ggplot2}が基本的に提供しているminimalに変更し、フォントはヒラギノ角ゴジックW3にします。
+6. グラフのテーマを{ggplot2}が基本的に提供しているminimalに変更し、フォントサイズを12に変更します。
 
 
 ```{.r .numberLines}
@@ -276,7 +273,7 @@ ggplot(data = df) +
              size = 3, shape = 21, fill = "white") +
   labs(x = "年度", y = "平均利用者数 (人/日)", color = "事業者区分") +
   scale_x_continuous(breaks = 2011:2017, labels = 2011:2017) +
-  theme_minimal(base_family = "HiraKakuProN-W3")
+  theme_minimal(base_size = 12)
 ```
 
 <img src="visualization1_files/figure-html/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;" />

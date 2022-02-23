@@ -1,9 +1,5 @@
 ---
-output:
-  pdf_document: default
-  html_document: default
-editor_options:
-  chunk_output_type: console
+always_allow_html: true
 ---
 # 反復処理 {#iteration}
 
@@ -28,7 +24,7 @@ editor_options:
 
 
 ```{.r .numberLines}
-library(tidyverse)
+pacman::p_load(tidyverse)
 ```
 
 それでは、`*apply()`関数群と`map_*()`関数群の動きとその仕組について調べてみましょう。まず、実習用データとして長さ5のnumericベクトル`num_vec`を用意します。
@@ -240,7 +236,7 @@ sapply(num_vec, ~(.x + 2) / 3)
 ```
 
 ```
-## Error in match.fun(FUN): '~(.x + 2)/3' is not a function, character or symbol
+## Error in match.fun(FUN):  '~(.x + 2)/3' は関数、文字、またはシンボルではありません
 ```
 
 これまでの例は**正しい**コードではありますが、**良い**コードとは言えないでしょう。なぜなら`num_vec + 2`という最適解が存在するからです。`*apply()`と`map_*()`はより複雑な処理に特化しています。たとえば、リスト型データの処理です。以下の例を考えてみましょう。
@@ -701,7 +697,7 @@ Dummy_df2 <- as.data.frame(Dummy_list2)
 ```
 
 ```
-## Error in (function (..., row.names = NULL, check.rows = FALSE, check.names = TRUE, : arguments imply differing number of rows: 3, 5
+## Error in (function (..., row.names = NULL, check.rows = FALSE, check.names = TRUE, :  引数に異なる列数のデータフレームが含まれています: 3, 5
 ```
 
 一方、`as_tibble()`を使用してtibble型に変換することは可能です。
@@ -1507,12 +1503,22 @@ Country_df2 %>%
   labs(x = "人口", y = "政治的自由度が所得に与える影響", color = "") +
   scale_color_manual(values = c("統計的有意" = "black",
                                 "統計的非有意" = "gray70")) +
-  theme_minimal(base_family = "HiraKakuProN-W3",
-                base_size   = 12) +
-  theme(legend.position = "bottom")
+  theme_minimal(base_size = 12)
 ```
 
 <img src="iteration_files/figure-html/unnamed-chunk-84-1.png" width="672" style="display: block; margin: auto;" />
+
+```{.r .numberLines}
+  theme(legend.position = "bottom")
+```
+
+```
+## List of 1
+##  $ legend.position: chr "bottom"
+##  - attr(*, "class")= chr [1:2] "theme" "gg"
+##  - attr(*, "complete")= logi FALSE
+##  - attr(*, "validate")= logi TRUE
+```
 
 政治的自由度が高くなるほど所得水準も高くなる傾向が確認されますが、人口が1億人以上の国においてはそのような傾向が見られないことが分かります。
 
@@ -1597,7 +1603,7 @@ Range_df %>%
   labs(x = "データ内FH_Scoreの最小値", y = "Populationの係数") +
   scale_x_continuous(breaks = seq(0, 80, by = 10),
                      labels = seq(0, 80, by = 10)) +
-  theme_minimal(base_family = "HiraKakuProN-W3")
+  theme_minimal(base_size = 12)
 ```
 
 <img src="iteration_files/figure-html/unnamed-chunk-90-1.png" width="672" style="display: block; margin: auto;" />
@@ -1654,15 +1660,13 @@ summary(RDD_Fit)
 ## -46.930  -6.402   0.132   7.191  46.443 
 ## 
 ## Coefficients:
-##                   Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)       47.33084    0.54192  87.340  < 2e-16 ***
-## margin             0.34806    0.01335  26.078  < 2e-16 ***
-## I(margin > 0)TRUE  4.78461    0.92290   5.184 2.51e-07 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+##                   Estimate Std. Error t value Pr(>|t|)
+## (Intercept)       47.33084    0.54192  87.340  < 2e-16
+## margin             0.34806    0.01335  26.078  < 2e-16
+## I(margin > 0)TRUE  4.78461    0.92290   5.184 2.51e-07
 ## 
 ## Residual standard error: 11.78 on 1294 degrees of freedom
-##   (93 observations deleted due to missingness)
+##   ( 93 個の観測値が欠損のため削除されました )
 ## Multiple R-squared:  0.5781,	Adjusted R-squared:  0.5774 
 ## F-statistic: 886.4 on 2 and 1294 DF,  p-value: < 2.2e-16
 ```
@@ -2120,11 +2124,21 @@ Diff_df %>%
   scale_color_manual(values = c("統計的有意"   = "black",
                                 "統計的非有意" = "gray70")) +
   labs(x = "非加盟国のPPP - 加盟国のPPP", y = "グループ", color = "") +
-  theme_bw(base_family = "HiraKakuProN-W3",
-           base_size   = 12) +
-  theme(legend.position = "bottom")
+  theme_minimal(base_size = 12)
 ```
 
 <img src="iteration_files/figure-html/unnamed-chunk-122-1.png" width="672" style="display: block; margin: auto;" />
+
+```{.r .numberLines}
+  theme(legend.position = "bottom")
+```
+
+```
+## List of 1
+##  $ legend.position: chr "bottom"
+##  - attr(*, "class")= chr [1:2] "theme" "gg"
+##  - attr(*, "complete")= logi FALSE
+##  - attr(*, "validate")= logi TRUE
+```
 
 以上の方法を応用すると応答変数を変えながら分析を繰り返すこともできます。他にも説明変数が2つ以上のケースにも応用可能です。

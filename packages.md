@@ -60,7 +60,7 @@ devtools::install_github("JaehyunSong/BalanceR")
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Installation/Package_Workbench.jpg" alt="Rパッケージと作業環境" width="75%" />
-<p class="caption">(\#fig:unnamed-chunk-6)Rパッケージと作業環境</p>
+<p class="caption">(\#fig:packages_load_1)Rパッケージと作業環境</p>
 </div>
 
 [^default-pacakge]: `mean()`や`sum()`、`lm()`のように、よく使われる関数 (=工具)はR起動と同時に作業台上に載せられる。
@@ -191,7 +191,7 @@ install.packages("devtools")
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Installation/Package_Ubuntu1.png" alt="必要なライブラリがない場合" width="75%" />
-<p class="caption">(\#fig:unnamed-chunk-16)必要なライブラリがない場合</p>
+<p class="caption">(\#fig:unnamed-chunk-1)必要なライブラリがない場合</p>
 </div>
 
 これは`xml2`パッケージをインストールしようとした時に表示されたメッセージです。これはUbuntuに`libxml-2.0`というライブラリが入っていないことを意味します。解決方法は、このライブラリを導入することですが、OSによってインストールに必要なライブラリ名が異なります。UbuntuはDebian系列のOSであるため、`deb`行を確認します。どうやら`libxml2-dev`をインストールすれば良いようです。したがって、新しいTerminalを起動し、`R`と同じやり方で`libxml2-dev`をインストールします。

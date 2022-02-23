@@ -1,25 +1,6 @@
----
-output: html_document
-editor_options: 
-  chunk_output_type: console
----
 # データの型 {#datatype}
 
 
-
-<h2>目次</h2>
-
-* 第\@ref(WhatIsDatatype)章: データ型とは
-* 第\@ref(type-logical)章: Logical型
-* 第\@ref(type-numeric)章: Numeric型
-* 第\@ref(type-complex)章: Complex型
-* 第\@ref(type-character)章: Character型
-* 第\@ref(type-factor)章: Factor型
-* 第\@ref(type-date)章: Date型
-* 第\@ref(type-na)章: NA型
-* 第\@ref(type-null)章: NULL型
-* 第\@ref(type-nan)章: NaN型
-* 第\@ref(type-inf)章: Inf型
 
 ## データ型とは {#WhatIsDatatype}
 
@@ -664,7 +645,7 @@ ggplot(SongSleep,
        mapping = aes(x = Date, y = Sleep)) +
     geom_point() +
     labs(x = "日付", y = "睡眠時間 (分)") +
-    theme_bw(base_family = "HiraKakuProN-W3")
+    theme_gray(base_size = 12)
 ```
 
 <div class="figure" style="text-align: center">
@@ -705,7 +686,7 @@ ggplot(SongSleep,
        mapping = aes(x = DateD, y = Sleep)) +
     geom_point() +
     labs(x = "日付", y = "睡眠時間 (分)") +
-    theme_bw(base_family = "HiraKakuProN-W3")
+    theme_gray(base_size = 12)
 ```
 
 <div class="figure" style="text-align: center">
@@ -745,7 +726,7 @@ ggplot(SongSleep2,
        mapping = aes(x = Date, y = Sleep)) +
     geom_point() +
     labs(x = "日付", y = "睡眠時間 (分)") +
-    theme_bw(base_family = "HiraKakuProN-W3")
+    theme_gray(base_size = 12)
 ```
 
 <div class="figure" style="text-align: center">
@@ -761,7 +742,7 @@ ggplot(SongSleep2,
        mapping = aes(x = DateD, y = Sleep)) +
     geom_point() +
     labs(x = "日付", y = "睡眠時間 (分)") +
-    theme_bw(base_family = "HiraKakuProN-W3")
+    theme_gray(base_size = 12)
 ```
 
 <div class="figure" style="text-align: center">
@@ -910,7 +891,7 @@ as.Date("21may2020",   format = "%d%b%Y")
 ```
 
 ```
-## [1] "2020-05-21"
+## [1] NA
 ```
 
 ```{.r .numberLines}
@@ -918,7 +899,7 @@ as.Date("May/21/2020", format = "%b/%d/%Y")
 ```
 
 ```
-## [1] "2020-05-21"
+## [1] NA
 ```
 
 うまくいかないですね。これはシステムの時間ロケールが日本になっているのが原因です。ロケール設定は`Sys.getlocale()`で確認できます。
@@ -929,7 +910,7 @@ Sys.getlocale(category = "LC_TIME")
 ```
 
 ```
-## [1] "en_US.UTF-8"
+## [1] "ja_JP.UTF-8"
 ```
 
 これを`Sys.setlocale()`を使って、`"C"`に変更します。

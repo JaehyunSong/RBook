@@ -1,8 +1,3 @@
----
-output: html_document
-editor_options: 
-  chunk_output_type: console
----
 # データの入出力 {#io}
 
 
@@ -76,7 +71,7 @@ my_df1
 ## 34   34               Congo DR  110   1159        1159           CAF
 ## 35   35           Cook Islands  103   1194        1194           OFC
 ## 36   36             Costa Rica   36   1644        1630      CONCACAF
-## 37   37          Côte d'Ivoire   63   1392        1392           CAF
+## 37   37         Côte d'Ivoire   63   1392        1392           CAF
 ## 38   38                Croatia   52   1453        1439          UEFA
 ## 39   39                   Cuba   88   1240        1240      CONCACAF
 ## 40   40                 Cyprus  123   1114        1123          UEFA
@@ -249,7 +244,7 @@ ShiftJIS_df <- read.csv("Data/Vote_ShiftJIS.csv")
 ```
 
 ```
-## Error in type.convert.default(data[[i]], as.is = as.is[i], dec = dec, : invalid multibyte string at '<96>k<8a>C<93><b9>'
+## Error in type.convert.default(data[[i]], as.is = as.is[i], dec = dec, :  '<96>k<8a>C<93><b9>' に不正なマルチバイト文字があります
 ```
 
 　Windowsならなんの問題なく読み込まれるだろう。しかし、macOSの場合、以下のようなエラーが表示され、読み込めない。
@@ -550,45 +545,23 @@ my_data <- data.frame(
 )
 ```
 
-　上のコードを実行すると、`my_data`というオブジェクトが生成され、中には表\@ref(tab:my-data-inside)以下のようなデータが保持される。
+　上のコードを実行すると、`my_data`というオブジェクトが生成され、中には以下のようなデータが保持される。
 
-<table class=" lightable-classic" style='font-family: "Arial Narrow", "Source Sans Pro", sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'>
-<caption>(\#tab:my-data-inside)`my_data`の中身</caption>
- <thead>
-  <tr>
-   <th style="text-align:right;"> ID </th>
-   <th style="text-align:left;"> Name </th>
-   <th style="text-align:right;"> Score </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;"> Aさん </td>
-   <td style="text-align:right;"> 50 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 2 </td>
-   <td style="text-align:left;"> Bさん </td>
-   <td style="text-align:right;"> 75 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 3 </td>
-   <td style="text-align:left;"> Cさん </td>
-   <td style="text-align:right;"> 60 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 4 </td>
-   <td style="text-align:left;"> Dさん </td>
-   <td style="text-align:right;"> 93 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 5 </td>
-   <td style="text-align:left;"> Eさん </td>
-   <td style="text-align:right;"> 51 </td>
-  </tr>
-</tbody>
-</table>
+(ref:my_data_detail) `my_data`の中身
+
+
+```{.r .numberLines}
+my_data
+```
+
+```
+##   ID  Name Score
+## 1  1 Aさん    50
+## 2  2 Bさん    75
+## 3  3 Cさん    60
+## 4  4 Dさん    93
+## 5  5 Eさん    51
+```
 
 　このデータを`my_data.csv`という名前のcsvファイルで保存するには、`write.csv()`という関数を使う。必須の引数は2つで、1つ目の引数は保存するオブジェクト名、2つ目の引数 `file` は書き出すファイル名。もし、プロジェクトフォルダの下位フォルダ、たとえば、Dataフォルダーに保存するなら、ファイル名を`"Data/my_ata.csv"`のように指定する。他によく使う引数として`row.names`があり、デフォルトは`TRUE`だが、`FALSE`にすることを推奨する。`TRUE`のままだと、データの1列目に行番号が保存される。
 
@@ -601,7 +574,7 @@ write.csv(my_data, file = "Data/my_data.csv", row.names = FALSE)
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Rbasic/Export.png" alt="my_data.csvの中身" width="40%" />
-<p class="caption">(\#fig:unnamed-chunk-22)my_data.csvの中身</p>
+<p class="caption">(\#fig:unnamed-chunk-23)my_data.csvの中身</p>
 </div>
 
 ### RDataファイル

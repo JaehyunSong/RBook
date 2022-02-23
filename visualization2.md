@@ -1,8 +1,3 @@
----
-output: html_document
-editor_options: 
-  chunk_output_type: console
----
 # 可視化[基礎] {#visualization2}
 
 

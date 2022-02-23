@@ -1,9 +1,3 @@
----
-output: html_document
-editor_options: 
-  chunk_output_type: console
----
-
 # (PART) 再現可能な研究 {-}
 
 # R Markdown [基礎] {#rmarkdown}
@@ -453,7 +447,7 @@ print("Hello World!")
 ````markdown
 ```{r}
 # パッケージの読み込み
-library(tidyverse)
+pacman::p_load(tidyverse)
 # R内蔵データセットのirisを使った可視化
 iris %>%
   mutate(Species2 = recode(Species,
@@ -472,7 +466,7 @@ iris %>%
 
 ```{.r .numberLines}
 # パッケージの読み込み
-library(tidyverse)
+pacman::p_load(tidyverse)
 # R内蔵データセットのirisを使った可視化
 iris %>%
   mutate(Species2 = recode(Species,

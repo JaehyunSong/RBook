@@ -1,8 +1,3 @@
----
-output: html_document
-editor_options: 
-  chunk_output_type: console
----
 # 整然データ構造 {#tidydata}
 
 
@@ -11,9 +6,7 @@ editor_options:
 
 ## 整然データ (tidy data)とは {#tidydata-intro}
 
-分析や作図に適したデータの形は整然データ、または簡潔データ (tidy data)と呼ばれます。整然データの概念はtidyverse世界の産みの親であるHadely Wickham先生が提唱した概念であり、詳細はHadley先生が2014年に発表した論文[^tidydata1]を参照してください。
-
-[^tidydata1]: [Wickham, Hadley. 2014. "Tidy data." *Journal of Statistical Software.* 59 (10)](https://www.jstatsoft.org/article/view/v059i10)
+分析や作図に適したデータの形は整然データ、または簡潔データ (tidy data)と呼ばれます。整然データの概念はtidyverse世界の産みの親であるHadely Wickham先生が提唱した概念であり、詳細は @Wickham:2014 を参照してください。
 
 整然データは目指す到達点は非常に単純です。それは「データの構造 (structure)と意味 (semantic)を一致させる」ことです。そして、この「意味」を出来る限り小さい単位で分解します。
 
@@ -498,7 +491,7 @@ editor_options:
 
 
 ```{.r .numberLines}
-library(tidyverse)
+pacman::p_load(tidyverse)
 ```
 
 今回は様々な形のデータを変形する作業をするので、あるデータセットを使うよりも、架空の簡単なデータを使います。

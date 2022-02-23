@@ -1,33 +1,31 @@
 --- 
 title: "私たちのR: ベストプラクティスの探究"
 author: "宋財泫 (Jaehyun Song)・矢内勇生 (Yuki Yanai)"
-date: "最終修正: 2022-02-22"
+date: "改訂: 2022-02-23"
+description: "R Not for Everyone: An Esoteric Guide."
+url: 'https\://jaysong.net/RBook/'
+
 site: bookdown::bookdown_site
-#documentclass: bxjsbook
-documentclass: ltjbook
-#classoption: xelatex, ja = standard, base = 12pt
-bibliography: TeX/reference.bib
-biblio-style: TeX/jecon.bst
+
+bibliography: "tex/reference.bib"
+biblio-style: "tex/jecon.bst"
 link-citations: yes
 always_allow_html: true
-description: "R Not for Everyone: An Esoteric Guide."
+
 github-repo: "JaehyunSong/RBook"
+cover-image: "HTML/cover.png"
 favicon: "HTML/favicon.png"
 apple-touch-icon: "HTML/apple-favicon.png"
-cover-image: "HTML/cover.png"
-editor_options: 
-  chunk_output_type: console
+apple-touch-icon-size: 120
 ---
 
 
 
 # 紹介 {#preface .unnumbered}
 
-<img src="figures/Cover.png" width="300" alt="RN4E" align="right" style="margin: 0 0 1em 1em; border-width: 1px; border-style: solid; border-color: black;" />
+<img src="figures/Cover.png" width="250" alt="RN4E" align="right" style="margin: 0 0 1em 1em; border-width: 1px; border-style: solid; border-color: black;" />
 
-『私たちのR』は[SONG Jaehyun](http://www.jaysong.net/) と [矢内勇生](https://yukiyanai.github.io) が共同で執筆するRプログラミングの「入門書」である。**統計学の本ではない。**
-
-また、**本書はデータ分析の手法の解説書でもない**。Rを用いたデータ分析については他の本を参照されたい。私たちが専門とする政治学におけるデータ分析については、以下の本を勧める。
+『私たちのR』は[SONG Jaehyun](http://www.jaysong.net/) と [矢内勇生](https://yukiyanai.github.io) が共同で執筆するRプログラミングの「入門書」である。**統計学の本ではない**。また、**本書はデータ分析の手法の解説書でもない**。Rを用いたデータ分析については他の本を参照されたい。私たちが専門とする政治学におけるデータ分析については、以下の本を勧める。
 
 - 浅野正彦, 矢内勇生. 2018. 『[Rによる計量政治学](https://www.ohmsha.co.jp/book/9784274223136/)』オーム社.
 - 飯田健. 2013.『[計量政治分析](https://www.kyoritsu-pub.co.jp/bookdetail/9784320019249)』共立出版.
@@ -55,36 +53,36 @@ editor_options:
 
 | 章                    | タイトル                              |進捗状況 (%)| 備考        |
 |-----------------------|---------------------------------------|-----------:|-------------|
-||**Rの導入**|||
+|Part I|**Rの導入**|||
 | \@ref(aboutR)         | R?                                    |         75 |             |
 | \@ref(installation)   | Rのインストール                       |          0 |  再執筆予定 |
 | \@ref(ide)            | IDEの導入                             |          0 |  再執筆予定 |
 | \@ref(R-Customize)    | 分析環境のカスタマイズ                |          0 |             |
 | \@ref(packages)       | Rパッケージ                           |         50 |             |
-||**Rの基礎**|||
+|Part II|**Rの基礎**|||
 | \@ref(rbasic)         | 基本的な操作                          |         80 |             |
 | \@ref(io)             | データの入出力                        |         70 |             |
 | \@ref(datatype)       | データ型                              |         90 |             |
 | \@ref(datastructure)  | データ構造                            |         80 |             |
 | \@ref(programming)    | Rプログラミングの基礎                 |         85 |             |
 | \@ref(functions)      | 関数の自作                            |         50 |             |
-||**データハンドリング**|||
+|Part III|**データハンドリング**|||
 | \@ref(datahandling1)  | データハンドリング [基礎編: 抽出]     |         95 |             |
 | \@ref(datahandling2)  | データハンドリング [基礎編: 拡張]     |         95 |             |
 | \@ref(factor)         | データハンドリング [基礎編: factor型] |         90 |             |
 | \@ref(tidydata)       | 整然データ構造                        |         85 |             |
 | \@ref(string)         | 文字列の処理                          |          0 |             |
-||**可視化**|||
+|Part IV|**可視化**|||
 | \@ref(visualization1) | 可視化[理論]                          |         85 |             |
 | \@ref(visualization2) | 可視化[基礎]                          |         85 |             |
 | \@ref(visualization3) | 可視化[応用]                          |         85 |             |
 | \@ref(visualization4) | 可視化[発展]                          |         80 |             |
-||**再現可能な研究**|||
+|Part V|**再現可能な研究**|||
 | \@ref(rmarkdown)      | R Markdown [基礎]                     |         85 |             |
 | \@ref(rmarkdown2)     | R Markdown [応用]                     |          0 |             |
 | 99                    | モデルの可視化                        |          0 |             |
 | \@ref(table)          | 表の作成                              |          0 |             |
-||**中級者向け**|||
+|Part VI|**中級者向け**|||
 | \@ref(datahandling3)  | データハンドリング [応用編]           |          0 |             |
 | \@ref(iteration)      | 反復処理                              |         70 |             |
 | \@ref(oop)            | オブジェクト指向プログラミング        |         60 |             |
@@ -96,7 +94,7 @@ editor_options:
 
 <div class="figure" style="text-align: center">
 <img src="figures/Authors/SongYanai.jpg" alt="事例研究をこよなく愛する著者 (Portland, OR. 2016年2月)" width="50%" />
-<p class="caption">(\#fig:unnamed-chunk-2)事例研究をこよなく愛する著者 (Portland, OR. 2016年2月)</p>
+<p class="caption">(\#fig:preface_author)事例研究をこよなく愛する著者 (Portland, OR. 2016年2月)</p>
 </div>
 
 **Song Jaehyun**（宋 財泫 [ソン ジェヒョン]; 写真左）はR黒帯の大学教員。猫好き。
@@ -118,46 +116,6 @@ editor_options:
 * Twitter: [\@yuki871](https://twitter.com/yuki871)
 * GitHub: https://github.com/yukiyanai
 
-<!--
-
-## 本書の構成 {#about-toc}
-
-**第\@ref(aboutR)章**ではR?
-
-**第\@ref(installation)章**ではRおよび統合開発環境の一つであるRStudioのインストールについて解説します。また、本書で頻繁に使うパッケージ群のインストール方法についても解説します。
-
-**第\@ref(ide)章**では本書で用いる統合開発環境 (IDE)であるRStudioの
-
-**第\@ref(process)章**では
-
-**第\@ref(rbasic)章**ではRの基本的な操作について説明します。プロジェクト機能を用いたデータの管理、電卓としてのRの使い方、簡単なデータの代入と抽出について解説し、最後はデータの入出力について説明します。
-
-**第\@ref(datatype)章**ではRにおけるデータの最小単位であるベクトルのデータ型について説明します。それぞれのデータ型の扱い方については本書を通じて解説していきますので、ここは軽く目を通すだけでも良いかも知れません。
-
-**第\@ref(datastructure)章**ではデータ構造
-
-**第\@ref(programming)章**ではRプログラミングの基礎
-
-**第\@ref(datahandling1)章**では比較的に綺麗なデータのハンドリング方法
-
-**第\@ref(datahandling2)章**ではデータを拡張する、要約する
-
-**第\@ref(factor)章**ではfactor型
-
-**第\@ref(visualization)章**ではデータの視覚化について
-
-**第\@ref(tidydata)章**では簡潔データ (tidydata)構造について
-
-**第\@ref(datahandling3)章**では
-
-**第\@ref(string)章**では文字列の処理方法
-
-**第\@ref(scraping)章**ではウェブデータの収集方法
-
-**第\@ref(rmarkdown)章**ではR Markdown
-
--->
-
 ## データのダウンロード {-}
 
 本書のデータは全て筆者の GitHub リポジトリから入手可能である。データは以下の手順でダウンロードできる。
@@ -174,14 +132,14 @@ editor_options:
 * コードは以下のように背景に色が付けられている部分である。
 
 
-```r
+```{.r .numberLines}
 print("Hello!")
 ```
 
 * コードの中で`#`で始まる内容はコメントであり、分析に影響を与えない。ただし、`"`や`'`で囲まれた`#`はコメントではない。また、行の途中から`#`が入る場合、`#`以降は実行されない。
 
 
-```r
+```{.r .numberLines}
 # Hello!を出力するコード
 print("Hello!")
 

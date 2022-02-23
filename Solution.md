@@ -1,8 +1,3 @@
----
-output: html_document
-editor_options: 
-  chunk_output_type: console
----
 # 演習問題の回答 {#solution .unnumbered}
 
 
@@ -12,7 +7,7 @@ editor_options:
 ## 基本的な操作 {#solution-rbasic}
 
 
-```r
+```{.r .numberLines}
 (myVec1 <- c(3, 9, 10, 8, 3, 5, 8)) # 問1
 myVec1[c(2, 4, 6)]                  # 問2
 sum(myVec1)                         # 問3
@@ -30,7 +25,7 @@ sum((myVec4[myVec4 %% 2 == 1])^2)   # 問10
 ### ベクトル
 
 
-```r
+```{.r .numberLines}
 # 問1 1から10までの公差1の等差数列を作成し、myVec1と名付けよ。
 myVec1 <- 1:10
 
@@ -75,7 +70,7 @@ $$
 $$
 
 
-```r
+```{.r .numberLines}
 # myMat1: byrow = を指定する場合
 myMat1 <- matrix(1:6, nrow = 2, byrow = TRUE)
 # myMat1: byrow = を指定しない場合
@@ -90,14 +85,14 @@ myMat2 <- matrix(1:9, nrow = 3)
 **問2** `myMat1`と`myMat2`の掛け算を行い、`myMat3`と名付けよ。
 
 
-```r
+```{.r .numberLines}
 myMat3 <- myMat1 %*% myMat2
 ```
 
 **問3** 連立方程式の解を求めよ。
 
 
-```r
+```{.r .numberLines}
 # 問3-1
 myMat4 <- matrix(c(3, -1,  2, 
                    1,  2,  3,
@@ -117,7 +112,7 @@ myMat4 %*% myMat6
 ### データフレーム
 
 
-```r
+```{.r .numberLines}
 # 問1. 以下のようなデータフレームを作成し、myDF1と名付けよ。
 myDF1 <- data.frame(
     ID    = 1:10,
@@ -157,7 +152,7 @@ myTbl1[myTbl1$Rank < 20, ]
 `while()`を使う場合
 
 
-```r
+```{.r .numberLines}
 Trial <- 1
 Total <- 0
 
@@ -176,7 +171,7 @@ while (Total != 15) {
 `for()`を使う場合
 
 
-```r
+```{.r .numberLines}
 for (Trial in 1:10000) {
   Dice  <- sample(1:6, 3, replace = TRUE)
   Total <- sum(Dice)
@@ -194,7 +189,7 @@ for (Trial in 1:10000) {
 **問2**
 
 
-```r
+```{.r .numberLines}
 # 問2-1
 Cause <- c("喫煙", "飲酒", "食べすぎ", "寝不足", "ストレス")
 
@@ -205,7 +200,7 @@ for (i in Cause) {
 ```
 
 
-```r
+```{.r .numberLines}
 # 問2-2
 Effect <- c("肥満", "ハゲ", "不人気", "金欠")
 
@@ -218,7 +213,7 @@ for (i in Effect) {
 ```
 
 
-```r
+```{.r .numberLines}
 # 問2-3
 Solution <- c("この薬を飲めば", "一日一麺すれば", "Songに100万円振り込めば")
 
@@ -237,7 +232,7 @@ for (i in Effect) {
 **問1**
 
 
-```r
+```{.r .numberLines}
 Data   <- c(5, 3)
 
 if (Data[1] > Data[2]) {
@@ -252,7 +247,7 @@ Data
 **問2**
 
 
-```r
+```{.r .numberLines}
 my_sqrt <- function(x, g, e = 0.001) {
     
     if (!is.numeric(x) | x <= 0) {
@@ -275,7 +270,7 @@ my_sqrt <- function(x, g, e = 0.001) {
 **問3**
 
 
-```r
+```{.r .numberLines}
 Data <- c(5, 2, 4, 1)
 
 for (i in (length(Data)-1):1) {
@@ -294,7 +289,7 @@ Data
 **問4**
 
 
-```r
+```{.r .numberLines}
 mySort <- function(x) {
   
   for (i in (length(x)-1):1) {
@@ -318,7 +313,7 @@ mySort(Data)
 **問5**
 
 
-```r
+```{.r .numberLines}
 DQ_Attack2 <- function(attack, defence, hp, enemy) {
   DefaultDamage <- (attack / 2) - (defence / 4)
   DefaultDamage <- ifelse(DefaultDamage < 0, 0, DefaultDamage)
@@ -357,7 +352,7 @@ DQ_Attack2 <- function(attack, defence, hp, enemy) {
 **問6**
 
 
-```r
+```{.r .numberLines}
 mySample <- function(x, n, seed) {
   
   # 以下の条件が満たされない場合、エラーメッセージを出力し、関数を停止
