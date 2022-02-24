@@ -382,7 +382,7 @@ div.csl-indent {
 <li class="chapter" data-level="12.4.2" data-path="datahandling1.html"><a href="datahandling1.html#条件に合致する行を抽出する"><i class="fa fa-check"></i><b>12.4.2</b> 条件に合致する行を抽出する</a></li>
 </ul></li>
 <li class="chapter" data-level="12.5" data-path="datahandling1.html"><a href="datahandling1.html#handling1-arrange"><i class="fa fa-check"></i><b>12.5</b> 行のソート</a></li>
-<li class="chapter" data-level="12.6" data-path="datahandling1.html"><a href="datahandling1.html#handling1-exercise"><i class="fa fa-check"></i><b>12.6</b> 練習問題</a></li>
+<li class="chapter" data-level="" data-path="datahandling1.html"><a href="datahandling1.html#handling1-exercise"><i class="fa fa-check"></i>練習問題</a></li>
 </ul></li>
 <li class="chapter" data-level="13" data-path="datahandling2.html"><a href="datahandling2.html"><i class="fa fa-check"></i><b>13</b> データハンドリング [基礎編: 拡張]</a>
 <ul>
@@ -406,7 +406,7 @@ div.csl-indent {
 <li class="chapter" data-level="13.5.1" data-path="datahandling2.html"><a href="datahandling2.html#行の結合"><i class="fa fa-check"></i><b>13.5.1</b> 行の結合</a></li>
 <li class="chapter" data-level="13.5.2" data-path="datahandling2.html"><a href="datahandling2.html#列の結合"><i class="fa fa-check"></i><b>13.5.2</b> 列の結合</a></li>
 </ul></li>
-<li class="chapter" data-level="13.6" data-path="datahandling2.html"><a href="datahandling2.html#handling2-exercise"><i class="fa fa-check"></i><b>13.6</b> 練習問題</a></li>
+<li class="chapter" data-level="" data-path="datahandling2.html"><a href="datahandling2.html#handling2-exercise"><i class="fa fa-check"></i>練習問題</a></li>
 </ul></li>
 <li class="chapter" data-level="14" data-path="factor.html"><a href="factor.html"><i class="fa fa-check"></i><b>14</b> データハンドリング [基礎編: factor型]</a>
 <ul>
@@ -904,17 +904,37 @@ div.csl-indent {
 ## 157 157             Wales   34   1658        1659          UEFA
 ## 158 158            Zambia  100   1198        1167           CAF
 ## 159 159          Zimbabwe  111   1151        1151           CAF</code></pre>
+<p>　ただし、今後、特殊な事情がない限り、データの読み込みは<code>read.csv()</code>を使用せず、<code>read_csv()</code>を使用しますが、使い方は同じです。<code>read_csv()</code>は{tidyverse}の一部である{readr}パッケージに含まれている関数であるため、あらかじめ{tidyverse}を読み込んでおく必要があります。</p>
+<div class="sourceCode" id="cb97"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb97-1"><a href="io.html#cb97-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse)</span>
+<span id="cb97-2"><a href="io.html#cb97-2"></a>my_df1 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;Data/FIFA_Women.csv&quot;</span>)</span>
+<span id="cb97-3"><a href="io.html#cb97-3"></a></span>
+<span id="cb97-4"><a href="io.html#cb97-4"></a>my_df1</span></code></pre></div>
+<pre><code>## # A tibble: 159 × 6
+##       ID Team                 Rank Points Prev_Points Confederation
+##    &lt;dbl&gt; &lt;chr&gt;               &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;        
+##  1     1 Albania                75   1325        1316 UEFA         
+##  2     2 Algeria                85   1271        1271 CAF          
+##  3     3 American Samoa        133   1030        1030 OFC          
+##  4     4 Andorra               155    749         749 UEFA         
+##  5     5 Angola                121   1117        1117 CAF          
+##  6     6 Antigua and Barbuda   153    787         787 CONCACAF     
+##  7     7 Argentina              32   1659        1659 CONMEBOL     
+##  8     8 Armenia               126   1103        1104 UEFA         
+##  9     9 Aruba                 157    724         724 CONCACAF     
+## 10    10 Australia               7   1963        1963 AFC          
+## # … with 149 more rows</code></pre>
+<p>　同じファイルが読み込まれましたが、データを出力する際、最初の10行のみが表示されます。また、画面に収まらない横長のデータであれば、適宜省略し、見やすく出力してくれます。<code>read_csv()</code>で読み込まれた表形式データはtibbleと呼ばれるやや特殊なものとして格納されます。Rがデフォルトで提供する表形式データの構造はdata.frameですが、tibbleはその拡張版です。詳細は第<a href="datastructure.html#structure-dataframe">9.4</a>章を参照してください。</p>
 </div>
 <div id="エンコーディングの話" class="section level3" number="7.1.2">
 <h3><span class="header-section-number">7.1.2</span> エンコーディングの話</h3>
 <p>　<code>Vote_ShiftJIS.csv</code> はShift-JIS でエンコーディングされた csvファイルである。このファイルを <code>read.csv()</code> 関数で読み込んでみよう。</p>
-<div class="sourceCode" id="cb97"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb97-1"><a href="io.html#cb97-1"></a>ShiftJIS_df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/Vote_ShiftJIS.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb99-1"><a href="io.html#cb99-1"></a>ShiftJIS_df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/Vote_ShiftJIS.csv&quot;</span>)</span></code></pre></div>
 <pre><code>## Error in type.convert.default(data[[i]], as.is = as.is[i], dec = dec, : invalid multibyte string at &#39;&lt;96&gt;k&lt;8a&gt;C&lt;93&gt;&lt;b9&gt;&#39;</code></pre>
 <p>　Windowsならなんの問題なく読み込まれるだろう。しかし、macOSの場合、以下のようなエラーが表示され、読み込めない。</p>
 <pre><code>## Error in type.convert.default(data[[i]], as.is = as.is[i], dec = dec, :  &#39;&lt;96&gt;k&lt;8a&gt;C&lt;93&gt;&lt;b9&gt;&#39; に不正なマルチバイト文字があります</code></pre>
 <p>　このファイルは、<code>read.csv()</code>の代わりに <strong>readr</strong>パッケージの<code>read_csv()</code>を使えば読み込むことができる<a href="reference.html#fn33" class="footnote-ref" id="fnref33"><sup>33</sup></a>。<code>read_csv()</code>で読み込み、中身を確認してみよう。</p>
-<div class="sourceCode" id="cb100"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb100-1"><a href="io.html#cb100-1"></a>ShiftJIS_df1 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;Data/Vote_ShiftJIS.csv&quot;</span>)</span>
-<span id="cb100-2"><a href="io.html#cb100-2"></a><span class="fu">head</span>(ShiftJIS_df1)</span></code></pre></div>
+<div class="sourceCode" id="cb102"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb102-1"><a href="io.html#cb102-1"></a>ShiftJIS_df1 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;Data/Vote_ShiftJIS.csv&quot;</span>)</span>
+<span id="cb102-2"><a href="io.html#cb102-2"></a><span class="fu">head</span>(ShiftJIS_df1)</span></code></pre></div>
 <pre><code>## # A tibble: 6 × 11
 ##      ID Pref           Zaisei Over65 Under30   LDP   DPJ Komei Ishin   JCP   SDP
 ##   &lt;dbl&gt; &lt;chr&gt;           &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -928,9 +948,9 @@ div.csl-indent {
 <p>　正しい都道府県名を表示する方法はいくつかあるが、ここでは3つの方法を紹介する。</p>
 <p><strong>1. <code>read.csv()</code>関数の<code>fileEncoing</code>引数の指定</strong></p>
 <p>　一つ目の方法は、<code>read.csv()</code>関数の <code>fileEncoding</code> 引数を追加するというものだる。この引数に、指定したファイルのエンコーディングを指定すればよいが、Shift-JISの場合、<code>"Shift_JIS"</code>　を指定する。ハイフン (<code>-</code>)ではなく、アンダーバー (<code>_</code>) であることに注意されたい。この<code>"Shift_JIS"</code>は<code>"cp932"</code> に書き換えても良い。それではやってみよう。</p>
-<div class="sourceCode" id="cb102"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb102-1"><a href="io.html#cb102-1"></a>ShiftJIS_df2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/Vote_ShiftJIS.csv&quot;</span>, </span>
-<span id="cb102-2"><a href="io.html#cb102-2"></a>                         <span class="at">fileEncoding =</span> <span class="st">&quot;Shift_JIS&quot;</span>)</span>
-<span id="cb102-3"><a href="io.html#cb102-3"></a><span class="fu">head</span>(ShiftJIS_df2)</span></code></pre></div>
+<div class="sourceCode" id="cb104"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb104-1"><a href="io.html#cb104-1"></a>ShiftJIS_df2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/Vote_ShiftJIS.csv&quot;</span>, </span>
+<span id="cb104-2"><a href="io.html#cb104-2"></a>                         <span class="at">fileEncoding =</span> <span class="st">&quot;Shift_JIS&quot;</span>)</span>
+<span id="cb104-3"><a href="io.html#cb104-3"></a><span class="fu">head</span>(ShiftJIS_df2)</span></code></pre></div>
 <pre><code>##   ID   Pref  Zaisei Over65 Under30   LDP   DPJ Komei Ishin   JCP  SDP
 ## 1  1 北海道 0.41903  29.09   24.70 32.82 30.62 13.41  3.43 11.44 1.68
 ## 2  2 青森県 0.33190  30.14   23.92 40.44 24.61 12.76  3.82  8.92 3.41
@@ -941,9 +961,9 @@ div.csl-indent {
 <p>　<code>Pref</code>列の日本語が正常に表示された。むろん、Windowsなら<code>fileEncoding</code>引数がなくても読み込める。むしろ、UTF-8で書かれたファイルが読み込めない可能性がある。この場合は<code>fileEncoding = "UTF-8"</code>を指定すれば良い。</p>
 <p><strong>2. <code>read_csv()</code>関数の<code>locale</code>引数の指定</strong></p>
 <p>　二つ目の方法は <code>read_csv()</code> 関数の<code>locale</code> 引数を指定する方法である。<code>read_csv()</code>には　<code>fileEncoding</code>　引数がないが、代わりに <code>locale</code> があるので、<code>locale = locale(encoding = "Shift_JIS")</code>を追加すれば良い。</p>
-<div class="sourceCode" id="cb104"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb104-1"><a href="io.html#cb104-1"></a>ShiftJIS_df3 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;Data/Vote_ShiftJIS.csv&quot;</span>, </span>
-<span id="cb104-2"><a href="io.html#cb104-2"></a>                         <span class="at">locale =</span> <span class="fu">locale</span>(<span class="at">encoding =</span> <span class="st">&quot;Shift_JIS&quot;</span>))</span>
-<span id="cb104-3"><a href="io.html#cb104-3"></a><span class="fu">head</span>(ShiftJIS_df3)</span></code></pre></div>
+<div class="sourceCode" id="cb106"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb106-1"><a href="io.html#cb106-1"></a>ShiftJIS_df3 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;Data/Vote_ShiftJIS.csv&quot;</span>, </span>
+<span id="cb106-2"><a href="io.html#cb106-2"></a>                         <span class="at">locale =</span> <span class="fu">locale</span>(<span class="at">encoding =</span> <span class="st">&quot;Shift_JIS&quot;</span>))</span>
+<span id="cb106-3"><a href="io.html#cb106-3"></a><span class="fu">head</span>(ShiftJIS_df3)</span></code></pre></div>
 <pre><code>## # A tibble: 6 × 11
 ##      ID Pref   Zaisei Over65 Under30   LDP   DPJ Komei Ishin   JCP   SDP
 ##   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -955,9 +975,9 @@ div.csl-indent {
 ## 6     6 山形県  0.342   30.8    24.8  42.5  21.5 11.8   4.3   7.6   5.2</code></pre>
 <p><strong>3. LibreOfficeなどを利用した方法</strong></p>
 <p>　第三の方法は、そもそも Shift-JISでではなく、より一般的な UTF-8 でエンコーディングされたファイルを用意し、それを読み込むことである。ただし、この作業のためにはR以外のソフトが必要である。テキストエディタには文字コードを変更する機能がついているものが多いので、その機能を利用して文字コードを Shift-JISからUTF-8に変えれば良い。また、オープンソースのオフィススイートである <a href="https://ja.libreoffice.org/">LibreOffice</a> は、CSVを開く際に文字コードを尋ねてくれるので、Shift-JIS を指定して上で使った csv ファイルを開こう。その後、文字コードをUTF-8に変更し、別名でcsvファイルを保存すれ、文字コード以外の中身が同じファイルができる。そのようにして作ったのが、<code>Vote.csv</code> である。これを読み込んでみよう。</p>
-<div class="sourceCode" id="cb106"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb106-1"><a href="io.html#cb106-1"></a>UTF8_df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/Vote.csv&quot;</span>) <span class="co"># macOSの場合</span></span>
-<span id="cb106-2"><a href="io.html#cb106-2"></a>UTF8_df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/Vote.csv&quot;</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>) <span class="co"># Windowsの場合</span></span></code></pre></div>
-<div class="sourceCode" id="cb107"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb107-1"><a href="io.html#cb107-1"></a><span class="fu">head</span>(UTF8_df)</span></code></pre></div>
+<div class="sourceCode" id="cb108"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb108-1"><a href="io.html#cb108-1"></a>UTF8_df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/Vote.csv&quot;</span>) <span class="co"># macOSの場合</span></span>
+<span id="cb108-2"><a href="io.html#cb108-2"></a>UTF8_df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/Vote.csv&quot;</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>) <span class="co"># Windowsの場合</span></span></code></pre></div>
+<div class="sourceCode" id="cb109"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb109-1"><a href="io.html#cb109-1"></a><span class="fu">head</span>(UTF8_df)</span></code></pre></div>
 <pre><code>##   ID   Pref  Zaisei Over65 Under30   LDP   DPJ Komei Ishin   JCP  SDP
 ## 1  1 北海道 0.41903  29.09   24.70 32.82 30.62 13.41  3.43 11.44 1.68
 ## 2  2 青森県 0.33190  30.14   23.92 40.44 24.61 12.76  3.82  8.92 3.41
@@ -971,9 +991,9 @@ div.csl-indent {
 <h3><span class="header-section-number">7.1.3</span> その他のフォーマット</h3>
 <p>　データ分析で用いられるデータの多くは表の形で保存されている。表形式のデータは、<code>.csv</code>以外に、<code>.xlsx</code> (Excel)、<code>.dta</code> (Stata)、<code>.sav</code> (SPSS)、<code>.ods</code> (LibreOfficeなど)　などのファイル形式で保存されることがある。ここでは接する機会が多い Excel 形式のファイルと Stata 形式のファイルの読み込みについて説明しよう<a href="reference.html#fn34" class="footnote-ref" id="fnref34"><sup>34</sup></a>。</p>
 <p>　Excelファイルを読み込むためには<strong>readxl</strong>パッケージを使う。インストールされていない場合、コンソール上で<code>install.packages("readxl")</code>を入力し、インストールする（上で <code>pacman::p_load(readxl)</code> を実行したのでインストールされているはずだが）。以下では<strong>readxl</strong>パッケージがインストールされていると想定し、<code>Soccer.xlsx</code>ファイルを読み込み、<code>Excel_DF</code>と名付けてみよう。</p>
-<div class="sourceCode" id="cb109"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb109-1"><a href="io.html#cb109-1"></a>Excel_DF <span class="ot">&lt;-</span> <span class="fu">read_xlsx</span>(<span class="st">&quot;Data/Soccer.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb111"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb111-1"><a href="io.html#cb111-1"></a>Excel_DF <span class="ot">&lt;-</span> <span class="fu">read_xlsx</span>(<span class="st">&quot;Data/Soccer.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="dv">1</span>)</span></code></pre></div>
 <p>　Excelファイルには2つ以上のシートが含まれる場合が多いので、どのシートを読み込むかを<code>sheetIndex</code> で指定する。実際、<code>Soccer.xlsx</code>ファイルをExcelまたはLibreOffice Calc で開いてみると、シートが3つある。そのうち、必要なデータは1つ目のシートにあるので、ここでは<code>1</code>を指定した。きちんと読み込たか確認してみよう。</p>
-<div class="sourceCode" id="cb110"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb110-1"><a href="io.html#cb110-1"></a><span class="fu">head</span>(Excel_DF)</span></code></pre></div>
+<div class="sourceCode" id="cb112"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb112-1"><a href="io.html#cb112-1"></a><span class="fu">head</span>(Excel_DF)</span></code></pre></div>
 <pre><code>## # A tibble: 6 × 6
 ##      ID Team                 Rank Points Prev_Points Confederation
 ##   &lt;dbl&gt; &lt;chr&gt;               &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;        
@@ -984,8 +1004,8 @@ div.csl-indent {
 ## 5     5 Angola                121   1117        1117 CAF          
 ## 6     6 Antigua and Barbuda   153    787         787 CONCACAF</code></pre>
 <p>　Stataの<code>.dta</code>ファイルは<strong>haven</strong>パッケージの<code>read_dta()</code> 関数を使って読み込む。Stata形式で保存された <code>Soccer.dta</code> を読み込み、<code>Stata_DF</code>と名付けてみよう。</p>
-<div class="sourceCode" id="cb112"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb112-1"><a href="io.html#cb112-1"></a>Stata_DF <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">&quot;Data/Soccer.dta&quot;</span>)</span>
-<span id="cb112-2"><a href="io.html#cb112-2"></a><span class="fu">head</span>(Stata_DF)</span></code></pre></div>
+<div class="sourceCode" id="cb114"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb114-1"><a href="io.html#cb114-1"></a>Stata_DF <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">&quot;Data/Soccer.dta&quot;</span>)</span>
+<span id="cb114-2"><a href="io.html#cb114-2"></a><span class="fu">head</span>(Stata_DF)</span></code></pre></div>
 <pre><code>## # A tibble: 6 × 6
 ##      id team                 rank points prev_points confederation
 ##   &lt;dbl&gt; &lt;chr&gt;               &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;        
@@ -1002,14 +1022,14 @@ div.csl-indent {
 <h3><span class="header-section-number">7.1.4</span> RDataファイルの場合</h3>
 <p>　データ分析には表形式以外のデータも使われる。データ分析でよく使われるデータの形として、ベクトルや行列のほかに<code>list</code>型とがある。表形式だけでなく、Rで扱える様々なデータを含むファイル形式の1つが<code>.RData</code>フォーマットである。<code>.RData</code>にはRが扱える形式のデータを格納するだけでなく、表形式のデータを<strong>複数</strong>格納することができる。また、データだけでなく、分析結果も保存することができる。<code>.RData</code>形式のファイルはRでしか読み込めないため、データの保存方法としては推奨できないが、1つのファイルにさまざまなデータが格納できるという大きな長所があるため、分析の途中経過を保存するためにしばしば利用される。</p>
 <p>　ここでは<code>Data</code>フォルダにある<code>Scores.RData</code>を読み込んでみよう。このファイルには学生5人の数学と英語の成績に関するデータがそれぞれ<code>MathScore</code>と<code>EnglishScore</code>という名で保存されている。このデータを読み込む前に、現在の実行環境にどのようなオブジェクトがあるかを <code>ls()</code> 関数を使って確認してみよう<a href="reference.html#fn35" class="footnote-ref" id="fnref35"><sup>35</sup></a>。</p>
-<div class="sourceCode" id="cb114"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb114-1"><a href="io.html#cb114-1"></a><span class="fu">ls</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb116"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb116-1"><a href="io.html#cb116-1"></a><span class="fu">ls</span>()</span></code></pre></div>
 <pre><code>## [1] &quot;Excel_DF&quot;     &quot;my_df1&quot;       &quot;ShiftJIS_df1&quot; &quot;ShiftJIS_df2&quot; &quot;ShiftJIS_df3&quot;
 ## [6] &quot;Stata_DF&quot;     &quot;UTF8_df&quot;</code></pre>
 <p>　現在の実行環境に7個のオブジェクトがあることがわかる。</p>
 <p>　では、<code>Scores.RData</code>を読み込んでみよう。<code>.RData</code> は、<code>load()</code> 関数で読み込む。ただし、これまでのファイルの読み込みとは異なり、保存先のオブジェクト名は指定しない。なぜなら、<code>.Rdata</code> の中に既にオブジェクトが保存されているからだ。</p>
-<div class="sourceCode" id="cb116"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb116-1"><a href="io.html#cb116-1"></a><span class="fu">load</span>(<span class="st">&quot;Data/Scores.RData&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb118"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb118-1"><a href="io.html#cb118-1"></a><span class="fu">load</span>(<span class="st">&quot;Data/Scores.RData&quot;</span>)</span></code></pre></div>
 <p>　ここでもう一度実行環境上にあるオブジェクトのリストを確認してみよう。</p>
-<div class="sourceCode" id="cb117"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb117-1"><a href="io.html#cb117-1"></a><span class="fu">ls</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb119"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb119-1"><a href="io.html#cb119-1"></a><span class="fu">ls</span>()</span></code></pre></div>
 <pre><code>## [1] &quot;EnglishScore&quot; &quot;Excel_DF&quot;     &quot;MathScore&quot;    &quot;my_df1&quot;       &quot;ShiftJIS_df1&quot;
 ## [6] &quot;ShiftJIS_df2&quot; &quot;ShiftJIS_df3&quot; &quot;Stata_DF&quot;     &quot;UTF8_df&quot;</code></pre>
 <p>　<code>MathScore</code>と<code>EnglishScore</code>という名前のオブジェクトが追加されていることが分かる。</p>
@@ -1019,14 +1039,14 @@ div.csl-indent {
 <li><code>.RData</code>の中にRのオブジェクトが保存されているので、ファイルの読み込みと同時に名前を付けて格納する必要がない。</li>
 </ol>
 <p>　問題なく読み込まれているか確認するため、それぞれのオブジェクトの中身を見てみよう。</p>
-<div class="sourceCode" id="cb119"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb119-1"><a href="io.html#cb119-1"></a>MathScore <span class="co"># MathScoreの中身を出力</span></span></code></pre></div>
+<div class="sourceCode" id="cb121"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb121-1"><a href="io.html#cb121-1"></a>MathScore <span class="co"># MathScoreの中身を出力</span></span></code></pre></div>
 <pre><code>##   ID    Name Score
 ## 1  1 Caracal   100
 ## 2  2 Cheetah    37
 ## 3  3  Jaguar    55
 ## 4  4 Leopard    69
 ## 5  5  Serval    95</code></pre>
-<div class="sourceCode" id="cb121"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb121-1"><a href="io.html#cb121-1"></a>EnglishScore <span class="co"># EnglishScoreの中身を出力</span></span></code></pre></div>
+<div class="sourceCode" id="cb123"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb123-1"><a href="io.html#cb123-1"></a>EnglishScore <span class="co"># EnglishScoreの中身を出力</span></span></code></pre></div>
 <pre><code>##   ID    Name Score
 ## 1  1 Caracal    90
 ## 2  2 Cheetah    21
@@ -1044,13 +1064,13 @@ div.csl-indent {
 <h3><span class="header-section-number">7.2.1</span> csvファイル</h3>
 <p>　データを保存する際にまず考えるべきフォーマットは<code>.csv</code> である。データが表の形をしていない場合には次節で紹介する<code>.RData</code>フォーマットが必要になるが、多くの場合、データは表の形をしている。読み込みのところで説明したとおり、<code>.csv</code>ファイルは汎用的なテキストファイルであり、ほとんどの統計ソフトおよび表計算ソフトで読み込むことができるので、特にこだわりがなければ業界標準のフォーマットとも言える csv 形式でデータ保存しておくのが安全だ<a href="reference.html#fn37" class="footnote-ref" id="fnref37"><sup>37</sup></a>。</p>
 <p>　まずは、架空のデータを作ってみよう。Rにおける表形式のデータは <code>data.frame</code>型で表現する。（詳細については第<a href="datastructure.html#datastructure">9</a>章で説明する。）</p>
-<div class="sourceCode" id="cb123"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb123-1"><a href="io.html#cb123-1"></a>my_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb123-2"><a href="io.html#cb123-2"></a>    <span class="at">ID    =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,</span>
-<span id="cb123-3"><a href="io.html#cb123-3"></a>    <span class="at">Name  =</span> <span class="fu">c</span>(<span class="st">&quot;Aさん&quot;</span>, <span class="st">&quot;Bさん&quot;</span>, <span class="st">&quot;Cさん&quot;</span>, <span class="st">&quot;Dさん&quot;</span>, <span class="st">&quot;Eさん&quot;</span>),</span>
-<span id="cb123-4"><a href="io.html#cb123-4"></a>    <span class="at">Score =</span> <span class="fu">c</span>(<span class="dv">50</span>, <span class="dv">75</span>, <span class="dv">60</span>, <span class="dv">93</span>, <span class="dv">51</span>)</span>
-<span id="cb123-5"><a href="io.html#cb123-5"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb125"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb125-1"><a href="io.html#cb125-1"></a>my_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb125-2"><a href="io.html#cb125-2"></a>    <span class="at">ID    =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,</span>
+<span id="cb125-3"><a href="io.html#cb125-3"></a>    <span class="at">Name  =</span> <span class="fu">c</span>(<span class="st">&quot;Aさん&quot;</span>, <span class="st">&quot;Bさん&quot;</span>, <span class="st">&quot;Cさん&quot;</span>, <span class="st">&quot;Dさん&quot;</span>, <span class="st">&quot;Eさん&quot;</span>),</span>
+<span id="cb125-4"><a href="io.html#cb125-4"></a>    <span class="at">Score =</span> <span class="fu">c</span>(<span class="dv">50</span>, <span class="dv">75</span>, <span class="dv">60</span>, <span class="dv">93</span>, <span class="dv">51</span>)</span>
+<span id="cb125-5"><a href="io.html#cb125-5"></a>)</span></code></pre></div>
 <p>　上のコードを実行すると、<code>my_data</code>というオブジェクトが生成され、中には以下のようなデータが保持される。</p>
-<div class="sourceCode" id="cb124"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb124-1"><a href="io.html#cb124-1"></a>my_data</span></code></pre></div>
+<div class="sourceCode" id="cb126"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb126-1"><a href="io.html#cb126-1"></a>my_data</span></code></pre></div>
 <pre><code>##   ID  Name Score
 ## 1  1 Aさん    50
 ## 2  2 Bさん    75
@@ -1058,7 +1078,7 @@ div.csl-indent {
 ## 4  4 Dさん    93
 ## 5  5 Eさん    51</code></pre>
 <p>　このデータを<code>my_data.csv</code>という名前のcsvファイルで保存するには、<code>write.csv()</code>という関数を使う。必須の引数は2つで、1つ目の引数は保存するオブジェクト名、2つ目の引数 <code>file</code> は書き出すファイル名。もし、プロジェクトフォルダの下位フォルダ、たとえば、Dataフォルダーに保存するなら、ファイル名を<code>"Data/my_ata.csv"</code>のように指定する。他によく使う引数として<code>row.names</code>があり、デフォルトは<code>TRUE</code>だが、<code>FALSE</code>にすることを推奨する。<code>TRUE</code>のままだと、データの1列目に行番号が保存される。</p>
-<div class="sourceCode" id="cb126"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb126-1"><a href="io.html#cb126-1"></a><span class="fu">write.csv</span>(my_data, <span class="at">file =</span> <span class="st">&quot;Data/my_data.csv&quot;</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb128"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb128-1"><a href="io.html#cb128-1"></a><span class="fu">write.csv</span>(my_data, <span class="at">file =</span> <span class="st">&quot;Data/my_data.csv&quot;</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <p>　これを実行すると、プロジェクトのフォルダの中にある <code>Data</code> フォルダに<code>my_data.csv</code>が生成される。<code>LibreOffice</code>や<code>Numbers</code>、<code>Excel</code>などを使って<code>my_data.csv</code>を開いてみると、先ほど作成したデータが保存されていることが確認できる。</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:io-export-4"></span>
 <img src="figures/Rbasic/Export.png" alt="保存したcsvファイルの中身" width="40%" />
@@ -1070,25 +1090,25 @@ div.csl-indent {
 <div id="rdataファイル" class="section level3" number="7.2.2">
 <h3><span class="header-section-number">7.2.2</span> RDataファイル</h3>
 <p>最後に<code>.RData</code>形式でデータを書き出してみよう。今回は先ほど作成した<code>my_data</code>と、以下で作成する<code>numeric_vec1</code>、<code>numeric_vec2</code>、<code>character_vec</code>を<code>my_RData.RData</code>という名のファイルとして <code>Data</code>フォルダに書き出す。使用する関数は <code>save()</code> である。引数として保存するオブジェクト名をすべてカンマ区切りで書き、最後に<code>file</code>　引数でファイル名を指定すればよい。</p>
-<div class="sourceCode" id="cb127"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb127-1"><a href="io.html#cb127-1"></a>numeric_vec1  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">99</span>, <span class="dv">2</span>, <span class="dv">8</span>)</span>
-<span id="cb127-2"><a href="io.html#cb127-2"></a>numeric_vec2  <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span></span>
-<span id="cb127-3"><a href="io.html#cb127-3"></a>character_vec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;cat&#39;</span>, <span class="st">&#39;cheetah&#39;</span>, <span class="st">&#39;lion&#39;</span>,　<span class="st">&#39;tiger&#39;</span>)</span>
-<span id="cb127-4"><a href="io.html#cb127-4"></a><span class="fu">save</span>(my_data, numeric_vec1, numeric_vec2, character_vec, </span>
-<span id="cb127-5"><a href="io.html#cb127-5"></a>     <span class="at">file =</span> <span class="st">&quot;Data/my_RData.RData&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb129"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb129-1"><a href="io.html#cb129-1"></a>numeric_vec1  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">99</span>, <span class="dv">2</span>, <span class="dv">8</span>)</span>
+<span id="cb129-2"><a href="io.html#cb129-2"></a>numeric_vec2  <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span></span>
+<span id="cb129-3"><a href="io.html#cb129-3"></a>character_vec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;cat&#39;</span>, <span class="st">&#39;cheetah&#39;</span>, <span class="st">&#39;lion&#39;</span>,　<span class="st">&#39;tiger&#39;</span>)</span>
+<span id="cb129-4"><a href="io.html#cb129-4"></a><span class="fu">save</span>(my_data, numeric_vec1, numeric_vec2, character_vec, </span>
+<span id="cb129-5"><a href="io.html#cb129-5"></a>     <span class="at">file =</span> <span class="st">&quot;Data/my_RData.RData&quot;</span>)</span></code></pre></div>
 <p>　実際に<code>my_RData.Rdata</code>ファイルが生成されているかを確認してみよう。ファイルの保存がうまくいっていれば、<code>my_RData.Rdata</code>を読み込むだけで、<code>my_data</code>、<code>numeric_vec1</code>、<code>numeric_vec2</code>、<code>character_vec</code> という4つのオブジェクトを一挙に作業スペースに読み込むことができるはずだ。実際にできるか確認しよう。そのために、まず現在の実行環境上にある<code>my_ata</code>、<code>numeric_vec1</code>、<code>numeric_vec2</code>、<code>character_vec</code>を削除する。そのために <code>rm()</code> 関数を使う。</p>
-<div class="sourceCode" id="cb128"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb128-1"><a href="io.html#cb128-1"></a><span class="fu">rm</span>(my_data)</span>
-<span id="cb128-2"><a href="io.html#cb128-2"></a><span class="fu">rm</span>(numeric_vec1)</span>
-<span id="cb128-3"><a href="io.html#cb128-3"></a><span class="fu">rm</span>(numeric_vec2)</span>
-<span id="cb128-4"><a href="io.html#cb128-4"></a><span class="fu">rm</span>(character_vec)</span></code></pre></div>
+<div class="sourceCode" id="cb130"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb130-1"><a href="io.html#cb130-1"></a><span class="fu">rm</span>(my_data)</span>
+<span id="cb130-2"><a href="io.html#cb130-2"></a><span class="fu">rm</span>(numeric_vec1)</span>
+<span id="cb130-3"><a href="io.html#cb130-3"></a><span class="fu">rm</span>(numeric_vec2)</span>
+<span id="cb130-4"><a href="io.html#cb130-4"></a><span class="fu">rm</span>(character_vec)</span></code></pre></div>
 <p>　このコードは以下のように1行のコードに書き換えられる。</p>
-<div class="sourceCode" id="cb129"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb129-1"><a href="io.html#cb129-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">c</span>(<span class="st">&quot;my_data&quot;</span>, <span class="st">&quot;numeric_vec1&quot;</span>, <span class="st">&quot;numeric_vec2&quot;</span>, <span class="st">&quot;character_vec&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb131"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb131-1"><a href="io.html#cb131-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">c</span>(<span class="st">&quot;my_data&quot;</span>, <span class="st">&quot;numeric_vec1&quot;</span>, <span class="st">&quot;numeric_vec2&quot;</span>, <span class="st">&quot;character_vec&quot;</span>))</span></code></pre></div>
 <p>　4のオブジェクトが削除されたか、<code>ls()</code>関数で確認しよう。</p>
-<div class="sourceCode" id="cb130"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb130-1"><a href="io.html#cb130-1"></a><span class="fu">ls</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb132"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb132-1"><a href="io.html#cb132-1"></a><span class="fu">ls</span>()</span></code></pre></div>
 <pre><code>## [1] &quot;EnglishScore&quot; &quot;Excel_DF&quot;     &quot;MathScore&quot;    &quot;my_df1&quot;       &quot;ShiftJIS_df1&quot;
 ## [6] &quot;ShiftJIS_df2&quot; &quot;ShiftJIS_df3&quot; &quot;Stata_DF&quot;     &quot;UTF8_df&quot;</code></pre>
 <p>それでは<code>Data</code>フォルダー内の<code>my_RData.RData</code>を読み込み、4つのオブジェクトが実行環境に読み込まれるか確認しよう。</p>
-<div class="sourceCode" id="cb132"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb132-1"><a href="io.html#cb132-1"></a><span class="fu">load</span>(<span class="st">&quot;Data/my_RData.RData&quot;</span>) <span class="co"># Dataフォルダー内のmy_RData.RDataを読み込む</span></span>
-<span id="cb132-2"><a href="io.html#cb132-2"></a><span class="fu">ls</span>()                        <span class="co"># 作業スペース上のオブジェクトのリストを確認する</span></span></code></pre></div>
+<div class="sourceCode" id="cb134"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb134-1"><a href="io.html#cb134-1"></a><span class="fu">load</span>(<span class="st">&quot;Data/my_RData.RData&quot;</span>) <span class="co"># Dataフォルダー内のmy_RData.RDataを読み込む</span></span>
+<span id="cb134-2"><a href="io.html#cb134-2"></a><span class="fu">ls</span>()                        <span class="co"># 作業スペース上のオブジェクトのリストを確認する</span></span></code></pre></div>
 <pre><code>##  [1] &quot;character_vec&quot; &quot;EnglishScore&quot;  &quot;Excel_DF&quot;      &quot;MathScore&quot;    
 ##  [5] &quot;my_data&quot;       &quot;my_df1&quot;        &quot;numeric_vec1&quot;  &quot;numeric_vec2&quot; 
 ##  [9] &quot;ShiftJIS_df1&quot;  &quot;ShiftJIS_df2&quot;  &quot;ShiftJIS_df3&quot;  &quot;Stata_DF&quot;     

@@ -233,6 +233,34 @@ tail(my_df1, n = 9)
 ## 159 159          Zimbabwe  111   1151        1151           CAF
 ```
 
+　ただし、今後、特殊な事情がない限り、データの読み込みは`read.csv()`を使用せず、`read_csv()`を使用しますが、使い方は同じです。`read_csv()`は{tidyverse}の一部である{readr}パッケージに含まれている関数であるため、あらかじめ{tidyverse}を読み込んでおく必要があります。
+
+
+```{.r .numberLines}
+pacman::p_load(tidyverse)
+my_df1 <- read_csv("Data/FIFA_Women.csv")
+
+my_df1
+```
+
+```
+## # A tibble: 159 × 6
+##       ID Team                 Rank Points Prev_Points Confederation
+##    <dbl> <chr>               <dbl>  <dbl>       <dbl> <chr>        
+##  1     1 Albania                75   1325        1316 UEFA         
+##  2     2 Algeria                85   1271        1271 CAF          
+##  3     3 American Samoa        133   1030        1030 OFC          
+##  4     4 Andorra               155    749         749 UEFA         
+##  5     5 Angola                121   1117        1117 CAF          
+##  6     6 Antigua and Barbuda   153    787         787 CONCACAF     
+##  7     7 Argentina              32   1659        1659 CONMEBOL     
+##  8     8 Armenia               126   1103        1104 UEFA         
+##  9     9 Aruba                 157    724         724 CONCACAF     
+## 10    10 Australia               7   1963        1963 AFC          
+## # … with 149 more rows
+```
+
+　同じファイルが読み込まれましたが、データを出力する際、最初の10行のみが表示されます。また、画面に収まらない横長のデータであれば、適宜省略し、見やすく出力してくれます。`read_csv()`で読み込まれた表形式データはtibbleと呼ばれるやや特殊なものとして格納されます。Rがデフォルトで提供する表形式データの構造はdata.frameですが、tibbleはその拡張版です。詳細は第\@ref(structure-dataframe)章を参照してください。
 
 ### エンコーディングの話
 

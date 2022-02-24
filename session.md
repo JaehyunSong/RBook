@@ -31,7 +31,7 @@
 
 
 ```
-## # A tibble: 389 × 3
+## # A tibble: 390 × 3
 ##    Package     Version  Built
 ##    <chr>       <chr>    <chr>
 ##  1 abind       1.4-5    4.1.0
@@ -44,5 +44,5 @@
 ##  8 attempt     0.3.1    4.1.0
 ##  9 backports   1.4.1    4.1.0
 ## 10 BalanceR    0.7.6    4.1.2
-## # … with 379 more rows
+## # … with 380 more rows
 ```

@@ -1880,4 +1880,4 @@ full_join(Wave1_df, Wave2_df, by = "ID", suffix = c("_W1", "_W2"))
 
 ---
 
-## 練習問題 {#handling2-exercise}
+## 練習問題 {#handling2-exercise .unnumbered}
