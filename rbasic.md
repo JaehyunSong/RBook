@@ -82,14 +82,14 @@ Windows では、エクスプローラー (Explorer) （**注意：インター�
 
 　次に、ファイルシステムについて解説する。私たちが使用しているコンピュータには、数千〜数万（あるいはそれ以上）のファイルが含まれている。これらのファイルは基本的には1つのドライブ (ハードディスクドライブ [Hard Disk Drive; HDD] またはソリッドステートドライブ [Solid State Drive; SSD]） に保存されているが、ドライブの中にあるファイルはグループ化・階層化されて保存されている。
 
-　下の図はファイルシステムの例を示している。矢印の左側には、ドライブ内にあるファイル（の一部）が示されている。通常、これらのファイルは矢印の右側に示されているように、階層化されている。
+　図\@ref(fig:rbasic-filesystem)はファイルシステムの例を示している。矢印の左側には、ドライブ内にあるファイル（の一部）が示されている。通常、これらのファイルは矢印の右側に示されているように、階層化されている。
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Rbasic/Filesystem1.png" alt="ファイルシステムの例" width="60%" />
-<p class="caption">(\#fig:unnamed-chunk-2)ファイルシステムの例</p>
+<p class="caption">(\#fig:rbasic-filesystem)ファイルシステムの例</p>
 </div>
 
-　図の左側にある Diary_YYYYMMDD.txt がYYYY年MM月DD日の日記を保存したテキストファイルだとしよう[^rbasic-txt]。
+　図\@ref(fig:rbasic-filesystem)の左側にある Diary_YYYYMMDD.txt がYYYY年MM月DD日の日記を保存したテキストファイルだとしよう[^rbasic-txt]。
 3年間毎日日記を書くと、それだけでファイル数は1000個以上になる。また、Analysis_blahblah.R はRスクリプトである[^rbasic-Rscript]。Rスクリプトファイルも複数ある。さらに、上の図には表示されていないが、自分で作ったファイル以外に、OSやソフトウェア（アプリ）を構成するファイルもドライブ内に保存されているだろう。これらのファイルが整理されずに1つの場所にまとめて置いてあるとしよう（上の図の左側の状態）。そうすると、特定のファイルを開いたり、それぞれのファイルがどのような目的で存在するのかを把握したりするのに少なからぬ労を要する。
 
 [^rbasic-txt]: ファイル名拡張子が ".txt" のファイルを「テキストファイル」と呼ぶ。
@@ -172,7 +172,7 @@ Rが自動的に生成するファイルもどんどん溜まる。そう遠く�
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Rbasic/Project1.png" alt="FileからNew Project..." width="60%" />
-<p class="caption">(\#fig:unnamed-chunk-3)FileからNew Project...</p>
+<p class="caption">(\#fig:rbasic-project-1)FileからNew Project...</p>
 </div>
 
 3. 下の画面が表示されたら、 "New Directory" を選択する。ただし、既存のフォルダを利用したい場合は、
@@ -180,7 +180,7 @@ Rが自動的に生成するファイルもどんどん溜まる。そう遠く�
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Rbasic/Project2.png" alt="New Directoryを選択" width="60%" />
-<p class="caption">(\#fig:unnamed-chunk-4)New Directoryを選択</p>
+<p class="caption">(\#fig:rbasic-project-2)New Directoryを選択</p>
 </div>
 
 
@@ -189,7 +189,7 @@ Rが自動的に生成するファイルもどんどん溜まる。そう遠く�
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Rbasic/Project3.png" alt="New Projectを選択" width="60%" />
-<p class="caption">(\#fig:unnamed-chunk-5)New Projectを選択</p>
+<p class="caption">(\#fig:rbasic-project-3)New Projectを選択</p>
 </div>
 
 
@@ -200,7 +200,7 @@ Rが自動的に生成するファイルもどんどん溜まる。そう遠く�
    
 <div class="figure" style="text-align: center">
 <img src="Figures/Rbasic/Project4.png" alt="プロジェクト名と保存場所の指定" width="70%" />
-<p class="caption">(\#fig:unnamed-chunk-6)プロジェクト名と保存場所の指定</p>
+<p class="caption">(\#fig:rbasic-project-4)プロジェクト名と保存場所の指定</p>
 </div>
 
 
@@ -213,7 +213,7 @@ Rが自動的に生成するファイルもどんどん溜まる。そう遠く�
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Rbasic/Project5.png" alt="プロジェクトの確認" width="80%" />
-<p class="caption">(\#fig:unnamed-chunk-7)プロジェクトの確認</p>
+<p class="caption">(\#fig:rbasic-project-5)プロジェクトの確認</p>
 </div>
 
 　`Ch04` プロジェクトを開くには、この`Ch04.Rproj` ファイルをダブルクリックすれば良い。RStudio が起動していない場合でも、指定のプロジェクトを開いた状態でRStudio が起ち上がる。
@@ -231,7 +231,7 @@ Rが自動的に生成するファイルもどんどん溜まる。そう遠く�
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Rbasic/InputCode1.png" alt="コード入力の例" width="100%" />
-<p class="caption">(\#fig:unnamed-chunk-8)コード入力の例</p>
+<p class="caption">(\#fig:rbasic-calc-1)コード入力の例</p>
 </div>
 
 　Source ペイン (Untitled1) に入力したコードが Console（本書の説明どおりにカスタマイズしていれば、RStudio 内の右上画面）に転送され、計算結果が表示される。Rのコードは Console に直接打ち込むこともできるが、Sourceペインで入力してから Console に転送する方法が基本である[^input1]。
@@ -341,12 +341,15 @@ RStudioでは、 option + `-` [マイナス, ハイフン] (macOS 場合) また
 　Rを起動した時点では、`x` というオブジェクトは存在しない。RStudio 右下のペインにある Environment タブを開くと、現時点では何も表示されていないはずだ。しかし、`x` に何かを格納することで、`x` というオブジェクトができる。
 実際に `x`に、`123454321`を格納してみよう。
 
+
 ```{.r .numberLines}
 x <- 123454321  # xに123454321を格納
 ```
+
 Environment タブに、`x` が登場し、格納した数字が右側に表示されていることが確認できるだろう。
 
 　オブジェクトの中身は、オブジェクト名をそのまま入力することで表示できる。
+
 
 ```{.r .numberLines}
 x
@@ -360,6 +363,7 @@ x
 
 　ちなみに、格納と同時にそのオブジェクトの中身を表示することもできる。そのためには、格納コマンド全体を`()` で囲む。例えば、次のようにする。
 
+
 ```{.r .numberLines}
 (y <- 2) 　# yに2を格納し、中身を表示
 ```
@@ -369,6 +373,7 @@ x
 ```
 
 　値が格納されたオブジェクトは計算に利用できるので、先ほどの計算は、次のようにできる。
+
 
 ```{.r .numberLines}
 x * 2
@@ -396,6 +401,7 @@ x * 4
 
 　文字列を格納することもできる。ただし、文字列は必ず `""` か `''` で囲む必要がある。
 
+
 ```{.r .numberLines}
 x <- "猫の恋 やむとき閨の 朧月（芭蕉）"
 x
@@ -407,6 +413,7 @@ x
 
 　オブジェクトに格納できるのは1つの数値や文字列だけではない。複数の数値や文字列を格納することもできる。そのためには `c()` という関数を使う。`c()` の**c** は concatenate または combine の頭文字で、複数の要素からベクトル (vector) を作るのに使われる関数である。
 `c()` に含む要素はカンマ (`,`) で区切る。
+
 
 ```{.r .numberLines}
 # ある日の Lions の打順をベクトルに格納する
@@ -420,6 +427,7 @@ numeric_vec1
 
 　複数の文字列を格納することもできる。
 
+
 ```{.r .numberLines}
 character_vec <- c('cat', 'cheetah', 'lion',  'tiger')
 character_vec
@@ -432,6 +440,7 @@ character_vec
 　ひとつひとつの要素を指定する代わりに、様々な方法でベクトルを作ることが可能である。 たとえば、`seq()` 関数を使うと、一連の数字からなるベクトルを作ることができる。`from` で数列の初項を、`to` で数列の最終項を指定し、`by` で要素間の差（第2要素は第1要素に `by` を加えた値になる ）を指定するか、`length.out` で最終的にできるベクトルの要素の数を指定する。Rのベクトルの **length** とは、要素の数のことなので、注意されたい。
 
 　いくつか例を挙げる。
+
 
 ```{.r .numberLines}
 seq(from =  1, to =  20, by = 1)           # 1から20までの整数。1:20 でも同じ
@@ -487,6 +496,7 @@ Rでは、1つの関数で使う引数の数が複数あることが多いので
 
 　`seq(from = x, to = y, by = 1)` の場合はより単純に `x:y` とすることができる。
 
+
 ```{.r .numberLines}
 21:30  # 21 から30までの整数
 ```
@@ -504,6 +514,7 @@ Rでは、1つの関数で使う引数の数が複数あることが多いので
 ```
 
 　また、`rep()` 関数も便利である。例を挙げよう。
+
 
 ```{.r .numberLines}
 rep(3, times = 10)                         # 3が10個のベクトル
@@ -531,6 +542,7 @@ rep(c('C', 'A', 'T'), each = 2)            # C, A, T を2つずつ
 
 　アルファベットのベクトルは、あらかじめ用意されている。
 
+
 ```{.r .numberLines}
 LETTERS  # 大文字
 ```
@@ -555,6 +567,7 @@ letters  # 小文字
 　オブジェクト名（ベクトル）の後に `[抽出する要素のインデクス]` を付けると、ベクトルの特定の要素を抽出することができる。ちなみに `[` は関数である。Console に`help("[")` と打てば、これが Extract と言う名前の関数であることがわかる（`help("[]")` ではないので注意）。
 
 　ベクトルの要素を取り出してみよう。Rのインデクスは、他の多くのプログラミング言語（例えば、C, C++, Pythonなど）とは異なり「1」から始まるので注意されたい。
+
 
 ```{.r .numberLines}
 # numeric_vec1の5番目の要素を抽出
@@ -594,6 +607,7 @@ numeric_vec1[5:7]
 
 　`c()`や`:`だけでなく、`seq()`も使える。
 
+
 ```{.r .numberLines}
 numeric_vec2 <- 1:20
 # numeric_vec2 の奇数番目の要素を抽出
@@ -606,6 +620,7 @@ numeric_vec2[seq(1, 20, by = 2)]
 
 　さらに、`TRUE`と`FALSE`を使うこともできる。この場合、抽出したい要素の場所を指定するのではなく、**それぞれの場所について抽出する (`TRUE`) か、しない (`FALSE`) かを指定する**。たとえば、`character_vec`から1, 3, 4番目の要素を抽出するなら、`[c(TRUE, FALSE, TRUE, TRUE)]`と指定する。
 
+
 ```{.r .numberLines}
 character_vec[c(TRUE, FALSE, TRUE, TRUE)]
 ```
@@ -615,6 +630,7 @@ character_vec[c(TRUE, FALSE, TRUE, TRUE)]
 ```
 
 　`TRUE`と`FALSE`が使えるので、論理演算子を`[]`の中で使うこともできる。たとえば、`numeric_vec1`の各要素が偶数かどうかを判定するためには、インデックスが2で割り切れるかどうか（2で割った余りが0かどうか）を確認すれば良い。
+
 
 ```{.r .numberLines}
 (numeric_vec1 %% 2) == 0  # 偶数かどうかの判定
@@ -626,6 +642,7 @@ character_vec[c(TRUE, FALSE, TRUE, TRUE)]
 
 これを利用すれば、`numeric_vec1`から偶数のみを抽出できる。
 
+
 ```{.r .numberLines}
 numeric_vec1[(numeric_vec1 %% 2) == 0]
 ```
@@ -635,6 +652,7 @@ numeric_vec1[(numeric_vec1 %% 2) == 0]
 ```
 
 　`[` と格納（代入）を組み合わせれば、「ベクトルの一部の要素を書き換える」ことができる。たとえば、`numeric_vec1`の2番目の要素は5だが、これを100に書き換えたい場合、置換したい要素の場所を`[]`で指定し、`<-`で代入すれば良い。
+
 
 ```{.r .numberLines}
 numeric_vec1[2] <- 100
@@ -647,6 +665,7 @@ numeric_vec1
 
 　複数の要素を置換することもできる。たとえば、偶数を全て0に置換したい場合、以下のようにする。
 
+
 ```{.r .numberLines}
 numeric_vec1[(numeric_vec1 %% 2) == 0] <- 0
 numeric_vec1
@@ -658,7 +677,7 @@ numeric_vec1
 
 ---
 
-## 演習問題 {#rbasic-exercise}
+## 演習問題 {#rbasic-exercise .unnumbered}
 
 **問1** `my_vec1`という名のオブジェクトに(3, 9, 10, 8, 3, 5, 8)を格納し、表示せよ。
 

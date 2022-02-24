@@ -71,7 +71,7 @@ my_df1
 ## 34   34               Congo DR  110   1159        1159           CAF
 ## 35   35           Cook Islands  103   1194        1194           OFC
 ## 36   36             Costa Rica   36   1644        1630      CONCACAF
-## 37   37         Côte d'Ivoire   63   1392        1392           CAF
+## 37   37          Côte d'Ivoire   63   1392        1392           CAF
 ## 38   38                Croatia   52   1453        1439          UEFA
 ## 39   39                   Cuba   88   1240        1240      CONCACAF
 ## 40   40                 Cyprus  123   1114        1123          UEFA
@@ -244,7 +244,7 @@ ShiftJIS_df <- read.csv("Data/Vote_ShiftJIS.csv")
 ```
 
 ```
-## Error in type.convert.default(data[[i]], as.is = as.is[i], dec = dec, :  '<96>k<8a>C<93><b9>' に不正なマルチバイト文字があります
+## Error in type.convert.default(data[[i]], as.is = as.is[i], dec = dec, : invalid multibyte string at '<96>k<8a>C<93><b9>'
 ```
 
 　Windowsならなんの問題なく読み込まれるだろう。しかし、macOSの場合、以下のようなエラーが表示され、読み込めない。
@@ -258,20 +258,6 @@ ShiftJIS_df <- read.csv("Data/Vote_ShiftJIS.csv")
 
 ```{.r .numberLines}
 ShiftJIS_df1 <- read_csv("Data/Vote_ShiftJIS.csv")
-```
-
-```
-## Rows: 47 Columns: 11
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: ","
-## chr  (1): Pref
-## dbl (10): ID, Zaisei, Over65, Under30, LDP, DPJ, Komei, Ishin, JCP, SDP
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-```
-
-```{.r .numberLines}
 head(ShiftJIS_df1)
 ```
 
@@ -325,20 +311,6 @@ head(ShiftJIS_df2)
 ```{.r .numberLines}
 ShiftJIS_df3 <- read_csv("Data/Vote_ShiftJIS.csv", 
                          locale = locale(encoding = "Shift_JIS"))
-```
-
-```
-## Rows: 47 Columns: 11
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: ","
-## chr  (1): Pref
-## dbl (10): ID, Zaisei, Over65, Under30, LDP, DPJ, Komei, Ishin, JCP, SDP
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-```
-
-```{.r .numberLines}
 head(ShiftJIS_df3)
 ```
 
@@ -360,7 +332,8 @@ head(ShiftJIS_df3)
 
 
 
-```r
+
+```{.r .numberLines}
 UTF8_df <- read.csv("Data/Vote.csv") # macOSの場合
 UTF8_df <- read.csv("Data/Vote.csv", fileEncoding = "UTF-8") # Windowsの場合
 ```
@@ -547,8 +520,6 @@ my_data <- data.frame(
 
 　上のコードを実行すると、`my_data`というオブジェクトが生成され、中には以下のようなデータが保持される。
 
-(ref:my_data_detail) `my_data`の中身
-
 
 ```{.r .numberLines}
 my_data
@@ -573,8 +544,8 @@ write.csv(my_data, file = "Data/my_data.csv", row.names = FALSE)
 　これを実行すると、プロジェクトのフォルダの中にある `Data` フォルダに`my_data.csv`が生成される。`LibreOffice`や`Numbers`、`Excel`などを使って`my_data.csv`を開いてみると、先ほど作成したデータが保存されていることが確認できる。
 
 <div class="figure" style="text-align: center">
-<img src="Figures/Rbasic/Export.png" alt="my_data.csvの中身" width="40%" />
-<p class="caption">(\#fig:unnamed-chunk-23)my_data.csvの中身</p>
+<img src="Figures/Rbasic/Export.png" alt="保存したcsvファイルの中身" width="40%" />
+<p class="caption">(\#fig:io-export-4)保存したcsvファイルの中身</p>
 </div>
 
 ### RDataファイル

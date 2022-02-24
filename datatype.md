@@ -40,9 +40,9 @@ Logical型は`TRUE`と`FALSE`のみで構成されたデータ型です。練習
 
 
 ```{.r .numberLines}
-Logical.Vec1 <- c(TRUE, FALSE, TRUE, TRUE, FALSE)
+logical_vec1 <- c(TRUE, FALSE, TRUE, TRUE, FALSE)
 
-Logical.Vec1
+logical_vec1
 ```
 
 ```
@@ -53,9 +53,9 @@ Logical.Vec1
 
 
 ```{.r .numberLines}
-Logical.Vec2 <- c(TRUE, "FALSE", TRUE, TRUE, FALSE)
+logical_vec2 <- c(TRUE, "FALSE", TRUE, TRUE, FALSE)
 
-Logical.Vec2
+logical_vec2
 ```
 
 ```
@@ -66,7 +66,7 @@ Logical.Vec2
 
 
 ```{.r .numberLines}
-class(Logical.Vec1)
+class(logical_vec1)
 ```
 
 ```
@@ -74,20 +74,20 @@ class(Logical.Vec1)
 ```
 
 ```{.r .numberLines}
-class(Logical.Vec2)
+class(logical_vec2)
 ```
 
 ```
 ## [1] "character"
 ```
 
-`Logical.Vec1`はlogical型ですが、`Logical.Vec2`はcharacter型と認識されます。
+`logical_vec1`はlogical型ですが、`logical_vec2`はcharacter型と認識されます。
 
 他にも、`is.logical()`関数を使ってあるベクトルがlogical型か否かを判定することも可能です。もし、ベクトルがlogical型なら`TRUE`が、logical型以外なら`FALSE`が返って来ます。
 
 
 ```{.r .numberLines}
-is.logical(Logical.Vec1)
+is.logical(logical_vec1)
 ```
 
 ```
@@ -95,7 +95,7 @@ is.logical(Logical.Vec1)
 ```
 
 ```{.r .numberLines}
-is.logical(Logical.Vec2)
+is.logical(logical_vec2)
 ```
 
 ```
@@ -108,13 +108,13 @@ Logical型は様々な場面で使われますが、代表的な使い方は第\
 
 ## Numeric {#type-numeric}
 
-Numeric型は数値型ですが、まずはnumeric型のベクトル`Numeric.Vec1`を作成し、データ型を確認してみましょう。
+Numeric型は数値型ですが、まずはnumeric型のベクトル`numeric_vec1`を作成し、データ型を確認してみましょう。
 
 
 ```{.r .numberLines}
-Numeric.Vec1 <- c(2, 0, 0, 1, 3)
+numeric_vec1 <- c(2, 0, 0, 1, 3)
 
-class(Numeric.Vec1)
+class(numeric_vec1)
 ```
 
 ```
@@ -125,7 +125,7 @@ class(Numeric.Vec1)
 
 
 ```{.r .numberLines}
-is.numeric(Numeric.Vec1)
+is.numeric(numeric_vec1)
 ```
 
 ```
@@ -133,7 +133,7 @@ is.numeric(Numeric.Vec1)
 ```
 
 ```{.r .numberLines}
-is.numeric(Logical.Vec1)
+is.numeric(logical_vec1)
 ```
 
 ```
@@ -146,7 +146,7 @@ integerは整数型であり、doubleは実数型です。これは`class()`関�
 
 
 ```{.r .numberLines}
-typeof(Numeric.Vec1)
+typeof(numeric_vec1)
 ```
 
 ```
@@ -157,8 +157,8 @@ typeof(Numeric.Vec1)
 
 
 ```{.r .numberLines}
-Integer.Vec1 <- c(2L, 0L, 0L, 1L, 3L)
-typeof(Integer.Vec1)
+integer_vec1 <- c(2L, 0L, 0L, 1L, 3L)
+typeof(integer_vec1)
 ```
 
 ```
@@ -169,8 +169,8 @@ typeof(Integer.Vec1)
 
 
 ```{.r .numberLines}
-Integer.Vec2 <- c(2L, 0L, 0, 1L, 3L)
-typeof(Integer.Vec2)
+integer_vec2 <- c(2L, 0L, 0, 1L, 3L)
+typeof(integer_vec2)
 ```
 
 ```
@@ -234,12 +234,12 @@ typeof(3L * 6L)
 
 ## Complex {#type-complex}
 
-Complex型は複素数を表すデータ型であり、`実数部+虚数部i`のように表記します。まず、複素数のベクトル`Complex.Vec1`を作成し、データ型を確認してみましょう。
+Complex型は複素数を表すデータ型であり、`実数部+虚数部i`のように表記します。まず、複素数のベクトル`complex_vec1`を作成し、データ型を確認してみましょう。
 
 
 ```{.r .numberLines}
-Complex.Vec1 <- c(1+3i, 3+2i, 2.5+7i)
-Complex.Vec1
+complex_vec1 <- c(1+3i, 3+2i, 2.5+7i)
+complex_vec1
 ```
 
 ```
@@ -247,7 +247,7 @@ Complex.Vec1
 ```
 
 ```{.r .numberLines}
-class(Complex.Vec1)
+class(complex_vec1)
 ```
 
 ```
@@ -258,8 +258,8 @@ class(Complex.Vec1)
 
 
 ```{.r .numberLines}
-Complex.Vec2 <- c(3i+1, 2i+3, 7i+2.5)
-Complex.Vec2
+complex_vec2 <- c(3i+1, 2i+3, 7i+2.5)
+complex_vec2
 ```
 
 ```
@@ -267,18 +267,18 @@ Complex.Vec2
 ```
 
 ```{.r .numberLines}
-class(Complex.Vec2)
+class(complex_vec2)
 ```
 
 ```
 ## [1] "complex"
 ```
 
-`Complex.Vec1`と`Complex.Vec2`は同じベクトルであることを確認してみましょう。
+`complex_vec1`と`complex_vec2`は同じベクトルであることを確認してみましょう。
 
 
 ```{.r .numberLines}
-Complex.Vec1 == Complex.Vec2
+complex_vec1 == complex_vec2
 ```
 
 ```
@@ -289,8 +289,8 @@ Complex.Vec1 == Complex.Vec2
 
 
 ```{.r .numberLines}
-Complex.Vec3 <- c(2+7i, 5, 13+1i)
-Complex.Vec3
+complex_vec3 <- c(2+7i, 5, 13+1i)
+complex_vec3
 ```
 
 ```
@@ -298,7 +298,7 @@ Complex.Vec3
 ```
 
 ```{.r .numberLines}
-class(Complex.Vec3)
+class(complex_vec3)
 ```
 
 ```
@@ -313,11 +313,11 @@ Character型は文字列で構成されているデータ型です。Rを含む�
 
 
 ```{.r .numberLines}
-Char.Vec1 <- c("Yanai", "Song", "Shigemura", "Tani")
-Char.Vec2 <- c(1, 2, 3, 4)
-Char.Vec3 <- c("1", "2", "3", "4")
+char_vec1 <- c("Yanai", "Song", "Shigemura", "Tani")
+char_vec2 <- c(1, 2, 3, 4)
+char_vec3 <- c("1", "2", "3", "4")
 
-Char.Vec1
+char_vec1
 ```
 
 ```
@@ -325,7 +325,7 @@ Char.Vec1
 ```
 
 ```{.r .numberLines}
-Char.Vec2
+char_vec2
 ```
 
 ```
@@ -333,18 +333,18 @@ Char.Vec2
 ```
 
 ```{.r .numberLines}
-Char.Vec3
+char_vec3
 ```
 
 ```
 ## [1] "1" "2" "3" "4"
 ```
 
-`Char.Vec2`と`Char.Vec3`の違いは通じを`"`で囲んだか否かです。ベクトルの中身を見ても、`Char.Vec2`は`"`で囲まれていません。データ型を見てみましょう。
+`char_vec2`と`char_vec3`の違いは通じを`"`で囲んだか否かです。ベクトルの中身を見ても、`char_vec2`は`"`で囲まれていません。データ型を見てみましょう。
 
 
 ```{.r .numberLines}
-class(Char.Vec1)
+class(char_vec1)
 ```
 
 ```
@@ -352,7 +352,7 @@ class(Char.Vec1)
 ```
 
 ```{.r .numberLines}
-class(Char.Vec2)
+class(char_vec2)
 ```
 
 ```
@@ -360,14 +360,14 @@ class(Char.Vec2)
 ```
 
 ```{.r .numberLines}
-class(Char.Vec3)
+class(char_vec3)
 ```
 
 ```
 ## [1] "character"
 ```
 
-やはり`Char.Vec3`もcharacter型になっていることが分かります。
+やはり`char_vec3`もcharacter型になっていることが分かります。
 
 ---
 
@@ -381,10 +381,10 @@ Factor型はラベル付きの数値型データです。Factor型の見た目�
     3. 好き
     4. どちらかといえば好き
     
-以下の表\@ref(tab:Cat)は5人の結果です。
+以下の表\@ref(tab:datatype-factor-1)は5人の結果です。
 
 <table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>(\#tab:Cat)猫好きの度合い</caption>
+<caption>(\#tab:datatype-factor-1)猫好きの度合い</caption>
  <thead>
   <tr>
    <th style="text-align:right;"> ID </th>
@@ -423,14 +423,14 @@ Factor型はラベル付きの数値型データです。Factor型の見た目�
 
 人間としてはこの表から、[重村](https://soheishigemura.com)という人がどれだけ猫が嫌いなのかが分かります。ただし、Rはそうではありません。Rは日本語どころか、人間の言葉は理解できません。各項目ごとに順番を付けてあげる必要がありますが、そのために使われるのがfactor型です。
 
-実習のために表\@ref(tab:Cat)の`Cat`列のみのベクトルを作ってみましょう。
+実習のために表\@ref(tab:datatype-factor-1)の`Cat`列のみのベクトルを作ってみましょう。
 
 
 ```{.r .numberLines}
-Factor.Vec1 <- c("めちゃめちゃ好き", "めちゃめちゃ好き", 
+factor_vec1 <- c("めちゃめちゃ好き", "めちゃめちゃ好き", 
                  "どちらかといえば好き", "めちゃ好き", "好き")
 
-Factor.Vec1
+factor_vec1
 ```
 
 ```
@@ -439,21 +439,21 @@ Factor.Vec1
 ```
 
 ```{.r .numberLines}
-class(Factor.Vec1)
+class(factor_vec1)
 ```
 
 ```
 ## [1] "character"
 ```
 
-`Factor.Vec1`は普通の文字列ベクトルであることが分かります。これをfactor型に変換するためには`factor()`関数を使います。
+`factor_vec1`は普通の文字列ベクトルであることが分かります。これをfactor型に変換するためには`factor()`関数を使います。
 
 
 ```{.r .numberLines}
-Factor.Vec2 <- factor(Factor.Vec1, ordered = TRUE,
+factor_vec2 <- factor(factor_vec1, ordered = TRUE,
                       levels = c("どちらかといえば好き", "好き",
                                  "めちゃ好き", "めちゃめちゃ好き"))
-class(Factor.Vec2)
+class(factor_vec2)
 ```
 
 ```
@@ -464,7 +464,7 @@ class(Factor.Vec2)
 
 
 ```{.r .numberLines}
-Factor.Vec2
+factor_vec2
 ```
 
 ```
@@ -473,12 +473,12 @@ Factor.Vec2
 ## Levels: どちらかといえば好き < 好き < めちゃ好き < めちゃめちゃ好き
 ```
 
-いくつかの点で異なります。まず、文字列であるにもかかわらず、`"`で囲まれていいない点です。そして3行目に`4 Levels: `というのが追加されている点です。このlevelは「水準」と呼ばれるものです。`4 Levels`ですから、`Factor.Vec2`は4つの水準で構成されていることを意味します。Factor型の値は予め指定された水準以外の値を取ることはできません。たとえば、2番目の要素を「超好き」に変えてみましょう。
+いくつかの点で異なります。まず、文字列であるにもかかわらず、`"`で囲まれていいない点です。そして3行目に`4 Levels: `というのが追加されている点です。このlevelは「水準」と呼ばれるものです。`4 Levels`ですから、`factor_vec2`は4つの水準で構成されていることを意味します。Factor型の値は予め指定された水準以外の値を取ることはできません。たとえば、2番目の要素を「超好き」に変えてみましょう。
 
 
 ```{.r .numberLines}
-Factor.Vec2[2] <- "超好き"
-Factor.Vec2
+factor_vec2[2] <- "超好き"
+factor_vec2
 ```
 
 ```
@@ -491,8 +491,8 @@ Factor.Vec2
 
 
 ```{.r .numberLines}
-Factor.Vec2[2] <- "好き"
-Factor.Vec2
+factor_vec2[2] <- "好き"
+factor_vec2
 ```
 
 ```
@@ -507,10 +507,10 @@ Factor型はこのように順序付きデータを扱う際に便利なデー�
 
 
 ```{.r .numberLines}
-Factor.Vec3 <- factor(Factor.Vec1,
+factor_vec3 <- factor(factor_vec1,
                       levels = c("どちらかといえば好き", "好き",
                                  "めちゃ好き", "めちゃめちゃ好き"))
-Factor.Vec3
+factor_vec3
 ```
 
 ```
@@ -520,18 +520,19 @@ Factor.Vec3
 ```
 
 ```{.r .numberLines}
-class(Factor.Vec3)
+class(factor_vec3)
 ```
 
 ```
 ## [1] "factor"
 ```
+
 今回は3行目が`## Levels: どちらかといえば好き 好き めちゃ好き めちゃめちゃ好き`となり、順序に関する情報がなくなりました。また、`class()`で確認しましたデータ型に`"ordered"`が付いていません。これは順序なしfactor型であることを意味します。「順序付けしないならfactor型は要らないのでは...?」と思うかも知れませんが、これはこれで便利です。その例を考えてみましょう。
 
-分析においてfactor型はcharacter型に近い役割を果たしますが、factor型なりの長所もあります。それは図や表を作成する際です。例えば、横軸が都道府県名で、縦軸がその都道府県の財政力指数を表す棒グラフを作成するとします。元になるデータは表\@ref(tab:Zaisei)の`Zaisei.df`です。
+分析においてfactor型はcharacter型に近い役割を果たしますが、factor型なりの長所もあります。それは図や表を作成する際です。例えば、横軸が都道府県名で、縦軸がその都道府県の財政力指数を表す棒グラフを作成するとします。たとえば、表\@ref(tab:datatype-factor-7)のようなデータがあるとします。このデータは3つの列で構成されており、`ID`と`Zaisei`列はnumeric型、`Pref`列はcharacter型です。
 
 <table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>(\#tab:Zaisei)5都道府県のH29財政力指数</caption>
+<caption>(\#tab:datatype-factor-7)5都道府県のH29財政力指数</caption>
  <thead>
   <tr>
    <th style="text-align:right;"> ID </th>
@@ -568,14 +569,14 @@ class(Factor.Vec3)
 </tbody>
 </table>
 
-可視化については第\@ref(visualization1)章以降で詳しく解説しますが、この`Pref`列をcharacter型にしたままグラフにしますと図\@ref(fig:ZaiseiFig)のようになります。
+可視化については第\@ref(visualization1)章以降で詳しく解説しますが、この`Pref`列をcharacter型にしたままグラフにしますと図\@ref(fig:datatype-factor-8)のようになります。
 
 <div class="figure" style="text-align: center">
-<img src="datatype_files/figure-html/ZaiseiFig-1.png" alt="5都道府県のH29財政力指数" width="672" />
-<p class="caption">(\#fig:ZaiseiFig)5都道府県のH29財政力指数</p>
+<img src="datatype_files/figure-html/datatype-factor-8-1.png" alt="5都道府県のH29財政力指数" width="672" />
+<p class="caption">(\#fig:datatype-factor-8)5都道府県のH29財政力指数</p>
 </div>
 
-このようにアルファベット順で横軸が並び替えられます。別にこれでも問題ないと思う方もいるかも知れませんが、基本的に日本の都道府県は北から南の方へ並べるのが一般的な作法です[^PrefSort]。北海道と東京、大阪の間には順序関係はありません。しかし、表示される順番は固定したい。この場合、順序なしfactor型が活躍します。これを修正するためには`Pref`列を順序なしfactor型にすれば良いです[^orderedfactor]。データフレームの列を修正する方法は第\@ref(datastructure)章で詳しく説明します。
+このようにアルファベット順で横軸が並び替えられます。別にこれでも問題ないと思う方もいるかも知れませんが、基本的に日本の都道府県は北から南の方へ並べるのが一般的な作法です[^PrefSort]。北海道と東京、大阪の間には順序関係はありません。しかし、表示される順番は固定したい。この場合、`Pref`列を順序なしfactor型にすれば良いです[^orderedfactor]。データフレームの列を修正する方法は第\@ref(datastructure)章で詳しく説明します。
 
 [^PrefSort]: アメリカの州ならアルファベット順ですね。
 
@@ -583,15 +584,15 @@ class(Factor.Vec3)
 
 
 ```{.r .numberLines}
-Zaisei.df$Pref <- factor(Zaisei.df$Pref,
+zaisei_df$Pref <- factor(zaisei_df$Pref,
                          levels = c("Hokkaido", "Tokyo", "Aichi", "Osaka", "Fukuoka"))
 ```
 
-`Zaisei.df`の`Pref`列を順序付きfactor型にしてから同じ図を描くと図\@ref(fig:ZaiseiFig2)のようになります。
+`zaisei_df`の`Pref`列をfactor型にしてから同じ図を描くと図\@ref(fig:datatype-factor-10)のようになります。
 
 <div class="figure" style="text-align: center">
-<img src="datatype_files/figure-html/ZaiseiFig2-1.png" alt="5都道府県のH29財政力指数" width="672" />
-<p class="caption">(\#fig:ZaiseiFig2)5都道府県のH29財政力指数</p>
+<img src="datatype_files/figure-html/datatype-factor-10-1.png" alt="5都道府県のH29財政力指数" width="672" />
+<p class="caption">(\#fig:datatype-factor-10)5都道府県のH29財政力指数</p>
 </div>
 
 都道府県以外にもこのような例は多くあります。順序尺度で測定された変数が代表的な例です。他にも政党名を議席数順で表示させたい場合もfactor型は有効でしょう。
@@ -637,7 +638,7 @@ SongSleep
 ## 7 2017-06-23   290
 ```
 
-日付を横軸に、睡眠時間を縦軸にした散布図を描くと図\@ref{fig:sleep1}このようになります。ggplot2を利用した作図については第\@ref{visualization}章で解説しますので、ここではDate型の特徴のみ理解してもらえたら十分です。
+日付を横軸に、睡眠時間を縦軸にした散布図を描くと図\@ref{fig:datatype-date-3}のようになります。{ggplot2}を利用した作図については第\@ref{visualization}章で解説しますので、ここではDate型の特徴のみ理解してもらえたら十分です。
 
 
 ```{.r .numberLines}
@@ -649,8 +650,8 @@ ggplot(SongSleep,
 ```
 
 <div class="figure" style="text-align: center">
-<img src="datatype_files/figure-html/sleep1-1.png" alt="Songの睡眠時間" width="672" />
-<p class="caption">(\#fig:sleep1)Songの睡眠時間</p>
+<img src="datatype_files/figure-html/datatype-date-3-1.png" alt="Songの睡眠時間" width="672" />
+<p class="caption">(\#fig:datatype-date-3)Songの睡眠時間</p>
 </div>
 
 この図は全く問題ないように見えます。それでは、`Date`列をそれぞれDate型に変換し、`SoongSleep`データの`DateD`としてみます。データフレームの列追加については第\@ref(structure-dataframe)章で解説します。
@@ -690,8 +691,8 @@ ggplot(SongSleep,
 ```
 
 <div class="figure" style="text-align: center">
-<img src="datatype_files/figure-html/sleep2-1.png" alt="Songの睡眠時間" width="672" />
-<p class="caption">(\#fig:sleep2)Songの睡眠時間</p>
+<img src="datatype_files/figure-html/datatype-date-6-1.png" alt="Songの睡眠時間" width="672" />
+<p class="caption">(\#fig:datatype-date-6)Songの睡眠時間</p>
 </div>
 
 しかし、Songがうっかり6月19日に記録するのを忘れたとします。つまり、`SongSleep`データの3行目が抜けている状況を考えてみましょう。データフレームの要素抽出については第\@ref(structure-dataframe)章で解説します。
@@ -718,7 +719,7 @@ SongSleep2
 ## 7 2017-06-23   290 2017-06-23
 ```
 
-この状態で横軸を`Date`にしたらどうなるでしょうか（図\@ref(fig:sleep3)）。
+この状態で横軸を`Date`にしたらどうなるでしょうか（図\@ref(fig:datatype-date-9)）。
 
 
 ```{.r .numberLines}
@@ -730,11 +731,11 @@ ggplot(SongSleep2,
 ```
 
 <div class="figure" style="text-align: center">
-<img src="datatype_files/figure-html/sleep3-1.png" alt="Songの睡眠時間" width="672" />
-<p class="caption">(\#fig:sleep3)Songの睡眠時間</p>
+<img src="datatype_files/figure-html/datatype-date-9-1.png" alt="Songの睡眠時間" width="672" />
+<p class="caption">(\#fig:datatype-date-9)Songの睡眠時間</p>
 </div>
 
-一方、横軸を`DateD`にしたものが図\@ref(fig:sleep4)です。
+一方、横軸を`DateD`にしたものが図\@ref(fig:datatype-date-10)です。
 
 
 ```{.r .numberLines}
@@ -746,11 +747,11 @@ ggplot(SongSleep2,
 ```
 
 <div class="figure" style="text-align: center">
-<img src="datatype_files/figure-html/sleep4-1.png" alt="Songの睡眠時間" width="672" />
-<p class="caption">(\#fig:sleep4)Songの睡眠時間</p>
+<img src="datatype_files/figure-html/datatype-date-10-1.png" alt="Songの睡眠時間" width="672" />
+<p class="caption">(\#fig:datatype-date-10)Songの睡眠時間</p>
 </div>
 
-違いが分かりますかね。違いは抜けている6月19日です。図\@ref(fig:sleep3)を見ると、横軸の6月18日の次が20日になっています。一方、図\@ref(fig:sleep4)は19日になっており、ちゃんと空けてくれますね。これはDate型でない場合、データにないものは図に表示されないことを意味します。一方、Date型は抜けている日があっても、図に表示表示されます。一般のcharacter型またはfactor型でこのようなことを再現するためには、6月19日の列を追加し、睡眠時間を欠損値として指定する必要があります。たとえば、`SongSleep`データにおいて6月19日の行は温存したまま、睡眠時間だけを欠損値にしてみましょう。
+違いが分かりますかね。違いは抜けている6月19日です。図\@ref(fig:datatype-date-9)を見ると、横軸の6月18日の次が20日になっています。一方、図\@ref(fig:datatype-date-10)は19日になっており、ちゃんと空けてくれますね。これはDate型でない場合、データにないものは図に表示されないことを意味します。一方、Date型は抜けている日があっても、図に表示表示されます。一般のcharacter型またはfactor型でこのようなことを再現するためには、6月19日の列を追加し、睡眠時間を欠損値として指定する必要があります。たとえば、`SongSleep`データにおいて6月19日の行は温存したまま、睡眠時間だけを欠損値にしてみましょう。
 
 
 ```{.r .numberLines}
@@ -771,7 +772,7 @@ SongSleep3
 ## 7 2017-06-23   290 2017-06-23
 ```
 
-このように日付はあるが、睡眠時間が欠損している場合、図にしたものが図\@ref(fig:sleep5)です。
+このように日付はあるが、睡眠時間が欠損している場合、図にしたものが図\@ref(fig:datatype-date-12)です。
 
 
 ```{.r .numberLines}
@@ -783,11 +784,11 @@ ggplot(SongSleep3,
 ```
 
 <div class="figure" style="text-align: center">
-<img src="datatype_files/figure-html/sleep5-1.png" alt="Songの睡眠時間" width="672" />
-<p class="caption">(\#fig:sleep5)Songの睡眠時間</p>
+<img src="datatype_files/figure-html/datatype-date-12-1.png" alt="Songの睡眠時間" width="672" />
+<p class="caption">(\#fig:datatype-date-12)Songの睡眠時間</p>
 </div>
 
-警告が表示されましたが、横軸上に6月19日が表示されます。このようにDate型でなくてもDate型と同じように動かすことは可能ですが、非常に面倒です。その意味でDate型は時系列データを扱う際に非常に便利なデータ型です。
+横軸上に6月19日が表示されます。このようにDate型でなくてもDate型と同じように動かすことは可能ですが、非常に面倒です。その意味でDate型は時系列データを扱う際に非常に便利なデータ型です。
 
 ### Date型の作り方
 
@@ -891,7 +892,7 @@ as.Date("21may2020",   format = "%d%b%Y")
 ```
 
 ```
-## [1] NA
+## [1] "2020-05-21"
 ```
 
 ```{.r .numberLines}
@@ -899,7 +900,7 @@ as.Date("May/21/2020", format = "%b/%d/%Y")
 ```
 
 ```
-## [1] NA
+## [1] "2020-05-21"
 ```
 
 うまくいかないですね。これはシステムの時間ロケールが日本になっているのが原因です。ロケール設定は`Sys.getlocale()`で確認できます。
@@ -910,7 +911,7 @@ Sys.getlocale(category = "LC_TIME")
 ```
 
 ```
-## [1] "ja_JP.UTF-8"
+## [1] "en_US.UTF-8"
 ```
 
 これを`Sys.setlocale()`を使って、`"C"`に変更します。
@@ -964,10 +965,10 @@ POSIXct、POSIXlt型は日付だけでなく時間の情報も含むデータ型
 
 ## NA {#type-na}
 
-NAは欠損値と呼ばれます。これは本来は値があるはずなのがなんらかの理由で欠損していることを意味します。表\@ref(tab:NAExample1)の例を考えてみましょう。
+NAは欠損値と呼ばれます。これは本来は値があるはずなのがなんらかの理由で欠損していることを意味します。表\@ref(tab:datatype-na-1)の例を考えてみましょう。
 
 <table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>(\#tab:NAExample1)4人の支持政党</caption>
+<caption>(\#tab:datatype-na-1)4人の支持政党</caption>
  <thead>
   <tr>
    <th style="text-align:right;"> ID </th>
@@ -1006,12 +1007,12 @@ NAは欠損値と呼ばれます。これは本来は値があるはずなのが
 
 3列目で支持政党があるケースのみ、4列目に値があります。YanaiとTaniの場合、支持する政党がないため、政治政党名が欠損しています。実際、多くのデータには欠損値が含まれています。世論調査データの場合はもっと多いです。理由としては「Q2で"はい"を選んだ場合のみQ3に進み、それ以外はQ4へ飛ばす」のようなのもありますが、単に回答を拒否した場合もあります。
 
-まずは欠損値が含まれたベクトル`NA.Vec1`を作ってみましょう。
+まずは欠損値が含まれたベクトル`na_vec1`を作ってみましょう。
 
 
 ```{.r .numberLines}
-NA.Vec1 <- c(1, NA, 3, NA, 5, 6)
-NA.Vec1
+na_vec1 <- c(1, NA, 3, NA, 5, 6)
+na_vec1
 ```
 
 ```
@@ -1022,7 +1023,7 @@ NA.Vec1
 
 
 ```{.r .numberLines}
-class(NA.Vec1)
+class(na_vec1)
 ```
 
 ```
@@ -1033,7 +1034,7 @@ NAが含まれていてもデータ型はnumericのままです。これは「�
 
 
 ```{.r .numberLines}
-is.na(NA.Vec1)
+is.na(na_vec1)
 ```
 
 ```
@@ -1046,7 +1047,7 @@ is.na(NA.Vec1)
 
 
 ```{.r .numberLines}
-length(NA.Vec1)
+length(na_vec1)
 ```
 
 ```
@@ -1055,33 +1056,33 @@ length(NA.Vec1)
 
 **欠損値の取り扱い**
 
-欠損値を含むデータの処理方法はやや特殊です。まず、`NA.Vec1`の要素全てに1を足してみましょう。
+欠損値を含むデータの処理方法はやや特殊です。まず、`na_vec1`の要素全てに1を足してみましょう。
 
 
 ```{.r .numberLines}
-NA.Vec1 + 1
+na_vec1 + 1
 ```
 
 ```
 ## [1]  2 NA  4 NA  6  7
 ```
 
-この場合、欠損値の箇所には1が足されず、それ以外の要素のみに1を足した結果が返ってきます。これは直感的に考えると自然です。問題になるのは欠損値が含まれるベクトルを関数に入れた場合です。たとえば、numeric型ベクトル内の要素の総和を求めるには`sum()`関数を使います。`sum(c(1, 3, 5))`を入力すると9が返されます。`NA.Vec1`は欠損していない要素が1, 3, 5, 6であるため、総和は15のはずです。確認してみましょう。
+この場合、欠損値の箇所には1が足されず、それ以外の要素のみに1を足した結果が返ってきます。これは直感的に考えると自然です。問題になるのは欠損値が含まれるベクトルを関数に入れた場合です。たとえば、numeric型ベクトル内の要素の総和を求めるには`sum()`関数を使います。`sum(c(1, 3, 5))`を入力すると9が返されます。`na_vec1`は欠損していない要素が1, 3, 5, 6であるため、総和は15のはずです。確認してみましょう。
 
 
 ```{.r .numberLines}
-sum(NA.Vec1)
+sum(na_vec1)
 ```
 
 ```
 ## [1] NA
 ```
 
-このように欠損値を含むベクトルの総和はNAとなります。もし、欠損値を除いた要素の総和を求めるには、まずベクトルから欠損値を除去する必要があります。そのためには`is.na()`関数を使って`NA.Vec1`の要素を抽出します。ただし、`is.na()`を使うと、欠損値であるところが`TRUE`になるため、これを反転する必要があります。この場合は`!is.na()`関数を使います。それでは`is.na()`と`!is.na()`を使って要素を抽出してみましょう。
+このように欠損値を含むベクトルの総和はNAとなります。もし、欠損値を除いた要素の総和を求めるには、まずベクトルから欠損値を除去する必要があります。そのためには`is.na()`関数を使って`na_vec1`の要素を抽出します。ただし、`is.na()`を使うと、欠損値であるところが`TRUE`になるため、これを反転する必要があります。この場合は`!is.na()`関数を使います。それでは`is.na()`と`!is.na()`を使って要素を抽出してみましょう。
 
 
 ```{.r .numberLines}
-NA.Vec1[is.na(NA.Vec1)]
+na_vec1[is.na(na_vec1)]
 ```
 
 ```
@@ -1089,7 +1090,7 @@ NA.Vec1[is.na(NA.Vec1)]
 ```
 
 ```{.r .numberLines}
-NA.Vec1[!is.na(NA.Vec1)]
+na_vec1[!is.na(na_vec1)]
 ```
 
 ```
@@ -1100,7 +1101,7 @@ NA.Vec1[!is.na(NA.Vec1)]
 
 
 ```{.r .numberLines}
-sum(NA.Vec1[!is.na(NA.Vec1)])
+sum(na_vec1[!is.na(na_vec1)])
 ```
 
 ```
@@ -1111,7 +1112,7 @@ sum(NA.Vec1[!is.na(NA.Vec1)])
 
 
 ```{.r .numberLines}
-sum(NA.Vec1, na.rm = TRUE)
+sum(na_vec1, na.rm = TRUE)
 ```
 
 ```
@@ -1122,55 +1123,55 @@ sum(NA.Vec1, na.rm = TRUE)
 
 主に欠損値を扱うのは入手したデータに含まれる欠損値に対してですが、NAをこちらから生成することもあります。それは空ベクトルを用意する時です。第\@ref(programming)章では関数の作り方について解説します。関数内で何らかの処理を行い、その結果を返すことになりますが、その結果を格納するベクトルを事前に作っておくこともできます。こちらの方がメモリの観点からは効率的です。以下は第\@ref(programming)章を読んでから読んでも構いません。
 
-もし、長さ10のベクトル`Result.Vec1`を返すとします。ベクトルの要素として1から10の数字が入るとします。一つ目の方法としてはまず、`Result.Vec1`に1を代入し、次は`c()`を使って要素を一つずつ足して行く手順です。
+もし、長さ10のベクトル`result_vec1`を返すとします。ベクトルの要素として1から10の数字が入るとします。一つ目の方法としてはまず、`result_vec1`に1を代入し、次は`c()`を使って要素を一つずつ足して行く手順です。
 
 
 ```{.r .numberLines}
-Result.Vec1 <- 1
-Result.Vec1 <- c(Result.Vec1, 2)
-Result.Vec1 <- c(Result.Vec1, 3)
-Result.Vec1 <- c(Result.Vec1, 4)
-Result.Vec1 <- c(Result.Vec1, 5)
-Result.Vec1 <- c(Result.Vec1, 6)
-Result.Vec1 <- c(Result.Vec1, 7)
-Result.Vec1 <- c(Result.Vec1, 8)
-Result.Vec1 <- c(Result.Vec1, 9)
-Result.Vec1 <- c(Result.Vec1, 10)
+result_vec1 <- 1
+result_vec1 <- c(result_vec1, 2)
+result_vec1 <- c(result_vec1, 3)
+result_vec1 <- c(result_vec1, 4)
+result_vec1 <- c(result_vec1, 5)
+result_vec1 <- c(result_vec1, 6)
+result_vec1 <- c(result_vec1, 7)
+result_vec1 <- c(result_vec1, 8)
+result_vec1 <- c(result_vec1, 9)
+result_vec1 <- c(result_vec1, 10)
 ```
 
 二つ目の方法はまず、10個のNAが格納されたベクトル`Reuslt.Vec2`を作っておいて、その中に要素を置換してく方法です。
 
 
 ```{.r .numberLines}
-Result.Vec2     <- rep(NA, 10)
-Result.Vec2[1]  <- 1
-Result.Vec2[2]  <- 2
-Result.Vec2[3]  <- 3
-Result.Vec2[4]  <- 4
-Result.Vec2[5]  <- 5
-Result.Vec2[6]  <- 6
-Result.Vec2[7]  <- 7
-Result.Vec2[8]  <- 8
-Result.Vec2[9]  <- 9
-Result.Vec2[10] <- 10
+result_vec2     <- rep(NA, 10)
+result_vec2[1]  <- 1
+result_vec2[2]  <- 2
+result_vec2[3]  <- 3
+result_vec2[4]  <- 4
+result_vec2[5]  <- 5
+result_vec2[6]  <- 6
+result_vec2[7]  <- 7
+result_vec2[8]  <- 8
+result_vec2[9]  <- 9
+result_vec2[10] <- 10
 ```
 
-以上の手順を`for()`を使って反復処理するとしたら、以下のようなコードになります。
+以上の手順を第\@ref(programming)章で紹介する`for()`を使って反復処理するとしたら、以下のようなコードになります。
 
 
 ```{.r .numberLines}
 # 方法1
-Result.Vec1 <- 1
+result_vec1 <- 1
 
 for (i in 2:10) {
-    Result.Vec1 <- c(Result.Vec1, i)
+    result_vec1 <- c(result_vec1, i)
 }
 
 # 方法2
-Result.Vec2 <- rep(NA, 10)
+result_vec2 <- rep(NA, 10)
 
 for (i in 1:10) {
-    Result.Vec2[i] <- i
+    result_vec2[i] <- i
 }
 ```
 
@@ -1178,7 +1179,7 @@ for (i in 1:10) {
 
 
 ```{.r .numberLines}
-Result.Vec1
+result_vec1
 ```
 
 ```
@@ -1186,7 +1187,7 @@ Result.Vec1
 ```
 
 ```{.r .numberLines}
-Result.Vec2
+result_vec2
 ```
 
 ```
@@ -1199,12 +1200,12 @@ Result.Vec2
 
 ## NULL {#type-null}
 
-NULLは「存在しない」、空っぽであることを意味します。先ほどのNAはデータは存在するはずなのに、何らかの理由で値が存在しない、または割り当てられていないことを意味しますが、NULLは「存在しません」。したがって、NULLが含まれたベクトルを作成しても表示されません。NULLが含まれた`NULL.Vec1`を作ってみましょう。
+NULLは「存在しない」、空っぽであることを意味します。先ほどのNAはデータは存在するはずなのに、何らかの理由で値が存在しない、または割り当てられていないことを意味しますが、NULLは「存在しません」。したがって、NULLが含まれたベクトルを作成しても表示されません。NULLが含まれた`null_vec1`を作ってみましょう。
 
 
 ```{.r .numberLines}
-NULL.Vec1 <- c(1, 3, NULL, 5, 10)
-NULL.Vec1
+null_vec1 <- c(1, 3, NULL, 5, 10)
+null_vec1
 ```
 
 ```
@@ -1215,18 +1216,18 @@ NULL.Vec1
 
 
 ```{.r .numberLines}
-length(NULL.Vec1)
+length(null_vec1)
 ```
 
 ```
 ## [1] 4
 ```
 
-この`NULL.Vec1`のデータ型は何でしょう。
+この`null_vec1`のデータ型は何でしょう。
 
 
 ```{.r .numberLines}
-class(NULL.Vec1)
+class(null_vec1)
 ```
 
 ```
@@ -1237,22 +1238,31 @@ class(NULL.Vec1)
 
 
 ```{.r .numberLines}
-is.null(NULL.Vec1)
+is.null(null_vec1)
 ```
 
 ```
 ## [1] FALSE
 ```
 
-NULLは存在しないことを意味するため、`NULL.Vec1`は要素が4のnumeric型ベクトルです。`is.null()`でNULLが判定できるのは`is.null(NULL)`のようなケースです。このNULLはいつ使うのでしょうか。実際、使う機会はあまりありません。強いて言えば、空っぽのリストを作成する際に使うケースがあります。リストについては第\@ref(datastructure)章で説明します。以下の例は第\@ref(datastructure)章を読み終わってから目を通して下さい。
+NULLは存在しないことを意味するため、`null_vec1`は要素が4のnumeric型ベクトルです。`is.null()`でNULLが判定できるのは`is.null(NULL)`のようなケースです。
+
+図\@ref(fig:datatype-null-5)はNA型とNULL型の違いについてまとめたものです。
+
+<div class="figure" style="text-align: center">
+<img src="figures/Datatype/NA_NULL.png" alt="NAとNULLの違い" width="85%" />
+<p class="caption">(\#fig:datatype-null-5)NAとNULLの違い</p>
+</div>
+
+このNULLはいつ使うのでしょうか。実際、使う機会はあまりありません。強いて言えば、空っぽのリストを作成する際に使うケースがあります。リストについては第\@ref(datastructure)章で説明します。以下の例は第\@ref(datastructure)章を読み終わってから目を通して下さい。
 
 
 ```{.r .numberLines}
-NULL.List1 <- list(Room1 = 1:3,
+null_list1 <- list(Room1 = 1:3,
                    Room2 = c("Yuki", "Jaehyun", "Hadley"),
                    Room3 = NULL)
 
-NULL.List1
+null_list1
 ```
 
 ```
@@ -1266,11 +1276,11 @@ NULL.List1
 ## NULL
 ```
 
-このように予めリストの要素は作っておきたいが、とりあえず空けておく際に使います。続く分析の段階で`NULL.List1[["Room3"]]`に何かを格納したりすることに使えるでしょう。ちなみにこの場合は`is.null()`が使用可能です。
+このように予めリストの要素は作っておきたいが、とりあえず空けておく際に使います。続く分析の段階で`null_list1[["Room3"]]`に何かを格納したりすることに使えるでしょう。ちなみにこの場合は`is.null()`が使用可能です。
 
 
 ```{.r .numberLines}
-is.null(NULL.List1[["Room3"]])
+is.null(null_list1[["Room3"]])
 ```
 
 ```
@@ -1281,12 +1291,12 @@ is.null(NULL.List1[["Room3"]])
 
 ## NaN {#type-nan}
 
-NaNはnumeric型、中でもdouble型の一種ですが、これは計算できない値を意味します。つまり、NaN値を直接入力することはめったにありませんが、計算の結果として`NaN`が返されるケースがあります。代表的な例が0を0で割った場合です。実際、0を0で割ることはできません。ここでは0を0で割った値を含む`NaN.Vec1`作ってみましょう。
+NaNはnumeric型、中でもdouble型の一種ですが、これは計算できない値を意味します。つまり、NaN値を直接入力することはめったにありませんが、計算の結果として`NaN`が返されるケースがあります。代表的な例が0を0で割った場合です。実際、0を0で割ることはできません。ここでは0を0で割った値を含む`nan_vec1`作ってみましょう。
 
 
 ```{.r .numberLines}
-NaN.Vec1 <- c(2/5, 0/12, 0/0)
-NaN.Vec1
+nan_vec1 <- c(2/5, 0/12, 0/0)
+nan_vec1
 ```
 
 ```
@@ -1294,7 +1304,7 @@ NaN.Vec1
 ```
 
 ```{.r .numberLines}
-class(NaN.Vec1)
+class(nan_vec1)
 ```
 
 ```
@@ -1305,7 +1315,7 @@ class(NaN.Vec1)
 
 
 ```{.r .numberLines}
-is.nan(NaN.Vec1)
+is.nan(nan_vec1)
 ```
 
 ```
@@ -1316,12 +1326,12 @@ is.nan(NaN.Vec1)
 
 ## Inf {#type-inf}
 
-Infもまたnumeric型、中でもdouble型の一部ですが、これは無限大を意味します。Infも通常、自分から作成するケースはあまりなく、結果として帰ってくる場合があります。一つの例が0以外の数値を0で割った場合です。それではなんらかの数値を0を割った値が含まれるベクトル`Inf.Vec1`を作ってみましょう。
+Infもまたnumeric型、中でもdouble型の一部ですが、これは無限大を意味します。Infも通常、自分から作成するケースはあまりなく、結果として帰ってくる場合があります。一つの例が0以外の数値を0で割った場合です。それではなんらかの数値を0を割った値が含まれるベクトル`inf_vec1`を作ってみましょう。
 
 
 ```{.r .numberLines}
-Inf.Vec1 <- c(28/95, 3/0, -12/0, 0/0)
-Inf.Vec1
+inf_vec1 <- c(28/95, 3/0, -12/0, 0/0)
+inf_vec1
 ```
 
 ```
@@ -1329,7 +1339,7 @@ Inf.Vec1
 ```
 
 ```{.r .numberLines}
-class(Inf.Vec1)
+class(inf_vec1)
 ```
 
 ```
@@ -1340,7 +1350,7 @@ class(Inf.Vec1)
 
 
 ```{.r .numberLines}
-is.infinite(Inf.Vec1)
+is.infinite(inf_vec1)
 ```
 
 ```

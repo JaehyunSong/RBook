@@ -236,7 +236,7 @@ sapply(num_vec, ~(.x + 2) / 3)
 ```
 
 ```
-## Error in match.fun(FUN):  '~(.x + 2)/3' は関数、文字、またはシンボルではありません
+## Error in match.fun(FUN): '~(.x + 2)/3' is not a function, character or symbol
 ```
 
 これまでの例は**正しい**コードではありますが、**良い**コードとは言えないでしょう。なぜなら`num_vec + 2`という最適解が存在するからです。`*apply()`と`map_*()`はより複雑な処理に特化しています。たとえば、リスト型データの処理です。以下の例を考えてみましょう。
@@ -697,7 +697,7 @@ Dummy_df2 <- as.data.frame(Dummy_list2)
 ```
 
 ```
-## Error in (function (..., row.names = NULL, check.rows = FALSE, check.names = TRUE, :  引数に異なる列数のデータフレームが含まれています: 3, 5
+## Error in (function (..., row.names = NULL, check.rows = FALSE, check.names = TRUE, : arguments imply differing number of rows: 3, 5
 ```
 
 一方、`as_tibble()`を使用してtibble型に変換することは可能です。
@@ -1660,13 +1660,15 @@ summary(RDD_Fit)
 ## -46.930  -6.402   0.132   7.191  46.443 
 ## 
 ## Coefficients:
-##                   Estimate Std. Error t value Pr(>|t|)
-## (Intercept)       47.33084    0.54192  87.340  < 2e-16
-## margin             0.34806    0.01335  26.078  < 2e-16
-## I(margin > 0)TRUE  4.78461    0.92290   5.184 2.51e-07
+##                   Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)       47.33084    0.54192  87.340  < 2e-16 ***
+## margin             0.34806    0.01335  26.078  < 2e-16 ***
+## I(margin > 0)TRUE  4.78461    0.92290   5.184 2.51e-07 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 11.78 on 1294 degrees of freedom
-##   ( 93 個の観測値が欠損のため削除されました )
+##   (93 observations deleted due to missingness)
 ## Multiple R-squared:  0.5781,	Adjusted R-squared:  0.5774 
 ## F-statistic: 886.4 on 2 and 1294 DF,  p-value: < 2.2e-16
 ```

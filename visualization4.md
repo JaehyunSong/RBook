@@ -1253,7 +1253,7 @@ ne_countries(scale = "large", country = "Japan", returnclass = "sf") %>%
 
 <img src="visualization4_files/figure-html/visual4-map11-1.png" width="672" style="display: block; margin: auto;" />
 
-　ただ、日本地図を出すという場合、多くは都道府県レベルでマッピングが目的でしょう。世界地図のマッピングならこれで問題ありませんが、一国だけなら、その下の自治体の境界線も必要です。したがって、先ほど使用しましたパッケージのより高解像度の地図が含まれている{rnaturalearthhires}をインストールし、読み込みましょう。2022年 2月23日現在、{rnaturalearthhires}はCRANに登録されておらず、GitHubの[ropensciレポジトリー](https://github.com/ropensci)のみで公開されているため、今回は{pacman}の`p_load()`でなく、`p_load_gh()`を使用します。
+　ただ、日本地図を出すという場合、多くは都道府県レベルでマッピングが目的でしょう。世界地図のマッピングならこれで問題ありませんが、一国だけなら、その下の自治体の境界線も必要です。したがって、先ほど使用しましたパッケージのより高解像度の地図が含まれている{rnaturalearthhires}をインストールし、読み込みましょう。2022年Feb月24日現在、{rnaturalearthhires}はCRANに登録されておらず、GitHubの[ropensciレポジトリー](https://github.com/ropensci)のみで公開されているため、今回は{pacman}の`p_load()`でなく、`p_load_gh()`を使用します。
 
 
 ```{.r .numberLines}
@@ -1451,7 +1451,7 @@ Japan_Map
 ## 8      <NA>         1      jpn     JA39       <NA>         7        11        3
 ## 9      <NA>         1      jpn     JA17       <NA>         7        11        3
 ## 10     <NA>         1      jpn     JA05       <NA>         7        11        3
-##    wikidataid name_ar name_bn              name_de              name_en
+##    wikidataid name_ar name_bn             name_de              name_en
 ## 1      Q15701    <NA>    <NA> Präfektur Kagoshima Kagoshima Prefecture
 ## 2     Q133924    <NA>    <NA>      Präfektur Oita      Oita Prefecture
 ## 3     Q123258    <NA>    <NA>   Präfektur Fukuoka   Fukuoka Prefecture
@@ -1462,7 +1462,7 @@ Japan_Map
 ## 8     Q160734    <NA>    <NA> Präfektur Tokushima Tokushima Prefecture
 ## 9     Q161454    <NA>    <NA>    Präfektur Kagawa    Kagawa Prefecture
 ## 10    Q123376    <NA>    <NA>     Präfektur Ehime     Ehime Prefecture
-##                    name_es                  name_fr name_el name_hi
+##                    name_es                 name_fr name_el name_hi
 ## 1  Prefectura de Kagoshima Préfecture de Kagoshima    <NA>    <NA>
 ## 2       Prefectura de Oita       Préfecture d'Oita    <NA>    <NA>
 ## 3    Prefectura de Fukuoka   Préfecture de Fukuoka    <NA>    <NA>
@@ -1473,9 +1473,9 @@ Japan_Map
 ## 8  Prefectura de Tokushima Préfecture de Tokushima    <NA>    <NA>
 ## 9     Prefectura de Kagawa    Préfecture de Kagawa    <NA>    <NA>
 ## 10     Prefectura de Ehime      Préfecture d'Ehime    <NA>    <NA>
-##                  name_hu             name_id                 name_it name_ja
+##                 name_hu             name_id                 name_it name_ja
 ## 1   Kagosima prefektúra Prefektur Kagoshima prefettura di Kagoshima    <NA>
-## 2      Óita prefektúra      Prefektur Oita      prefettura di Oita    <NA>
+## 2       Óita prefektúra      Prefektur Oita      prefettura di Oita    <NA>
 ## 3    Fukuoka prefektúra   Prefektur Fukuoka   prefettura di Fukuoka    <NA>
 ## 4      Szaga prefektúra      Prefektur Saga      Prefettura di Saga    <NA>
 ## 5  Nagaszaki prefektúra  Prefektur Nagasaki  prefettura di Nagasaki    <NA>
@@ -2015,14 +2015,14 @@ Vote_0910
 ##    <chr>  <chr>      <int>
 ##  1 DK     DK           111
 ##  2 DK     その他         8
-##  3 DK     棄権          57
+##  3 DK     公明           7
 ##  4 DK     共産・社民    15
-##  5 DK     公明           7
-##  6 DK     自民          29
-##  7 DK     民主         116
+##  5 DK     棄権          57
+##  6 DK     民主         116
+##  7 DK     自民          29
 ##  8 その他 DK            18
 ##  9 その他 その他        73
-## 10 その他 棄権          18
+## 10 その他 公明           4
 ## # … with 37 more rows
 ```
 

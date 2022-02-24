@@ -60,7 +60,7 @@ devtools::install_github("JaehyunSong/BalanceR")
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Installation/Package_Workbench.jpg" alt="Rパッケージと作業環境" width="75%" />
-<p class="caption">(\#fig:packages_load_1)Rパッケージと作業環境</p>
+<p class="caption">(\#fig:packages-load-1)Rパッケージと作業環境</p>
 </div>
 
 [^default-pacakge]: `mean()`や`sum()`、`lm()`のように、よく使われる関数 (=工具)はR起動と同時に作業台上に載せられる。

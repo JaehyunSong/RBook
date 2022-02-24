@@ -1,23 +1,22 @@
 --- 
-title: "私たちのR: ベストプラクティスの探究"
+title: '私たちのR: ベストプラクティスの探究'
 author: "宋財泫 (Jaehyun Song)・矢内勇生 (Yuki Yanai)"
-date: "改訂: 2022-02-23"
-description: "R Not for Everyone: An Esoteric Guide."
-url: 'https\://jaysong.net/RBook/'
-
+date: '改訂: 2022-02-24'
+description: 'R Not for Everyone: An Esoteric Guide.'
+url: https\://jaysong.net/RBook/
 site: bookdown::bookdown_site
-
-bibliography: "tex/reference.bib"
-biblio-style: "tex/jecon.bst"
+bibliography: tex/reference.bib
+biblio-style: tex/jecon.bst
 link-citations: yes
-always_allow_html: true
-
-github-repo: "JaehyunSong/RBook"
-cover-image: "HTML/cover.png"
-favicon: "HTML/favicon.png"
-apple-touch-icon: "HTML/apple-favicon.png"
+always_allow_html: yes
+github-repo: JaehyunSong/RBook
+cover-image: HTML/cover.png
+favicon: HTML/favicon.png
+apple-touch-icon: HTML/apple-favicon.png
 apple-touch-icon-size: 120
 ---
+
+ 
 
 
 
@@ -47,54 +46,50 @@ apple-touch-icon-size: 120
 
 ## 進捗状況 {-}
 
-章立ては未定。著者が書きたいものから書く予定。
+章立ては未定。著者が書きたいものから書く予定（全部で30~35章くらいになる見込み）。
 
-* 全部で30~35章くらいになる見込み。
-
-| 章                    | タイトル                              |進捗状況 (%)| 備考        |
-|-----------------------|---------------------------------------|-----------:|-------------|
-|Part I|**Rの導入**|||
-| \@ref(aboutR)         | R?                                    |         75 |             |
-| \@ref(installation)   | Rのインストール                       |          0 |  再執筆予定 |
-| \@ref(ide)            | IDEの導入                             |          0 |  再執筆予定 |
-| \@ref(R-Customize)    | 分析環境のカスタマイズ                |          0 |             |
-| \@ref(packages)       | Rパッケージ                           |         50 |             |
-|Part II|**Rの基礎**|||
-| \@ref(rbasic)         | 基本的な操作                          |         80 |             |
-| \@ref(io)             | データの入出力                        |         70 |             |
-| \@ref(datatype)       | データ型                              |         90 |             |
-| \@ref(datastructure)  | データ構造                            |         80 |             |
-| \@ref(programming)    | Rプログラミングの基礎                 |         85 |             |
-| \@ref(functions)      | 関数の自作                            |         50 |             |
-|Part III|**データハンドリング**|||
-| \@ref(datahandling1)  | データハンドリング [基礎編: 抽出]     |         95 |             |
-| \@ref(datahandling2)  | データハンドリング [基礎編: 拡張]     |         95 |             |
-| \@ref(factor)         | データハンドリング [基礎編: factor型] |         90 |             |
-| \@ref(tidydata)       | 整然データ構造                        |         85 |             |
-| \@ref(string)         | 文字列の処理                          |          0 |             |
-|Part IV|**可視化**|||
-| \@ref(visualization1) | 可視化[理論]                          |         85 |             |
-| \@ref(visualization2) | 可視化[基礎]                          |         85 |             |
-| \@ref(visualization3) | 可視化[応用]                          |         85 |             |
-| \@ref(visualization4) | 可視化[発展]                          |         80 |             |
-|Part V|**再現可能な研究**|||
-| \@ref(rmarkdown)      | R Markdown [基礎]                     |         85 |             |
-| \@ref(rmarkdown2)     | R Markdown [応用]                     |          0 |             |
-| 99                    | モデルの可視化                        |          0 |             |
-| \@ref(table)          | 表の作成                              |          0 |             |
-|Part VI|**中級者向け**|||
-| \@ref(datahandling3)  | データハンドリング [応用編]           |          0 |             |
-| \@ref(iteration)      | 反復処理                              |         70 |             |
-| \@ref(oop)            | オブジェクト指向プログラミング        |         60 |             |
-| \@ref(monte)          | モンテカルロシミュレーション          |         40 |             |
-| \@ref(scraping)       | スクレイピング                        |          0 |             |
-| 99                    | API                                   |          0 |             |
+- **第I部: Rの導入**
+   - 第\@ref(aboutR)章: R? (50%)
+   - 第\@ref(installation)章: Rのインストール (0%)
+   - 第\@ref(ide)章: IDEの導入 (0%)
+   - 第\@ref(R-Customize)章: 分析環境のカスタマイズ (0%)
+   - 第\@ref(packages)章: Rパッケージ (50%)
+- **第II部: Rの基礎**
+   - 第\@ref(rbasic)章: 基本的な操作 (80%)
+   - 第\@ref(io)章: データの入出力 (70%)
+   - 第\@ref(datatype)章: データ型 (90%)
+   - 第\@ref(datastructure)章: データ構造 (80%)
+   - 第\@ref(programming)章: Rプログラミングの基礎 (75%)
+   - 第\@ref(functions)章: 関数の自作 (50%)
+- **第III部: データハンドリング**
+   - 第\@ref(datahandling1)章: データハンドリング [基礎編: 抽出] (95%)
+   - 第\@ref(datahandling2)章: データハンドリング [基礎編: 拡張] (95%)
+   - 第\@ref(factor)章: データハンドリング [基礎編: factor型] (90%)
+   - 第\@ref(tidydata)章: 整然データ構造 (85%)
+   - 第\@ref(string)章: 文字列の処理 (0%)
+- **第IV部: 可視化**
+   - 第\@ref(visualization1)章: 可視化[理論] (85%)
+   - 第\@ref(visualization2)章: 可視化[基礎] (85%)
+   - 第\@ref(visualization3)章: 可視化[応用] (85%)
+   - 第\@ref(visualization4)章: 可視化[発展] (85%)
+- **第V部: 再現可能な研究**
+   - 第\@ref(rmarkdown)章: R Markdown [基礎] (85%)
+   - 第\@ref(rmarkdown2)章: R Markdown [応用] (0%)
+   - 第\@ref(table)章: 表の作成 (0%)
+   - 第??章: モデルの可視化 (0%)
+- **第VI部: 中級者向け**
+   - 第\@ref(datahandling3)章: データハンドリング [応用編] (0%)
+   - 第\@ref(iteration)章: 反復処理 (70%)
+   - 第\@ref(oop)章: オブジェクト指向プログラミング (70%)
+   - 第\@ref(monte)章: モンテカルロシミュレーション (50%)
+   - 第\@ref(scraping)章: スクレイピング (0%)
+   - 第??章: API (0%)
 
 ## 著者紹介 {-}
 
 <div class="figure" style="text-align: center">
 <img src="figures/Authors/SongYanai.jpg" alt="事例研究をこよなく愛する著者 (Portland, OR. 2016年2月)" width="50%" />
-<p class="caption">(\#fig:preface_author)事例研究をこよなく愛する著者 (Portland, OR. 2016年2月)</p>
+<p class="caption">(\#fig:preface-author)事例研究をこよなく愛する著者 (Portland, OR. 2016年2月)</p>
 </div>
 
 **Song Jaehyun**（宋 財泫 [ソン ジェヒョン]; 写真左）はR黒帯の大学教員。猫好き。
@@ -167,3 +162,5 @@ print("Hello World!") # Hellow World!を出力
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="クリエイティブ・コモンズ・ライセンス" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a>
 
 本著作物は [クリエイティブ・コモンズ 表示-非営利-改変禁止 4.0国際ライセンス](http://creativecommons.org/licenses/by-nc-nd/4.0/)の下に提供されています。
+
+
