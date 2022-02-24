@@ -30,7 +30,8 @@ Beamer出力、Powerpoint出力も可能
 
 [Chrome](https://www.google.com/intl/ja_jp/chrome/)や[Opera](https://www.opera.com/ja)からスライドを開き、印刷でPDF出力
 
-```r
+
+```{.r .numberLines}
 pagedown::chrome_print("スライドファイル名.html")
 ```
 

@@ -76,14 +76,14 @@ apple-touch-icon-size: 120
    - 第\@ref(rmarkdown)章: R Markdown [基礎] (85%)
    - 第\@ref(rmarkdown2)章: R Markdown [応用] (0%)
    - 第\@ref(table)章: 表の作成 (0%)
-   - 第??章: モデルの可視化 (0%)
+   - 第\@ref(visualization5)章: モデルの可視化 (0%)
 - **第VI部: 中級者向け**
    - 第\@ref(datahandling3)章: データハンドリング [応用編] (0%)
    - 第\@ref(iteration)章: 反復処理 (70%)
    - 第\@ref(oop)章: オブジェクト指向プログラミング (70%)
    - 第\@ref(monte)章: モンテカルロシミュレーション (50%)
    - 第\@ref(scraping)章: スクレイピング (0%)
-   - 第??章: API (0%)
+   - 第\@ref(api)章: API (0%)
 
 ## 著者紹介 {-}
 
