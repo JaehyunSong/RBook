@@ -22,9 +22,9 @@ apple-touch-icon-size: 120
 
 # 紹介 {#preface .unnumbered}
 
-<img src="figures/Cover.png" width="250" alt="RN4E" align="right" style="margin: 0 0 1em 1em; border-width: 1px; border-style: solid; border-color: black;" />
+<img src="figures/Cover.png" width="225" alt="RN4E" align="right" style="margin: 0 0 1em 1em; border-width: 1px; border-style: solid; border-color: black;" />
 
-『私たちのR』は[SONG Jaehyun](http://www.jaysong.net/) と [矢内勇生](https://yukiyanai.github.io) が共同で執筆するRプログラミングの「入門書」である。**統計学の本ではない**。また、**本書はデータ分析の手法の解説書でもない**。Rを用いたデータ分析については他の本を参照されたい。私たちが専門とする政治学におけるデータ分析については、以下の本を勧める。
+『私たちのR: ベストプラクティスの探究 (R Not for Everyone: An Esoteric Guide)』は[SONG Jaehyun](https://www.jaysong.net/) と [矢内勇生](https://yukiyanai.github.io) が共同で執筆するRプログラミングの「入門書」である。**統計学の本ではない**。また、**本書はデータ分析の手法の解説書でもない**。Rを用いたデータ分析については他の本を参照されたい。私たちが専門とする政治学におけるデータ分析については、以下の本を勧める。
 
 - 浅野正彦, 矢内勇生. 2018. 『[Rによる計量政治学](https://www.ohmsha.co.jp/book/9784274223136/)』オーム社.
 - 飯田健. 2013.『[計量政治分析](https://www.kyoritsu-pub.co.jp/bookdetail/9784320019249)』共立出版.
@@ -32,11 +32,11 @@ apple-touch-icon-size: 120
 
 本書が想定するのは、次のような希望をもつ読者である。
 
-* 分析に入るまでの段階、つまりデータの入手やクリーニング方法が知りたい
-* 分析結果を自分の思いどおりに可視化したい
-* 複数のモデルを効率的に分析したい
-* Rでシミュレーションがしたい
-* Rと友達になりたい
+- 分析に入るまでの段階、つまりデータの入手やクリーニング方法が知りたい
+- 分析結果を自分の思いどおりに可視化したい
+- 複数のモデルを効率的に分析したい
+- Rでシミュレーションがしたい
+- Rと友達になりたい
 
 本書を読んでも統計学やデータ分析を理解することはできない。本書の目的は、統計学やデータ分析についての知識を持った方々と、Rを使ってもっと効率的にデータ分析をする方法を共有することである。また、統計学やデータ分析を勉強する際に、プログラミングについての副読本として読むことも想定している。
 
