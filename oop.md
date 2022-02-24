@@ -63,7 +63,7 @@ summary(Vector1)
 ##        10 character character
 ```
 
-データの中身は変わっていませんが、`summary()`関数の動き方が変わりました。このように、Rで頻繁に使う`summary()`、`print()`、`plot()`などの関数は様々なクラスの対応しております。`lm()`関数を使った回帰分析の結果オブジェクトのクラス名は`lm`であり、その結果を見るためにも`summary()`関数を使います。他にも`plot(lmオブジェクト名)`をすると回帰診断の図が表示されます。これができないと、各クラスに応じた関数を作成する必要がありますね。numeric型専用の`numeric_print()`、character型専用の`character_print()`、lm型専用の`lm_plot()`など...、覚えなきゃいけない関数が増えてきます。ユーザー側でも大変ですが、コードを作成する側も大変です。実際、下の図[^HardestTasks]を見ると、プログラマーにとって最も大変な仕事は「名付け」であることが分かります。
+データの中身は変わっていませんが、`summary()`関数の動き方が変わりました。このように、Rで頻繁に使う`summary()`、`print()`、`plot()`などの関数は様々なクラスの対応しております。`lm()`関数を使った回帰分析の結果オブジェクトのクラス名は`lm`であり、その結果を見るためにも`summary()`関数を使います。他にも`plot(lmオブジェクト名)`をすると回帰診断の図が表示されます。これができないと、各クラスに応じた関数を作成する必要がありますね。numeric型専用の`numeric_print()`、character型専用の`character_print()`、lm型専用の`lm_plot()`など...、覚えなきゃいけない関数が増えてきます。ユーザー側でも大変ですが、コードを作成する側も大変です。実際、図\@ref(fig:oop-intro-5)[^HardestTasks]を見ると、プログラマーにとって最も大変な仕事は「名付け」であることが分かります。
 
 [^HardestTasks]: 図の出典は[IT WORLD](https://www.itworld.com/article/2833265/don-t-go-into-programming-if-you-don-t-have-a-good-thesaurus.html)です (アクセス: 2020-05-21)。
 
@@ -255,7 +255,7 @@ summary
 ```
 ## function (object, ...) 
 ## UseMethod("summary")
-## <bytecode: 0x7fb26b520080>
+## <bytecode: 0x7fc17a2d0820>
 ## <environment: namespace:base>
 ```
 
@@ -318,7 +318,7 @@ getS3method("summary", "default")
 ##     class(value) <- c("summaryDefault", "table")
 ##     value
 ## }
-## <bytecode: 0x7fb26de76818>
+## <bytecode: 0x7fc16a8c0e28>
 ## <environment: namespace:base>
 ```
 
@@ -350,7 +350,8 @@ class(my_tibble)
 
 クラスを変えるのは簡単です。`class(オブジェクト) <- "新しいクラス名"`だけです。つまり、関数から何かの結果を返す直前にクラスを変更すれば良いです。
 
-```r
+
+```{.r .numberLines}
 # 方法1
 関数名 <- function(...) {
   
@@ -385,12 +386,12 @@ My_Score1 # My_Score1の内部を見る
 
 ```
 ## $Score1
-##  [1] 52.29519 54.25551 36.85794 48.98601 76.23278 36.25421 57.43925 51.36504
-##  [9] 61.27243 31.45804
+##  [1] 58.06588 60.97718 38.97553 42.74556 52.80304 75.10910 47.27618 40.74482
+##  [9] 39.37759 66.91751
 ## 
 ## $Score2
-##  [1] 51.86637 51.00643 65.46291 51.95387 38.00751 61.81450 51.26342 55.44474
-##  [9] 40.22077 49.93101
+##  [1] 44.90958 46.51614 41.19401 62.11393 46.57184 52.75073 52.97574 35.72859
+##  [9] 47.39733 35.32528
 ## 
 ## attr(,"class")
 ## [1] "Score"
@@ -424,12 +425,12 @@ My_Score2 # My_Score2の内部を見る
 
 ```
 ## $Score1
-##  [1] 51.50266 60.60003 37.75109 66.55713 61.37130 40.44811 46.60347 43.78265
-##  [9] 44.89540 61.55911
+##  [1] 40.83042 62.82262 34.75625 58.63049 43.05116 56.64620 38.55660 42.70890
+##  [9] 58.42665 48.29049
 ## 
 ## $Score2
-##  [1] 61.51215 39.48670 44.78181 35.81484 55.29216 42.31978 45.20452 54.22192
-##  [9] 37.60266 41.47034
+##  [1] 59.25127 50.48592 48.41540 72.48833 51.44901 36.11956 46.65860 46.21153
+##  [9] 58.70118 43.92517
 ## 
 ## attr(,"class")
 ## [1] "Score"
@@ -474,8 +475,8 @@ mean(My_Score1) # Scoreクラスのメソッドであるmean()を使う
 ```
 
 ```
-## [1] 50.64164
-## [1] 51.69715
+## [1] 52.29924
+## [1] 46.54832
 ```
 
 `mean(c(1, 3, 5, 7, 9, 11))`は引数がnumeric型ベクトルであるため、既存の`mean()`関数が使用されます。一方、`mean(My_Score1)`は引数がScoreクラスであるため、`mean.Score()`が使用されます。このように`mean_Score()`のような別途の関数を作る必要なく、既存の関数名が利用できます。実際、`methods(mean)`を実行すると、Scoreクラスのメソッドとして`mean()`関数が用意されたことを確認できます。
@@ -581,8 +582,8 @@ my_func(My_Score1)
 ```
 
 ```
-## [1] 50.64164
-## [1] 51.69715
+## [1] 52.29924
+## [1] 46.54832
 ```
 
 ```{.r .numberLines}
@@ -689,16 +690,17 @@ my_func(My_Cat2)
 
 
 
-たとえば、「1日当たりゲーム時間」と「身長」といった2つのnumeric型ベクトルをそれぞれ`x`と`y`で入力し、`x.name`と`y.name`で各ベクトルの名前も指定します。また、入力されたデータを用いて相関係数とその信頼区間を求めます。これらのデータはリスト型として格納されますが、クラスを`"My_Cor_Object"`とします。以下はその例です。
+たとえば、「1日当たりゲーム時間」と「身長」といった2つのnumeric型ベクトルをそれぞれ`x`と`y`で入力し、`x_name`と`y_name`で各ベクトルの名前も指定します。また、入力されたデータを用いて相関係数とその信頼区間を求めます。これらのデータはリスト型として格納されますが、クラスを`"My_Cor_Object"`とします。以下はその例です。
 
 
 ```{.r .numberLines}
 pacman::p_load(tidyverse)
 
+set.seed(19861008)
 Cor_Obj <- My_Cor(x      = rnorm(20, 2, 0.5), 
                   y      = rnorm(20, 165, 6), 
-                  x.name = "1日当たりゲーム時間", 
-                  y.name = "身長")
+                  x_name = "1日当たりゲーム時間", 
+                  y_name = "身長")
 
 class(Cor_Obj)
 ```
@@ -717,12 +719,12 @@ str(Cor_Obj)
 ```
 ## List of 4
 ##  $ data    :'data.frame':	20 obs. of  2 variables:
-##   ..$ x: num [1:20] 1.72 1.6 2.64 2.03 2.29 ...
-##   ..$ y: num [1:20] 159 162 172 170 155 ...
+##   ..$ x: num [1:20] 1.96 2.2 1.34 2.29 2.08 ...
+##   ..$ y: num [1:20] 165 159 155 158 164 ...
 ##  $ var_name: chr [1:2] "1日当たりゲーム時間" "身長"
-##  $ cor     : Named num 0.0471
+##  $ cor     : Named num 0.277
 ##   ..- attr(*, "names")= chr "cor"
-##  $ cor_ci  : num [1:2] -0.404 0.48
+##  $ cor_ci  : num [1:2] -0.188 0.641
 ##   ..- attr(*, "conf.level")= num 0.95
 ##  - attr(*, "class")= chr "My_Cor_Object"
 ```
@@ -737,9 +739,9 @@ print(Cor_Obj)
 ```
 
 ```
-## 1日当たりゲーム時間の平均値: 2.038
-## 身長の平均値: 165.710
-## 相関係数: 0.047 [-0.404, 0.480]
+## 1日当たりゲーム時間の平均値: 2.085
+## 身長の平均値: 164.001
+## 相関係数: 0.277 [-0.188, 0.641]
 ```
 
 ```{.r .numberLines}
@@ -747,38 +749,41 @@ summary(Cor_Obj) # summary()はprint()と同じ
 ```
 
 ```
-## 1日当たりゲーム時間の平均値: 2.038
-## 身長の平均値: 165.710
-## 相関係数: 0.047 [-0.404, 0.480]
+## 1日当たりゲーム時間の平均値: 2.085
+## 身長の平均値: 164.001
+## 相関係数: 0.277 [-0.188, 0.641]
 ```
 
 ```{.r .numberLines}
 plot(Cor_Obj)
 ```
 
-<img src="oop_files/figure-html/My_Cor_Object_Exam1-1.png" width="672" style="display: block; margin: auto;" />
+<img src="oop_files/figure-html/oop-sample-4-1.png" width="672" style="display: block; margin: auto;" />
 
-既存の`cor.test()`で作成される`"htest"`クラスに比べ、`"My_Cor_Object"`クラスは各変数の平均値が名前と一緒に表示され、`plot()`で簡単に散布図が作成できる大変便利なクラスです。このMy_Cor_Objectクラスとそのメソッドの構造を図示したものが以下の図です。
+既存の`cor.test()`で作成される`"htest"`クラスに比べ、`"My_Cor_Object"`クラスは各変数の平均値が名前と一緒に表示され、`plot()`で簡単に散布図が作成できる大変便利なクラスです。このMy_Cor_Objectクラスとそのメソッドの構造を図示したものが図\@ref(fig:oop-sample-5)です。
 
-![My_Cor_Objectクラスの構造](figures/OOP/My_Cor_Object.png)
+<div class="figure" style="text-align: center">
+<img src="figures/OOP/My_Cor_Object.png" alt="クラスの構造" width="100%" />
+<p class="caption">(\#fig:oop-sample-5)クラスの構造</p>
+</div>
 
 それでは一つずつ作っていきましょう。まずは、`"My_Cor_Object"`クラスのオブジェクトを作成する`My_Cor()`関数からです。
 
 
 ```{.r .numberLines}
-My_Cor <- function(x, y, x.name, y.name) {
+My_Cor <- function(x, y, x_name, y_name) {
     if (!is.numeric(x) | !is.numeric(y)) {
         stop("xまたはyがnumeric型ではありません。")
     }
     if (length(x) != length(y)) {
         stop("xとyは同じ長さでなかればなりません。")
     }
-    if (!is.character(x.name) | !is.character(y.name)) {
-        stop("x.nameまたはy.nameがcharacter型ではありません。")
+    if (!is.character(x_name) | !is.character(y_name)) {
+        stop("x_nameまたはy_nameがcharacter型ではありません。")
     }
     
     data     <- data.frame(x = x, y = y)
-    var_name <- c(x.name, y.name)
+    var_name <- c(x_name, y_name)
     cor      <- cor.test(x, y)$estimate
     cor_ci   <- cor.test(x, y)$conf.int
     
