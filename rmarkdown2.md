@@ -2,41 +2,28 @@
 
 
 
-## 表の作成 {#rmarkdown2-table}
+R Markdownでできることを紹介。使い方は説明しない
 
-## R Markdownを用いたスライド作成 {#rmakrdown2-slide}
+## スライド作成 {#rmakrdown2-slide}
 
-R Markdownを用いたスライド作成例
+{xaringan}
 
-ioslides、SlidyのようなHTMLフォーマット
+## 書籍 {#rmakrdown2-book}
 
-Beamer出力、Powerpoint出力も可能
+{bookdown}、{pagedown}
 
-ここでは[Xaringan](https://github.com/yihui/xaringan)パッケージを使用
+## ホームページ {#rmakrdown2-homepage}
 
-<iframe src="https://www.jaysong.net/teaching/KPU2020/Slide1.html" width="672" height="400px" data-external="1"></iframe>
+{distill}、{blogdown}
 
-### スライド区分 {#rmakrdown2-brak}
+## 履歴書 {#rmakrdown2-cv}
 
-### コード {#rmakrdown2-chunk}
+{vitae}
 
-### ハイライト {#rmakrdown2-highlight}
+## パッケージ開発 {#rmakrdown2-package}
 
-### Xaringanスライドの操作 {#rmakrdown2-operation}
+{fusen}
 
-### 日本語フォントの指定 {#rmakrdown2-japanese}
+## チュートリアル {#rmakrdown2-tutorial}
 
-### スライドのPDF出力
-
-[Chrome](https://www.google.com/intl/ja_jp/chrome/)や[Opera](https://www.opera.com/ja)からスライドを開き、印刷でPDF出力
-
-
-```{.r .numberLines}
-pagedown::chrome_print("スライドファイル名.html")
-```
-
-Firefoxではできない
-
-### もっと詳しく
-
-[remarkのマニュアル](https://github.com/gnab/remark/wiki)
+{learnr}

@@ -6,21 +6,11 @@
 
 
 ```{.r .numberLines}
+pacman::p_load(tidyverse)
 # データのパスは適宜修正すること
 # 文字化けが生じる場合、以下のコードに書き換える。
 # df <- read_csv("Data/Ramen.csv", locale = locale(encoding = "utf8"))
 df <- read_csv("Data/Ramen.csv")
-```
-
-```
-## Rows: 6292 Columns: 14
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: ","
-## chr (5): ID, Name, Pref, Line, Station
-## dbl (9): Zipcode, Latitude, Longitude, Walk, Bus, Car, Budget, ScoreN, Score
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 ```
 
 データの詳細については第\@ref(handling1-select)章を参照してください。
@@ -77,11 +67,11 @@ df %>%
 ## 1  3.66
 ```
 
-`df`の`Score`変数の平均値はNAであることが分かります。また、`summarise()`関数は複数の記述統計量を同時に計算することも可能です。以下は`Score`変数の平均値、中央値、標準偏差、最小値、最大値、第一四分位点、第三四分位点を計算し、`Score.Desc`という名のデータフレームに格納するコードです。
+`df`の`Score`変数の平均値はNAであることが分かります。また、`summarise()`関数は複数の記述統計量を同時に計算することも可能です。以下は`Score`変数の平均値、中央値、標準偏差、最小値、最大値、第一四分位点、第三四分位点を計算し、`score_desc`という名のデータフレームに格納するコードです。
 
 
 ```{.r .numberLines}
-Score.Desc <- df %>%
+score_desc <- df %>%
   summarize(Mean   =     mean(Score,       na.rm = TRUE),  # 平均値
             Median =   median(Score,       na.rm = TRUE),  # 中央値
             SD     =       sd(Score,       na.rm = TRUE),  # 標準偏差
@@ -89,11 +79,8 @@ Score.Desc <- df %>%
             Max    =      max(Score,       na.rm = TRUE),  # 最大値
             Q1     = quantile(Score, 0.25, na.rm = TRUE),  # 第一四分位点
             Q3     = quantile(Score, 0.75, na.rm = TRUE))  # 第三四分位点
-```
 
-
-```{.r .numberLines}
-Score.Desc
+score_desc
 ```
 
 ```
@@ -548,7 +535,7 @@ mean(df$Score[df$Pref == "和歌山県"], na.rm = TRUE)
 
 変わったのは`df$Score`が`df$Score[df$Pref == "東京都"]`に変わっただけです。`df$Pref`が`"東京都"`であるか否かを`TRUE`と`FALSE`で判定し、これを基準に`df$Score`を抽出する仕組みです。`df$Score`と`df$Pref`は同じデータフレームですから、このような書き方で問題ありません。
 
-これだけでもかなり書くのが面倒ですが、これが47都道府県なら、あるいは200ヶ国ならかなり骨の折れる作業でしょう。ここで大活躍するのが`dplyr`パッケージの`group_by()`関数です。引数はグループ化する変数名だけです。先ほどの作業を`dplyr`を使うなら`Pref`変数でグループ化し、`summarise()`関数で平均値を求めるだけです。今回は`Score`だけでなく、`ScoreN`の平均値も求めてみましょう。そして、評価が高い順にソートもしてみます。
+これだけでもかなり書くのが面倒ですが、これが47都道府県なら、あるいは200ヶ国ならかなり骨の折れる作業でしょう。ここで大活躍するのが{dplyr}パッケージの`group_by()`関数です。引数はグループ化する変数名だけです。先ほどの作業を{dplyr}を使うなら`Pref`変数でグループ化し、`summarise()`関数で平均値を求めるだけです。今回は`Score`だけでなく、`ScoreN`の平均値も求めてみましょう。そして、評価が高い順にソートもしてみます。
 
 
 ```{.r .numberLines}
@@ -577,7 +564,7 @@ df %>%
 
 評判が最も高い都府県は和歌山県、最も低いのは神奈川県ですね。Songも和歌山ラーメンは井出系も車庫前系も好きです。しかし、大事なのは「井出系」と「車庫前系」といった分類が正しいかどうかではありません。コードが非常に簡潔となり、ソートなども自由自在であることです。都府県ごとに`ScoreN`と`Score`の平均値を求める場合、`dplyr()`を使わなかったら18行のコードとなり、ソートも自分でやる必要があります。一方、`group_by()`関数を使うことによってコードが5行になりました。
 
-また、これは2020年6月に公開された`dplyr`1.0.0からの問題ですが、`group_by()`の後に`summarise()`を使うと以下のようなメッセージが出力されます。
+また、これは2020年6月に公開された{dplyr}1.0.0からの問題ですが、`group_by()`の後に`summarise()`を使うと以下のようなメッセージが出力されます。
 
 ```
 ## `summarise()` ungrouping output (override with `.groups` argument)
@@ -1267,7 +1254,7 @@ myDF1 %>%
 
 あら、なんかおかしくありませんか。1行目の場合、`X1`と`X2`、`X3`それぞれ2、5、3であり、平均値は3.333であるはずなのに3.133になりました。これは2行目以降も同じです。なぜでしょうか。
 
-実は`dplyr`は行単位の計算が苦手です。実際、データフレームというのは既に説明したとおり、縦ベクトルを横に並べたものです。列をまたがる場合、データ型が異なる場合も多いため、そもそも使う場面も多くありません。したがって、以下のような書き方が必要でした。
+実は{dplyr}は行単位の計算が苦手です。実際、データフレームというのは既に説明したとおり、縦ベクトルを横に並べたものです。列をまたがる場合、データ型が異なる場合も多いため、そもそも使う場面も多くありません。したがって、以下のような書き方が必要でした。
 
 
 ```{.r .numberLines}
@@ -1336,14 +1323,14 @@ myDF1 %>%
 
 ### 行の結合
 
-まずは、複数のデータフレームまたはtibbleを縦に結合する方法について解説します。イメージとしては図\@ref(fig:merge-row)のようなものです。
+まずは、複数のデータフレームまたはtibbleを縦に結合する方法について解説します。イメージとしては図\@ref(fig:handling2-merge-row-1)のようなものです。
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Handling2/Merge1.png" alt="行の結合" width="80%" />
-<p class="caption">(\#fig:merge-row)行の結合</p>
+<p class="caption">(\#fig:handling2-merge-row-1)行の結合</p>
 </div>
 
-行を結合する際には`dplyr`パッケージの`bind_rows()`関数を使います。この関数の使い方は以下の通りです。
+行を結合する際には{dplyr}パッケージの`bind_rows()`関数を使います。この関数の使い方は以下の通りです。
 
 
 ```{.r .numberLines}
@@ -1466,7 +1453,7 @@ Binded_df2
 ## 9     9 I     TRUE
 ```
 
-このように変数の順番が異なっても、先に指定したデータの変数順で問題なく結合できました。これまでの作業は`dplyr`パッケージの`bind_rows()`を使わずに、R内蔵関数の`rbind()`でも同じやり方でできます。`bind_rows()`の特徴は、変数名が一致しない場合、つまり今回の例だと`rbind_df4`が含まれる場合です。`rbind_df1`から`rbind_df3`までは順番が違っても`X1`、`X2`、`X3`変数で構成されていました。一方、`rbind_dr4`には`X3`がなく、新たに`X4`という変数があります。これを`rbind()`関数で結合するとエラーが出力されます。
+このように変数の順番が異なっても、先に指定したデータの変数順で問題なく結合できました。これまでの作業は{dplyr}パッケージの`bind_rows()`を使わずに、R内蔵関数の`rbind()`でも同じやり方でできます。`bind_rows()`の特徴は、変数名が一致しない場合、つまり今回の例だと`rbind_df4`が含まれる場合です。`rbind_df1`から`rbind_df3`までは順番が違っても`X1`、`X2`、`X3`変数で構成されていました。一方、`rbind_dr4`には`X3`がなく、新たに`X4`という変数があります。これを`rbind()`関数で結合するとエラーが出力されます。
 
 
 ```{.r .numberLines}
@@ -1510,11 +1497,11 @@ Binded_df3
 
 ### 列の結合
 
-実はデータ分析においてデータの結合といえば、列の結合が一般的です。これは図\@ref(fig:merge-col)のような操作を意味します。
+実はデータ分析においてデータの結合といえば、列の結合が一般的です。これは図\@ref(fig:handling2-merge-col-1)のような操作を意味します。
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Handling2/Merge2.png" alt="列の結合" width="80%" />
-<p class="caption">(\#fig:merge-col)列の結合</p>
+<p class="caption">(\#fig:handling2-merge-col-1)列の結合</p>
 </div>
 
 まずは、本章で作成した`df2`をもう一回作ってみます。
@@ -1552,20 +1539,7 @@ df2
 
 ```{.r .numberLines}
 df3 <- read_csv("Data/Ramen2.csv")
-```
 
-```
-## Rows: 47 Columns: 15
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: ","
-## chr  (1): Pref
-## dbl (12): RamenN, Turnout, LDP, CDP, DPFP, Komei, JIP, JCP, SDP, Reiwa, NHK,...
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-```
-
-```{.r .numberLines}
 df3
 ```
 
@@ -1687,7 +1661,7 @@ df3 %>%
 
 そして、この情報を`df2$RamenN <- c(415, 1106, 1254, ...)`のように追加すればいいですね。
 
-しかし、このような方法は非効率的です。そもそも`df3`から得られた結果の順番と`df2`の順番も一致しないので、一々対照しながらベクトルを作ることになります。ここで登場する関数が`dplyr`の`*_join()`関数群です。この関数群には4つの関数が含まれており、以下のような使い方になります。
+しかし、このような方法は非効率的です。そもそも`df3`から得られた結果の順番と`df2`の順番も一致しないので、一々対照しながらベクトルを作ることになります。ここで登場する関数が{dplyr}の`*_join()`関数群です。この関数群には4つの関数が含まれており、以下のような使い方になります。
 
 
 ```{.r .numberLines}
@@ -1739,13 +1713,13 @@ df4
 
 これから共通変数名の値をキー (key)と呼びます。今回の例だと`Pref`が`df2`と`df4`のキー変数であり、その値である`"東京都"`、`"北海道"`などがキーです。
 
-まずは、`inner_join()`の仕組みについて考えます。これは`df2`と`df4`に共通するキーを持つケースのみ結合する関数です。`df4`には`"北海道"`というキーがありますが、`df2`にはありません。したがって、キーが`"北海道"`のケースは結合から除外されます。これをイメージにしたものが図\@ref(fig:inner-join)です[^merge1]。それぞれ3 $\times$ 2 (3行2列)のデータですが、キーが一致するケースは2つしかないため、結合後のデータは3 $\times$ 2となります。
+まずは、`inner_join()`の仕組みについて考えます。これは`df2`と`df4`に共通するキーを持つケースのみ結合する関数です。`df4`には`"北海道"`というキーがありますが、`df2`にはありません。したがって、キーが`"北海道"`のケースは結合から除外されます。これをイメージにしたものが図\@ref(fig:handling2-merge-col-8)です[^merge1]。それぞれ3 $\times$ 2 (3行2列)のデータですが、キーが一致するケースは2つしかないため、結合後のデータは3 $\times$ 2となります。
 
 [^merge1]: これらの図は[Garrett Grolemund and Hadley Wickham. 2017. *R for Data Science: Import, Tidy, Transform, Visualize, and Model Data.* O'Reilly.](https://r4ds.had.co.nz)を参考にしました。
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Handling2/Merge_Inner.png" alt="`inner_join()`の仕組み" width="80%" />
-<p class="caption">(\#fig:inner-join)`inner_join()`の仕組み</p>
+<p class="caption">(\#fig:handling2-merge-col-8)`inner_join()`の仕組み</p>
 </div>
 
 実際にやってみましょう。
@@ -1772,11 +1746,11 @@ inner_join(df2, df4, by = "Pref")
 
 共通するキーは9つのみであり、結果として返されたデータの大きさも9 $\times$ 6です。`df2`に足された`df4`は2列のデータですが、キー変数である`Pref`は共通するため、1列のみ足されました。キー変数を両方残す場合は`keep = TRUE`引数を追加してください。
 
-一方、`full_join()`は、すべてのキーに対して結合を行います (図\@ref(fig:full-join))。たとえば、`df2`には`"北海道"`というキーがありません。それでも新しく出来上がるデータには北海道の列が追加されます。ただし、道内店舗の平均予算、口コミ数などの情報はないため、欠損値が代入されます。
+一方、`full_join()`は、すべてのキーに対して結合を行います (図\@ref(fig: handling2-merge-col-10))。たとえば、`df2`には`"北海道"`というキーがありません。それでも新しく出来上がるデータには北海道の列が追加されます。ただし、道内店舗の平均予算、口コミ数などの情報はないため、欠損値が代入されます。
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Handling2/Merge_Full.png" alt="`full_join()`の仕組み" width="80%" />
-<p class="caption">(\#fig:full-join)`full_join()`の仕組み</p>
+<p class="caption">(\#fig:handling2-merge-col-10)`full_join()`の仕組み</p>
 </div>
 
 それでは実際、結果を確認してみましょう。今回は結合後、`RamenN`が大きい順で出力します。
@@ -1806,18 +1780,18 @@ full_join(df2, df4, by = "Pref") %>%
 
 `df2`にはなかった北海道や愛知県などの行ができました。そして、`df2`にはない情報はすべて欠損値 (`NA`)となりました。
 
-続いて、`left_join()`ですが、これは先に指定したデータに存在するキーのみで結合を行います (図\@ref(fig:left-join))。今回は`df2`が先に指定されていますが、`df2`のキーは`df4`のキーの部分集合であるため、`inner_join()`と同じ結果が得られます。
+続いて、`left_join()`ですが、これは先に指定したデータに存在するキーのみで結合を行います (図\@ref(fig: handling2-merge-col-12))。今回は`df2`が先に指定されていますが、`df2`のキーは`df4`のキーの部分集合であるため、`inner_join()`と同じ結果が得られます。
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Handling2/Merge_Left.png" alt="`left_join()`の仕組み" width="80%" />
-<p class="caption">(\#fig:left-join)`left_join()`の仕組み</p>
+<p class="caption">(\#fig:handling2-merge-col-12)`left_join()`の仕組み</p>
 </div>
 
-一方、`right_join()`は`left_join()`と逆の関数であり、後に指定したデータに存在するキーを基準に結合を行います (図\@ref(fig:right-join))。後に指定された`df4`のキーは`df2`のキーを完全に含むので、`full_join()`と同じ結果が得られます。
+一方、`right_join()`は`left_join()`と逆の関数であり、後に指定したデータに存在するキーを基準に結合を行います (図\@ref(fig: handling2-merge-col-13))。後に指定された`df4`のキーは`df2`のキーを完全に含むので、`full_join()`と同じ結果が得られます。
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Handling2/Merge_Right.png" alt="`right_join()`の仕組み" width="80%" />
-<p class="caption">(\#fig:right-join)`right_join()`の仕組み</p>
+<p class="caption">(\#fig:handling2-merge-col-13)`right_join()`の仕組み</p>
 </div>
 
 これからは`df2`と`df4`を結合することになりますが、この2つのtibbleの大きさが異なります。`df2`は9つの都府県のみであるに対し、`df4`は47都道府県全てのデータが入っているからです。

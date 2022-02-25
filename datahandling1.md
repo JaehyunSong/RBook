@@ -86,18 +86,18 @@ paste(3, "+", 5, "=", 8) %>%
     print()
 ```
 
-パイプ演算子を使わない方法は図\@ref(fig:pipe1)のようにイメージできます。一回の処理ごとに結果を保存し、それをまた次の処理時においてデータとして使うイメージです。
+パイプ演算子を使わない方法は図\@ref(fig:handling1-pipe-4)のようにイメージできます。一回の処理ごとに結果を保存し、それをまた次の処理時においてデータとして使うイメージです。
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Handling1/Pipeline1.png" alt="パイプ演算子を使わない場合" width="80%" />
-<p class="caption">(\#fig:pipe1)パイプ演算子を使わない場合</p>
+<p class="caption">(\#fig:handling1-pipe-4)パイプ演算子を使わない場合</p>
 </div>
 
-一方、図\@ref(fig:pipe2)はパイプ演算子を使う場合のプロセスです。処理後の結果を保存せず、すぐに次のプロセスに渡すことで、メモリ (図だとボウル)や時間、コードの無駄を減らすことができます。むろん、図\@ref(fig:pipe1)の結果1を使って色々試してみたい場合は、一旦結果1までは格納し、適宜引き出して使った方が効率的でしょう。パイプ演算子はたしかに便利で、「今どき」のRの書き方を象徴するようなものですが、一つの結果を出すまであまりにも多くのパイプ演算子を使うことはあ望ましくありません。
+一方、図\@ref(fig:handling1-pipe-5)はパイプ演算子を使う場合のプロセスです。処理後の結果を保存せず、すぐに次のプロセスに渡すことで、メモリ (図だとボウル)や時間、コードの無駄を減らすことができます。むろん、図\@ref(fig:handling1-pipe-4)の結果1を使って色々試してみたい場合は、一旦結果1までは格納し、適宜引き出して使った方が効率的でしょう。パイプ演算子はたしかに便利で、「今どき」のRの書き方を象徴するようなものですが、一つの結果を出すまであまりにも多くのパイプ演算子を使うことはあ望ましくありません。
 
 <div class="figure" style="text-align: center">
 <img src="Figures/Handling1/Pipeline2.png" alt="パイプ演算子を使う場合" width="100%" />
-<p class="caption">(\#fig:pipe2)パイプ演算子を使う場合</p>
+<p class="caption">(\#fig:handling1-pipe-5)パイプ演算子を使う場合</p>
 </div>
 
 データハンドリングもこれど同様に、様々な作業を順に沿って行う必要があります。例えば、「(1) 列を選択して、(2) 欠損値を含む列を除去して、 (3) ある変数の値を100倍にして、(4) ある変数の値がが小さい行から大きい順へ並び替える」といった手順です。これらの作業はパイプ演算子を使えば、スムーズに行うことが可能です。
@@ -111,17 +111,6 @@ paste(3, "+", 5, "=", 8) %>%
 
 ```{.r .numberLines}
 df <- read_csv("Data/Ramen.csv")
-```
-
-```
-## Rows: 6292 Columns: 14
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: ","
-## chr (5): ID, Name, Pref, Line, Station
-## dbl (9): Zipcode, Latitude, Longitude, Walk, Bus, Car, Budget, ScoreN, Score
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 ```
 
 データの中身を確認してみましょう。
@@ -151,7 +140,7 @@ df
 
 1行目の`# A tibble: 2,000 x 12`から、ケース数 (店舗数)は2000、変数は12個あることが分かります。各変数の詳細は以下の通りです。
 
-<table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
  <thead>
   <tr>
    <th style="text-align:left;text-align: center;"> 変数名 </th>
@@ -757,8 +746,6 @@ myDF1 %>%
 ## 5     5     7     2     2
 ```
 
-ぱっぱらぱー！
-
 **`all_of()`と`any_of()`: 文字型ベクトルを用いた変数の選択**
 
 `all_of()`と`any_of()`は`select()`内の変数名として文字型ベクトルを使う際に用いる関数です。これは抽出したい列名が既にcharacter型ベクトルとして用意されている場合、便利な関数です。たとえば、以下の`Name_Vec`を考えてみましょう。
@@ -1008,22 +995,22 @@ df %>%
 
 ### 指定した行を抽出する
 
-他にも特定の行を抽出する場合があります。たとえば、「`df`の最初の5行」や「`df`の8行目のケース」といった場合です。この操作には{dplyr}の`slice_*()`関数群が便利です。それではそれぞれの関数の使い方について紹介していきます。その前に、実習用データとして`df`から一部の列のみを抽出した`selelct.df`を作成します。
+他にも特定の行を抽出する場合があります。たとえば、「`df`の最初の5行」や「`df`の8行目のケース」といった場合です。この操作には{dplyr}の`slice_*()`関数群が便利です。それではそれぞれの関数の使い方について紹介していきます。その前に、実習用データとして`df`から一部の列のみを抽出した`select_df`を作成します。
 
 
 ```{.r .numberLines}
-select.df <- df %>% 
+select_df <- df %>% 
   select(ID, Name, Pref, Budget, Score)
 ```
 
 **`slice()`: 指定した番号の行のみ抽出する**
 
-`select.df`から2, 8, 9行目の行を抽出したいとします。このような簡単な操作はパッケージを使わず、以下のように抽出することができます。
+`select_df`から2, 8, 9行目の行を抽出したいとします。このような簡単な操作はパッケージを使わず、以下のように抽出することができます。
 
 
 ```{.r .numberLines}
-# select.dfから2, 8, 9行目の行を抽出し、出力する
-select.df[c(2, 8, 9),]
+# select_dfから2, 8, 9行目の行を抽出し、出力する
+select_df[c(2, 8, 9),]
 ```
 
 ```
@@ -1037,12 +1024,12 @@ select.df[c(2, 8, 9),]
 
 しかし、以下の`slice()`関数を使うとパイプ演算子を前後に付けることが可能であり[^slice1]、コードの可読性も高いです。`slice()`関数には以下のように抽出したい行の番号を入れるだけです。
 
-[^slice1]: 実は`select.df[, c(2, 8, 9)]`でも前後にパイプ演算子を使うことは可能ですが、コードが読みにくくなるため、推奨しません。
+[^slice1]: 実は`select_df[, c(2, 8, 9)]`でも前後にパイプ演算子を使うことは可能ですが、コードが読みにくくなるため、推奨しません。
 
 
 ```{.r .numberLines}
-# select.dfから2, 8, 9行目の行を抽出し、出力する
-select.df %>% 
+# select_dfから2, 8, 9行目の行を抽出し、出力する
+select_df %>% 
   slice(2, 8, 9) # slice(c(2, 8, 9))もOK
 ```
 
@@ -1061,8 +1048,8 @@ select.df %>%
 
 
 ```{.r .numberLines}
-# select.dfから最初の3行抽出し、出力する
-select.df %>% 
+# select_dfから最初の3行抽出し、出力する
+select_df %>% 
   slice_head(n = 3)
 ```
 
@@ -1075,14 +1062,14 @@ select.df %>%
 ## 3 ggt5900 食べ飲み放題×中華ビストロ NOZOMI（のぞみ） 東京都   2980  NA
 ```
 
-これは`head(データ名, n = 出力する個数)`と同じ動きをする関数です。注意点としては引数`n = `を必ず付ける点です。たとえば、`slice_head(3)`にすると、`select.df`の3行目のみ抽出されます。
+これは`head(データ名, n = 出力する個数)`と同じ動きをする関数です。注意点としては引数`n = `を必ず付ける点です。たとえば、`slice_head(3)`にすると、`select_df`の3行目のみ抽出されます。
 
 **`slice_tail()`: 最後のn行を抽出する**
 
 
 ```{.r .numberLines}
-# select.dfから最後の7行を抽出し、出力する
-select.df %>% 
+# select_dfから最後の7行を抽出し、出力する
+select_df %>% 
   slice_tail(n = 7)
 ```
 
@@ -1107,8 +1094,8 @@ select.df %>%
 
 
 ```{.r .numberLines}
-# select.dfからScoreの値が高い順で5行を抽出し、出力する
-select.df %>% 
+# select_dfからScoreの値が高い順で5行を抽出し、出力する
+select_df %>% 
   slice_max(Budget, n = 4)
 ```
 
@@ -1128,8 +1115,8 @@ select.df %>%
 
 
 ```{.r .numberLines}
-# select.dfからScoreの値が低い順で3行を抽出し、出力する
-select.df %>% 
+# select_dfからScoreの値が低い順で3行を抽出し、出力する
+select_df %>% 
   slice_min(Score, n = 3)
 ```
 
@@ -1143,11 +1130,11 @@ select.df %>%
 ## 4 5495086 らあめん花月嵐 坂戸わかば店 埼玉県     NA     1
 ```
 
-ただし、`n = 3`と指定したはずなのに、4行が抽出されました。これは同点のケースがあるからです。実際、`select.df`には`Score`が1のケースが4つあります。もし、同点の存在により`n`に収まらない場合、`slice_max()`、`slice_min()`関数は`n`を超える行を出力します。これを強制的に`n`行に合わせるためには`with_ties = FALSE`引数を付けます。この場合、データで格納されている順で`n`個のみ出力されます。
+ただし、`n = 3`と指定したはずなのに、4行が抽出されました。これは同点のケースがあるからです。実際、`select_df`には`Score`が1のケースが4つあります。もし、同点の存在により`n`に収まらない場合、`slice_max()`、`slice_min()`関数は`n`を超える行を出力します。これを強制的に`n`行に合わせるためには`with_ties = FALSE`引数を付けます。この場合、データで格納されている順で`n`個のみ出力されます。
 
 
 ```{.r .numberLines}
-select.df %>% 
+select_df %>% 
   slice_min(Score, n = 3, with_ties = FALSE)
 ```
 
@@ -1162,29 +1149,29 @@ select.df %>%
 
 **`slice_sample()`: 無作為にn行を抽出する**
 
-最後に無作為に`n`行を抽出する`slice_sample()`関数です。引数は`n`であり、抽出したい行数を指定します。たとえば、`select.df`から無作為に10行抽出したい場合は、
+最後に無作為に`n`行を抽出する`slice_sample()`関数です。引数は`n`であり、抽出したい行数を指定します。たとえば、`select_df`から無作為に10行抽出したい場合は、
 
 
 ```{.r .numberLines}
-# select.dfから無作為に5行を抽出し、出力する
-select.df %>% 
+# select_dfから無作為に5行を抽出し、出力する
+select_df %>% 
   slice_sample(n = 10)
 ```
 
 ```
 ## # A tibble: 10 × 5
-##    ID      Name                                       Pref     Budget Score
-##    <chr>   <chr>                                      <chr>     <dbl> <dbl>
-##  1 7756589 鎌ヶ谷 製麺堂てつ                          千葉県       NA    NA
-##  2 7505166 麺屋よし                                   東京都     1000    NA
-##  3 7738183 らーめん処 克享                            京都府       NA    NA
-##  4 7424988 RAMEN TOMIRAI（戸みら伊） 横浜伊勢佐木町店 神奈川県     NA    NA
-##  5 7509942 壱角家 橋本店                              神奈川県     NA    NA
-##  6 7291112 たん坦めん麺 炎真                          東京都      900    NA
-##  7 7210595 AFURI 横浜ジョイナス                       神奈川県     NA     5
-##  8 7495348 横浜家系ラーメン 吟家 ～GINYA～ 木更津店   千葉県     1000    NA
-##  9 gdv6137 ラーメン山岡家 東千葉店                    千葉県      800    NA
-## 10 5494180 喜久                                       埼玉県       NA     5
+##    ID      Name                        Pref     Budget Score
+##    <chr>   <chr>                       <chr>     <dbl> <dbl>
+##  1 7204609 一日一麺lab＋               大阪府      800 NA   
+##  2 6913034 ジャンクガレッジ 東大宮本店 埼玉県       NA  3.89
+##  3 ka7k718 野菜串巻き酒場 HARAIPPAI    大阪府      900 NA   
+##  4 5034419 山の子                      神奈川県   2500 NA   
+##  5 6737588 屯てい                      神奈川県     NA NA   
+##  6 7754983 孫鈴舎                      東京都       NA NA   
+##  7 6167534 らーめん やきそば つちのこ  兵庫県       NA NA   
+##  8 7143128 佐野 グランツリー武蔵小杉店 神奈川県     NA NA   
+##  9 6742141 定食ラーメン やおや         神奈川県     NA NA   
+## 10 6316537 雅狼                        埼玉県       NA NA
 ```
 
 のように書きます。ブートストラップ法や機械学習における交差検証 (cross-validation)の際に有用な関数ですが、ブートストラップや機械学習のパッケージの多くはサンプル分割の関数を提供しているため、あまり使う機会はないでしょう。また、`slice_sample()`関数をブートストラップ法のために用いる場合は、ケースを反復抽出する必要があり、`replace = TRUE`を付けると反復抽出を行います。デフォルト値は`FALSE`です。

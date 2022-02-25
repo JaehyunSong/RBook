@@ -2,15 +2,15 @@
 
 
 
-## 名目変数を含むグラフを作成する際の注意点
+## 名目変数を含むグラフを作成する際の注意点 {#factor-intro}
 
 ここからは楽しい可視化、つまりグラフの作成について解説します。ただし、その前に、名目変数の扱いと簡潔データ構造について話したいと思います。本章では名目変数の扱いについて解説し、次章は簡潔データ構造について解説します。
 
-横軸、または縦軸が気温、成績、身長のような連続変数ではなく、都道府県や国、企業のような名目変数になる場合があります。たとえば、棒グラフの横軸は図\@ref(fig:factor1)のように、一般的に名目変数になる場合が多いです。
+横軸、または縦軸が気温、成績、身長のような連続変数ではなく、都道府県や国、企業のような名目変数になる場合があります。たとえば、棒グラフの横軸は図\@ref(fig:factor-intro-1)のように、一般的に名目変数になる場合が多いです。
 
 <div class="figure" style="text-align: center">
-<img src="factor_files/figure-html/factor1-1.png" alt="横軸が名目変数の棒グラフ" width="576" />
-<p class="caption">(\#fig:factor1)横軸が名目変数の棒グラフ</p>
+<img src="factor_files/figure-html/factor-intro-1-1.png" alt="横軸が名目変数の棒グラフ" width="576" />
+<p class="caption">(\#fig:factor-intro-1)横軸が名目変数の棒グラフ</p>
 </div>
 
 ここでは横軸の順番に注目してください。京都府、埼玉県、神奈川県、...の順番になっていますね。「この順番で大満足だよ!」という方がいるかも知れませんが、そうでない方もおおいでしょう。普通考えられるものとしては、都道府県コードの順か、縦軸が高い順 (低い順)でしょう。都道府県コードの順だと、埼玉県、千葉県、東京都、神奈川県、京都府、大阪府、兵庫県、奈良県、和歌山県の順番になります。または、縦軸 (口コミ評価の平均値)が高い順なら和歌山県、奈良県、大阪府、...の順番になります。あるいは50音順も考えられるでしょう。アメリカの場合、州を並べる際、アルファベット順で並べます。
@@ -54,7 +54,7 @@ Score_df
 ## 9 神奈川県  3.53
 ```
 
-この時点で勝手にロケール順になります。実際、表示された`Score_df`を見ると`Pref`の下に``<chr>`と表記されており、`Pref`はcharacter型であることが分かります。これをこのまま棒グラフに出してみましょう。可視化の方法はこれから詳細に解説するので、ここでは結果だけに注目してください。
+この時点で勝手にロケール順になります。実際、表示された`Score_df`を見ると`Pref`の下に`<chr>`と表記されており、`Pref`はcharacter型であることが分かります。これをこのまま棒グラフに出してみましょう。可視化の方法はこれから詳細に解説するので、ここでは結果だけに注目してください。
 
 
 ```{.r .numberLines}
@@ -66,8 +66,8 @@ Score_df %>%
 ```
 
 <div class="figure" style="text-align: center">
-<img src="factor_files/figure-html/factor2-1.png" alt="Prefがcharacter型の場合 (1)" width="576" />
-<p class="caption">(\#fig:factor2)Prefがcharacter型の場合 (1)</p>
+<img src="factor_files/figure-html/factor-intro-4-1.png" alt="Prefがcharacter型の場合 (1)" width="576" />
+<p class="caption">(\#fig:factor-intro-4)Prefがcharacter型の場合 (1)</p>
 </div>
 
 横軸の順番があまり直感的ではありませんね。それでは、`Score_df`を`Score`が高い順にソートし、`Score_df2`で保存してから、もう一回試してみます。
@@ -107,8 +107,8 @@ Score_df2 %>%
 ```
 
 <div class="figure" style="text-align: center">
-<img src="factor_files/figure-html/factor3-1.png" alt="Prefがcharacter型の場合 (2)" width="576" />
-<p class="caption">(\#fig:factor3)Prefがcharacter型の場合 (2)</p>
+<img src="factor_files/figure-html/factor-intro-6-1.png" alt="Prefがcharacter型の場合 (2)" width="576" />
+<p class="caption">(\#fig:factor-intro-6)Prefがcharacter型の場合 (2)</p>
 </div>
 
 結果は全く変わっておりません。それでは、`Score_df`の`Pref`列をfactor型に変換し、順番は口コミ評価の平均値が高い順番にしてみましょう。結果は`Score_df_f1`という名で保存します。
@@ -151,11 +151,11 @@ Score_df_f1$Pref
 ## 9 Levels: 和歌山県 奈良県 大阪府 千葉県 京都府 東京都 埼玉県 ... 神奈川県
 ```
 
-この`Score_df_f1`データを使って、図\@ref(fig:factor2)と全く同じコードを実行した結果が図\@ref(fig:factor4)です。
+この`Score_df_f1`データを使って、図\@ref(fig:factor-intro-4)と全く同じコードを実行した結果が図\@ref(fig:factor-intro-9)です。
 
 <div class="figure" style="text-align: center">
-<img src="factor_files/figure-html/factor4-1.png" alt="Prefがfactor型の場合 (1)" width="576" />
-<p class="caption">(\#fig:factor4)Prefがfactor型の場合 (1)</p>
+<img src="factor_files/figure-html/factor-intro-9-1.png" alt="Prefがfactor型の場合 (1)" width="576" />
+<p class="caption">(\#fig:factor-intro-9)Prefがfactor型の場合 (1)</p>
 </div>
 
 これまでの話をまとめるの以下の2点が分かります。
@@ -190,11 +190,11 @@ Score_df_f1
 ## 9 神奈川県  3.53     1
 ```
 
-`Kanto`変数のデータ型は、`<dbl>`、つまりnumeric型です。しかし、これは明らかに名目変数ですね。これをこのまま`Kanto`を横軸にした図を出すと図\@ref(fig:factor5)のようになります。
+`Kanto`変数のデータ型は、`<dbl>`、つまりnumeric型です。しかし、これは明らかに名目変数ですね。これをこのまま`Kanto`を横軸にした図を出すと図\@ref(fig:factor-intro-11)のようになります。
 
 <div class="figure" style="text-align: center">
-<img src="factor_files/figure-html/factor5-1.png" alt="Kantoがnumeric型の場合" width="288" />
-<p class="caption">(\#fig:factor5)Kantoがnumeric型の場合</p>
+<img src="factor_files/figure-html/factor-intro-11-1.png" alt="Kantoがnumeric型の場合" width="288" />
+<p class="caption">(\#fig:factor-intro-11)Kantoがnumeric型の場合</p>
 </div>
 
 この場合、図の横軸は`Kanto`の値が小さい順でソートされます。ただし、このような図は非常に見にくいため、`1`に`"関東"`、`0`に`"関西"`とラベルを付けたfactor型に変換した方が望ましいです。numeric型をラベル付きのfactor型にするためには、`levels`引数には元の数値を、`labels`引数にはそれぞれの数値に対応したラベルを指定します。また、関東の方を先に出したいので、`factor()`内の`levels`引数は`c(0, 1)`でなく、`c(1, 0)`にします。
@@ -234,18 +234,18 @@ Score_df_f1$Kanto
 ## Levels: 関東 その他
 ```
 
-また、`"関東"`、`"その他"`の順になっていますね。これを図として出力した結果が図\@ref(fig:factor6)です。
+また、`"関東"`、`"その他"`の順になっていますね。これを図として出力した結果が図\@ref(fig:factor-intro-14)です。
 
 <div class="figure" style="text-align: center">
-<img src="factor_files/figure-html/factor6-1.png" alt="Kantoがfactor型の場合" width="288" />
-<p class="caption">(\#fig:factor6)Kantoがfactor型の場合</p>
+<img src="factor_files/figure-html/factor-intro-14-1.png" alt="Kantoがfactor型の場合" width="288" />
+<p class="caption">(\#fig:factor-intro-14)Kantoがfactor型の場合</p>
 </div>
 
 このように数値型名目変数でも、factor化することによって、自由に横軸の順番を変えることができます。それでは、factor化に使える便利な関数をいくつか紹介します。
 
-## {forcats}パッケージについて
+## {forcats}パッケージについて {#factor-forcats}
 
-実はfactor型への変換や、順番に変更などは全てR内蔵の`factor()`関数で対応可能ですが、ここでは{forcats}パッケージが提供している`fct_*()`関数を使用します。`forcats`パッケージは{tidyverse}を読み込む際、自動的に読み込まれるため、既に{tidyverse}を読み込んでいる場合、別途のコードは要りません。
+実はfactor型への変換や、順番に変更などは全てR内蔵の`factor()`関数で対応可能ですが、ここでは{forcats}パッケージが提供している`fct_*()`関数を使用します。{forcats}パッケージは{tidyverse}を読み込む際、自動的に読み込まれるため、既に{tidyverse}を読み込んでいる場合、別途のコードは要りません。
 
 ### `fct_relevel()`: 水準の順番を変更する
 
@@ -693,8 +693,8 @@ levels(Score_df$Pref2)
 ```
 
 ```
-## [1] "千葉県"   "大阪府"   "奈良県"   "東京都"   "和歌山県" "埼玉県"   "兵庫県"  
-## [8] "京都府"   "神奈川県"
+## [1] "奈良県"   "和歌山県" "神奈川県" "千葉県"   "埼玉県"   "東京都"   "兵庫県"  
+## [8] "京都府"   "大阪府"
 ```
 
 ```{.r .numberLines}
@@ -702,8 +702,8 @@ levels(Score_df$Pref3)
 ```
 
 ```
-## [1] "大阪府"   "和歌山県" "奈良県"   "神奈川県" "千葉県"   "兵庫県"   "京都府"  
-## [8] "東京都"   "埼玉県"
+## [1] "東京都"   "神奈川県" "京都府"   "千葉県"   "兵庫県"   "奈良県"   "大阪府"  
+## [8] "和歌山県" "埼玉県"
 ```
 
 ```{.r .numberLines}
@@ -711,8 +711,8 @@ levels(Score_df$Pref4)
 ```
 
 ```
-## [1] "兵庫県"   "千葉県"   "和歌山県" "京都府"   "奈良県"   "大阪府"   "埼玉県"  
-## [8] "神奈川県" "東京都"
+## [1] "千葉県"   "京都府"   "埼玉県"   "東京都"   "大阪府"   "神奈川県" "兵庫県"  
+## [8] "奈良県"   "和歌山県"
 ```
 
 `Pref`から`Pref4`まで同じように見えますが、水準の順番が異なります (`Pref`はcharacter型だから水準がありません)。
@@ -872,7 +872,10 @@ Reorder2_df %>%
   theme_gray(base_size = 12)
 ```
 
-<img src="factor_files/figure-html/unnamed-chunk-35-1.png" width="672" style="display: block; margin: auto;" />
+<div class="figure" style="text-align: center">
+<img src="factor_files/figure-html/factor-forcats-reorder2-2-1.png" alt="国名の順番を変更する前" width="672" />
+<p class="caption">(\#fig:factor-forcats-reorder2-2)国名の順番を変更する前</p>
+</div>
 
 このグラフに違和感はあまりありませんが、「読みやすさ」の麺では改善の余地があります。たとえば、7月1日の時点で、新規感染者数が多いのは日本、韓国、香港、中国 (本土)、台湾の順です。しかし、右側の凡例の順番はそうではありません。この順番が一致すれば、更に図は読みやすくなるでしょう。
 
@@ -952,7 +955,10 @@ Reorder2_df %>%
   theme_gray(base_size = 12)
 ```
 
-<img src="factor_files/figure-html/unnamed-chunk-41-1.png" width="672" style="display: block; margin: auto;" />
+<div class="figure" style="text-align: center">
+<img src="factor_files/figure-html/factor-forcats-reorder2-8-1.png" alt="国名の順番を変更した後" width="672" />
+<p class="caption">(\#fig:factor-forcats-reorder2-8)国名の順番を変更した後</p>
+</div>
 
 これで図がさらに読みやすくなりました。ちなみに、{forcats}パッケージは`last2()`以外にも`first2()`という関数も提供しております。これを使うと、7月1日でなく、6月27日の新規感染者数の降順で水準の順番が調整されます。他にも引数を2つ使用する自作関数も使えますが、`fct_reorder2()`の主な使いみちは`last2()`で十分でしょう。
 
@@ -1359,4 +1365,4 @@ df6 %>%
 
 ---
 
-## 練習問題 {#factor-excersie}
+## 練習問題 {#factor-excersie .unnumbered}
