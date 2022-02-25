@@ -1,9 +1,11 @@
 # 私たちのR: ベストプラクティスの探求
 R Not for Everyone: An Esoteric Guide
 
-<https://www.jaysong.net/RBook>
+URL: <https://www.jaysong.net/RBook>
 
 <img src="figures/Cover.png" align="right" width="25%"/>
+
+## 目次
 
 - **第I部: Rの導入**
    - 第1章: R?
@@ -41,3 +43,11 @@ R Not for Everyone: An Esoteric Guide
    - 第28章: モンテカルロシミュレーション
    - 第29章: スクレイピング
    - 第30章: API
+
+---
+
+## 著作権
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="クリエイティブ・コモンズ・ライセンス" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a>
+
+本著作物は [クリエイティブ・コモンズ 表示-非営利-改変禁止 4.0国際ライセンス](http://creativecommons.org/licenses/by-nc-nd/4.0/)の下に提供されています。
