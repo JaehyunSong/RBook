@@ -13,79 +13,36 @@ Rによる可視化は様々な方法がありますが、可視化のために�
 
 
 
-<table>
-<caption>(\#tab:visual1-sampledata)`Country_df`の中身 (最初の10行のみ表示)</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Country </th>
-   <th style="text-align:right;"> PPP </th>
-   <th style="text-align:right;"> HDI </th>
-   <th style="text-align:left;"> OECD </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> Afghanistan </td>
-   <td style="text-align:right;"> 2125 </td>
-   <td style="text-align:right;"> 0.496 </td>
-   <td style="text-align:left;"> 非加盟国 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Albania </td>
-   <td style="text-align:right;"> 13781 </td>
-   <td style="text-align:right;"> 0.791 </td>
-   <td style="text-align:left;"> 非加盟国 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Algeria </td>
-   <td style="text-align:right;"> 11324 </td>
-   <td style="text-align:right;"> 0.759 </td>
-   <td style="text-align:left;"> 非加盟国 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Angola </td>
-   <td style="text-align:right;"> 6649 </td>
-   <td style="text-align:right;"> 0.574 </td>
-   <td style="text-align:left;"> 非加盟国 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Argentina </td>
-   <td style="text-align:right;"> 22938 </td>
-   <td style="text-align:right;"> 0.830 </td>
-   <td style="text-align:left;"> 非加盟国 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Armenia </td>
-   <td style="text-align:right;"> 12974 </td>
-   <td style="text-align:right;"> 0.760 </td>
-   <td style="text-align:left;"> 非加盟国 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Australia </td>
-   <td style="text-align:right;"> 50001 </td>
-   <td style="text-align:right;"> 0.938 </td>
-   <td style="text-align:left;"> 加盟国 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Austria </td>
-   <td style="text-align:right;"> 55824 </td>
-   <td style="text-align:right;"> 0.914 </td>
-   <td style="text-align:left;"> 加盟国 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Azerbaijan </td>
-   <td style="text-align:right;"> 14257 </td>
-   <td style="text-align:right;"> 0.754 </td>
-   <td style="text-align:left;"> 非加盟国 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Bahrain </td>
-   <td style="text-align:right;"> 43624 </td>
-   <td style="text-align:right;"> 0.838 </td>
-   <td style="text-align:left;"> 非加盟国 </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}
+
+\caption{(\#tab:visual1-sampledata)`Countries.csv`の中身 (最初の10行のみ表示)}
+\centering
+\begin{tabular}[t]{l|r|r|l}
+\hline
+Country & PPP & HDI & OECD\\
+\hline
+Afghanistan & 2125 & 0.496 & 非加盟国\\
+\hline
+Albania & 13781 & 0.791 & 非加盟国\\
+\hline
+Algeria & 11324 & 0.759 & 非加盟国\\
+\hline
+Angola & 6649 & 0.574 & 非加盟国\\
+\hline
+Argentina & 22938 & 0.830 & 非加盟国\\
+\hline
+Armenia & 12974 & 0.760 & 非加盟国\\
+\hline
+Australia & 50001 & 0.938 & 加盟国\\
+\hline
+Austria & 55824 & 0.914 & 加盟国\\
+\hline
+Azerbaijan & 14257 & 0.754 & 非加盟国\\
+\hline
+Bahrain & 43624 & 0.838 & 非加盟国\\
+\hline
+\end{tabular}
+\end{table}
 
 このデータは各国 (`Country`) の一人当たり購買力平価基準GDP (`PPP`)、人間開発指数 (`HDI`)、OECD加盟有無 (`OECD`)の変数で構成されています。このデータを使って横軸は`PPP`、縦軸は`HDI`とし、`OECD`の値によって色分けしたグラフを作成します。
 
@@ -106,10 +63,14 @@ legend("bottomright", pch = 19,
        col    = c("red", "blue"))
 ```
 
-<div class="figure" style="text-align: center">
-<img src="visualization1_files/figure-html/visual1-baser1-1.png" alt="Base Rによるグラフ" width="576" />
-<p class="caption">(\#fig:visual1-baser1)Base Rによるグラフ</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{visualization1_files/figure-latex/visual1-baser1-1} 
+
+}
+
+\caption{Base Rによるグラフ}(\#fig:visual1-baser1)
+\end{figure}
 
 ### {lattice}パッケージ
 
@@ -132,10 +93,14 @@ xyplot(HDI ~ PPP, data = Country_df,
        xlab = "一人当たり購買力平価GDP (USD)", ylab = "人間開発指数")
 ```
 
-<div class="figure" style="text-align: center">
-<img src="visualization1_files/figure-html/visual1-lattice1-1.png" alt="latticeによるグラフ" width="576" />
-<p class="caption">(\#fig:visual1-lattice1)latticeによるグラフ</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{visualization1_files/figure-latex/visual1-lattice1-1} 
+
+}
+
+\caption{{lattice}によるグラフ}(\#fig:visual1-lattice1)
+\end{figure}
 
 1つの関数で全てを処理するので、関数が非常に長くなり、人間にとって読みやすいコードにはなりにくいのが短所です。しかし、{lattice}はBase Rでは出来ない、プロットのオブジェクトとしての保存ができます。Base Rは出来上がったプロットをオブジェクトとして保存することが出来ず、同じ図をもう一回出力するためには、改めてコードを書く必要があります。しかし、{lattice}はオブジェクトとして保存ができるため、いつでもリサイクルが可能です。他にも、{lattice}は条件付きプロットの作成において非常に強力です。しかし、これらの特徴は今は{ggplot2}も共有しているため、{lattice}独自の長所とは言いにくいです。
 
@@ -143,7 +108,7 @@ xyplot(HDI ~ PPP, data = Country_df,
 
 {ggplot2}はHadely Wickhamが大学院生の時に開発した可視化パッケージであり[^visual1-ggplot-naming]、 @Wilkinson:2005 の「グラフィックの文法 (**g**rammer of **g**raphics)」の思想をR上で具現化したものです。グラフィックの文法という思想は今は{ggplot2}以外にも[Plotly](https://plotly.com)や[Tableau](https://www.tableau.com/)などでも採用されています。
 
-[^visual1-ggplot-naming]: 厳密に言えば、大学院生の時代に開発したパッケージは{ggplot2}ではなく、`ggplot`です。このパッケージもグラフィックの文法の思想に基づいた可視化パッケージではありますが、今の{ggplot2}とは別物に近いパッケージです。このパッケージは2008年10月、バージョン0.4.2を以ってCRANから削除されました。
+[^visual1-ggplot-naming]: 厳密に言えば、大学院生の時代に開発したパッケージは{ggplot2}ではなく、{ggplot}です。このパッケージもグラフィックの文法の思想に基づいた可視化パッケージではありますが、今の{ggplot2}とは別物に近いパッケージです。このパッケージは2008年10月、バージョン0.4.2を以ってCRANから削除されました。
 
 グラフィックの文法は後ほど詳細に解説しますが、{ggplot2}による作図の特徴は「レイヤーを重ねる」ことです。グラフの様々な要素をそれぞれ1つの層 (layer)と捉え、これを重ねられていくことでグラフが出来上がる仕組みです。これはBase Rの書き方に似ています。たとえば、{ggplot2}を使って図\@ref(fig:visual1-baser1)を作る場合、以下のようなコードになります。
 
@@ -157,10 +122,14 @@ ggplot(data = Country_df) +
   theme_bw(base_family = "HiraKakuProN-W3")
 ```
 
-<div class="figure" style="text-align: center">
-<img src="visualization1_files/figure-html/visual1-ggplot1-1.png" alt="ggplot2によるグラフ" width="576" />
-<p class="caption">(\#fig:visual1-ggplot1)ggplot2によるグラフ</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{visualization1_files/figure-latex/visual1-ggplot1-1} 
+
+}
+
+\caption{{ggplot2}によるグラフ}(\#fig:visual1-ggplot1)
+\end{figure}
 
 このように{ggplot2}による作図コードはBase Rや{lattice}に比べ、読みやすいのが特徴です。また、書く手間も大きく省かれる場合が多く、結果として出力されるグラフも綺麗です（これは好みによりますが）。しかし、{ggplot2}にも限界はあり、代表的なものとして (1) 3次元グラフが作成でないこと、(2) 処理速度が遅い点があります。後者は多くの場合においてあまり気にならない程度ですが、3次元プロットが必要な場合は{lattice}や別途のパッケージを使う必要があります。しかし、社会科学において3次元プロットが使われる機会は少なく、2次元平面であっても3次元以上のデータを表現することも可能です。本書では{ggplot2}を用いた可視化方法のみについて解説していきます。
 
@@ -180,16 +149,20 @@ ggplot(data = Country_df) +
 
 
 ```{=html}
-<div id="htmlwidget-ab3229e0ff5fbb3d2a82" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ab3229e0ff5fbb3d2a82">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28"],[2011,2011,2011,2011,2012,2012,2012,2012,2013,2013,2013,2013,2014,2014,2014,2014,2015,2015,2015,2015,2016,2016,2016,2016,2017,2017,2017,2017],["その他","JR","大手私鉄","準大手私鉄","その他","JR","大手私鉄","準大手私鉄","その他","JR","大手私鉄","準大手私鉄","その他","JR","大手私鉄","準大手私鉄","その他","JR","大手私鉄","準大手私鉄","その他","JR","大手私鉄","準大手私鉄","その他","JR","大手私鉄","準大手私鉄"],[4769,7399,19421,7683,5014,7289,21286,10471,5154,7383,21097,10652,5517,7469,21013,10569,5662,7495,21809,10740,5807,7622,22474,10767,5943,7707,22783,10862]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Year<\/th>\n      <th>Company_Type1<\/th>\n      <th>P<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,3]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-67c4033cdc4b0aa888cf" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-67c4033cdc4b0aa888cf">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28"],[2011,2011,2011,2011,2012,2012,2012,2012,2013,2013,2013,2013,2014,2014,2014,2014,2015,2015,2015,2015,2016,2016,2016,2016,2017,2017,2017,2017],["その他","JR","大手私鉄","準大手私鉄","その他","JR","大手私鉄","準大手私鉄","その他","JR","大手私鉄","準大手私鉄","その他","JR","大手私鉄","準大手私鉄","その他","JR","大手私鉄","準大手私鉄","その他","JR","大手私鉄","準大手私鉄","その他","JR","大手私鉄","準大手私鉄"],[4769,7399,19421,7683,5014,7289,21286,10471,5154,7383,21097,10652,5517,7469,21013,10569,5662,7495,21809,10740,5807,7622,22474,10767,5943,7707,22783,10862]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Year<\/th>\n      <th>Company_Type1<\/th>\n      <th>P<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,3]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 ```
 
 このデータ`df`を使って図\@ref(fig:visual1-fig1)のようなグラフを作成します。以下では作図のコードも載っていますが、詳しく理解しなくても結構です。理解しなくてもいいですが、必ずコードには目を通し、説明文との対応を自分で考えてください。
 
-<div class="figure" style="text-align: center">
-<img src="visualization1_files/figure-html/visual1-fig1-1.png" alt="鉄道駅の事業者区分による平均利用者数の推移" width="768" />
-<p class="caption">(\#fig:visual1-fig1)鉄道駅の事業者区分による平均利用者数の推移</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{visualization1_files/figure-latex/visual1-fig1-1} 
+
+}
+
+\caption{鉄道駅の事業者区分による平均利用者数の推移}(\#fig:visual1-fig1)
+\end{figure}
 
 1. まずは、グラフに使用するデータを指定し、空のキャンバスを用意します。
 
@@ -199,7 +172,9 @@ ggplot(data = Country_df) +
 ggplot(data = df)
 ```
 
-<img src="visualization1_files/figure-html/unnamed-chunk-4-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization1_files/figure-latex/unnamed-chunk-2-1} \end{center}
 
 2. 折れ線グラフを作成します。折れ線グラフは点の位置を指定すると、勝手に点と点の間を線で繋いでぐれます。したがって、必要な情報は点の情報ですが、横軸 (X軸)は`Year`、縦軸 (Y軸)は`P`にした点を出力します。この点を`Company_Type1`ごとに色分けします。これで折れ線グラフが出来上がります。線の太さは1にします。
 
@@ -211,7 +186,9 @@ ggplot(data = df) +
             size = 1)
 ```
 
-<img src="visualization1_files/figure-html/unnamed-chunk-5-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization1_files/figure-latex/unnamed-chunk-3-1} \end{center}
 
 3. 続いて、折れ線グラフに散布図を載せます。これは線が引かれていない折れ線グラフと同じです。したがって、横軸、縦軸、色分けの情報は同じです。しかし、点と線が重なると点がよく見えないこともあるので、点の大きさを3にし、形は枠線付きの点にします。点の中身は白塗りをします。つまり、`Company_Type1`によって変わるのは、点の枠線です。
 
@@ -226,7 +203,9 @@ ggplot(data = df) +
              size = 3, shape = 21, fill = "white")
 ```
 
-<img src="visualization1_files/figure-html/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization1_files/figure-latex/unnamed-chunk-4-1} \end{center}
 
 4. 横軸と縦軸、そして凡例のタイトルを日本語に直します。日本語のレポート、論文なら図表も日本語にすべきです。横軸のラベルは`"年度"`、縦軸のラベルは`"平均利用者数 (人/日)"`にします。色の凡例タイトルは`"事業者区分"`にします。
 
@@ -242,7 +221,9 @@ ggplot(data = df) +
   labs(x = "年度", y = "平均利用者数 (人/日)", color = "事業者区分")
 ```
 
-<img src="visualization1_files/figure-html/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization1_files/figure-latex/unnamed-chunk-5-1} \end{center}
 
 5. 横軸のスケールを修正します。横軸は連続 (continuous)変数です。今の目盛りは2012、2014、2016になっていますが、これを1年刻みにし、それぞれの目盛りのラベルも2011、2012、2013、...にします。
 
@@ -259,7 +240,9 @@ ggplot(data = df) +
   scale_x_continuous(breaks = 2011:2017, labels = 2011:2017)
 ```
 
-<img src="visualization1_files/figure-html/unnamed-chunk-8-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization1_files/figure-latex/unnamed-chunk-6-1} \end{center}
 
 6. グラフのテーマを{ggplot2}が基本的に提供しているminimalに変更し、フォントサイズを12に変更します。
 
@@ -276,14 +259,20 @@ ggplot(data = df) +
   theme_minimal(base_size = 12)
 ```
 
-<img src="visualization1_files/figure-html/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization1_files/figure-latex/unnamed-chunk-7-1} \end{center}
 
 これで図が出来上がりました。このように{ggplot2}では図の要素をレイヤーと捉えます。このレイヤーを生成する関数が`ggplot()`、`geom_line()`、`lab()`などであり、これらを`+`演算子を用いて重ねていきます。このイメージを図にすると図\@ref(fig:layer-example1)のように表現できます。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Visualization1/Layer_Example.png" alt="ggplot2の図が出来上がるまで (全体像)" width="85%" />
-<p class="caption">(\#fig:layer-example1)ggplot2の図が出来上がるまで (全体像)</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{Figures/Visualization1/Layer_Example} 
+
+}
+
+\caption{{ggplot2}の図が出来上がるまで (全体像)}(\#fig:layer-example1)
+\end{figure}
 
 それでは、グラフは具体的にどのような要素で構成されているかを以下で解説します。
 
@@ -301,10 +290,14 @@ ggplot(data = df) +
 
 {ggplot2}の図は以上の3つ要素を重ねることで出来ます。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Visualization1/Structure_Example2.png" alt="ggplot2の構造の例" width="100%" />
-<p class="caption">(\#fig:structure-example2)ggplot2の構造の例</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{Figures/Visualization1/Structure_Example2} 
+
+}
+
+\caption{{ggplot2}の構造の例}(\#fig:structure-example2)
+\end{figure}
 
 ただし、この中で座標系は適切だと判断される座標系に設定してくれるため、ユーザーが必ず指定すべきものはデータと幾何オブジェクトのみです。また、幾何オブジェクトはマッピングを含んでおり、これも必ず指定する必要があります。したがって、{ggplot2}で作図するための最小限のコードは以下のようになります。
 
@@ -363,55 +356,28 @@ ggplot(data = データ名) +
 
 それでは、最初にお見せした図\@ref(fig:visual1-fig1)のマッピングはどうなるでしょうか。図\@ref(fig:visual1-fig1)の幾何オブジェクトは折れ線グラフ (`geom_line()`)と散布図 (`geom_point()`)の2つです。それぞれの幾何オブジェクトのマッピング情報をまとめたのが表\@ref(tab:visual1-mapping1)です。
 
-<table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>(\#tab:visual1-mapping1)図\@ref(fig:visual1-fig1)のマッピング情報</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;text-align: center;"> 幾何オブジェクト </th>
-   <th style="text-align:left;text-align: center;"> マッピング要素 </th>
-   <th style="text-align:left;text-align: center;"> 変数 </th>
-   <th style="text-align:left;text-align: center;"> 引数 </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> `geom_line` </td>
-   <td style="text-align:left;"> X軸 </td>
-   <td style="text-align:left;"> `Year` </td>
-   <td style="text-align:left;"> `x` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `geom_line` </td>
-   <td style="text-align:left;"> Y軸 </td>
-   <td style="text-align:left;"> `P` </td>
-   <td style="text-align:left;"> `y` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `geom_line` </td>
-   <td style="text-align:left;"> 線の色 </td>
-   <td style="text-align:left;"> `Company_Type1` </td>
-   <td style="text-align:left;"> `color` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `geom_point` </td>
-   <td style="text-align:left;"> X軸 </td>
-   <td style="text-align:left;"> `Year` </td>
-   <td style="text-align:left;"> `x` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `geom_point` </td>
-   <td style="text-align:left;"> Y軸 </td>
-   <td style="text-align:left;"> `P` </td>
-   <td style="text-align:left;"> `y` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `geom_point` </td>
-   <td style="text-align:left;"> 枠線の色 </td>
-   <td style="text-align:left;"> `Company_Type1` </td>
-   <td style="text-align:left;"> `color` </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}
+
+\caption{(\#tab:visual1-mapping1)図\@ref(fig:visual1-fig1)のマッピング情報}
+\centering
+\begin{tabular}[t]{l|l|l|l}
+\hline
+\multicolumn{1}{c}{幾何オブジェクト} & \multicolumn{1}{c}{マッピング要素} & \multicolumn{1}{c}{変数} & \multicolumn{1}{c}{引数}\\
+\hline
+ & X軸 & `Year` & `x`\\
+\cline{2-4}
+ & Y軸 & `P` & `y`\\
+\cline{2-4}
+\multirow[t]{-3}{*}{\raggedright\arraybackslash `geom\_line`} & 線の色 & `Company\_Type1` & `color`\\
+\cline{1-4}
+ & X軸 & `Year` & `x`\\
+\cline{2-4}
+ & Y軸 & `P` & `y`\\
+\cline{2-4}
+\multirow[t]{-3}{*}{\raggedright\arraybackslash `geom\_point`} & 枠線の色 & `Company\_Type1` & `color`\\
+\hline
+\end{tabular}
+\end{table}
 
 先ほどマッピング引数は幾何オブジェクト関数内で指定すると言いましたが、実は`ggplot()`内に入れ、`geom_*()`内では省略することも可能です。幾何オブジェクトが1つのみならどっちでも問題ありません。しかし、幾何オブジェクトが2つ以上の場合は注意が必要です。全ての幾何オブジェクトがマッピングを共有する場合は`ggplot()`の方が書く手間が省きます。たとえば、表\@ref(tab:visual1-mapping1)を見ると、`geom_line()`と`geom_point()`は`x`、`y`、`color`引数の値が同じですから、`ggplot()`内に`aes()`を入れることも可能です。しかし、幾何オブジェクトがマッピングを共有しない場合は幾何オブジェクト関数内に別途指定する必要があります。あるいは、共有するところだけ、`ggplot()`に書いて、共有しない部分だけ幾何オブジェクトで指定することも可能です。したがって、上の図は以下のコードでも作成することができます。
 
@@ -443,10 +409,14 @@ df %>%
              color = "red")
 ```
 
-<div class="figure" style="text-align: center">
-<img src="visualization1_files/figure-html/visual1-mapping2-1.png" alt="`color`を`aes()`外側に置いた場合" width="768" />
-<p class="caption">(\#fig:visual1-mapping2)`color`を`aes()`外側に置いた場合</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{visualization1_files/figure-latex/visual1-mapping2-1} 
+
+}
+
+\caption{`color`を`aes()`外側に置いた場合}(\#fig:visual1-mapping2)
+\end{figure}
 
 ここで注目する点は
 
@@ -463,10 +433,14 @@ df %>%
   geom_point(aes(x = ゲームのプレイ時間, y = 身長, color = 性別))
 ```
 
-<div class="figure" style="text-align: center">
-<img src="visualization1_files/figure-html/visual1-mapping3-1.png" alt="`color`を`aes()`外側に置いた場合" width="768" />
-<p class="caption">(\#fig:visual1-mapping3)`color`を`aes()`外側に置いた場合</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{visualization1_files/figure-latex/visual1-mapping3-1} 
+
+}
+
+\caption{`color`を`aes()`外側に置いた場合}(\#fig:visual1-mapping3)
+\end{figure}
 
 以上のように書きます。`aes()`の内部はマッピングの情報が含まれています。言い換えると、**`aes()`の中はある変数がグラフ上においてどのような役割を果たしているかを明記するところ**です。2つ目の例では性別という変数が色分けをする役割を果たすため、`aes()`の内側に入ります。一方、1つ目の例では色分けが行われておりません。
 
@@ -476,28 +450,40 @@ df %>%
 
 座標系のズームイン (zoom-in) やズームアウト (zoom-out) を行う`coord_cartesian()`、横軸と縦軸を交換する`coord_flip()`、横軸と縦軸の比率を固定する`coord_fixed()`がよく使われます。座標系の説明は次章以降で詳しく解説しますが、ここでは座標系のズームインを見てみましょう。以下の図\@ref(fig:coord1)は各国のCOVID19の感染者数を時系列で示したものです。これを見るとアメリカ、ブラジル、インドは大変だなーくらいしかわかりません。感染者数が比較的に少ない国のデータは線としては存在しますが、なかなか区別ができません。
 
-<div class="figure" style="text-align: center">
-<img src="visualization1_files/figure-html/coord1-1.png" alt="ズームイン前" width="768" />
-<p class="caption">(\#fig:coord1)ズームイン前</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{visualization1_files/figure-latex/coord1-1} 
+
+}
+
+\caption{ズームイン前}(\#fig:coord1)
+\end{figure}
 
 ここで座標系をズームインすると、一部の情報は失われますが、ズームインされた箇所はより詳細にグラフを観察できます。ズームインと言っても難しいものではありません。単に、軸の上限、下限を調整するだけです。たとえば、縦軸の上限を10万人に変更したのが図\@ref(fig:coord2)です。アメリカなど感染者数が10万人を超える国家の時系列情報の一部は失われましたが、日中韓などのデータはより見やすくなったかと思います[^coord1]。
 
 [^coord1]: 実は図\@ref(fig:coord1)と図\@ref(fig:coord2)は似たような色が多く使われているため、褒められそうなグラフではありません。
 
-<div class="figure" style="text-align: center">
-<img src="visualization1_files/figure-html/coord2-1.png" alt="ズームイン後" width="768" />
-<p class="caption">(\#fig:coord2)ズームイン後</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{visualization1_files/figure-latex/coord2-1} 
+
+}
+
+\caption{ズームイン後}(\#fig:coord2)
+\end{figure}
 
 また、同じ棒グラフや散布図、折れ線グラフでも座標系を変えることによって図の見方が劇的に変わることもあります。我々にとって最も馴染みのある座標系はデカルト座標系 (直交座標系)です。このデカルト座標系に切片0、傾き1の直線を引きます。そして同じ図に対して座標系のみを極座標系 (polar coordinates system)に変更します。この2つを比較したのが図\@ref(fig:coord3)です。この2つの図は同じデータ、同じ変数、同じ幾何オブジェクトで構成されています。異なるのは座標系ですが、見方が劇的に変わります。
 
 
 
-<div class="figure" style="text-align: center">
-<img src="visualization1_files/figure-html/coord3-1.png" alt="直交座標系と極座標系の比較 (1)" width="768" />
-<p class="caption">(\#fig:coord3)直交座標系と極座標系の比較 (1)</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{visualization1_files/figure-latex/coord3-1} 
+
+}
+
+\caption{直交座標系と極座標系の比較 (1)}(\#fig:coord3)
+\end{figure}
 
 こんな座標系を実際に使う機会は多くないかも知れませんが、極座標系は割と身近なところで見ることができます。それは積み上げ棒グラフと円グラフの関係です。図\@ref(fig:coord4)はデカルト座標系上の積み上げ棒グラフを極座標系に変換したものです。
 
@@ -518,10 +504,14 @@ Coord_Fig5 <- Coord_Fig4 +
     coord_polar(theta = "y")
 ```
 
-<div class="figure" style="text-align: center">
-<img src="visualization1_files/figure-html/coord4-1.png" alt="直交座標系と極座標系の比較 (2)" width="768" />
-<p class="caption">(\#fig:coord4)直交座標系と極座標系の比較 (2)</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{visualization1_files/figure-latex/coord4-1} 
+
+}
+
+\caption{直交座標系と極座標系の比較 (2)}(\#fig:coord4)
+\end{figure}
 
 他にも軸を対数スケールなどに変換する `coord_trans()` 、地図の出力に使われる `coord_map()` や `coord_sf()` などがあり、適宜紹介していきます。
 
@@ -543,10 +533,16 @@ Coord_Fig5 <- Coord_Fig4 +
                      labels = c(145, 150, 155, 160, 165, 170, 175, 180))
 ```
 
-<div class="figure" style="text-align: center">
-<img src="visualization1_files/figure-html/visual1-scale1-1.png" alt="`scale_y_continuous()`を使って縦軸を5cm刻みに変更" width="768" />
-<p class="caption">(\#fig:visual1-scale1)`scale_y_continuous()`を使って縦軸を5cm刻みに変更</p>
-</div>
+(ref:scale-caption1) `scale_y_continuous()`を使って縦軸を5cm刻みに変更
+
+\begin{figure}
+
+{\centering \includegraphics{visualization1_files/figure-latex/visual1-scale1-1} 
+
+}
+
+\caption{(ref:scale-caption1)}(\#fig:visual1-scale1)
+\end{figure}
 
 また、性別ごとの色を変更する際は`scale_color_manual()`を使います（図\@ref(fig:visual1-scale2)）。
 
@@ -561,10 +557,16 @@ Coord_Fig5 <- Coord_Fig4 +
   scale_color_manual(values = c("男性" = "#ff9900", "女性" = "#339900"))
 ```
 
-<div class="figure" style="text-align: center">
-<img src="visualization1_files/figure-html/visual1-scale2-1.png" alt="さらに`scale_color_manual()`を使って色を指定" width="768" />
-<p class="caption">(\#fig:visual1-scale2)さらに`scale_color_manual()`を使って色を指定</p>
-</div>
+(ref:scale-caption2) さらに`scale_color_manual()`を使って色を指定
+
+\begin{figure}
+
+{\centering \includegraphics{visualization1_files/figure-latex/visual1-scale2-1} 
+
+}
+
+\caption{(ref:scale-caption2)}(\#fig:visual1-scale2)
+\end{figure}
 
 `scale_*_*()`関数群は以上のように、`scale_スケールのタイプ_変数のタイプ()`です。つまり、`scale_x_date()`、`scale_y_discrete()`や`scale_color_contiuous()`など様々な組み合わせが可能であり、{ggplot2}は様々なタイプのスケールと変数のための関数群を提供しています。むろん、[ユーザーから独自のスケール関数を作る](https://ggplot2-book.org/extensions.html)ことも可能であり、パッケージとして公開することも可能です。
 
@@ -574,19 +576,27 @@ Coord_Fig5 <- Coord_Fig4 +
 
 たとえば、フリーダムハウスでは毎年、各国を「自由」、「部分的に自由」、「不自由」と格付けをし、結果を公表しています。世界に自由な国、部分的に自由な国、不自由な国が何カ国あるかを大陸ごとに示したいとします。カテゴリごとの個数を示すには棒グラフが効果的であり、図\@ref(fig:facet1)のように示すことができます。
 
-<div class="figure" style="text-align: center">
-<img src="visualization1_files/figure-html/facet1-1.png" alt="ファセットを分けないグラフの例" width="768" />
-<p class="caption">(\#fig:facet1)ファセットを分けないグラフの例</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{visualization1_files/figure-latex/facet1-1} 
+
+}
+
+\caption{ファセットを分けないグラフの例}(\#fig:facet1)
+\end{figure}
 
 このグラフを見ると各大陸に自由な国がどれほどあるかが分かりますが、人によっては読みにくいかも知れません。できれば大陸ごとに分けたグラフの方が見やすいでしょう。そのためにはデータを特定の大陸に絞って、そのデータを用いた棒グラフを作り、最終的には出来上がったグラフたちを結合する必要があります。
 
 しかし、{ggplot2}のファセットを指定するとそのような手間が省けます。これはデータを大陸ごとの部分集合に分割し、1つのプロット上に小さい複数のプロットを出力します。
 
-<div class="figure" style="text-align: center">
-<img src="visualization1_files/figure-html/facet2-1.png" alt="大陸ごとにファセットを分けたグラフの例" width="768" />
-<p class="caption">(\#fig:facet2)大陸ごとにファセットを分けたグラフの例</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{visualization1_files/figure-latex/facet2-1} 
+
+}
+
+\caption{大陸ごとにファセットを分けたグラフの例}(\#fig:facet2)
+\end{figure}
 
 ファセットを指定するには `facet_*()` 関数群を使います。具体的には `facet_wrap()` と `facet_grid()` がありますが、今回のように1つの変数 (ここでは「大陸」)でファセットを分割する場合は主に `facet_wrap()` を、2つの変数で分割する場合は `facet_grid()` を使います。
 
@@ -621,26 +631,38 @@ Coord_Fig5 <- Coord_Fig4 +
 
 ここで1つの例を紹介します。たとえば、G20加盟国におけるCOVID19の累積感染者数を時系列で示すとします。そこで最近、インドにおいて感染者数が急増していることを示したいとします。まず、図\@ref(fig:dataink-ratio1)から見ましょう。
 
-<div class="figure" style="text-align: center">
-<img src="visualization1_files/figure-html/dataink-ratio1-1.png" alt="データ・インク比の例 (改善前)" width="768" />
-<p class="caption">(\#fig:dataink-ratio1)データ・インク比の例 (改善前)</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{visualization1_files/figure-latex/dataink-ratio1-1} 
+
+}
+
+\caption{データ・インク比の例 (改善前)}(\#fig:dataink-ratio1)
+\end{figure}
 
 そもそもどの線がインドを表しているのかが分かりにくいです。カテゴリが増えると使える色に制約が生じてしまうからです。実際、図からフランス、ドイツ、インド、インドネシアを区別するのは非常に難しいでしょう。現実に色分けが出来る天才的な色覚を持つ読者ならこちらの方が情報も豊富であり、いいかも知れません。しかし、インドにおける感染者数の急増を示すには無駄な情報が多すぎます。そこでインドを除く国の色をグレーにまとめたものが図\@ref(fig:dataink-ratio2)です。
 
-<div class="figure" style="text-align: center">
-<img src="visualization1_files/figure-html/dataink-ratio2-1.png" alt="データ・インク比の例 (改善後)" width="768" />
-<p class="caption">(\#fig:dataink-ratio2)データ・インク比の例 (改善後)</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{visualization1_files/figure-latex/dataink-ratio2-1} 
+
+}
+
+\caption{データ・インク比の例 (改善後)}(\#fig:dataink-ratio2)
+\end{figure}
 
 こちらの方は多くの情報が失われています。アメリカや日本、韓国がどの線に該当するかが分かりません。しかし、図で示したいメッセージとは無関係でしょう。ここからもう一歩踏み込んで、「ならばインド以外の線を消せばいいじゃん」と思う方もいるかも知れません。しかし、インドの線のみ残している場合、比較対象がなくなるため、急増していることを示しにくくなります。この場合、示したい情報の損失が生じるため、インド以外の国の線はデータ・インクに含まれます。
 
 しかし、このデータ・インク比に基づく可視化は常に正しいとは言えません。そこでもう一つの例を紹介します。図\@ref(fig:dataink-ratio3)の左は @Kuznicki_McCutcheon:1979 の論文に掲載された図であり、右はTufteによる改善案です。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Visualization1/Dataink_ratio2.png" alt="データ・インク比改善の例" width="85%" />
-<p class="caption">(\#fig:dataink-ratio3)データ・インク比改善の例</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{Figures/Visualization1/Dataink_ratio2} 
+
+}
+
+\caption{データ・インク比改善の例}(\#fig:dataink-ratio3)
+\end{figure}
 
 確かに棒グラフは面を使用しており、高さを示すには線のみで十分かも知れません。また、エラー・バーも線の位置を若干ずらすことによって表現できます。それでは、読者の皆さんから見て、どのグラフが見やすいと思いますか。これについて興味深い研究結果があります。@Inbar_et_al:2007 は87人の学部生を対象に3つのグループに分けました。そして、学生たちは図\@ref(fig:dataink-ratio4)を「美しさ」、「明瞭さ」、「簡潔さ」の3つの面で評価し、最後にどの図が最も好きかを尋ねました。
 
@@ -649,49 +671,35 @@ Coord_Fig5 <- Coord_Fig4 +
     * ただし、事前にTufteスタイル (図\@ref(fig:dataink-ratio4)のD)の読み方について学習させる。
 * **グループ3:** 図\@ref(fig:dataink-ratio4)のA、B、C、Dを評価
 
+(ref:dataink-caption1) @Inbar_et_al:2007 から抜粋
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Visualization1/Dataink_ratio3.png" alt="@Inbar_et_al:2007 から抜粋" width="65%" />
-<p class="caption">(\#fig:dataink-ratio4)@Inbar_et_al:2007 から抜粋</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.65\linewidth]{Figures/Visualization1/Dataink_ratio3} 
+
+}
+
+\caption{(ref:dataink-caption1)}(\#fig:dataink-ratio4)
+\end{figure}
 
 皆さんもある程度は結果が予想できたかと思いますが、いずれのグループにおいても、Tufteが推奨する図\@ref(fig:dataink-ratio4)のDが「美しさ」、「明瞭さ」、「簡潔さ」のすべての点において最下位でした。また、どの図が最も好きかに対しても表\@ref(tab:dataink-ratio5)のような結果が得られました。
 
-<table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>(\#tab:dataink-ratio5)@Inbar_et_al:2007 の実験結果</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;text-align: center;"> グループ </th>
-   <th style="text-align:right;text-align: center;"> グラフA </th>
-   <th style="text-align:right;text-align: center;"> グラフB </th>
-   <th style="text-align:right;text-align: center;"> グラフC </th>
-   <th style="text-align:right;text-align: center;"> グラフD </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> グループ1 </td>
-   <td style="text-align:right;"> 24 </td>
-   <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 3 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> グループ2 </td>
-   <td style="text-align:right;"> 29 </td>
-   <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> NA </td>
-   <td style="text-align:right;"> 2 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> グループ3 </td>
-   <td style="text-align:right;"> 14 </td>
-   <td style="text-align:right;"> 3 </td>
-   <td style="text-align:right;"> 12 </td>
-   <td style="text-align:right;"> 0 </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}
+
+\caption{(\#tab:dataink-ratio5)Inbar, Tractinsky, and Meyer (2007)の実験結果}
+\centering
+\begin{tabular}[t]{l|r|r|r|r}
+\hline
+\multicolumn{1}{c}{グループ} & \multicolumn{1}{c}{グラフA} & \multicolumn{1}{c}{グラフB} & \multicolumn{1}{c}{グラフC} & \multicolumn{1}{c}{グラフD}\\
+\hline
+グループ1 & 24 & NA & NA & 3\\
+\hline
+グループ2 & 29 & NA & NA & 2\\
+\hline
+グループ3 & 14 & 3 & 12 & 0\\
+\hline
+\end{tabular}
+\end{table}
 
 図\@ref(fig:dataink-ratio4)のDはデータ・インク比の観点から見れば最も優れた図ですが、それが分かりやすさを意味するわけではありません。今は、人々の認知の観点からも図を評価するようになり、近年の可視化の教科書ではこれらに関しても詳しく触れているものが多いです。@Tufte:2001 の本は可視化を勉強する人にとって必読の書かも知れませんが、これだけでは十分ではなく、近年の教科書も合わせて読むことをおすすめします。
 
@@ -701,44 +709,68 @@ Coord_Fig5 <- Coord_Fig4 +
 
 [^3dplot-1]: [総務省の定額給付金特設ホームページ](https://kyufukin.soumu.go.jp/ja-JP/transition/)から取得（アクセス：2020年7月28日）
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Visualization1/garbage_graph.png" alt="3次元プロットの例" width="100%" />
-<p class="caption">(\#fig:3dplot1)3次元プロットの例</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{Figures/Visualization1/garbage_graph} 
+
+}
+
+\caption{3次元プロットの例}(\#fig:3dplot1)
+\end{figure}
 
 この図の目的は筆者にとってはよく分かりませんが、少なくとも給付金が順調（？）に配られているということですかね。その傾向を見るにはこの図は大きな問題はありません。しかし、細かい数値を見ようとすると誤解が生じる可能性があります。たとえば、7月22日の給付済み額は12.12兆円です。しかし、図\@ref(fig:3dplot2)を見ると、7月22日の棒は12兆円に達しておりません。なぜでしょうか。
 
 これは棒と壁（？）との間隔が理由です。図\@ref(fig:3dplot2)の右下にある青い円を見ればお分かりかと思いますが、棒が浮いています。この棒を壁（？）側に密着すると12の線を超えると考えられますが、このままだと12兆円に達していないのに12兆円超えてると、何かの入力ミスじゃないかと考えさせるかも知れません。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Visualization1/garbage_graph2.png" alt="3次元プロットの例 (2)" width="100%" />
-<p class="caption">(\#fig:3dplot2)3次元プロットの例 (2)</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{Figures/Visualization1/garbage_graph2} 
+
+}
+
+\caption{3次元プロットの例 (2)}(\#fig:3dplot2)
+\end{figure}
 
 この図において3D要素の必要性は0と言えます。2次元の棒グラフ (図\@ref(fig:3dplot3))、または折れ線グラフ (図\@ref(fig:3dplot4)の方がデータ・インク比の観点からも、分かりやすさからも優れていると言えるでしょう。
 
-<div class="figure" style="text-align: center">
-<img src="visualization1_files/figure-html/3dplot3-1.png" alt="図\@ref(fig:3dplot1)を2次元プロットに再構成した例 (棒グラフ)" width="672" />
-<p class="caption">(\#fig:3dplot3)図\@ref(fig:3dplot1)を2次元プロットに再構成した例 (棒グラフ)</p>
-</div>
+\begin{figure}
 
-<div class="figure" style="text-align: center">
-<img src="visualization1_files/figure-html/3dplot4-1.png" alt="図\@ref(fig:3dplot1)を2次元プロットに再構成した例 (折れ線グラフ)" width="672" />
-<p class="caption">(\#fig:3dplot4)図\@ref(fig:3dplot1)を2次元プロットに再構成した例 (折れ線グラフ)</p>
-</div>
+{\centering \includegraphics{visualization1_files/figure-latex/3dplot3-1} 
+
+}
+
+\caption{図\@ref(fig:3dplot1)を2次元プロットに再構成した例 (棒グラフ)}(\#fig:3dplot3)
+\end{figure}
+
+\begin{figure}
+
+{\centering \includegraphics{visualization1_files/figure-latex/3dplot4-1} 
+
+}
+
+\caption{図\@ref(fig:3dplot1)を2次元プロットに再構成した例 (折れ線グラフ)}(\#fig:3dplot4)
+\end{figure}
 
 ただ、総務省の図はまだマシかも知れません。世の中には誤解を招かすために作成された3次元プロットもあります。以下の図は早稲田アカデミーが作成した早慶高の合格者数を年度ごとに示した図です。2001年は754人で2012年は1494人です。比較対象がないので本当に12年連続全国No.1かどうかは判断できませんが、2倍近く増加したことは分かります。ただし、棒グラフの高さを見ると、2倍どころか3倍程度に見えます。他にも一時期、合格者が減少した時期 (2002、2003年)があるにもかかわらず、あまり目立ちません。これには2つの原因があります。それは(1)多分、ベースラインが0人ではない、(2) 遠近法により遠いものは小さく見えることです。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Visualization1/garbage_graph3.jpg" alt="3次元プロットの例 (2)" width="100%" />
-<p class="caption">(\#fig:3dplot5)3次元プロットの例 (2)</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{Figures/Visualization1/garbage_graph3} 
+
+}
+
+\caption{3次元プロットの例 (2)}(\#fig:3dplot5)
+\end{figure}
 
 これを2次元棒グラフに直してものが図\@ref(fig:3dplot6)です。こちらの方が合格者をより客観的に確認することができるでしょう。
 
-<div class="figure" style="text-align: center">
-<img src="visualization1_files/figure-html/3dplot6-1.png" alt="図\@ref(fig:3dplot4)を2次元プロットに再構成した例" width="672" />
-<p class="caption">(\#fig:3dplot6)図\@ref(fig:3dplot4)を2次元プロットに再構成した例</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{visualization1_files/figure-latex/3dplot6-1} 
+
+}
+
+\caption{図\@ref(fig:3dplot4)を2次元プロットに再構成した例}(\#fig:3dplot6)
+\end{figure}
 
 むろん、3次元プロットそのものが悪いわけではありません。むしろ、3次元の方が解釈しやすい、見やすいケースもあるでしょう。それには共通点があり、深さというもう一つの軸も何らかの情報があるという点です。一方、ここでお見せしました2つの例の場合、深さは何の情報も持ちません。つまり、データ・インク比の観点から見れば望ましくない図です。

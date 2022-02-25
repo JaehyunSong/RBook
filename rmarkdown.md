@@ -40,10 +40,14 @@
 
 　R Markdownファイルは大きく3つの領域に分けることができます（図\@ref(fig: rmarkdown-sample-1)）。まず、最初に`---`と`---`で囲まれた領域はヘッダー（Header）と呼ばれる領域です。ここでは題目、作成者情報の入力以外にも、文書全体に通じる設定を行います。これは第\@ref(rmarkdown-header)節で解説します。次はR Markdownの核心部であるチャンク（Chunk）です。チャンクは```` ```{r} ````と```` ``` ````で囲まれた領域であり、Rコードが入る箇所です。チャンクに関しましては第\@ref(rmarkdown-grammar)節の後半と第\@ref(rmarkdown-chunk)節で解説します。その他の領域がマークダウン（Markdown）であり、文書に該当します。
 
-<div class="figure" style="text-align: center">
-<img src="figures/Markdown/SamplePage.png" alt="R Markdownのサンプルページ" width="80%" />
-<p class="caption">(\#fig:rmarkdown-sample-1)R Markdownのサンプルページ</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{figures/Markdown/SamplePage} 
+
+}
+
+\caption{R Markdownのサンプルページ}(\#fig:rmarkdown-sample-1)
+\end{figure}
 
 　まずは、文章の書き方から説明します。非常に簡単な文法で綺麗、かつ構造化された文書が作成可能であり、これに慣れるとMarkdown基盤のノートアプリなどを使って素早くノート作成、メモが出来ます。
 
@@ -496,7 +500,9 @@ iris %>%
   theme_minimal(base_size = 12)
 ```
 
-<img src="rmarkdown_files/figure-html/rmarkdown-code-2-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{rmarkdown_files/figure-latex/rmarkdown-code-2-1} \end{center}
 
 　他にも文中にRコードを埋め込むことも可能です。例えば、ベクトル`X <- c(2, 3, 5, 7, 12)`があり、この平均値を文中で示したいとします。むろん、文中に「5.8」と書いても問題はありません。しかし、実は`X`の入力ミスが見つかり、実は`c(2, 3, 5, 7, 11)`になったらどうなるでしょうか。この「5.8」と書いた箇所を見つけて5.6と修正したいといけません。これは非常に面倒な作業であり、ミスも起こりやすいです。文中でRコードを入れるためには`` `rコード` ``のように入力します。
 
@@ -610,10 +616,14 @@ iris %>%
   theme_minimal(base_size = 12)
 ```
 
-<div class="figure" style="text-align: center">
-<img src="rmarkdown_files/figure-html/rmarkdown-chunk-1-1.png" alt="`iris`データセットの可視化" width="504" />
-<p class="caption">(\#fig:rmarkdown-chunk-1)`iris`データセットの可視化</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{rmarkdown_files/figure-latex/rmarkdown-chunk-1-1} 
+
+}
+
+\caption{`iris`データセットの可視化}(\#fig:rmarkdown-chunk-1)
+\end{figure}
 
 ### コードの見栄
 

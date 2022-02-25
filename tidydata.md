@@ -10,67 +10,42 @@
 
 整然データは目指す到達点は非常に単純です。それは「データの構造 (structure)と意味 (semantic)を一致させる」ことです。そして、この「意味」を出来る限り小さい単位で分解します。
 
-例えば、3人で構成されたあるクラス内の被験者に対し、投薬前後に測定した数学成績があるとします。投薬前の成績は`"Control"`、投薬後の状況を`"Treatment"`とします。これをまとめたのが表\@ref(tab:messy-data1)です。
+例えば、3人で構成されたあるクラス内の被験者に対し、投薬前後に測定した数学成績があるとします。投薬前の成績は`"Control"`、投薬後の状況を`"Treatment"`とします。これをまとめたのが表\@ref(tab:tidydata-intro-1)です。
 
-<table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>(\#tab:messy-data1)Messy Dataの例 (1)</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;text-align: center;"> Name </th>
-   <th style="text-align:right;text-align: center;"> Control </th>
-   <th style="text-align:right;text-align: center;"> Treatment </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> Hadley </td>
-   <td style="text-align:right;"> 90 </td>
-   <td style="text-align:right;"> 90 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Song </td>
-   <td style="text-align:right;"> 80 </td>
-   <td style="text-align:right;"> 25 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Yanai </td>
-   <td style="text-align:right;"> 100 </td>
-   <td style="text-align:right;"> 95 </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}
 
-また、以上の表は転置も可能であり、以下のように表現することが可能です (表\@ref(tab:messy-data2))。
+\caption{(\#tab:tidydata-intro-1)Messy Dataの例 (1)}
+\centering
+\begin{tabular}[t]{lrr}
+\toprule
+\multicolumn{1}{c}{Name} & \multicolumn{1}{c}{Control} & \multicolumn{1}{c}{Treatment}\\
+\midrule
+Hadley & 90 & 90\\
+Song & 80 & 25\\
+Yanai & 100 & 95\\
+\bottomrule
+\end{tabular}
+\end{table}
 
-<table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>(\#tab:messy-data2)Messy Dataの例 (2)</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;text-align: center;"> Treat </th>
-   <th style="text-align:right;text-align: center;"> Hadely </th>
-   <th style="text-align:right;text-align: center;"> Song </th>
-   <th style="text-align:right;text-align: center;"> Yanai </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> Control </td>
-   <td style="text-align:right;"> 90 </td>
-   <td style="text-align:right;"> 80 </td>
-   <td style="text-align:right;"> 100 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Treatment </td>
-   <td style="text-align:right;"> 90 </td>
-   <td style="text-align:right;"> 25 </td>
-   <td style="text-align:right;"> 95 </td>
-  </tr>
-</tbody>
-</table>
+また、以上の表は転置も可能であり、以下のように表現することが可能です (表\@ref(tab:tidydata-intro-2))。
+
+\begin{table}
+
+\caption{(\#tab:tidydata-intro-2)Messy Dataの例 (2)}
+\centering
+\begin{tabular}[t]{lrrr}
+\toprule
+\multicolumn{1}{c}{Treat} & \multicolumn{1}{c}{Hadely} & \multicolumn{1}{c}{Song} & \multicolumn{1}{c}{Yanai}\\
+\midrule
+Control & 90 & 80 & 100\\
+Treatment & 90 & 25 & 95\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 2つのデータが持つ情報は全く同じです。これは「同じ意味を持つが、異なる構造を持つ」とも言えます。このような多様性が生じる理由は行と列のあり方が各値を説明するに十分ではないからです。異なるデータ構造として表現される余地があるということです。
 
-たとえば、表\@ref(tab:messy-data1)の場合、各列は以下のような3つの情報があります。
+たとえば、表\@ref(tab:tidydata-intro-1)の場合、各列は以下のような3つの情報があります。
 
 1. `Name`: 被験者名
 2. `Control`: **投薬前**の**数学成績**
@@ -82,89 +57,49 @@
 2. `Treat`: 投薬有無
 3. `Math_Score`: 数学成績
 
-`Treat`は投薬前なら`"Control"`の値を、投薬後なら`"Treatment"`の値が入ります。`Math_Socre`には数学成績が入ります。これに則って表に直したのが表\@ref(tab:tidydata1)です。
+`Treat`は投薬前なら`"Control"`の値を、投薬後なら`"Treatment"`の値が入ります。`Math_Socre`には数学成績が入ります。これに則って表に直したのが表\@ref(tab:tidydata-intro-3)です。
 
-<table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>(\#tab:tidydata1)整然データの例</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;text-align: center;"> Name </th>
-   <th style="text-align:left;text-align: center;"> Treat </th>
-   <th style="text-align:right;text-align: center;"> Math_Score </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> Hadley </td>
-   <td style="text-align:left;"> Control </td>
-   <td style="text-align:right;"> 90 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Hadley </td>
-   <td style="text-align:left;"> Treatment </td>
-   <td style="text-align:right;"> 90 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Song </td>
-   <td style="text-align:left;"> Control </td>
-   <td style="text-align:right;"> 80 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Song </td>
-   <td style="text-align:left;"> Treatment </td>
-   <td style="text-align:right;"> 25 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Yanai </td>
-   <td style="text-align:left;"> Control </td>
-   <td style="text-align:right;"> 100 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Yanai </td>
-   <td style="text-align:left;"> Treatment </td>
-   <td style="text-align:right;"> 95 </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}
 
-表が長くなりましたが、これなら一つの列に2つ以上の情報が含まれることはありません。この場合、表\@ref(tab:messy-data1)と表\@ref(tab:messy-data2)のように、行と列を転置することができるでしょうか。
+\caption{(\#tab:tidydata-intro-3)整然データの例}
+\centering
+\begin{tabular}[t]{l|l|r}
+\hline
+\multicolumn{1}{c}{Name} & \multicolumn{1}{c}{Treat} & \multicolumn{1}{c}{Math\_Score}\\
+\hline
+Hadley & Control & 90\\
+\hline
+Hadley & Treatment & 90\\
+\hline
+Song & Control & 80\\
+\hline
+Song & Treatment & 25\\
+\hline
+Yanai & Control & 100\\
+\hline
+Yanai & Treatment & 95\\
+\hline
+\end{tabular}
+\end{table}
 
-<table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>(\#tab:transdata)表\@ref(tab:tidydata1)を転置した場合</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;text-align: center;"> Name </th>
-   <th style="text-align:left;text-align: center;"> Hadley </th>
-   <th style="text-align:left;text-align: center;"> Hadley </th>
-   <th style="text-align:left;text-align: center;"> Song </th>
-   <th style="text-align:left;text-align: center;"> Song </th>
-   <th style="text-align:left;text-align: center;"> Yanai </th>
-   <th style="text-align:left;text-align: center;"> Yanai </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> Treat </td>
-   <td style="text-align:left;"> Control </td>
-   <td style="text-align:left;"> Treatment </td>
-   <td style="text-align:left;"> Control </td>
-   <td style="text-align:left;"> Treatment </td>
-   <td style="text-align:left;"> Control </td>
-   <td style="text-align:left;"> Treatment </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Math_Score </td>
-   <td style="text-align:left;"> 90 </td>
-   <td style="text-align:left;"> 90 </td>
-   <td style="text-align:left;"> 80 </td>
-   <td style="text-align:left;"> 25 </td>
-   <td style="text-align:left;"> 100 </td>
-   <td style="text-align:left;"> 95 </td>
-  </tr>
-</tbody>
-</table>
+表が長くなりましたが、これなら一つの列に2つ以上の情報が含まれることはありません。この場合、表\@ref(tab:tidydata-intro-1)と表\@ref(tab:tidydata-intro-2)のように、行と列を転置することができるでしょうか。
 
-その結果が表\@ref(tab:transdata)ですが、いかがでしょうか。まず、列名が重複している時点でアウトですし、人間が見ても非常に分かりにくい表になりました。また、一つの列に異なるデータ (この場合、character型とnumeirc型)が混在しています。パソコンから見てはわけのわからないデータになったわけです。
+\begin{table}
+
+\caption{(\#tab:tidydata-intro-4)表\@ref(tab:tidydata1)を転置した場合}
+\centering
+\begin{tabular}[t]{l|l|l|l|l|l|l}
+\hline
+\multicolumn{1}{c}{Name} & \multicolumn{1}{c}{Hadley} & \multicolumn{1}{c}{Hadley} & \multicolumn{1}{c}{Song} & \multicolumn{1}{c}{Song} & \multicolumn{1}{c}{Yanai} & \multicolumn{1}{c}{Yanai}\\
+\hline
+Treat & Control & Treatment & Control & Treatment & Control & Treatment\\
+\hline
+Math\_Score & 90 & 90 & 80 & 25 & 100 & 95\\
+\hline
+\end{tabular}
+\end{table}
+
+その結果が表\@ref(tab:tidydata-intro-4)ですが、いかがでしょうか。まず、列名が重複している時点でアウトですし、人間が見ても非常に分かりにくい表になりました。また、一つの列に異なるデータ (この場合、character型とnumeirc型)が混在しています。パソコンから見てはわけのわからないデータになったわけです。
 
 ここまで来たら整然データのイメージはある程度掴めたかも知れません。具体的に整然データとは次の4つの条件を満たすデータです[@Wickham:2014]。
 
@@ -173,289 +108,134 @@
 3. 1つのセル（特定の列の特定の行）は、1つの値を表す。
 4. 1つの表は、1つの観測単位 (unit of observation)をもつ（異なる観測単位が混ざっていない）。
 
-以下でも、表\@ref(tab:messy-data1)と表\@ref(tab:tidydata1)を対比しながら、以上の4条件をより詳しく説明します。
+以下でも、表\@ref(tab:tidydata-intro-1)と表\@ref(tab:tidydata-intro-3)を対比しながら、以上の4条件をより詳しく説明します。
 
 ### 1つの列は、1つの変数を表す
 
-表\@ref(tab:messy-data1)と表\@ref(tab:tidydata1)に含まれる情報は以下の3つで共通しています。
+表\@ref(tab:tidydata-intro-1)と表\@ref(tab:tidydata-intro-3)に含まれる情報は以下の3つで共通しています。
 
 1. 被験者名
 2. 投薬有無
 3. 数学成績
 
-これらの情報がそれぞれデータの変数になるわけですが、整然データは一つの列が一つの変数を表します。それではまず、表\@ref(tab:messy-data1) (図\@ref(fig:messy-data7)の左)から考えてみましょう。この図には3つの情報が全て含まれています。しかし、数学成績は2列に渡って格納されており、「1列1変数」の条件を満たしておりません。一方、表\@ref(tab:tidydata1) (図\@ref(fig:messy-data7)の右)は投薬前後を表す`Treat`変数を作成し、その値に応じた数学成績が格納されており、「1列1変数」の条件を満たしています。
+これらの情報がそれぞれデータの変数になるわけですが、整然データは一つの列が一つの変数を表します。それではまず、表\@ref(tab:tidydata-intro-1) (図\@ref(fig:tidydata-intro-5)の左)から考えてみましょう。この図には3つの情報が全て含まれています。しかし、数学成績は2列に渡って格納されており、「1列1変数」の条件を満たしておりません。一方、表\@ref(tab:tidydata-intro-3) (図\@ref(fig:tidydata-intro-5)の右)は投薬前後を表す`Treat`変数を作成し、その値に応じた数学成績が格納されており、「1列1変数」の条件を満たしています。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Tidydata/TidyData1.png" alt="1つの列は、1つの変数を表す" width="100%" />
-<p class="caption">(\#fig:messy-data7)1つの列は、1つの変数を表す</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{Figures/Tidydata/TidyData1} 
+
+}
+
+\caption{1つの列は、1つの変数を表す}(\#fig:tidydata-intro-5)
+\end{figure}
 
 「1列1変数」は整然データの最も基本となる条件であり、整然データ作成の出発点とも言えます。
 
 ### 1つの行は、1つの観測を表す
 
-図\@ref(fig:messy-data6)の左は一行当たり、いくつの観察が含まれているでしょうか。そのためにはこのデータが何を観察しているかを考える必要があります。このデータは投薬**前後**の数学成績を観察し、量的に測定したものです。つまり、同じ人に対して2回観察を行ったことになります。したがって、投薬前の数学成績と投薬後の数学成績は別の観察であり、図\@ref(fig:messy-data6)の左は3行の表ですが、実は6回分の観察が含まれていることになります。1行に2つの観察が載っていることですね。
+図\@ref(fig:tidydata-intro-6)の左は一行当たり、いくつの観察が含まれているでしょうか。そのためにはこのデータが何を観察しているかを考える必要があります。このデータは投薬**前後**の数学成績を観察し、量的に測定したものです。つまり、同じ人に対して2回観察を行ったことになります。したがって、投薬前の数学成績と投薬後の数学成績は別の観察であり、図\@ref(fig:tidydata-intro-6)の左は3行の表ですが、実は6回分の観察が含まれていることになります。1行に2つの観察が載っていることですね。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Tidydata/TidyData2.png" alt="1つの行は、1つの観測を表す" width="100%" />
-<p class="caption">(\#fig:messy-data6)1つの行は、1つの観測を表す</p>
-</div>
+\begin{figure}
 
-一方、図\@ref(fig:messy-data6)の右は6行のデータであり、観察回数とデータの行数が一致しています。つまり、1行に1観察となります。
+{\centering \includegraphics[width=1\linewidth]{Figures/Tidydata/TidyData2} 
 
-今回は数学成績しか測っていたいので、簡単な例ですが、実際のデータには曖昧な部分があります。たとえば、投薬によって血圧が変化する可能性があるため、最高血圧もまた投薬前後に測定したとします。それが表\@ref(tab:blood-pressure)の左です。
+}
 
-<table class="kable_wrapper table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>(\#tab:blood-pressure)1行1観察の例</caption>
-<tbody>
-  <tr>
-   <td> 
+\caption{1つの行は、1つの観測を表す}(\#fig:tidydata-intro-6)
+\end{figure}
 
-<table>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Name </th>
-   <th style="text-align:left;"> Treat </th>
-   <th style="text-align:right;"> Math </th>
-   <th style="text-align:right;"> Blood </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> Hadley </td>
-   <td style="text-align:left;"> Control </td>
-   <td style="text-align:right;"> 90 </td>
-   <td style="text-align:right;"> 110 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Hadley </td>
-   <td style="text-align:left;"> Treatment </td>
-   <td style="text-align:right;"> 90 </td>
-   <td style="text-align:right;"> 115 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Song </td>
-   <td style="text-align:left;"> Control </td>
-   <td style="text-align:right;"> 80 </td>
-   <td style="text-align:right;"> 95 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Song </td>
-   <td style="text-align:left;"> Treatment </td>
-   <td style="text-align:right;"> 25 </td>
-   <td style="text-align:right;"> 110 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Yanai </td>
-   <td style="text-align:left;"> Control </td>
-   <td style="text-align:right;"> 100 </td>
-   <td style="text-align:right;"> 100 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Yanai </td>
-   <td style="text-align:left;"> Treatment </td>
-   <td style="text-align:right;"> 95 </td>
-   <td style="text-align:right;"> 95 </td>
-  </tr>
-</tbody>
-</table>
+一方、図\@ref(fig:tidydata-intro-6)の右は6行のデータであり、観察回数とデータの行数が一致しています。つまり、1行に1観察となります。
 
- </td>
-   <td> 
+今回は数学成績しか測っていたいので、簡単な例ですが、実際のデータには曖昧な部分があります。たとえば、投薬によって血圧が変化する可能性があるため、最高血圧もまた投薬前後に測定したとします。それが表\@ref(tab:tidydata-intro-7)の左です。
 
-<table>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Name </th>
-   <th style="text-align:left;"> Treat </th>
-   <th style="text-align:left;"> Type </th>
-   <th style="text-align:right;"> Value </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> Hadley </td>
-   <td style="text-align:left;"> Control </td>
-   <td style="text-align:left;"> Math </td>
-   <td style="text-align:right;"> 90 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Hadley </td>
-   <td style="text-align:left;"> Control </td>
-   <td style="text-align:left;"> Blood </td>
-   <td style="text-align:right;"> 110 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Hadley </td>
-   <td style="text-align:left;"> Treatment </td>
-   <td style="text-align:left;"> Math </td>
-   <td style="text-align:right;"> 90 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Hadley </td>
-   <td style="text-align:left;"> Treatment </td>
-   <td style="text-align:left;"> Blood </td>
-   <td style="text-align:right;"> 115 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Song </td>
-   <td style="text-align:left;"> Control </td>
-   <td style="text-align:left;"> Math </td>
-   <td style="text-align:right;"> 80 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Song </td>
-   <td style="text-align:left;"> Control </td>
-   <td style="text-align:left;"> Blood </td>
-   <td style="text-align:right;"> 95 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Song </td>
-   <td style="text-align:left;"> Treatment </td>
-   <td style="text-align:left;"> Math </td>
-   <td style="text-align:right;"> 25 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Song </td>
-   <td style="text-align:left;"> Treatment </td>
-   <td style="text-align:left;"> Blood </td>
-   <td style="text-align:right;"> 110 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Yanai </td>
-   <td style="text-align:left;"> Control </td>
-   <td style="text-align:left;"> Math </td>
-   <td style="text-align:right;"> 100 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Yanai </td>
-   <td style="text-align:left;"> Control </td>
-   <td style="text-align:left;"> Blood </td>
-   <td style="text-align:right;"> 100 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Yanai </td>
-   <td style="text-align:left;"> Treatment </td>
-   <td style="text-align:left;"> Math </td>
-   <td style="text-align:right;"> 95 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Yanai </td>
-   <td style="text-align:left;"> Treatment </td>
-   <td style="text-align:left;"> Blood </td>
-   <td style="text-align:right;"> 95 </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}
+\caption{(\#tab:tidydata-intro-7)1行1観察の例}
 
- </td>
-  </tr>
-</tbody>
-</table>
+\centering
+\begin{tabular}[t]{llrr}
+\toprule
+Name & Treat & Math & Blood\\
+\midrule
+Hadley & Control & 90 & 110\\
+Hadley & Treatment & 90 & 115\\
+Song & Control & 80 & 95\\
+Song & Treatment & 25 & 110\\
+Yanai & Control & 100 & 100\\
+\addlinespace
+Yanai & Treatment & 95 & 95\\
+\bottomrule
+\end{tabular}
+\centering
+\begin{tabular}[t]{lllr}
+\toprule
+Name & Treat & Type & Value\\
+\midrule
+Hadley & Control & Math & 90\\
+Hadley & Control & Blood & 110\\
+Hadley & Treatment & Math & 90\\
+Hadley & Treatment & Blood & 115\\
+Song & Control & Math & 80\\
+\addlinespace
+Song & Control & Blood & 95\\
+Song & Treatment & Math & 25\\
+Song & Treatment & Blood & 110\\
+Yanai & Control & Math & 100\\
+Yanai & Control & Blood & 100\\
+\addlinespace
+Yanai & Treatment & Math & 95\\
+Yanai & Treatment & Blood & 95\\
+\bottomrule
+\end{tabular}
+\end{table}
 
-3人に投薬前後に数学成績と最高血圧を測定した場合の観察回数は何回でしょう。3人 $\times$ 2時点 $\times$ 2指標の測定だから12回の測定でしょうか。ならば、表\@ref(tab:blood-pressure)の右が整然データでしょう。しかし、この場合、1列1変数という条件が満たされなくなります。`Value`列には数学成績と血圧が混在しており、2つの変数になります。ならば、どれも整然データではないということでしょうか。実は整然データは表\@ref(tab:blood-pressure)の左です。なぜなら、「1観察=1値」ではないからです。データにおける観察とは観察単位ごとに測定された**値の集合**です。観察対象とは人や自治体、企業、国などだけでなく、時間も含まれます。たとえば、人の特徴 (性別、身長、所得、政治関心など)を測定しもの、ある日の特徴 (気温、株価など)を測定したもの全てが観察です。むろん、人 $\times$ 時間のような組み合わせが観察単位ともなり得ます。この一つ一つの観察単位から得られた値の集合が観察です。表\@ref(tab:blood-pressure)の分析単位は「人 $\times$ 時間」です。成績や最高血圧は分析単位が持つ特徴や性質であって、分析単位ではありません。
+3人に投薬前後に数学成績と最高血圧を測定した場合の観察回数は何回でしょう。3人 $\times$ 2時点 $\times$ 2指標の測定だから12回の測定でしょうか。ならば、表\@ref(tab:tidydata-intro-7)の右が整然データでしょう。しかし、この場合、1列1変数という条件が満たされなくなります。`Value`列には数学成績と血圧が混在しており、2つの変数になります。ならば、どれも整然データではないということでしょうか。実は整然データは表\@ref(tab:tidydata-intro-7)の左です。なぜなら、「1観察=1値」ではないからです。データにおける観察とは観察単位ごとに測定された**値の集合**です。観察対象とは人や自治体、企業、国などだけでなく、時間も含まれます。たとえば、人の特徴 (性別、身長、所得、政治関心など)を測定しもの、ある日の特徴 (気温、株価など)を測定したもの全てが観察です。むろん、人 $\times$ 時間のような組み合わせが観察単位ともなり得ます。この一つ一つの観察単位から得られた値の集合が観察です。表\@ref(tab:tidydata-intro-7)の分析単位は「人 $\times$ 時間」です。成績や最高血圧は分析単位が持つ特徴や性質であって、分析単位ではありません。
 
 
 ### 1つのセルは、1つの値を表す
 
-この条件に反するケースはあまりないかも知れません。たとえば、「Hadleyは処置前後の数学成績が同じだし、一行にまとめよう」という意味で図\@ref(fig:messy-data5)の左のような表を作る方もいるかも知れませんが、あまりいないでしょう。
+この条件に反するケースはあまりないかも知れません。たとえば、「Hadleyは処置前後の数学成績が同じだし、一行にまとめよう」という意味で図\@ref(fig:tidydata-intro-8)の左のような表を作る方もいるかも知れませんが、あまりいないでしょう。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Tidydata/TidyData3.png" alt="1つのセルは、1つの値を表す" width="50%" />
-<p class="caption">(\#fig:messy-data5)1つのセルは、1つの値を表す</p>
-</div>
+\begin{figure}
 
-図\@ref(fig:messy-data5)の例は「1セル1値」の条件に明らかに反します。しかし、基準が曖昧な変数もあり、その一つが日付です。
+{\centering \includegraphics[width=0.5\linewidth]{Figures/Tidydata/TidyData3} 
 
-<table class="kable_wrapper table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>(\#tab:date-table)日付の扱い方</caption>
-<tbody>
-  <tr>
-   <td> 
+}
 
-<table>
- <thead>
-  <tr>
-   <th style="text-align:left;"> Date </th>
-   <th style="text-align:right;"> Stock </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> 2020/06/29 </td>
-   <td style="text-align:right;"> 100 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> 2020/06/30 </td>
-   <td style="text-align:right;"> 105 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> 2020/07/01 </td>
-   <td style="text-align:right;"> 110 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> 2020/07/02 </td>
-   <td style="text-align:right;"> 85 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> 2020/07/03 </td>
-   <td style="text-align:right;"> 90 </td>
-  </tr>
-</tbody>
-</table>
+\caption{1つのセルは、1つの値を表す}(\#fig:tidydata-intro-8)
+\end{figure}
 
- </td>
-   <td> 
+図\@ref(fig:tidydata-intro-8)の例は「1セル1値」の条件に明らかに反します。しかし、基準が曖昧な変数もあり、その一つが日付です。
 
-<table>
- <thead>
-  <tr>
-   <th style="text-align:right;"> Year </th>
-   <th style="text-align:right;"> Month </th>
-   <th style="text-align:right;"> Date </th>
-   <th style="text-align:right;"> Stock </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:right;"> 2020 </td>
-   <td style="text-align:right;"> 6 </td>
-   <td style="text-align:right;"> 29 </td>
-   <td style="text-align:right;"> 100 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 2020 </td>
-   <td style="text-align:right;"> 6 </td>
-   <td style="text-align:right;"> 30 </td>
-   <td style="text-align:right;"> 105 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 2020 </td>
-   <td style="text-align:right;"> 7 </td>
-   <td style="text-align:right;"> 1 </td>
-   <td style="text-align:right;"> 110 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 2020 </td>
-   <td style="text-align:right;"> 7 </td>
-   <td style="text-align:right;"> 2 </td>
-   <td style="text-align:right;"> 85 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 2020 </td>
-   <td style="text-align:right;"> 7 </td>
-   <td style="text-align:right;"> 3 </td>
-   <td style="text-align:right;"> 90 </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}
+\caption{(\#tab:tidydata-intro-9)日付の扱い方}
 
- </td>
-  </tr>
-</tbody>
-</table>
+\centering
+\begin{tabular}[t]{lr}
+\toprule
+Date & Stock\\
+\midrule
+2020/06/29 & 100\\
+2020/06/30 & 105\\
+2020/07/01 & 110\\
+2020/07/02 & 85\\
+2020/07/03 & 90\\
+\bottomrule
+\end{tabular}
+\centering
+\begin{tabular}[t]{rrrr}
+\toprule
+Year & Month & Date & Stock\\
+\midrule
+2020 & 6 & 29 & 100\\
+2020 & 6 & 30 & 105\\
+2020 & 7 & 1 & 110\\
+2020 & 7 & 2 & 85\\
+2020 & 7 & 3 & 90\\
+\bottomrule
+\end{tabular}
+\end{table}
 
-表\@ref(tab:date-table)の左側の表はどうでしょうか。5日間の株価を記録した架空のデータですが、たしかに`Date`列には日付が1つずつ、`Stock`には株価の値が1つずつ格納されています。しかし、解釈によっては「`Date`に年、月、日といった3つの値が含まれているぞ」と見ることもできます。この解釈に基づく場合、表\@ref(tab:date-table)の右側の表が整然データとなり、左側は雑然データとなります。このケースは第一条件であった「一列一変数」とも関係します。なぜなら、`Date`という列が年・月・日といった3変数で構成されているとも解釈できるからです。
+表\@ref(tab:tidydata-intro-9)の左側の表はどうでしょうか。5日間の株価を記録した架空のデータですが、たしかに`Date`列には日付が1つずつ、`Stock`には株価の値が1つずつ格納されています。しかし、解釈によっては「`Date`に年、月、日といった3つの値が含まれているぞ」と見ることもできます。この解釈に基づく場合、表\@ref(tab:tidydata-intro-9)の右側の表が整然データとなり、左側は雑然データとなります。このケースは第一条件であった「一列一変数」とも関係します。なぜなら、`Date`という列が年・月・日といった3変数で構成されているとも解釈できるからです。
 
 分析によっては左側のような表でも全く問題ないケースもあります。時系列分析でトレンド変数のみ必要ならこれでも十分に整然データと呼べます。しかし、季節変動などの要素も考慮するならば、左側は雑然データになります。データとしての使い勝手は右側の方が優れているのは確かです。
 
@@ -463,19 +243,27 @@
 
 ### 1つの表は、1つの観測単位をもつ
 
-[e-stat](https://www.e-stat.go.jp)などから[国勢調査データ](https://www.e-stat.go.jp/stat-search/database?page=1&toukei=00200521&tstat=000001080615)をダウンロードした経験はあるでしょうか。以下の図\@ref(fig:messy-data3)は2015年度国勢調査データの一部です。
+[e-stat](https://www.e-stat.go.jp)などから[国勢調査データ](https://www.e-stat.go.jp/stat-search/database?page=1&toukei=00200521&tstat=000001080615)をダウンロードした経験はあるでしょうか。以下の図\@ref(fig:tidydata-intro-10)は2015年度国勢調査データの一部です。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Tidydata/MessyData4.png" alt="国勢調査データ" width="100%" />
-<p class="caption">(\#fig:messy-data3)国勢調査データ</p>
-</div>
+\begin{figure}
 
-このデータの観察単位はなんでしょうか。データのの1行目は全国の人口を表しています。つまり、単位は国となります。しかし、2行目は北海道の人口です。この場合の観測単位は都道府県となります。つづいて、3行目は札幌市なので単位は市区町村になります。4行目は札幌市中央区、つまり観測単位が行政区になっています。そして14行目は函館市でまた単位は市区町村に戻っています。実際、会社や政府が作成するデータには図\@ref(fig:messy-data3)や図\@ref(fig:messy-data4)のようなものが多いです。とりわけ、図\@ref(fig:messy-data4)のように、最後の行に「合計」などが表記されている場合が多いです。
+{\centering \includegraphics[width=1\linewidth]{Figures/Tidydata/MessyData4} 
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Tidydata/TidyData4.png" alt="1つの表は、1つの観測単位をもつ" width="65%" />
-<p class="caption">(\#fig:messy-data4)1つの表は、1つの観測単位をもつ</p>
-</div>
+}
+
+\caption{国勢調査データ}(\#fig:tidydata-intro-10)
+\end{figure}
+
+このデータの観察単位はなんでしょうか。データのの1行目は全国の人口を表しています。つまり、単位は国となります。しかし、2行目は北海道の人口です。この場合の観測単位は都道府県となります。つづいて、3行目は札幌市なので単位は市区町村になります。4行目は札幌市中央区、つまり観測単位が行政区になっています。そして14行目は函館市でまた単位は市区町村に戻っています。実際、会社や政府が作成するデータには図\@ref(fig:tidydata-intro-10)や図\@ref(fig:tidydata-intro-11)のようなものが多いです。とりわけ、図\@ref(fig:tidydata-intro-11)のように、最後の行に「合計」などが表記されている場合が多いです。
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.65\linewidth]{Figures/Tidydata/TidyData4} 
+
+}
+
+\caption{1つの表は、1つの観測単位をもつ}(\#fig:tidydata-intro-11)
+\end{figure}
 
 このような表・データを作成することが悪いことではありません。むしろ、「読む」ための表ならこのような書き方が一般的でしょう。しかし、「分析」のためのデータは観察の単位を統一する必要があります。
 
@@ -483,11 +271,11 @@
 
 ## Wide型からLong型へ {#tidydata-gather}
 
-以下では「1列1変数」の条件を満たすデータの作成に便利な`pivot_longer()`と`pivot_wider()`関数について解説します。この関数群はおなじみの`dplyr`でなく、`tidyr`パッケージが提供している関数ですが、どれも`tidyverse`パッケージ群に含まれているため、`tidyverse`パッケージを読み込むだけで十分です。本節では`pivot_longer()`を、次節では`pivot_wider()`を取り上げます。
+以下では「1列1変数」の条件を満たすデータの作成に便利な`pivot_longer()`と`pivot_wider()`関数について解説します。この関数群はおなじみの{dplyr}でなく、{tidyr}パッケージが提供している関数ですが、どれも{tidyverse}パッケージ群に含まれているため、{tidyverse}パッケージを読み込むだけで十分です。本節では`pivot_longer()`を、次節では`pivot_wider()`を取り上げます。
 
-まず、`pivot_longer()`ですが、この関数は比較的に新しい関数であり、これまでは`tidyr`の`gather()`関数が使われてきました。しかし、`gahter()`関数は将来、なくなる予定の関数であり、今から`tidyr`を学習する方は`pivot_*()`関数群に慣れておきましょう。
+まず、`pivot_longer()`ですが、この関数は比較的に新しい関数であり、これまでは{tidyr}の`gather()`関数が使われてきました。しかし、`gahter()`関数は将来、なくなる予定の関数であり、今から{tidyr}を学習する方は`pivot_*()`関数群に慣れておきましょう。
 
-まずは`tidyverse`パッケージを読み込みます。
+まずは{tidyverse}パッケージを読み込みます。
 
 
 ```{.r .numberLines}
@@ -509,7 +297,7 @@ df1
 ```
 
 ```
-## # A tibble: 3 × 4
+## # A tibble: 3 x 4
 ##   Name   Control Treatment Gender
 ##   <chr>    <dbl>     <dbl> <chr> 
 ## 1 Hadley      90        90 Male  
@@ -521,7 +309,7 @@ df1
 
 
 ```
-## # A tibble: 6 × 4
+## # A tibble: 6 x 4
 ##   Name   Gender Treat     Math_Score
 ##   <chr>  <chr>  <chr>          <dbl>
 ## 1 Hadley Male   Control           90
@@ -536,7 +324,7 @@ df1
 
 「1列1変数」を満たさなかった最初のデータは「Wide型データ」、これを満たすようなデータは「Long型データ」と呼ばれます。これは相対的に最初のデータが横に広いから名付けた名前であって、「Wide型=雑然データ」もしくは「Long型=雑然データ」ではないことに注意してください[^longer1]。
 
-[^longer1]: たとえば、表\@ref(tab:blood-pressure)は右の方がLong型データですが、整然データはWide型である左の方ですね。
+[^longer1]: たとえば、表\@ref(tab:tidydata-intro-7)は右の方がLong型データですが、整然データはWide型である左の方ですね。
 
 Wide型データをLong型へ変換する関数が`pivot_longer()`であり、基本的な使い方は以下の通りです。
 
@@ -549,7 +337,7 @@ Wide型データをLong型へ変換する関数が`pivot_longer()`であり、�
                values_to = "値変数名")
 ```
 
-ここでは同じ変数が`Control`と`Treatment`変数で分けられているため、まとめる変数はこの2つであり、`cols = c(Control, Treatment)`と指定します。`Control`と`Treatment`は`"`で囲んでも、囲まなくても同じです。また、`dplyr`の`select()`関数で使える変数選択の関数 (`starts_with()`、`where()`など)や`:`演算子も使用可能です。また、`cols`引数は`pivot_longer()`の第2引数であるため、`cols = `は省略可能です（第一引数はパイプにより既に渡されています）。
+ここでは同じ変数が`Control`と`Treatment`変数で分けられているため、まとめる変数はこの2つであり、`cols = c(Control, Treatment)`と指定します。`Control`と`Treatment`は`"`で囲んでも、囲まなくても同じです。また、{dplyr}の`select()`関数で使える変数選択の関数 (`starts_with()`、`where()`など)や`:`演算子も使用可能です。また、`cols`引数は`pivot_longer()`の第2引数であるため、`cols = `は省略可能です（第一引数はパイプにより既に渡されています）。
 
 `names_to`と`values_to`引数はそれぞれキー変数名と値変数名を指定する引数で、ここは必ず`"`で囲んでください。この`df1`をLong型へ変換し、`df1_L`と名付けるコードが以下のコードです。
 
@@ -564,7 +352,7 @@ df1_L
 ```
 
 ```
-## # A tibble: 6 × 4
+## # A tibble: 6 x 4
 ##   Name   Gender Treat     Math_Score
 ##   <chr>  <chr>  <chr>          <dbl>
 ## 1 Hadley Male   Control           90
@@ -592,7 +380,7 @@ df2
 ```
 
 ```
-## # A tibble: 3 × 4
+## # A tibble: 3 x 4
 ##   Name    Day1  Day2  Day3
 ##   <chr>  <dbl> <dbl> <dbl>
 ## 1 Hadley    75    73    71
@@ -613,7 +401,7 @@ df2_L
 ```
 
 ```
-## # A tibble: 9 × 3
+## # A tibble: 9 x 3
 ##   Name   Days  Weight
 ##   <chr>  <chr>  <dbl>
 ## 1 Hadley Day1      75
@@ -642,13 +430,13 @@ df2_L
 # 2. Days変数の値から"Day"を除去
 # 3. Days変数をnumeric型へ変換
 df2_L %>%
-  filter(!is.na(Weight)) %>%           # 1
+  filter(!is.na(Weight)) %>%             # 1
   mutate(Days = str_remove(Days, "Day"), # 2
          Days = as.numeric(Days))        # 3
 ```
 
 ```
-## # A tibble: 8 × 3
+## # A tibble: 8 x 3
 ##   Name    Days Weight
 ##   <chr>  <dbl>  <dbl>
 ## 1 Hadley     1     75
@@ -674,7 +462,7 @@ df2 %>%
 ```
 
 ```
-## # A tibble: 8 × 3
+## # A tibble: 8 x 3
 ##   Name   Days  Weight
 ##   <chr>  <chr>  <dbl>
 ## 1 Hadley Day1      75
@@ -704,7 +492,7 @@ df2 %>%
 ```
 
 ```
-## # A tibble: 8 × 3
+## # A tibble: 8 x 3
 ##   Name    Days Weight
 ##   <chr>  <dbl>  <dbl>
 ## 1 Hadley     1     75
@@ -723,123 +511,43 @@ df2 %>%
 
 ## Long型からWide型へ {#tidydata-spread}
 
-ご存知の通り、「Long型データ=整然データ」ではありません。実際、表\@ref(tab:blood-pressure)の右はLong型データですが、1列に2つの変数が含まれており、整然データとは言えません。このようなデータはいくらでもあります。とりわけ、「分析」のためじゃなく、「読む」ための表の場合において多く発見されます。
+ご存知の通り、「Long型データ=整然データ」ではありません。実際、表\@ref(tab:tidydata-intro-7)の右はLong型データですが、1列に2つの変数が含まれており、整然データとは言えません。このようなデータはいくらでもあります。とりわけ、「分析」のためじゃなく、「読む」ための表の場合において多く発見されます。
 
-<table class="kable_wrapper table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>(\#tab:wider1)Long型データの例</caption>
-<tbody>
-  <tr>
-   <td> 
+\begin{table}
+\caption{(\#tab:tidydata-wider-1)Long型データの例}
 
-<table>
- <thead>
-  <tr>
-   <th style="text-align:left;"> 都道府県 </th>
-   <th style="text-align:left;"> 区分 </th>
-   <th style="text-align:right;"> 人口 </th>
-   <th style="text-align:right;"> 面積 </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> 北海道 </td>
-   <td style="text-align:left;"> 総人口 </td>
-   <td style="text-align:right;"> 5381733 </td>
-   <td style="text-align:right;"> 83424.31 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> 外国人 </td>
-   <td style="text-align:right;"> 21676 </td>
-   <td style="text-align:right;"> 83424.31 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> 青森県 </td>
-   <td style="text-align:left;"> 総人口 </td>
-   <td style="text-align:right;"> 1308265 </td>
-   <td style="text-align:right;"> 9645.59 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> 外国人 </td>
-   <td style="text-align:right;"> 3447 </td>
-   <td style="text-align:right;"> 9645.59 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> 岩手県 </td>
-   <td style="text-align:left;"> 総人口 </td>
-   <td style="text-align:right;"> 1279594 </td>
-   <td style="text-align:right;"> 15275.01 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> 外国人 </td>
-   <td style="text-align:right;"> 5017 </td>
-   <td style="text-align:right;"> 15275.01 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> 宮城県 </td>
-   <td style="text-align:left;"> 総人口 </td>
-   <td style="text-align:right;"> 2333899 </td>
-   <td style="text-align:right;"> 7282.22 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;">  </td>
-   <td style="text-align:left;"> 外国人 </td>
-   <td style="text-align:right;"> 13989 </td>
-   <td style="text-align:right;"> 7282.22 </td>
-  </tr>
-</tbody>
-</table>
-
- </td>
-   <td> 
-
-<table>
- <thead>
-  <tr>
-   <th style="text-align:left;"> 都道府県 </th>
-   <th style="text-align:right;"> 総人口 </th>
-   <th style="text-align:right;"> 外国人 </th>
-   <th style="text-align:right;"> 面積 </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> 北海道 </td>
-   <td style="text-align:right;"> 5381733 </td>
-   <td style="text-align:right;"> 21676 </td>
-   <td style="text-align:right;"> 83424.31 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> 青森県 </td>
-   <td style="text-align:right;"> 1308265 </td>
-   <td style="text-align:right;"> 3447 </td>
-   <td style="text-align:right;"> 9645.59 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> 岩手県 </td>
-   <td style="text-align:right;"> 1279594 </td>
-   <td style="text-align:right;"> 5017 </td>
-   <td style="text-align:right;"> 15275.01 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> 宮城県 </td>
-   <td style="text-align:right;"> 2333899 </td>
-   <td style="text-align:right;"> 13989 </td>
-   <td style="text-align:right;"> 7282.22 </td>
-  </tr>
-</tbody>
-</table>
-
- </td>
-  </tr>
-</tbody>
-</table>
+\centering
+\begin{tabular}[t]{llrr}
+\toprule
+都道府県 & 区分 & 人口 & 面積\\
+\midrule
+北海道 & 総人口 & 5381733 & 83424.31\\
+ & 外国人 & 21676 & 83424.31\\
+青森県 & 総人口 & 1308265 & 9645.59\\
+ & 外国人 & 3447 & 9645.59\\
+岩手県 & 総人口 & 1279594 & 15275.01\\
+\addlinespace
+ & 外国人 & 5017 & 15275.01\\
+宮城県 & 総人口 & 2333899 & 7282.22\\
+ & 外国人 & 13989 & 7282.22\\
+\bottomrule
+\end{tabular}
+\centering
+\begin{tabular}[t]{lrrr}
+\toprule
+都道府県 & 総人口 & 外国人 & 面積\\
+\midrule
+北海道 & 5381733 & 21676 & 83424.31\\
+青森県 & 1308265 & 3447 & 9645.59\\
+岩手県 & 1279594 & 5017 & 15275.01\\
+宮城県 & 2333899 & 13989 & 7282.22\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 変数名が日本語になっていますが、これは「読むための表」を読み込むことを仮定しています。このように変数名として日本語は使えますが、自分でデータセットを作成する際、変数名はローマ字にすることを強く推奨します。
 
-表\@ref(tab:wider1)の左の場合、`人口`列に総人口と外国人人口といった2つの変数の値が格納されているため、整然データではありません。これを整然データにしたものが右の表です。本節ではLong型データをWide型データへ変換する`pivot_wider()`関数を紹介します。この関数は同じく`tidyr`が提供している`spread()`関数とほぼ同じ関数ですが、今は`pivot_wider()`の使用が推奨されており、`spread()`はいずれか`tidyr`から外される予定です。
+表\@ref(tab:tidydata-wider-1)の左の場合、`人口`列に総人口と外国人人口といった2つの変数の値が格納されているため、整然データではありません。これを整然データにしたものが右の表です。本節ではLong型データをWide型データへ変換する`pivot_wider()`関数を紹介します。この関数は同じく{tidyr}が提供している`spread()`関数とほぼ同じ関数ですが、今は`pivot_wider()`の使用が推奨されており、`spread()`はいずれか{tidyr}から外される予定です。
 
 まずは、実習用データを読み込みます。
 
@@ -850,13 +558,13 @@ df3 <- read_csv("Data/Population2015.csv")
 
 ```
 ## Rows: 94 Columns: 4
-## ── Column specification ────────────────────────────────────────────────────────
+## -- Column specification --------------------------------------------------------
 ## Delimiter: ","
 ## chr (2): 都道府県, 区分
 ## dbl (2): 人口, 面積
 ## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
 ```
 
 ```{.r .numberLines}
@@ -864,7 +572,7 @@ df3
 ```
 
 ```
-## # A tibble: 94 × 4
+## # A tibble: 94 x 4
 ##    都道府県 区分      人口   面積
 ##    <chr>    <chr>    <dbl>  <dbl>
 ##  1 北海道   総人口 5381733 83424.
@@ -877,37 +585,27 @@ df3
 ##  8 <NA>     外国人   13989  7282.
 ##  9 秋田県   総人口 1023119 11638.
 ## 10 <NA>     外国人    2914 11638.
-## # … with 84 more rows
+## # ... with 84 more rows
 ```
 
 このデータは2015年国勢調査から抜粋したデータであり、各変数の詳細は以下の通りです。
 
-<table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;text-align: center;"> 変数名 </th>
-   <th style="text-align:left;text-align: center;"> 説明 </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> `都道府県` </td>
-   <td style="text-align:left;"> 都道府県名 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `区分` </td>
-   <td style="text-align:left;"> 総人口/外国人人口の区分 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `人口` </td>
-   <td style="text-align:left;"> 人口 (人) </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `面積` </td>
-   <td style="text-align:left;"> 面積 (km$^2$) </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}
+\centering
+\begin{tabular}{l|l}
+\hline
+\multicolumn{1}{c}{変数名} & \multicolumn{1}{c}{説明}\\
+\hline
+`都道府県` & 都道府県名\\
+\hline
+`区分` & 総人口/外国人人口の区分\\
+\hline
+`人口` & 人口 (人)\\
+\hline
+`面積` & 面積 (km\$\textasciicircum{}2\$)\\
+\hline
+\end{tabular}
+\end{table}
 
 まずは変数名が日本語になっているので、`rename()`関数を使ってそれぞれ`Pref`、`Type`、`Population`、`Area`に変更します。
 
@@ -920,7 +618,7 @@ df3
 ```
 
 ```
-## # A tibble: 94 × 4
+## # A tibble: 94 x 4
 ##    Pref   Type   Population   Area
 ##    <chr>  <chr>       <dbl>  <dbl>
 ##  1 北海道 総人口    5381733 83424.
@@ -933,7 +631,7 @@ df3
 ##  8 <NA>   外国人      13989  7282.
 ##  9 秋田県 総人口    1023119 11638.
 ## 10 <NA>   外国人       2914 11638.
-## # … with 84 more rows
+## # ... with 84 more rows
 ```
 
 次は、`Pref`列の欠損値を埋めましょう。ここの欠損値は、当該セルの一つ上のセルの値で埋まりますが、これは`fill()`関数で簡単に処理できます。欠損値を埋めたい変数名を`fill()`の引数として渡すだけです。
@@ -947,7 +645,7 @@ df3
 ```
 
 ```
-## # A tibble: 94 × 4
+## # A tibble: 94 x 4
 ##    Pref   Type   Population   Area
 ##    <chr>  <chr>       <dbl>  <dbl>
 ##  1 北海道 総人口    5381733 83424.
@@ -960,7 +658,7 @@ df3
 ##  8 宮城県 外国人      13989  7282.
 ##  9 秋田県 総人口    1023119 11638.
 ## 10 秋田県 外国人       2914 11638.
-## # … with 84 more rows
+## # ... with 84 more rows
 ```
 
 そして、いよいよ`pivot_wider()`関数の出番ですが、基本的に使い方は以下の通りです。
@@ -985,7 +683,7 @@ df3_W
 ```
 
 ```
-## # A tibble: 47 × 4
+## # A tibble: 47 x 4
 ##    Pref     Area  総人口 外国人
 ##    <chr>   <dbl>   <dbl>  <dbl>
 ##  1 北海道 83424. 5381733  21676
@@ -998,7 +696,7 @@ df3_W
 ##  8 茨城県  6097. 2916976  41310
 ##  9 栃木県  6408. 1974255  26494
 ## 10 群馬県  6362. 1973115  37126
-## # … with 37 more rows
+## # ... with 37 more rows
 ```
 
 また、日本語の変数名が出来てしまったので、それぞれ`Total`と`Foreigner`に変更し、`relocate()`関数を使って`Area`を最後の列に移動します。
@@ -1014,7 +712,7 @@ df3_W
 ```
 
 ```
-## # A tibble: 47 × 4
+## # A tibble: 47 x 4
 ##    Pref     Total Foreigner   Area
 ##    <chr>    <dbl>     <dbl>  <dbl>
 ##  1 北海道 5381733     21676 83424.
@@ -1027,7 +725,7 @@ df3_W
 ##  8 茨城県 2916976     41310  6097.
 ##  9 栃木県 1974255     26494  6408.
 ## 10 群馬県 1973115     37126  6362.
-## # … with 37 more rows
+## # ... with 37 more rows
 ```
 
 これで整然データの出来上がりです。
@@ -1047,25 +745,12 @@ df3_W
 
 ```{.r .numberLines}
 df4 <- read_csv("Data/COVID19_JK.csv")
-```
 
-```
-## Rows: 172 Columns: 5
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: ","
-## chr (4): Date, Week, Confirmed_Japan, Confirmed_Korea
-## dbl (1): ID
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-```
-
-```{.r .numberLines}
 df4
 ```
 
 ```
-## # A tibble: 172 × 5
+## # A tibble: 172 x 5
 ##       ID Date      Week  Confirmed_Japan Confirmed_Korea
 ##    <dbl> <chr>     <chr> <chr>           <chr>          
 ##  1     1 2020/1/16 木    1人             <NA>           
@@ -1078,41 +763,29 @@ df4
 ##  8     8 2020/1/23 木    0人             0人            
 ##  9     9 2020/1/24 金    2人             1人            
 ## 10    10 2020/1/25 土    0人             0人            
-## # … with 162 more rows
+## # ... with 162 more rows
 ```
 
 このデータは2020年1月16日から2020年7月5日まで、COVID-19 (新型コロナ)の新規感染者数を日本と韓国を対象に収集したものです。データはWikipedia ([日本](https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Japan) / [韓国](https://en.wikipedia.org/wiki/COVID-19_pandemic_in_South_Korea))から収集しました。韓国の新規感染者数は最初の4日分が欠損値のように見えますが、最初の感染者が確認されたのが1月20日のため、1月19日までは欠損となっています。
 
-<table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;text-align: center;"> 変数名 </th>
-   <th style="text-align:left;text-align: center;"> 説明 </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> `ID` </td>
-   <td style="text-align:left;"> ケースID </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Date` </td>
-   <td style="text-align:left;"> 年月日 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Week` </td>
-   <td style="text-align:left;"> 曜日 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Confirmed_Japan` </td>
-   <td style="text-align:left;"> 新規感染者数 (日本) </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Confirmed_Korea` </td>
-   <td style="text-align:left;"> 新規感染者数 (韓国) </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}
+\centering
+\begin{tabular}{l|l}
+\hline
+\multicolumn{1}{c}{変数名} & \multicolumn{1}{c}{説明}\\
+\hline
+`ID` & ケースID\\
+\hline
+`Date` & 年月日\\
+\hline
+`Week` & 曜日\\
+\hline
+`Confirmed\_Japan` & 新規感染者数 (日本)\\
+\hline
+`Confirmed\_Korea` & 新規感染者数 (韓国)\\
+\hline
+\end{tabular}
+\end{table}
 
 このデータの場合、観察単位は「国 $\times$ 日」です。しかし、`df4`は1行に日本と韓国の情報が格納されており「1行1観察」の条件を満たしておりません。したがって、`pivot_longer()`を使ってLong型へ変換し、新しいデータの名前を`df4_L`と名付けます。
 
@@ -1128,7 +801,7 @@ df4_L
 ```
 
 ```
-## # A tibble: 344 × 5
+## # A tibble: 344 x 5
 ##       ID Date      Week  Country Confirmed
 ##    <dbl> <chr>     <chr> <chr>   <chr>    
 ##  1     1 2020/1/16 木    Japan   1人      
@@ -1141,7 +814,7 @@ df4_L
 ##  8     4 2020/1/19 日    Korea   <NA>     
 ##  9     5 2020/1/20 月    Japan   0人      
 ## 10     5 2020/1/20 月    Korea   1人      
-## # … with 334 more rows
+## # ... with 334 more rows
 ```
 
 続いて、新規感染者数を表す`Confirmed`列から「人」を除去しましょう。人間にとってはなんの問題もありませんが、パソコンにとって`1人`や`5人`は文字列に過ぎず、分析ができる状態ではありません。ここで使う関数が`parse_number()`です。引数として指定した列から数値のみ抽出します。`"$1000"`や`"1, 324, 392"`のような数値でありながら、character型として保存されている列から数値のみを取り出す際に使う関数です。使い方は以下の通りです。
@@ -1165,7 +838,7 @@ df4_S
 ```
 
 ```
-## # A tibble: 344 × 5
+## # A tibble: 344 x 5
 ##       ID Date      Week  Country Confirmed
 ##    <dbl> <chr>     <chr> <chr>       <dbl>
 ##  1     1 2020/1/16 木    Japan           1
@@ -1178,7 +851,7 @@ df4_S
 ##  8     4 2020/1/19 日    Korea          NA
 ##  9     5 2020/1/20 月    Japan           0
 ## 10     5 2020/1/20 月    Korea           1
-## # … with 334 more rows
+## # ... with 334 more rows
 ```
 
 それでは国、曜日ごとの新規感染者数を調べてみます。求める統計量は曜日ごとの新規感染者数の合計、平均、標準偏差です。まず、曜日は月から日の順になるよう、factor型に変換します。そして、国と曜日ごとに記述統計量を計算し、`df4_S_Summary1`という名で保存します。
@@ -1200,7 +873,7 @@ df4_S_Summary1
 ```
 
 ```
-## # A tibble: 14 × 5
+## # A tibble: 14 x 5
 ##    Country Week    Sum  Mean    SD
 ##    <chr>   <fct> <dbl> <dbl> <dbl>
 ##  1 Japan   月     2540 106.   156.
@@ -1229,7 +902,7 @@ df4_S_Summary1 %>%
 ```
 
 ```
-## # A tibble: 7 × 7
+## # A tibble: 7 x 7
 ##   Week  Sum_Japan Sum_Korea Mean_Japan Mean_Korea SD_Japan SD_Korea
 ##   <fct>     <dbl>     <dbl>      <dbl>      <dbl>    <dbl>    <dbl>
 ## 1 月         2540      1609      106.        67.0     156.     126.
@@ -1252,7 +925,7 @@ df4_S_Summary1 %>%
 ```
 
 ```
-## # A tibble: 7 × 7
+## # A tibble: 7 x 7
 ##   Week  Sum_Japan Mean_Japan SD_Japan Sum_Korea Mean_Korea SD_Korea
 ##   <fct>     <dbl>      <dbl>    <dbl>     <dbl>      <dbl>    <dbl>
 ## 1 月         2540      106.      156.      1609       67.0     126.
@@ -1288,7 +961,7 @@ df4_S
 ```
 
 ```
-## # A tibble: 344 × 7
+## # A tibble: 344 x 7
 ##       ID Year  Month Day   Week  Country Confirmed
 ##    <dbl> <chr> <chr> <chr> <fct> <chr>       <dbl>
 ##  1     1 2020  1     16    木    Japan           1
@@ -1301,7 +974,7 @@ df4_S
 ##  8     4 2020  1     19    日    Korea          NA
 ##  9     5 2020  1     20    月    Japan           0
 ## 10     5 2020  1     20    月    Korea           1
-## # … with 334 more rows
+## # ... with 334 more rows
 ```
 
 新しく出来た変数は元の変数があった場所になります。ここまで来たら月ごとに新規感染者の記述統計量は計算できます。曜日ごとに行ったコードの`Week`を`Month`に変えるだけです。また、`Month`は数字のみで構成されたcharacter型であるため、このままでも問題なくソートされます。したがって、別途factor化の必要もありません（むろん、してもいいですし、むしろ推奨されます）。
@@ -1319,7 +992,7 @@ df4_S_Summary2
 ```
 
 ```
-## # A tibble: 14 × 5
+## # A tibble: 14 x 5
 ##    Country Month   Sum    Mean     SD
 ##    <chr>   <chr> <dbl>   <dbl>  <dbl>
 ##  1 Japan   1        17   1.06    1.34
@@ -1347,7 +1020,7 @@ df4_S_Summary2 %>%
 ```
 
 ```
-## # A tibble: 7 × 7
+## # A tibble: 7 x 7
 ##   Month Sum_Japan Mean_Japan SD_Japan Sum_Korea Mean_Korea SD_Korea
 ##   <chr>     <dbl>      <dbl>    <dbl>     <dbl>      <dbl>    <dbl>
 ## 1 1            17       1.06     1.34        11      0.917     1.44

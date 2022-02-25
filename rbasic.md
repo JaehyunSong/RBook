@@ -84,10 +84,14 @@ Windows では、エクスプローラー (Explorer) （**注意：インター�
 
 　図\@ref(fig:rbasic-filesystem)はファイルシステムの例を示している。矢印の左側には、ドライブ内にあるファイル（の一部）が示されている。通常、これらのファイルは矢印の右側に示されているように、階層化されている。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Rbasic/Filesystem1.png" alt="ファイルシステムの例" width="60%" />
-<p class="caption">(\#fig:rbasic-filesystem)ファイルシステムの例</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.6\linewidth]{Figures/Rbasic/Filesystem1} 
+
+}
+
+\caption{ファイルシステムの例}(\#fig:rbasic-filesystem)
+\end{figure}
 
 　図\@ref(fig:rbasic-filesystem)の左側にある Diary_YYYYMMDD.txt がYYYY年MM月DD日の日記を保存したテキストファイルだとしよう[^rbasic-txt]。
 3年間毎日日記を書くと、それだけでファイル数は1000個以上になる。また、Analysis_blahblah.R はRスクリプトである[^rbasic-Rscript]。Rスクリプトファイルも複数ある。さらに、上の図には表示されていないが、自分で作ったファイル以外に、OSやソフトウェア（アプリ）を構成するファイルもドライブ内に保存されているだろう。これらのファイルが整理されずに1つの場所にまとめて置いてあるとしよう（上の図の左側の状態）。そうすると、特定のファイルを開いたり、それぞれのファイルがどのような目的で存在するのかを把握したりするのに少なからぬ労を要する。
@@ -170,27 +174,39 @@ Rが自動的に生成するファイルもどんどん溜まる。そう遠く�
 
 2. RStudio が起動したら、"File" から "New Project" を選択する。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Rbasic/Project1.png" alt="FileからNew Project..." width="60%" />
-<p class="caption">(\#fig:rbasic-project-1)FileからNew Project...</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.6\linewidth]{Figures/Rbasic/Project1} 
+
+}
+
+\caption{FileからNew Project...}(\#fig:rbasic-project-1)
+\end{figure}
 
 3. 下の画面が表示されたら、 "New Directory" を選択する。ただし、既存のフォルダを利用したい場合は、
 "Existing Directory" を選ぶ。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Rbasic/Project2.png" alt="New Directoryを選択" width="60%" />
-<p class="caption">(\#fig:rbasic-project-2)New Directoryを選択</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.6\linewidth]{Figures/Rbasic/Project2} 
+
+}
+
+\caption{New Directoryを選択}(\#fig:rbasic-project-2)
+\end{figure}
 
 
 4. 下の画面が表示されたら、"New Project" を選択する。
   - 前の手順で "Existing Directory" を選択した場合、この画面は表示されない。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Rbasic/Project3.png" alt="New Projectを選択" width="60%" />
-<p class="caption">(\#fig:rbasic-project-3)New Projectを選択</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.6\linewidth]{Figures/Rbasic/Project3} 
+
+}
+
+\caption{New Projectを選択}(\#fig:rbasic-project-3)
+\end{figure}
 
 
 5. 下の画面が表示されたら、"Directory name:" にプロジェクト名を入力する。これがフォルダ名になるので、**半角英数字のみ**の 名前を付ける。ここでは第4章のコードということで、"Ch04" にした。統計学の授業用プロジェクトなら "statistics"、計量政治学の授業なら "quant_methods_ps" などの名前を付ければ良いだろう。英語が嫌なら "tokeigaku" のようにすれば良い。また、"Create project as subdirectory of: " では、プロジェクトのフォルダをどのフォルダの中に設置するかを指定する。 
@@ -198,10 +214,14 @@ Rが自動的に生成するファイルもどんどん溜まる。そう遠く�
 
 - 手順3で "Existing Directory" を選んだ場合、プロジェクトのフォルダとして使う既存フォルダを選択する画面が表示される。
    
-<div class="figure" style="text-align: center">
-<img src="Figures/Rbasic/Project4.png" alt="プロジェクト名と保存場所の指定" width="70%" />
-<p class="caption">(\#fig:rbasic-project-4)プロジェクト名と保存場所の指定</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.7\linewidth]{Figures/Rbasic/Project4} 
+
+}
+
+\caption{プロジェクト名と保存場所の指定}(\#fig:rbasic-project-4)
+\end{figure}
 
 
 
@@ -211,10 +231,14 @@ Rが自動的に生成するファイルもどんどん溜まる。そう遠く�
 　念のため、Finder（Macの場合）やエクスプローラー （Windows の場合）で、指定した場所にプロジェクトのフォルダ（上の例では `Ch04`）が生成されていることを確認しよう。
 プロジェクトフォルダを開いてみると、`Ch04.Rproj` というファイルが生成されていることがわかる（下の図）。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Rbasic/Project5.png" alt="プロジェクトの確認" width="80%" />
-<p class="caption">(\#fig:rbasic-project-5)プロジェクトの確認</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{Figures/Rbasic/Project5} 
+
+}
+
+\caption{プロジェクトの確認}(\#fig:rbasic-project-5)
+\end{figure}
 
 　`Ch04` プロジェクトを開くには、この`Ch04.Rproj` ファイルをダブルクリックすれば良い。RStudio が起動していない場合でも、指定のプロジェクトを開いた状態でRStudio が起ち上がる。
 
@@ -229,10 +253,14 @@ Rが自動的に生成するファイルもどんどん溜まる。そう遠く�
 
 [^rbasic-newscript]: Mac では、command + shift + N、Windows では Ctrl + Shift + N のショートカットが使える。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Rbasic/InputCode1.png" alt="コード入力の例" width="100%" />
-<p class="caption">(\#fig:rbasic-calc-1)コード入力の例</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{Figures/Rbasic/InputCode1} 
+
+}
+
+\caption{コード入力の例}(\#fig:rbasic-calc-1)
+\end{figure}
 
 　Source ペイン (Untitled1) に入力したコードが Console（本書の説明どおりにカスタマイズしていれば、RStudio 内の右上画面）に転送され、計算結果が表示される。Rのコードは Console に直接打ち込むこともできるが、Sourceペインで入力してから Console に転送する方法が基本である[^input1]。
 Source ペインの内容をファイルに保存すれば、後でもう1度同じコードを実行したり、コードを他のプロジェクトで再利用することができるようになる。先ほど `3 + 3`　を入力した画面にカーソルを合わせ、Cmd/Ctrl + S を押してみよう。ファイルの保存を促されるので、ファイル名をつけて保存しよう。このとき、**.R というファイル名拡張子を付ける**。これにより、ファイルが**Rスクリプト**として認識される。例えば、"practice01.R" という名前をつけて保存しよう。Sourceペインの上部に表示されるタブの名前が、"Untitled1" から "practice01.R" に変わることが確認できるはずだ。

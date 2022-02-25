@@ -41,7 +41,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 1 × 1
+## # A tibble: 1 x 1
 ##    Mean
 ##   <dbl>
 ## 1    NA
@@ -61,7 +61,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 1 × 1
+## # A tibble: 1 x 1
 ##    Mean
 ##   <dbl>
 ## 1  3.66
@@ -84,7 +84,7 @@ score_desc
 ```
 
 ```
-## # A tibble: 1 × 7
+## # A tibble: 1 x 7
 ##    Mean Median    SD   Min   Max    Q1    Q3
 ##   <dbl>  <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
 ## 1  3.66   3.58 0.719     1     5     3     4
@@ -101,7 +101,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 1 × 3
+## # A tibble: 1 x 3
 ##   Budget_Mean SocreN_Mean Score_Mean
 ##         <dbl>       <dbl>      <dbl>
 ## 1       1232.       0.537       3.66
@@ -127,7 +127,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 1 × 3
+## # A tibble: 1 x 3
 ##   Budget ScoreN Score
 ##    <dbl>  <dbl> <dbl>
 ## 1  1232.  0.537  3.66
@@ -149,7 +149,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 1 × 6
+## # A tibble: 1 x 6
 ##   Budget_Q1 Budget_Q3 ScoreN_Q1 ScoreN_Q3 Score_Q1 Score_Q3
 ##       <dbl>     <dbl>     <dbl>     <dbl>    <dbl>    <dbl>
 ## 1       800      1000         0         0        3        4
@@ -175,7 +175,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 1 × 6
+## # A tibble: 1 x 6
 ##   Budget_Q1 Budget_Q3 ScoreN_Q1 ScoreN_Q3 Score_Q1 Score_Q3
 ##       <dbl>     <dbl>     <dbl>     <dbl>    <dbl>    <dbl>
 ## 1       800      1000         0         0        3        4
@@ -224,7 +224,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 1 × 6
+## # A tibble: 1 x 6
 ##   Budget_Q1 Budget_Q3 ScoreN_Q1 ScoreN_Q3 Score_Q1 Score_Q3
 ##       <dbl>     <dbl>     <dbl>     <dbl>    <dbl>    <dbl>
 ## 1       800      1000         0         0        3        4
@@ -254,7 +254,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 9 × 5
+## # A tibble: 9 x 5
 ##   Pref      Mean    SD   IQR     N
 ##   <chr>    <dbl> <dbl> <dbl> <int>
 ## 1 東京都    4.29  4.49     4   919
@@ -285,7 +285,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 9 × 3
+## # A tibble: 9 x 3
 ##   Pref     Farthest                           Distance
 ##   <chr>    <chr>                                 <dbl>
 ## 1 京都府   熱烈らぁめん                             30
@@ -351,7 +351,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 9 × 2
+## # A tibble: 9 x 2
 ##   Pref     N_Station
 ##   <chr>        <int>
 ## 1 東京都         368
@@ -411,7 +411,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 9 × 3
+## # A tibble: 9 x 3
 ##   Pref     Over60 Within30
 ##   <chr>    <lgl>  <lgl>   
 ## 1 京都府   FALSE  TRUE    
@@ -443,7 +443,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 1 × 1
+## # A tibble: 1 x 1
 ##    Mean
 ##   <dbl>
 ## 1  3.66
@@ -548,7 +548,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 9 × 3
+## # A tibble: 9 x 3
 ##   Pref     ScoreN_Mean Score_Mean
 ##   <chr>          <dbl>      <dbl>
 ## 1 和歌山県       0.593       3.97
@@ -584,7 +584,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 9 × 3
+## # A tibble: 9 x 3
 ##   Pref     ScoreN_Mean Score_Mean
 ##   <chr>          <dbl>      <dbl>
 ## 1 和歌山県       0.593       3.97
@@ -617,7 +617,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 9 × 5
+## # A tibble: 9 x 5
 ##   Pref     ScoreN_Sum ScoreN_Mean Score_Mean     N
 ##   <chr>         <dbl>       <dbl>      <dbl> <int>
 ## 1 大阪府          516       0.516       3.77  1000
@@ -652,7 +652,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 523 × 5
+## # A tibble: 523 x 5
 ##    Pref     Line                        N ScoreN_Sum Score_Mean
 ##    <chr>    <chr>                   <int>      <dbl>      <dbl>
 ##  1 埼玉県   東武東上線                122         27       3.68
@@ -675,7 +675,7 @@ df %>%
 ## 18 大阪府   京阪本線                   43         10       3.69
 ## 19 千葉県   新京成電鉄                 43          6       3.6 
 ## 20 京都府   阪急京都本線               43         27       3.5 
-## # … with 503 more rows
+## # ... with 503 more rows
 ```
 
 ぐるなびに登録されているラーメン屋が最も多い路線は埼玉県内の東武東上線で122店舗があります。東武東上線は東京都と埼玉県をまたがる路線ですので、東武東上線だけならもっと多いかも知れませんね。
@@ -700,7 +700,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 523 × 5
+## # A tibble: 523 x 5
 ## # Groups:   Pref, Line [523]
 ##   Pref     Line                     N ScoreN_Sum Score_Mean
 ##   <chr>    <chr>                <int>      <dbl>      <dbl>
@@ -709,7 +709,7 @@ df %>%
 ## 3 神奈川県 小田急小田原線          96         31       3.59
 ## 4 埼玉県   東武伊勢崎線            96         18       3.51
 ## 5 神奈川県 横浜市営ブルーライン    82         77       3.66
-## # … with 518 more rows
+## # ... with 518 more rows
 ```
 
 2. `.groups`引数を何とかする。
@@ -730,7 +730,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 523 × 5
+## # A tibble: 523 x 5
 ## # Groups:   Pref, Line [523]
 ##   Pref     Line                     N ScoreN_Sum Score_Mean
 ##   <chr>    <chr>                <int>      <dbl>      <dbl>
@@ -739,7 +739,7 @@ df %>%
 ## 3 神奈川県 小田急小田原線          96         31       3.59
 ## 4 埼玉県   東武伊勢崎線            96         18       3.51
 ## 5 神奈川県 横浜市営ブルーライン    82         77       3.66
-## # … with 518 more rows
+## # ... with 518 more rows
 ```
 
 `.groups`引数は`"drop"`と`"keep"`以外にも`"drop_last"`があります。実は`summarise()`に`.groups`引数を指定したい場合のデフォルト値は`.groups == "drop_last"`または`"keep"`ですが、ここがややこしいです。主なケースにおいてデフォルト値は`"drop"`となりますとなります。`.groups == "drop_last"`これは最後のグループ化変数のみ解除する意味です。今回の例だと、2番目のグループ化変数である`Line`がグループ化変数から外され、`Pref`のみがグループ化変数として残る仕組みです。
@@ -783,7 +783,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 509 × 3
+## # A tibble: 509 x 3
 ## # Groups:   Pref [9]
 ##    Pref   Line                       Mean
 ##    <chr>  <chr>                     <dbl>
@@ -797,7 +797,7 @@ df %>%
 ##  8 京都府 JR山陰本線（京都-米子）    8.67
 ##  9 京都府 ＪＲ山陰本線（京都-米子）  9.23
 ## 10 京都府 ＪＲ嵯峨野線               5   
-## # … with 499 more rows
+## # ... with 499 more rows
 ```
 
 最初は`Pref`と`Line`でグループ化しましたが、`summarise()`の後、`Line`がグループ化変数から外されました。つまり、引数が`"drop_last"`になっていることです。
@@ -819,7 +819,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 1,018 × 4
+## # A tibble: 1,018 x 4
 ## # Groups:   Pref, Line [509]
 ##    Pref   Line        Mean Quantile
 ##    <chr>  <chr>      <dbl>    <dbl>
@@ -833,7 +833,7 @@ df %>%
 ##  8 京都府 ＪＲ奈良線  8        9   
 ##  9 京都府 JR小浜線   16.5      9.75
 ## 10 京都府 JR小浜線   16.5     23.2 
-## # … with 1,008 more rows
+## # ... with 1,008 more rows
 ```
 
 同じ`Pref`、`Line`のケースが2つずつ出来ています。最初に来る数値は第一四分位点、次に来るのが第三四分位点です。そして最初のグループ化変数であった`Pref`と`Line`が、`summarise()`後もグループ化変数として残っていることが分かります。
@@ -867,7 +867,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 5,375 × 4
+## # A tibble: 5,375 x 4
 ##    Pref     Name                               Walk Walk_Hour
 ##    <chr>    <chr>                             <dbl>     <dbl>
 ##  1 埼玉県   札幌ラーメン どさん子 小鹿野店      116     1.93 
@@ -880,7 +880,7 @@ df %>%
 ##  8 埼玉県   ラーメン山岡家 上尾店                35     0.583
 ##  9 兵庫県   濃厚醤油 中華そば いせや 大蔵谷店    35     0.583
 ## 10 大阪府   河童ラーメン本舗 松原店              31     0.517
-## # … with 5,365 more rows
+## # ... with 5,365 more rows
 ```
 
 `mutate()`は3行目に登場しますが、これは`Walk`を60に割った結果を`Walk_Hour`としてデータフレームの最後の列として格納することを意味します。もし、最後の列でなく、ある変数の前、または後にしたい場合は、`.before`または`.after`引数を追加します。これは`select()`関数の`.before`と`.after`と同じ使い方です。たとえば、新しく出来た`Walk_Hour`を`ID`と`Name`の間に入れたい場合は
@@ -919,7 +919,7 @@ df2 %>%
 ```
 
 ```
-## # A tibble: 9 × 6
+## # A tibble: 9 x 6
 ##   Pref     Budget_Mean ScoreN_Sum ScoreN_Mean Score_Mean     N
 ##   <chr>          <dbl>      <dbl>       <dbl>      <dbl> <int>
 ## 1 京都府         1399.        216       0.522       3.68   414
@@ -955,7 +955,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 18 × 3
+## # A tibble: 18 x 3
 ##    Pref     Budget2       N
 ##    <chr>    <chr>     <int>
 ##  1 京都府   Cheap        22
@@ -1045,7 +1045,7 @@ df2 %>%
 ```
 
 ```
-## # A tibble: 9 × 6
+## # A tibble: 9 x 6
 ##   Pref     Budget_Mean ScoreN_Sum Score_Mean     N Pref2   
 ##   <chr>          <dbl>      <dbl>      <dbl> <int> <chr>   
 ## 1 京都府         1399.        216       3.68   414 Kyoto   
@@ -1098,7 +1098,7 @@ df2 %>%
 ```
 
 ```
-## # A tibble: 9 × 6
+## # A tibble: 9 x 6
 ##   Pref     EastJapan Budget_Mean ScoreN_Sum Score_Mean     N
 ##   <chr>        <dbl>       <dbl>      <dbl>      <dbl> <int>
 ## 1 京都府           0       1399.        216       3.68   414
@@ -1130,7 +1130,7 @@ df3
 ```
 
 ```
-## # A tibble: 9 × 6
+## # A tibble: 9 x 6
 ##   Pref     EastJapan Budget_Mean ScoreN_Sum Score_Mean     N
 ##   <chr>        <dbl>       <dbl>      <dbl>      <dbl> <int>
 ## 1 京都府           0       1399.        216       3.68   414
@@ -1283,7 +1283,7 @@ myDF1 %>%
 ```
 
 ```
-## # A tibble: 5 × 11
+## # A tibble: 5 x 11
 ## # Rowwise: 
 ##      ID    X1    Y1   X1D    X2    Y2   X2D    X3    Y3   X3D X_Mean
 ##   <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl>
@@ -1304,7 +1304,7 @@ myDF1 %>%
 ```
 
 ```
-## # A tibble: 5 × 11
+## # A tibble: 5 x 11
 ## # Rowwise: 
 ##      ID    X1    Y1   X1D    X2    Y2   X2D    X3    Y3   X3D X_Mean
 ##   <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl>
@@ -1325,10 +1325,14 @@ myDF1 %>%
 
 まずは、複数のデータフレームまたはtibbleを縦に結合する方法について解説します。イメージとしては図\@ref(fig:handling2-merge-row-1)のようなものです。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Handling2/Merge1.png" alt="行の結合" width="80%" />
-<p class="caption">(\#fig:handling2-merge-row-1)行の結合</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{Figures/Handling2/Merge1} 
+
+}
+
+\caption{行の結合}(\#fig:handling2-merge-row-1)
+\end{figure}
 
 行を結合する際には{dplyr}パッケージの`bind_rows()`関数を使います。この関数の使い方は以下の通りです。
 
@@ -1363,7 +1367,7 @@ rbind_df1 # rbind_df1を出力
 ```
 
 ```
-## # A tibble: 3 × 3
+## # A tibble: 3 x 3
 ##      X1 X2    X3   
 ##   <int> <chr> <lgl>
 ## 1     1 A     TRUE 
@@ -1376,7 +1380,7 @@ rbind_df2 # rbind_df2を出力
 ```
 
 ```
-## # A tibble: 3 × 3
+## # A tibble: 3 x 3
 ##      X1 X2    X3   
 ##   <int> <chr> <lgl>
 ## 1     4 D     FALSE
@@ -1389,7 +1393,7 @@ rbind_df3 # rbind_df3を出力
 ```
 
 ```
-## # A tibble: 3 × 3
+## # A tibble: 3 x 3
 ##      X1 X3    X2   
 ##   <int> <lgl> <chr>
 ## 1     7 TRUE  G    
@@ -1402,7 +1406,7 @@ rbind_df4 # rbind_df4を出力
 ```
 
 ```
-## # A tibble: 3 × 3
+## # A tibble: 3 x 3
 ##      X1 X2    X5    
 ##   <int> <chr> <chr> 
 ## 1    10 J     Song  
@@ -1419,7 +1423,7 @@ Binded_df1
 ```
 
 ```
-## # A tibble: 6 × 3
+## # A tibble: 6 x 3
 ##      X1 X2    X3   
 ##   <int> <chr> <lgl>
 ## 1     1 A     TRUE 
@@ -1439,7 +1443,7 @@ Binded_df2
 ```
 
 ```
-## # A tibble: 9 × 3
+## # A tibble: 9 x 3
 ##      X1 X2    X3   
 ##   <int> <chr> <lgl>
 ## 1     1 A     TRUE 
@@ -1474,7 +1478,7 @@ Binded_df3
 ```
 
 ```
-## # A tibble: 12 × 4
+## # A tibble: 12 x 4
 ##       X1 X2    X3    X5    
 ##    <int> <chr> <lgl> <chr> 
 ##  1     1 A     TRUE  <NA>  
@@ -1499,10 +1503,14 @@ Binded_df3
 
 実はデータ分析においてデータの結合といえば、列の結合が一般的です。これは図\@ref(fig:handling2-merge-col-1)のような操作を意味します。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Handling2/Merge2.png" alt="列の結合" width="80%" />
-<p class="caption">(\#fig:handling2-merge-col-1)列の結合</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{Figures/Handling2/Merge2} 
+
+}
+
+\caption{列の結合}(\#fig:handling2-merge-col-1)
+\end{figure}
 
 まずは、本章で作成した`df2`をもう一回作ってみます。
 
@@ -1520,7 +1528,7 @@ df2
 ```
 
 ```
-## # A tibble: 9 × 5
+## # A tibble: 9 x 5
 ##   Pref     Budget_Mean ScoreN_Sum Score_Mean     N
 ##   <chr>          <dbl>      <dbl>      <dbl> <int>
 ## 1 京都府         1399.        216       3.68   414
@@ -1544,7 +1552,7 @@ df3
 ```
 
 ```
-## # A tibble: 47 × 15
+## # A tibble: 47 x 15
 ##    Pref      Pop   Area RamenN Turnout   LDP   CDP  DPFP Komei   JIP   JCP   SDP
 ##    <chr>   <dbl>  <dbl>  <dbl>   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
 ##  1 北海道 5.38e6 83424.   1454    53.8  32.3  20.8  6.65 11.7   7.78 11.6   1.31
@@ -1557,79 +1565,48 @@ df3
 ##  8 茨城県 2.92e6  6097.    663    45.0  39.3  15.2  7.15 15.1   6.73  7.73  1.46
 ##  9 栃木県 1.97e6  6408.    595    44.1  40.3  18.9  9.94 12.8   4.9   5.04  1.03
 ## 10 群馬県 1.97e6  6362.    488    48.2  40.6  16.4  9.76 12.4   4.67  7.58  1.87
-## # … with 37 more rows, and 3 more variables: Reiwa <dbl>, NHK <dbl>, HRP <dbl>
+## # ... with 37 more rows, and 3 more variables: Reiwa <dbl>, NHK <dbl>,
+## #   HRP <dbl>
 ```
 
-<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;text-align: center;"> 変数名 </th>
-   <th style="text-align:left;text-align: center;"> 説明 </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> `Pref` </td>
-   <td style="text-align:left;"> 都道府県名 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Pop` </td>
-   <td style="text-align:left;"> 日本人人口 (2015年国勢調査) </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Area` </td>
-   <td style="text-align:left;"> 面積 (2015年国勢調査) </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `RamenN` </td>
-   <td style="text-align:left;"> ぐるなびに登録されたラーメン屋の店舗数 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Turnout` </td>
-   <td style="text-align:left;"> 2019年参院選: 投票率 (比例) </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `LDP` </td>
-   <td style="text-align:left;"> 2019年参院選: 自民党の得票率 (比例) </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `CDP` </td>
-   <td style="text-align:left;"> 2019年参院選: 立憲民主党の得票率 (比例) </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `DPFP` </td>
-   <td style="text-align:left;"> 2019年参院選: 国民民主党の得票率 (比例) </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Komei` </td>
-   <td style="text-align:left;"> 2019年参院選: 公明党の得票率 (比例) </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `JIP` </td>
-   <td style="text-align:left;"> 2019年参院選: 日本維新の会の得票率 (比例) </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `JCP` </td>
-   <td style="text-align:left;"> 2019年参院選: 日本共産党の得票率 (比例) </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `SDP` </td>
-   <td style="text-align:left;"> 2019年参院選: 社会民主党の得票率 (比例) </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Reiwa` </td>
-   <td style="text-align:left;"> 2019年参院選: れいわ新選組の得票率 (比例) </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `NHK` </td>
-   <td style="text-align:left;"> 2019年参院選: NHKから国民を守る党の得票率 (比例) </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `HRP` </td>
-   <td style="text-align:left;"> 2019年参院選: 幸福実現党の得票率 (比例) </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}
+\centering
+\begin{tabular}{l|l}
+\hline
+\multicolumn{1}{c}{変数名} & \multicolumn{1}{c}{説明}\\
+\hline
+`Pref` & 都道府県名\\
+\hline
+`Pop` & 日本人人口 (2015年国勢調査)\\
+\hline
+`Area` & 面積 (2015年国勢調査)\\
+\hline
+`RamenN` & ぐるなびに登録されたラーメン屋の店舗数\\
+\hline
+`Turnout` & 2019年参院選: 投票率 (比例)\\
+\hline
+`LDP` & 2019年参院選: 自民党の得票率 (比例)\\
+\hline
+`CDP` & 2019年参院選: 立憲民主党の得票率 (比例)\\
+\hline
+`DPFP` & 2019年参院選: 国民民主党の得票率 (比例)\\
+\hline
+`Komei` & 2019年参院選: 公明党の得票率 (比例)\\
+\hline
+`JIP` & 2019年参院選: 日本維新の会の得票率 (比例)\\
+\hline
+`JCP` & 2019年参院選: 日本共産党の得票率 (比例)\\
+\hline
+`SDP` & 2019年参院選: 社会民主党の得票率 (比例)\\
+\hline
+`Reiwa` & 2019年参院選: れいわ新選組の得票率 (比例)\\
+\hline
+`NHK` & 2019年参院選: NHKから国民を守る党の得票率 (比例)\\
+\hline
+`HRP` & 2019年参院選: 幸福実現党の得票率 (比例)\\
+\hline
+\end{tabular}
+\end{table}
 
 本データは都道府県ごとの人口、面積、ぐるなびに登録されたラーメン屋の店舗数、2019年参議院議員通常選挙の結果が格納されています。人口と面積は2015年国勢調査、ぐるなびの情報は2020年6月時点での情報です。
 
@@ -1645,7 +1622,7 @@ df3 %>%
 ```
 
 ```
-## # A tibble: 9 × 2
+## # A tibble: 9 x 2
 ##   Pref     RamenN
 ##   <chr>     <dbl>
 ## 1 埼玉県     1106
@@ -1695,7 +1672,7 @@ df4
 ```
 
 ```
-## # A tibble: 47 × 2
+## # A tibble: 47 x 2
 ##    Pref   RamenN
 ##    <chr>   <dbl>
 ##  1 北海道   1454
@@ -1708,7 +1685,7 @@ df4
 ##  8 茨城県    663
 ##  9 栃木県    595
 ## 10 群馬県    488
-## # … with 37 more rows
+## # ... with 37 more rows
 ```
 
 これから共通変数名の値をキー (key)と呼びます。今回の例だと`Pref`が`df2`と`df4`のキー変数であり、その値である`"東京都"`、`"北海道"`などがキーです。
@@ -1717,10 +1694,16 @@ df4
 
 [^merge1]: これらの図は[Garrett Grolemund and Hadley Wickham. 2017. *R for Data Science: Import, Tidy, Transform, Visualize, and Model Data.* O'Reilly.](https://r4ds.had.co.nz)を参考にしました。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Handling2/Merge_Inner.png" alt="`inner_join()`の仕組み" width="80%" />
-<p class="caption">(\#fig:handling2-merge-col-8)`inner_join()`の仕組み</p>
-</div>
+(ref:inner-join) `inner_join()`の仕組み
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{Figures/Handling2/Merge_Inner} 
+
+}
+
+\caption{(ref:inner-join)}(\#fig:handling2-merge-col-8)
+\end{figure}
 
 実際にやってみましょう。
 
@@ -1730,7 +1713,7 @@ inner_join(df2, df4, by = "Pref")
 ```
 
 ```
-## # A tibble: 9 × 6
+## # A tibble: 9 x 6
 ##   Pref     Budget_Mean ScoreN_Sum Score_Mean     N RamenN
 ##   <chr>          <dbl>      <dbl>      <dbl> <int>  <dbl>
 ## 1 京都府         1399.        216       3.68   414    415
@@ -1748,10 +1731,16 @@ inner_join(df2, df4, by = "Pref")
 
 一方、`full_join()`は、すべてのキーに対して結合を行います (図\@ref(fig: handling2-merge-col-10))。たとえば、`df2`には`"北海道"`というキーがありません。それでも新しく出来上がるデータには北海道の列が追加されます。ただし、道内店舗の平均予算、口コミ数などの情報はないため、欠損値が代入されます。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Handling2/Merge_Full.png" alt="`full_join()`の仕組み" width="80%" />
-<p class="caption">(\#fig:handling2-merge-col-10)`full_join()`の仕組み</p>
-</div>
+(ref:full-join) `full_join()`の仕組み
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{Figures/Handling2/Merge_Full} 
+
+}
+
+\caption{(ref:full-join)}(\#fig:handling2-merge-col-10)
+\end{figure}
 
 それでは実際、結果を確認してみましょう。今回は結合後、`RamenN`が大きい順で出力します。
 
@@ -1762,7 +1751,7 @@ full_join(df2, df4, by = "Pref") %>%
 ```
 
 ```
-## # A tibble: 47 × 6
+## # A tibble: 47 x 6
 ##    Pref     Budget_Mean ScoreN_Sum Score_Mean     N RamenN
 ##    <chr>          <dbl>      <dbl>      <dbl> <int>  <dbl>
 ##  1 東京都         1283.       1165       3.67  1000   3220
@@ -1775,24 +1764,36 @@ full_join(df2, df4, by = "Pref") %>%
 ##  8 福岡県           NA          NA      NA       NA    985
 ##  9 新潟県           NA          NA      NA       NA    705
 ## 10 静岡県           NA          NA      NA       NA    679
-## # … with 37 more rows
+## # ... with 37 more rows
 ```
 
 `df2`にはなかった北海道や愛知県などの行ができました。そして、`df2`にはない情報はすべて欠損値 (`NA`)となりました。
 
 続いて、`left_join()`ですが、これは先に指定したデータに存在するキーのみで結合を行います (図\@ref(fig: handling2-merge-col-12))。今回は`df2`が先に指定されていますが、`df2`のキーは`df4`のキーの部分集合であるため、`inner_join()`と同じ結果が得られます。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Handling2/Merge_Left.png" alt="`left_join()`の仕組み" width="80%" />
-<p class="caption">(\#fig:handling2-merge-col-12)`left_join()`の仕組み</p>
-</div>
+(ref:left-join) `left_join()`の仕組み
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{Figures/Handling2/Merge_Left} 
+
+}
+
+\caption{(ref:left-join)}(\#fig:handling2-merge-col-12)
+\end{figure}
 
 一方、`right_join()`は`left_join()`と逆の関数であり、後に指定したデータに存在するキーを基準に結合を行います (図\@ref(fig: handling2-merge-col-13))。後に指定された`df4`のキーは`df2`のキーを完全に含むので、`full_join()`と同じ結果が得られます。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Handling2/Merge_Right.png" alt="`right_join()`の仕組み" width="80%" />
-<p class="caption">(\#fig:handling2-merge-col-13)`right_join()`の仕組み</p>
-</div>
+(ref:right-join) `right_join()`の仕組み
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{Figures/Handling2/Merge_Right} 
+
+}
+
+\caption{(ref:right-join)}(\#fig:handling2-merge-col-13)
+\end{figure}
 
 これからは`df2`と`df4`を結合することになりますが、この2つのtibbleの大きさが異なります。`df2`は9つの都府県のみであるに対し、`df4`は47都道府県全てのデータが入っているからです。
 
@@ -1818,7 +1819,7 @@ full_join(Wave1_df, Wave2_df, by = "ID")
 ```
 
 ```
-## # A tibble: 7 × 7
+## # A tibble: 7 x 7
 ##      ID  F1.x  F2.x  Q1.x  F1.y  F2.y  Q1.y
 ##   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
 ## 1     1     1    18     1     1    18     1
@@ -1838,7 +1839,7 @@ full_join(Wave1_df, Wave2_df, by = "ID", suffix = c("_W1", "_W2"))
 ```
 
 ```
-## # A tibble: 7 × 7
+## # A tibble: 7 x 7
 ##      ID F1_W1 F2_W1 Q1_W1 F1_W2 F2_W2 Q1_W2
 ##   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
 ## 1     1     1    18     1     1    18     1

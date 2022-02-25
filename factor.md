@@ -8,10 +8,14 @@
 
 横軸、または縦軸が気温、成績、身長のような連続変数ではなく、都道府県や国、企業のような名目変数になる場合があります。たとえば、棒グラフの横軸は図\@ref(fig:factor-intro-1)のように、一般的に名目変数になる場合が多いです。
 
-<div class="figure" style="text-align: center">
-<img src="factor_files/figure-html/factor-intro-1-1.png" alt="横軸が名目変数の棒グラフ" width="576" />
-<p class="caption">(\#fig:factor-intro-1)横軸が名目変数の棒グラフ</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{factor_files/figure-latex/factor-intro-1-1} 
+
+}
+
+\caption{横軸が名目変数の棒グラフ}(\#fig:factor-intro-1)
+\end{figure}
 
 ここでは横軸の順番に注目してください。京都府、埼玉県、神奈川県、...の順番になっていますね。「この順番で大満足だよ!」という方がいるかも知れませんが、そうでない方もおおいでしょう。普通考えられるものとしては、都道府県コードの順か、縦軸が高い順 (低い順)でしょう。都道府県コードの順だと、埼玉県、千葉県、東京都、神奈川県、京都府、大阪府、兵庫県、奈良県、和歌山県の順番になります。または、縦軸 (口コミ評価の平均値)が高い順なら和歌山県、奈良県、大阪府、...の順番になります。あるいは50音順も考えられるでしょう。アメリカの場合、州を並べる際、アルファベット順で並べます。
 
@@ -40,7 +44,7 @@ Score_df
 ```
 
 ```
-## # A tibble: 9 × 2
+## # A tibble: 9 x 2
 ##   Pref     Score
 ##   <chr>    <dbl>
 ## 1 京都府    3.68
@@ -65,10 +69,14 @@ Score_df %>%
   theme_gray(base_size = 12)
 ```
 
-<div class="figure" style="text-align: center">
-<img src="factor_files/figure-html/factor-intro-4-1.png" alt="Prefがcharacter型の場合 (1)" width="576" />
-<p class="caption">(\#fig:factor-intro-4)Prefがcharacter型の場合 (1)</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{factor_files/figure-latex/factor-intro-4-1} 
+
+}
+
+\caption{Prefがcharacter型の場合 (1)}(\#fig:factor-intro-4)
+\end{figure}
 
 横軸の順番があまり直感的ではありませんね。それでは、`Score_df`を`Score`が高い順にソートし、`Score_df2`で保存してから、もう一回試してみます。
 
@@ -81,7 +89,7 @@ Score_df2
 ```
 
 ```
-## # A tibble: 9 × 2
+## # A tibble: 9 x 2
 ##   Pref     Score
 ##   <chr>    <dbl>
 ## 1 和歌山県  3.97
@@ -106,10 +114,14 @@ Score_df2 %>%
   theme_gray(base_size = 12)
 ```
 
-<div class="figure" style="text-align: center">
-<img src="factor_files/figure-html/factor-intro-6-1.png" alt="Prefがcharacter型の場合 (2)" width="576" />
-<p class="caption">(\#fig:factor-intro-6)Prefがcharacter型の場合 (2)</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{factor_files/figure-latex/factor-intro-6-1} 
+
+}
+
+\caption{Prefがcharacter型の場合 (2)}(\#fig:factor-intro-6)
+\end{figure}
 
 結果は全く変わっておりません。それでは、`Score_df`の`Pref`列をfactor型に変換し、順番は口コミ評価の平均値が高い順番にしてみましょう。結果は`Score_df_f1`という名で保存します。
 
@@ -124,7 +136,7 @@ Score_df_f1
 ```
 
 ```
-## # A tibble: 9 × 2
+## # A tibble: 9 x 2
 ##   Pref     Score
 ##   <fct>    <dbl>
 ## 1 京都府    3.68
@@ -153,10 +165,14 @@ Score_df_f1$Pref
 
 この`Score_df_f1`データを使って、図\@ref(fig:factor-intro-4)と全く同じコードを実行した結果が図\@ref(fig:factor-intro-9)です。
 
-<div class="figure" style="text-align: center">
-<img src="factor_files/figure-html/factor-intro-9-1.png" alt="Prefがfactor型の場合 (1)" width="576" />
-<p class="caption">(\#fig:factor-intro-9)Prefがfactor型の場合 (1)</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{factor_files/figure-latex/factor-intro-9-1} 
+
+}
+
+\caption{Prefがfactor型の場合 (1)}(\#fig:factor-intro-9)
+\end{figure}
 
 これまでの話をまとめるの以下の2点が分かります。
 
@@ -176,7 +192,7 @@ Score_df_f1
 ```
 
 ```
-## # A tibble: 9 × 3
+## # A tibble: 9 x 3
 ##   Pref     Score Kanto
 ##   <fct>    <dbl> <dbl>
 ## 1 京都府    3.68     0
@@ -192,10 +208,14 @@ Score_df_f1
 
 `Kanto`変数のデータ型は、`<dbl>`、つまりnumeric型です。しかし、これは明らかに名目変数ですね。これをこのまま`Kanto`を横軸にした図を出すと図\@ref(fig:factor-intro-11)のようになります。
 
-<div class="figure" style="text-align: center">
-<img src="factor_files/figure-html/factor-intro-11-1.png" alt="Kantoがnumeric型の場合" width="288" />
-<p class="caption">(\#fig:factor-intro-11)Kantoがnumeric型の場合</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{factor_files/figure-latex/factor-intro-11-1} 
+
+}
+
+\caption{Kantoがnumeric型の場合}(\#fig:factor-intro-11)
+\end{figure}
 
 この場合、図の横軸は`Kanto`の値が小さい順でソートされます。ただし、このような図は非常に見にくいため、`1`に`"関東"`、`0`に`"関西"`とラベルを付けたfactor型に変換した方が望ましいです。numeric型をラベル付きのfactor型にするためには、`levels`引数には元の数値を、`labels`引数にはそれぞれの数値に対応したラベルを指定します。また、関東の方を先に出したいので、`factor()`内の`levels`引数は`c(0, 1)`でなく、`c(1, 0)`にします。
 
@@ -208,7 +228,7 @@ Score_df_f1
 ```
 
 ```
-## # A tibble: 9 × 3
+## # A tibble: 9 x 3
 ##   Pref     Score Kanto 
 ##   <fct>    <dbl> <fct> 
 ## 1 京都府    3.68 その他
@@ -236,10 +256,14 @@ Score_df_f1$Kanto
 
 また、`"関東"`、`"その他"`の順になっていますね。これを図として出力した結果が図\@ref(fig:factor-intro-14)です。
 
-<div class="figure" style="text-align: center">
-<img src="factor_files/figure-html/factor-intro-14-1.png" alt="Kantoがfactor型の場合" width="288" />
-<p class="caption">(\#fig:factor-intro-14)Kantoがfactor型の場合</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{factor_files/figure-latex/factor-intro-14-1} 
+
+}
+
+\caption{Kantoがfactor型の場合}(\#fig:factor-intro-14)
+\end{figure}
 
 このように数値型名目変数でも、factor化することによって、自由に横軸の順番を変えることができます。それでは、factor化に使える便利な関数をいくつか紹介します。
 
@@ -272,7 +296,7 @@ Score_df_f1
 ```
 
 ```
-## # A tibble: 9 × 4
+## # A tibble: 9 x 4
 ##   Pref     Score Kanto  Pref2   
 ##   <fct>    <dbl> <fct>  <fct>   
 ## 1 京都府    3.68 その他 京都府  
@@ -375,7 +399,7 @@ Score_df_f1
 ```
 
 ```
-## # A tibble: 9 × 7
+## # A tibble: 9 x 7
 ##   Pref     Score Kanto  Pref2    Pref3    Pref4    Pref5   
 ##   <fct>    <dbl> <fct>  <fct>    <fct>    <fct>    <fct>   
 ## 1 京都府    3.68 その他 京都府   京都府   京都府   Kyoto   
@@ -517,7 +541,7 @@ df4
 ```
 
 ```
-## # A tibble: 10 × 2
+## # A tibble: 10 x 2
 ##       ID Q1                          
 ##    <int> <fct>                       
 ##  1     1 そう思う                    
@@ -543,7 +567,7 @@ df4
 ```
 
 ```
-## # A tibble: 10 × 3
+## # A tibble: 10 x 3
 ##       ID Q1                           Q1_R                        
 ##    <int> <fct>                        <fct>                       
 ##  1     1 そう思う                     そう思う                    
@@ -579,66 +603,24 @@ levels(df4$Q1_R)
 
 問題は`n =`引数ですが、その挙動については以下の表を参照してください。
 
-<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;"> 水準の順番 </th>
-   <th style="text-align:center;"> 1番目 </th>
-   <th style="text-align:center;"> 2番目 </th>
-   <th style="text-align:center;"> 3番目 </th>
-   <th style="text-align:center;"> 4番目 </th>
-   <th style="text-align:center;"> 5番目 </th>
-   <th style="text-align:center;"> 6番目 </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> `n = -2` </td>
-   <td style="text-align:center;"> `E` </td>
-   <td style="text-align:center;"> `F` </td>
-   <td style="text-align:center;"> `A` </td>
-   <td style="text-align:center;"> `B` </td>
-   <td style="text-align:center;"> `C` </td>
-   <td style="text-align:center;"> `D` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `n = -1` </td>
-   <td style="text-align:center;"> `F` </td>
-   <td style="text-align:center;"> `A` </td>
-   <td style="text-align:center;"> `B` </td>
-   <td style="text-align:center;"> `C` </td>
-   <td style="text-align:center;"> `D` </td>
-   <td style="text-align:center;"> `E` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `n = 0` </td>
-   <td style="text-align:center;"> `A` </td>
-   <td style="text-align:center;"> `B` </td>
-   <td style="text-align:center;"> `C` </td>
-   <td style="text-align:center;"> `D` </td>
-   <td style="text-align:center;"> `E` </td>
-   <td style="text-align:center;"> `F` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `n = 1` </td>
-   <td style="text-align:center;"> `B` </td>
-   <td style="text-align:center;"> `C` </td>
-   <td style="text-align:center;"> `D` </td>
-   <td style="text-align:center;"> `E` </td>
-   <td style="text-align:center;"> `F` </td>
-   <td style="text-align:center;"> `A` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `n = 2` </td>
-   <td style="text-align:center;"> `C` </td>
-   <td style="text-align:center;"> `D` </td>
-   <td style="text-align:center;"> `E` </td>
-   <td style="text-align:center;"> `F` </td>
-   <td style="text-align:center;"> `A` </td>
-   <td style="text-align:center;"> `B` </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}
+\centering
+\begin{tabular}{l|c|c|c|c|c|c}
+\hline
+水準の順番 & 1番目 & 2番目 & 3番目 & 4番目 & 5番目 & 6番目\\
+\hline
+`n = -2` & `E` & `F` & `A` & `B` & `C` & `D`\\
+\hline
+`n = -1` & `F` & `A` & `B` & `C` & `D` & `E`\\
+\hline
+`n = 0` & `A` & `B` & `C` & `D` & `E` & `F`\\
+\hline
+`n = 1` & `B` & `C` & `D` & `E` & `F` & `A`\\
+\hline
+`n = 2` & `C` & `D` & `E` & `F` & `A` & `B`\\
+\hline
+\end{tabular}
+\end{table}
 
 具体的には水準は左方向へ`n`個移動します。元の水準が`A`, `B`, `C`, ..., `F`の順で、`n = 1`の場合、`A`が`F`の後ろへ移動し、`B`, `C`, `D`, `E`, `F`が前の方へ1つずつ移動します。逆に右側へ1つ移動したい場合は`n = -1`のように書きます。今回は最初の水準を最後に移動させたいので、`n = 1`と指定します。
 
@@ -674,7 +656,7 @@ Score_df
 ```
 
 ```
-## # A tibble: 9 × 5
+## # A tibble: 9 x 5
 ##   Pref     Score Pref2    Pref3    Pref4   
 ##   <chr>    <dbl> <fct>    <fct>    <fct>   
 ## 1 京都府    3.68 京都府   京都府   京都府  
@@ -693,7 +675,7 @@ levels(Score_df$Pref2)
 ```
 
 ```
-## [1] "奈良県"   "和歌山県" "神奈川県" "千葉県"   "埼玉県"   "東京都"   "兵庫県"  
+## [1] "奈良県"   "埼玉県"   "兵庫県"   "和歌山県" "東京都"   "千葉県"   "神奈川県"
 ## [8] "京都府"   "大阪府"
 ```
 
@@ -702,8 +684,8 @@ levels(Score_df$Pref3)
 ```
 
 ```
-## [1] "東京都"   "神奈川県" "京都府"   "千葉県"   "兵庫県"   "奈良県"   "大阪府"  
-## [8] "和歌山県" "埼玉県"
+## [1] "兵庫県"   "大阪府"   "神奈川県" "東京都"   "埼玉県"   "奈良県"   "和歌山県"
+## [8] "京都府"   "千葉県"
 ```
 
 ```{.r .numberLines}
@@ -711,8 +693,8 @@ levels(Score_df$Pref4)
 ```
 
 ```
-## [1] "千葉県"   "京都府"   "埼玉県"   "東京都"   "大阪府"   "神奈川県" "兵庫県"  
-## [8] "奈良県"   "和歌山県"
+## [1] "東京都"   "京都府"   "神奈川県" "埼玉県"   "奈良県"   "千葉県"   "大阪府"  
+## [8] "和歌山県" "兵庫県"
 ```
 
 `Pref`から`Pref4`まで同じように見えますが、水準の順番が異なります (`Pref`はcharacter型だから水準がありません)。
@@ -755,7 +737,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 9 × 2
+## # A tibble: 9 x 2
 ##   Pref     Budget
 ##   <chr>     <dbl>
 ## 1 千葉県    1124.
@@ -798,7 +780,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 9 × 2
+## # A tibble: 9 x 2
 ##   Pref     Score
 ##   <chr>    <dbl>
 ## 1 和歌山県  4   
@@ -843,7 +825,7 @@ Reorder2_df
 ```
 
 ```
-## # A tibble: 25 × 3
+## # A tibble: 25 x 3
 ##    Country Date       NewPat
 ##    <chr>   <date>      <dbl>
 ##  1 日本    2020-06-27    100
@@ -856,7 +838,7 @@ Reorder2_df
 ##  8 韓国    2020-06-29     43
 ##  9 韓国    2020-06-30     50
 ## 10 韓国    2020-07-01     54
-## # … with 15 more rows
+## # ... with 15 more rows
 ```
 
 可視化のコードはとりあえず無視し、グラフを出力してみましょう。
@@ -872,10 +854,14 @@ Reorder2_df %>%
   theme_gray(base_size = 12)
 ```
 
-<div class="figure" style="text-align: center">
-<img src="factor_files/figure-html/factor-forcats-reorder2-2-1.png" alt="国名の順番を変更する前" width="672" />
-<p class="caption">(\#fig:factor-forcats-reorder2-2)国名の順番を変更する前</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{factor_files/figure-latex/factor-forcats-reorder2-2-1} 
+
+}
+
+\caption{国名の順番を変更する前}(\#fig:factor-forcats-reorder2-2)
+\end{figure}
 
 このグラフに違和感はあまりありませんが、「読みやすさ」の麺では改善の余地があります。たとえば、7月1日の時点で、新規感染者数が多いのは日本、韓国、香港、中国 (本土)、台湾の順です。しかし、右側の凡例の順番はそうではありません。この順番が一致すれば、更に図は読みやすくなるでしょう。
 
@@ -903,7 +889,7 @@ Reorder2_df %>%
 ```
 
 ```
-## # A tibble: 5 × 3
+## # A tibble: 5 x 3
 ##   Country     Date       NewPat
 ##   <chr>       <date>      <dbl>
 ## 1 日本        2020-07-01    130
@@ -955,10 +941,14 @@ Reorder2_df %>%
   theme_gray(base_size = 12)
 ```
 
-<div class="figure" style="text-align: center">
-<img src="factor_files/figure-html/factor-forcats-reorder2-8-1.png" alt="国名の順番を変更した後" width="672" />
-<p class="caption">(\#fig:factor-forcats-reorder2-8)国名の順番を変更した後</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{factor_files/figure-latex/factor-forcats-reorder2-8-1} 
+
+}
+
+\caption{国名の順番を変更した後}(\#fig:factor-forcats-reorder2-8)
+\end{figure}
 
 これで図がさらに読みやすくなりました。ちなみに、{forcats}パッケージは`last2()`以外にも`first2()`という関数も提供しております。これを使うと、7月1日でなく、6月27日の新規感染者数の降順で水準の順番が調整されます。他にも引数を2つ使用する自作関数も使えますが、`fct_reorder2()`の主な使いみちは`last2()`で十分でしょう。
 
@@ -995,12 +985,12 @@ df4
 ```
 
 ```
-## # A tibble: 10 × 4
+## # A tibble: 10 x 4
 ##       ID Q1                           Q1_R                         Q1_R2        
 ##    <int> <fct>                        <fct>                        <fct>        
 ##  1     1 そう思う                     そう思う                     そう思う     
 ##  2     2 そう思わない                 そう思わない                 そう思わない 
-##  3     3 どちらとも言えない           どちらとも言えない           どちらとも言…
+##  3     3 どちらとも言えない           どちらとも言えない           どちらとも言~
 ##  4     4 どちらかと言えばそう思う     どちらかと言えばそう思う     そう思う     
 ##  5     5 答えたくない                 答えたくない                 答えたくない 
 ##  6     6 どちらかと言えばそう思う     どちらかと言えばそう思う     そう思う     
@@ -1035,19 +1025,19 @@ df4
 ```
 
 ```
-## # A tibble: 10 × 5
+## # A tibble: 10 x 5
 ##       ID Q1                           Q1_R                         Q1_R2   Q1_R3
 ##    <int> <fct>                        <fct>                        <fct>   <fct>
-##  1     1 そう思う                     そう思う                     そう思… そう…
-##  2     2 そう思わない                 そう思わない                 そう思… そう…
-##  3     3 どちらとも言えない           どちらとも言えない           どちら… どち…
-##  4     4 どちらかと言えばそう思う     どちらかと言えばそう思う     そう思… そう…
-##  5     5 答えたくない                 答えたくない                 答えた… 答え…
-##  6     6 どちらかと言えばそう思う     どちらかと言えばそう思う     そう思… そう…
-##  7     7 どちらかと言えばそう思わない どちらかと言えばそう思わない そう思… そう…
-##  8     8 答えたくない                 答えたくない                 答えた… 答え…
-##  9     9 そう思わない                 そう思わない                 そう思… そう…
-## 10    10 そう思う                     そう思う                     そう思… そう…
+##  1     1 そう思う                     そう思う                     そう思~ そう~
+##  2     2 そう思わない                 そう思わない                 そう思~ そう~
+##  3     3 どちらとも言えない           どちらとも言えない           どちら~ どち~
+##  4     4 どちらかと言えばそう思う     どちらかと言えばそう思う     そう思~ そう~
+##  5     5 答えたくない                 答えたくない                 答えた~ 答え~
+##  6     6 どちらかと言えばそう思う     どちらかと言えばそう思う     そう思~ そう~
+##  7     7 どちらかと言えばそう思わない どちらかと言えばそう思わない そう思~ そう~
+##  8     8 答えたくない                 答えたくない                 答えた~ 答え~
+##  9     9 そう思わない                 そう思わない                 そう思~ そう~
+## 10    10 そう思う                     そう思う                     そう思~ そう~
 ```
 
 ```{.r .numberLines}
@@ -1078,7 +1068,7 @@ Score_df_f2
 ```
 
 ```
-## # A tibble: 8 × 2
+## # A tibble: 8 x 2
 ##   Pref     Score
 ##   <fct>    <dbl>
 ## 1 東京都    3.67
@@ -1154,7 +1144,7 @@ df5 %>%
 ```
 
 ```
-## # A tibble: 9 × 3
+## # A tibble: 9 x 3
 ##   Pref     Score     N
 ##   <fct>    <dbl> <int>
 ## 1 京都府    3.68   414
@@ -1195,7 +1185,7 @@ df5 %>%
 ```
 
 ```
-## # A tibble: 10 × 3
+## # A tibble: 10 x 3
 ##    Pref      Score     N
 ##    <fct>     <dbl> <int>
 ##  1 京都府     3.68   414
@@ -1232,7 +1222,7 @@ df6
 ```
 
 ```
-## # A tibble: 10 × 2
+## # A tibble: 10 x 2
 ##       ID X1      
 ##    <int> <fct>   
 ##  1     1 ラーメン
@@ -1258,7 +1248,7 @@ df6 %>%
 ```
 
 ```
-## # A tibble: 4 × 2
+## # A tibble: 4 x 2
 ##   X1           N
 ##   <fct>    <int>
 ## 1 ラーメン     2
@@ -1284,7 +1274,7 @@ df6 %>%
 ```
 
 ```
-## # A tibble: 10 × 3
+## # A tibble: 10 x 3
 ##       ID X1       X2      
 ##    <int> <fct>    <fct>   
 ##  1     1 ラーメン ラーメン
@@ -1326,7 +1316,7 @@ df6
 ```
 
 ```
-## # A tibble: 10 × 3
+## # A tibble: 10 x 3
 ##       ID X1       X2      
 ##    <int> <fct>    <fct>   
 ##  1     1 ラーメン ラーメン
@@ -1352,7 +1342,7 @@ df6 %>%
 ```
 
 ```
-## # A tibble: 4 × 2
+## # A tibble: 4 x 2
 ##   X2           N
 ##   <fct>    <int>
 ## 1 ラーメン     2

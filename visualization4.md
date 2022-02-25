@@ -42,19 +42,23 @@ COVID19_df <- read_csv("Data/COVID19_Worldwide.csv", guess_max = 10000)
 
 　以下の図は対数化した一人当たり購買力平価GDP（`PPP_per_capita`）のヒストグラムです。
 
-<img src="visualization4_files/figure-html/visual4-violin1-1.png" width="672" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-violin1-1} \end{center}
 
 　このヒストグラムをなめらかにすると以下のような図になります。
 
-<img src="visualization4_files/figure-html/visual4-violin2-1.png" width="672" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-violin2-1} \end{center}
 
 　この密度曲線を上下対称にすると以下のような図となり、これがバイオリンプロットです。ヒストグラムのようにデータの分布が分かりやすくなります。
 
-<img src="visualization4_files/figure-html/visual4-violin3-1.png" width="672" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-violin3-1} \end{center}
 
 　しかし、この図の場合、ヒストグラムと同様、中央値や四分位数などの情報が含まれておりません。これらの箱ひげ図を使用した方が良いでしょう。バイオリンプロットの良い点はバイオリンの中に箱ひげ図を入れ、ヒストグラムと箱ひげ図両方の長所を取ることができる点です。たとえば、バイオリンプロットを90度回転させ、中にバイオリン図を入れると以下のようになります。
 
-<img src="visualization4_files/figure-html/visual4-violin4-1.png" width="672" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-violin4-1} \end{center}
 
 　それでは実際にバイオリンプロットを作ってみましょう。使い方は箱ひげ図（`geom_boxplot()`）と同じです。たとえば、横軸は大陸（`Continent`）に、縦軸は対数化した一人当たり購買力平価GDP（`PPP_per_capita`）にしたバイオリンプロットを作るには作るには`geom_violin()`幾何オブジェクトの中にマッピングするだけです。大陸ごとに色分けしたい場合は`fill`引数に`Continent`をマッピングします。
 
@@ -72,7 +76,9 @@ Country_df %>%
                   base_size   = 16)
 ```
 
-<img src="visualization4_files/figure-html/visual4-violin5-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-violin5-1} \end{center}
 
 　ここに箱ひげ図も載せたい場合は、`geom_violin()`オブジェクトの後に`geom_boxplot()`オブジェクトを入れるだけで十分です。
 
@@ -92,7 +98,9 @@ Country_df %>%
                   base_size   = 16)
 ```
 
-<img src="visualization4_files/figure-html/visual4-violin6-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-violin6-1} \end{center}
 
 　箱ひげ図は四分位範囲、四分位数、最小値、最大値などの情報を素早く読み取れますが、どの値当たりが分厚いかなどの情報が欠けています。これをバイオリンプロットで補うことで、よりデータの分布を的確に把握することができます。
 
@@ -117,7 +125,9 @@ Country_df %>%
     theme_minimal(base_size = 12)
 ```
 
-<img src="visualization4_files/figure-html/visual4-rug1-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-rug1-1} \end{center}
 
 　一変数の分布を確認する場合、ヒストグラムは情報量の損失が少ない方です。それでも値一つ一つの情報は失われますね。例えば、上記のヒストグラムで左端の度数は1です。左端の棒の区間はおおよそ500から780であり、一人当たりPPPがこの区間に属する国は1カ国ということです。ちなみに、その国はブルンジ共和国ですが、ブルンジ共和国の具体的な一人当たりPPPはヒストグラムから分かりません。情報量をより豊富に持たせるためには区間を細かく刻むことも出来ますが、逆に分布の全体像が読みにくくなります。
 
@@ -136,7 +146,9 @@ Country_df %>%
     theme_minimal(base_size = 12)
 ```
 
-<img src="visualization4_files/figure-html/visual4-rug2-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-rug2-1} \end{center}
 
 ラグプロットを使うと本来のヒストグラムの外見にほぼ影響を与えず、更に情報を付け加えることが可能です。点（｜）の密度でデータの分布を確認することもできますが、その密度の相対的な比較に関してはヒストグラムの方が良いでしょう。
 
@@ -155,7 +167,9 @@ Country_df %>%
     theme_minimal(base_size = 12)
 ```
 
-<img src="visualization4_files/figure-html/visual4-rug3-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-rug3-1} \end{center}
 
 散布図の目的は二変量間の**関係**を確認することであって、それぞれの変数の分布を確認することではありません。もし、`FH_Total`と`PPP_per_capita`の分布が確認したいなら、それぞれのヒストグラムや箱ひげ図を作成した方が良いでしょう。しかし、ラグプロットを使えば、点（｜）の密度で大まかな分布は確認出来ますし、図の見た目にもほぼ影響を与えません。
 
@@ -175,7 +189,9 @@ Country_df %>%
     theme_minimal(base_size = 12)
 ```
 
-<img src="visualization4_files/figure-html/visual4-rug4-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-rug4-1} \end{center}
 
 　これで`FH_Total`はほぼ均等に分布していて、`PPP_per_capita`は2万ドル以下に多く密集していることが確認できます。
 
@@ -196,7 +212,9 @@ Scatter_Fig1 <- Country_df %>%
 ggExtra::ggMarginal(Scatter_Fig1, type = "boxplot")
 ```
 
-<img src="visualization4_files/figure-html/visual4-rug5-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-rug5-1} \end{center}
 
 ---
 
@@ -216,7 +234,9 @@ Country_df %>%
                 base_size   = 12)
 ```
 
-<img src="visualization4_files/figure-html/visual4-ridge1-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-ridge1-1} \end{center}
 
 　これを大陸ごとに出力する場合、ファセット分割を行います。今回は大陸ごとに1列（`ncol = 1`）でファセットを分割します。
 
@@ -231,7 +251,9 @@ Country_df %>%
                 base_size   = 12)
 ```
 
-<img src="visualization4_files/figure-html/visual4-ridge2-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-ridge2-1} \end{center}
 
 　それでは上のグラフをリッジプロットとして作図してみましょう。今回は{ggridges}パッケージを使います。
 
@@ -257,7 +279,9 @@ Country_df %>%
 ## Picking joint bandwidth of 0.054
 ```
 
-<img src="visualization4_files/figure-html/visual4-ridge4-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-ridge4-1} \end{center}
 
 先ほど作図した図と非常に似た図が出来上がりました。ファセット分割に比べ、空間を最大限に活用していることが分かります。ファセットラベルがなく、グループ名が縦軸上に位置するからです。また、リッジプロットの特徴は密度曲線がオーバラップする点ですが、以下のように`scale = 1`を指定すると、オーバラップなしで作成することも可能です。もし、`scale = 3`にすると最大2つの密度曲線が重なることになります。たとえば最下段のアフリカはアメリカの行と若干オーバラップしていますが、`scale = 3`の場合、アジアの行までオーバーラップされうることになります。
 
@@ -276,7 +300,9 @@ Country_df %>%
 ## Picking joint bandwidth of 0.054
 ```
 
-<img src="visualization4_files/figure-html/visual4-ridge5-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-ridge5-1} \end{center}
 
 　また、横軸の値に応じて背景の色をグラデーションで表現することも可能です。この場合、`geom_density_ridges()`幾何オブジェクトでなく、`geom_density_ridges_gradient()`を使い、`fill`にもマッピングをする必要があります。横軸（`x`）の値に応じて色塗りをする場合、`fill = stat(x)`とします。デフォルトでは横軸の値が高いほど空色、低いほど黒になります。ここでは高いほど黄色、低いほど紫ににするため、色弱にも優しい`scale_fill_viridis_c()`を使い[^viridis]、カラーオプションはplasmaにします（`option = "c"`）。
 
@@ -299,7 +325,9 @@ Country_df %>%
 ## Picking joint bandwidth of 0.054
 ```
 
-<img src="visualization4_files/figure-html/visual4-ridge6-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-ridge6-1} \end{center}
 
 密度曲線は基本的にはなめらかな曲線であるため、データが存在しない箇所にも密度が高く見積もられるケースがあります。全体的な分布を俯瞰するには良いですが、情報の損失は避けられません。そこで出てくるのが点付きのリッジプロットです。`HDI_2018`の個々の値を点で出力するには`jittered_points = TRUE`を指定するだけです。これだけで密度曲線の内側に点が若干のズレ付き（jitter）で出力されます。ただし、密度曲線がオーバーラップされるリッジプロットの特徴を考えると、グループごとに点の色分けをする必要があります（同じ色になると、どのグループの点かが分からなくなるので）。この場合、`point_color`に対し、グループ変数（`Continent`）をマッピングします。また、密度曲線の色と合わせるために密度曲線の色塗りも`fill`で指定します。
 
@@ -320,7 +348,9 @@ Country_df %>%
 ## Picking joint bandwidth of 0.054
 ```
 
-<img src="visualization4_files/figure-html/visual4-ridge7-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-ridge7-1} \end{center}
 
 　他にも密度曲線の下側にラグプロットを付けることも可能です。こうすれば点ごとに色訳をする必要もなくなります。ラグプロットを付けるためには点の形（`point_shape`）を「|」にする必要があります。ただ、これだけだと「|」が密度曲線内部に散らばる（jittered）だけです。散らばりをなくす、つまり密度曲線の下段に固定する必要があり、これは`aes()`その外側に`position = position_points_jitter(width = 0, height = 0)`を指定することで出来ます。
 
@@ -342,7 +372,9 @@ Country_df %>%
 ## Picking joint bandwidth of 0.054
 ```
 
-<img src="visualization4_files/figure-html/visual4-ridge8-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-ridge8-1} \end{center}
 
 　最後に密度曲線でなく、ヒストグラムで示す方法を紹介します。これは`geom_density_ridges()`の内部に`stat = "binline"`を指定するだけです。
 
@@ -361,7 +393,9 @@ Country_df %>%
 ## `stat_binline()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
-<img src="visualization4_files/figure-html/visual4-ridge9-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-ridge9-1} \end{center}
 
 ---
 
@@ -370,7 +404,7 @@ Country_df %>%
 　エラーバー付きの散布図は推定結果の点推定値とその不確実性（信頼区間など）を示す際によく使われる図です。以下の表は`Country_df`を用い、大陸（オセアニアを除く）ごとにフリーダムハウス・スコア（`FH_Total`）を一人当たりPPP GDP（`PPP_per_capita`）に回帰させた分析から得られたフリーダムハウス・スコア（`FH_Total`）の係数（以下の式の$\beta_1$）の点推定値と95%信頼区間です。
 
 $$
-\text{PPP per capita} = \beta_0 + \beta_1 \cdot \text{FH_Total} + \varepsilon
+\text{PPP per capita} = \beta_0 + \beta_1 \cdot \text{FH}\_\text{Total} + \varepsilon
 $$
 
 
@@ -390,7 +424,7 @@ Pointrange_df
 ```
 
 ```
-## # A tibble: 4 × 4
+## # A tibble: 4 x 4
 ## # Groups:   Continent [4]
 ##   Continent  Coef Conf_lwr Conf_upr
 ##   <chr>     <dbl>    <dbl>    <dbl>
@@ -429,7 +463,9 @@ Pointrange_df %>%
     theme_bw(base_size = 12)
 ```
 
-<img src="visualization4_files/figure-html/visual4-pointrage3-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-pointrage3-1} \end{center}
 
 ここでもう一つの次元を追加することもあるでしょう。たとえば、複数のモデルを比較した場合がそうかもしれません。以下の`Pointrange_df2`について考えてみましょう。
 
@@ -453,7 +489,7 @@ Pointrange_df2
 ```
 
 ```
-## # A tibble: 8 × 5
+## # A tibble: 8 x 5
 ## # Groups:   Continent [4]
 ##   Continent Term              Coef Conf_lwr Conf_upr
 ##   <chr>     <chr>            <dbl>    <dbl>    <dbl>
@@ -471,8 +507,8 @@ Pointrange_df2
 
 $$
 \begin{aligned}
-\text{PPP per capita} & = \beta_0 + \beta_1 \cdot \text{FH_CL} + \varepsilon \\
-\text{PPP per capita} & = \gamma_0 + \gamma_1 \cdot \text{FH_PR} + \upsilon
+\text{PPP per capita} & = \beta_0 + \beta_1 \cdot \text{FH}\_\text{CL} + \varepsilon \\
+\text{PPP per capita} & = \gamma_0 + \gamma_1 \cdot \text{FH}\_\text{PR} + \upsilon
 \end{aligned}
 $$
 
@@ -492,7 +528,9 @@ Pointrange_df2 %>%
     theme(legend.position = "bottom")
 ```
 
-<img src="visualization4_files/figure-html/visual4-pointrage6-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-pointrage6-1} \end{center}
 
 　何か違いますね。この2つのエラーバーと点の位置をずらす必要があるようです。これは3次元以上の棒グラフで使った`position`引数で調整可能です。今回は実引数として`position_dodge(0.5)`を指定してみましょう。
 
@@ -511,7 +549,9 @@ Pointrange_df2 %>%
     theme(legend.position = "bottom")
 ```
 
-<img src="visualization4_files/figure-html/visual4-pointrage7-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-pointrage7-1} \end{center}
 
 　これで完成です。更に、$\alpha = 0.05$水準で統計的に有意か否かを透明度で示し、透明度の凡例を非表示にしてみましょう。$\alpha = 0.05$水準で統計的に有意か否かは95%信頼区間の上限と下限の積が0より大きいか否かで判定できます。`ggplot()`にデータを渡す前に統計的有意か否かを意味する`Sig`変数を作成し、`geom_pointrage()`の内部では`alpha`に`Sig`をマッピングします。
 
@@ -534,7 +574,9 @@ Pointrange_df2 %>%
     theme(legend.position = "bottom")
 ```
 
-<img src="visualization4_files/figure-html/visual4-pointrage8-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-pointrage8-1} \end{center}
 
 ---
 
@@ -556,7 +598,9 @@ Country_df %>%
            base_size   = 12)
 ```
 
-<img src="visualization4_files/figure-html/visual4-lollipop1-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-lollipop1-1} \end{center}
 
 ここで登場するのがロリーポップチャートです。ロリーポップチャートの構成要素は棒とキャンディーの部分です。棒は線になるため`geom_segement()`を、キャンディーは散布図`geom_point()`を使います。散布図については既に第\@ref(visualization2)章で説明しましたので、ここでは`geom_segment()`について説明します。
 
@@ -581,7 +625,9 @@ Country_df %>%
         axis.ticks.y = element_blank())
 ```
 
-<img src="visualization4_files/figure-html/visual4-lollipop2-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-lollipop2-1} \end{center}
 
 　これで完成です。もし一人当たりPPP GDP順で並べ替えたい場合は`fct_reorder()`を使います。`Country`を`PPP_per_capita`の低い方を先にくるようにするなら、`fct_reorder(Country, PPP_per_capita)`です。縦に並ぶの棒グラフなら最初に来る水準が下に位置されます。もし、順番を逆にしたいなら、更に`fct_rev()`で水準の順番を逆転させます。
 
@@ -603,7 +649,9 @@ Country_df %>%
         axis.ticks.y = element_blank())
 ```
 
-<img src="visualization4_files/figure-html/visual4-lollipop3-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-lollipop3-1} \end{center}
 
 　ロリーポップロリーポップチャートで次元を追加するには点（キャンディー）の色分けが考えられます。たとえば、OECD加盟国か否かの次元を追加する場合、`geom_point()`において`color`をマッピングするだけです。
 
@@ -629,7 +677,9 @@ Country_df %>%
         legend.position    = "bottom")
 ```
 
-<img src="visualization4_files/figure-html/visual4-lollipop4-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-lollipop4-1} \end{center}
 
 　ファセット分割ももちろんできますが、この場合、OECD加盟国の一人当たりPPP GDPが相対的に高いことを示すなら、一つのファセットにまとめた方が良いでしょう。
 
@@ -655,7 +705,9 @@ Country_df %>%
         axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ```
 
-<img src="visualization4_files/figure-html/visual4-lollipop5-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-lollipop5-1} \end{center}
 
 ---
 
@@ -679,7 +731,9 @@ Country_df %>%
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="visualization4_files/figure-html/visual4-smooth1-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-smooth1-1} \end{center}
 
 　青い線が平滑化ライン、網掛けの領域が95%信頼区間です。この線はLOESS (**LO**cal **E**stimated **S**catterplot **S**moothing)と呼ばれる非線形平滑化ラインです。どのようなラインを引くかは`method`引数で指定しますが、この`method`既定値が`"loess"`です。これを見るとフリーダムハウス・スコアが75以下の国では国の自由度と所得間の関係があまり見られませんが、75からは正の関係が確認できます。
 
@@ -701,7 +755,9 @@ Country_df %>%
 ## `geom_smooth()` using formula 'y ~ x'
 ```
 
-<img src="visualization4_files/figure-html/visual4-smooth2-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-smooth2-1} \end{center}
 
 　他にも定番の回帰直線を引くこともできます。`method`の実引数を`"lm"`に変えるだけです。
 
@@ -721,7 +777,9 @@ Country_df %>%
 ## `geom_smooth()` using formula 'y ~ x'
 ```
 
-<img src="visualization4_files/figure-html/visual4-smooth3-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-smooth3-1} \end{center}
 
 　信頼区間は既定値だと95%信頼区間が表示されますが、`level`引数で調整することができます。たとえば、99.9%信頼区間を表示したい場合、`level = 0.999`を指定します。
 
@@ -741,7 +799,9 @@ Country_df %>%
 ## `geom_smooth()` using formula 'y ~ x'
 ```
 
-<img src="visualization4_files/figure-html/visual4-smooth4-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-smooth4-1} \end{center}
 
 　信頼区間を消したい場合は`se = FALSE`を指定します（既定値は`TRUE`）。
 
@@ -761,7 +821,9 @@ Country_df %>%
 ## `geom_smooth()` using formula 'y ~ x'
 ```
 
-<img src="visualization4_files/figure-html/visual4-smooth5-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-smooth5-1} \end{center}
 
 　最後にデータのサブセットごとに回帰直線を引く方法について説明します。散布図で色分けを行う場合、`aes()`内で`color`引数を指定しますが、これだけで十分です。今回はこれまでの散布図をOECD加盟有無ごとに色分けし、それぞれ別の回帰直線を重ねてみましょう。回帰直線も色分けしたいので`color`引数で次元を増やす必要があり、これは`geom_point()`と共通であるため、`ggplot()`内でマッピングします。
 
@@ -784,7 +846,9 @@ Country_df %>%
 ## `geom_smooth()` using formula 'y ~ x'
 ```
 
-<img src="visualization4_files/figure-html/visual4-smooth6-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-smooth6-1} \end{center}
 
 　これを見ると、国の自由度と所得の間に関係が見られるのはOECD加盟国で、非加盟国では非常に関係が弱いことが分かります。
 
@@ -809,7 +873,9 @@ Country_df %>%
 ## `geom_smooth()` using formula 'y ~ x'
 ```
 
-<img src="visualization4_files/figure-html/visual4-smooth7-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-smooth7-1} \end{center}
 
 　{ggplot2}が提供する平滑化ラインにはLOESSと回帰直線以外にも`"glm"`や`"gam"`などがります。詳細はRコンソール上で`?geom_smooth`を入力し、ヘルプを参照してください。
 
@@ -847,7 +913,7 @@ Heatmap_df
 ```
 
 ```
-## # A tibble: 178 × 5
+## # A tibble: 178 x 5
 ##    Country             Continent  Income                     FH_Total HDI_2018
 ##    <chr>               <fct>      <fct>                         <dbl>    <dbl>
 ##  1 Afghanistan         アジア     "1万ドル未満"                    27    0.496
@@ -860,7 +926,7 @@ Heatmap_df
 ##  8 Australia           オセアニア "3万ドル以上"                    97    0.938
 ##  9 Austria             ヨーロッパ "3万ドル以上"                    93    0.914
 ## 10 Azerbaijan          ヨーロッパ "1万ドル以上\n2万ドル未満"       10    0.754
-## # … with 168 more rows
+## # ... with 168 more rows
 ```
 
 　次は`group_by()`と`summarise()`を使って、各カテゴリーに属するケース数を計算し、`N`という名の列として追加します。
@@ -876,7 +942,7 @@ Heatmap_df1
 ```
 
 ```
-## # A tibble: 18 × 3
+## # A tibble: 18 x 3
 ##    Continent  Income                         N
 ##    <fct>      <fct>                      <int>
 ##  1 アフリカ   "1万ドル未満"                 41
@@ -912,7 +978,9 @@ Heatmap_df1 %>%
   theme(panel.grid = element_blank()) # グリッドラインを消す
 ```
 
-<img src="visualization4_files/figure-html/visual4-heatmap3-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-heatmap3-1} \end{center}
 
 　明るいほどカテゴリーに属するケースが多く、暗いほど少ないことを意味します。これを見ると世界で最も多くの割合を占めているのは、一人当たり購買力平価GDPが1万ドル未満のアフリカの国で、次は一人当たり購買力平価GDPが3万ドル以上のヨーロッパの国であることが分かります。欠損している（ケース数が0）セルは白の空白となります。
 
@@ -931,7 +999,9 @@ Heatmap_df1 %>%
   theme(panel.grid = element_blank()) # グリッドラインを消す
 ```
 
-<img src="visualization4_files/figure-html/visual4-heatmap4-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-heatmap4-1} \end{center}
 
 　気のせいかも知れませんが、先ほどよりは読みやすくなったような気がしますね。
 
@@ -952,7 +1022,7 @@ Heatmap_df2
 ```
 
 ```
-## # A tibble: 18 × 3
+## # A tibble: 18 x 3
 ##    Continent  Income                       HDI
 ##    <fct>      <fct>                      <dbl>
 ##  1 アフリカ   "1万ドル未満"              0.510
@@ -994,7 +1064,9 @@ Heatmap_df2 %>%
         panel.grid      = element_blank())
 ```
 
-<img src="visualization4_files/figure-html/visual4-heatmap6-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-heatmap6-1} \end{center}
 
 ---
 
@@ -1012,7 +1084,9 @@ Country_df %>%
                 base_size = 12)
 ```
 
-<img src="visualization4_files/figure-html/visual4-contour1-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-contour1-1} \end{center}
 
 
 ```{.r .numberLines}
@@ -1025,7 +1099,9 @@ Country_df %>%
                 base_size = 12)
 ```
 
-<img src="visualization4_files/figure-html/visual4-contour2-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-contour2-1} \end{center}
 
 
 ```{.r .numberLines}
@@ -1038,7 +1114,9 @@ Country_df %>%
                 base_size = 12)
 ```
 
-<img src="visualization4_files/figure-html/visual4-contour3-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-contour3-1} \end{center}
 
 　`geom_density_2d_filled()`オブジェクトの後に`geom_density_2d()`オブジェクトを重ねると、区間の区画線を追加することもできます。
 
@@ -1054,7 +1132,9 @@ Country_df %>%
                 base_size = 12)
 ```
 
-<img src="visualization4_files/figure-html/visual4-contour4-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-contour4-1} \end{center}
 
 　色が気に入らない場合、自分で調整することも可能です。`scale_fill_manual()`で各区間ごとの色を指定することもできませんが、あまり効率的ではありません。ここでは`scale_fill_brewer()`関数を使って、[ColorBrewer](https://colorbrewer2.org/)のパレットを使ってみましょう。引数なしでも使えますが、既定値のパレットは区間が9つまで対応します。今回の等高線図は全部で10区間ですので、あまり適切ではありません。ここでは11区間まで対応可能な`"Spectral"`パレットを使いますが、これは`palette`引数で指定できます。
 
@@ -1070,7 +1150,9 @@ Country_df %>%
                 base_size = 12)
 ```
 
-<img src="visualization4_files/figure-html/visual4-contour5-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-contour5-1} \end{center}
 
 　`palette`で指定可能なカラーパレットの一覧は{RColorBrewer}の`display.brewer.all()`関数で確認することが出来ます。各パレットが何区間まで対応できるかを見てから自分でパレットを作成することも可能ですが、詳細はネット上の各種記事を参照してください。
 
@@ -1079,10 +1161,14 @@ Country_df %>%
 RColorBrewer::display.brewer.all()
 ```
 
-<div class="figure" style="text-align: center">
-<img src="visualization4_files/figure-html/visual4-contour6-1.png" alt="{RColorBrewer}が提供するパレート一覧" width="672" />
-<p class="caption">(\#fig:visual4-contour6){RColorBrewer}が提供するパレート一覧</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{visualization4_files/figure-latex/visual4-contour6-1} 
+
+}
+
+\caption{{RColorBrewer}が提供するパレート一覧}(\#fig:visual4-contour6)
+\end{figure}
 
 ---
 
@@ -1122,7 +1208,9 @@ world_map %>%
   theme_void() # 何もないテーマを指定する。ここはお好みで
 ```
 
-<img src="visualization4_files/figure-html/visual4-map3-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-map3-1} \end{center}
 
 　もし、各国の人口に応じて色塗りをする場合はどうすれば良いでしょうか。実は、今回使用するデータがデータフレーム形式であることを考えると、これまでの{ggplot2}の使い方とあまり変わりません。{rnaturalearth}から読み込んだデータには既に`pop_est`という各国の人口データが含まれて負います。この値に応じて色塗りを行うため、`geom_sf()`内に`fill = pop_est`でマッピングするだけです。
 
@@ -1140,7 +1228,9 @@ world_map %>%
   theme_void()
 ```
 
-<img src="visualization4_files/figure-html/visual4-map4-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-map4-1} \end{center}
 
 　もし、世界でなく一部の地域だけを出力するなら、`coord_sf()`で座標系を調整します。東アジアと東南アジアの一部を出力したいとします。この場合、経度は90度から150度まで、緯度は10度から50度に絞ることになります。経度は`xlim`で、緯度は`ylim`で調整します。
 
@@ -1156,7 +1246,9 @@ world_map %>%
   theme(legend.position = "bottom")
 ```
 
-<img src="visualization4_files/figure-html/visual4-map5-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-map5-1} \end{center}
 
 　他にも`ne_countries()`内に`continent`引数を指定し、特定の大陸だけを読み込むことで可能です。ここではアジアの国のみを抽出し、`asia_map`という名のオブジェクトとして格納します。解像度は中程度とします。
 
@@ -1173,7 +1265,9 @@ asia_map %>%
     labs(fill = "Income Group")
 ```
 
-<img src="visualization4_files/figure-html/visual4-map6-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-map6-1} \end{center}
 
 　アジアの中から更に東アジアに絞りたい場合は`filter()`を使用し、`subregion`列を基準に抽出することも可能です。
 
@@ -1187,7 +1281,9 @@ asia_map %>%
     labs(fill = "Income Group")
 ```
 
-<img src="visualization4_files/figure-html/visual4-map7-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-map7-1} \end{center}
 
 　`subregion`の値は以下のように確認可能です。
 
@@ -1223,7 +1319,9 @@ asia_map %>%
   theme(legend.position = "bottom")
 ```
 
-<img src="visualization4_files/figure-html/visual4-map9-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-map9-1} \end{center}
 
 　`scale_fill_brewer()`の`palette`引数は等高線図のときに紹介しましたパレート一覧を参照してください。
 
@@ -1239,7 +1337,9 @@ ne_countries(scale = "small", country = "Japan", returnclass = "sf") %>%
     theme_void() # 空っぽのテーマ
 ```
 
-<img src="visualization4_files/figure-html/visual4-map10-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-map10-1} \end{center}
 
 　これだと、物足りない感があるので、もう少し高解像度の地図にしてみましょう。高解像度の地図データを読み込む際は`scale = "large"`を指定します。
 
@@ -1251,7 +1351,9 @@ ne_countries(scale = "large", country = "Japan", returnclass = "sf") %>%
     theme_void() # 空っぽのテーマ
 ```
 
-<img src="visualization4_files/figure-html/visual4-map11-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-map11-1} \end{center}
 
 　ただ、日本地図を出すという場合、多くは都道府県レベルでマッピングが目的でしょう。世界地図のマッピングならこれで問題ありませんが、一国だけなら、その下の自治体の境界線も必要です。したがって、先ほど使用しましたパッケージのより高解像度の地図が含まれている{rnaturalearthhires}をインストールし、読み込みましょう。2022年Feb月25日現在、{rnaturalearthhires}はCRANに登録されておらず、GitHubの[ropensciレポジトリー](https://github.com/ropensci)のみで公開されているため、今回は{pacman}の`p_load()`でなく、`p_load_gh()`を使用します。
 
@@ -1272,7 +1374,9 @@ Japan_Map %>%
   theme_void()
 ```
 
-<img src="visualization4_files/figure-html/visual4-map13-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-map13-1} \end{center}
 
 　今回は各都道府県を人口密度ごとに色塗りをしてみましょう。`ne_states()`で読み込んだデータに人口密度のデータはないため、別途のデータと結合する必要があります。筆者が予め作成しておいた[データ](Data/Japan_Density.csv)を読み込み、中身を確認してみます。
 
@@ -1283,13 +1387,13 @@ Japan_Density <- read_csv("Data/Japan_Density.csv")
 
 ```
 ## Rows: 47 Columns: 3
-## ── Column specification ────────────────────────────────────────────────────────
+## -- Column specification --------------------------------------------------------
 ## Delimiter: ","
 ## chr (1): Name
 ## dbl (2): Code, Density
 ## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
 ```
 
 ```{.r .numberLines}
@@ -1297,7 +1401,7 @@ Japan_Density
 ```
 
 ```
-## # A tibble: 47 × 3
+## # A tibble: 47 x 3
 ##     Code Name   Density
 ##    <dbl> <chr>    <dbl>
 ##  1     1 北海道    66.6
@@ -1310,7 +1414,7 @@ Japan_Density
 ##  8     8 茨城県   470. 
 ##  9     9 栃木県   302. 
 ## 10    10 群馬県   305. 
-## # … with 37 more rows
+## # ... with 37 more rows
 ```
 
 　各都道府県の人口密度がついております、左側の`Code`は何でしょうか。これは各都道府県のISOコードであり、このコードをキー変数としてデータを結合することとなります。各都道府県のコードは[国土交通省のホームページ](https://nlftp.mlit.go.jp/ksj/gml/codelist/PrefCd.html)から確認可能です。
@@ -1538,7 +1642,9 @@ Japan_Map %>%
     theme_void(base_family = "HiraginoSans-W3")
 ```
 
-<img src="visualization4_files/figure-html/visual4-map18-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-map18-1} \end{center}
 
 　世界地図でも同じやり方でデータの結合が可能です。この場合はISO3コードかISO2コードがキー変数となります。ISO3コードは`iso_a3`、ISO2コードは`iso_a2`列に格納されています。他に使用可能なキー変数は`iso_n3`であり、こちらは各国を識別する3桁の数字となります。
 
@@ -1575,7 +1681,9 @@ Osaka_map %>%
   theme_minimal()
 ```
 
-<img src="visualization4_files/figure-html/visual4-map21-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-map21-1} \end{center}
 
 　ここでもデータの結合&マッピングが可能です。大阪府内自治体の人口と学生数が格納された[データ](data/Osaka_Student.csv)を読み込んでみましょう。こちらは2015年国勢調査の結果から取得したデータです。
 
@@ -1586,13 +1694,13 @@ Osaka_Student <- read_csv("data/Osaka_Student.csv")
 
 ```
 ## Rows: 75 Columns: 4
-## ── Column specification ────────────────────────────────────────────────────────
+## -- Column specification --------------------------------------------------------
 ## Delimiter: ","
 ## chr (1): Name
 ## dbl (3): Code, Pop, Student
 ## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
 ```
 
 ```{.r .numberLines}
@@ -1600,7 +1708,7 @@ Osaka_Student
 ```
 
 ```
-## # A tibble: 75 × 4
+## # A tibble: 75 x 4
 ##     Code Name                Pop Student
 ##    <dbl> <chr>             <dbl>   <dbl>
 ##  1 27000 大阪府          8839469  438901
@@ -1613,7 +1721,7 @@ Osaka_Student
 ##  8 27108 大阪市 大正区     65141    2627
 ##  9 27109 大阪市 天王寺区   75729    3480
 ## 10 27111 大阪市 浪速区     69766    1409
-## # … with 65 more rows
+## # ... with 65 more rows
 ```
 
 　各市区町村にもコードが指定されており、`Osaka_Student`では`Code`列、`Osaka_map`では`citi_code`列となります。`Osaka_map`の`city_code`は文字列であるため、こちらを数値型に変換し`Code`という名の列として追加しておきましょう。続いて、`Code`列をキー変数とし、2つのデータセットを結合します。
@@ -1640,7 +1748,9 @@ Osaka_map %>%
   theme(legend.position = "bottom")
 ```
 
-<img src="visualization4_files/figure-html/visual4-map24-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-map24-1} \end{center}
 
 ---
 
@@ -1648,7 +1758,8 @@ Osaka_map %>%
 
 　近年、因果推論の界隈でよく登場する非巡回有向グラフ（DAG）ですが、「グラフ」からも分かるように、DAGの考え方に基づく因果推論の研究には多くの図が登場します。DAGを作図するには{ggplot2}のみでも可能ですが、{dagitty}パッケージでDAGの情報を含むオブジェクトを生成し、{ggdag}で作図した方が簡単です。以下の図はDAGの一例です。
 
-<img src="visualization4_files/figure-html/visual4-dag1-1.png" width="672" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-dag1-1} \end{center}
 
 　ここでX、Y、Zはノード（node）と呼ばれ、それぞれのノードをつなぐ線のことをエッジ（edge）と呼びます。また、これらのエッジには方向があります（有向）。簡単に言うと原因と結果といった関係ですが、DAGを描く際は、各ノード間の関係を記述する必要があります。
 
@@ -1717,7 +1828,9 @@ DAG_data1 %>%
   ggdag()
 ```
 
-<img src="visualization4_files/figure-html/visual4-dag5-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-dag5-1} \end{center}
 
 　DAGにおいて背景、軸の目盛り、ラベルは不要ですので、`theme_dag_blank()`テーマを指定して全て除去します。
 
@@ -1728,7 +1841,9 @@ DAG_data1 %>%
   theme_dag_blank()
 ```
 
-<img src="visualization4_files/figure-html/visual4-dag6-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-dag6-1} \end{center}
 
 ### ノードの位置を指定する
 
@@ -1773,7 +1888,9 @@ DAG_data2 %>%
   theme_dag_blank()
 ```
 
-<img src="visualization4_files/figure-html/visual4-dag9-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-dag9-1} \end{center}
 
 　以上の使い方だけでも、ほとんどのDAGは描けるでしょう。また、ノードを若干オシャレ（?）にするには、`ggdag()`内で`stylized = TRUE`を指定します。
 
@@ -1794,7 +1911,9 @@ DAG_data3 %>%
   theme_dag_blank()
 ```
 
-<img src="visualization4_files/figure-html/visual4-dag10-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-dag10-1} \end{center}
 
 　可視化の話ではありませんが、`adjustmentSets()`関数を用いると、処置変数`T`の総効果（total effect）を推定するためにはどの変数を統制（調整）する必要があるかを調べることも可能です。
 
@@ -1870,9 +1989,13 @@ Bump_df
 ```
 
 
+```
+## PhantomJS not found. You can install it with webshot::install_phantomjs(). If it is installed, please make sure the phantomjs executable can be found via the PATH variable.
+```
+
 ```{=html}
-<div id="htmlwidget-642ccf7978bca8edfca2" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-642ccf7978bca8edfca2">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28"],["Canada","Canada","Canada","Canada","France","France","France","France","Germany","Germany","Germany","Germany","Italy","Italy","Italy","Italy","Japan","Japan","Japan","Japan","United Kingdom","United Kingdom","United Kingdom","United Kingdom","United States","United States","United States","United States"],[4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7],[2,2,3,3,5,4,4,4,3,3,2,2,7,6,5,5,1,1,1,1,4,5,6,6,6,7,7,7],[24637.9154724449,62787.0894703042,79922.1210320958,28516.76139099,54618.9011745094,81421.0565109242,85834.8084016522,30116.9264854476,47060.6288732512,64783.4760508165,67683.1605750897,23598.8299524031,81514.6403285935,114367.419204309,117681.394538101,39973.3378876119,2257.49517137422,4100.01984479942,4324.67034320323,1622.05677149679,48576.4676505625,102407.379263796,119872.185871719,41919.1582848447,58486.8693972508,135824.160741713,194232.174864135,87484.5641143518]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Country<\/th>\n      <th>Month<\/th>\n      <th>Rank<\/th>\n      <th>New_Cases_per_million<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-1c8b8a8fe4fbb23d5799" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1c8b8a8fe4fbb23d5799">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28"],["Canada","Canada","Canada","Canada","France","France","France","France","Germany","Germany","Germany","Germany","Italy","Italy","Italy","Italy","Japan","Japan","Japan","Japan","United Kingdom","United Kingdom","United Kingdom","United Kingdom","United States","United States","United States","United States"],[4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7,4,5,6,7],[2,2,3,3,5,4,4,4,3,3,2,2,7,6,5,5,1,1,1,1,4,5,6,6,6,7,7,7],[24637.9154724449,62787.0894703042,79922.1210320958,28516.76139099,54618.9011745094,81421.0565109242,85834.8084016522,30116.9264854476,47060.6288732512,64783.4760508165,67683.1605750897,23598.8299524031,81514.6403285935,114367.419204309,117681.394538101,39973.3378876119,2257.49517137422,4100.01984479942,4324.67034320323,1622.05677149679,48576.4676505625,102407.379263796,119872.185871719,41919.1582848447,58486.8693972508,135824.160741713,194232.174864135,87484.5641143518]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Country<\/th>\n      <th>Month<\/th>\n      <th>Rank<\/th>\n      <th>New_Cases_per_million<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 ```
 
 　それでは{ggbump}が提供する`geom_bump()`幾何オブジェクトを使用し、簡単なバンプチャートを作成してみましょう。必要なマッピング要素は`x`と`y`、`color`です。`x`には時間を表す変数である`Month`を、`y`には順位を表す`Rank`をマッピングします。また、7本の線が出るため、月と順位、それぞれの値がどの国の値かを特定する必要があります。`groups`に国名である`Country`をマッピングしても線は引けますが、どの線がどの国かが分からなくなるため、`color`に`Country`をマッピングし、線の色分けをします。
@@ -1884,7 +2007,9 @@ Bump_df %>%
   geom_bump()
 ```
 
-<img src="visualization4_files/figure-html/visual4-bump5-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-bump5-1} \end{center}
 
 　これで最低限のバンプチャートはできましたが、もう少し見やすく、可愛くしてみましょう。今は線が細いのでややぶ厚めにします。これは`geom_bump()`レイヤーの`size`引数で指定可能です。また、各月に点を付けることによって、同時期における順位の比較をよりしやすくしてみましょう。これは散布図と同じであるため、`geom_point()`幾何オブジェクトを使用します。
 
@@ -1897,7 +2022,9 @@ Bump_df %>%
   theme_minimal(base_size = 14)
 ```
 
-<img src="visualization4_files/figure-html/visual4-bump6-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-bump6-1} \end{center}
 
 　これでだいぶ見やすくなりましたが、凡例における国名の順番がやや気になりますね。7月の時点において順位が最も高い国はアメリカ、最も低い国は日本ですが、凡例の順番はアルファベット順となっています。この凡例の順番を7月時点における`Rank`の値に合わせた方がより見やすいでしょう。ここで第\@ref(factor-forcat-reorder2)で紹介しました`fct_reorder2()`を使って`Country`変数の水準 (level)を7月時点における`Rank`の順位に合わせます。この場合、`Country`変数 (`.f = Country`)の水準を`Month`が (`.x = Month`)最も大きい (`.fun = last2`)時点における`Rank`の順番に合わせる (`.y = Rank`)こととなります。`fct_reorder2()`内の引数の順番の既定値は`.f`、`.x`、`.y`、`.fun`となります。
 
@@ -1911,7 +2038,9 @@ Bump_df %>%
   theme_minimal(base_size = 14)
 ```
 
-<img src="visualization4_files/figure-html/visual4-bump7-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-bump7-1} \end{center}
 
 　最後に縦軸の目盛りラベルを付けます。上に行くほど順位が高くなりますので、1を7に、2を6に、...、7を1に変更します。また、図内のグリッドも不要ですので、`theme()`を使用し、グリッドを削除します (`panel.grid = element_blank()`)。
 
@@ -1927,7 +2056,9 @@ Bump_df %>%
   theme(panel.grid = element_blank())
 ```
 
-<img src="visualization4_files/figure-html/visual4-bump8-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-bump8-1} \end{center}
 
 　これでバンプチャートの完成です。このままでの良いかも知れませんが、もう少し手間を掛けることでより読みやすいグラフが作れます。たとえば、今のままだと「日本のトレンド」を確認したい場合、まず凡例から日本の色を確認し、その色に該当する点と線を見つけてトレンドを見る必要がありますね。もし、ここで図の左端と右端の点の横に国名を出力すると、凡例がなくても良いですし、4月の時点から日本のトレンドを確認することも、7月の時点から遡る形で日本のトレンドを確認することも可能かも知れません。
 
@@ -1959,7 +2090,9 @@ Bump_df %>%
         panel.grid      = element_blank())
 ```
 
-<img src="visualization4_files/figure-html/visual4-bump9-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-bump9-1} \end{center}
 
 ---
 
@@ -2010,7 +2143,7 @@ Vote_0910
 ```
 
 ```
-## # A tibble: 47 × 3
+## # A tibble: 47 x 3
 ##    Vote09 Vote10      Freq
 ##    <chr>  <chr>      <int>
 ##  1 DK     DK           111
@@ -2023,7 +2156,7 @@ Vote_0910
 ##  8 その他 DK            18
 ##  9 その他 その他        73
 ## 10 その他 公明           4
-## # … with 37 more rows
+## # ... with 37 more rows
 ```
 
 　2009年の調査で「わからない」と回答し、2010年の調査でも「わからない」と回答した回答者数は111名、2009年の調査で「わからない」と回答し、2010年の調査では「棄権」と回答した回答者数は8名、...といったことが分かりますね。
@@ -2051,7 +2184,9 @@ Vote_0910 %>%
     geom_stratum()
 ```
 
-<img src="visualization4_files/figure-html/visual4-alluvial6-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-alluvial6-1} \end{center}
 
 　何かの図は出てきましたが、これだけだと、それぞれの四角形がどの政党を示しているのかが分かりませんね。四角形内に政党名を出力するためには{ggplot2}内蔵の`geom_text()`を使用します。マッピング要素は`ggplot()`内でマッピングしたものに加え、`label`が必要ですが、ここでは`after_stat(stratum)`を指定します。そして、`aes()`のその側に`stat = "stratum"`を指定するだけです。フォントの指定が必要な場合は`family`を使います。`theme_*()`内で`base_family`を指定した場合でも必要です。
 
@@ -2065,7 +2200,9 @@ Vote_0910 %>%
               stat = "stratum", family = "HiraginoSans-W3")
 ```
 
-<img src="visualization4_files/figure-html/visual4-alluvial7-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-alluvial7-1} \end{center}
 
 　これで沖積図はとりあえず完成ですが、少し読みやすく加工してみましょう。たとえば、2010年に民主党に投票した回答者において2009年の投票先の割合を見たいとした場合、`geom_alluvium()`内に`fill = Vote09`をマッピングします。これで帯に2009年の投票先ごとの色付けができます。
 
@@ -2079,7 +2216,9 @@ Vote_0910 %>%
               stat = "stratum", family = "HiraginoSans-W3")
 ```
 
-<img src="visualization4_files/figure-html/visual4-alluvial8-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-alluvial8-1} \end{center}
 
 　`fill = Vote10`とマッピングした場合は、感覚が変わります。実際にやってみましょう。
 
@@ -2095,7 +2234,9 @@ Alluvial_Plot <- Vote_0910 %>%
 Alluvial_Plot
 ```
 
-<img src="visualization4_files/figure-html/visual4-alluvial9-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-alluvial9-1} \end{center}
 
 　この場合、2009年に民主党に投票した人が2010年にどこに流れたかが分かりやすくなります。`Vote09`に色分けするか、`Vote10`に色分けするかは作成する人が決める問題であり、自分の主張・メッセージに適したマッピングをしましょう。
 
@@ -2114,7 +2255,9 @@ Alluvial_Plot +
           axis.text.y = element_blank())
 ```
 
-<img src="visualization4_files/figure-html/visual4-alluvial10-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-alluvial10-1} \end{center}
 
 　これでだいぶスッキリした沖積図が出来上がりました。
 
@@ -2141,7 +2284,9 @@ Country_df %>%
   geom_treemap(aes(area = Population))
 ```
 
-<img src="visualization4_files/figure-html/visual4-tree2-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-tree2-1} \end{center}
 
 　これだけだと各長方形がどの国を指しているのかが分かりませんね。長方形の上に国名（`Country`）を追加するためには`geom_treemap_text()`幾何オブジェクトを使用します。マッピングは`area`と`label`に対し、それぞれ面積を表す`Population`と国名を表す`Country`を指定します。`area`は`geom_treemap()`と`geom_treemap_text()`両方で使われるので`ggplot()`の内部でマッピングしても問題ありません[^tree_mapping]。また、`aes()`の外側に`color = "white"`で文字を白に指定し、`place = "center"`で長方形の真ん中にラベルが付くようにします。
 
@@ -2156,7 +2301,9 @@ Country_df %>%
   geom_treemap_text(aes(label = Country), color = "white", place = "center")
 ```
 
-<img src="visualization4_files/figure-html/visual4-tree3-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-tree3-1} \end{center}
 
 　これでツリーマップが完成しました。インドと中国の存在感がかなり大きいですね。更にラベルのサイズを長方形に合わせると、その存在感をより高めることができます。ラベルの大きさを長方形に合わせるには`geom_treepmap_text()`の内部に`grow = TRUE`を指定します。
 
@@ -2170,7 +2317,9 @@ Country_df %>%
                     grow = TRUE)
 ```
 
-<img src="visualization4_files/figure-html/visual4-tree4-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-tree4-1} \end{center}
 
 　ここで更に次元を追加するために、色塗りをしてみましょう。たとえば、G20加盟国か否かで色分けをしたい場合、`fill`に`G20`をマッピングします。ただし、今のままだと`G20`は連続変数扱いになりますので、character型、またはfactor型に変換します。
 
@@ -2189,7 +2338,9 @@ Country_df %>%
   theme(legend.position = "bottom")
 ```
 
-<img src="visualization4_files/figure-html/visual4-tree5-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-tree5-1} \end{center}
 
 　色塗りは連続変数に対して行うことも可能です。ここでは2018年人間開発指数（`HDI_2108`）の値に応じて色塗りをしてみます。また、`HDI_2018`が低い（`low`）と<span style = "color:#CD3333;">**brown3**</span>、高い（`high`）と<span style = "color:#6495ED;">**cornflowerblue**</span>色にします。真ん中の値（`midpoint`）は0.7とし、色（`mid`）は<span style = "color:#FFF8DC;background-color:#7F7F7F;">**cornsilk**</span>を使います。
 
@@ -2213,7 +2364,9 @@ Country_df %>%
   theme(legend.position = "bottom")
 ```
 
-<img src="visualization4_files/figure-html/visual4-tree6-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-tree6-1} \end{center}
 
 　ちなみに以上の図を円グラフにすると以下のようになります（国名は人口の割合が2.5%を超える国のみ表示）。ツリーマップと比較してかなり読みにくいことが分かります。
 
@@ -2244,7 +2397,9 @@ Country_df %>%
         axis.text  = element_blank())
 ```
 
-<img src="visualization4_files/figure-html/visual4-tree7-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-tree7-1} \end{center}
 
 　ただし、ツリーマップが必ずしも円グラフより優れているとは言えません。たとえば、 @Heer_Bostock:2010 の研究では円グラフとツリーマップを含む9種類のグラフを用い、被験者に大小関係を判断してもらう実験を行いましたが、ツリーマップ（四角形の面積）は円グラフ（角度）よりも判断までの所要時間が長いことが述べています。
 
@@ -2281,7 +2436,7 @@ head(Mosaic_df)
 ```
 
 ```
-## # A tibble: 6 × 4
+## # A tibble: 6 x 4
 ##   Country     Continent Polity          PPP     
 ##   <chr>       <fct>     <fct>           <fct>   
 ## 1 Afghanistan Asia      Closed Anocracy Low PPP 
@@ -2319,7 +2474,9 @@ Mosaic_Tab
 plot(Mosaic_Tab)
 ```
 
-<img src="visualization4_files/figure-html/visual4-mosaic6-1.png" width="480" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-mosaic6-1} \end{center}
 
 　やや地味ではありますが、モザイクプロットが出来ました。ここからはより読みやすいモザイクプロットを作成するために{ggmosaic}パッケージの`geom_mosaic()`関数を使います。
 
@@ -2335,7 +2492,9 @@ Mosaic_df %>%
     theme(panel.grid = element_blank())
 ```
 
-<img src="visualization4_files/figure-html/visual4-mosaic7-1.png" width="480" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-mosaic7-1} \end{center}
 
 　これで出来上がりですが、`"table"`オブジェクトを`plot()`に渡した結果とあまり変わらないですね。続いて、この図を少し改良してみましょう。まずはセルの色分けですが、これは`fill`に色分けする変数をマッピングするだけです。今回は政治体制ごとにセルを色分けしましょう。また、文字を大きめにし、横軸の目盛りラベルを回転します。
 
@@ -2352,7 +2511,9 @@ Mosaic_df %>%
           axis.text.x     = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ```
 
-<img src="visualization4_files/figure-html/visual4-mosaic8-1.png" width="480" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-mosaic8-1} \end{center}
 
 　次元を追加するためにはファセット分割を使います。たとえば、一人当たりPPP GDPの高低（`PPP`）でファセットを分割する場合、`facet_wrap(~PPP)`レイヤーを足すだけです。
 
@@ -2370,7 +2531,9 @@ Mosaic_df %>%
           axis.text.x     = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ```
 
-<img src="visualization4_files/figure-html/visual4-mosaic9-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-mosaic9-1} \end{center}
 
 　ただし、一つ問題があります。それは目盛りラベルの位置です。例えば、右側の横軸目盛りラベルの場合、セルの位置とラベルの位置がずれています。これは2つのファセットが同じ目盛りを共有し、左側の方に合わせられたため生じるものです。よく見ると横軸も縦軸も目盛りラベルに位置が同じであることが分かります。これを解消するためには、`facet_wrap()`の内部に`scale = "free"`を指定します[^facet_scale]。これは各ファセットが独自のスケールを有することを意味します。
 
@@ -2390,7 +2553,9 @@ Mosaic_df %>%
           axis.text.x     = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ```
 
-<img src="visualization4_files/figure-html/visual4-mosaic10-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-mosaic10-1} \end{center}
 
 　右側ファセットの横軸ラベルが重なってしまいましたが、これでとりあえず完成です。アフリカにおけるOpen AnocracyとClosed Anocracyの頻度が0であるため、これは仕方ありません。一つの対処方法としては以下のように縦軸目盛りを削除し、凡例で代替することが考えられます。
 
@@ -2408,7 +2573,9 @@ Mosaic_df %>%
           axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ```
 
-<img src="visualization4_files/figure-html/visual4-mosaic11-1.png" width="864" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization4_files/figure-latex/visual4-mosaic11-1} \end{center}
 
 ---
 

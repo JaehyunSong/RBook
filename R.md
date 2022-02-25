@@ -6,10 +6,14 @@
 
 ## Rとは {#WhatIsR}
 
-<div class="figure" style="text-align: center">
-<img src="figures/AboutR/Rlogo.png" alt="R Logo" width="25%" />
-<p class="caption">(\#fig:aboutr-logo)R Logo</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.25\linewidth]{figures/AboutR/Rlogo} 
+
+}
+
+\caption{R Logo}(\#fig:aboutr-logo)
+\end{figure}
 
 　Rは統計、データ分析、作図のためのインタープリタープログラミング言語である。Rという名前は二人の開発者 Ross Ihaka と Robert Clifford Gentleman のイニシャルに由来する。R言語は完全にゼロベースから開発されたものではなく、1976年に開発されたS言語に起源をもつ。S言語もR言語同様、統計やデータ分析に特化した言語であり、S言語の開発が中止された現在、RはSの正当な後継者であると言ってよいだろう。
 
@@ -125,10 +129,14 @@
 
 [^aboutr-ichiran]: たとえば、「◯蘭」の注文システムのように。
 
-<div class="figure" style="text-align: center">
-<img src="figures/AboutR/CUI_GUI.png" alt="CUIとGUIの比較" width="75%" />
-<p class="caption">(\#fig:aboutr-cui-gui)CUIとGUIの比較</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.75\linewidth]{figures/AboutR/CUI_GUI} 
+
+}
+
+\caption{CUIとGUIの比較}(\#fig:aboutr-cui-gui)
+\end{figure}
 
 　CUIとGUIを比べたとき、一見するとGUIのほうが優れているように見える。マウスでポチポチするだけで操作できるほうが楽に見えるし、間違いの心配もなさそうな気がする。キーボードで長いコマンドを打つCUIよりも、ボタンをクリックしたほうが手早く済みそうにも思える[^aboutr-illusion1]。そして、CUIのコマンドを覚えるのはしんどい[^aboutr-illusion2]。
 
@@ -149,38 +157,58 @@
 
 * [R Commander](https://socialsciences.mcmaster.ca/jfox/Misc/Rcmdr/)
 
-<div class="figure" style="text-align: center">
-<img src="figures/AboutR/GUI_Rcmdr.png" alt="R Commander" width="75%" />
-<p class="caption">(\#fig:aboutr-rcmdr)R Commander</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.75\linewidth]{figures/AboutR/GUI_Rcmdr} 
+
+}
+
+\caption{R Commander}(\#fig:aboutr-rcmdr)
+\end{figure}
 
 * [RKWard](https://rkward.kde.org)
 
-<div class="figure" style="text-align: center">
-<img src="figures/AboutR/GUI_RKWard.png" alt="RKWard" width="75%" />
-<p class="caption">(\#fig:aboutr-rkward)RKWard</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.75\linewidth]{figures/AboutR/GUI_RKWard} 
+
+}
+
+\caption{RKWard}(\#fig:aboutr-rkward)
+\end{figure}
 
 * [JASP](https://jasp-stats.org)
 
-<div class="figure" style="text-align: center">
-<img src="figures/AboutR/GUI_JASP.png" alt="JASP" width="75%" />
-<p class="caption">(\#fig:aboutr-jasp)JASP</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.75\linewidth]{figures/AboutR/GUI_JASP} 
+
+}
+
+\caption{JASP}(\#fig:aboutr-jasp)
+\end{figure}
 
 * [jamovi](https://www.jamovi.org)
 
-<div class="figure" style="text-align: center">
-<img src="figures/AboutR/GUI_jamovi.png" alt="jamovi" width="75%" />
-<p class="caption">(\#fig:aboutr-jamovi)jamovi</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.75\linewidth]{figures/AboutR/GUI_jamovi} 
+
+}
+
+\caption{jamovi}(\#fig:aboutr-jamovi)
+\end{figure}
 
 * [R AnalyticFlow](https://r.analyticflow.com)
 
-<div class="figure" style="text-align: center">
-<img src="figures/AboutR/GUI_RAnalyticFlow.png" alt="RAnalyticFlow (画像は公式ホームページから)" width="75%" />
-<p class="caption">(\#fig:aboutr-ranalyticflow)RAnalyticFlow (画像は公式ホームページから)</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.75\linewidth]{figures/AboutR/GUI_RAnalyticFlow} 
+
+}
+
+\caption{RAnalyticFlow (画像は公式ホームページから)}(\#fig:aboutr-ranalyticflow)
+\end{figure}
 
 
 
@@ -191,18 +219,26 @@
 　プログラマにとって優れたIDEを使うということは、優れた秘書を雇用するようなものだ。ファイルの管理、うろ覚えのコマンドの補完入力、コードの色分けなどを自動的に行ってくれる。さらに、コードの実行結果の画面をコードと同時に表示してくれたり、これまでの作業を記録してくれるなど、多くの作業を手助けしてくれる。Rにはいくつかの優れたIDEが用意されている。本書では代表的なIDEである [RStudio](https://rstudio.com) を使うことにする。ただし、プログラミングにIDEは必須ではない。IDEをインストールしなくても、本書を読む上で特に問題はない（RStudioに関する説明の部分を除く）が、Rの実行環境に特にこだわりがないなら RStudioの導入を強く推奨する。
 
 
-<div class="figure" style="text-align: center">
-<img src="figures/AboutR/IDE_RStudio.png" alt="RStudio" width="75%" />
-<p class="caption">(\#fig:aboutr-rstudio)RStudio</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.75\linewidth]{figures/AboutR/IDE_RStudio} 
+
+}
+
+\caption{RStudio}(\#fig:aboutr-rstudio)
+\end{figure}
 
 
 　RStudio以外にもRのIDEはある。魔界において圧倒的なシェアを誇ると噂されるWindowsという名のOSを使用しているなら、[R Tools for Visual Studio](https://docs.microsoft.com/ja-jp/visualstudio/rtvs/installer?view=vs-2017) がRStudioの代替候補として有力だ。
 
-<div class="figure" style="text-align: center">
-<img src="figures/AboutR/IDE_RTVS.png" alt="R Tools for Visual Studio" width="75%" />
-<p class="caption">(\#fig:aboutr-rtvs)R Tools for Visual Studio</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.75\linewidth]{figures/AboutR/IDE_RTVS} 
+
+}
+
+\caption{R Tools for Visual Studio}(\#fig:aboutr-rtvs)
+\end{figure}
 
 　自分が使い慣れたテキストエディタをIDEとして使うことも可能である。[Sublime Text](https://www.sublimetext.com) や [Atom](https://atom.io) はむろん、伝統のある [Emacs](https://www.gnu.org/software/emacs/) や [Vim](https://www.vim.org) を使うこともできる。
 

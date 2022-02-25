@@ -67,7 +67,8 @@ summary(Vector1)
 
 [^HardestTasks]: 図の出典は[IT WORLD](https://www.itworld.com/article/2833265/don-t-go-into-programming-if-you-don-t-have-a-good-thesaurus.html)です (アクセス: 2020-05-21)。
 
-<img src="https://images.techhive.com/images/idge/imported/article/itw/2013/10/23/programmers_hardest_tasks-600x700-100521914-orig.jpg" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics[width=0.5\linewidth]{figures/OOP/naming} \end{center}
 
 OOPの多態性にはこのような煩わしい仕事を軽減する機能があります。OOPにはここで紹介した多態性以外にも、「**継承** (inheritance)」、「**カプセル化** (encapsulation)」のような特徴があります。他にも人によっては「メッセージパッシング (message passing)」、「動的バインディング (dynamic binding)」などの特徴を述べたりしますが、詳しい話は専門書に譲りたいと思います。また、ここではRのS3クラスについて解説しますが、S3はカプセル化に対応しておりません。したがって、ここでは以下の概念について例と一緒に解説していきたいと思います。
 
@@ -255,7 +256,7 @@ summary
 ```
 ## function (object, ...) 
 ## UseMethod("summary")
-## <bytecode: 0x7fd610495590>
+## <bytecode: 0x7f8bb912dfe0>
 ## <environment: namespace:base>
 ```
 
@@ -318,7 +319,7 @@ getS3method("summary", "default")
 ##     class(value) <- c("summaryDefault", "table")
 ##     value
 ## }
-## <bytecode: 0x7fd5a1efa930>
+## <bytecode: 0x7f8b7a5ed040>
 ## <environment: namespace:base>
 ```
 
@@ -386,12 +387,12 @@ My_Score1 # My_Score1の内部を見る
 
 ```
 ## $Score1
-##  [1] 43.73120 52.72012 47.93838 34.91353 27.38316 66.99634 44.26924 41.13091
-##  [9] 56.36164 60.82260
+##  [1] 54.05122 51.07192 45.94344 56.11016 48.09151 41.02497 64.20918 59.25451
+##  [9] 35.68637 70.51868
 ## 
 ## $Score2
-##  [1] 52.18018 60.84505 58.38369 54.18697 63.95436 65.51644 70.55844 44.97395
-##  [9] 45.14283 58.33112
+##  [1] 27.52296 61.75080 45.26661 50.56225 53.74473 41.17582 36.38738 40.96406
+##  [9] 54.54985 51.82713
 ## 
 ## attr(,"class")
 ## [1] "Score"
@@ -425,12 +426,12 @@ My_Score2 # My_Score2の内部を見る
 
 ```
 ## $Score1
-##  [1] 51.18513 38.42212 52.22020 49.97897 58.12754 76.01640 40.22101 40.27685
-##  [9] 50.70804 30.42512
+##  [1] 52.54609 39.43518 48.42632 56.17504 53.71988 55.18788 48.79573 45.10627
+##  [9] 44.12105 51.97093
 ## 
 ## $Score2
-##  [1] 40.56159 43.32807 61.26404 58.88657 50.34604 52.75954 53.81399 44.68132
-##  [9] 56.60167 54.55685
+##  [1] 45.31915 57.90272 64.80667 32.68372 44.98925 59.80929 53.09691 56.14003
+##  [9] 49.87368 54.12750
 ## 
 ## attr(,"class")
 ## [1] "Score"
@@ -475,8 +476,8 @@ mean(My_Score1) # Scoreクラスのメソッドであるmean()を使う
 ```
 
 ```
-## [1] 47.62671
-## [1] 57.4073
+## [1] 52.5962
+## [1] 46.37516
 ```
 
 `mean(c(1, 3, 5, 7, 9, 11))`は引数がnumeric型ベクトルであるため、既存の`mean()`関数が使用されます。一方、`mean(My_Score1)`は引数がScoreクラスであるため、`mean.Score()`が使用されます。このように`mean_Score()`のような別途の関数を作る必要なく、既存の関数名が利用できます。実際、`methods(mean)`を実行すると、Scoreクラスのメソッドとして`mean()`関数が用意されたことを確認できます。
@@ -582,8 +583,8 @@ my_func(My_Score1)
 ```
 
 ```
-## [1] 47.62671
-## [1] 57.4073
+## [1] 52.5962
+## [1] 46.37516
 ```
 
 ```{.r .numberLines}
@@ -758,14 +759,20 @@ summary(Cor_Obj) # summary()はprint()と同じ
 plot(Cor_Obj)
 ```
 
-<img src="oop_files/figure-html/oop-sample-4-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{oop_files/figure-latex/oop-sample-4-1} \end{center}
 
 既存の`cor.test()`で作成される`"htest"`クラスに比べ、`"My_Cor_Object"`クラスは各変数の平均値が名前と一緒に表示され、`plot()`で簡単に散布図が作成できる大変便利なクラスです。このMy_Cor_Objectクラスとそのメソッドの構造を図示したものが図\@ref(fig:oop-sample-5)です。
 
-<div class="figure" style="text-align: center">
-<img src="figures/OOP/My_Cor_Object.png" alt="クラスの構造" width="100%" />
-<p class="caption">(\#fig:oop-sample-5)クラスの構造</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{figures/OOP/My_Cor_Object} 
+
+}
+
+\caption{クラスの構造}(\#fig:oop-sample-5)
+\end{figure}
 
 それでは一つずつ作っていきましょう。まずは、`"My_Cor_Object"`クラスのオブジェクトを作成する`My_Cor()`関数からです。
 

@@ -1871,8 +1871,9 @@ div.csl-indent {
 ## # … with 37 more rows</code></pre>
 <p>これから共通変数名の値をキー (key)と呼びます。今回の例だと<code>Pref</code>が<code>df2</code>と<code>df4</code>のキー変数であり、その値である<code>"東京都"</code>、<code>"北海道"</code>などがキーです。</p>
 <p>まずは、<code>inner_join()</code>の仕組みについて考えます。これは<code>df2</code>と<code>df4</code>に共通するキーを持つケースのみ結合する関数です。<code>df4</code>には<code>"北海道"</code>というキーがありますが、<code>df2</code>にはありません。したがって、キーが<code>"北海道"</code>のケースは結合から除外されます。これをイメージにしたものが図<a href="datahandling2.html#fig:handling2-merge-col-8">13.3</a>です<a href="reference.html#fn76" class="footnote-ref" id="fnref76"><sup>76</sup></a>。それぞれ3 <span class="math inline">\(\times\)</span> 2 (3行2列)のデータですが、キーが一致するケースは2つしかないため、結合後のデータは3 <span class="math inline">\(\times\)</span> 2となります。</p>
+
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:handling2-merge-col-8"></span>
-<img src="figures/Handling2/Merge_Inner.png" alt="`inner_join()`の仕組み" width="80%" />
+<img src="figures/Handling2/Merge_Inner.png" alt="inner_join()の仕組み" width="80%" />
 <p class="caption">
 図 13.3: <code>inner_join()</code>の仕組み
 </p>
@@ -1893,8 +1894,9 @@ div.csl-indent {
 ## 9 神奈川県       1239.        587       3.53  1000   1254</code></pre>
 <p>共通するキーは9つのみであり、結果として返されたデータの大きさも9 <span class="math inline">\(\times\)</span> 6です。<code>df2</code>に足された<code>df4</code>は2列のデータですが、キー変数である<code>Pref</code>は共通するため、1列のみ足されました。キー変数を両方残す場合は<code>keep = TRUE</code>引数を追加してください。</p>
 <p>一方、<code>full_join()</code>は、すべてのキーに対して結合を行います (図@ref(fig: handling2-merge-col-10))。たとえば、<code>df2</code>には<code>"北海道"</code>というキーがありません。それでも新しく出来上がるデータには北海道の列が追加されます。ただし、道内店舗の平均予算、口コミ数などの情報はないため、欠損値が代入されます。</p>
+
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:handling2-merge-col-10"></span>
-<img src="figures/Handling2/Merge_Full.png" alt="`full_join()`の仕組み" width="80%" />
+<img src="figures/Handling2/Merge_Full.png" alt="full_join()の仕組み" width="80%" />
 <p class="caption">
 図 13.4: <code>full_join()</code>の仕組み
 </p>
@@ -1918,15 +1920,17 @@ div.csl-indent {
 ## # … with 37 more rows</code></pre>
 <p><code>df2</code>にはなかった北海道や愛知県などの行ができました。そして、<code>df2</code>にはない情報はすべて欠損値 (<code>NA</code>)となりました。</p>
 <p>続いて、<code>left_join()</code>ですが、これは先に指定したデータに存在するキーのみで結合を行います (図@ref(fig: handling2-merge-col-12))。今回は<code>df2</code>が先に指定されていますが、<code>df2</code>のキーは<code>df4</code>のキーの部分集合であるため、<code>inner_join()</code>と同じ結果が得られます。</p>
+
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:handling2-merge-col-12"></span>
-<img src="figures/Handling2/Merge_Left.png" alt="`left_join()`の仕組み" width="80%" />
+<img src="figures/Handling2/Merge_Left.png" alt="left_join()の仕組み" width="80%" />
 <p class="caption">
 図 13.5: <code>left_join()</code>の仕組み
 </p>
 </div>
 <p>一方、<code>right_join()</code>は<code>left_join()</code>と逆の関数であり、後に指定したデータに存在するキーを基準に結合を行います (図@ref(fig: handling2-merge-col-13))。後に指定された<code>df4</code>のキーは<code>df2</code>のキーを完全に含むので、<code>full_join()</code>と同じ結果が得られます。</p>
+
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:handling2-merge-col-13"></span>
-<img src="figures/Handling2/Merge_Right.png" alt="`right_join()`の仕組み" width="80%" />
+<img src="figures/Handling2/Merge_Right.png" alt="right_join()の仕組み" width="80%" />
 <p class="caption">
 図 13.6: <code>right_join()</code>の仕組み
 </p>

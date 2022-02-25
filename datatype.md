@@ -383,43 +383,26 @@ Factor型はラベル付きの数値型データです。Factor型の見た目�
     
 以下の表\@ref(tab:datatype-factor-1)は5人の結果です。
 
-<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>(\#tab:datatype-factor-1)猫好きの度合い</caption>
- <thead>
-  <tr>
-   <th style="text-align:right;"> ID </th>
-   <th style="text-align:left;"> Name </th>
-   <th style="text-align:left;"> Cat </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;"> Yanai </td>
-   <td style="text-align:left;"> めちゃめちゃ好き </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 2 </td>
-   <td style="text-align:left;"> Song </td>
-   <td style="text-align:left;"> めちゃめちゃ好き </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 3 </td>
-   <td style="text-align:left;"> Shigemura </td>
-   <td style="text-align:left;"> どちらかといえば好き </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 4 </td>
-   <td style="text-align:left;"> Tani </td>
-   <td style="text-align:left;"> めちゃ好き </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 5 </td>
-   <td style="text-align:left;"> Hadley </td>
-   <td style="text-align:left;"> 好き </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}
+
+\caption{(\#tab:datatype-factor-1)猫好きの度合い}
+\centering
+\begin{tabular}[t]{r|l|l}
+\hline
+ID & Name & Cat\\
+\hline
+1 & Yanai & めちゃめちゃ好き\\
+\hline
+2 & Song & めちゃめちゃ好き\\
+\hline
+3 & Shigemura & どちらかといえば好き\\
+\hline
+4 & Tani & めちゃ好き\\
+\hline
+5 & Hadley & 好き\\
+\hline
+\end{tabular}
+\end{table}
 
 人間としてはこの表から、[重村](https://soheishigemura.com)という人がどれだけ猫が嫌いなのかが分かります。ただし、Rはそうではありません。Rは日本語どころか、人間の言葉は理解できません。各項目ごとに順番を付けてあげる必要がありますが、そのために使われるのがfactor型です。
 
@@ -531,50 +514,37 @@ class(factor_vec3)
 
 分析においてfactor型はcharacter型に近い役割を果たしますが、factor型なりの長所もあります。それは図や表を作成する際です。例えば、横軸が都道府県名で、縦軸がその都道府県の財政力指数を表す棒グラフを作成するとします。たとえば、表\@ref(tab:datatype-factor-7)のようなデータがあるとします。このデータは3つの列で構成されており、`ID`と`Zaisei`列はnumeric型、`Pref`列はcharacter型です。
 
-<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>(\#tab:datatype-factor-7)5都道府県のH29財政力指数</caption>
- <thead>
-  <tr>
-   <th style="text-align:right;"> ID </th>
-   <th style="text-align:left;"> Pref </th>
-   <th style="text-align:right;"> Zaisei </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;"> Hokkaido </td>
-   <td style="text-align:right;"> 0.44396 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 2 </td>
-   <td style="text-align:left;"> Tokyo </td>
-   <td style="text-align:right;"> 1.19157 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 3 </td>
-   <td style="text-align:left;"> Aichi </td>
-   <td style="text-align:right;"> 0.92840 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 4 </td>
-   <td style="text-align:left;"> Osaka </td>
-   <td style="text-align:right;"> 0.78683 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 5 </td>
-   <td style="text-align:left;"> Fukuoka </td>
-   <td style="text-align:right;"> 0.64322 </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}
+
+\caption{(\#tab:datatype-factor-7)5都道府県のH29財政力指数}
+\centering
+\begin{tabular}[t]{r|l|r}
+\hline
+ID & Pref & Zaisei\\
+\hline
+1 & Hokkaido & 0.44396\\
+\hline
+2 & Tokyo & 1.19157\\
+\hline
+3 & Aichi & 0.92840\\
+\hline
+4 & Osaka & 0.78683\\
+\hline
+5 & Fukuoka & 0.64322\\
+\hline
+\end{tabular}
+\end{table}
 
 可視化については第\@ref(visualization1)章以降で詳しく解説しますが、この`Pref`列をcharacter型にしたままグラフにしますと図\@ref(fig:datatype-factor-8)のようになります。
 
-<div class="figure" style="text-align: center">
-<img src="datatype_files/figure-html/datatype-factor-8-1.png" alt="5都道府県のH29財政力指数" width="672" />
-<p class="caption">(\#fig:datatype-factor-8)5都道府県のH29財政力指数</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{datatype_files/figure-latex/datatype-factor-8-1} 
+
+}
+
+\caption{5都道府県のH29財政力指数}(\#fig:datatype-factor-8)
+\end{figure}
 
 このようにアルファベット順で横軸が並び替えられます。別にこれでも問題ないと思う方もいるかも知れませんが、基本的に日本の都道府県は北から南の方へ並べるのが一般的な作法です[^PrefSort]。北海道と東京、大阪の間には順序関係はありません。しかし、表示される順番は固定したい。この場合、`Pref`列を順序なしfactor型にすれば良いです[^orderedfactor]。データフレームの列を修正する方法は第\@ref(datastructure)章で詳しく説明します。
 
@@ -590,10 +560,14 @@ zaisei_df$Pref <- factor(zaisei_df$Pref,
 
 `zaisei_df`の`Pref`列をfactor型にしてから同じ図を描くと図\@ref(fig:datatype-factor-10)のようになります。
 
-<div class="figure" style="text-align: center">
-<img src="datatype_files/figure-html/datatype-factor-10-1.png" alt="5都道府県のH29財政力指数" width="672" />
-<p class="caption">(\#fig:datatype-factor-10)5都道府県のH29財政力指数</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{datatype_files/figure-latex/datatype-factor-10-1} 
+
+}
+
+\caption{5都道府県のH29財政力指数}(\#fig:datatype-factor-10)
+\end{figure}
 
 都道府県以外にもこのような例は多くあります。順序尺度で測定された変数が代表的な例です。他にも政党名を議席数順で表示させたい場合もfactor型は有効でしょう。
 
@@ -649,10 +623,14 @@ ggplot(SongSleep,
     theme_gray(base_size = 12)
 ```
 
-<div class="figure" style="text-align: center">
-<img src="datatype_files/figure-html/datatype-date-3-1.png" alt="Songの睡眠時間" width="672" />
-<p class="caption">(\#fig:datatype-date-3)Songの睡眠時間</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{datatype_files/figure-latex/datatype-date-3-1} 
+
+}
+
+\caption{Songの睡眠時間}(\#fig:datatype-date-3)
+\end{figure}
 
 この図は全く問題ないように見えます。それでは、`Date`列をそれぞれDate型に変換し、`SoongSleep`データの`DateD`としてみます。データフレームの列追加については第\@ref(structure-dataframe)章で解説します。
 
@@ -690,10 +668,14 @@ ggplot(SongSleep,
     theme_gray(base_size = 12)
 ```
 
-<div class="figure" style="text-align: center">
-<img src="datatype_files/figure-html/datatype-date-6-1.png" alt="Songの睡眠時間" width="672" />
-<p class="caption">(\#fig:datatype-date-6)Songの睡眠時間</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{datatype_files/figure-latex/datatype-date-6-1} 
+
+}
+
+\caption{Songの睡眠時間}(\#fig:datatype-date-6)
+\end{figure}
 
 しかし、Songがうっかり6月19日に記録するのを忘れたとします。つまり、`SongSleep`データの3行目が抜けている状況を考えてみましょう。データフレームの要素抽出については第\@ref(structure-dataframe)章で解説します。
 
@@ -730,10 +712,14 @@ ggplot(SongSleep2,
     theme_gray(base_size = 12)
 ```
 
-<div class="figure" style="text-align: center">
-<img src="datatype_files/figure-html/datatype-date-9-1.png" alt="Songの睡眠時間" width="672" />
-<p class="caption">(\#fig:datatype-date-9)Songの睡眠時間</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{datatype_files/figure-latex/datatype-date-9-1} 
+
+}
+
+\caption{Songの睡眠時間}(\#fig:datatype-date-9)
+\end{figure}
 
 一方、横軸を`DateD`にしたものが図\@ref(fig:datatype-date-10)です。
 
@@ -746,10 +732,14 @@ ggplot(SongSleep2,
     theme_gray(base_size = 12)
 ```
 
-<div class="figure" style="text-align: center">
-<img src="datatype_files/figure-html/datatype-date-10-1.png" alt="Songの睡眠時間" width="672" />
-<p class="caption">(\#fig:datatype-date-10)Songの睡眠時間</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{datatype_files/figure-latex/datatype-date-10-1} 
+
+}
+
+\caption{Songの睡眠時間}(\#fig:datatype-date-10)
+\end{figure}
 
 違いが分かりますかね。違いは抜けている6月19日です。図\@ref(fig:datatype-date-9)を見ると、横軸の6月18日の次が20日になっています。一方、図\@ref(fig:datatype-date-10)は19日になっており、ちゃんと空けてくれますね。これはDate型でない場合、データにないものは図に表示されないことを意味します。一方、Date型は抜けている日があっても、図に表示表示されます。一般のcharacter型またはfactor型でこのようなことを再現するためには、6月19日の列を追加し、睡眠時間を欠損値として指定する必要があります。たとえば、`SongSleep`データにおいて6月19日の行は温存したまま、睡眠時間だけを欠損値にしてみましょう。
 
@@ -783,10 +773,14 @@ ggplot(SongSleep3,
     theme_bw()
 ```
 
-<div class="figure" style="text-align: center">
-<img src="datatype_files/figure-html/datatype-date-12-1.png" alt="Songの睡眠時間" width="672" />
-<p class="caption">(\#fig:datatype-date-12)Songの睡眠時間</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics{datatype_files/figure-latex/datatype-date-12-1} 
+
+}
+
+\caption{Songの睡眠時間}(\#fig:datatype-date-12)
+\end{figure}
 
 横軸上に6月19日が表示されます。このようにDate型でなくてもDate型と同じように動かすことは可能ですが、非常に面倒です。その意味でDate型は時系列データを扱う際に非常に便利なデータ型です。
 
@@ -967,43 +961,24 @@ POSIXct、POSIXlt型は日付だけでなく時間の情報も含むデータ型
 
 NAは欠損値と呼ばれます。これは本来は値があるはずなのがなんらかの理由で欠損していることを意味します。表\@ref(tab:datatype-na-1)の例を考えてみましょう。
 
-<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>(\#tab:datatype-na-1)4人の支持政党</caption>
- <thead>
-  <tr>
-   <th style="text-align:right;"> ID </th>
-   <th style="text-align:left;"> 名前 </th>
-   <th style="text-align:left;"> 支持政党あり </th>
-   <th style="text-align:left;"> 政党名 </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;"> Yanai </td>
-   <td style="text-align:left;"> ない </td>
-   <td style="text-align:left;"> NA </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 2 </td>
-   <td style="text-align:left;"> Song </td>
-   <td style="text-align:left;"> ある </td>
-   <td style="text-align:left;"> ラーメン大好き党 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 3 </td>
-   <td style="text-align:left;"> Shigemura </td>
-   <td style="text-align:left;"> ある </td>
-   <td style="text-align:left;"> 鹿児島第一党 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 4 </td>
-   <td style="text-align:left;"> Tani </td>
-   <td style="text-align:left;"> ない </td>
-   <td style="text-align:left;"> NA </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}
+
+\caption{(\#tab:datatype-na-1)4人の支持政党}
+\centering
+\begin{tabular}[t]{r|l|l|l}
+\hline
+ID & 名前 & 支持政党あり & 政党名\\
+\hline
+1 & Yanai & ない & NA\\
+\hline
+2 & Song & ある & ラーメン大好き党\\
+\hline
+3 & Shigemura & ある & 鹿児島第一党\\
+\hline
+4 & Tani & ない & NA\\
+\hline
+\end{tabular}
+\end{table}
 
 3列目で支持政党があるケースのみ、4列目に値があります。YanaiとTaniの場合、支持する政党がないため、政治政党名が欠損しています。実際、多くのデータには欠損値が含まれています。世論調査データの場合はもっと多いです。理由としては「Q2で"はい"を選んだ場合のみQ3に進み、それ以外はQ4へ飛ばす」のようなのもありますが、単に回答を拒否した場合もあります。
 
@@ -1249,10 +1224,14 @@ NULLは存在しないことを意味するため、`null_vec1`は要素が4のn
 
 図\@ref(fig:datatype-null-5)はNA型とNULL型の違いについてまとめたものです。
 
-<div class="figure" style="text-align: center">
-<img src="figures/Datatype/NA_NULL.png" alt="NAとNULLの違い" width="85%" />
-<p class="caption">(\#fig:datatype-null-5)NAとNULLの違い</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.85\linewidth]{figures/Datatype/NA_NULL} 
+
+}
+
+\caption{NAとNULLの違い}(\#fig:datatype-null-5)
+\end{figure}
 
 このNULLはいつ使うのでしょうか。実際、使う機会はあまりありません。強いて言えば、空っぽのリストを作成する際に使うケースがあります。リストについては第\@ref(datastructure)章で説明します。以下の例は第\@ref(datastructure)章を読み終わってから目を通して下さい。
 

@@ -31,156 +31,81 @@ COVID19_df <- read_csv("Data/COVID19_Worldwide.csv", guess_max = 10000)
 
 　これらの変数はSONGが適当にインターネットなどで集めたデータであり、あくまでも実習用データとしてのみお使い下さい。各変数の詳細は以下の通りです。
 
-<table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>(\#tab:unnamed-chunk-3)`Countries.csv`の詳細</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;text-align: center;"> 変数名 </th>
-   <th style="text-align:left;text-align: center;"> 説明 </th>
-   <th style="text-align:left;text-align: center;"> 詳細 </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> `Country` </td>
-   <td style="text-align:left;"> 国名 </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Population` </td>
-   <td style="text-align:left;"> 人口 </td>
-   <td style="text-align:left;"> 人 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Area` </td>
-   <td style="text-align:left;"> 面積 </td>
-   <td style="text-align:left;"> km$^2$ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `GDP` </td>
-   <td style="text-align:left;"> 国内総生産 (GDP) </td>
-   <td style="text-align:left;"> 100万米ドル </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `PPP` </td>
-   <td style="text-align:left;"> GDP (購買力平価): </td>
-   <td style="text-align:left;"> 100万米ドル </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `GDP_per_capita` </td>
-   <td style="text-align:left;"> 一人あたりGDP </td>
-   <td style="text-align:left;"> 米ドル </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `PPP_per_capita` </td>
-   <td style="text-align:left;"> 一人あたりGDP (購買力平価) </td>
-   <td style="text-align:left;"> 米ドル </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `G7` </td>
-   <td style="text-align:left;"> G7構成国 </td>
-   <td style="text-align:left;"> 1:構成国, 0:構成国以外 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `G20` </td>
-   <td style="text-align:left;"> G20構成国 </td>
-   <td style="text-align:left;"> 1:構成国, 0:構成国以外 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `OECD` </td>
-   <td style="text-align:left;"> OECD構成国 </td>
-   <td style="text-align:left;"> 1:構成国, 0:構成国以外 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `HDI_2018` </td>
-   <td style="text-align:left;"> 人間開発指数 </td>
-   <td style="text-align:left;"> 2018年基準 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Polity_Score` </td>
-   <td style="text-align:left;"> 民主主義の程度 </td>
-   <td style="text-align:left;"> Polity IVから; -10:権威主義〜10:民主主義 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Polity_Type` </td>
-   <td style="text-align:left;"> 民主主義の程度 (カテゴリ) </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `FH_PR` </td>
-   <td style="text-align:left;"> 政治的自由の指標 </td>
-   <td style="text-align:left;"> 2020年基準; Freedom Houseから </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `FH_CL` </td>
-   <td style="text-align:left;"> 市民的自由の指標 </td>
-   <td style="text-align:left;"> 2020年基準; Freedom Houseから </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `FH_Total` </td>
-   <td style="text-align:left;"> 政治的自由と市民的自由の合計 </td>
-   <td style="text-align:left;"> 2020年基準; Freedom Houseから </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `FH_Status` </td>
-   <td style="text-align:left;"> 総合評価 </td>
-   <td style="text-align:left;"> F:完全な自由; PF:一部自由; NF:不自由 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Continent` </td>
-   <td style="text-align:left;"> 大陸 </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}
 
-<table class="table table-striped table-hover table-condensed table-responsive" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<caption>(\#tab:unnamed-chunk-4)`COVID19_Worldwide.csv`の詳細</caption>
- <thead>
-  <tr>
-   <th style="text-align:left;text-align: center;"> 変数名 </th>
-   <th style="text-align:left;text-align: center;"> 説明 </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> `ID` </td>
-   <td style="text-align:left;"> ID </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Country` </td>
-   <td style="text-align:left;"> 国名 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Date` </td>
-   <td style="text-align:left;"> 年月日 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Confirmed_Day` </td>
-   <td style="text-align:left;"> COVID-19 新規感染者数（人） </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Confirmed_Total` </td>
-   <td style="text-align:left;"> COVID-19 累積感染者数（人） </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Death_Day` </td>
-   <td style="text-align:left;"> COVID-19 新規死亡者数（人） </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Death_Total` </td>
-   <td style="text-align:left;"> COVID-19 累積死亡者数（人） </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Test_Day` </td>
-   <td style="text-align:left;"> COVID-19 新規検査数（人） </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Test_Total` </td>
-   <td style="text-align:left;"> COVID-19 累積検査数（人） </td>
-  </tr>
-</tbody>
-</table>
+\caption{(\#tab:unnamed-chunk-3)国家別民主主義および政治的自由データの詳細}
+\centering
+\begin{tabular}[t]{l|l|l}
+\hline
+\multicolumn{1}{c}{変数名} & \multicolumn{1}{c}{説明} & \multicolumn{1}{c}{詳細}\\
+\hline
+`Country` & 国名 & \\
+\hline
+`Population` & 人口 & 人\\
+\hline
+`Area` & 面積 & km\$\textasciicircum{}2\$\\
+\hline
+`GDP` & 国内総生産 (GDP) & 100万米ドル\\
+\hline
+`PPP` & GDP (購買力平価): & 100万米ドル\\
+\hline
+`GDP\_per\_capita` & 一人あたりGDP & 米ドル\\
+\hline
+`PPP\_per\_capita` & 一人あたりGDP (購買力平価) & 米ドル\\
+\hline
+`G7` & G7構成国 & 1:構成国, 0:構成国以外\\
+\hline
+`G20` & G20構成国 & 1:構成国, 0:構成国以外\\
+\hline
+`OECD` & OECD構成国 & 1:構成国, 0:構成国以外\\
+\hline
+`HDI\_2018` & 人間開発指数 & 2018年基準\\
+\hline
+`Polity\_Score` & 民主主義の程度 & Polity IVから; -10:権威主義〜10:民主主義\\
+\hline
+`Polity\_Type` & 民主主義の程度 (カテゴリ) & \\
+\hline
+`FH\_PR` & 政治的自由の指標 & 2020年基準; Freedom Houseから\\
+\hline
+`FH\_CL` & 市民的自由の指標 & 2020年基準; Freedom Houseから\\
+\hline
+`FH\_Total` & 政治的自由と市民的自由の合計 & 2020年基準; Freedom Houseから\\
+\hline
+`FH\_Status` & 総合評価 & F:完全な自由; PF:一部自由; NF:不自由\\
+\hline
+`Continent` & 大陸 & \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}
+
+\caption{(\#tab:unnamed-chunk-4)COVID-19データの詳細}
+\centering
+\begin{tabular}[t]{l|l}
+\hline
+\multicolumn{1}{c}{変数名} & \multicolumn{1}{c}{説明}\\
+\hline
+`ID` & ID\\
+\hline
+`Country` & 国名\\
+\hline
+`Date` & 年月日\\
+\hline
+`Confirmed\_Day` & COVID-19 新規感染者数（人）\\
+\hline
+`Confirmed\_Total` & COVID-19 累積感染者数（人）\\
+\hline
+`Death\_Day` & COVID-19 新規死亡者数（人）\\
+\hline
+`Death\_Total` & COVID-19 累積死亡者数（人）\\
+\hline
+`Test\_Day` & COVID-19 新規検査数（人）\\
+\hline
+`Test\_Total` & COVID-19 累積検査数（人）\\
+\hline
+\end{tabular}
+\end{table}
 
 ---
 
@@ -218,7 +143,9 @@ Country_df %>%
   labs(x = "大陸", y = "ケース数")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-6-1} \end{center}
 
 　使用しているPCのOSによっては、日本語、または漢字が□□□で出力されることもあります（豆腐化と呼ばれます）。この場合は、プロットで使用するフォント群 (font family)を指定する必要があります。たとえば、macOSの場合、ヒラギノ角コジックW3がよく使われます (W0からW9まであり、数字が大きくなると太字になります)。フォント群の指定は`theme_*()`関数の`base_family`引数で行います。ここの`theme_*()`ですが、`*`の箇所には`gray`や`bw`、`minimal`などが入ります。`ggplot2`が提供しているテーマについては[ここ](https://www.r-graph-gallery.com/192-ggplot-themes.html)を参照してください。また、`ggthemes`や`egg`、`hrbrthemes`などのパッケージを導入すると様々なテーマが利用可能になります。デフォルトのテーマは`gray`ですが、今回は`bw`にし、ヒラギノ角コジックW3 (`"HiraKakuProN-W3"`)をフォント群として指定します。
 
@@ -245,7 +172,9 @@ Country_df %>%
   theme_bw(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-7-1} \end{center}
 
 　これで初めてのggplot2を用いたグラフが完成しました。もし、Windowsで「YuGothic」や「Noto」を使用するなら`base_family`の実引数として`"YuGothic"`や`"Noto"`を指定します。
 
@@ -264,7 +193,7 @@ Bar_df1
 ```
 
 ```
-## # A tibble: 5 × 2
+## # A tibble: 5 x 2
 ##   Continent Democracy
 ##   <chr>         <dbl>
 ## 1 Africa        2.48 
@@ -285,7 +214,9 @@ Bar_df1 %>%
   theme_minimal(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-9-1} \end{center}
 
 　考えてみれば、大陸名が英語になっていますね。図内の言語は統一するのが原則であり、図の言語は論文やレポート、報告書の言語とも一致させるべきです。ここは`Bar_df1`の`Continent`列の値を日本語に置換するだけでいいので、`recode()`関数を使います。`recode()`の使い方は第\@ref(handling2-mutate)章を参照してください。また、順番はローマ字順にしたいので、`fct_inorder()`を使って、`Bar_df1`における表示順でfactor化を行います。
 
@@ -305,7 +236,9 @@ Bar_df1 %>%
   theme_minimal(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-10-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-10-1} \end{center}
 
 ### 次元を追加する
 
@@ -322,7 +255,7 @@ Bar_df2
 ```
 
 ```
-## # A tibble: 9 × 3
+## # A tibble: 9 x 3
 ##   Continent  OECD Democracy
 ##   <chr>     <dbl>     <dbl>
 ## 1 Africa        0     2.48 
@@ -357,7 +290,7 @@ Bar_df2
 ```
 
 ```
-## # A tibble: 9 × 3
+## # A tibble: 9 x 3
 ##   Continent  OECD         Democracy
 ##   <fct>      <fct>            <dbl>
 ## 1 アフリカ   OECD非加盟国     2.48 
@@ -383,7 +316,9 @@ Bar_df2 %>%
   theme_minimal(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-13-1} \end{center}
 
 　なんか思ったものと違うものが出てきました。たとえば、アメリカ大陸の場合、Polity IVスコアの平均値が約15ですが、明らかにおかしいです。なぜならPolity IVスコアの最大値は10だからです。これは2つの棒が積み上げられているからです。アメリカ大陸においてOECD加盟国の平均値は8.6、非加盟国のそれは6.55であり、足したら15.15になります。これをずらすためには`position`を設定する必要があります。しかし、`position`というのは`Bar_df2`の何かと変数の値を表すわけではないため、`aes()`の外側に入れます。そして、その値ですが、ここでは`"dodge"`を指定します。これは棒の位置が重ならないように調整することを意味します。この`position`のデフォルト値は`"stack"`であり、言葉通り「積み上げ」です。
 
@@ -397,7 +332,9 @@ Bar_df2 %>%
   theme_minimal(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-14-1} \end{center}
 
 　これで私たちが期待した図が出来上がりました。「`"dodge"`の方が普通なのになぜデフォルトが`"stack"`か」と思う方もいるかも知れませんが、実は`"stack"`も頻繁に使われます。それはケース数のグラフにおいてです。
 
@@ -425,7 +362,7 @@ Bar_df3
 ```
 
 ```
-## # A tibble: 9 × 3
+## # A tibble: 9 x 3
 ##   Continent  OECD             N
 ##   <fct>      <fct>        <int>
 ## 1 アフリカ   OECD非加盟国    54
@@ -451,7 +388,9 @@ Bar_df3 %>%
   theme_minimal(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-16-1} \end{center}
 
 　この図は`position = "dodge"`でも良いと思いますが、大陸内の比率を考えるなら`position = "stack"`でも問題ないでしょう。また、積み上げグラフの特性上、大陸ごとの国数の合計も一瞬で判別できるといった長所もあります。`position = "dodoge"`だと、それが難しいですね。むろん、積み上げ棒グラフはベースラインが一致したいため、避けるべきという人も多いですし、著者 (SONG)も同意見です。どの図を作成するかは分析者の責任で判断しましょう。
 
@@ -474,7 +413,9 @@ Country_df %>%
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-17-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-17-1} \end{center}
 
 　ケース数の棒グラフのコードとほぼ同じです。横軸の数値が`2.0e+07`になっているのは`2 \times 10^7`、つまり2千万を意味します。普通に表記すると`20000000`になりますね。また、GDPの単位は100万ドルであるため、実際のGDPは20兆ドルになります。つまり、今のヒストグラムにおいて横軸の目盛りは5兆ドルになっています。この軸の数値を「0, 5e+06, 1e+07, 1.5e+07, 2e+07」から「0, 5, 10, 15, 20」 にし、X軸のラベルを「国内総生産 (100万米ドル)」から「国内総生産 (兆米ドル)」に替えてみましょう。ここで使うのは`scale_x_continuous()`関数です。これは横軸 (X軸)が連続変数 (continuous)の場合のスケール調整関数です。目盛りの再調整には`breaks`と`labels`引数が必要です。`breaks`は新しい目盛りの位置、`labels`は目盛りに表記する値です。それぞれベクトルが必要であり、`breaks`と`labels`の実引数の長さは必ず一致する必要があります。また、`breaks`は数値型ベクトルですが、`labels`は数値型でも文字型でも構いません。
 
@@ -493,7 +434,9 @@ Country_df %>%
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-18-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-18-1} \end{center}
 
 　これで一通りヒストグラムが完成しました。ほんの一部の国は非常に高いGDPを誇っていることが分かります。GDPが10兆ドル以上の国はアメリカと中国のみであり、5兆ドルを国まで拡大しても日本が加わるだけです。そもそも1兆ドルを超える国はデータには16カ国しかなく、90%以上の国が図の非常に狭い範囲内 (0~1兆ドル)に集まっていることが分かります。
 
@@ -502,7 +445,9 @@ Country_df %>%
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-19-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-19-1} \end{center}
 
 　この場合、2つの方法が考えられます。1つ目は方法は情報の損失を覚悟した上で、GDPが1兆ドル未満の国でヒストグラムを書く方法です。これはデータを`ggplot()`関数を渡す前に`filter()`を使って、`GDP`が100万未満のケースに絞るだけで出来ます。ただし、横軸の最大値が2000万でなく、100万になるため、目盛りを調整した方が良いでしょう。
 
@@ -522,7 +467,9 @@ Country_df %>%
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-20-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-20-1} \end{center}
 
 　2つ目の方法は横軸を対数化することです。GDPを底10の対数化 (常用対数)をすると、10兆のような非常に大きい値があっても比較的に狭い範囲内にデータを収めることが出来ます。たとえば、10を常用対数化すると1, 1000は3, 10000000は7になります。自然対数 (底が$e$)も可能ですが、「読む」ためのグラフとしては底が10の方が読みやすいでしょう。横軸の変数が対数化されるということは、横軸のスケールを対数化することと同じです。そのためには`scale_x_continuous()`内に`trans`引数を指定し、`"log10"`を渡します。
 
@@ -542,7 +489,9 @@ Country_df %>%
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-21-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-21-1} \end{center}
 
 　対数化することによってGDPの分布が綺麗な形になりました。対数化すると横軸における目盛りの間隔が等間隔でないことに注意すべきです。0から5兆ドルの距離はかなり広めですが、5兆から10兆までの距離は短くなり、10兆から15兆までの距離は更に短くなります。したがって、この図から「世界のGDPは鐘型に分布している」と解釈することは出来ません。分布を可視化するには対数化する前の図が適します。
 
@@ -562,7 +511,9 @@ Country_df %>%
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-22-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-22-1} \end{center}
 
 　横軸を修正するには`scale_x_continuous()`と同様、`breaks`と`labels`引数を指定します。
 
@@ -581,7 +532,9 @@ Country_df %>%
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-23-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-23-1} \end{center}
 
 　他にも`coord_*()`関数群、つまり座標系の操作を用いて軸を対数化することも可能です。他にも、データを`ggplot()`を渡す前に変数を対数化するのもありでしょう。プログラミングにおいてある結果にたどり着く方法は複数あるので、色々試してみるのも良いでしょう。
 
@@ -604,7 +557,9 @@ Country_df %>%
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-24-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-24-1} \end{center}
 
 　これでもヒストグラムとしては十分すぎるかも知れませんが、色々調整してみましょう。まずは、棒の枠線を白にしてみましょう。枠線はデータ内の変数に対応していないため、`aes()`の外側に入れます。枠線を指定する引数は`color`です。ちなみに棒の色を指定する引数は`fill`です。また、警告メッセージも気になるので、`HDI_2018`が欠損している行を除外します。
 
@@ -624,7 +579,9 @@ Country_df %>%
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-25-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-25-1} \end{center}
 
 　人によってはこちらの方が見やすかも知れません。
 
@@ -650,7 +607,9 @@ Country_df %>%
   theme_bw(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-26-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-26-1} \end{center}
 
 　数えてみると棒が10個だということが分かります。
 
@@ -668,56 +627,34 @@ Country_df %>%
   theme_bw(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-27-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-27-1} \end{center}
 
 　ヒストグラムが出力されましたが、棒の幅が`binwidth`で指定した0.1と一致することが分かります。たとえば、一番左の棒は0.35から0.45まで、つまり幅が0.1です。そして、一番右の棒は0.95から1.05に渡って位置します。ただし、ここでに疑問を持つ読者もいるでしょう「。なぜ0.3から0.4、0.4から0.5、...ではなく、0.35から0.45、0.45から0.55なのか」です。これは`ggplot2`の基本仕様です。ヒストグラムは度数分布表を基に作成されますが、本グラフの度数分布表は以下のようになります。
 
-<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:right;text-align: center;"> から </th>
-   <th style="text-align:right;text-align: center;"> まで </th>
-   <th style="text-align:right;text-align: center;"> 度数 </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:right;"> 0.35 </td>
-   <td style="text-align:right;"> 0.45 </td>
-   <td style="text-align:right;"> 10 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 0.45 </td>
-   <td style="text-align:right;"> 0.55 </td>
-   <td style="text-align:right;"> 26 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 0.55 </td>
-   <td style="text-align:right;"> 0.65 </td>
-   <td style="text-align:right;"> 22 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 0.65 </td>
-   <td style="text-align:right;"> 0.75 </td>
-   <td style="text-align:right;"> 37 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 0.75 </td>
-   <td style="text-align:right;"> 0.85 </td>
-   <td style="text-align:right;"> 47 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 0.85 </td>
-   <td style="text-align:right;"> 0.95 </td>
-   <td style="text-align:right;"> 37 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 0.95 </td>
-   <td style="text-align:right;"> 1.05 </td>
-   <td style="text-align:right;"> 1 </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}
+\centering
+\begin{tabular}{r|r|r}
+\hline
+\multicolumn{1}{c}{から} & \multicolumn{1}{c}{まで} & \multicolumn{1}{c}{度数}\\
+\hline
+0.35 & 0.45 & 10\\
+\hline
+0.45 & 0.55 & 26\\
+\hline
+0.55 & 0.65 & 22\\
+\hline
+0.65 & 0.75 & 37\\
+\hline
+0.75 & 0.85 & 47\\
+\hline
+0.85 & 0.95 & 37\\
+\hline
+0.95 & 1.05 & 1\\
+\hline
+\end{tabular}
+\end{table}
 
 　簡単に言うと、ヒストグラムの最初の棒は0を中央にした上で、棒の幅を0.1にしたとも言えます。これによってヒストグラムの境界線 (boundary)が、データより左右に0.05 (`binwidth`の半分)ずつ広くなります。もし、これを調整したい場合は、`boundary`引数を指定します。指定しない場合、`boundary`は「棒の広さ / 2」となります。棒がデータの範囲を超えないようにするためには、`geom_histogram()`内に`boundary = 0`を指定します。
 
@@ -734,7 +671,9 @@ Country_df %>%
   theme_bw(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-29-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-29-1} \end{center}
 
 　ここまで抑えとけば、普段使われるヒストグラムは問題なく作れるでしょう。
 
@@ -742,7 +681,8 @@ Country_df %>%
 
 　ヒストグラムには以下のように密度の表す線を同時に載せるケースもあります。
 
-<img src="visualization2_files/figure-html/unnamed-chunk-30-1.png" width="768" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-30-1} \end{center}
 
 　この密度の線を追加するには`geom_density()`という幾何オブジェクトを追加する必要があります。密度の線を示すには、横軸と縦軸両方の情報が必要です。横軸は`HDI_2018`で問題ないですが、縦軸はどうでしょう。縦軸には密度の情報が必要ですが、`Country_df`にそのような情報はありません。幸い、`ggplot2`は`y = ..density..`と指定するだけで、自動的に`HDI_2018`のある時点における密度を計算してくれます。したがって、マッピングは`aes(x = HDI_2018, y = ..density..)`のように書きます。こうなるとマッピング要素`x`は`geom_histogram()`と`geom_density()`に共通するため、`ggplot()`に入れても問題ありません。
 
@@ -760,7 +700,9 @@ Country_df %>%
   theme_bw(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-31-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-31-1} \end{center}
 
 　なんとも言えない微妙なグラフが出来ました。考えたものと全然違いますね。これはなぜでしょうか。それは`geom_density()`は**密度**を表す一方、`geom_histogram()`は**度数**を表すからです。2つは単位が全然違います。したがって、どちらかに単位を合わせる必要があり、この場合はヒストグラムの縦軸を度数でなく、密度に調整する必要があります。ヒストグラムの縦軸を密度にするためには、`y = ..density..`を指定するだけです。こうなると、`geom_histogram()`と`geom_density()`は`x`と`y`を共有するため、全部`ggplot()`内で指定しましょう。
 
@@ -777,7 +719,9 @@ Country_df %>%
   theme_bw(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-32-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-32-1} \end{center}
 
 　これで密度を表す線が出来ました。
 
@@ -800,7 +744,9 @@ Country_df %>%
   theme_bw(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-33-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-33-1} \end{center}
 
 　ヒストグラムが出来上がりました。OECD加盟国の場合、人間開発指数が相対的に高いことが分かります。しかし、積み上げヒストグラムになっています。これはある階級においてOECD加盟国と非加盟国の比率を比較する際に有効ですが、OECD加盟国と非加盟国の分布の違いを見るにはやや物足りません。したがって、棒グラフ同様、`position`引数で棒の位置を調整します。ただし、ヒストグラムの場合、`postion = "dodge"`は向いていないので、ここでは`position = "identity"`を指定します。しかし、この場合、棒が重なってしまうと、一方の棒が見えなくなる可能性もあるので、`alpha`引数で棒の透明度を調整します。`alpha`の値は0から1までであり、0になると、完全透明になります。ここでは0.5くらいにしてみましょう。
 
@@ -819,7 +765,9 @@ Country_df %>%
   theme_bw(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-34-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-34-1} \end{center}
 
 　これで2つのヒストグラムを綺麗にオーバーラッピングできました。また、先ほど紹介しました`geom_density()`オブジェクトを重ねることも可能です。
 
@@ -842,7 +790,9 @@ Country_df %>%
   theme_bw(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-35-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-35-1} \end{center}
 
 　この場合、OECD加盟国と非加盟国の密度をそれぞれ計算するため、ヒストグラムの見た目がこれまでのものと変わることに注意してください。
 
@@ -866,7 +816,9 @@ Country_df %>%
   theme_bw(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-36-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-36-1} \end{center}
 
 　OECDは加盟/非加盟だけですから、オーバーラッピングされたヒストグラムで十分かも知れません。しかし、大陸のように、3つ以上のグループになると、オーバーラッピングよりもファセットで分けた方が効率的です。たとえば、大陸ごとの人間開発指数のヒストグラムを作ってみましょう。
 
@@ -885,7 +837,9 @@ Country_df %>%
   theme_bw(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-37-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-37-1} \end{center}
 
 
 ---
@@ -906,11 +860,14 @@ Country_df %>%
   theme_gray(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-38-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-38-1} \end{center}
 
 　箱ひげ図の読み方は以下の通りです。
 
-<img src="visualization2_files/figure-html/unnamed-chunk-39-1.png" width="768" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-39-1} \end{center}
 
 　これで箱ひげ図は完成ですが、人間開発指数は0から1の相対を取るので、座標系の縦軸を調整してみましょう。座標系の操作は`coord_*()`関数群を使いますが、現在使っているのは直交座標系（デカルト座標系）ですので`coord_cartesian()`を使います。ここで縦軸の上限と下限を指定する引数が`ylim`であり、長さ2の数値型ベクトルが必要です。下限0、上限1ですので、`ylim = c(0, 1)`とします。
 
@@ -925,7 +882,9 @@ Country_df %>%
   theme_gray(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-40-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-40-1} \end{center}
 
 　まだまだ改善の余地はありますが、それなりの箱ひげ図の出来上がりです。しかし、一変数の箱ひげ図はあまり使われません。変数が1つだけならヒストグラムの方がより情報量は豊富でしょう。情報量が豊富ということはヒストグラムから（完璧には無理ですが）箱ひげ図を作ることは可能である一方、その逆は不可能か非常に難しいことを意味します。
 
@@ -942,7 +901,9 @@ Country_df %>%
   theme_gray(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-41-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-41-1} \end{center}
 
 　いかがでしょうか。5大陸の分布を素早く確認することができました。ヨーロッパの場合、人間開発指数が高く、バラツキも小さいことが分かります。一方、アジアとアフリカはバラツキが非常に大きいですね。アメリカ大陸はバラツキは非常に小さいですが、極端に高い国や低い国が含まれています。このアメリカ大陸に3つの点がありますが、これは外れ値です。つまり、最小値より小さい、または最大値より大きいケースを表します。最小値より小さい、または最大値より大きいという表現に違和感を感じるかも知れません。実は一般的な箱ひげ図の最小値は「第1四分位点 - 1.5 $\times$ 四分位範囲」より大きい値の中での最小値です。同じく最大値は「第3四分位点 + 1.5 $\times$ 四分位範囲」より小さい値の中での最大値です。普通に分布している場合、ほとんどのケースは箱ひげ図の最小値と最大値の範囲内に収まりますが、極端に大きい値、小さい値が含まれる場合は箱ひげ図の最小値と最大値の範囲からはみ出る場合があります。
 
@@ -960,7 +921,9 @@ Country_df %>%
   theme_gray(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-42-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-42-1} \end{center}
 
 　彩りどりでちょっとテンションが上がる箱ひげ図ができました。
 
@@ -985,7 +948,9 @@ Country_df %>%
   theme_gray(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-43-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-43-1} \end{center}
 
 　点が透明ではあるものの、それでも重なっている箇所は相変わらず読みにくいです。この場合有効な方法がジッター（jitter）です。これは点の位置に若干のノイズを付けることによって、点が重ならないようにすることです。ジッターの方法は2つありますが、ここではジッター専用の幾何オブジェクト`geom_jitter()`を使います[^boxplot-jitter]。`geom_jitter()`はノイズが追加された散布図ですので、`geom_point()`と使い方はほぼ同じです。
 
@@ -1005,7 +970,9 @@ Country_df %>%
   theme_gray(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-44-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-44-1} \end{center}
 
 　これで点が重ならなくなりましたが、ちょっと散らばりすぎるという印象もあります。この散らばり具合を調整する引数が`width`と`height`です。もちろん、これはデータの中身に対応する要素ではないため、`aes()`の外側にいれます。それぞれの実引数は0から1の間の数値になりますが、数字が大きいほど散らばり具合が大きくなり、0になるとジッター無しの散布図と同じものになります。ここでは横の散らばり具合を0.15（`width = 0.15`）、縦の散らばり具合は0（`height = 0`）にしてみましょう。そして、横軸が英語のままなので、これも日本語に直します。
 
@@ -1029,7 +996,9 @@ Country_df %>%
   theme_gray(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-45-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-45-1} \end{center}
 
 ### 次元を追加する
 
@@ -1065,7 +1034,9 @@ Country_df %>%
   theme_bw(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-46-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-46-1} \end{center}
 
 　次の方法はファセットを分割せずに次元を追加する方法です。ファセットに分ける場合、「先進国における大陸別人間開発指数の分布」、「先進国外における大陸別人間開発指数の分布」は素早く読み取れますが、「ある大陸における先進国/その他の国の人間開発指数の分布」を比較するにはあまり向いておりません。なぜなら目の動線が長いからです。先進国とその他の国を大陸ごとに横に並べると視線の動線が短くなり比較しやすくなります。
 
@@ -1102,7 +1073,9 @@ Country_df %>%
   theme_bw(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-47-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-47-1} \end{center}
 
 　ファセット分割と色分け、どれが良いかという正解はありません。分析者の目的に依存するものです。もし、先進国の中での比較を強調したい場合はファセット分割が有効でしょう。しかし、同じ大陸内で先進国とその他の国の比較なら色分けの方が適切です。
 
@@ -1126,7 +1099,7 @@ Democracy_df
 ```
 
 ```
-## # A tibble: 316 × 4
+## # A tibble: 316 x 4
 ##    Country     Continent Type          Value
 ##    <chr>       <chr>     <chr>         <dbl>
 ##  1 Afghanistan Asia      Polity IV        -1
@@ -1139,7 +1112,7 @@ Democracy_df
 ##  8 Angola      Africa    Freedom House    32
 ##  9 Argentina   America   Polity IV         9
 ## 10 Argentina   America   Freedom House    85
-## # … with 306 more rows
+## # ... with 306 more rows
 ```
 
 　続いて、箱ひげ図の作成ですが、これは次元の追加と全く同じやり方になります。`fill`で色分けをするか、ファセット分割をするかですね。ここでは箱の色分けをします。
@@ -1155,7 +1128,9 @@ Democracy_df %>%
   theme_gray(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-49-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-49-1} \end{center}
 
 　しかし、1つ問題があります。それはPolity IVは-10から10までの指標なのに対して、Freedom Houseは0から100までの指標になっている点です。この場合、正確な比較が出来ません。複数の変数を1つの箱ひげ図に出す際は、変数のスケールが一致させた方が良いでしょう。たとえば、複数の人、または団体に対する感情温度はスケールが0から100であるため、使えます。しかし、今回の場合はあまり良いケースではありません。
 
@@ -1184,7 +1159,9 @@ Democracy_df %>%
   theme_gray(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-50-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-50-1} \end{center}
 
 　先よりは比較可能な図のように見えますが、あくまでも最小値と最大値を一致させたものであるため、厳密な意味ではこれもよくありません。複数の変数を1つの箱ひげ図としてまとめる場合は、スケールが一致するもののみを使うことを推奨します。
 
@@ -1203,7 +1180,9 @@ Country_df %>%
   theme_bw(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-51-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-51-1} \end{center}
 
 　以下のメッセージが表示されますが、これは一人当たりGDP (購買力平価基準)または人間開発指数が欠損しているケースが11カ国あることを意味します。たとえば、教皇聖座 (Holy See; いわゆるバチカン)や西サハラ、ソマリアなどの国があります。
 
@@ -1221,7 +1200,7 @@ Country_df %>%
 ```
 
 ```
-## # A tibble: 11 × 3
+## # A tibble: 11 x 3
 ##    Country        PPP_per_capita HDI_2018
 ##    <chr>                   <dbl>    <dbl>
 ##  1 Andorra                   NA     0.857
@@ -1251,7 +1230,9 @@ Country_df %>%
   theme_bw(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-53-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-53-1} \end{center}
 
 　対数化してみたら、かなり綺麗な線形関係が確認できます。事実を言うと、そもそも人間開発指数は所得も評価項目であるため、線形関係があるのは当たり前です。
 
@@ -1271,7 +1252,9 @@ Country_df %>%
   theme_bw(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-54-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-54-1} \end{center}
 
 　一人当たりGDPが非常に高い国の多くは面積が小さい国が多いですね。
 
@@ -1291,7 +1274,9 @@ Country_df %>%
   theme_bw(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-55-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-55-1} \end{center}
 
 　色分けはされていますが、凡例を見ると想像したものとやや違いますね。なぜなら`OECD`変数が数値型になっているからです。実際のデータには`OECD = 0.5`や`OECD = 0.71`のような値は存在しませんが、数値型である以上、その値をとること自体は出来ます。したがって、0から1までの数値に対応できるように、色分けもグラデーションになっています。これを見やすく二分するためには、`OECD`変数をfactor型か文字型に変換する必要があります。
 
@@ -1309,7 +1294,9 @@ Country_df %>%
   theme_bw(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-56-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-56-1} \end{center}
 
 　これで散布図の出来上がりです。2次元座標系で表現された散布図ですが、この図から分かる情報は何があるでしょうか。
 
@@ -1347,7 +1334,9 @@ Country_df %>%
   theme_bw(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-57-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-57-1} \end{center}
 
 　日本と韓国を見つけるのは大変ですが、目的達成と言えるでしょう。ただ、もっと楽な方法があります。それが[湯谷啓明](https://twitter.com/yutannihilation)さんが開発した`gghighlight`パッケージです。詳しい使い方は[湯谷さんによる解説ページ](https://cran.r-project.org/web/packages/gghighlight/vignettes/gghighlight.html)を参照して頂きますが、ここでは簡単な使い方のみ紹介します。まずは、`install.packages("gghighlight")`でパッケージをインストールし、読み込みます。
 
@@ -1383,7 +1372,9 @@ Country_df %>%
 ## label_key: Country
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-59-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-59-1} \end{center}
 
 　非常に簡単なやり方で点のハイライトが出来ました。これは後ほど紹介する折れ線グラフだけでなく、様々な幾何オブジェクトにも対応しています。湯谷さんの解説ページを参照して下さい。
 
@@ -1416,7 +1407,9 @@ COVID19_df %>%
   theme_minimal(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-61-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-61-1} \end{center}
 
 　??????????????????
 
@@ -1437,7 +1430,9 @@ COVID19_df %>%
   theme_minimal(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-62-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-62-1} \end{center}
 
 　これで折れ線グラフは出力されましたが、どの線がどの国かが分かりませんね。`group`の場合、凡例が表示されないので、`group`でなく、`color`で色分けしてみましょう。
 
@@ -1454,7 +1449,9 @@ COVID19_df %>%
   theme_minimal(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-63-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-63-1} \end{center}
 
 　???????????????????
 
@@ -1477,7 +1474,9 @@ COVID19_df %>%
   theme_minimal(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-64-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-64-1} \end{center}
 
 　これだけでもG7国のCOVID-19の状況が比較可能ですが、この図は改善の余地があります。それは凡例の順番です。できれば、一番最新の日付のデータを基準に凡例の順番を揃えることが出来たら、どの線がどの国かが分かりやすくなります。そこで登場するのは第\@ref(factor)章で紹介しました`fct_reorder2`関数です。実際にやってみましょう。
 
@@ -1496,7 +1495,9 @@ COVID19_df %>%
   theme_minimal(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-65-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-65-1} \end{center}
 
 　これでより読みやすい図が出来上がりました。
 
@@ -1519,7 +1520,9 @@ COVID19_df %>%
   theme_minimal(base_family = "HiraKakuProN-W3")
 ```
 
-<img src="visualization2_files/figure-html/unnamed-chunk-66-1.png" width="768" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-66-1} \end{center}
 
 　情報量の損失を最小化しながら、一部の国のみをハイライトすることによって世界における日米中韓のトレンドが確認出来ました。
 

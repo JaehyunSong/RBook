@@ -244,7 +244,7 @@ my_df1
 ```
 
 ```
-## # A tibble: 159 × 6
+## # A tibble: 159 x 6
 ##       ID Team                 Rank Points Prev_Points Confederation
 ##    <dbl> <chr>               <dbl>  <dbl>       <dbl> <chr>        
 ##  1     1 Albania                75   1325        1316 UEFA         
@@ -257,7 +257,7 @@ my_df1
 ##  8     8 Armenia               126   1103        1104 UEFA         
 ##  9     9 Aruba                 157    724         724 CONCACAF     
 ## 10    10 Australia               7   1963        1963 AFC          
-## # … with 149 more rows
+## # ... with 149 more rows
 ```
 
 　同じファイルが読み込まれましたが、データを出力する際、最初の10行のみが表示されます。また、画面に収まらない横長のデータであれば、適宜省略し、見やすく出力してくれます。`read_csv()`で読み込まれた表形式データはtibbleと呼ばれるやや特殊なものとして格納されます。Rがデフォルトで提供する表形式データの構造はdata.frameですが、tibbleはその拡張版です。詳細は第\@ref(structure-dataframe)章を参照してください。
@@ -290,15 +290,15 @@ head(ShiftJIS_df1)
 ```
 
 ```
-## # A tibble: 6 × 11
+## # A tibble: 6 x 11
 ##      ID Pref           Zaisei Over65 Under30   LDP   DPJ Komei Ishin   JCP   SDP
 ##   <dbl> <chr>           <dbl>  <dbl>   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-## 1     1 "\x96k\x8aC\x…  0.419   29.1    24.7  32.8  30.6 13.4   3.43 11.4   1.68
-## 2     2 "\x90\xc2\x90…  0.332   30.1    23.9  40.4  24.6 12.8   3.82  8.92  3.41
-## 3     3 "\x8a\xe2\x8e…  0.341   30.4    24.5  34.9  22.4  8.61  5.16 11.2   5.29
-## 4     4 "\x8b{\x8f\xe…  0.596   25.8    27.3  36.7  25.4 13.4   3.97  9.99  3.62
-## 5     5 "\x8fH\x93c\x…  0.299   33.8    21.4  43.5  22.7 11.2   5.17  7.56  5.12
-## 6     6 "\x8eR\x8c`\x…  0.342   30.8    24.8  42.5  21.5 11.8   4.3   7.6   5.2
+## 1     1 "\x96k\x8aC\x~  0.419   29.1    24.7  32.8  30.6 13.4   3.43 11.4   1.68
+## 2     2 "\x90\xc2\x90~  0.332   30.1    23.9  40.4  24.6 12.8   3.82  8.92  3.41
+## 3     3 "\x8a\xe2\x8e~  0.341   30.4    24.5  34.9  22.4  8.61  5.16 11.2   5.29
+## 4     4 "\x8b{\x8f\xe~  0.596   25.8    27.3  36.7  25.4 13.4   3.97  9.99  3.62
+## 5     5 "\x8fH\x93c\x~  0.299   33.8    21.4  43.5  22.7 11.2   5.17  7.56  5.12
+## 6     6 "\x8eR\x8c`\x~  0.342   30.8    24.8  42.5  21.5 11.8   4.3   7.6   5.2
 ```
 
 　2列目の`Pref`列には日本語で都道府県名が入っているはずだが、謎の文字列が表示される。`read.csv()`の場合、少なくともWindowsでは問題なく読み込めたはずだ。なぜなら`read.csv()`はWindowsの場合、Shift-JISで、macOSの場合UTF-8でファイルを読み込む。一方、`read_csv()`はOSと関係なく世界標準であるUTF-8でファイルを読み込むからだ。
@@ -343,7 +343,7 @@ head(ShiftJIS_df3)
 ```
 
 ```
-## # A tibble: 6 × 11
+## # A tibble: 6 x 11
 ##      ID Pref   Zaisei Over65 Under30   LDP   DPJ Komei Ishin   JCP   SDP
 ##   <dbl> <chr>   <dbl>  <dbl>   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
 ## 1     1 北海道  0.419   29.1    24.7  32.8  30.6 13.4   3.43 11.4   1.68
@@ -403,7 +403,7 @@ head(Excel_DF)
 ```
 
 ```
-## # A tibble: 6 × 6
+## # A tibble: 6 x 6
 ##      ID Team                 Rank Points Prev_Points Confederation
 ##   <dbl> <chr>               <dbl>  <dbl>       <dbl> <chr>        
 ## 1     1 Albania                75   1325        1316 UEFA         
@@ -425,7 +425,7 @@ head(Stata_DF)
 ```
 
 ```
-## # A tibble: 6 × 6
+## # A tibble: 6 x 6
 ##      id team                 rank points prev_points confederation
 ##   <dbl> <chr>               <dbl>  <dbl>       <dbl> <chr>        
 ## 1     1 Albania                75   1325        1316 UEFA         
@@ -571,10 +571,14 @@ write.csv(my_data, file = "Data/my_data.csv", row.names = FALSE)
 
 　これを実行すると、プロジェクトのフォルダの中にある `Data` フォルダに`my_data.csv`が生成される。`LibreOffice`や`Numbers`、`Excel`などを使って`my_data.csv`を開いてみると、先ほど作成したデータが保存されていることが確認できる。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Rbasic/Export.png" alt="保存したcsvファイルの中身" width="40%" />
-<p class="caption">(\#fig:io-export-4)保存したcsvファイルの中身</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.4\linewidth]{Figures/Rbasic/Export} 
+
+}
+
+\caption{保存したcsvファイルの中身}(\#fig:io-export-4)
+\end{figure}
 
 ### RDataファイル
 

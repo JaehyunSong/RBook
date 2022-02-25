@@ -29,10 +29,14 @@
 
 これまでRとRStudioの導入について説明しましたが、これは自分のパソコンにインストールすることを前提としていました。したがって、パソコンを新しく買ったり、複数のパソコンを持つ場合は、それぞれに対してインストールと設定をする必要があります。これらの作業は慣れれば大したことではありませんが、それでも面倒だと思う方もいるでしょう。また、それぞれのパソコンにRとRStudioをインストールして常に同じ環境を維持するのも手間のかかる作業です。そこで一つの対案となるのが[RStudio Cloud](https://rstudio.cloud)です。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Installation/RStudioCloud.png" alt="RStudio Cloudの起動画面 (Operaの場合)" width="100%" />
-<p class="caption">(\#fig:RStudioCloud)RStudio Cloudの起動画面 (Operaの場合)</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{Figures/Installation/RStudioCloud} 
+
+}
+
+\caption{RStudio Cloudの起動画面 (Operaの場合)}(\#fig:RStudioCloud)
+\end{figure}
 
 RStudio Cloudはサーバー上にインストールされているRとRStudioをインターネットブラウザ[^browser]で動かすことができるサービスです。インターネットさえ接続されていれば、図\@ref(fig:RStudioCloud)のように、どこでも同じ環境のRとRStudioを使用することができます。また、無料です。ブラウザ上で操作できるため、スマートフォンやタブレットPCでも操作は不可能ではありませんが、基本的にはPCでの操作を想定しています。
 

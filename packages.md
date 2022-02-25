@@ -58,10 +58,14 @@ devtools::install_github("JaehyunSong/BalanceR")
 
 　先ほど述べたように、パッケージのインストールは道具セットの購入と収納に似ている。ただし、実際に道具セットを使うためには、それを自分の作業台上に載せた方が効率がいいだろう[^default-pacakge] [^load_direct]。この作業がパッケージの読み込み (load) である。インストールしたパッケージを読み込むには`library()`または`require()`関数を使う。`require()`は関数内に使う目的で設計された関数だが、パッケージを読み込むという点では全く同じである。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Installation/Package_Workbench.jpg" alt="Rパッケージと作業環境" width="75%" />
-<p class="caption">(\#fig:packages-load-1)Rパッケージと作業環境</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.75\linewidth]{Figures/Installation/Package_Workbench} 
+
+}
+
+\caption{Rパッケージと作業環境}(\#fig:packages-load-1)
+\end{figure}
 
 [^default-pacakge]: `mean()`や`sum()`、`lm()`のように、よく使われる関数 (=工具)はR起動と同時に作業台上に載せられる。
 
@@ -189,10 +193,14 @@ install.packages("devtools")
 
 パッケージのインストールの祭、エラーが出る場合があります。とりわけ、R導入直後は必要とするライブラリがインストールされていないケースが多く、以下のようなエラーメッセージが表示されるケースがあります。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Installation/Package_Ubuntu1.png" alt="必要なライブラリがない場合" width="75%" />
-<p class="caption">(\#fig:unnamed-chunk-1)必要なライブラリがない場合</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.75\linewidth]{Figures/Installation/Package_Ubuntu1} 
+
+}
+
+\caption{必要なライブラリがない場合}(\#fig:unnamed-chunk-1)
+\end{figure}
 
 これは`xml2`パッケージをインストールしようとした時に表示されたメッセージです。これはUbuntuに`libxml-2.0`というライブラリが入っていないことを意味します。解決方法は、このライブラリを導入することですが、OSによってインストールに必要なライブラリ名が異なります。UbuntuはDebian系列のOSであるため、`deb`行を確認します。どうやら`libxml2-dev`をインストールすれば良いようです。したがって、新しいTerminalを起動し、`R`と同じやり方で`libxml2-dev`をインストールします。
 

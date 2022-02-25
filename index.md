@@ -16,7 +16,7 @@ apple-touch-icon: HTML/apple-favicon.png
 apple-touch-icon-size: 120
 ---
 
- 
+<!-- 
 
 
 
@@ -87,10 +87,14 @@ apple-touch-icon-size: 120
 
 ## 著者紹介 {-}
 
-<div class="figure" style="text-align: center">
-<img src="figures/Authors/SongYanai.jpg" alt="事例研究をこよなく愛する著者 (Portland, OR. 2016年2月)" width="50%" />
-<p class="caption">(\#fig:preface-author)事例研究をこよなく愛する著者 (Portland, OR. 2016年2月)</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.5\linewidth]{figures/Authors/SongYanai} 
+
+}
+
+\caption{事例研究をこよなく愛する著者 (Portland, OR. 2016年2月)}(\#fig:preface-author)
+\end{figure}
 
 **Song Jaehyun**（宋 財泫 [ソン ジェヒョン]; 写真左）はR黒帯の大学教員。猫好き。
 主な著書：[真に驚くべき業績を残しているが、この余白はそれを書くには狭すぎる](https://ja.wikipedia.org/wiki/フェルマーの最終定理)。
@@ -163,4 +167,4 @@ print("Hello World!") # Hellow World!を出力
 
 本著作物は [クリエイティブ・コモンズ 表示-非営利-改変禁止 4.0国際ライセンス](http://creativecommons.org/licenses/by-nc-nd/4.0/)の下に提供されています。
 
-
+-->

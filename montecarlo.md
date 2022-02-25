@@ -42,7 +42,7 @@ sample(1:6, 3, replace = TRUE, prob = rep(1/6, 6))
 ```
 
 ```
-## [1] 4 3 2
+## [1] 6 6 5
 ```
 
 　今回はサイコロを1万回振り、それぞれの目が出た回数を棒グラフとして示してみます。無作為に抽出された値であれば、各目が出る回数は等しいはずです。ベクトルに対して`table()`関数を使うと、各要素が出現した回数が出力され、このオブジェクトを`barplot()`関数に渡すと棒グラフを作成することができます。
@@ -53,7 +53,9 @@ Dice_vec <- sample(1:6, 10^4, replace = TRUE)
 table(Dice_vec) %>% barplot()
 ```
 
-<img src="montecarlo_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{montecarlo_files/figure-latex/unnamed-chunk-3-1} \end{center}
 
 　1から6までの目が出た回数がほぼ同じであることが確認できます。この6つの棒の高さがすべて同じになることはありえませんが（そもそも1万を6で割ったら余りが出ますね）、ほぼ同じ割合であることから、疑似乱数とは言え、シミュレーション用としては十分でしょう。
 
@@ -94,7 +96,7 @@ rnorm(5) %>% round(3)
 ```
 
 ```
-## [1]  0.419 -0.024  0.461  0.514 -0.306
+## [1]  1.563  0.215  0.358 -1.366  1.069
 ```
 
 ```{.r .numberLines}
@@ -102,7 +104,7 @@ rnorm(5) %>% round(3)
 ```
 
 ```
-## [1] -0.238  0.935 -0.767  0.166  0.821
+## [1] -1.073 -0.943 -0.325 -1.353  1.067
 ```
 
 ```{.r .numberLines}
@@ -110,7 +112,7 @@ rnorm(5) %>% round(3)
 ```
 
 ```
-## [1]  1.153 -0.940 -0.280 -1.622 -2.984
+## [1] -0.451 -0.776 -0.448  1.990  0.207
 ```
 
 　このように、抽出の度に結果が変わります。1回きりのシミュレーションではこれで問題ないでしょうが、同じシミュレーションから同じ結果を得るためには、乱数を固定する必要があります。そこで使うのがシード（seed）です。シードが同じなら抽出される乱数は同じ値を取ります。シードの指定は`set.seed(numeric型スカラー)`です。たとえば、シードを[19861008](https://www.jaysong.net)にし、同じ作業をやってみましょう。
@@ -321,7 +323,7 @@ Prob_df
 ```
 
 ```
-## # A tibble: 99 × 2
+## # A tibble: 99 x 2
 ##    Students Probs
 ##       <int> <dbl>
 ##  1        2  0.01
@@ -334,7 +336,7 @@ Prob_df
 ##  8        9  0.09
 ##  9       10  0.12
 ## 10       11  0.18
-## # … with 89 more rows
+## # ... with 89 more rows
 ```
 
 　学生数が何人いれば、同じ誕生日の人が2人以上いる割合が50%になるのでしょうか。割合が0.4以上、0.6以下の行を抽出してみましょう。
@@ -346,7 +348,7 @@ Prob_df %>%
 ```
 
 ```
-## # A tibble: 7 × 2
+## # A tibble: 7 x 2
 ##   Students Probs
 ##      <int> <dbl>
 ## 1       18  0.41
@@ -371,7 +373,9 @@ Prob_df %>%
     theme_bw(base_family = "HiraginoSans-W3")
 ```
 
-<img src="montecarlo_files/figure-html/monte-birthday10-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{montecarlo_files/figure-latex/monte-birthday10-1} \end{center}
 
 　非常に直感に反する結果かも知れませんが、50人程度いれば、**ほぼ**確実に同じ誕生日の人が2人以上いることが分かります。この誕生日問題は以下のように解くことができます。人が$n$人いる場合、同じ誕生日の人が2人以上いる確率$p(n)$は、
 
@@ -441,7 +445,7 @@ Prob_df
 ```
 
 ```
-## # A tibble: 99 × 3
+## # A tibble: 99 x 3
 ##    Students Probs  Expect
 ##       <int> <dbl>   <dbl>
 ##  1        2  0.01 0.00274
@@ -454,7 +458,7 @@ Prob_df
 ##  8        9  0.09 0.0946 
 ##  9       10  0.12 0.117  
 ## 10       11  0.18 0.141  
-## # … with 89 more rows
+## # ... with 89 more rows
 ```
 
 　これは人間にとっては読みやすい表ですが、可視化まで考えると、tidyなデータといは言えません。したがって、`pivot_longer()`関数を使用してtidyなデータに整形します。{tidyr}パッケージの使い方は第\@ref(tidydata)章を参照してください。
@@ -470,7 +474,7 @@ Prob_df2
 ```
 
 ```
-## # A tibble: 198 × 3
+## # A tibble: 198 x 3
 ##    Students Type      Prob
 ##       <int> <chr>    <dbl>
 ##  1        2 Probs  0.01   
@@ -483,7 +487,7 @@ Prob_df2
 ##  8        5 Expect 0.0271 
 ##  9        6 Probs  0.02   
 ## 10        6 Expect 0.0405 
-## # … with 188 more rows
+## # ... with 188 more rows
 ```
 
 　こちらのデータを使用し、シミュレーションから得られた結果と理論値を折れ線グラフで出力してみましょう。
@@ -501,7 +505,9 @@ Prob_df2 %>%
     theme(legend.position = "bottom")
 ```
 
-<img src="montecarlo_files/figure-html/monte-birthday16-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{montecarlo_files/figure-latex/monte-birthday16-1} \end{center}
 
 　最後に以上の作業を試行回数10000としてもう一回やってみましょう。
 
@@ -529,7 +535,9 @@ Prob_df %>%
     theme(legend.position = "bottom")
 ```
 
-<img src="montecarlo_files/figure-html/monte-birthday17-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{montecarlo_files/figure-latex/monte-birthday17-1} \end{center}
 
 　モンテカルロ・シミュレーションから得られた割合と理論上の確率が非常に近似していることが分かります。
 
@@ -606,11 +614,13 @@ table(Switch_No)
 
 　今回はもう一つの例として、円周率 ($\pi$)の計算を紹介したいと思います。$\pi$は無理数であるため、厳密な計算は出来ませんが、モンテカルロ・シミュレーションである程度近似できます。たとえば、半径1 ($r = 1$)の円を考えてみましょう。
 
-<img src="montecarlo_files/figure-html/monte-pi1-1.png" width="672" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics{montecarlo_files/figure-latex/monte-pi1-1} \end{center}
 
 　円の面積は$r^2\pi$であるため、この円の面積は$\pi$です。また、四角形は辺の長さが2の正四角形ですから面積は4です。続いて、四角形の範囲内の点を付けます。無作為に20個を付けてみます。
 
-<img src="montecarlo_files/figure-html/monte-pi2-1.png" width="672" style="display: block; margin: auto;" />
+
+\begin{center}\includegraphics{montecarlo_files/figure-latex/monte-pi2-1} \end{center}
 
 　20個点のうち、円の外側にあるのは5個、円の内側は15個です。つまり、75%の点が円内にあることを意味します。点の位置は無作為ですので、もし円の大きさが$\pi$であれば、点が円内に入る確率は$\frac{\pi}{4}$です。今回の例だと$\frac{\pi}{4} = 0.75$であるため、$\pi = 0.75 \times 4 = 3$となります。実際の円周率は3.141593...なので、そこそこ近似できていますね。
 
@@ -626,7 +636,7 @@ pi_df
 ```
 
 ```
-## # A tibble: 100 × 2
+## # A tibble: 100 x 2
 ##          x      y
 ##      <dbl>  <dbl>
 ##  1 -0.950  -0.344
@@ -639,7 +649,7 @@ pi_df
 ##  8 -0.273  -0.886
 ##  9 -0.405   0.701
 ## 10  0.528  -0.547
-## # … with 90 more rows
+## # ... with 90 more rows
 ```
 
 　まず、各辺の長さが2の正四角形と`pi_df`で生成した100個の点をプロットします。四角形を描くときには`geom_rect()`幾何オブジェクトを使用します。マッピングは四角形の左下の座標 (`xmin`と`ymin`)、右上の座標 (`xmax`と`ymax`)に行います。今回は原点が (0, 0)の半径1の円に接する四角形ですから、左下の座標は (-1, -1)、右上の座標は (1, 1)となります。
@@ -655,7 +665,9 @@ pi_df %>%
     theme_minimal()
 ```
 
-<img src="montecarlo_files/figure-html/monte-pi4-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{montecarlo_files/figure-latex/monte-pi4-1} \end{center}
 
 　ここに円を追加してみましょう。円を描くときには{ggforce}パッケージの`geom_circle()`幾何オブジェクトを使用します。マッピングは円の原点 (`x0`と`y0`)、円の半径 (`r`)です。原点は (0, 0)で半径は1の円を重ねます。
 
@@ -671,7 +683,9 @@ pi_df %>%
     theme_minimal()
 ```
 
-<img src="montecarlo_files/figure-html/monte-pi5-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{montecarlo_files/figure-latex/monte-pi5-1} \end{center}
 
 　これだけだと読みづらいので、円の中か外かで点の色分けをしてみましょう。そのためには各点が円内に入っているかどうかを判定した変数`in_circle`を追加します。点($x$, $y$)が、原点が($x^\prime$, $y^\prime$)、かつ半径$r$の円内に入っている場合、$(x - x^\prime)^2 + (y - y^\prime)^2 < r^2$が成立します。今回は原点が (0, 0)で、半径が1であるため、$x^2 + y^2 < 1$か否かを判定します。この条件を満たしているかどうかを示す`in_circle`という変数を追加します。
 
@@ -697,7 +711,9 @@ pi_df %>%
     theme_void(base_family = "HiraginoSans-W3")
 ```
 
-<img src="montecarlo_files/figure-html/monte-pi7-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{montecarlo_files/figure-latex/monte-pi7-1} \end{center}
 
 　実際に円内の点と円外の点の個数を数えてみましょう。
 
@@ -709,7 +725,7 @@ pi_df %>%
 ```
 
 ```
-## # A tibble: 2 × 2
+## # A tibble: 2 x 2
 ##   in_circle     N
 ##   <chr>     <int>
 ## 1 円内         82
@@ -749,7 +765,9 @@ pi_df2 %>%
     theme_void(base_family = "HiraginoSans-W3")
 ```
 
-<img src="montecarlo_files/figure-html/monte-pi10-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{montecarlo_files/figure-latex/monte-pi10-1} \end{center}
 
 ```{.r .numberLines}
 pi_df2 %>%
@@ -758,7 +776,7 @@ pi_df2 %>%
 ```
 
 ```
-## # A tibble: 2 × 2
+## # A tibble: 2 x 2
 ##   in_circle     N
 ##   <chr>     <int>
 ## 1 円内       3919
@@ -916,461 +934,10 @@ enframe(Result_vec) %>%
     theme(legend.position = "bottom")
 ```
 
-<img src="montecarlo_files/figure-html/monte-boot8-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{montecarlo_files/figure-latex/monte-boot8-1} \end{center}
 
 $t$検定とブートストラップ法の比較
 
 
-```{=html}
-<div id="nqkariscnw" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
-}
-
-#nqkariscnw .gt_table {
-  display: table;
-  border-collapse: collapse;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#nqkariscnw .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#nqkariscnw .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#nqkariscnw .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 0;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#nqkariscnw .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#nqkariscnw .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#nqkariscnw .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#nqkariscnw .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#nqkariscnw .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#nqkariscnw .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#nqkariscnw .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#nqkariscnw .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#nqkariscnw .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#nqkariscnw .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#nqkariscnw .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#nqkariscnw .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#nqkariscnw .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#nqkariscnw .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#nqkariscnw .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#nqkariscnw .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#nqkariscnw .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-
-#nqkariscnw .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#nqkariscnw .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#nqkariscnw .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#nqkariscnw .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#nqkariscnw .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#nqkariscnw .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#nqkariscnw .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#nqkariscnw .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-left: 4px;
-  padding-right: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#nqkariscnw .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#nqkariscnw .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#nqkariscnw .gt_left {
-  text-align: left;
-}
-
-#nqkariscnw .gt_center {
-  text-align: center;
-}
-
-#nqkariscnw .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#nqkariscnw .gt_font_normal {
-  font-weight: normal;
-}
-
-#nqkariscnw .gt_font_bold {
-  font-weight: bold;
-}
-
-#nqkariscnw .gt_font_italic {
-  font-style: italic;
-}
-
-#nqkariscnw .gt_super {
-  font-size: 65%;
-}
-
-#nqkariscnw .gt_footnote_marks {
-  font-style: italic;
-  font-weight: normal;
-  font-size: 75%;
-  vertical-align: 0.4em;
-}
-
-#nqkariscnw .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#nqkariscnw .gt_slash_mark {
-  font-size: 0.7em;
-  line-height: 0.7em;
-  vertical-align: 0.15em;
-}
-
-#nqkariscnw .gt_fraction_numerator {
-  font-size: 0.6em;
-  line-height: 0.6em;
-  vertical-align: 0.45em;
-}
-
-#nqkariscnw .gt_fraction_denominator {
-  font-size: 0.6em;
-  line-height: 0.6em;
-  vertical-align: -0.05em;
-}
-</style>
-<table class="gt_table">
-  
-  <thead class="gt_col_headings">
-    <tr>
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2">
-        <span class="gt_column_spanner"><strong>t検定</strong></span>
-      </th>
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2">
-        <span class="gt_column_spanner"><strong>ブートストラップ法</strong></span>
-      </th>
-    </tr>
-    <tr>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">統計量</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">値</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">統計量</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">値</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td class="gt_row gt_left">(1): 平均値の差分</td>
-<td class="gt_row gt_right">&minus;0.307</td>
-<td class="gt_row gt_left">(1): 平均値の差分の平均値</td>
-<td class="gt_row gt_right">&minus;0.305</td></tr>
-    <tr><td class="gt_row gt_left">(2): 標準誤差</td>
-<td class="gt_row gt_right">0.141</td>
-<td class="gt_row gt_left">(2): 平均値の差分の標準偏差</td>
-<td class="gt_row gt_right">0.140</td></tr>
-    <tr><td class="gt_row gt_left">(3): 検定統計量</td>
-<td class="gt_row gt_right">&minus;2.171</td>
-<td class="gt_row gt_left">(3): (1) / (2)</td>
-<td class="gt_row gt_right">&minus;2.168</td></tr>
-    <tr><td class="gt_row gt_left">(4): p値</td>
-<td class="gt_row gt_right">0.031</td>
-<td class="gt_row gt_left">(4): p値</td>
-<td class="gt_row gt_right">0.031</td></tr>
-    <tr><td class="gt_row gt_left">(5): 95%信頼区間の下限</td>
-<td class="gt_row gt_right">&minus;0.585</td>
-<td class="gt_row gt_left">(5): 95%信頼区間の下限</td>
-<td class="gt_row gt_right">&minus;0.581</td></tr>
-    <tr><td class="gt_row gt_left">(6): 95%信頼区間の上限</td>
-<td class="gt_row gt_right">&minus;0.028</td>
-<td class="gt_row gt_left">(6): 95%信頼区間の上限</td>
-<td class="gt_row gt_right">&minus;0.030</td></tr>
-  </tbody>
-  
-  
-</table>
-</div>
-```

@@ -27,10 +27,14 @@ Linuxの場合、ディストリビューション (distribution)[^dist]によ�
 
 [^dist]: よく使われるディストリビューションとしては[Debian](https://www.debian.org)系とRed Hat系があります。シェアトップレベルの[Ubuntu](https://ubuntu.com)と[Mint](https://www.linuxmint.com)はDebian系です。ちなみに、個人向けのRed Hat Linuxは開発中止され、現在は[Fedora](https://getfedora.org)に受け継がれています。Red Hat系ではFedoraだけでなく、[CentOS](https://www.centos.org)も広く使われています。最近は[arch linux](https://www.archlinux.org)系の[manjaro linux](https://manjaro.org)も人気です。人気ディストリビューションにつしては[DistroWatch.com](https://distrowatch.com/dwres.php?resource=popularity)から最新ランキングを確認してください。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Installation/R_Ubuntu1.png" alt="Terminalの起動" width="100%" />
-<p class="caption">(\#fig:unnamed-chunk-1)Terminalの起動</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{Figures/Installation/R_Ubuntu1} 
+
+}
+
+\caption{Terminalの起動}(\#fig:unnamed-chunk-1)
+\end{figure}
 
 まず、Terminal (端末)を立ち上げます。Terminalはデスクトップ画面で右クリックし、「Open Terminal (端末を開く)」を選択します。Terminalプロンプト上に以下のように入力します。
 
@@ -46,24 +50,36 @@ R
 
 と入力するだけです。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Installation/R_Ubuntu2.png" alt="Applicationから起動1" width="100%" />
-<p class="caption">(\#fig:unnamed-chunk-2)Applicationから起動1</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{Figures/Installation/R_Ubuntu2} 
+
+}
+
+\caption{Applicationから起動1}(\#fig:unnamed-chunk-2)
+\end{figure}
 
 2つ目の方法はApplicationから開く方法です。Ubuntuの左上の「Activities (アクティビティ)」または、左下のボタンをクリックします。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Installation/R_Ubuntu3.png" alt="Applicationから起動2" width="100%" />
-<p class="caption">(\#fig:unnamed-chunk-3)Applicationから起動2</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{Figures/Installation/R_Ubuntu3} 
+
+}
+
+\caption{Applicationから起動2}(\#fig:unnamed-chunk-3)
+\end{figure}
 
 上段中央の検索で「R」を入力し、検索結果からRを選択します。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Installation/R_Ubuntu4.png" alt="R Console" width="100%" />
-<p class="caption">(\#fig:linux-r-console)R Console</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{Figures/Installation/R_Ubuntu4} 
+
+}
+
+\caption{R Console}(\#fig:linux-r-console)
+\end{figure}
 
 図\@ref(fig:linux-r-console)のような画面が表示されたらRはインストールは完了です。
 
@@ -109,40 +125,60 @@ Rをインストールする前に以下の2点を確認します。
 
 #### Rのダウンロードとインストール
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Installation/R_Windows1.png" alt="Rのインストール1 (Windows)" width="100%" />
-<p class="caption">(\#fig:unnamed-chunk-4)Rのインストール1 (Windows)</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{Figures/Installation/R_Windows1} 
+
+}
+
+\caption{Rのインストール1 (Windows)}(\#fig:unnamed-chunk-4)
+\end{figure}
 
 CRAN (https://cran.r-project.org/)にアクセスし、「Download R for Windows」を選択します。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Installation/R_Windows2.png" alt="Rのインストール2 (Windows)" width="100%" />
-<p class="caption">(\#fig:unnamed-chunk-5)Rのインストール2 (Windows)</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{Figures/Installation/R_Windows2} 
+
+}
+
+\caption{Rのインストール2 (Windows)}(\#fig:unnamed-chunk-5)
+\end{figure}
 
 「base」を選択します。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Installation/R_Windows3.png" alt="Rのインストール3 (Windows)" width="100%" />
-<p class="caption">(\#fig:unnamed-chunk-6)Rのインストール3 (Windows)</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{Figures/Installation/R_Windows3} 
+
+}
+
+\caption{Rのインストール3 (Windows)}(\#fig:unnamed-chunk-6)
+\end{figure}
 
 「Download R x.x.x for Windows」を選択し、インストーラーをダウンロードします。
 
 インストールの途中、コンポーネントの選択画面が表示されます。「Core File」と「Message translation」にはチェックを入れますが、自分のパソコンのbitによって32bitか64bitかが決まります。多くの場合、64bitで問題ありませんが、以下のような方法で確認できます。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Installation/R_Windows_Pre1.png" alt="bitの確認 (1)" width="50%" />
-<p class="caption">(\#fig:unnamed-chunk-7)bitの確認 (1)</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.5\linewidth]{Figures/Installation/R_Windows_Pre1} 
+
+}
+
+\caption{bitの確認 (1)}(\#fig:unnamed-chunk-7)
+\end{figure}
 
 1. デスクトップ画面のPCを**右クリック**し、「プロパティ」を選択
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Installation/R_Windows_Pre2.png" alt="bitの確認 (2)" width="100%" />
-<p class="caption">(\#fig:unnamed-chunk-8)bitの確認 (2)</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{Figures/Installation/R_Windows_Pre2} 
+
+}
+
+\caption{bitの確認 (2)}(\#fig:unnamed-chunk-8)
+\end{figure}
 
 2. 「システムの種類」を確認
 
@@ -160,24 +196,36 @@ CRAN (https://cran.r-project.org/)にアクセスし、「Download R for Windows
 
 RStudioのインストール方法はもっと簡単です。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Installation/RStudio1.png" alt="RStudioのインストール1" width="100%" />
-<p class="caption">(\#fig:unnamed-chunk-9)RStudioのインストール1</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{Figures/Installation/RStudio1} 
+
+}
+
+\caption{RStudioのインストール1}(\#fig:unnamed-chunk-9)
+\end{figure}
 
 まず、RStudioのホームページ (https://rstudio.com)にアクセスし、「Download」をクリックします。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Installation/RStudio2.png" alt="RStudioのインストール2" width="100%" />
-<p class="caption">(\#fig:unnamed-chunk-10)RStudioのインストール2</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{Figures/Installation/RStudio2} 
+
+}
+
+\caption{RStudioのインストール2}(\#fig:unnamed-chunk-10)
+\end{figure}
 
 RStudio Desktopの「Download」を選択します。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Installation/RStudio3.png" alt="RStudioのインストール3" width="100%" />
-<p class="caption">(\#fig:unnamed-chunk-11)RStudioのインストール3</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{Figures/Installation/RStudio3} 
+
+}
+
+\caption{RStudioのインストール3}(\#fig:unnamed-chunk-11)
+\end{figure}
 
 自分のOSに合ったインストーラーをダウンロードします[^rstudio-ubuntu]。
 
@@ -193,10 +241,14 @@ RStudio Desktopの「Download」を選択します。
 
 とりあえずインスールされたRStudioを立ち上げてみましょう。図\@ref(fig:RStudio1)のおような画面が表示されたら問題なくRStudioがインストールされていると考えて良いでしょう。図\@ref(fig:RStudio1)と完全に同じ画面が表示されなくても問題ゴザ会いません。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Installation/RStudio_Setting1.png" alt="RStudioの初期画面" width="100%" />
-<p class="caption">(\#fig:RStudio1)RStudioの初期画面</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{Figures/Installation/RStudio_Setting1} 
+
+}
+
+\caption{RStudioの初期画面}(\#fig:RStudio1)
+\end{figure}
 
 ### RStudioの設定
 
@@ -219,10 +271,14 @@ RStudio Desktopの「Download」を選択します。
     * ちなみに、RStudioのテーマやフォントなどの設定は「Apperance」から調整できます。
 4. 「OK」を押してRStudioの画面に戻ったら、左下Paneの最小化ボタン (図\@ref(fig:PaneExample)の赤い四角形)をクリックし、最小化します。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Installation/RStudio_Setting4.png" alt="Pane設定後" width="100%" />
-<p class="caption">(\#fig:PaneExample)Pane設定後</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{Figures/Installation/RStudio_Setting4} 
+
+}
+
+\caption{Pane設定後}(\#fig:PaneExample)
+\end{figure}
 
 ---
 -->

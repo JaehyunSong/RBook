@@ -345,10 +345,16 @@ map_dbl(num_list, `[`, 3)
 
 ここまで来たら`map_*()`関数群の仕組みについてイメージが出来たかと思います。`map_*()`関数群の動きは図\@ref(fig:map-inside)のように表すことができます。第一引数はデータであり、そのデータの各要素に対して第二引数で指定された関数を適用します。この関数に必要な（データを除く）引数は第三引数以降に指定します。この関数部（第二引数）はRやパッケージなどで予め提供されている関数でも、内部に直接無名関数を作成することもできます。この無名関数は`function(x){}`のような従来の書き方も可能ですが、`map_*()`関数群の場合`~`で始まるラムダ式を使うことも可能です。
 
-<div class="figure" style="text-align: center">
-<img src="figures/Iteration/map_inside.png" alt="`map_*()`関数群のイメージ" width="100%" />
-<p class="caption">(\#fig:map-inside)`map_*()`関数群のイメージ</p>
-</div>
+(ref:map-caption1) `map_*()`関数群のイメージ
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{figures/Iteration/map_inside} 
+
+}
+
+\caption{(ref:map-caption1)}(\#fig:map-inside)
+\end{figure}
 
 `map()`の場合、返り値はリストとなり、`map_dbl()`の返り値はnumeric (double)型のベクトルとなります。他にも`map_*()`関数群には`map_int()`、`map_lgl()`、`map_chr()`、`map_df()`などがあり、それぞれ返り値のデータ型/データ構造を表しています。例えば、返り値がcharacter型のベクトルであれば、`map_chr()`を使います。`c(1, 2, 3, 4, 5)`のベクトルの各要素の前に`"ID: "`を付ける例だと以下のように書きます。
 
@@ -512,7 +518,7 @@ Dummy_df %>%
 ```
 
 ```
-## # A tibble: 5 × 4
+## # A tibble: 5 x 4
 ##       X     Y     Z   Sum
 ##   <dbl> <dbl> <dbl> <dbl>
 ## 1     1    10     2    13
@@ -569,7 +575,7 @@ map_df(Dummy_df, mean)
 ```
 
 ```
-## # A tibble: 1 × 3
+## # A tibble: 1 x 3
 ##       X     Y     Z
 ##   <dbl> <dbl> <dbl>
 ## 1     3    30     6
@@ -639,7 +645,7 @@ map_df(Dummy_list, mean)
 ```
 
 ```
-## # A tibble: 1 × 3
+## # A tibble: 1 x 3
 ##       X     Y     Z
 ##   <dbl> <dbl> <dbl>
 ## 1     3    30     6
@@ -710,12 +716,12 @@ Dummy_tibble
 ```
 
 ```
-## # A tibble: 3 × 2
+## # A tibble: 3 x 2
 ##      ID Data        
 ##   <int> <list>      
-## 1     1 <df [5 × 3]>
-## 2     2 <df [5 × 3]>
-## 3     3 <df [5 × 3]>
+## 1     1 <df [5 x 3]>
+## 2     2 <df [5 x 3]>
+## 3     3 <df [5 x 3]>
 ```
 
 2列目の各セルには5行3列のデータフレーム（`df`）が格納されていることが分かります。たとえば、`Dummy_tibble`の`Data`列を抽出してみましょう。
@@ -787,13 +793,13 @@ Country_df <- read_csv("Data/Countries.csv")
 
 ```
 ## Rows: 186 Columns: 18
-## ── Column specification ────────────────────────────────────────────────────────
+## -- Column specification --------------------------------------------------------
 ## Delimiter: ","
 ## chr  (4): Country, Polity_Type, FH_Status, Continent
 ## dbl (14): Population, Area, GDP, PPP, GDP_per_capita, PPP_per_capita, G7, G2...
 ## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
 ```
 
 ### サンプルの分割とモデル推定（`split()`利用） {#iteration-split1}
@@ -832,28 +838,28 @@ Split_Data
 
 ```
 ## $Africa
-## # A tibble: 54 × 18
+## # A tibble: 54 x 18
 ##    Country   Population   Area    GDP    PPP GDP_per_capita PPP_per_capita    G7
 ##    <chr>          <dbl>  <dbl>  <dbl>  <dbl>          <dbl>          <dbl> <dbl>
 ##  1 Algeria     43851044 2.38e6 1.70e5 4.97e5          3876.         11324.     0
 ##  2 Angola      32866272 1.25e6 9.46e4 2.19e5          2879.          6649.     0
 ##  3 Benin       12123200 1.13e5 1.44e4 3.72e4          1187.          3067.     0
 ##  4 Botswana     2351627 5.67e5 1.83e4 4.07e4          7799.         17311.     0
-##  5 Burkina …   20903273 2.74e5 1.57e4 3.76e4           753.          1800.     0
+##  5 Burkina ~   20903273 2.74e5 1.57e4 3.76e4           753.          1800.     0
 ##  6 Burundi     11890784 2.57e4 3.01e3 8.72e3           253.           733.     0
-##  7 Cabo Ver…     555987 4.03e3 1.98e3 3.84e3          3565.          6913.     0
+##  7 Cabo Ver~     555987 4.03e3 1.98e3 3.84e3          3565.          6913.     0
 ##  8 Cameroon    26545863 4.73e5 3.88e4 9.31e4          1460.          3506.     0
-##  9 Central …    4829767 6.23e5 2.22e3 4.46e3           460.           924.     0
+##  9 Central ~    4829767 6.23e5 2.22e3 4.46e3           460.           924.     0
 ## 10 Chad        16425864 1.26e6 1.13e4 2.51e4           689.          1525.     0
-## # … with 44 more rows, and 10 more variables: G20 <dbl>, OECD <dbl>,
+## # ... with 44 more rows, and 10 more variables: G20 <dbl>, OECD <dbl>,
 ## #   HDI_2018 <dbl>, Polity_Score <dbl>, Polity_Type <chr>, FH_PR <dbl>,
 ## #   FH_CL <dbl>, FH_Total <dbl>, FH_Status <chr>, Continent <chr>
 ## 
 ## $America
-## # A tibble: 36 × 18
+## # A tibble: 36 x 18
 ##    Country   Population   Area    GDP    PPP GDP_per_capita PPP_per_capita    G7
 ##    <chr>          <dbl>  <dbl>  <dbl>  <dbl>          <dbl>          <dbl> <dbl>
-##  1 Antigua …      97929 4.4 e2 1.73e3 2.08e3         17643.         21267.     0
+##  1 Antigua ~      97929 4.4 e2 1.73e3 2.08e3         17643.         21267.     0
 ##  2 Argentina   45195774 2.74e6 4.50e5 1.04e6          9949.         22938.     0
 ##  3 Bahamas       393244 1.00e4 1.28e4 1.40e4         32618.         35662.     0
 ##  4 Barbados      287375 4.3 e2 5.21e3 4.62e3         18126.         16066.     0
@@ -863,17 +869,17 @@ Split_Data
 ##  8 Canada      37742154 9.09e6 1.74e6 1.85e6         46008.         49088.     1
 ##  9 Chile       19116201 7.44e5 2.82e5 4.64e5         14769.         24262.     0
 ## 10 Colombia    50882891 1.11e6 3.24e5 7.37e5          6364.         14475.     0
-## # … with 26 more rows, and 10 more variables: G20 <dbl>, OECD <dbl>,
+## # ... with 26 more rows, and 10 more variables: G20 <dbl>, OECD <dbl>,
 ## #   HDI_2018 <dbl>, Polity_Score <dbl>, Polity_Type <chr>, FH_PR <dbl>,
 ## #   FH_CL <dbl>, FH_Total <dbl>, FH_Status <chr>, Continent <chr>
 ## 
 ## $Asia
-## # A tibble: 42 × 18
+## # A tibble: 42 x 18
 ##    Country   Population   Area    GDP    PPP GDP_per_capita PPP_per_capita    G7
 ##    <chr>          <dbl>  <dbl>  <dbl>  <dbl>          <dbl>          <dbl> <dbl>
-##  1 Afghanis…   38928346 6.53e5 1.91e4 8.27e4           491.          2125.     0
+##  1 Afghanis~   38928346 6.53e5 1.91e4 8.27e4           491.          2125.     0
 ##  2 Bahrain      1701575 7.6 e2 3.86e4 7.42e4         22670.         43624.     0
-##  3 Banglade…  164689383 1.30e5 3.03e5 7.34e5          1837.          4458.     0
+##  3 Banglade~  164689383 1.30e5 3.03e5 7.34e5          1837.          4458.     0
 ##  4 Bhutan        771608 3.81e4 2.45e3 8.77e3          3171.         11363.     0
 ##  5 Brunei        437479 5.27e3 1.35e4 2.65e4         30789.         60656.     0
 ##  6 Burma       54409800 6.53e5 7.61e4 2.68e5          1398.          4932.     0
@@ -881,37 +887,37 @@ Split_Data
 ##  8 China     1447470092 9.39e6 1.48e7 2.20e7         10199.         15177.     0
 ##  9 India     1380004385 2.97e6 2.88e6 9.06e6          2083.          6564.     0
 ## 10 Indonesia  273523615 1.81e6 1.12e6 3.12e6          4092.         11397.     0
-## # … with 32 more rows, and 10 more variables: G20 <dbl>, OECD <dbl>,
+## # ... with 32 more rows, and 10 more variables: G20 <dbl>, OECD <dbl>,
 ## #   HDI_2018 <dbl>, Polity_Score <dbl>, Polity_Type <chr>, FH_PR <dbl>,
 ## #   FH_CL <dbl>, FH_Total <dbl>, FH_Status <chr>, Continent <chr>
 ## 
 ## $Europe
-## # A tibble: 50 × 18
+## # A tibble: 50 x 18
 ##    Country  Population   Area    GDP     PPP GDP_per_capita PPP_per_capita    G7
 ##    <chr>         <dbl>  <dbl>  <dbl>   <dbl>          <dbl>          <dbl> <dbl>
 ##  1 Albania     2877797  27400 1.53e4  39658.          5309.         13781.     0
 ##  2 Andorra       77265    470 3.15e3     NA          40821.            NA      0
 ##  3 Armenia     2963243  28470 1.37e4  38446.          4614.         12974.     0
 ##  4 Austria     9006398  82409 4.46e5 502771.         49555.         55824.     0
-##  5 Azerbai…   10139177  82658 4.80e4 144556.          4739.         14257.     0
+##  5 Azerbai~   10139177  82658 4.80e4 144556.          4739.         14257.     0
 ##  6 Belarus     9449323 202910 6.31e4 183461.          6676.         19415.     0
 ##  7 Belgium    11589623  30280 5.30e5 597433.         45697.         51549.     0
-##  8 Bosnia …    3280819  51000 2.00e4  49733.          6111.         15159.     0
+##  8 Bosnia ~    3280819  51000 2.00e4  49733.          6111.         15159.     0
 ##  9 Bulgaria    6948445 108560 6.79e4 156693.          9776.         22551.     0
 ## 10 Croatia     4105267  55960 6.04e4 114932.         14717.         27996.     0
-## # … with 40 more rows, and 10 more variables: G20 <dbl>, OECD <dbl>,
+## # ... with 40 more rows, and 10 more variables: G20 <dbl>, OECD <dbl>,
 ## #   HDI_2018 <dbl>, Polity_Score <dbl>, Polity_Type <chr>, FH_PR <dbl>,
 ## #   FH_CL <dbl>, FH_Total <dbl>, FH_Status <chr>, Continent <chr>
 ## 
 ## $Oceania
-## # A tibble: 4 × 18
+## # A tibble: 4 x 18
 ##   Country    Population   Area    GDP    PPP GDP_per_capita PPP_per_capita    G7
 ##   <chr>           <dbl>  <dbl>  <dbl>  <dbl>          <dbl>          <dbl> <dbl>
 ## 1 Australia    25499884 7.68e6 1.39e6 1.28e6         54615.         50001.     0
 ## 2 Fiji           896445 1.83e4 5.54e3 1.25e4          6175.         13940.     0
-## 3 New Zeala…    4842780 2.64e5 2.07e5 2.04e5         42729.         42178.     0
-## 4 Papua New…    8947024 4.53e5 2.50e4 3.73e4          2791.          4171.     0
-## # … with 10 more variables: G20 <dbl>, OECD <dbl>, HDI_2018 <dbl>,
+## 3 New Zeala~    4842780 2.64e5 2.07e5 2.04e5         42729.         42178.     0
+## 4 Papua New~    8947024 4.53e5 2.50e4 3.73e4          2791.          4171.     0
+## # ... with 10 more variables: G20 <dbl>, OECD <dbl>, HDI_2018 <dbl>,
 ## #   Polity_Score <dbl>, Polity_Type <chr>, FH_PR <dbl>, FH_CL <dbl>,
 ## #   FH_Total <dbl>, FH_Status <chr>, Continent <chr>
 ```
@@ -1076,10 +1082,14 @@ Nested_Data %>%
 
 {dplyr}の`group_by()`関数と{tidyr}の`nest()`、`unnest()`関数を組み合わせることでデータを入れ子型データへ変換したり、解除することができます。以上の流れを図式化したものが以下の図\@ref(fig:nested-data)です。
 
-<div class="figure" style="text-align: center">
-<img src="figures/Iteration/nested_data.png" alt="入れ子型データの生成過程" width="100%" />
-<p class="caption">(\#fig:nested-data)入れ子型データの生成過程</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{figures/Iteration/nested_data} 
+
+}
+
+\caption{入れ子型データの生成過程}(\#fig:nested-data)
+\end{figure}
 
 それではこの入れ子型データを使用して大陸ごとの`Polity_Score`と`FH_Total`の相関係数を計算してみましょう。`data`列をデータとした相関係数のラムダ式はどう書けば良いでしょうか。これまでの内容が理解できましたら、答えは難しくないでしょう。`cor.test()`関数の`data`引数の実引数として`.x`を指定するだけです。この結果を`Cor_test`という列として追加し、`Nested_Data2`という名のオブジェクトとして保存します。
 
@@ -1204,15 +1214,15 @@ Nested_Data2 %>%
 ```
 
 ```
-## # A tibble: 5 × 4
+## # A tibble: 5 x 4
 ## # Groups:   Continent [5]
 ##   Continent data               Cor_test Cor_coef
 ##   <chr>     <list>             <list>      <dbl>
-## 1 Asia      <tibble [42 × 17]> <htest>     0.834
-## 2 Europe    <tibble [50 × 17]> <htest>     0.842
-## 3 Africa    <tibble [54 × 17]> <htest>     0.761
-## 4 America   <tibble [36 × 17]> <htest>     0.836
-## 5 Oceania   <tibble [4 × 17]>  <htest>     0.996
+## 1 Asia      <tibble [42 x 17]> <htest>     0.834
+## 2 Europe    <tibble [50 x 17]> <htest>     0.842
+## 3 Africa    <tibble [54 x 17]> <htest>     0.761
+## 4 America   <tibble [36 x 17]> <htest>     0.836
+## 5 Oceania   <tibble [4 x 17]>  <htest>     0.996
 ```
 
 ```r
@@ -1237,15 +1247,15 @@ Country_df %>%
 ```
 
 ```
-## # A tibble: 5 × 4
+## # A tibble: 5 x 4
 ## # Groups:   Continent [5]
 ##   Continent data               Cor_test Cor_coef
 ##   <chr>     <list>             <list>      <dbl>
-## 1 Asia      <tibble [42 × 17]> <htest>     0.834
-## 2 Europe    <tibble [50 × 17]> <htest>     0.842
-## 3 Africa    <tibble [54 × 17]> <htest>     0.761
-## 4 America   <tibble [36 × 17]> <htest>     0.836
-## 5 Oceania   <tibble [4 × 17]>  <htest>     0.996
+## 1 Asia      <tibble [42 x 17]> <htest>     0.834
+## 2 Europe    <tibble [50 x 17]> <htest>     0.842
+## 3 Africa    <tibble [54 x 17]> <htest>     0.761
+## 4 America   <tibble [36 x 17]> <htest>     0.836
+## 5 Oceania   <tibble [4 x 17]>  <htest>     0.996
 ```
 
 たった5行のコードで大陸ごとの相関分析が出来ました。これを`map_*()`を使わずに処理するなら以下のようなコードとなります[^iter-inconvenience]。
@@ -1506,7 +1516,9 @@ Country_df2 %>%
   theme_minimal(base_size = 12)
 ```
 
-<img src="iteration_files/figure-html/unnamed-chunk-84-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{iteration_files/figure-latex/unnamed-chunk-84-1} \end{center}
 
 ```{.r .numberLines}
   theme(legend.position = "bottom")
@@ -1534,7 +1546,7 @@ Range_df
 ```
 
 ```
-## # A tibble: 9 × 1
+## # A tibble: 9 x 1
 ##   Min_FH
 ##    <dbl>
 ## 1      0
@@ -1606,7 +1618,9 @@ Range_df %>%
   theme_minimal(base_size = 12)
 ```
 
-<img src="iteration_files/figure-html/unnamed-chunk-90-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{iteration_files/figure-latex/unnamed-chunk-90-1} \end{center}
 
 以上の例は実際の分析では多く使われる方法ではないかも知れません。しかし、ノンパラメトリック回帰不連続デザイン（Regression Discontinuity Design; RDD）の場合、感度分析を行う際、バンド幅を色々と調整しながら局所処置効果を推定します。RDDの詳細については[矢内の授業資料](https://yukiyanai.github.io/econometrics2/regression-discontinuity.html)、および[SONGの授業資料](https://www.jaysong.net/post/kobe2020-qpm1/)などに譲りますが、ハンド幅の調整はデータの範囲を少しずつ拡張（縮小）させながら同じ分析を繰り返すことです。以下ではアメリカ上院選挙のデータを例に、方法を紹介します。
 
@@ -1846,7 +1860,7 @@ RDD_Func(100)
 ```
 
 ```
-## # A tibble: 1 × 2
+## # A tibble: 1 x 2
 ##    LATE    SE
 ##   <dbl> <dbl>
 ## 1  5.64 0.884
@@ -1886,7 +1900,9 @@ RDD_df %>%
   theme_minimal()
 ```
 
-<img src="iteration_files/figure-html/unnamed-chunk-106-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{iteration_files/figure-latex/unnamed-chunk-106-1} \end{center}
 
 ### 説明・応答変数を指定したモデル推定 {#iteration-variables}
 
@@ -1972,7 +1988,7 @@ Diff_df
 ```
 
 ```
-## # A tibble: 3 × 1
+## # A tibble: 3 x 1
 ##   Group
 ##   <chr>
 ## 1 G7   
@@ -1991,7 +2007,7 @@ Diff_df
 ```
 
 ```
-## # A tibble: 3 × 2
+## # A tibble: 3 x 2
 ##   Group Formula   
 ##   <chr> <chr>     
 ## 1 G7    PPP ~ G7  
@@ -2021,7 +2037,7 @@ Diff_df
 ```
 
 ```
-## # A tibble: 3 × 2
+## # A tibble: 3 x 2
 ##   Group Formula  
 ##   <chr> <list>   
 ## 1 G7    <formula>
@@ -2129,7 +2145,9 @@ Diff_df %>%
   theme_minimal(base_size = 12)
 ```
 
-<img src="iteration_files/figure-html/unnamed-chunk-122-1.png" width="672" style="display: block; margin: auto;" />
+
+
+\begin{center}\includegraphics{iteration_files/figure-latex/unnamed-chunk-122-1} \end{center}
 
 ```{.r .numberLines}
   theme(legend.position = "bottom")

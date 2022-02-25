@@ -911,43 +911,24 @@ At <- t(A)
 
 まずは、表\@ref(tab: datastructure-dataframe-1)のようなデータフレームを作成して見ましょう。データフレームを作成する際は`data.frame()`関数を使います。
 
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
-<caption>(\#tab:datastructure-dataframe-1)`myDF`の中身</caption>
- <thead>
-  <tr>
-   <th style="text-align:right;"> ID </th>
-   <th style="text-align:left;"> Name </th>
-   <th style="text-align:right;"> Math </th>
-   <th style="text-align:right;"> Stat </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;"> Yanai </td>
-   <td style="text-align:right;"> 50 </td>
-   <td style="text-align:right;"> 25 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 2 </td>
-   <td style="text-align:left;"> Song </td>
-   <td style="text-align:right;"> 90 </td>
-   <td style="text-align:right;"> 5 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 3 </td>
-   <td style="text-align:left;"> Shigemura </td>
-   <td style="text-align:right;"> 100 </td>
-   <td style="text-align:right;"> 100 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 4 </td>
-   <td style="text-align:left;"> Tani </td>
-   <td style="text-align:right;"> 80 </td>
-   <td style="text-align:right;"> 85 </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}
+
+\caption{(\#tab:datastructure-dataframe-1)`myDF`の中身}
+\centering
+\begin{tabu} to \linewidth {>{\raggedleft}X>{\raggedright}X>{\raggedleft}X>{\raggedleft}X}
+\hline
+ID & Name & Math & Stat\\
+\hline
+1 & Yanai & 50 & 25\\
+\hline
+2 & Song & 90 & 5\\
+\hline
+3 & Shigemura & 100 & 100\\
+\hline
+4 & Tani & 80 & 85\\
+\hline
+\end{tabu}
+\end{table}
 
 
 ```{.r .numberLines}
@@ -1470,7 +1451,7 @@ VoteDF2
 ```
 
 ```
-## # A tibble: 47 × 11
+## # A tibble: 47 x 11
 ##       ID Pref   Zaisei Over65 Under30   LDP   DPJ Komei Ishin   JCP   SDP
 ##    <int> <chr>   <dbl>  <dbl>   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
 ##  1     1 北海道  0.419   29.1    24.7  32.8  30.6 13.4   3.43 11.4   1.68
@@ -1483,7 +1464,7 @@ VoteDF2
 ##  8     8 茨城県  0.633   26.8    26.6  40.6  19.0 15.0   6.67 10.1   2.88
 ##  9     9 栃木県  0.622   25.9    26.8  38.8  21.6 12.4  10.9   7     2.05
 ## 10    10 群馬県  0.603   27.6    26.6  42.1  19.3 13.8   5.61 10     2.44
-## # … with 37 more rows
+## # ... with 37 more rows
 ```
 
 同じデータですが、表示画面がやや異なります。data.frame型は全ての列と行が表示されましたが、tibble型の場合、「画面に収まる」程度しか表示されません。表示されなかった行や列に関しては最後に表示されています。今回は全ての列が表示されましたが、たとえば、`VoteDF2`の場合、下段にこのように表示される場合があります (画面の大きさによって変わり、表示されないケースもあれば、`SDP`以外の変数も省略されるケースがあります。)。
@@ -1505,13 +1486,13 @@ VoteDF3 <- read_csv("Data/Vote.csv")
 
 ```
 ## Rows: 47 Columns: 11
-## ── Column specification ────────────────────────────────────────────────────────
+## -- Column specification --------------------------------------------------------
 ## Delimiter: ","
 ## chr  (1): Pref
 ## dbl (10): ID, Zaisei, Over65, Under30, LDP, DPJ, Komei, Ishin, JCP, SDP
 ## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
 ```
 
 ```{.r .numberLines}
@@ -1818,10 +1799,14 @@ List2$Men[10, ]
 
 配列型は簡単にいうと、同じサイズの行列を数枚重ねたものです。図\@ref(fig:datastructure-array-1)は配列型のイメージを表したものです。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/DataStructure/array001.png" alt="配列型データのイメージ" width="100%" />
-<p class="caption">(\#fig:datastructure-array-1)配列型データのイメージ</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{Figures/DataStructure/array001} 
+
+}
+
+\caption{配列型データのイメージ}(\#fig:datastructure-array-1)
+\end{figure}
 
 したがって、配列型は行と列以外にも、層の要素も持つことになります。複数の行列で構成されている点では、リスト型と類似していますが、配列型は**同じサイズ**の**行列**のみで構成されている点が特徴です。
 
@@ -1848,9 +1833,9 @@ Mat1
 
 ```
 ##      [,1] [,2] [,3] [,4]
-## [1,]   10   10    1   12
-## [2,]    3   10    5    8
-## [3,]    9    3   12    1
+## [1,]    2    6    2   12
+## [2,]    9    6    7    4
+## [3,]   11    6    8   11
 ```
 
 ```{.r .numberLines}
@@ -1859,9 +1844,9 @@ Mat2
 
 ```
 ##      [,1] [,2] [,3] [,4]
-## [1,]    6   12    3    8
-## [2,]   12    5    4   11
-## [3,]    2    2    1   12
+## [1,]   11   11    1    8
+## [2,]    9   10   12    3
+## [3,]    5   10    3   12
 ```
 
 ```{.r .numberLines}
@@ -1870,9 +1855,9 @@ Mat3
 
 ```
 ##      [,1] [,2] [,3] [,4]
-## [1,]    3    7   10    2
-## [2,]    2    9    5    4
-## [3,]    1    1   12    3
+## [1,]    3    5    5   12
+## [2,]   12    8   12    8
+## [3,]    3    6    5   12
 ```
 
 ```{.r .numberLines}
@@ -1881,9 +1866,9 @@ Mat4
 
 ```
 ##      [,1] [,2] [,3] [,4]
-## [1,]    4   12    3    5
-## [2,]    5   11    3   10
-## [3,]    7    5    1    6
+## [1,]    5   12    9    4
+## [2,]    4    4    6    9
+## [3,]    4    7   12    5
 ```
 
 配列型データを作成するには`array()`関数を使います。引数としては行列名を`c()`で繋ぎ[^array1]、`dim = `でarrayの大きさを指定するだけです。配列を作成した後はそのデータ構造も確認してみましょう。
@@ -1911,30 +1896,30 @@ Array1
 ## , , 1
 ## 
 ##      [,1] [,2] [,3] [,4]
-## [1,]   10   10    1   12
-## [2,]    3   10    5    8
-## [3,]    9    3   12    1
+## [1,]    2    6    2   12
+## [2,]    9    6    7    4
+## [3,]   11    6    8   11
 ## 
 ## , , 2
 ## 
 ##      [,1] [,2] [,3] [,4]
-## [1,]    6   12    3    8
-## [2,]   12    5    4   11
-## [3,]    2    2    1   12
+## [1,]   11   11    1    8
+## [2,]    9   10   12    3
+## [3,]    5   10    3   12
 ## 
 ## , , 3
 ## 
 ##      [,1] [,2] [,3] [,4]
-## [1,]    3    7   10    2
-## [2,]    2    9    5    4
-## [3,]    1    1   12    3
+## [1,]    3    5    5   12
+## [2,]   12    8   12    8
+## [3,]    3    6    5   12
 ## 
 ## , , 4
 ## 
 ##      [,1] [,2] [,3] [,4]
-## [1,]    4   12    3    5
-## [2,]    5   11    3   10
-## [3,]    7    5    1    6
+## [1,]    5   12    9    4
+## [2,]    4    4    6    9
+## [3,]    4    7   12    5
 ```
 
 このように一つのオブジェクト内に複数の行列が格納されたオブジェクトが生成されます。
@@ -1950,9 +1935,9 @@ Array1[, , 3]
 
 ```
 ##      [,1] [,2] [,3] [,4]
-## [1,]    3    7   10    2
-## [2,]    2    9    5    4
-## [3,]    1    1   12    3
+## [1,]    3    5    5   12
+## [2,]   12    8   12    8
+## [3,]    3    6    5   12
 ```
 
 また、2番目の行列の3行目・1列目の要素を抽出するなら`Array1[3, 1, 2]`と入力します。
@@ -1963,7 +1948,7 @@ Array1[3, 1, 2]
 ```
 
 ```
-## [1] 2
+## [1] 5
 ```
 
 配列型における操作の特徴の一つは全ての行列が同じ大きさを持つため、層を貫通した操作ができるという点です。たとえば、全ての層の2行目を抽出するなら、層番号を指定せず、行番号のみで抽出します。
@@ -1975,13 +1960,13 @@ Array1[2, , ]
 
 ```
 ##      [,1] [,2] [,3] [,4]
-## [1,]    3   12    2    5
-## [2,]   10    5    9   11
-## [3,]    5    4    5    3
-## [4,]    8   11    4   10
+## [1,]    9    9   12    4
+## [2,]    6   10    8    4
+## [3,]    7   12   12    6
+## [4,]    4    3    8    9
 ```
 
-ただ、返された結果は配列型でなく行列型であることに注意しましょう。たとえば、1番目の行列の2行目の要素は3, 10, 5, 8ですが、これは先ほど抽出された行列の1列目に該当します。また、2番目の行列の2行目の要素は12, 5, 4, 11であり、これは先ほどの抽出された行列の2列目となります。全層において特定の一列を抽出しても同じです。これは各層において抽出されたデータが行列でなく、ベクトルだからです。
+ただ、返された結果は配列型でなく行列型であることに注意しましょう。たとえば、1番目の行列の2行目の要素は9, 6, 7, 4ですが、これは先ほど抽出された行列の1列目に該当します。また、2番目の行列の2行目の要素は9, 10, 12, 3であり、これは先ほどの抽出された行列の2列目となります。全層において特定の一列を抽出しても同じです。これは各層において抽出されたデータが行列でなく、ベクトルだからです。
 
 一方、**複数**の行または列を抽出した場合、結果は配列型です。`Array1`の各層から1・2行目と1・2列目の要素、つまり大きさが2 $\times$ 2の行列を抽出してみましょう。
 
@@ -1994,26 +1979,26 @@ Array1[1:2, 1:2, ]
 ## , , 1
 ## 
 ##      [,1] [,2]
-## [1,]   10   10
-## [2,]    3   10
+## [1,]    2    6
+## [2,]    9    6
 ## 
 ## , , 2
 ## 
 ##      [,1] [,2]
-## [1,]    6   12
-## [2,]   12    5
+## [1,]   11   11
+## [2,]    9   10
 ## 
 ## , , 3
 ## 
 ##      [,1] [,2]
-## [1,]    3    7
-## [2,]    2    9
+## [1,]    3    5
+## [2,]   12    8
 ## 
 ## , , 4
 ## 
 ##      [,1] [,2]
-## [1,]    4   12
-## [2,]    5   11
+## [1,]    5   12
+## [2,]    4    4
 ```
 
 このように各層において抽出されたデータが行列だからです。自分の操作から得られた結果がどのようなデータ型・データ構造かを予め知っておくことで分析の効率が上がるでしょう。
@@ -2040,9 +2025,9 @@ Array2[, , "M4"]
 
 ```
 ##      [,1] [,2] [,3] [,4]
-## [1,]    4   12    3    5
-## [2,]    5   11    3   10
-## [3,]    7    5    1    6
+## [1,]    5   12    9    4
+## [2,]    4    4    6    9
+## [3,]    4    7   12    5
 ```
 
 むろん、これまでと同様、番号で抽出することも可能です。
@@ -2054,9 +2039,9 @@ Array2[, , 4]
 
 ```
 ##      [,1] [,2] [,3] [,4]
-## [1,]    4   12    3    5
-## [2,]    5   11    3   10
-## [3,]    7    5    1    6
+## [1,]    5   12    9    4
+## [2,]    4    4    6    9
+## [3,]    4    7   12    5
 ```
 
 ---
@@ -2141,78 +2126,32 @@ $$
 
 [^fifa]: 2020年4月9日現在のFIFA男子サッカーランキングである。データはAFC (アジアサッカー連盟)所属の上位10カ国である。データ源は(https://www.fifa.com/fifa-world-ranking/ranking-table/men/rank/id12882/)である (アクセス日: 2020年4月11日)。
 
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:right;"> ID </th>
-   <th style="text-align:left;"> Name </th>
-   <th style="text-align:right;"> Rank </th>
-   <th style="text-align:right;"> Socre </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;"> Japan </td>
-   <td style="text-align:right;"> 28 </td>
-   <td style="text-align:right;"> 1500 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 2 </td>
-   <td style="text-align:left;"> Iran </td>
-   <td style="text-align:right;"> 33 </td>
-   <td style="text-align:right;"> 1489 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 3 </td>
-   <td style="text-align:left;"> South Korea </td>
-   <td style="text-align:right;"> 40 </td>
-   <td style="text-align:right;"> 1464 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 4 </td>
-   <td style="text-align:left;"> Australia </td>
-   <td style="text-align:right;"> 42 </td>
-   <td style="text-align:right;"> 1457 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 5 </td>
-   <td style="text-align:left;"> Qatar </td>
-   <td style="text-align:right;"> 55 </td>
-   <td style="text-align:right;"> 1396 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 6 </td>
-   <td style="text-align:left;"> Saudi Arabia </td>
-   <td style="text-align:right;"> 67 </td>
-   <td style="text-align:right;"> 1351 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 7 </td>
-   <td style="text-align:left;"> Iraq </td>
-   <td style="text-align:right;"> 70 </td>
-   <td style="text-align:right;"> 1344 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 8 </td>
-   <td style="text-align:left;"> UAE </td>
-   <td style="text-align:right;"> 71 </td>
-   <td style="text-align:right;"> 1334 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 9 </td>
-   <td style="text-align:left;"> China </td>
-   <td style="text-align:right;"> 76 </td>
-   <td style="text-align:right;"> 1323 </td>
-  </tr>
-  <tr>
-   <td style="text-align:right;"> 10 </td>
-   <td style="text-align:left;"> Syria </td>
-   <td style="text-align:right;"> 79 </td>
-   <td style="text-align:right;"> 1314 </td>
-  </tr>
-</tbody>
-</table>
+
+\begin{tabu} to \linewidth {>{\raggedleft}X>{\raggedright}X>{\raggedleft}X>{\raggedleft}X}
+\hline
+ID & Name & Rank & Socre\\
+\hline
+1 & Japan & 28 & 1500\\
+\hline
+2 & Iran & 33 & 1489\\
+\hline
+3 & South Korea & 40 & 1464\\
+\hline
+4 & Australia & 42 & 1457\\
+\hline
+5 & Qatar & 55 & 1396\\
+\hline
+6 & Saudi Arabia & 67 & 1351\\
+\hline
+7 & Iraq & 70 & 1344\\
+\hline
+8 & UAE & 71 & 1334\\
+\hline
+9 & China & 76 & 1323\\
+\hline
+10 & Syria & 79 & 1314\\
+\hline
+\end{tabu}
 
 **問2** `myDF1`から`Name`列を抽出せよ。
 

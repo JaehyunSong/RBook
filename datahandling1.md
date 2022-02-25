@@ -88,17 +88,25 @@ paste(3, "+", 5, "=", 8) %>%
 
 パイプ演算子を使わない方法は図\@ref(fig:handling1-pipe-4)のようにイメージできます。一回の処理ごとに結果を保存し、それをまた次の処理時においてデータとして使うイメージです。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Handling1/Pipeline1.png" alt="パイプ演算子を使わない場合" width="80%" />
-<p class="caption">(\#fig:handling1-pipe-4)パイプ演算子を使わない場合</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{Figures/Handling1/Pipeline1} 
+
+}
+
+\caption{パイプ演算子を使わない場合}(\#fig:handling1-pipe-4)
+\end{figure}
 
 一方、図\@ref(fig:handling1-pipe-5)はパイプ演算子を使う場合のプロセスです。処理後の結果を保存せず、すぐに次のプロセスに渡すことで、メモリ (図だとボウル)や時間、コードの無駄を減らすことができます。むろん、図\@ref(fig:handling1-pipe-4)の結果1を使って色々試してみたい場合は、一旦結果1までは格納し、適宜引き出して使った方が効率的でしょう。パイプ演算子はたしかに便利で、「今どき」のRの書き方を象徴するようなものですが、一つの結果を出すまであまりにも多くのパイプ演算子を使うことはあ望ましくありません。
 
-<div class="figure" style="text-align: center">
-<img src="Figures/Handling1/Pipeline2.png" alt="パイプ演算子を使う場合" width="100%" />
-<p class="caption">(\#fig:handling1-pipe-5)パイプ演算子を使う場合</p>
-</div>
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{Figures/Handling1/Pipeline2} 
+
+}
+
+\caption{パイプ演算子を使う場合}(\#fig:handling1-pipe-5)
+\end{figure}
 
 データハンドリングもこれど同様に、様々な作業を順に沿って行う必要があります。例えば、「(1) 列を選択して、(2) 欠損値を含む列を除去して、 (3) ある変数の値を100倍にして、(4) ある変数の値がが小さい行から大きい順へ並び替える」といった手順です。これらの作業はパイプ演算子を使えば、スムーズに行うことが可能です。
 
@@ -121,91 +129,61 @@ df
 ```
 
 ```
-## # A tibble: 6,292 × 14
+## # A tibble: 6,292 x 14
 ##    ID     Name  Pref  Zipcode Latitude Longitude Line  Station  Walk   Bus   Car
 ##    <chr>  <chr> <chr>   <dbl>    <dbl>     <dbl> <chr> <chr>   <dbl> <dbl> <dbl>
-##  1 e5396… 居酒… 東京… 1040031     35.7      140. 地下… 銀座一…     3    NA    NA
-##  2 gfeb6… 本格… 東京… 1100005     35.7      140. 地下… 仲御徒…     1    NA    NA
-##  3 ggt59… 食べ… 東京… 1250041     35.8      140. ＪＲ… 金町駅      2    NA    NA
-##  4 g1813… 博多… 東京… 1920904     35.7      139. ＪＲ  八王子…     1    NA    NA
-##  5 ggww1… まさ… 東京… 1500042     35.7      140. 地下… 渋谷駅      7    NA    NA
-##  6 gdzk5… 完全… 東京… 1000013     35.7      140. 地下… 虎ノ門…     3    NA    NA
-##  7 ga2g2… 鶏そ… 東京… 1760006     35.7      140. 西武… 江古田…     2    NA    NA
-##  8 gg9m1… 宴会… 東京… 1010021     35.7      140. ＪＲ  秋葉原…     4    NA    NA
-##  9 gdvk2… 中国… 東京… 1000006     35.7      140. ＪＲ  有楽町…     1    NA    NA
-## 10 gggb2… 中国… 東京… 1140002     35.8      140. 地下… 王子駅      2    NA    NA
-## # … with 6,282 more rows, and 3 more variables: Budget <dbl>, ScoreN <dbl>,
+##  1 e5396~ 居酒~ 東京~ 1040031     35.7      140. 地下~ 銀座一~     3    NA    NA
+##  2 gfeb6~ 本格~ 東京~ 1100005     35.7      140. 地下~ 仲御徒~     1    NA    NA
+##  3 ggt59~ 食べ~ 東京~ 1250041     35.8      140. ＪＲ~ 金町駅      2    NA    NA
+##  4 g1813~ 博多~ 東京~ 1920904     35.7      139. ＪＲ  八王子~     1    NA    NA
+##  5 ggww1~ まさ~ 東京~ 1500042     35.7      140. 地下~ 渋谷駅      7    NA    NA
+##  6 gdzk5~ 完全~ 東京~ 1000013     35.7      140. 地下~ 虎ノ門~     3    NA    NA
+##  7 ga2g2~ 鶏そ~ 東京~ 1760006     35.7      140. 西武~ 江古田~     2    NA    NA
+##  8 gg9m1~ 宴会~ 東京~ 1010021     35.7      140. ＪＲ  秋葉原~     4    NA    NA
+##  9 gdvk2~ 中国~ 東京~ 1000006     35.7      140. ＪＲ  有楽町~     1    NA    NA
+## 10 gggb2~ 中国~ 東京~ 1140002     35.8      140. 地下~ 王子駅      2    NA    NA
+## # ... with 6,282 more rows, and 3 more variables: Budget <dbl>, ScoreN <dbl>,
 ## #   Score <dbl>
 ```
 
 1行目の`# A tibble: 2,000 x 12`から、ケース数 (店舗数)は2000、変数は12個あることが分かります。各変数の詳細は以下の通りです。
 
-<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;text-align: center;"> 変数名 </th>
-   <th style="text-align:left;text-align: center;"> 説明 </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> `ID` </td>
-   <td style="text-align:left;"> 店舗ID </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Name` </td>
-   <td style="text-align:left;"> 店舗名 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Pref` </td>
-   <td style="text-align:left;"> 店舗の所在地 (都府県) </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Zipcode` </td>
-   <td style="text-align:left;"> 店舗の郵便番号 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Latitude` </td>
-   <td style="text-align:left;"> 緯度 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Longitude` </td>
-   <td style="text-align:left;"> 経度 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Line` </td>
-   <td style="text-align:left;"> 最寄りの駅の路線 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Station` </td>
-   <td style="text-align:left;"> 最寄りの駅 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Walk` </td>
-   <td style="text-align:left;"> 最寄りの駅からの距離 (徒歩; 分) </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Bus` </td>
-   <td style="text-align:left;"> 最寄りの駅からの距離 (バス; 分) </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Car` </td>
-   <td style="text-align:left;"> 最寄りの駅からの距離 (車; 分) </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Budget` </td>
-   <td style="text-align:left;"> 平均予算 (円) </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `ScoreN` </td>
-   <td style="text-align:left;"> 口コミの数 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `Score` </td>
-   <td style="text-align:left;"> 口コミ評価の平均値 </td>
-  </tr>
-</tbody>
-</table>
+\begin{table}
+\centering
+\begin{tabular}{l|l}
+\hline
+\multicolumn{1}{c}{変数名} & \multicolumn{1}{c}{説明}\\
+\hline
+`ID` & 店舗ID\\
+\hline
+`Name` & 店舗名\\
+\hline
+`Pref` & 店舗の所在地 (都府県)\\
+\hline
+`Zipcode` & 店舗の郵便番号\\
+\hline
+`Latitude` & 緯度\\
+\hline
+`Longitude` & 経度\\
+\hline
+`Line` & 最寄りの駅の路線\\
+\hline
+`Station` & 最寄りの駅\\
+\hline
+`Walk` & 最寄りの駅からの距離 (徒歩; 分)\\
+\hline
+`Bus` & 最寄りの駅からの距離 (バス; 分)\\
+\hline
+`Car` & 最寄りの駅からの距離 (車; 分)\\
+\hline
+`Budget` & 平均予算 (円)\\
+\hline
+`ScoreN` & 口コミの数\\
+\hline
+`Score` & 口コミ評価の平均値\\
+\hline
+\end{tabular}
+\end{table}
 
 それではここからは`df`を用いた{dplyr}の様々な機能を紹介していきます。
 
@@ -220,7 +198,7 @@ df[, c("ID", "Name", "Pref", "Score")]
 ```
 
 ```
-## # A tibble: 6,292 × 4
+## # A tibble: 6,292 x 4
 ##    ID      Name                                                     Pref   Score
 ##    <chr>   <chr>                                                    <chr>  <dbl>
 ##  1 e539604 居酒屋 龍記 京橋店                                       東京都 NA   
@@ -233,7 +211,7 @@ df[, c("ID", "Name", "Pref", "Score")]
 ##  8 gg9m100 宴会個室×餃子酒場 北京飯店 秋葉原本店                    東京都  3.33
 ##  9 gdvk200 中国料理 宝龍                                            東京都  2.5 
 ## 10 gggb200 中国料理 天安門                                          東京都 NA   
-## # … with 6,282 more rows
+## # ... with 6,282 more rows
 ```
 
 ```{.r .numberLines}
@@ -244,7 +222,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 6,292 × 4
+## # A tibble: 6,292 x 4
 ##    ID      Name                                                     Pref   Score
 ##    <chr>   <chr>                                                    <chr>  <dbl>
 ##  1 e539604 居酒屋 龍記 京橋店                                       東京都 NA   
@@ -257,7 +235,7 @@ df %>%
 ##  8 gg9m100 宴会個室×餃子酒場 北京飯店 秋葉原本店                    東京都  3.33
 ##  9 gdvk200 中国料理 宝龍                                            東京都  2.5 
 ## 10 gggb200 中国料理 天安門                                          東京都 NA   
-## # … with 6,282 more rows
+## # ... with 6,282 more rows
 ```
 
 どれも結果は同じですが、`select()`関数を使った方がより読みやすいコードになっているでしょう。むろん、`select()`関数を使わない方がスッキリする方も知るかも知れません。実際、自分でパッケージなどを作成する際は`select()`を使わない場合が多いです。ただし、一般的な分析の流れでは`select()`の方がコードも意味も明確となり、パイプ演算子でつなぐのも容易です。
@@ -273,7 +251,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 6,292 × 3
+## # A tibble: 6,292 x 3
 ##    ID      Pref   Name                                                    
 ##    <chr>   <chr>  <chr>                                                   
 ##  1 e539604 東京都 居酒屋 龍記 京橋店                                      
@@ -286,7 +264,7 @@ df %>%
 ##  8 gg9m100 東京都 宴会個室×餃子酒場 北京飯店 秋葉原本店                   
 ##  9 gdvk200 東京都 中国料理 宝龍                                           
 ## 10 gggb200 東京都 中国料理 天安門                                         
-## # … with 6,282 more rows
+## # ... with 6,282 more rows
 ```
 
 ### 特定の列を抽出し、列名を変更する
@@ -300,20 +278,20 @@ df %>%
 ```
 
 ```
-## # A tibble: 6,292 × 4
+## # A tibble: 6,292 x 4
 ##    ID      Name                                                Prefecture Score
 ##    <chr>   <chr>                                               <chr>      <dbl>
 ##  1 e539604 居酒屋 龍記 京橋店                                  東京都     NA   
 ##  2 gfeb600 本格上海料理 新錦江 上野御徒町本店                  東京都      4.5 
 ##  3 ggt5900 食べ飲み放題×中華ビストロ NOZOMI（のぞみ）          東京都     NA   
-##  4 g181340 博多餃子軒 八王子店 タピオカ店 Bull Pulu（ブルプル… 東京都     NA   
+##  4 g181340 博多餃子軒 八王子店 タピオカ店 Bull Pulu（ブルプル~ 東京都     NA   
 ##  5 ggww100 まさ屋 渋谷店                                       東京都     NA   
 ##  6 gdzk500 完全個室 上海レストラン 檸檬 霞ヶ関ビル内店         東京都     NA   
 ##  7 ga2g202 鶏そば きらり                                       東京都     NA   
 ##  8 gg9m100 宴会個室×餃子酒場 北京飯店 秋葉原本店               東京都      3.33
 ##  9 gdvk200 中国料理 宝龍                                       東京都      2.5 
 ## 10 gggb200 中国料理 天安門                                     東京都     NA   
-## # … with 6,282 more rows
+## # ... with 6,282 more rows
 ```
 
 抽出する際、変数を`新しい変数名 = 既存の変数名`にするだけで、変数名が簡単に変更できました。もし、特定の列は抽出しないものの、変数名を変えるにはどうすれば良いでしょうか。ここでは`df`の`Pref`を`Prefecture`に、`Walk`を`Distance`に変更してみます。{dplyr}を使わない場合と{dplyr}の`rename()`関数を使う場合を両方紹介します。
@@ -343,20 +321,20 @@ df
 ```
 
 ```
-## # A tibble: 6,292 × 14
+## # A tibble: 6,292 x 14
 ##    ID      Name     Prefecture Zipcode Latitude Longitude Line  Station Distance
 ##    <chr>   <chr>    <chr>        <dbl>    <dbl>     <dbl> <chr> <chr>      <dbl>
-##  1 e539604 居酒屋 … 東京都     1040031     35.7      140. 地下… 銀座一…        3
-##  2 gfeb600 本格上…  東京都     1100005     35.7      140. 地下… 仲御徒…        1
-##  3 ggt5900 食べ飲…  東京都     1250041     35.8      140. ＪＲ… 金町駅         2
-##  4 g181340 博多餃…  東京都     1920904     35.7      139. ＪＲ  八王子…        1
-##  5 ggww100 まさ屋 … 東京都     1500042     35.7      140. 地下… 渋谷駅         7
-##  6 gdzk500 完全個…  東京都     1000013     35.7      140. 地下… 虎ノ門…        3
-##  7 ga2g202 鶏そば … 東京都     1760006     35.7      140. 西武… 江古田…        2
-##  8 gg9m100 宴会個…  東京都     1010021     35.7      140. ＪＲ  秋葉原…        4
-##  9 gdvk200 中国料…  東京都     1000006     35.7      140. ＪＲ  有楽町…        1
-## 10 gggb200 中国料…  東京都     1140002     35.8      140. 地下… 王子駅         2
-## # … with 6,282 more rows, and 5 more variables: Bus <dbl>, Car <dbl>,
+##  1 e539604 居酒屋 ~ 東京都     1040031     35.7      140. 地下~ 銀座一~        3
+##  2 gfeb600 本格上~  東京都     1100005     35.7      140. 地下~ 仲御徒~        1
+##  3 ggt5900 食べ飲~  東京都     1250041     35.8      140. ＪＲ~ 金町駅         2
+##  4 g181340 博多餃~  東京都     1920904     35.7      139. ＪＲ  八王子~        1
+##  5 ggww100 まさ屋 ~ 東京都     1500042     35.7      140. 地下~ 渋谷駅         7
+##  6 gdzk500 完全個~  東京都     1000013     35.7      140. 地下~ 虎ノ門~        3
+##  7 ga2g202 鶏そば ~ 東京都     1760006     35.7      140. 西武~ 江古田~        2
+##  8 gg9m100 宴会個~  東京都     1010021     35.7      140. ＪＲ  秋葉原~        4
+##  9 gdvk200 中国料~  東京都     1000006     35.7      140. ＪＲ  有楽町~        1
+## 10 gggb200 中国料~  東京都     1140002     35.8      140. 地下~ 王子駅         2
+## # ... with 6,282 more rows, and 5 more variables: Bus <dbl>, Car <dbl>,
 ## #   Budget <dbl>, ScoreN <dbl>, Score <dbl>
 ```
 
@@ -383,20 +361,20 @@ df %>%
 ```
 
 ```
-## # A tibble: 6,292 × 12
+## # A tibble: 6,292 x 12
 ##    ID    Name  Pref  Zipcode Line  Station  Walk   Bus   Car Budget ScoreN Score
 ##    <chr> <chr> <chr>   <dbl> <chr> <chr>   <dbl> <dbl> <dbl>  <dbl>  <dbl> <dbl>
-##  1 e539… 居酒… 東京… 1040031 地下… 銀座一…     3    NA    NA   3000      0 NA   
-##  2 gfeb… 本格… 東京… 1100005 地下… 仲御徒…     1    NA    NA   2000      2  4.5 
-##  3 ggt5… 食べ… 東京… 1250041 ＪＲ… 金町駅      2    NA    NA   2980      0 NA   
-##  4 g181… 博多… 東京… 1920904 ＪＲ  八王子…     1    NA    NA   2000      0 NA   
-##  5 ggww… まさ… 東京… 1500042 地下… 渋谷駅      7    NA    NA    380      0 NA   
-##  6 gdzk… 完全… 東京… 1000013 地下… 虎ノ門…     3    NA    NA   2980      0 NA   
-##  7 ga2g… 鶏そ… 東京… 1760006 西武… 江古田…     2    NA    NA    850      0 NA   
-##  8 gg9m… 宴会… 東京… 1010021 ＪＲ  秋葉原…     4    NA    NA   2000      3  3.33
-##  9 gdvk… 中国… 東京… 1000006 ＪＲ  有楽町…     1    NA    NA   1000      2  2.5 
-## 10 gggb… 中国… 東京… 1140002 地下… 王子駅      2    NA    NA   2000      0 NA   
-## # … with 6,282 more rows
+##  1 e539~ 居酒~ 東京~ 1040031 地下~ 銀座一~     3    NA    NA   3000      0 NA   
+##  2 gfeb~ 本格~ 東京~ 1100005 地下~ 仲御徒~     1    NA    NA   2000      2  4.5 
+##  3 ggt5~ 食べ~ 東京~ 1250041 ＪＲ~ 金町駅      2    NA    NA   2980      0 NA   
+##  4 g181~ 博多~ 東京~ 1920904 ＪＲ  八王子~     1    NA    NA   2000      0 NA   
+##  5 ggww~ まさ~ 東京~ 1500042 地下~ 渋谷駅      7    NA    NA    380      0 NA   
+##  6 gdzk~ 完全~ 東京~ 1000013 地下~ 虎ノ門~     3    NA    NA   2980      0 NA   
+##  7 ga2g~ 鶏そ~ 東京~ 1760006 西武~ 江古田~     2    NA    NA    850      0 NA   
+##  8 gg9m~ 宴会~ 東京~ 1010021 ＪＲ  秋葉原~     4    NA    NA   2000      3  3.33
+##  9 gdvk~ 中国~ 東京~ 1000006 ＪＲ  有楽町~     1    NA    NA   1000      2  2.5 
+## 10 gggb~ 中国~ 東京~ 1140002 地下~ 王子駅      2    NA    NA   2000      0 NA   
+## # ... with 6,282 more rows
 ```
 
 かなり長いコードになりましたね。しかし、もっと簡単な方法があります。それは`-`を使う方法です。
@@ -408,20 +386,20 @@ df %>%
 ```
 
 ```
-## # A tibble: 6,292 × 12
+## # A tibble: 6,292 x 12
 ##    ID    Name  Pref  Zipcode Line  Station  Walk   Bus   Car Budget ScoreN Score
 ##    <chr> <chr> <chr>   <dbl> <chr> <chr>   <dbl> <dbl> <dbl>  <dbl>  <dbl> <dbl>
-##  1 e539… 居酒… 東京… 1040031 地下… 銀座一…     3    NA    NA   3000      0 NA   
-##  2 gfeb… 本格… 東京… 1100005 地下… 仲御徒…     1    NA    NA   2000      2  4.5 
-##  3 ggt5… 食べ… 東京… 1250041 ＪＲ… 金町駅      2    NA    NA   2980      0 NA   
-##  4 g181… 博多… 東京… 1920904 ＪＲ  八王子…     1    NA    NA   2000      0 NA   
-##  5 ggww… まさ… 東京… 1500042 地下… 渋谷駅      7    NA    NA    380      0 NA   
-##  6 gdzk… 完全… 東京… 1000013 地下… 虎ノ門…     3    NA    NA   2980      0 NA   
-##  7 ga2g… 鶏そ… 東京… 1760006 西武… 江古田…     2    NA    NA    850      0 NA   
-##  8 gg9m… 宴会… 東京… 1010021 ＪＲ  秋葉原…     4    NA    NA   2000      3  3.33
-##  9 gdvk… 中国… 東京… 1000006 ＪＲ  有楽町…     1    NA    NA   1000      2  2.5 
-## 10 gggb… 中国… 東京… 1140002 地下… 王子駅      2    NA    NA   2000      0 NA   
-## # … with 6,282 more rows
+##  1 e539~ 居酒~ 東京~ 1040031 地下~ 銀座一~     3    NA    NA   3000      0 NA   
+##  2 gfeb~ 本格~ 東京~ 1100005 地下~ 仲御徒~     1    NA    NA   2000      2  4.5 
+##  3 ggt5~ 食べ~ 東京~ 1250041 ＪＲ~ 金町駅      2    NA    NA   2980      0 NA   
+##  4 g181~ 博多~ 東京~ 1920904 ＪＲ  八王子~     1    NA    NA   2000      0 NA   
+##  5 ggww~ まさ~ 東京~ 1500042 地下~ 渋谷駅      7    NA    NA    380      0 NA   
+##  6 gdzk~ 完全~ 東京~ 1000013 地下~ 虎ノ門~     3    NA    NA   2980      0 NA   
+##  7 ga2g~ 鶏そ~ 東京~ 1760006 西武~ 江古田~     2    NA    NA    850      0 NA   
+##  8 gg9m~ 宴会~ 東京~ 1010021 ＪＲ  秋葉原~     4    NA    NA   2000      3  3.33
+##  9 gdvk~ 中国~ 東京~ 1000006 ＪＲ  有楽町~     1    NA    NA   1000      2  2.5 
+## 10 gggb~ 中国~ 東京~ 1140002 地下~ 王子駅      2    NA    NA   2000      0 NA   
+## # ... with 6,282 more rows
 ```
 
 除外したい変数名の前に`-`を付けただけです。また、`-Latitude`と`-Longitude`をそれぞれ指定せず、`-c(Latitude, Longitude)`のように`c()`でまとめるのも可能です。
@@ -471,20 +449,20 @@ df %>%
 ```
 
 ```
-## # A tibble: 6,292 × 14
+## # A tibble: 6,292 x 14
 ##    Score ScoreN ID    Name  Pref  Zipcode Latitude Longitude Line  Station  Walk
 ##    <dbl>  <dbl> <chr> <chr> <chr>   <dbl>    <dbl>     <dbl> <chr> <chr>   <dbl>
-##  1 NA         0 e539… 居酒… 東京… 1040031     35.7      140. 地下… 銀座一…     3
-##  2  4.5       2 gfeb… 本格… 東京… 1100005     35.7      140. 地下… 仲御徒…     1
-##  3 NA         0 ggt5… 食べ… 東京… 1250041     35.8      140. ＪＲ… 金町駅      2
-##  4 NA         0 g181… 博多… 東京… 1920904     35.7      139. ＪＲ  八王子…     1
-##  5 NA         0 ggww… まさ… 東京… 1500042     35.7      140. 地下… 渋谷駅      7
-##  6 NA         0 gdzk… 完全… 東京… 1000013     35.7      140. 地下… 虎ノ門…     3
-##  7 NA         0 ga2g… 鶏そ… 東京… 1760006     35.7      140. 西武… 江古田…     2
-##  8  3.33      3 gg9m… 宴会… 東京… 1010021     35.7      140. ＪＲ  秋葉原…     4
-##  9  2.5       2 gdvk… 中国… 東京… 1000006     35.7      140. ＪＲ  有楽町…     1
-## 10 NA         0 gggb… 中国… 東京… 1140002     35.8      140. 地下… 王子駅      2
-## # … with 6,282 more rows, and 3 more variables: Bus <dbl>, Car <dbl>,
+##  1 NA         0 e539~ 居酒~ 東京~ 1040031     35.7      140. 地下~ 銀座一~     3
+##  2  4.5       2 gfeb~ 本格~ 東京~ 1100005     35.7      140. 地下~ 仲御徒~     1
+##  3 NA         0 ggt5~ 食べ~ 東京~ 1250041     35.8      140. ＪＲ~ 金町駅      2
+##  4 NA         0 g181~ 博多~ 東京~ 1920904     35.7      139. ＪＲ  八王子~     1
+##  5 NA         0 ggww~ まさ~ 東京~ 1500042     35.7      140. 地下~ 渋谷駅      7
+##  6 NA         0 gdzk~ 完全~ 東京~ 1000013     35.7      140. 地下~ 虎ノ門~     3
+##  7 NA         0 ga2g~ 鶏そ~ 東京~ 1760006     35.7      140. 西武~ 江古田~     2
+##  8  3.33      3 gg9m~ 宴会~ 東京~ 1010021     35.7      140. ＪＲ  秋葉原~     4
+##  9  2.5       2 gdvk~ 中国~ 東京~ 1000006     35.7      140. ＪＲ  有楽町~     1
+## 10 NA         0 gggb~ 中国~ 東京~ 1140002     35.8      140. 地下~ 王子駅      2
+## # ... with 6,282 more rows, and 3 more variables: Bus <dbl>, Car <dbl>,
 ## #   Budget <dbl>
 ```
 
@@ -497,20 +475,20 @@ df %>%
 ```
 
 ```
-## # A tibble: 6,292 × 14
+## # A tibble: 6,292 x 14
 ##    Score ScoreN ID    Name  Pref  Zipcode Latitude Longitude Line  Station  Walk
 ##    <dbl>  <dbl> <chr> <chr> <chr>   <dbl>    <dbl>     <dbl> <chr> <chr>   <dbl>
-##  1 NA         0 e539… 居酒… 東京… 1040031     35.7      140. 地下… 銀座一…     3
-##  2  4.5       2 gfeb… 本格… 東京… 1100005     35.7      140. 地下… 仲御徒…     1
-##  3 NA         0 ggt5… 食べ… 東京… 1250041     35.8      140. ＪＲ… 金町駅      2
-##  4 NA         0 g181… 博多… 東京… 1920904     35.7      139. ＪＲ  八王子…     1
-##  5 NA         0 ggww… まさ… 東京… 1500042     35.7      140. 地下… 渋谷駅      7
-##  6 NA         0 gdzk… 完全… 東京… 1000013     35.7      140. 地下… 虎ノ門…     3
-##  7 NA         0 ga2g… 鶏そ… 東京… 1760006     35.7      140. 西武… 江古田…     2
-##  8  3.33      3 gg9m… 宴会… 東京… 1010021     35.7      140. ＪＲ  秋葉原…     4
-##  9  2.5       2 gdvk… 中国… 東京… 1000006     35.7      140. ＪＲ  有楽町…     1
-## 10 NA         0 gggb… 中国… 東京… 1140002     35.8      140. 地下… 王子駅      2
-## # … with 6,282 more rows, and 3 more variables: Bus <dbl>, Car <dbl>,
+##  1 NA         0 e539~ 居酒~ 東京~ 1040031     35.7      140. 地下~ 銀座一~     3
+##  2  4.5       2 gfeb~ 本格~ 東京~ 1100005     35.7      140. 地下~ 仲御徒~     1
+##  3 NA         0 ggt5~ 食べ~ 東京~ 1250041     35.8      140. ＪＲ~ 金町駅      2
+##  4 NA         0 g181~ 博多~ 東京~ 1920904     35.7      139. ＪＲ  八王子~     1
+##  5 NA         0 ggww~ まさ~ 東京~ 1500042     35.7      140. 地下~ 渋谷駅      7
+##  6 NA         0 gdzk~ 完全~ 東京~ 1000013     35.7      140. 地下~ 虎ノ門~     3
+##  7 NA         0 ga2g~ 鶏そ~ 東京~ 1760006     35.7      140. 西武~ 江古田~     2
+##  8  3.33      3 gg9m~ 宴会~ 東京~ 1010021     35.7      140. ＪＲ  秋葉原~     4
+##  9  2.5       2 gdvk~ 中国~ 東京~ 1000006     35.7      140. ＪＲ  有楽町~     1
+## 10 NA         0 gggb~ 中国~ 東京~ 1140002     35.8      140. 地下~ 王子駅      2
+## # ... with 6,282 more rows, and 3 more variables: Bus <dbl>, Car <dbl>,
 ## #   Budget <dbl>
 ```
 
@@ -523,20 +501,20 @@ df %>%
 ```
 
 ```
-## # A tibble: 6,292 × 14
+## # A tibble: 6,292 x 14
 ##    ID     Name  Zipcode Pref  Latitude Longitude Line  Station  Walk   Bus   Car
 ##    <chr>  <chr>   <dbl> <chr>    <dbl>     <dbl> <chr> <chr>   <dbl> <dbl> <dbl>
-##  1 e5396… 居酒… 1040031 東京…     35.7      140. 地下… 銀座一…     3    NA    NA
-##  2 gfeb6… 本格… 1100005 東京…     35.7      140. 地下… 仲御徒…     1    NA    NA
-##  3 ggt59… 食べ… 1250041 東京…     35.8      140. ＪＲ… 金町駅      2    NA    NA
-##  4 g1813… 博多… 1920904 東京…     35.7      139. ＪＲ  八王子…     1    NA    NA
-##  5 ggww1… まさ… 1500042 東京…     35.7      140. 地下… 渋谷駅      7    NA    NA
-##  6 gdzk5… 完全… 1000013 東京…     35.7      140. 地下… 虎ノ門…     3    NA    NA
-##  7 ga2g2… 鶏そ… 1760006 東京…     35.7      140. 西武… 江古田…     2    NA    NA
-##  8 gg9m1… 宴会… 1010021 東京…     35.7      140. ＪＲ  秋葉原…     4    NA    NA
-##  9 gdvk2… 中国… 1000006 東京…     35.7      140. ＪＲ  有楽町…     1    NA    NA
-## 10 gggb2… 中国… 1140002 東京…     35.8      140. 地下… 王子駅      2    NA    NA
-## # … with 6,282 more rows, and 3 more variables: Budget <dbl>, ScoreN <dbl>,
+##  1 e5396~ 居酒~ 1040031 東京~     35.7      140. 地下~ 銀座一~     3    NA    NA
+##  2 gfeb6~ 本格~ 1100005 東京~     35.7      140. 地下~ 仲御徒~     1    NA    NA
+##  3 ggt59~ 食べ~ 1250041 東京~     35.8      140. ＪＲ~ 金町駅      2    NA    NA
+##  4 g1813~ 博多~ 1920904 東京~     35.7      139. ＪＲ  八王子~     1    NA    NA
+##  5 ggww1~ まさ~ 1500042 東京~     35.7      140. 地下~ 渋谷駅      7    NA    NA
+##  6 gdzk5~ 完全~ 1000013 東京~     35.7      140. 地下~ 虎ノ門~     3    NA    NA
+##  7 ga2g2~ 鶏そ~ 1760006 東京~     35.7      140. 西武~ 江古田~     2    NA    NA
+##  8 gg9m1~ 宴会~ 1010021 東京~     35.7      140. ＪＲ  秋葉原~     4    NA    NA
+##  9 gdvk2~ 中国~ 1000006 東京~     35.7      140. ＪＲ  有楽町~     1    NA    NA
+## 10 gggb2~ 中国~ 1140002 東京~     35.8      140. 地下~ 王子駅      2    NA    NA
+## # ... with 6,282 more rows, and 3 more variables: Budget <dbl>, ScoreN <dbl>,
 ## #   Score <dbl>
 ```
 
@@ -550,20 +528,20 @@ df %>%
 ```
 
 ```
-## # A tibble: 6,292 × 14
+## # A tibble: 6,292 x 14
 ##    ID     Name  Zipcode Pref  Latitude Longitude Line  Station  Walk   Bus   Car
 ##    <chr>  <chr>   <dbl> <chr>    <dbl>     <dbl> <chr> <chr>   <dbl> <dbl> <dbl>
-##  1 e5396… 居酒… 1040031 東京…     35.7      140. 地下… 銀座一…     3    NA    NA
-##  2 gfeb6… 本格… 1100005 東京…     35.7      140. 地下… 仲御徒…     1    NA    NA
-##  3 ggt59… 食べ… 1250041 東京…     35.8      140. ＪＲ… 金町駅      2    NA    NA
-##  4 g1813… 博多… 1920904 東京…     35.7      139. ＪＲ  八王子…     1    NA    NA
-##  5 ggww1… まさ… 1500042 東京…     35.7      140. 地下… 渋谷駅      7    NA    NA
-##  6 gdzk5… 完全… 1000013 東京…     35.7      140. 地下… 虎ノ門…     3    NA    NA
-##  7 ga2g2… 鶏そ… 1760006 東京…     35.7      140. 西武… 江古田…     2    NA    NA
-##  8 gg9m1… 宴会… 1010021 東京…     35.7      140. ＪＲ  秋葉原…     4    NA    NA
-##  9 gdvk2… 中国… 1000006 東京…     35.7      140. ＪＲ  有楽町…     1    NA    NA
-## 10 gggb2… 中国… 1140002 東京…     35.8      140. 地下… 王子駅      2    NA    NA
-## # … with 6,282 more rows, and 3 more variables: Budget <dbl>, ScoreN <dbl>,
+##  1 e5396~ 居酒~ 1040031 東京~     35.7      140. 地下~ 銀座一~     3    NA    NA
+##  2 gfeb6~ 本格~ 1100005 東京~     35.7      140. 地下~ 仲御徒~     1    NA    NA
+##  3 ggt59~ 食べ~ 1250041 東京~     35.8      140. ＪＲ~ 金町駅      2    NA    NA
+##  4 g1813~ 博多~ 1920904 東京~     35.7      139. ＪＲ  八王子~     1    NA    NA
+##  5 ggww1~ まさ~ 1500042 東京~     35.7      140. 地下~ 渋谷駅      7    NA    NA
+##  6 gdzk5~ 完全~ 1000013 東京~     35.7      140. 地下~ 虎ノ門~     3    NA    NA
+##  7 ga2g2~ 鶏そ~ 1760006 東京~     35.7      140. 西武~ 江古田~     2    NA    NA
+##  8 gg9m1~ 宴会~ 1010021 東京~     35.7      140. ＪＲ  秋葉原~     4    NA    NA
+##  9 gdvk2~ 中国~ 1000006 東京~     35.7      140. ＪＲ  有楽町~     1    NA    NA
+## 10 gggb2~ 中国~ 1140002 東京~     35.8      140. 地下~ 王子駅      2    NA    NA
+## # ... with 6,282 more rows, and 3 more variables: Budget <dbl>, ScoreN <dbl>,
 ## #   Score <dbl>
 ```
 
@@ -593,7 +571,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 6,292 × 4
+## # A tibble: 6,292 x 4
 ##    ID      Name                                                     ScoreN Score
 ##    <chr>   <chr>                                                     <dbl> <dbl>
 ##  1 e539604 居酒屋 龍記 京橋店                                            0 NA   
@@ -606,7 +584,7 @@ df %>%
 ##  8 gg9m100 宴会個室×餃子酒場 北京飯店 秋葉原本店                         3  3.33
 ##  9 gdvk200 中国料理 宝龍                                                 2  2.5 
 ## 10 gggb200 中国料理 天安門                                               0 NA   
-## # … with 6,282 more rows
+## # ... with 6,282 more rows
 ```
 
 ```{.r .numberLines}
@@ -616,7 +594,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 6,292 × 8
+## # A tibble: 6,292 x 8
 ##    ID      Pref   Station       Walk   Bus   Car Budget ScoreN
 ##    <chr>   <chr>  <chr>        <dbl> <dbl> <dbl>  <dbl>  <dbl>
 ##  1 e539604 東京都 銀座一丁目駅     3    NA    NA   3000      0
@@ -629,7 +607,7 @@ df %>%
 ##  8 gg9m100 東京都 秋葉原駅         4    NA    NA   2000      3
 ##  9 gdvk200 東京都 有楽町駅         1    NA    NA   1000      2
 ## 10 gggb200 東京都 王子駅           2    NA    NA   2000      0
-## # … with 6,282 more rows
+## # ... with 6,282 more rows
 ```
 
 ```{.r .numberLines}
@@ -639,7 +617,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 6,292 × 2
+## # A tibble: 6,292 x 2
 ##    Pref   Score
 ##    <chr>  <dbl>
 ##  1 東京都 NA   
@@ -652,7 +630,7 @@ df %>%
 ##  8 東京都  3.33
 ##  9 東京都  2.5 
 ## 10 東京都 NA   
-## # … with 6,282 more rows
+## # ... with 6,282 more rows
 ```
 
 他の使い方としては`X1`、`X2`のような「文字+数字」の変数を選択する際、`starts_with()`が活躍します。たとえば、以下のような`myDF1`があるとします。
@@ -677,7 +655,7 @@ myDF1
 ```
 
 ```
-## # A tibble: 5 × 10
+## # A tibble: 5 x 10
 ##      ID    X1    Y1   X1D    X2    Y2   X2D    X3    Y3   X3D
 ##   <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
 ## 1     1     2     3     4     5     3     8     3     1     9
@@ -696,7 +674,7 @@ myDF1 %>%
 ```
 
 ```
-## # A tibble: 5 × 4
+## # A tibble: 5 x 4
 ##      ID    Y1    Y2    Y3
 ##   <int> <dbl> <dbl> <dbl>
 ## 1     1     3     3     1
@@ -715,7 +693,7 @@ myDF1 %>%
 ```
 
 ```
-## # A tibble: 5 × 3
+## # A tibble: 5 x 3
 ##      X1    X2    X3
 ##   <dbl> <dbl> <dbl>
 ## 1     2     5     3
@@ -736,7 +714,7 @@ myDF1 %>%
 ```
 
 ```
-## # A tibble: 5 × 4
+## # A tibble: 5 x 4
 ##      ID    X1    X2    X3
 ##   <int> <dbl> <dbl> <dbl>
 ## 1     1     2     5     3
@@ -763,7 +741,7 @@ myDF1[, c("ID", Name_Vec)]
 ```
 
 ```
-## # A tibble: 5 × 4
+## # A tibble: 5 x 4
 ##      ID    X1    X2    X3
 ##   <int> <dbl> <dbl> <dbl>
 ## 1     1     2     5     3
@@ -779,7 +757,7 @@ myDF1 %>%
 ```
 
 ```
-## # A tibble: 5 × 4
+## # A tibble: 5 x 4
 ##      ID    X1    X2    X3
 ##   <int> <dbl> <dbl> <dbl>
 ## 1     1     2     5     3
@@ -815,7 +793,7 @@ myDF1 %>%
 ```
 
 ```
-## # A tibble: 5 × 3
+## # A tibble: 5 x 3
 ##      X1    X2    X3
 ##   <dbl> <dbl> <dbl>
 ## 1     2     5     3
@@ -839,7 +817,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 6,292 × 2
+## # A tibble: 6,292 x 2
 ##    ID      Score
 ##    <chr>   <dbl>
 ##  1 e539604 NA   
@@ -852,7 +830,7 @@ df %>%
 ##  8 gg9m100  3.33
 ##  9 gdvk200  2.5 
 ## 10 gggb200 NA   
-## # … with 6,282 more rows
+## # ... with 6,282 more rows
 ```
 
 最後の2行分を取り出すことも可能です。この場合は`last_col()`の引数を長さ1ベクトルでなく、長さ2以上のベクトルにします。最後の行が`0`、その手前の行が`1`ですから、中の引数は`1:0`となります。`0:1`でも可能ですが、結果が若干異なります。
@@ -865,7 +843,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 6,292 × 3
+## # A tibble: 6,292 x 3
 ##    ID      ScoreN Score
 ##    <chr>    <dbl> <dbl>
 ##  1 e539604      0 NA   
@@ -878,7 +856,7 @@ df %>%
 ##  8 gg9m100      3  3.33
 ##  9 gdvk200      2  2.5 
 ## 10 gggb200      0 NA   
-## # … with 6,282 more rows
+## # ... with 6,282 more rows
 ```
 
 
@@ -889,7 +867,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 6,292 × 3
+## # A tibble: 6,292 x 3
 ##    ID      Score ScoreN
 ##    <chr>   <dbl>  <dbl>
 ##  1 e539604 NA         0
@@ -902,7 +880,7 @@ df %>%
 ##  8 gg9m100  3.33      3
 ##  9 gdvk200  2.5       2
 ## 10 gggb200 NA         0
-## # … with 6,282 more rows
+## # ... with 6,282 more rows
 ```
 
 `last_col()`の引数を`1:0`にするか`0:1`にするかによって抽出される順番が異なります。`1:0`は`c(1, 0)`、`0:1`は`c(0, 1)`と同じであることを考えると理由は簡単です。`c(1, 0)`の場合、`last_col(1), last_col(0)`の順番で処理をし、`c(0, 1)`は`last_col(0)`、`last_col(1)`の順番で処理を行うからです。
@@ -921,7 +899,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 6,292 × 9
+## # A tibble: 6,292 x 9
 ##    Zipcode Latitude Longitude  Walk   Bus   Car Budget ScoreN Score
 ##      <dbl>    <dbl>     <dbl> <dbl> <dbl> <dbl>  <dbl>  <dbl> <dbl>
 ##  1 1040031     35.7      140.     3    NA    NA   3000      0 NA   
@@ -934,7 +912,7 @@ df %>%
 ##  8 1010021     35.7      140.     4    NA    NA   2000      3  3.33
 ##  9 1000006     35.7      140.     1    NA    NA   1000      2  2.5 
 ## 10 1140002     35.8      140.     2    NA    NA   2000      0 NA   
-## # … with 6,282 more rows
+## # ... with 6,282 more rows
 ```
 
 `!`を使って条件に合致する列を除外することも可能です。もし、character型の列を除外する場合は以下のように`!where(is.character)`を指定します。
@@ -947,7 +925,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 6,292 × 9
+## # A tibble: 6,292 x 9
 ##    Zipcode Latitude Longitude  Walk   Bus   Car Budget ScoreN Score
 ##      <dbl>    <dbl>     <dbl> <dbl> <dbl> <dbl>  <dbl>  <dbl> <dbl>
 ##  1 1040031     35.7      140.     3    NA    NA   3000      0 NA   
@@ -960,7 +938,7 @@ df %>%
 ##  8 1010021     35.7      140.     4    NA    NA   2000      3  3.33
 ##  9 1000006     35.7      140.     1    NA    NA   1000      2  2.5 
 ## 10 1140002     35.8      140.     2    NA    NA   2000      0 NA   
-## # … with 6,282 more rows
+## # ... with 6,282 more rows
 ```
 
 `&`を使って複数の条件を使うことも可能です。たとえば、`ID`変数に加えて「`"L"`で始まる変数の中でnumeric型の列を抽出」するコードは以下のようになります。
@@ -973,7 +951,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 6,292 × 3
+## # A tibble: 6,292 x 3
 ##    ID      Latitude Longitude
 ##    <chr>      <dbl>     <dbl>
 ##  1 e539604     35.7      140.
@@ -986,7 +964,7 @@ df %>%
 ##  8 gg9m100     35.7      140.
 ##  9 gdvk200     35.7      140.
 ## 10 gggb200     35.8      140.
-## # … with 6,282 more rows
+## # ... with 6,282 more rows
 ```
 
 ---
@@ -1014,7 +992,7 @@ select_df[c(2, 8, 9),]
 ```
 
 ```
-## # A tibble: 3 × 5
+## # A tibble: 3 x 5
 ##   ID      Name                                  Pref   Budget Score
 ##   <chr>   <chr>                                 <chr>   <dbl> <dbl>
 ## 1 gfeb600 本格上海料理 新錦江 上野御徒町本店    東京都   2000  4.5 
@@ -1034,7 +1012,7 @@ select_df %>%
 ```
 
 ```
-## # A tibble: 3 × 5
+## # A tibble: 3 x 5
 ##   ID      Name                                  Pref   Budget Score
 ##   <chr>   <chr>                                 <chr>   <dbl> <dbl>
 ## 1 gfeb600 本格上海料理 新錦江 上野御徒町本店    東京都   2000  4.5 
@@ -1054,7 +1032,7 @@ select_df %>%
 ```
 
 ```
-## # A tibble: 3 × 5
+## # A tibble: 3 x 5
 ##   ID      Name                                       Pref   Budget Score
 ##   <chr>   <chr>                                      <chr>   <dbl> <dbl>
 ## 1 e539604 居酒屋 龍記 京橋店                         東京都   3000  NA  
@@ -1074,7 +1052,7 @@ select_df %>%
 ```
 
 ```
-## # A tibble: 7 × 5
+## # A tibble: 7 x 5
 ##   ID      Name                    Pref     Budget Score
 ##   <chr>   <chr>                   <chr>     <dbl> <dbl>
 ## 1 5508852 場鶴                    和歌山県     NA    NA
@@ -1100,10 +1078,10 @@ select_df %>%
 ```
 
 ```
-## # A tibble: 4 × 5
+## # A tibble: 4 x 5
 ##   ID      Name                                              Pref    Budget Score
 ##   <chr>   <chr>                                             <chr>    <dbl> <dbl>
-## 1 g670609 横浜ベイシェラトン ホテル＆タワーズ 中国料理 彩龍 神奈川…   8000    NA
+## 1 g670609 横浜ベイシェラトン ホテル＆タワーズ 中国料理 彩龍 神奈川~   8000    NA
 ## 2 g910420 JASMINE 憶江南                                    東京都    7000    NA
 ## 3 7176666 赤坂焼鳥 鳳                                       東京都    7000    NA
 ## 4 b612800 羽衣 銀座本店                                     東京都    6000    NA
@@ -1121,7 +1099,7 @@ select_df %>%
 ```
 
 ```
-## # A tibble: 4 × 5
+## # A tibble: 4 x 5
 ##   ID      Name                        Pref   Budget Score
 ##   <chr>   <chr>                       <chr>   <dbl> <dbl>
 ## 1 6384909 葛西大勝軒                  東京都     NA     1
@@ -1139,7 +1117,7 @@ select_df %>%
 ```
 
 ```
-## # A tibble: 3 × 5
+## # A tibble: 3 x 5
 ##   ID      Name                  Pref   Budget Score
 ##   <chr>   <chr>                 <chr>   <dbl> <dbl>
 ## 1 6384909 葛西大勝軒            東京都     NA     1
@@ -1159,19 +1137,19 @@ select_df %>%
 ```
 
 ```
-## # A tibble: 10 × 5
-##    ID      Name                        Pref     Budget Score
-##    <chr>   <chr>                       <chr>     <dbl> <dbl>
-##  1 7204609 一日一麺lab＋               大阪府      800 NA   
-##  2 6913034 ジャンクガレッジ 東大宮本店 埼玉県       NA  3.89
-##  3 ka7k718 野菜串巻き酒場 HARAIPPAI    大阪府      900 NA   
-##  4 5034419 山の子                      神奈川県   2500 NA   
-##  5 6737588 屯てい                      神奈川県     NA NA   
-##  6 7754983 孫鈴舎                      東京都       NA NA   
-##  7 6167534 らーめん やきそば つちのこ  兵庫県       NA NA   
-##  8 7143128 佐野 グランツリー武蔵小杉店 神奈川県     NA NA   
-##  9 6742141 定食ラーメン やおや         神奈川県     NA NA   
-## 10 6316537 雅狼                        埼玉県       NA NA
+## # A tibble: 10 x 5
+##    ID      Name                           Pref     Budget Score
+##    <chr>   <chr>                          <chr>     <dbl> <dbl>
+##  1 7647048 食処もとまちや                 東京都       NA    NA
+##  2 7499051 河童ラーメン本舗 桜井店        奈良県     1000    NA
+##  3 7645494 ラーメン藤 三田店              兵庫県       NA    NA
+##  4 kdjy600 みなと軒 三宮東門店            兵庫県     1000     4
+##  5 6752091 らあめん花月嵐 四街道店        千葉県       NA    NA
+##  6 5508457 好きやめん                     兵庫県       NA    NA
+##  7 6369982 京都ラーメン たかばし 横大路店 京都府       NA    NA
+##  8 7328991 ラーメン ばんだい 旭区善部町店 神奈川県     NA    NA
+##  9 5495927 ラーメン カズ                  千葉県       NA    NA
+## 10 7255219 新潟 三宝亭                    東京都       NA    NA
 ```
 
 のように書きます。ブートストラップ法や機械学習における交差検証 (cross-validation)の際に有用な関数ですが、ブートストラップや機械学習のパッケージの多くはサンプル分割の関数を提供しているため、あまり使う機会はないでしょう。また、`slice_sample()`関数をブートストラップ法のために用いる場合は、ケースを反復抽出する必要があり、`replace = TRUE`を付けると反復抽出を行います。デフォルト値は`FALSE`です。
@@ -1209,7 +1187,7 @@ df2 %>%
 ```
 
 ```
-## # A tibble: 414 × 3
+## # A tibble: 414 x 3
 ##    Name                                                    Station    Score
 ##    <chr>                                                   <chr>      <dbl>
 ##  1 中国料理 鳳麟                                           くいな橋駅 NA   
@@ -1222,7 +1200,7 @@ df2 %>%
 ##  8 DETAIL                                                  東山駅     NA   
 ##  9 めんや龍神                                              北大路駅   NA   
 ## 10 無尽蔵 京都八条家                                       京都駅      3.5 
-## # … with 404 more rows
+## # ... with 404 more rows
 ```
 
 これは`df`から`Pref == "京都府"`のケースのみ残したものを`df2`として格納し、それをまた`select()`関数を使って列を抽出するコードです。これでも問題ありませんが、これだとパイプ演算子の便利さが分かりません。パイプ演算子は複数使うことが可能です。
@@ -1235,7 +1213,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 414 × 3
+## # A tibble: 414 x 3
 ##    Name                                                    Station    Score
 ##    <chr>                                                   <chr>      <dbl>
 ##  1 中国料理 鳳麟                                           くいな橋駅 NA   
@@ -1248,7 +1226,7 @@ df %>%
 ##  8 DETAIL                                                  東山駅     NA   
 ##  9 めんや龍神                                              北大路駅   NA   
 ## 10 無尽蔵 京都八条家                                       京都駅      3.5 
-## # … with 404 more rows
+## # ... with 404 more rows
 ```
 
 全く同じ結果ですが、無駄に`df2`というデータフレームを作らず済むので、メモリの観点からも嬉しいですし、何よりコードが短く、しかも可読性も上がりました。
@@ -1263,7 +1241,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 1,344 × 4
+## # A tibble: 1,344 x 4
 ##    Name                                              Station       ScoreN Score
 ##    <chr>                                             <chr>          <dbl> <dbl>
 ##  1 本格上海料理 新錦江 上野御徒町本店                仲御徒町駅         2  4.5 
@@ -1273,10 +1251,10 @@ df %>%
 ##  5 刀削麺・火鍋・西安料理 XI’AN（シーアン） 後楽園店 後楽園駅           1 NA   
 ##  6 七志らーめん 渋谷道玄坂店                         渋谷駅             7  4.5 
 ##  7 永楽                                              京成小岩駅         6  4.42
-##  8 よってこや お台場店                               お台場海浜公…      1  4   
+##  8 よってこや お台場店                               お台場海浜公~      1  4   
 ##  9 ラーメン武藤製麺所                                竹ノ塚駅           4  3.5 
 ## 10 桂花ラーメン 新宿末広店                           新宿三丁目駅       8  3   
-## # … with 1,334 more rows
+## # ... with 1,334 more rows
 ```
 
 これで口コミ数が1以上の店舗のみに絞ることができました。ただし、店によっては口コミはあっても、評価 (`Score`)が付いていないところもあります。たとえば、「刀削麺・火鍋・西安料理 XI'AN（シーアン） 後楽園店」の場合、口コミはありますが、評価はありません。したがって、今回は評価が付いている店舗に絞ってみましょう。
@@ -1289,8 +1267,8 @@ df %>%
 ```
 
 ```
-## # A tibble: 0 × 4
-## # … with 4 variables: Name <chr>, Station <chr>, ScoreN <dbl>, Score <dbl>
+## # A tibble: 0 x 4
+## # ... with 4 variables: Name <chr>, Station <chr>, ScoreN <dbl>, Score <dbl>
 ```
 
 あらら、何の結果も表示されませんでした。これは`filter()`内の条件に合致するケースが存在しないことを意味します。しかし、先ほどの結果を見ても、評価が付いている店はいっぱいありましたね。これはなぜでしょう。
@@ -1305,7 +1283,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 1,134 × 4
+## # A tibble: 1,134 x 4
 ##    Name                                  Station          ScoreN Score
 ##    <chr>                                 <chr>             <dbl> <dbl>
 ##  1 本格上海料理 新錦江 上野御徒町本店    仲御徒町駅            2  4.5 
@@ -1318,7 +1296,7 @@ df %>%
 ##  8 ラーメン武藤製麺所                    竹ノ塚駅              4  3.5 
 ##  9 桂花ラーメン 新宿末広店               新宿三丁目駅          8  3   
 ## 10 北斗 新橋店                           新橋駅                4  2.5 
-## # … with 1,124 more rows
+## # ... with 1,124 more rows
 ```
 
 これで口コミ評価が登録された店舗に絞ることができました。
@@ -1333,7 +1311,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 53 × 4
+## # A tibble: 53 x 4
 ##    Name               Station    ScoreN Score
 ##    <chr>              <chr>       <dbl> <dbl>
 ##  1 無尽蔵 京都八条家  京都駅          2  3.5 
@@ -1346,7 +1324,7 @@ df %>%
 ##  8 大中BAL横店        <NA>            7  4.1 
 ##  9 こうちゃん         西舞鶴駅        1  5   
 ## 10 大黒ラーメン       伏見桃山駅      4  4.25
-## # … with 43 more rows
+## # ... with 43 more rows
 ```
 
 条件を`filter()`内に追加するだけです。今回は`!is.na(Score)`は不要です。なぜなら、`Score >= 3.5`という条件で既に欠損値は対象外になるからです。条件文が複数ある場合、ANDかORかを指定する必要があります。つまり、条件文AとBがある場合、「AとB両方満たすものを出力する」か「AとBどちらかを満たすものを出力するか」を指定する必要があります。今の結果ってANDでしたよね。`filter()`関数は、別途の指定がない場合、全てAND扱いになります。RのAND演算子は`&`ですので、以上のコードは以下のコードと同じです。
@@ -1359,7 +1337,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 53 × 4
+## # A tibble: 53 x 4
 ##    Name               Station    ScoreN Score
 ##    <chr>              <chr>       <dbl> <dbl>
 ##  1 無尽蔵 京都八条家  京都駅          2  3.5 
@@ -1372,7 +1350,7 @@ df %>%
 ##  8 大中BAL横店        <NA>            7  4.1 
 ##  9 こうちゃん         西舞鶴駅        1  5   
 ## 10 大黒ラーメン       伏見桃山駅      4  4.25
-## # … with 43 more rows
+## # ... with 43 more rows
 ```
 
 AND演算子 (`&`)が使えるということはOR演算子 (`|`)も使えることを意味します。たとえば、`Station`が`"高田馬場駅"`か`"三田駅"`の条件を指定したい場合、
@@ -1385,7 +1363,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 14 × 4
+## # A tibble: 14 x 4
 ##    Name                                 Station    ScoreN Score
 ##    <chr>                                <chr>       <dbl> <dbl>
 ##  1 麺達 うま家                          高田馬場駅      2  3   
@@ -1414,7 +1392,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 14 × 4
+## # A tibble: 14 x 4
 ##    Name                                 Station    ScoreN Score
 ##    <chr>                                <chr>       <dbl> <dbl>
 ##  1 麺達 うま家                          高田馬場駅      2  3   
@@ -1443,7 +1421,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 6 × 5
+## # A tibble: 6 x 5
 ##   Name                      Station  Walk ScoreN Score
 ##   <chr>                     <chr>   <dbl>  <dbl> <dbl>
 ## 1 Lei can ting 大阪ルクア店 大阪駅      3      3  4   
@@ -1476,7 +1454,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 24 × 5
+## # A tibble: 24 x 5
 ##    Name                                  Station             Walk ScoreN Score
 ##    <chr>                                 <chr>              <dbl>  <dbl> <dbl>
 ##  1 麺屋 あまのじゃく 本店                富雄駅                 2      2  4.5 
@@ -1519,7 +1497,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 24 × 5
+## # A tibble: 24 x 5
 ##    Name                                  Station             Walk ScoreN Score
 ##    <chr>                                 <chr>              <dbl>  <dbl> <dbl>
 ##  1 まりお流ラーメン                      新大宮駅              20      1  5   
@@ -1581,7 +1559,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 24 × 5
+## # A tibble: 24 x 5
 ##    Name                                  Station             Walk ScoreN Score
 ##    <chr>                                 <chr>              <dbl>  <dbl> <dbl>
 ##  1 まりお流ラーメン                      新大宮駅              20      1  5   
@@ -1622,7 +1600,7 @@ df %>%
 ```
 
 ```
-## # A tibble: 24 × 5
+## # A tibble: 24 x 5
 ##    Name                                  Station             Walk ScoreN Score
 ##    <chr>                                 <chr>              <dbl>  <dbl> <dbl>
 ##  1 ぶ～け                                奈良駅                11      1  5   
