@@ -6,7 +6,7 @@ description: 'R Not for Everyone: An Esoteric Guide.'
 url: https\://jaysong.net/RBook/
 site: bookdown::bookdown_site
 bibliography: tex/reference.bib
-biblio-style: tex/jecon.bst
+#biblio-style: tex/jecon
 link-citations: yes
 always_allow_html: yes
 github-repo: JaehyunSong/RBook
