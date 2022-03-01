@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>8. データの型 | 私たちのR: ベストプラクティスの探究</title>
+  <meta name="description" content="R Not for Everyone: An Esoteric Guide." />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="8. データの型 | 私たちのR: ベストプラクティスの探究" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://jaysong.net/RBook/" />
+  <meta property="og:image" content="https://jaysong.net/RBook//HTML/cover.png" />
+  <meta property="og:description" content="R Not for Everyone: An Esoteric Guide." />
+  <meta name="github-repo" content="JaehyunSong/RBook" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="8. データの型 | 私たちのR: ベストプラクティスの探究" />
+  
+  <meta name="twitter:description" content="R Not for Everyone: An Esoteric Guide." />
+  <meta name="twitter:image" content="https://jaysong.net/RBook//HTML/cover.png" />
+
+<meta name="author" content="宋財泫 (Jaehyun Song)・矢内勇生 (Yuki Yanai)" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="HTML/apple-favicon.png" />
+  <link rel="shortcut icon" href="HTML/favicon.png" type="image/x-icon" />
+<link rel="prev" href="io.html"/>
+<link rel="next" href="datastructure.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<meta name="twitter:title" content="R Not for Everyone"/>
+<meta name="twitter:description" content="An Esoteric Guide"/>
+<meta name="twitter:url" content="https://www.jaysong.net/RBook"/>
+<meta name="twitter:image" content="https://www.jaysong.net/RBook/figures/Cover.png"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:creator" content="@Tintstyle"/>
+<meta name="twitter:site" content="@Tintstyle"/>
+<meta property="og:title" content="R Not for Everyone"/>
+<meta property="og:description" content="An Esoteric Guide"/>
+<meta property="og:url" content="https://www.jaysong.net/RBook"/>
+<meta property="og:image" content="https://www.jaysong.net/RBook/figures/Cover.png"/>
+<meta property="og:type" content="book"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="article:author" content="Jaehyun Song"/>
+<meta property="article:author" content="Yuki Yanai"/>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.21/datatables.js"></script>
+<link href="libs/dt-core-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.11.3/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.11.3/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-165592410-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-165592410-1');
+  gtag('set', {'user_id': 'USER_ID'}); 
+</script>
+
+<meta name="google-site-verification" content="QJouPRaPKBPU1jDp6VaBuFbVV5imTI-Aazl_ScJwVgU" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="HTML/style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">私たちのR</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>紹介</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#進捗状況"><i class="fa fa-check"></i>進捗状況</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#著者紹介"><i class="fa fa-check"></i>著者紹介</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#データのダウンロード"><i class="fa fa-check"></i>データのダウンロード</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#本書における表記法"><i class="fa fa-check"></i>本書における表記法</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#著作権"><i class="fa fa-check"></i>著作権</a></li>
+</ul></li>
+<li class="part"><span><b>I Rの導入</b></span></li>
+<li class="chapter" data-level="1" data-path="aboutR.html"><a href="aboutR.html"><i class="fa fa-check"></i><b>1</b> R?</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="aboutR.html"><a href="aboutR.html#WhatIsR"><i class="fa fa-check"></i><b>1.1</b> Rとは</a></li>
+<li class="chapter" data-level="1.2" data-path="aboutR.html"><a href="aboutR.html#WhyR"><i class="fa fa-check"></i><b>1.2</b> Why R?</a></li>
+<li class="chapter" data-level="1.3" data-path="aboutR.html"><a href="aboutR.html#GUI_IDE"><i class="fa fa-check"></i><b>1.3</b> GUIとIDE</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="aboutR.html"><a href="aboutR.html#gui"><i class="fa fa-check"></i><b>1.3.1</b> GUI</a></li>
+<li class="chapter" data-level="1.3.2" data-path="aboutR.html"><a href="aboutR.html#aboutR-IDE"><i class="fa fa-check"></i><b>1.3.2</b> IDE</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="installation.html"><a href="installation.html"><i class="fa fa-check"></i><b>2</b> Rのインストール</a></li>
+<li class="chapter" data-level="3" data-path="ide.html"><a href="ide.html"><i class="fa fa-check"></i><b>3</b> IDEの導入</a></li>
+<li class="chapter" data-level="4" data-path="R-Customize.html"><a href="R-Customize.html"><i class="fa fa-check"></i><b>4</b> 分析環境のカスタマイズ</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="R-Customize.html"><a href="R-Customize.html#Customize-rprofile"><i class="fa fa-check"></i><b>4.1</b> .Rprofileの設定</a></li>
+<li class="chapter" data-level="4.2" data-path="R-Customize.html"><a href="R-Customize.html#Customize-rstudio"><i class="fa fa-check"></i><b>4.2</b> RStudioのカスタマイズ</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="packages.html"><a href="packages.html"><i class="fa fa-check"></i><b>5</b> Rパッケージ</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="packages.html"><a href="packages.html#packages_intro"><i class="fa fa-check"></i><b>5.1</b> パッケージとは</a></li>
+<li class="chapter" data-level="5.2" data-path="packages.html"><a href="packages.html#packages_install"><i class="fa fa-check"></i><b>5.2</b> パッケージのインストール</a></li>
+<li class="chapter" data-level="5.3" data-path="packages.html"><a href="packages.html#packages_library"><i class="fa fa-check"></i><b>5.3</b> パッケージの読み込み</a></li>
+<li class="chapter" data-level="5.4" data-path="packages.html"><a href="packages.html#packages_update"><i class="fa fa-check"></i><b>5.4</b> パッケージのアップデート</a></li>
+<li class="chapter" data-level="5.5" data-path="packages.html"><a href="packages.html#packages_pacman"><i class="fa fa-check"></i><b>5.5</b> {pacman}によるパッケージ管理</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="packages.html"><a href="packages.html#インストール"><i class="fa fa-check"></i><b>5.5.1</b> インストール</a></li>
+<li class="chapter" data-level="5.5.2" data-path="packages.html"><a href="packages.html#読み込み"><i class="fa fa-check"></i><b>5.5.2</b> 読み込み</a></li>
+<li class="chapter" data-level="5.5.3" data-path="packages.html"><a href="packages.html#アップデート"><i class="fa fa-check"></i><b>5.5.3</b> アップデート</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="packages.html"><a href="packages.html#packages_tidyverse"><i class="fa fa-check"></i><b>5.6</b> 必須パッケージのインストール</a></li>
+</ul></li>
+<li class="part"><span><b>II Rの基礎</b></span></li>
+<li class="chapter" data-level="6" data-path="rbasic.html"><a href="rbasic.html"><i class="fa fa-check"></i><b>6</b> 基本的な操作</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="rbasic.html"><a href="rbasic.html#rbasic-compbasic"><i class="fa fa-check"></i><b>6.1</b> コンピュータの基礎知識</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="rbasic.html"><a href="rbasic.html#ファイル名"><i class="fa fa-check"></i><b>6.1.1</b> ファイル名</a></li>
+<li class="chapter" data-level="6.1.2" data-path="rbasic.html"><a href="rbasic.html#ファイルシステムとパス"><i class="fa fa-check"></i><b>6.1.2</b> ファイルシステムとパス</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="rbasic.html"><a href="rbasic.html#rbasic-project"><i class="fa fa-check"></i><b>6.2</b> 「プロジェクト」のすゝめ</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="rbasic.html"><a href="rbasic.html#プロジェクト"><i class="fa fa-check"></i><b>6.2.1</b> プロジェクト</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="rbasic.html"><a href="rbasic.html#rbasic-calc"><i class="fa fa-check"></i><b>6.3</b> 電卓としてのR</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="rbasic.html"><a href="rbasic.html#算術演算子"><i class="fa fa-check"></i><b>6.3.1</b> 算術演算子</a></li>
+<li class="chapter" data-level="6.3.2" data-path="rbasic.html"><a href="rbasic.html#論理演算子"><i class="fa fa-check"></i><b>6.3.2</b> 論理演算子</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="rbasic.html"><a href="rbasic.html#rbasic-input"><i class="fa fa-check"></i><b>6.4</b> 格納とオブジェクトの作成</a></li>
+<li class="chapter" data-level="6.5" data-path="rbasic.html"><a href="rbasic.html#rbasic-extract"><i class="fa fa-check"></i><b>6.5</b> 要素の抽出</a></li>
+<li class="chapter" data-level="" data-path="rbasic.html"><a href="rbasic.html#rbasic-exercise"><i class="fa fa-check"></i>演習問題</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="io.html"><a href="io.html"><i class="fa fa-check"></i><b>7</b> データの入出力</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="io.html"><a href="io.html#io-read"><i class="fa fa-check"></i><b>7.1</b> データの読み込み</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="io.html"><a href="io.html#csvファイルの場合"><i class="fa fa-check"></i><b>7.1.1</b> csvファイルの場合</a></li>
+<li class="chapter" data-level="7.1.2" data-path="io.html"><a href="io.html#エンコーディングの話"><i class="fa fa-check"></i><b>7.1.2</b> エンコーディングの話</a></li>
+<li class="chapter" data-level="7.1.3" data-path="io.html"><a href="io.html#その他のフォーマット"><i class="fa fa-check"></i><b>7.1.3</b> その他のフォーマット</a></li>
+<li class="chapter" data-level="7.1.4" data-path="io.html"><a href="io.html#rdataファイルの場合"><i class="fa fa-check"></i><b>7.1.4</b> RDataファイルの場合</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="io.html"><a href="io.html#io-export"><i class="fa fa-check"></i><b>7.2</b> データの書き出し</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="io.html"><a href="io.html#csvファイル"><i class="fa fa-check"></i><b>7.2.1</b> csvファイル</a></li>
+<li class="chapter" data-level="7.2.2" data-path="io.html"><a href="io.html#rdataファイル"><i class="fa fa-check"></i><b>7.2.2</b> RDataファイル</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="datatype.html"><a href="datatype.html"><i class="fa fa-check"></i><b>8</b> データの型</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="datatype.html"><a href="datatype.html#WhatIsDatatype"><i class="fa fa-check"></i><b>8.1</b> データ型とは</a></li>
+<li class="chapter" data-level="8.2" data-path="datatype.html"><a href="datatype.html#type-logical"><i class="fa fa-check"></i><b>8.2</b> Logical</a></li>
+<li class="chapter" data-level="8.3" data-path="datatype.html"><a href="datatype.html#type-numeric"><i class="fa fa-check"></i><b>8.3</b> Numeric</a></li>
+<li class="chapter" data-level="8.4" data-path="datatype.html"><a href="datatype.html#type-complex"><i class="fa fa-check"></i><b>8.4</b> Complex</a></li>
+<li class="chapter" data-level="8.5" data-path="datatype.html"><a href="datatype.html#type-character"><i class="fa fa-check"></i><b>8.5</b> Character</a></li>
+<li class="chapter" data-level="8.6" data-path="datatype.html"><a href="datatype.html#type-factor"><i class="fa fa-check"></i><b>8.6</b> Factor</a></li>
+<li class="chapter" data-level="8.7" data-path="datatype.html"><a href="datatype.html#type-date"><i class="fa fa-check"></i><b>8.7</b> Date</a>
+<ul>
+<li class="chapter" data-level="8.7.1" data-path="datatype.html"><a href="datatype.html#なぜdate型があるのか"><i class="fa fa-check"></i><b>8.7.1</b> なぜDate型があるのか</a></li>
+<li class="chapter" data-level="8.7.2" data-path="datatype.html"><a href="datatype.html#date型の作り方"><i class="fa fa-check"></i><b>8.7.2</b> Date型の作り方</a></li>
+<li class="chapter" data-level="8.7.3" data-path="datatype.html"><a href="datatype.html#posixctposixlt型について"><i class="fa fa-check"></i><b>8.7.3</b> POSIXct、POSIXlt型について</a></li>
+</ul></li>
+<li class="chapter" data-level="8.8" data-path="datatype.html"><a href="datatype.html#type-na"><i class="fa fa-check"></i><b>8.8</b> NA</a></li>
+<li class="chapter" data-level="8.9" data-path="datatype.html"><a href="datatype.html#type-null"><i class="fa fa-check"></i><b>8.9</b> NULL</a></li>
+<li class="chapter" data-level="8.10" data-path="datatype.html"><a href="datatype.html#type-nan"><i class="fa fa-check"></i><b>8.10</b> NaN</a></li>
+<li class="chapter" data-level="8.11" data-path="datatype.html"><a href="datatype.html#type-inf"><i class="fa fa-check"></i><b>8.11</b> Inf</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="datastructure.html"><a href="datastructure.html"><i class="fa fa-check"></i><b>9</b> データの構造</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="datastructure.html"><a href="datastructure.html#WhatIsDatastructure"><i class="fa fa-check"></i><b>9.1</b> データ構造とは</a></li>
+<li class="chapter" data-level="9.2" data-path="datastructure.html"><a href="datastructure.html#structure-vector"><i class="fa fa-check"></i><b>9.2</b> ベクトル (vector)</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="datastructure.html"><a href="datastructure.html#ベクトルの作り方"><i class="fa fa-check"></i><b>9.2.1</b> ベクトルの作り方</a></li>
+<li class="chapter" data-level="9.2.2" data-path="datastructure.html"><a href="datastructure.html#ベクトルの操作"><i class="fa fa-check"></i><b>9.2.2</b> ベクトルの操作</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="datastructure.html"><a href="datastructure.html#structure-matrix"><i class="fa fa-check"></i><b>9.3</b> 行列 (matrix)</a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="datastructure.html"><a href="datastructure.html#行列の作り方"><i class="fa fa-check"></i><b>9.3.1</b> 行列の作り方</a></li>
+<li class="chapter" data-level="9.3.2" data-path="datastructure.html"><a href="datastructure.html#行列の操作"><i class="fa fa-check"></i><b>9.3.2</b> 行列の操作</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="datastructure.html"><a href="datastructure.html#structure-dataframe"><i class="fa fa-check"></i><b>9.4</b> データフレーム (data.frame)</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="datastructure.html"><a href="datastructure.html#データフレームの作成"><i class="fa fa-check"></i><b>9.4.1</b> データフレームの作成</a></li>
+<li class="chapter" data-level="9.4.2" data-path="datastructure.html"><a href="datastructure.html#データフレームの操作"><i class="fa fa-check"></i><b>9.4.2</b> データフレームの操作</a></li>
+<li class="chapter" data-level="9.4.3" data-path="datastructure.html"><a href="datastructure.html#tibble型"><i class="fa fa-check"></i><b>9.4.3</b> tibble型</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="datastructure.html"><a href="datastructure.html#structure-list"><i class="fa fa-check"></i><b>9.5</b> リスト (list)</a>
+<ul>
+<li class="chapter" data-level="9.5.1" data-path="datastructure.html"><a href="datastructure.html#リスト型データの作成"><i class="fa fa-check"></i><b>9.5.1</b> リスト型データの作成</a></li>
+<li class="chapter" data-level="9.5.2" data-path="datastructure.html"><a href="datastructure.html#リスト型データの操作"><i class="fa fa-check"></i><b>9.5.2</b> リスト型データの操作</a></li>
+</ul></li>
+<li class="chapter" data-level="9.6" data-path="datastructure.html"><a href="datastructure.html#structure-array"><i class="fa fa-check"></i><b>9.6</b> 配列 (array)</a>
+<ul>
+<li class="chapter" data-level="9.6.1" data-path="datastructure.html"><a href="datastructure.html#配列型データの作成"><i class="fa fa-check"></i><b>9.6.1</b> 配列型データの作成</a></li>
+<li class="chapter" data-level="9.6.2" data-path="datastructure.html"><a href="datastructure.html#配列型データの操作"><i class="fa fa-check"></i><b>9.6.2</b> 配列型データの操作</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="datastructure.html"><a href="datastructure.html#structure-exercise"><i class="fa fa-check"></i>練習問題</a>
+<ul>
+<li class="chapter" data-level="9.6.3" data-path="datastructure.html"><a href="datastructure.html#ベクトル"><i class="fa fa-check"></i><b>9.6.3</b> ベクトル</a></li>
+<li class="chapter" data-level="9.6.4" data-path="datastructure.html"><a href="datastructure.html#行列"><i class="fa fa-check"></i><b>9.6.4</b> 行列</a></li>
+<li class="chapter" data-level="9.6.5" data-path="datastructure.html"><a href="datastructure.html#データフレーム"><i class="fa fa-check"></i><b>9.6.5</b> データフレーム</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="programming.html"><a href="programming.html"><i class="fa fa-check"></i><b>10</b> Rプログラミングの基礎</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="programming.html"><a href="programming.html#programming-intro"><i class="fa fa-check"></i><b>10.1</b> R言語の基礎概念</a>
+<ul>
+<li class="chapter" data-level="10.1.1" data-path="programming.html"><a href="programming.html#オブジェクト"><i class="fa fa-check"></i><b>10.1.1</b> オブジェクト</a></li>
+<li class="chapter" data-level="10.1.2" data-path="programming.html"><a href="programming.html#クラス"><i class="fa fa-check"></i><b>10.1.2</b> クラス</a></li>
+<li class="chapter" data-level="10.1.3" data-path="programming.html"><a href="programming.html#関数と引数"><i class="fa fa-check"></i><b>10.1.3</b> 関数と引数</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="programming.html"><a href="programming.html#programming-style"><i class="fa fa-check"></i><b>10.2</b> Rのコーディングスタイル</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="programming.html"><a href="programming.html#オブジェクト名"><i class="fa fa-check"></i><b>10.2.1</b> オブジェクト名</a></li>
+<li class="chapter" data-level="10.2.2" data-path="programming.html"><a href="programming.html#改行"><i class="fa fa-check"></i><b>10.2.2</b> 改行</a></li>
+<li class="chapter" data-level="10.2.3" data-path="programming.html"><a href="programming.html#スペースとインデント"><i class="fa fa-check"></i><b>10.2.3</b> スペースとインデント</a></li>
+<li class="chapter" data-level="10.2.4" data-path="programming.html"><a href="programming.html#代入"><i class="fa fa-check"></i><b>10.2.4</b> 代入</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="programming.html"><a href="programming.html#programming-iteration"><i class="fa fa-check"></i><b>10.3</b> 反復</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="programming.html"><a href="programming.html#for-による反復"><i class="fa fa-check"></i><b>10.3.1</b> <code>for</code> による反復</a></li>
+<li class="chapter" data-level="10.3.2" data-path="programming.html"><a href="programming.html#whileによる反復"><i class="fa fa-check"></i><b>10.3.2</b> <code>while</code>による反復</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="programming.html"><a href="programming.html#programming-condition"><i class="fa fa-check"></i><b>10.4</b> 条件分岐</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="programming.html"><a href="programming.html#ifelse-ifelse-による条件分岐"><i class="fa fa-check"></i><b>10.4.1</b> <code>if</code>、<code>else if</code>、<code>else</code> による条件分岐</a></li>
+<li class="chapter" data-level="10.4.2" data-path="programming.html"><a href="programming.html#ifelseによる条件分岐"><i class="fa fa-check"></i><b>10.4.2</b> <code>ifelse()</code>による条件分岐</a></li>
+<li class="chapter" data-level="10.4.3" data-path="programming.html"><a href="programming.html#switchによる条件分岐"><i class="fa fa-check"></i><b>10.4.3</b> <code>switch()</code>による条件分岐</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="programming.html"><a href="programming.html#programming-exercise"><i class="fa fa-check"></i>練習問題</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="functions.html"><a href="functions.html"><i class="fa fa-check"></i><b>11</b> 関数の自作</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="functions.html"><a href="functions.html#func-intro"><i class="fa fa-check"></i><b>11.1</b> 関数の作成</a></li>
+<li class="chapter" data-level="11.2" data-path="functions.html"><a href="functions.html#func-adv"><i class="fa fa-check"></i><b>11.2</b> ちょっと複雑な関数</a></li>
+<li class="chapter" data-level="11.3" data-path="functions.html"><a href="functions.html#func-in-func"><i class="fa fa-check"></i><b>11.3</b> 関数 in 関数</a></li>
+<li class="chapter" data-level="" data-path="functions.html"><a href="functions.html#func-exercise"><i class="fa fa-check"></i>練習問題</a></li>
+</ul></li>
+<li class="part"><span><b>III データハンドリング</b></span></li>
+<li class="chapter" data-level="12" data-path="datahandling1.html"><a href="datahandling1.html"><i class="fa fa-check"></i><b>12</b> データハンドリング [基礎編: 抽出]</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="datahandling1.html"><a href="datahandling1.html#handling1-intro"><i class="fa fa-check"></i><b>12.1</b> データハンドリングとtidyverse</a></li>
+<li class="chapter" data-level="12.2" data-path="datahandling1.html"><a href="datahandling1.html#handling1-pipe"><i class="fa fa-check"></i><b>12.2</b> パイプ演算子 (<code>%&gt;%</code>)</a></li>
+<li class="chapter" data-level="12.3" data-path="datahandling1.html"><a href="datahandling1.html#handling1-select"><i class="fa fa-check"></i><b>12.3</b> 列の抽出</a>
+<ul>
+<li class="chapter" data-level="12.3.1" data-path="datahandling1.html"><a href="datahandling1.html#特定の列を抽出する"><i class="fa fa-check"></i><b>12.3.1</b> 特定の列を抽出する</a></li>
+<li class="chapter" data-level="12.3.2" data-path="datahandling1.html"><a href="datahandling1.html#特定の列を抽出し列名を変更する"><i class="fa fa-check"></i><b>12.3.2</b> 特定の列を抽出し、列名を変更する</a></li>
+<li class="chapter" data-level="12.3.3" data-path="datahandling1.html"><a href="datahandling1.html#特定の列を除外する"><i class="fa fa-check"></i><b>12.3.3</b> 特定の列を除外する</a></li>
+<li class="chapter" data-level="12.3.4" data-path="datahandling1.html"><a href="datahandling1.html#隣接した列を指定する"><i class="fa fa-check"></i><b>12.3.4</b> 隣接した列を指定する</a></li>
+<li class="chapter" data-level="12.3.5" data-path="datahandling1.html"><a href="datahandling1.html#一部の列の順番だけを変える"><i class="fa fa-check"></i><b>12.3.5</b> 一部の列の順番だけを変える</a></li>
+<li class="chapter" data-level="12.3.6" data-path="datahandling1.html"><a href="datahandling1.html#selectの便利な機能"><i class="fa fa-check"></i><b>12.3.6</b> <code>select()</code>の便利な機能</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="datahandling1.html"><a href="datahandling1.html#handling1-filter"><i class="fa fa-check"></i><b>12.4</b> 行の抽出</a>
+<ul>
+<li class="chapter" data-level="12.4.1" data-path="datahandling1.html"><a href="datahandling1.html#指定した行を抽出する"><i class="fa fa-check"></i><b>12.4.1</b> 指定した行を抽出する</a></li>
+<li class="chapter" data-level="12.4.2" data-path="datahandling1.html"><a href="datahandling1.html#条件に合致する行を抽出する"><i class="fa fa-check"></i><b>12.4.2</b> 条件に合致する行を抽出する</a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="datahandling1.html"><a href="datahandling1.html#handling1-arrange"><i class="fa fa-check"></i><b>12.5</b> 行のソート</a></li>
+<li class="chapter" data-level="" data-path="datahandling1.html"><a href="datahandling1.html#handling1-exercise"><i class="fa fa-check"></i>練習問題</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="datahandling2.html"><a href="datahandling2.html"><i class="fa fa-check"></i><b>13</b> データハンドリング [基礎編: 拡張]</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="datahandling2.html"><a href="datahandling2.html#handling2-summarise"><i class="fa fa-check"></i><b>13.1</b> 記述統計量の計算</a>
+<ul>
+<li class="chapter" data-level="13.1.1" data-path="datahandling2.html"><a href="datahandling2.html#summariseによる記述統計量の計算"><i class="fa fa-check"></i><b>13.1.1</b> <code>summarise()</code>による記述統計量の計算</a></li>
+<li class="chapter" data-level="13.1.2" data-path="datahandling2.html"><a href="datahandling2.html#summariseに使える便利な関数"><i class="fa fa-check"></i><b>13.1.2</b> <code>summarise()</code>に使える便利な関数</a></li>
+</ul></li>
+<li class="chapter" data-level="13.2" data-path="datahandling2.html"><a href="datahandling2.html#handling2-group"><i class="fa fa-check"></i><b>13.2</b> グルーピング</a>
+<ul>
+<li class="chapter" data-level="13.2.1" data-path="datahandling2.html"><a href="datahandling2.html#group_byによるグループ化"><i class="fa fa-check"></i><b>13.2.1</b> <code>group_by()</code>によるグループ化</a></li>
+<li class="chapter" data-level="13.2.2" data-path="datahandling2.html"><a href="datahandling2.html#複数の変数を用いたグループ化"><i class="fa fa-check"></i><b>13.2.2</b> 複数の変数を用いたグループ化</a></li>
+</ul></li>
+<li class="chapter" data-level="13.3" data-path="datahandling2.html"><a href="datahandling2.html#handling2-mutate"><i class="fa fa-check"></i><b>13.3</b> 変数の計算</a>
+<ul>
+<li class="chapter" data-level="13.3.1" data-path="datahandling2.html"><a href="datahandling2.html#mutate関数の使い方"><i class="fa fa-check"></i><b>13.3.1</b> <code>mutate()</code>関数の使い方</a></li>
+</ul></li>
+<li class="chapter" data-level="13.4" data-path="datahandling2.html"><a href="datahandling2.html#handling2-rowwise"><i class="fa fa-check"></i><b>13.4</b> 行単位の操作</a></li>
+<li class="chapter" data-level="13.5" data-path="datahandling2.html"><a href="datahandling2.html#handling2-merge"><i class="fa fa-check"></i><b>13.5</b> データの結合</a>
+<ul>
+<li class="chapter" data-level="13.5.1" data-path="datahandling2.html"><a href="datahandling2.html#行の結合"><i class="fa fa-check"></i><b>13.5.1</b> 行の結合</a></li>
+<li class="chapter" data-level="13.5.2" data-path="datahandling2.html"><a href="datahandling2.html#列の結合"><i class="fa fa-check"></i><b>13.5.2</b> 列の結合</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="datahandling2.html"><a href="datahandling2.html#handling2-exercise"><i class="fa fa-check"></i>練習問題</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="factor.html"><a href="factor.html"><i class="fa fa-check"></i><b>14</b> データハンドリング [基礎編: factor型]</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="factor.html"><a href="factor.html#factor-intro"><i class="fa fa-check"></i><b>14.1</b> 名目変数を含むグラフを作成する際の注意点</a></li>
+<li class="chapter" data-level="14.2" data-path="factor.html"><a href="factor.html#factor-forcats"><i class="fa fa-check"></i><b>14.2</b> {forcats}パッケージについて</a>
+<ul>
+<li class="chapter" data-level="14.2.1" data-path="factor.html"><a href="factor.html#fct_relevel-水準の順番を変更する"><i class="fa fa-check"></i><b>14.2.1</b> <code>fct_relevel()</code>: 水準の順番を変更する</a></li>
+<li class="chapter" data-level="14.2.2" data-path="factor.html"><a href="factor.html#fct_recode-水準のラベルを変更する"><i class="fa fa-check"></i><b>14.2.2</b> <code>fct_recode()</code>: 水準のラベルを変更する</a></li>
+<li class="chapter" data-level="14.2.3" data-path="factor.html"><a href="factor.html#fct_rev-水準の順番を反転させる"><i class="fa fa-check"></i><b>14.2.3</b> <code>fct_rev()</code>: 水準の順番を反転させる</a></li>
+<li class="chapter" data-level="14.2.4" data-path="factor.html"><a href="factor.html#fct_infreq-頻度順に順番を変更する"><i class="fa fa-check"></i><b>14.2.4</b> <code>fct_infreq()</code>: 頻度順に順番を変更する</a></li>
+<li class="chapter" data-level="14.2.5" data-path="factor.html"><a href="factor.html#fct_inorder-データ内の出現順番に順番を変更する"><i class="fa fa-check"></i><b>14.2.5</b> <code>fct_inorder()</code>: データ内の出現順番に順番を変更する</a></li>
+<li class="chapter" data-level="14.2.6" data-path="factor.html"><a href="factor.html#fct_shift-水準の順番をずらす"><i class="fa fa-check"></i><b>14.2.6</b> <code>fct_shift()</code>: 水準の順番をずらす</a></li>
+<li class="chapter" data-level="14.2.7" data-path="factor.html"><a href="factor.html#fct_shuffle-水準の順番をランダム化する"><i class="fa fa-check"></i><b>14.2.7</b> <code>fct_shuffle()</code>: 水準の順番をランダム化する</a></li>
+<li class="chapter" data-level="14.2.8" data-path="factor.html"><a href="factor.html#fct_reorder-別の1変数の値を基準に水準の順番を変更する"><i class="fa fa-check"></i><b>14.2.8</b> <code>fct_reorder()</code>: 別の1変数の値を基準に水準の順番を変更する</a></li>
+<li class="chapter" data-level="14.2.9" data-path="factor.html"><a href="factor.html#factor-forcat-reorder2"><i class="fa fa-check"></i><b>14.2.9</b> <code>fct_reorder2()</code>: 別の2変数の値を基準に水準の順番を変更する</a></li>
+<li class="chapter" data-level="14.2.10" data-path="factor.html"><a href="factor.html#fct_collapse-水準を統合する"><i class="fa fa-check"></i><b>14.2.10</b> <code>fct_collapse()</code>: 水準を統合する</a></li>
+<li class="chapter" data-level="14.2.11" data-path="factor.html"><a href="factor.html#fct_drop-使われていない水準を除去する"><i class="fa fa-check"></i><b>14.2.11</b> <code>fct_drop()</code>: 使われていない水準を除去する</a></li>
+<li class="chapter" data-level="14.2.12" data-path="factor.html"><a href="factor.html#fct_expand-水準を追加する"><i class="fa fa-check"></i><b>14.2.12</b> <code>fct_expand()</code>: 水準を追加する</a></li>
+<li class="chapter" data-level="14.2.13" data-path="factor.html"><a href="factor.html#fct_explicit_na-欠損値に水準を与える"><i class="fa fa-check"></i><b>14.2.13</b> <code>fct_explicit_na()</code>: 欠損値に水準を与える</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="factor.html"><a href="factor.html#factor-excersie"><i class="fa fa-check"></i>練習問題</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="tidydata.html"><a href="tidydata.html"><i class="fa fa-check"></i><b>15</b> 整然データ構造</a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="tidydata.html"><a href="tidydata.html#tidydata-intro"><i class="fa fa-check"></i><b>15.1</b> 整然データ (tidy data)とは</a>
+<ul>
+<li class="chapter" data-level="15.1.1" data-path="tidydata.html"><a href="tidydata.html#つの列は1つの変数を表す"><i class="fa fa-check"></i><b>15.1.1</b> 1つの列は、1つの変数を表す</a></li>
+<li class="chapter" data-level="15.1.2" data-path="tidydata.html"><a href="tidydata.html#つの行は1つの観測を表す"><i class="fa fa-check"></i><b>15.1.2</b> 1つの行は、1つの観測を表す</a></li>
+<li class="chapter" data-level="15.1.3" data-path="tidydata.html"><a href="tidydata.html#つのセルは1つの値を表す"><i class="fa fa-check"></i><b>15.1.3</b> 1つのセルは、1つの値を表す</a></li>
+<li class="chapter" data-level="15.1.4" data-path="tidydata.html"><a href="tidydata.html#つの表は1つの観測単位をもつ"><i class="fa fa-check"></i><b>15.1.4</b> 1つの表は、1つの観測単位をもつ</a></li>
+</ul></li>
+<li class="chapter" data-level="15.2" data-path="tidydata.html"><a href="tidydata.html#tidydata-gather"><i class="fa fa-check"></i><b>15.2</b> Wide型からLong型へ</a></li>
+<li class="chapter" data-level="15.3" data-path="tidydata.html"><a href="tidydata.html#tidydata-spread"><i class="fa fa-check"></i><b>15.3</b> Long型からWide型へ</a></li>
+<li class="chapter" data-level="15.4" data-path="tidydata.html"><a href="tidydata.html#tidydata-separate"><i class="fa fa-check"></i><b>15.4</b> 列の操作</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="string.html"><a href="string.html"><i class="fa fa-check"></i><b>16</b> 文字列の処理</a></li>
+<li class="part"><span><b>IV 可視化</b></span></li>
+<li class="chapter" data-level="17" data-path="visualization1.html"><a href="visualization1.html"><i class="fa fa-check"></i><b>17</b> 可視化[理論]</a>
+<ul>
+<li class="chapter" data-level="17.1" data-path="visualization1.html"><a href="visualization1.html#visual-packages"><i class="fa fa-check"></i><b>17.1</b> 可視化のためのパッケージ</a>
+<ul>
+<li class="chapter" data-level="17.1.1" data-path="visualization1.html"><a href="visualization1.html#base-r"><i class="fa fa-check"></i><b>17.1.1</b> Base R</a></li>
+<li class="chapter" data-level="17.1.2" data-path="visualization1.html"><a href="visualization1.html#latticeパッケージ"><i class="fa fa-check"></i><b>17.1.2</b> {lattice}パッケージ</a></li>
+<li class="chapter" data-level="17.1.3" data-path="visualization1.html"><a href="visualization1.html#ggplot2パッケージ"><i class="fa fa-check"></i><b>17.1.3</b> {ggplot2}パッケージ</a></li>
+</ul></li>
+<li class="chapter" data-level="17.2" data-path="visualization1.html"><a href="visualization1.html#visual-ggplot"><i class="fa fa-check"></i><b>17.2</b> グラフィックの文法</a>
+<ul>
+<li class="chapter" data-level="17.2.1" data-path="visualization1.html"><a href="visualization1.html#グラフィックの文法"><i class="fa fa-check"></i><b>17.2.1</b> グラフィックの文法</a></li>
+<li class="chapter" data-level="17.2.2" data-path="visualization1.html"><a href="visualization1.html#ggplot2のイメージ"><i class="fa fa-check"></i><b>17.2.2</b> ggplot2のイメージ</a></li>
+</ul></li>
+<li class="chapter" data-level="17.3" data-path="visualization1.html"><a href="visualization1.html#グラフィックの構成要素"><i class="fa fa-check"></i><b>17.3</b> グラフィックの構成要素</a>
+<ul>
+<li class="chapter" data-level="17.3.1" data-path="visualization1.html"><a href="visualization1.html#データ"><i class="fa fa-check"></i><b>17.3.1</b> データ</a></li>
+<li class="chapter" data-level="17.3.2" data-path="visualization1.html"><a href="visualization1.html#幾何オブジェクト"><i class="fa fa-check"></i><b>17.3.2</b> 幾何オブジェクト</a></li>
+<li class="chapter" data-level="17.3.3" data-path="visualization1.html"><a href="visualization1.html#マッピング"><i class="fa fa-check"></i><b>17.3.3</b> マッピング</a></li>
+<li class="chapter" data-level="17.3.4" data-path="visualization1.html"><a href="visualization1.html#マッピング-その他"><i class="fa fa-check"></i><b>17.3.4</b> マッピング: その他</a></li>
+<li class="chapter" data-level="17.3.5" data-path="visualization1.html"><a href="visualization1.html#座標系"><i class="fa fa-check"></i><b>17.3.5</b> 座標系</a></li>
+<li class="chapter" data-level="17.3.6" data-path="visualization1.html"><a href="visualization1.html#スケール"><i class="fa fa-check"></i><b>17.3.6</b> スケール</a></li>
+<li class="chapter" data-level="17.3.7" data-path="visualization1.html"><a href="visualization1.html#ファセット"><i class="fa fa-check"></i><b>17.3.7</b> ファセット</a></li>
+</ul></li>
+<li class="chapter" data-level="17.4" data-path="visualization1.html"><a href="visualization1.html#visual-principal"><i class="fa fa-check"></i><b>17.4</b> 良いグラフとは</a>
+<ul>
+<li class="chapter" data-level="17.4.1" data-path="visualization1.html"><a href="visualization1.html#データインク比"><i class="fa fa-check"></i><b>17.4.1</b> データ・インク比</a></li>
+<li class="chapter" data-level="17.4.2" data-path="visualization1.html"><a href="visualization1.html#次元プロット"><i class="fa fa-check"></i><b>17.4.2</b> 3次元プロット</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="visualization2.html"><a href="visualization2.html"><i class="fa fa-check"></i><b>18</b> 可視化[基礎]</a>
+<ul>
+<li class="chapter" data-level="18.1" data-path="visualization2.html"><a href="visualization2.html#本章の内容"><i class="fa fa-check"></i><b>18.1</b> 本章の内容</a></li>
+<li class="chapter" data-level="18.2" data-path="visualization2.html"><a href="visualization2.html#visual2-data"><i class="fa fa-check"></i><b>18.2</b> 実習用データ</a></li>
+<li class="chapter" data-level="18.3" data-path="visualization2.html"><a href="visualization2.html#visual2-japanese"><i class="fa fa-check"></i><b>18.3</b> 日本語が含まれた図について</a>
+<ul>
+<li class="chapter" data-level="18.3.1" data-path="visualization2.html"><a href="visualization2.html#macosの場合"><i class="fa fa-check"></i><b>18.3.1</b> macOSの場合</a></li>
+<li class="chapter" data-level="18.3.2" data-path="visualization2.html"><a href="visualization2.html#windowsの場合"><i class="fa fa-check"></i><b>18.3.2</b> Windowsの場合</a></li>
+<li class="chapter" data-level="18.3.3" data-path="visualization2.html"><a href="visualization2.html#raggの使用"><i class="fa fa-check"></i><b>18.3.3</b> {ragg}の使用</a></li>
+</ul></li>
+<li class="chapter" data-level="18.4" data-path="visualization2.html"><a href="visualization2.html#visual2-barplot"><i class="fa fa-check"></i><b>18.4</b> 棒グラフ</a>
+<ul>
+<li class="chapter" data-level="18.4.1" data-path="visualization2.html"><a href="visualization2.html#ケース数のグラフ"><i class="fa fa-check"></i><b>18.4.1</b> ケース数のグラフ</a></li>
+<li class="chapter" data-level="18.4.2" data-path="visualization2.html"><a href="visualization2.html#記述統計量のグラフ"><i class="fa fa-check"></i><b>18.4.2</b> 記述統計量のグラフ</a></li>
+<li class="chapter" data-level="18.4.3" data-path="visualization2.html"><a href="visualization2.html#次元を追加する"><i class="fa fa-check"></i><b>18.4.3</b> 次元を追加する</a></li>
+</ul></li>
+<li class="chapter" data-level="18.5" data-path="visualization2.html"><a href="visualization2.html#visual2-histogram"><i class="fa fa-check"></i><b>18.5</b> ヒストグラム</a>
+<ul>
+<li class="chapter" data-level="18.5.1" data-path="visualization2.html"><a href="visualization2.html#ヒストグラムの棒の大きさを調整する"><i class="fa fa-check"></i><b>18.5.1</b> ヒストグラムの棒の大きさを調整する</a></li>
+<li class="chapter" data-level="18.5.2" data-path="visualization2.html"><a href="visualization2.html#密度を追加する"><i class="fa fa-check"></i><b>18.5.2</b> 密度を追加する</a></li>
+<li class="chapter" data-level="18.5.3" data-path="visualization2.html"><a href="visualization2.html#次元を追加する-1"><i class="fa fa-check"></i><b>18.5.3</b> 次元を追加する</a></li>
+</ul></li>
+<li class="chapter" data-level="18.6" data-path="visualization2.html"><a href="visualization2.html#visual2-box"><i class="fa fa-check"></i><b>18.6</b> 箱ひげ図</a>
+<ul>
+<li class="chapter" data-level="18.6.1" data-path="visualization2.html"><a href="visualization2.html#個別のデータを表示する"><i class="fa fa-check"></i><b>18.6.1</b> 個別のデータを表示する</a></li>
+<li class="chapter" data-level="18.6.2" data-path="visualization2.html"><a href="visualization2.html#次元を追加する-2"><i class="fa fa-check"></i><b>18.6.2</b> 次元を追加する</a></li>
+<li class="chapter" data-level="18.6.3" data-path="visualization2.html"><a href="visualization2.html#複数の変数の場合"><i class="fa fa-check"></i><b>18.6.3</b> 複数の変数の場合</a></li>
+</ul></li>
+<li class="chapter" data-level="18.7" data-path="visualization2.html"><a href="visualization2.html#visual2-scatter"><i class="fa fa-check"></i><b>18.7</b> 散布図</a>
+<ul>
+<li class="chapter" data-level="18.7.1" data-path="visualization2.html"><a href="visualization2.html#次元を追加する-3"><i class="fa fa-check"></i><b>18.7.1</b> 次元を追加する</a></li>
+<li class="chapter" data-level="18.7.2" data-path="visualization2.html"><a href="visualization2.html#一部の点をハイライトする"><i class="fa fa-check"></i><b>18.7.2</b> 一部の点をハイライトする</a></li>
+</ul></li>
+<li class="chapter" data-level="18.8" data-path="visualization2.html"><a href="visualization2.html#visual2-line"><i class="fa fa-check"></i><b>18.8</b> 折れ線グラフ</a>
+<ul>
+<li class="chapter" data-level="18.8.1" data-path="visualization2.html"><a href="visualization2.html#一部の線をハイライトする"><i class="fa fa-check"></i><b>18.8.1</b> 一部の線をハイライトする</a></li>
+</ul></li>
+<li class="chapter" data-level="18.9" data-path="visualization2.html"><a href="visualization2.html#visual2-save"><i class="fa fa-check"></i><b>18.9</b> 図の保存</a>
+<ul>
+<li class="chapter" data-level="18.9.1" data-path="visualization2.html"><a href="visualization2.html#ggsaveを利用した図の保存"><i class="fa fa-check"></i><b>18.9.1</b> <code>ggsave()</code>を利用した図の保存</a></li>
+<li class="chapter" data-level="18.9.2" data-path="visualization2.html"><a href="visualization2.html#quartzを利用した図の保存"><i class="fa fa-check"></i><b>18.9.2</b> <code>quartz()</code>を利用した図の保存</a></li>
+</ul></li>
+<li class="chapter" data-level="18.10" data-path="visualization2.html"><a href="visualization2.html#visual2-summary"><i class="fa fa-check"></i><b>18.10</b> まとめ</a></li>
+<li class="chapter" data-level="" data-path="visualization2.html"><a href="visualization2.html#visual2-excersie"><i class="fa fa-check"></i>練習問題</a></li>
+</ul></li>
+<li class="chapter" data-level="19" data-path="visualization3.html"><a href="visualization3.html"><i class="fa fa-check"></i><b>19</b> 可視化[応用]</a>
+<ul>
+<li class="chapter" data-level="19.1" data-path="visualization3.html"><a href="visualization3.html#visual3-labs"><i class="fa fa-check"></i><b>19.1</b> <code>labs()</code>: ラベルの修正</a></li>
+<li class="chapter" data-level="19.2" data-path="visualization3.html"><a href="visualization3.html#visual3-coordinate"><i class="fa fa-check"></i><b>19.2</b> <code>coord_*()</code>: 座標系の調整</a>
+<ul>
+<li class="chapter" data-level="19.2.1" data-path="visualization3.html"><a href="visualization3.html#直交座標系の操作"><i class="fa fa-check"></i><b>19.2.1</b> 直交座標系の操作</a></li>
+<li class="chapter" data-level="19.2.2" data-path="visualization3.html"><a href="visualization3.html#座標系の変換"><i class="fa fa-check"></i><b>19.2.2</b> 座標系の変換</a></li>
+<li class="chapter" data-level="19.2.3" data-path="visualization3.html"><a href="visualization3.html#座標系の回転"><i class="fa fa-check"></i><b>19.2.3</b> 座標系の回転</a></li>
+<li class="chapter" data-level="19.2.4" data-path="visualization3.html"><a href="visualization3.html#座標系の固定"><i class="fa fa-check"></i><b>19.2.4</b> 座標系の固定</a></li>
+</ul></li>
+<li class="chapter" data-level="19.3" data-path="visualization3.html"><a href="visualization3.html#visual3-scale"><i class="fa fa-check"></i><b>19.3</b> <code>scale_*_*()</code>: スケールの調整</a>
+<ul>
+<li class="chapter" data-level="19.3.1" data-path="visualization3.html"><a href="visualization3.html#横軸縦軸スケールの調整"><i class="fa fa-check"></i><b>19.3.1</b> 横軸・縦軸スケールの調整</a></li>
+<li class="chapter" data-level="19.3.2" data-path="visualization3.html"><a href="visualization3.html#colorスケールの調整"><i class="fa fa-check"></i><b>19.3.2</b> <code>color</code>スケールの調整</a></li>
+<li class="chapter" data-level="19.3.3" data-path="visualization3.html"><a href="visualization3.html#alphaスケールの調整"><i class="fa fa-check"></i><b>19.3.3</b> <code>alpha</code>スケールの調整</a></li>
+<li class="chapter" data-level="19.3.4" data-path="visualization3.html"><a href="visualization3.html#sizeスケールの調整"><i class="fa fa-check"></i><b>19.3.4</b> <code>size</code>スケールの調整</a></li>
+<li class="chapter" data-level="19.3.5" data-path="visualization3.html"><a href="visualization3.html#shapelinetypeスケールの調整"><i class="fa fa-check"></i><b>19.3.5</b> <code>shape</code>、<code>linetype</code>スケールの調整</a></li>
+</ul></li>
+<li class="chapter" data-level="19.4" data-path="visualization3.html"><a href="visualization3.html#visual3-theme"><i class="fa fa-check"></i><b>19.4</b> <code>theme_*()</code>と<code>theme()</code>: テーマの指定</a>
+<ul>
+<li class="chapter" data-level="19.4.1" data-path="visualization3.html"><a href="visualization3.html#文字の大きさ"><i class="fa fa-check"></i><b>19.4.1</b> 文字の大きさ</a></li>
+<li class="chapter" data-level="19.4.2" data-path="visualization3.html"><a href="visualization3.html#背景のグリッド"><i class="fa fa-check"></i><b>19.4.2</b> 背景のグリッド</a></li>
+<li class="chapter" data-level="19.4.3" data-path="visualization3.html"><a href="visualization3.html#目盛りラベルの回転"><i class="fa fa-check"></i><b>19.4.3</b> 目盛りラベルの回転</a></li>
+<li class="chapter" data-level="19.4.4" data-path="visualization3.html"><a href="visualization3.html#scale__を用いたラベル重複の回避"><i class="fa fa-check"></i><b>19.4.4</b> <code>scale_*_*()</code>を用いたラベル重複の回避</a></li>
+<li class="chapter" data-level="19.4.5" data-path="visualization3.html"><a href="visualization3.html#凡例の表示非表示"><i class="fa fa-check"></i><b>19.4.5</b> 凡例の表示/非表示</a></li>
+<li class="chapter" data-level="19.4.6" data-path="visualization3.html"><a href="visualization3.html#凡例の位置"><i class="fa fa-check"></i><b>19.4.6</b> 凡例の位置</a></li>
+</ul></li>
+<li class="chapter" data-level="19.5" data-path="visualization3.html"><a href="visualization3.html#visual3-merge"><i class="fa fa-check"></i><b>19.5</b> 図の結合</a></li>
+</ul></li>
+<li class="chapter" data-level="20" data-path="visualization4.html"><a href="visualization4.html"><i class="fa fa-check"></i><b>20</b> 可視化[発展]</a>
+<ul>
+<li class="chapter" data-level="20.1" data-path="visualization4.html"><a href="visualization4.html#visual4-intro"><i class="fa fa-check"></i><b>20.1</b> 概要</a></li>
+<li class="chapter" data-level="20.2" data-path="visualization4.html"><a href="visualization4.html#visual4-violin"><i class="fa fa-check"></i><b>20.2</b> バイオリンプロット</a></li>
+<li class="chapter" data-level="20.3" data-path="visualization4.html"><a href="visualization4.html#visual4-rug"><i class="fa fa-check"></i><b>20.3</b> ラグプロット</a></li>
+<li class="chapter" data-level="20.4" data-path="visualization4.html"><a href="visualization4.html#visual4-ridge"><i class="fa fa-check"></i><b>20.4</b> リッジプロット</a></li>
+<li class="chapter" data-level="20.5" data-path="visualization4.html"><a href="visualization4.html#visual4-pointrange"><i class="fa fa-check"></i><b>20.5</b> エラーバー付き散布図</a></li>
+<li class="chapter" data-level="20.6" data-path="visualization4.html"><a href="visualization4.html#visual4-lollipop"><i class="fa fa-check"></i><b>20.6</b> ロリーポップチャート</a></li>
+<li class="chapter" data-level="20.7" data-path="visualization4.html"><a href="visualization4.html#visual4-smooth"><i class="fa fa-check"></i><b>20.7</b> 平滑化ライン</a></li>
+<li class="chapter" data-level="20.8" data-path="visualization4.html"><a href="visualization4.html#visual4-heatmap"><i class="fa fa-check"></i><b>20.8</b> ヒートマップ</a>
+<ul>
+<li class="chapter" data-level="20.8.1" data-path="visualization4.html"><a href="visualization4.html#つの離散変数の分布を表すヒートマップ"><i class="fa fa-check"></i><b>20.8.1</b> 2つの離散変数の分布を表すヒートマップ</a></li>
+<li class="chapter" data-level="20.8.2" data-path="visualization4.html"><a href="visualization4.html#離散変数times離散変数における連続変数の値を示すヒートマップ"><i class="fa fa-check"></i><b>20.8.2</b> 離散変数<span class="math inline">\(\times\)</span>離散変数における連続変数の値を示すヒートマップ</a></li>
+</ul></li>
+<li class="chapter" data-level="20.9" data-path="visualization4.html"><a href="visualization4.html#visual4-contour"><i class="fa fa-check"></i><b>20.9</b> 等高線図</a></li>
+<li class="chapter" data-level="20.10" data-path="visualization4.html"><a href="visualization4.html#visual4-map"><i class="fa fa-check"></i><b>20.10</b> 地図</a>
+<ul>
+<li class="chapter" data-level="20.10.1" data-path="visualization4.html"><a href="visualization4.html#世界地図"><i class="fa fa-check"></i><b>20.10.1</b> 世界地図</a></li>
+<li class="chapter" data-level="20.10.2" data-path="visualization4.html"><a href="visualization4.html#日本地図全体"><i class="fa fa-check"></i><b>20.10.2</b> 日本地図（全体）</a></li>
+<li class="chapter" data-level="20.10.3" data-path="visualization4.html"><a href="visualization4.html#日本地図特定の都道府県"><i class="fa fa-check"></i><b>20.10.3</b> 日本地図（特定の都道府県）</a></li>
+</ul></li>
+<li class="chapter" data-level="20.11" data-path="visualization4.html"><a href="visualization4.html#visual4-dag"><i class="fa fa-check"></i><b>20.11</b> 非巡回有向グラフ</a>
+<ul>
+<li class="chapter" data-level="20.11.1" data-path="visualization4.html"><a href="visualization4.html#ノードの位置を指定する"><i class="fa fa-check"></i><b>20.11.1</b> ノードの位置を指定する</a></li>
+</ul></li>
+<li class="chapter" data-level="20.12" data-path="visualization4.html"><a href="visualization4.html#visual4-bump"><i class="fa fa-check"></i><b>20.12</b> バンプチャート</a></li>
+<li class="chapter" data-level="20.13" data-path="visualization4.html"><a href="visualization4.html#visual4-alluvial"><i class="fa fa-check"></i><b>20.13</b> 沖積図</a></li>
+<li class="chapter" data-level="20.14" data-path="visualization4.html"><a href="visualization4.html#visual4-tree"><i class="fa fa-check"></i><b>20.14</b> ツリーマップ</a></li>
+<li class="chapter" data-level="20.15" data-path="visualization4.html"><a href="visualization4.html#visual4-mosaic"><i class="fa fa-check"></i><b>20.15</b> モザイクプロット</a></li>
+<li class="chapter" data-level="20.16" data-path="visualization4.html"><a href="visualization4.html#visual4-further"><i class="fa fa-check"></i><b>20.16</b> その他のグラフ</a></li>
+</ul></li>
+<li class="part"><span><b>V 再現可能な研究</b></span></li>
+<li class="chapter" data-level="21" data-path="rmarkdown.html"><a href="rmarkdown.html"><i class="fa fa-check"></i><b>21</b> R Markdown [基礎]</a>
+<ul>
+<li class="chapter" data-level="21.1" data-path="rmarkdown.html"><a href="rmarkdown.html#rmarkdown-intro"><i class="fa fa-check"></i><b>21.1</b> R Markdownとは</a></li>
+<li class="chapter" data-level="21.2" data-path="rmarkdown.html"><a href="rmarkdown.html#とりあえずknit"><i class="fa fa-check"></i><b>21.2</b> とりあえずKnit</a></li>
+<li class="chapter" data-level="21.3" data-path="rmarkdown.html"><a href="rmarkdown.html#rmarkdown-grammar"><i class="fa fa-check"></i><b>21.3</b> Markdown文法の基本</a>
+<ul>
+<li class="chapter" data-level="21.3.1" data-path="rmarkdown.html"><a href="rmarkdown.html#改行-1"><i class="fa fa-check"></i><b>21.3.1</b> 改行</a></li>
+<li class="chapter" data-level="21.3.2" data-path="rmarkdown.html"><a href="rmarkdown.html#強調"><i class="fa fa-check"></i><b>21.3.2</b> 強調</a></li>
+<li class="chapter" data-level="21.3.3" data-path="rmarkdown.html"><a href="rmarkdown.html#箇条書き"><i class="fa fa-check"></i><b>21.3.3</b> 箇条書き</a></li>
+<li class="chapter" data-level="21.3.4" data-path="rmarkdown.html"><a href="rmarkdown.html#見出し"><i class="fa fa-check"></i><b>21.3.4</b> 見出し</a></li>
+<li class="chapter" data-level="21.3.5" data-path="rmarkdown.html"><a href="rmarkdown.html#区切り線"><i class="fa fa-check"></i><b>21.3.5</b> 区切り線</a></li>
+<li class="chapter" data-level="21.3.6" data-path="rmarkdown.html"><a href="rmarkdown.html#表"><i class="fa fa-check"></i><b>21.3.6</b> 表</a></li>
+<li class="chapter" data-level="21.3.7" data-path="rmarkdown.html"><a href="rmarkdown.html#画像"><i class="fa fa-check"></i><b>21.3.7</b> 画像</a></li>
+<li class="chapter" data-level="21.3.8" data-path="rmarkdown.html"><a href="rmarkdown.html#リンク"><i class="fa fa-check"></i><b>21.3.8</b> リンク</a></li>
+<li class="chapter" data-level="21.3.9" data-path="rmarkdown.html"><a href="rmarkdown.html#脚注"><i class="fa fa-check"></i><b>21.3.9</b> 脚注</a></li>
+<li class="chapter" data-level="21.3.10" data-path="rmarkdown.html"><a href="rmarkdown.html#数式"><i class="fa fa-check"></i><b>21.3.10</b> 数式</a></li>
+<li class="chapter" data-level="21.3.11" data-path="rmarkdown.html"><a href="rmarkdown.html#引用"><i class="fa fa-check"></i><b>21.3.11</b> 引用</a></li>
+<li class="chapter" data-level="21.3.12" data-path="rmarkdown.html"><a href="rmarkdown.html#コメント"><i class="fa fa-check"></i><b>21.3.12</b> コメント</a></li>
+<li class="chapter" data-level="21.3.13" data-path="rmarkdown.html"><a href="rmarkdown.html#コード"><i class="fa fa-check"></i><b>21.3.13</b> コード</a></li>
+</ul></li>
+<li class="chapter" data-level="21.4" data-path="rmarkdown.html"><a href="rmarkdown.html#rmarkdown-chunk"><i class="fa fa-check"></i><b>21.4</b> チャンクのオプション</a>
+<ul>
+<li class="chapter" data-level="21.4.1" data-path="rmarkdown.html"><a href="rmarkdown.html#チャンク名とチャンク間依存関係"><i class="fa fa-check"></i><b>21.4.1</b> チャンク名とチャンク間依存関係</a></li>
+<li class="chapter" data-level="21.4.2" data-path="rmarkdown.html"><a href="rmarkdown.html#コードまたは結果の表示非常時"><i class="fa fa-check"></i><b>21.4.2</b> コードまたは結果の表示/非常時</a></li>
+<li class="chapter" data-level="21.4.3" data-path="rmarkdown.html"><a href="rmarkdown.html#プロット"><i class="fa fa-check"></i><b>21.4.3</b> プロット</a></li>
+<li class="chapter" data-level="21.4.4" data-path="rmarkdown.html"><a href="rmarkdown.html#コードの見栄"><i class="fa fa-check"></i><b>21.4.4</b> コードの見栄</a></li>
+<li class="chapter" data-level="21.4.5" data-path="rmarkdown.html"><a href="rmarkdown.html#チャンクオプションのもう一つの書き方"><i class="fa fa-check"></i><b>21.4.5</b> チャンクオプションのもう一つの書き方</a></li>
+</ul></li>
+<li class="chapter" data-level="21.5" data-path="rmarkdown.html"><a href="rmarkdown.html#rmarkdown-header"><i class="fa fa-check"></i><b>21.5</b> ヘッダーのオプション</a>
+<ul>
+<li class="chapter" data-level="21.5.1" data-path="rmarkdown.html"><a href="rmarkdown.html#目次の追加"><i class="fa fa-check"></i><b>21.5.1</b> 目次の追加</a></li>
+<li class="chapter" data-level="21.5.2" data-path="rmarkdown.html"><a href="rmarkdown.html#コードのハイライト"><i class="fa fa-check"></i><b>21.5.2</b> コードのハイライト</a></li>
+</ul></li>
+<li class="chapter" data-level="21.6" data-path="rmarkdown.html"><a href="rmarkdown.html#rmarkdown-japanese"><i class="fa fa-check"></i><b>21.6</b> 日本語が含まれているPDFの出力</a></li>
+</ul></li>
+<li class="chapter" data-level="22" data-path="rmarkdown2.html"><a href="rmarkdown2.html"><i class="fa fa-check"></i><b>22</b> R Markdown [応用]</a>
+<ul>
+<li class="chapter" data-level="22.1" data-path="rmarkdown2.html"><a href="rmarkdown2.html#rmakrdown2-slide"><i class="fa fa-check"></i><b>22.1</b> スライド作成</a></li>
+<li class="chapter" data-level="22.2" data-path="rmarkdown2.html"><a href="rmarkdown2.html#rmakrdown2-book"><i class="fa fa-check"></i><b>22.2</b> 書籍</a></li>
+<li class="chapter" data-level="22.3" data-path="rmarkdown2.html"><a href="rmarkdown2.html#rmakrdown2-homepage"><i class="fa fa-check"></i><b>22.3</b> ホームページ</a></li>
+<li class="chapter" data-level="22.4" data-path="rmarkdown2.html"><a href="rmarkdown2.html#rmakrdown2-cv"><i class="fa fa-check"></i><b>22.4</b> 履歴書</a></li>
+<li class="chapter" data-level="22.5" data-path="rmarkdown2.html"><a href="rmarkdown2.html#rmakrdown2-package"><i class="fa fa-check"></i><b>22.5</b> パッケージ開発</a></li>
+<li class="chapter" data-level="22.6" data-path="rmarkdown2.html"><a href="rmarkdown2.html#rmakrdown2-tutorial"><i class="fa fa-check"></i><b>22.6</b> チュートリアル</a></li>
+</ul></li>
+<li class="chapter" data-level="23" data-path="table.html"><a href="table.html"><i class="fa fa-check"></i><b>23</b> 表の作成</a></li>
+<li class="chapter" data-level="24" data-path="visualization5.html"><a href="visualization5.html"><i class="fa fa-check"></i><b>24</b> モデルの可視化</a></li>
+<li class="part"><span><b>VI 中級者向け</b></span></li>
+<li class="chapter" data-level="25" data-path="datahandling3.html"><a href="datahandling3.html"><i class="fa fa-check"></i><b>25</b> データハンドリング[応用編]</a></li>
+<li class="chapter" data-level="26" data-path="iteration.html"><a href="iteration.html"><i class="fa fa-check"></i><b>26</b> 反復処理</a>
+<ul>
+<li class="chapter" data-level="26.1" data-path="iteration.html"><a href="iteration.html#iteration-abstract"><i class="fa fa-check"></i><b>26.1</b> 概要</a></li>
+<li class="chapter" data-level="26.2" data-path="iteration.html"><a href="iteration.html#iteration-intro"><i class="fa fa-check"></i><b>26.2</b> <code>*apply()</code>関数群と<code>map_*()</code>関数群</a></li>
+<li class="chapter" data-level="26.3" data-path="iteration.html"><a href="iteration.html#iteration-two-arguments"><i class="fa fa-check"></i><b>26.3</b> 引数が2つ以上の場合</a></li>
+<li class="chapter" data-level="26.4" data-path="iteration.html"><a href="iteration.html#iteration-df"><i class="fa fa-check"></i><b>26.4</b> データフレームと{purrr}</a>
+<ul>
+<li class="chapter" data-level="26.4.1" data-path="iteration.html"><a href="iteration.html#iteration-tibble"><i class="fa fa-check"></i><b>26.4.1</b> tibbleの話</a></li>
+</ul></li>
+<li class="chapter" data-level="26.5" data-path="iteration.html"><a href="iteration.html#iteration-model1"><i class="fa fa-check"></i><b>26.5</b> モデルの反復推定</a>
+<ul>
+<li class="chapter" data-level="26.5.1" data-path="iteration.html"><a href="iteration.html#iteration-split1"><i class="fa fa-check"></i><b>26.5.1</b> サンプルの分割とモデル推定（<code>split()</code>利用）</a></li>
+<li class="chapter" data-level="26.5.2" data-path="iteration.html"><a href="iteration.html#iteration-split2"><i class="fa fa-check"></i><b>26.5.2</b> サンプルの分割とモデル推定（<code>nest()</code>利用）</a></li>
+<li class="chapter" data-level="26.5.3" data-path="iteration.html"><a href="iteration.html#iteration-range"><i class="fa fa-check"></i><b>26.5.3</b> データの範囲を指定したモデル推定</a></li>
+<li class="chapter" data-level="26.5.4" data-path="iteration.html"><a href="iteration.html#iteration-variables"><i class="fa fa-check"></i><b>26.5.4</b> 説明・応答変数を指定したモデル推定</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="27" data-path="oop.html"><a href="oop.html"><i class="fa fa-check"></i><b>27</b> オブジェクト指向型プログラミング</a>
+<ul>
+<li class="chapter" data-level="27.1" data-path="oop.html"><a href="oop.html#oop-intro"><i class="fa fa-check"></i><b>27.1</b> まずは例から</a></li>
+<li class="chapter" data-level="27.2" data-path="oop.html"><a href="oop.html#what-is-oop"><i class="fa fa-check"></i><b>27.2</b> OOPとは</a>
+<ul>
+<li class="chapter" data-level="27.2.1" data-path="oop.html"><a href="oop.html#オブジェクト-1"><i class="fa fa-check"></i><b>27.2.1</b> オブジェクト</a></li>
+<li class="chapter" data-level="27.2.2" data-path="oop.html"><a href="oop.html#クラス-1"><i class="fa fa-check"></i><b>27.2.2</b> クラス</a></li>
+<li class="chapter" data-level="27.2.3" data-path="oop.html"><a href="oop.html#メソッドと多態性"><i class="fa fa-check"></i><b>27.2.3</b> メソッドと多態性</a></li>
+<li class="chapter" data-level="27.2.4" data-path="oop.html"><a href="oop.html#継承"><i class="fa fa-check"></i><b>27.2.4</b> 継承</a></li>
+</ul></li>
+<li class="chapter" data-level="27.3" data-path="oop.html"><a href="oop.html#oop-in-r"><i class="fa fa-check"></i><b>27.3</b> RにおけるOOP</a>
+<ul>
+<li class="chapter" data-level="27.3.1" data-path="oop.html"><a href="oop.html#オブジェクトに任意のクラスを付ける"><i class="fa fa-check"></i><b>27.3.1</b> オブジェクトに任意のクラスを付ける</a></li>
+<li class="chapter" data-level="27.3.2" data-path="oop.html"><a href="oop.html#メソッドの作り方"><i class="fa fa-check"></i><b>27.3.2</b> メソッドの作り方</a></li>
+<li class="chapter" data-level="27.3.3" data-path="oop.html"><a href="oop.html#検証用関数を作る"><i class="fa fa-check"></i><b>27.3.3</b> 検証用関数を作る</a></li>
+</ul></li>
+<li class="chapter" data-level="27.4" data-path="oop.html"><a href="oop.html#oop-sample"><i class="fa fa-check"></i><b>27.4</b> 例題</a></li>
+</ul></li>
+<li class="chapter" data-level="28" data-path="monte.html"><a href="monte.html"><i class="fa fa-check"></i><b>28</b> モンテカルロシミュレーション</a>
+<ul>
+<li class="chapter" data-level="28.1" data-path="monte.html"><a href="monte.html#monte-intro"><i class="fa fa-check"></i><b>28.1</b> モンテカルロシミュレーションとは</a></li>
+<li class="chapter" data-level="28.2" data-path="monte.html"><a href="monte.html#monte-rng"><i class="fa fa-check"></i><b>28.2</b> 乱数生成</a>
+<ul>
+<li class="chapter" data-level="28.2.1" data-path="monte.html"><a href="monte.html#sampleによるサンプリング"><i class="fa fa-check"></i><b>28.2.1</b> <code>sample()</code>によるサンプリング</a></li>
+<li class="chapter" data-level="28.2.2" data-path="monte.html"><a href="monte.html#確率分布からの乱数制制"><i class="fa fa-check"></i><b>28.2.2</b> 確率分布からの乱数制制</a></li>
+<li class="chapter" data-level="28.2.3" data-path="monte.html"><a href="monte.html#シードについて"><i class="fa fa-check"></i><b>28.2.3</b> シードについて</a></li>
+</ul></li>
+<li class="chapter" data-level="28.3" data-path="monte.html"><a href="monte.html#monte-birthday"><i class="fa fa-check"></i><b>28.3</b> 例1: 誕生日問題</a></li>
+<li class="chapter" data-level="28.4" data-path="monte.html"><a href="monte.html#monte-montyhall"><i class="fa fa-check"></i><b>28.4</b> 例2: モンティ・ホール問題</a></li>
+<li class="chapter" data-level="28.5" data-path="monte.html"><a href="monte.html#monte-pi"><i class="fa fa-check"></i><b>28.5</b> 応用1: 円周率の計算</a></li>
+<li class="chapter" data-level="28.6" data-path="monte.html"><a href="monte.html#monte-bootstrap"><i class="fa fa-check"></i><b>28.6</b> 応用2: ブートストラップ法</a></li>
+</ul></li>
+<li class="chapter" data-level="29" data-path="scraping.html"><a href="scraping.html"><i class="fa fa-check"></i><b>29</b> スクレイピング</a></li>
+<li class="chapter" data-level="30" data-path="api.html"><a href="api.html"><i class="fa fa-check"></i><b>30</b> API</a></li>
+<li class="chapter" data-level="" data-path="solution.html"><a href="solution.html"><i class="fa fa-check"></i>演習問題の回答</a>
+<ul>
+<li class="chapter" data-level="30.1" data-path="solution.html"><a href="solution.html#solution-rbasic"><i class="fa fa-check"></i><b>30.1</b> 基本的な操作</a></li>
+<li class="chapter" data-level="30.2" data-path="solution.html"><a href="solution.html#solution-datastructure"><i class="fa fa-check"></i><b>30.2</b> データの構造</a>
+<ul>
+<li class="chapter" data-level="30.2.1" data-path="solution.html"><a href="solution.html#ベクトル-1"><i class="fa fa-check"></i><b>30.2.1</b> ベクトル</a></li>
+<li class="chapter" data-level="30.2.2" data-path="solution.html"><a href="solution.html#行列-1"><i class="fa fa-check"></i><b>30.2.2</b> 行列</a></li>
+<li class="chapter" data-level="30.2.3" data-path="solution.html"><a href="solution.html#データフレーム-1"><i class="fa fa-check"></i><b>30.2.3</b> データフレーム</a></li>
+</ul></li>
+<li class="chapter" data-level="30.3" data-path="solution.html"><a href="solution.html#rプログラミングの基礎"><i class="fa fa-check"></i><b>30.3</b> Rプログラミングの基礎</a></li>
+<li class="chapter" data-level="30.4" data-path="solution.html"><a href="solution.html#関数の自作"><i class="fa fa-check"></i><b>30.4</b> 関数の自作</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="session.html"><a href="session.html"><i class="fa fa-check"></i>本書の執筆環境</a></li>
+<li class="chapter" data-level="" data-path="reference.html"><a href="reference.html"><i class="fa fa-check"></i>参考資料</a></li>
+<li class="divider"></li>
+<p style = "text-align:center;"><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></p>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">私たちのR: ベストプラクティスの探究</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="datatype" class="section level1" number="8">
+<h1><span class="header-section-number">8.</span> データの型</h1>
+<div id="WhatIsDatatype" class="section level2" number="8.1">
+<h2><span class="header-section-number">8.1</span> データ型とは</h2>
+<p>ここではRにおけるデータ型について説明します。第<a href="datastructure.html#datastructure">9</a>章で説明するデータ「構造」とデータ「型」は異なる概念です。次章でも説明しますが、Rにおけるデータの最小単位はベクトルです。<code>c(1, 2, 3, 4, 5)</code>や<code>c("Yanai", "Song", "Hadley")</code>もベクトルですが、<code>30</code>とか<code>"R"</code>もベクトルです。後者のように要素が1つのベクトルは原子ベクトル (atomic vector)とも呼ばれますが、本質的には普通ベクトルです。このベクトルの要素の性質がデータ型です。たとえば<code>c(2, 3, 5, 7, 11)</code>は数値型ですし、<code>c("R", "Python", "Julia")</code>は文字型です。他にも第<a href="rbasic.html#rbasic">6</a>章で紹介した<code>FALSE</code>や<code>TRUE</code>は論理型と呼ばれています。一つのベクトルは複数の要素で構成されることも可能ですが、必ず<strong>同じデータ型</strong>である必要があります。</p>
+<p>しかし、データ分析を行う際はベクトル以外のデータも多いです。行列や表がその典型例です。しかし、行列でも表でも中身の一つ一つの要素は長さ1のベクトルに過ぎません。たとえば、以下のような2行5列のベクトルがあるとします。ここで1行3列目の要素は<code>11</code>であり、長さ1の数値型ベクトルです。あるいは5列目は<code>c(23, 29)</code>であり、長さ2の数値型ベクトルです。</p>
+<pre><code>##      [,1] [,2] [,3] [,4] [,5]
+## [1,]    2    5   11   17   23
+## [2,]    3    7   13   19   29</code></pre>
+<p>表についても考えてみましょう。以下の表の3行2列目の要素は<code>"American Samoa"</code>という長さ1の文字型ベクトルです。また、6列目は<code>c("UEFA", "CAF", "OFC", "UEFA", "CAF", "CONCACAF")</code>であり、これは長さ6の文字型ベクトルです。このようにRで扱う全てのデータは複数のベクトルが集まっているものです。</p>
+<pre><code>##   ID                Team Rank Points Prev_Points Confederation
+## 1  1             Albania   75   1325        1316          UEFA
+## 2  2             Algeria   85   1271        1271           CAF
+## 3  3      American Samoa  133   1030        1030           OFC
+## 4  4             Andorra  155    749         749          UEFA
+## 5  5              Angola  121   1117        1117           CAF
+## 6  6 Antigua and Barbuda  153    787         787      CONCACAF</code></pre>
+<p>つまり、複数のベクトルを綺麗に、または分析しやすく集めたのが行列や表であり、これがデータ構造に該当します。データ型ごとの処理方法については本書を通じて紹介して行きますので、本章は軽く読んで頂いても構いません。ただし、Factor型とDate &amp; Datetime型の処理はやや特殊ですので、手を動かしながら読み進めることをおすすめします。</p>
+<p>ここではデータ型について紹介し、次章ではデータ構造について解説します。</p>
+<hr />
+</div>
+<div id="type-logical" class="section level2" number="8.2">
+<h2><span class="header-section-number">8.2</span> Logical</h2>
+<p>Logical型は<code>TRUE</code>と<code>FALSE</code>のみで構成されたデータ型です。練習としてなにかの長さ5の論理型ベクトルを作ってみましょう。</p>
+<div class="sourceCode" id="cb138"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb138-1"><a href="datatype.html#cb138-1"></a>logical_vec1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>)</span>
+<span id="cb138-2"><a href="datatype.html#cb138-2"></a></span>
+<span id="cb138-3"><a href="datatype.html#cb138-3"></a>logical_vec1</span></code></pre></div>
+<pre><code>## [1]  TRUE FALSE  TRUE  TRUE FALSE</code></pre>
+<p>注意すべきこととしては、<code>TRUE</code>と<code>FALSE</code>は<code>"</code>で囲まないことです。<code>"TRUE"</code>、<code>"FALSE"</code>と入力してしまえばlogical 型として認識されません。もし、一つ間違えて2番目の要素である<code>FALSE</code>を<code>"FALSE"</code>と入力したらどうなるでしょうか。</p>
+<div class="sourceCode" id="cb140"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb140-1"><a href="datatype.html#cb140-1"></a>logical_vec2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="st">&quot;FALSE&quot;</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>)</span>
+<span id="cb140-2"><a href="datatype.html#cb140-2"></a></span>
+<span id="cb140-3"><a href="datatype.html#cb140-3"></a>logical_vec2</span></code></pre></div>
+<pre><code>## [1] &quot;TRUE&quot;  &quot;FALSE&quot; &quot;TRUE&quot;  &quot;TRUE&quot;  &quot;FALSE&quot;</code></pre>
+<p>2番目の要素だけでなく、他の全ての要素も<code>"</code>で囲まれるようになりました。実際に、この2つのベクトルのデータ型を確認してみましょう。ベクトルのデータ型を確認する関数は<code>class()</code>関数です。</p>
+<div class="sourceCode" id="cb142"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb142-1"><a href="datatype.html#cb142-1"></a><span class="fu">class</span>(logical_vec1)</span></code></pre></div>
+<pre><code>## [1] &quot;logical&quot;</code></pre>
+<div class="sourceCode" id="cb144"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb144-1"><a href="datatype.html#cb144-1"></a><span class="fu">class</span>(logical_vec2)</span></code></pre></div>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<p><code>logical_vec1</code>はlogical型ですが、<code>logical_vec2</code>はcharacter型と認識されます。</p>
+<p>他にも、<code>is.logical()</code>関数を使ってあるベクトルがlogical型か否かを判定することも可能です。もし、ベクトルがlogical型なら<code>TRUE</code>が、logical型以外なら<code>FALSE</code>が返って来ます。</p>
+<div class="sourceCode" id="cb146"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb146-1"><a href="datatype.html#cb146-1"></a><span class="fu">is.logical</span>(logical_vec1)</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb148"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb148-1"><a href="datatype.html#cb148-1"></a><span class="fu">is.logical</span>(logical_vec2)</span></code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+<p>Logical型は様々な場面で使われますが、代表的な使い方は第<a href="rbasic.html#rbasic-calc">6.3</a>章で紹介しました要素の抽出と第<a href="programming.html#programming">10</a>章で紹介する予定の条件分岐 (<code>if()</code>や<code>ifelse()</code>)、条件反復 (<code>while()</code>)があります。</p>
+<hr />
+</div>
+<div id="type-numeric" class="section level2" number="8.3">
+<h2><span class="header-section-number">8.3</span> Numeric</h2>
+<p>Numeric型は数値型ですが、まずはnumeric型のベクトル<code>numeric_vec1</code>を作成し、データ型を確認してみましょう。</p>
+<div class="sourceCode" id="cb150"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb150-1"><a href="datatype.html#cb150-1"></a>numeric_vec1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">3</span>)</span>
+<span id="cb150-2"><a href="datatype.html#cb150-2"></a></span>
+<span id="cb150-3"><a href="datatype.html#cb150-3"></a><span class="fu">class</span>(numeric_vec1)</span></code></pre></div>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<p><code>is.logical()</code>に似た関数<code>is.numeric()</code>も使用可能です。</p>
+<div class="sourceCode" id="cb152"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb152-1"><a href="datatype.html#cb152-1"></a><span class="fu">is.numeric</span>(numeric_vec1)</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb154"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb154-1"><a href="datatype.html#cb154-1"></a><span class="fu">is.numeric</span>(logical_vec1)</span></code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+<p>もうちょっと詳しく分けるとinteger型とdouble型があります。以下の内容はあまり意識的に区分して使う場面が稀ですので、(読み)飛ばしても構いません。</p>
+<p>integerは整数型であり、doubleは実数型です。これは<code>class()</code>関数では確認できず、<code>typeof()</code>関すを使います。</p>
+<div class="sourceCode" id="cb156"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb156-1"><a href="datatype.html#cb156-1"></a><span class="fu">typeof</span>(numeric_vec1)</span></code></pre></div>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<p>一般的に作成するnumeric型のベクトルは全てdouble型です。もし、整数型のベクトルを作成したい場合、数値の後ろに<code>L</code>を付けます。</p>
+<div class="sourceCode" id="cb158"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb158-1"><a href="datatype.html#cb158-1"></a>integer_vec1 <span class="ot">&lt;-</span> <span class="fu">c</span>(2L, 0L, 0L, 1L, 3L)</span>
+<span id="cb158-2"><a href="datatype.html#cb158-2"></a><span class="fu">typeof</span>(integer_vec1)</span></code></pre></div>
+<pre><code>## [1] &quot;integer&quot;</code></pre>
+<p>ここでも注意すべき点としては、一つでも<code>L</code>が付かない要素が含まれる場合、自動的にdouble型に変換されるという点です。</p>
+<div class="sourceCode" id="cb160"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb160-1"><a href="datatype.html#cb160-1"></a>integer_vec2 <span class="ot">&lt;-</span> <span class="fu">c</span>(2L, 0L, <span class="dv">0</span>, 1L, 3L)</span>
+<span id="cb160-2"><a href="datatype.html#cb160-2"></a><span class="fu">typeof</span>(integer_vec2)</span></code></pre></div>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<p>もちろんですが、小数点のある数値に<code>L</code>を付けてもinteger型にはならず、勝手にdouble型になります。また、integer型同士の割り算の結果もdouble型になります。これは<code>2L/1L</code>のような場合でも同じです。足し算、引き算、掛け算はinteger型になります。</p>
+<div class="sourceCode" id="cb162"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb162-1"><a href="datatype.html#cb162-1"></a><span class="fu">typeof</span>(<span class="fl">2.3</span>L)</span></code></pre></div>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<div class="sourceCode" id="cb164"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb164-1"><a href="datatype.html#cb164-1"></a><span class="fu">typeof</span>(3L <span class="sc">/</span> 12L)</span></code></pre></div>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<div class="sourceCode" id="cb166"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb166-1"><a href="datatype.html#cb166-1"></a><span class="fu">typeof</span>(3L <span class="sc">/</span> 1L)</span></code></pre></div>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<div class="sourceCode" id="cb168"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb168-1"><a href="datatype.html#cb168-1"></a><span class="fu">typeof</span>(3L <span class="sc">+</span> 1L)</span></code></pre></div>
+<pre><code>## [1] &quot;integer&quot;</code></pre>
+<div class="sourceCode" id="cb170"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb170-1"><a href="datatype.html#cb170-1"></a><span class="fu">typeof</span>(3L <span class="sc">-</span> 4L)</span></code></pre></div>
+<pre><code>## [1] &quot;integer&quot;</code></pre>
+<div class="sourceCode" id="cb172"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb172-1"><a href="datatype.html#cb172-1"></a><span class="fu">typeof</span>(3L <span class="sc">*</span> 6L)</span></code></pre></div>
+<pre><code>## [1] &quot;integer&quot;</code></pre>
+<p>一般的な分析において整数と実数を厳格に区別して使う場面は多くないと考えられますので、今のところはあまり気にしなくても問題ないでしょう。</p>
+<hr />
+</div>
+<div id="type-complex" class="section level2" number="8.4">
+<h2><span class="header-section-number">8.4</span> Complex</h2>
+<p>Complex型は複素数を表すデータ型であり、<code>実数部+虚数部i</code>のように表記します。まず、複素数のベクトル<code>complex_vec1</code>を作成し、データ型を確認してみましょう。</p>
+<div class="sourceCode" id="cb174"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb174-1"><a href="datatype.html#cb174-1"></a>complex_vec1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">+</span>3i, <span class="dv">3</span><span class="sc">+</span>2i, <span class="fl">2.5</span><span class="sc">+</span>7i)</span>
+<span id="cb174-2"><a href="datatype.html#cb174-2"></a>complex_vec1</span></code></pre></div>
+<pre><code>## [1] 1.0+3i 3.0+2i 2.5+7i</code></pre>
+<div class="sourceCode" id="cb176"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb176-1"><a href="datatype.html#cb176-1"></a><span class="fu">class</span>(complex_vec1)</span></code></pre></div>
+<pre><code>## [1] &quot;complex&quot;</code></pre>
+<p>あまりおすすめはできませんが、<code>虚数部i+実数部</code>のような書き方も可能です。</p>
+<div class="sourceCode" id="cb178"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb178-1"><a href="datatype.html#cb178-1"></a>complex_vec2 <span class="ot">&lt;-</span> <span class="fu">c</span>(3i<span class="sc">+</span><span class="dv">1</span>, 2i<span class="sc">+</span><span class="dv">3</span>, 7i<span class="fl">+2.5</span>)</span>
+<span id="cb178-2"><a href="datatype.html#cb178-2"></a>complex_vec2</span></code></pre></div>
+<pre><code>## [1] 1.0+3i 3.0+2i 2.5+7i</code></pre>
+<div class="sourceCode" id="cb180"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb180-1"><a href="datatype.html#cb180-1"></a><span class="fu">class</span>(complex_vec2)</span></code></pre></div>
+<pre><code>## [1] &quot;complex&quot;</code></pre>
+<p><code>complex_vec1</code>と<code>complex_vec2</code>は同じベクトルであることを確認してみましょう。</p>
+<div class="sourceCode" id="cb182"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb182-1"><a href="datatype.html#cb182-1"></a>complex_vec1 <span class="sc">==</span> complex_vec2</span></code></pre></div>
+<pre><code>## [1] TRUE TRUE TRUE</code></pre>
+<p>もし、ベクトル内にnumeric型とcomplex型が混在している場合、強制的にcomplex型に変換されます。変換された後の値は<code>実数部+0i</code>のようになります。</p>
+<div class="sourceCode" id="cb184"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb184-1"><a href="datatype.html#cb184-1"></a>complex_vec3 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span><span class="sc">+</span>7i, <span class="dv">5</span>, <span class="dv">13</span><span class="sc">+</span>1i)</span>
+<span id="cb184-2"><a href="datatype.html#cb184-2"></a>complex_vec3</span></code></pre></div>
+<pre><code>## [1]  2+7i  5+0i 13+1i</code></pre>
+<div class="sourceCode" id="cb186"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb186-1"><a href="datatype.html#cb186-1"></a><span class="fu">class</span>(complex_vec3)</span></code></pre></div>
+<pre><code>## [1] &quot;complex&quot;</code></pre>
+<hr />
+</div>
+<div id="type-character" class="section level2" number="8.5">
+<h2><span class="header-section-number">8.5</span> Character</h2>
+<p>Character型は文字列で構成されているデータ型です。Rを含む多くの言語は文字列を表現するために、中身を<code>"</code>で囲みます。<code>"abc"</code>はcharacter型ですが、<code>"1"</code>や<code>"3+5i"</code>もcharacter型です。数字であっても<code>"</code>で囲んだらそれは文字列となります。それではいくつかのcharacter型ベクトルを作っていみましょう。</p>
+<div class="sourceCode" id="cb188"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb188-1"><a href="datatype.html#cb188-1"></a>char_vec1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Yanai&quot;</span>, <span class="st">&quot;Song&quot;</span>, <span class="st">&quot;Shigemura&quot;</span>, <span class="st">&quot;Tani&quot;</span>)</span>
+<span id="cb188-2"><a href="datatype.html#cb188-2"></a>char_vec2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>)</span>
+<span id="cb188-3"><a href="datatype.html#cb188-3"></a>char_vec3 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;1&quot;</span>, <span class="st">&quot;2&quot;</span>, <span class="st">&quot;3&quot;</span>, <span class="st">&quot;4&quot;</span>)</span>
+<span id="cb188-4"><a href="datatype.html#cb188-4"></a></span>
+<span id="cb188-5"><a href="datatype.html#cb188-5"></a>char_vec1</span></code></pre></div>
+<pre><code>## [1] &quot;Yanai&quot;     &quot;Song&quot;      &quot;Shigemura&quot; &quot;Tani&quot;</code></pre>
+<div class="sourceCode" id="cb190"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb190-1"><a href="datatype.html#cb190-1"></a>char_vec2</span></code></pre></div>
+<pre><code>## [1] 1 2 3 4</code></pre>
+<div class="sourceCode" id="cb192"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb192-1"><a href="datatype.html#cb192-1"></a>char_vec3</span></code></pre></div>
+<pre><code>## [1] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot;</code></pre>
+<p><code>char_vec2</code>と<code>char_vec3</code>の違いは通じを<code>"</code>で囲んだか否かです。ベクトルの中身を見ても、<code>char_vec2</code>は<code>"</code>で囲まれていません。データ型を見てみましょう。</p>
+<div class="sourceCode" id="cb194"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb194-1"><a href="datatype.html#cb194-1"></a><span class="fu">class</span>(char_vec1)</span></code></pre></div>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<div class="sourceCode" id="cb196"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb196-1"><a href="datatype.html#cb196-1"></a><span class="fu">class</span>(char_vec2)</span></code></pre></div>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<div class="sourceCode" id="cb198"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb198-1"><a href="datatype.html#cb198-1"></a><span class="fu">class</span>(char_vec3)</span></code></pre></div>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<p>やはり<code>char_vec3</code>もcharacter型になっていることが分かります。</p>
+<hr />
+</div>
+<div id="type-factor" class="section level2" number="8.6">
+<h2><span class="header-section-number">8.6</span> Factor</h2>
+<p>Factor型はラベル付きの数値型データです。Factor型の見た目はcharacter型とほぼ同じですし、分析の場面においてもcharacter型とほぼ同じ扱いになります。Factor型とcharacter型との違いは、「順序が付いている」点です。例えば、以下の質問文に対するアンケートの結果を考えてみましょう。</p>
+<ul>
+<li>あなたは猫がすきですか。
+<ol style="list-style-type: decimal">
+<li>めちゃめちゃ好き</li>
+<li>めちゃ好き</li>
+<li>好き</li>
+<li>どちらかといえば好き</li>
+</ol></li>
+</ul>
+<p>以下の表<a href="datatype.html#tab:datatype-factor-1">8.1</a>は5人の結果です。</p>
+<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:datatype-factor-1">表 8.1: </span>猫好きの度合い
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+ID
+</th>
+<th style="text-align:left;">
+Name
+</th>
+<th style="text-align:left;">
+Cat
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Yanai
+</td>
+<td style="text-align:left;">
+めちゃめちゃ好き
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Song
+</td>
+<td style="text-align:left;">
+めちゃめちゃ好き
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+Shigemura
+</td>
+<td style="text-align:left;">
+どちらかといえば好き
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+Tani
+</td>
+<td style="text-align:left;">
+めちゃ好き
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:left;">
+Hadley
+</td>
+<td style="text-align:left;">
+好き
+</td>
+</tr>
+</tbody>
+</table>
+<p>人間としてはこの表から、<a href="https://soheishigemura.com">重村</a>という人がどれだけ猫が嫌いなのかが分かります。ただし、Rはそうではありません。Rは日本語どころか、人間の言葉は理解できません。各項目ごとに順番を付けてあげる必要がありますが、そのために使われるのがfactor型です。</p>
+<p>実習のために表<a href="datatype.html#tab:datatype-factor-1">8.1</a>の<code>Cat</code>列のみのベクトルを作ってみましょう。</p>
+<div class="sourceCode" id="cb200"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb200-1"><a href="datatype.html#cb200-1"></a>factor_vec1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;めちゃめちゃ好き&quot;</span>, <span class="st">&quot;めちゃめちゃ好き&quot;</span>, </span>
+<span id="cb200-2"><a href="datatype.html#cb200-2"></a>                 <span class="st">&quot;どちらかといえば好き&quot;</span>, <span class="st">&quot;めちゃ好き&quot;</span>, <span class="st">&quot;好き&quot;</span>)</span>
+<span id="cb200-3"><a href="datatype.html#cb200-3"></a></span>
+<span id="cb200-4"><a href="datatype.html#cb200-4"></a>factor_vec1</span></code></pre></div>
+<pre><code>## [1] &quot;めちゃめちゃ好き&quot;     &quot;めちゃめちゃ好き&quot;     &quot;どちらかといえば好き&quot;
+## [4] &quot;めちゃ好き&quot;           &quot;好き&quot;</code></pre>
+<div class="sourceCode" id="cb202"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb202-1"><a href="datatype.html#cb202-1"></a><span class="fu">class</span>(factor_vec1)</span></code></pre></div>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<p><code>factor_vec1</code>は普通の文字列ベクトルであることが分かります。これをfactor型に変換するためには<code>factor()</code>関数を使います。</p>
+<div class="sourceCode" id="cb204"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb204-1"><a href="datatype.html#cb204-1"></a>factor_vec2 <span class="ot">&lt;-</span> <span class="fu">factor</span>(factor_vec1, <span class="at">ordered =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb204-2"><a href="datatype.html#cb204-2"></a>                      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;どちらかといえば好き&quot;</span>, <span class="st">&quot;好き&quot;</span>,</span>
+<span id="cb204-3"><a href="datatype.html#cb204-3"></a>                                 <span class="st">&quot;めちゃ好き&quot;</span>, <span class="st">&quot;めちゃめちゃ好き&quot;</span>))</span>
+<span id="cb204-4"><a href="datatype.html#cb204-4"></a><span class="fu">class</span>(factor_vec2)</span></code></pre></div>
+<pre><code>## [1] &quot;ordered&quot; &quot;factor&quot;</code></pre>
+<p>データ型がfactor型に変換されています。<code>"ordered"</code>というものも付いていますが、これについては後ほど説明します。それでは中身をみましょう。</p>
+<div class="sourceCode" id="cb206"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb206-1"><a href="datatype.html#cb206-1"></a>factor_vec2</span></code></pre></div>
+<pre><code>## [1] めちゃめちゃ好き     めちゃめちゃ好き     どちらかといえば好き
+## [4] めちゃ好き           好き                
+## Levels: どちらかといえば好き &lt; 好き &lt; めちゃ好き &lt; めちゃめちゃ好き</code></pre>
+<p>いくつかの点で異なります。まず、文字列であるにもかかわらず、<code>"</code>で囲まれていいない点です。そして3行目に<code>4 Levels:</code>というのが追加されている点です。このlevelは「水準」と呼ばれるものです。<code>4 Levels</code>ですから、<code>factor_vec2</code>は4つの水準で構成されていることを意味します。Factor型の値は予め指定された水準以外の値を取ることはできません。たとえば、2番目の要素を「超好き」に変えてみましょう。</p>
+<div class="sourceCode" id="cb208"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb208-1"><a href="datatype.html#cb208-1"></a>factor_vec2[<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="st">&quot;超好き&quot;</span></span></code></pre></div>
+<pre><code>## Warning in `[&lt;-.factor`(`*tmp*`, 2, value = &quot;超好き&quot;): 不正な因子水準です。NA が
+## 発生しました</code></pre>
+<div class="sourceCode" id="cb210"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb210-1"><a href="datatype.html#cb210-1"></a>factor_vec2</span></code></pre></div>
+<pre><code>## [1] めちゃめちゃ好き     &lt;NA&gt;                 どちらかといえば好き
+## [4] めちゃ好き           好き                
+## Levels: どちらかといえば好き &lt; 好き &lt; めちゃ好き &lt; めちゃめちゃ好き</code></pre>
+<p>警告が表示され、2番目の要素が後ほど紹介する欠損値となっていることが分かります。それでは普通に「好き」を入れてみましょう。</p>
+<div class="sourceCode" id="cb212"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb212-1"><a href="datatype.html#cb212-1"></a>factor_vec2[<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="st">&quot;好き&quot;</span></span>
+<span id="cb212-2"><a href="datatype.html#cb212-2"></a>factor_vec2</span></code></pre></div>
+<pre><code>## [1] めちゃめちゃ好き     好き                 どちらかといえば好き
+## [4] めちゃ好き           好き                
+## Levels: どちらかといえば好き &lt; 好き &lt; めちゃ好き &lt; めちゃめちゃ好き</code></pre>
+<p>今回は問題なく置換できましたね。このようにfactor型の取りうる値は既に指定されています。また、<code>## 4 Levels: どちらかといえば好き &lt; 好き &lt; ... &lt; めちゃめちゃ好き</code>からも分かるように、その大小関係の情報も含まれています。猫好きの度合いは「どちらかといえば好き-好き-めちゃ好き-めちゃめちゃ好き」の順で高くなることをRも認識できるようになりました。</p>
+<p>Factor型はこのように順序付きデータを扱う際に便利なデータ型ですが、順序情報を含まないfactor型もあります。これは<code>factor()</code>を使う際、<code>ordered = TRUE</code>引数を削除するだけでできます。</p>
+<div class="sourceCode" id="cb214"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb214-1"><a href="datatype.html#cb214-1"></a>factor_vec3 <span class="ot">&lt;-</span> <span class="fu">factor</span>(factor_vec1,</span>
+<span id="cb214-2"><a href="datatype.html#cb214-2"></a>                      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;どちらかといえば好き&quot;</span>, <span class="st">&quot;好き&quot;</span>,</span>
+<span id="cb214-3"><a href="datatype.html#cb214-3"></a>                                 <span class="st">&quot;めちゃ好き&quot;</span>, <span class="st">&quot;めちゃめちゃ好き&quot;</span>))</span>
+<span id="cb214-4"><a href="datatype.html#cb214-4"></a>factor_vec3</span></code></pre></div>
+<pre><code>## [1] めちゃめちゃ好き     めちゃめちゃ好き     どちらかといえば好き
+## [4] めちゃ好き           好き                
+## Levels: どちらかといえば好き 好き めちゃ好き めちゃめちゃ好き</code></pre>
+<div class="sourceCode" id="cb216"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb216-1"><a href="datatype.html#cb216-1"></a><span class="fu">class</span>(factor_vec3)</span></code></pre></div>
+<pre><code>## [1] &quot;factor&quot;</code></pre>
+<p>今回は3行目が<code>## Levels: どちらかといえば好き 好き めちゃ好き めちゃめちゃ好き</code>となり、順序に関する情報がなくなりました。また、<code>class()</code>で確認しましたデータ型に<code>"ordered"</code>が付いていません。これは順序なしfactor型であることを意味します。「順序付けしないならfactor型は要らないのでは…?」と思うかも知れませんが、これはこれで便利です。その例を考えてみましょう。</p>
+<p>分析においてfactor型はcharacter型に近い役割を果たしますが、factor型なりの長所もあります。それは図や表を作成する際です。例えば、横軸が都道府県名で、縦軸がその都道府県の財政力指数を表す棒グラフを作成するとします。たとえば、表<a href="datatype.html#tab:datatype-factor-8">8.2</a>のようなデータがあるとします。このデータは3つの列で構成されており、<code>ID</code>と<code>Zaisei</code>列はnumeric型、<code>Pref</code>列はcharacter型です。</p>
+<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:datatype-factor-8">表 8.2: </span>5都道府県のH29財政力指数
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+ID
+</th>
+<th style="text-align:left;">
+Pref
+</th>
+<th style="text-align:right;">
+Zaisei
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Hokkaido
+</td>
+<td style="text-align:right;">
+0.44396
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Tokyo
+</td>
+<td style="text-align:right;">
+1.19157
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+Aichi
+</td>
+<td style="text-align:right;">
+0.92840
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+Osaka
+</td>
+<td style="text-align:right;">
+0.78683
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:left;">
+Fukuoka
+</td>
+<td style="text-align:right;">
+0.64322
+</td>
+</tr>
+</tbody>
+</table>
+<p>可視化については第<a href="visualization1.html#visualization1">17</a>章以降で詳しく解説しますが、この<code>Pref</code>列をcharacter型にしたままグラフにしますと図<a href="datatype.html#fig:datatype-factor-9">8.1</a>のようになります。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:datatype-factor-9"></span>
+<img src="datatype_files/figure-html/datatype-factor-9-1.png" alt="5都道府県のH29財政力指数" width="2100" />
+<p class="caption">
+図 8.1: 5都道府県のH29財政力指数
+</p>
+</div>
+<p>このようにアルファベット順で横軸が並び替えられます。別にこれでも問題ないと思う方もいるかも知れませんが、基本的に日本の都道府県は北から南の方へ並べるのが一般的な作法です<a href="reference.html#fn38" class="footnote-ref" id="fnref38"><sup>38</sup></a>。北海道と東京、大阪の間には順序関係はありません。しかし、表示される順番は固定したい。この場合、<code>Pref</code>列を順序なしfactor型にすれば良いです<a href="reference.html#fn39" class="footnote-ref" id="fnref39"><sup>39</sup></a>。データフレームの列を修正する方法は第<a href="datastructure.html#datastructure">9</a>章で詳しく説明します。</p>
+<div class="sourceCode" id="cb218"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb218-1"><a href="datatype.html#cb218-1"></a>zaisei_df<span class="sc">$</span>Pref <span class="ot">&lt;-</span> <span class="fu">factor</span>(zaisei_df<span class="sc">$</span>Pref,</span>
+<span id="cb218-2"><a href="datatype.html#cb218-2"></a>                         <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Hokkaido&quot;</span>, <span class="st">&quot;Tokyo&quot;</span>, <span class="st">&quot;Aichi&quot;</span>, <span class="st">&quot;Osaka&quot;</span>, <span class="st">&quot;Fukuoka&quot;</span>))</span></code></pre></div>
+<p><code>zaisei_df</code>の<code>Pref</code>列をfactor型にしてから同じ図を描くと図<a href="datatype.html#fig:datatype-factor-11">8.2</a>のようになります。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:datatype-factor-11"></span>
+<img src="datatype_files/figure-html/datatype-factor-11-1.png" alt="5都道府県のH29財政力指数" width="2100" />
+<p class="caption">
+図 8.2: 5都道府県のH29財政力指数
+</p>
+</div>
+<p>都道府県以外にもこのような例は多くあります。順序尺度で測定された変数が代表的な例です。他にも政党名を議席数順で表示させたい場合もfactor型は有効でしょう。</p>
+<hr />
+</div>
+<div id="type-date" class="section level2" number="8.7">
+<h2><span class="header-section-number">8.7</span> Date</h2>
+<div id="なぜdate型があるのか" class="section level3" number="8.7.1">
+<h3><span class="header-section-number">8.7.1</span> なぜDate型があるのか</h3>
+<p>Date型は年月日を表すデータ型<a href="reference.html#fn40" class="footnote-ref" id="fnref40"><sup>40</sup></a>です。この2つのデータ型はかなり複雑ですが、ここでは簡単に説明します。Date型は日付の情報を含むため、順序関係が成立します。その意味では順序付きFactor型とあまり挙動は変わらないかもしれませんが、実際はそうではありません。</p>
+<p>たとえば、Songの1週間<a href="reference.html#fn41" class="footnote-ref" id="fnref41"><sup>41</sup></a>の睡眠時間を記録したデータ<code>SongSleep</code>があるとします。<code>Date</code>という列には日付が、<code>Sleep</code>列には睡眠時間が記録されています。睡眠時間の単位は「分」です。</p>
+<div class="sourceCode" id="cb219"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb219-1"><a href="datatype.html#cb219-1"></a>SongSleep <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb219-2"><a href="datatype.html#cb219-2"></a>    <span class="at">Date  =</span> <span class="fu">c</span>(<span class="st">&quot;2017-06-17&quot;</span>, <span class="st">&quot;2017-06-18&quot;</span>, <span class="st">&quot;2017-06-19&quot;</span>, <span class="st">&quot;2017-06-20&quot;</span>, </span>
+<span id="cb219-3"><a href="datatype.html#cb219-3"></a>              <span class="st">&quot;2017-06-21&quot;</span>, <span class="st">&quot;2017-06-22&quot;</span>, <span class="st">&quot;2017-06-23&quot;</span>),</span>
+<span id="cb219-4"><a href="datatype.html#cb219-4"></a>    <span class="at">Sleep =</span> <span class="fu">c</span>(<span class="dv">173</span>, <span class="dv">192</span>, <span class="dv">314</span>, <span class="dv">259</span>, <span class="dv">210</span>, <span class="dv">214</span>, <span class="dv">290</span>)   </span>
+<span id="cb219-5"><a href="datatype.html#cb219-5"></a>)</span></code></pre></div>
+<p>中身をみると、以下のようになります。</p>
+<div class="sourceCode" id="cb220"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb220-1"><a href="datatype.html#cb220-1"></a>SongSleep</span></code></pre></div>
+<pre><code>##         Date Sleep
+## 1 2017-06-17   173
+## 2 2017-06-18   192
+## 3 2017-06-19   314
+## 4 2017-06-20   259
+## 5 2017-06-21   210
+## 6 2017-06-22   214
+## 7 2017-06-23   290</code></pre>
+<p>日付を横軸に、睡眠時間を縦軸にした散布図を描くと図@ref{fig:datatype-date-3}のようになります。{ggplot2}を利用した作図については第@ref{visualization}章で解説しますので、ここではDate型の特徴のみ理解してもらえたら十分です。</p>
+<div class="sourceCode" id="cb222"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb222-1"><a href="datatype.html#cb222-1"></a><span class="fu">ggplot</span>(SongSleep, </span>
+<span id="cb222-2"><a href="datatype.html#cb222-2"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Date, <span class="at">y =</span> Sleep)) <span class="sc">+</span></span>
+<span id="cb222-3"><a href="datatype.html#cb222-3"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb222-4"><a href="datatype.html#cb222-4"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;日付&quot;</span>, <span class="at">y =</span> <span class="st">&quot;睡眠時間 (分)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb222-5"><a href="datatype.html#cb222-5"></a>    <span class="fu">theme_gray</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:datatype-date-3"></span>
+<img src="datatype_files/figure-html/datatype-date-3-1.png" alt="Songの睡眠時間" width="2100" />
+<p class="caption">
+図 8.3: Songの睡眠時間
+</p>
+</div>
+<p>この図は全く問題ないように見えます。それでは、<code>Date</code>列をそれぞれDate型に変換し、<code>SoongSleep</code>データの<code>DateD</code>としてみます。データフレームの列追加については第<a href="datastructure.html#structure-dataframe">9.4</a>章で解説します。</p>
+<div class="sourceCode" id="cb223"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb223-1"><a href="datatype.html#cb223-1"></a>SongSleep<span class="sc">$</span>DateD <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(SongSleep<span class="sc">$</span>Date)</span></code></pre></div>
+<p>中身を見てみますが、あまり変わっていないようです。<code>Date</code>と<code>DateD</code>列は全く同じように見えますね。</p>
+<div class="sourceCode" id="cb224"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb224-1"><a href="datatype.html#cb224-1"></a>SongSleep</span></code></pre></div>
+<pre><code>##         Date Sleep      DateD
+## 1 2017-06-17   173 2017-06-17
+## 2 2017-06-18   192 2017-06-18
+## 3 2017-06-19   314 2017-06-19
+## 4 2017-06-20   259 2017-06-20
+## 5 2017-06-21   210 2017-06-21
+## 6 2017-06-22   214 2017-06-22
+## 7 2017-06-23   290 2017-06-23</code></pre>
+<p>図にすると実は先ほどの図と同じものが得られます。</p>
+<div class="sourceCode" id="cb226"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb226-1"><a href="datatype.html#cb226-1"></a><span class="fu">ggplot</span>(SongSleep, </span>
+<span id="cb226-2"><a href="datatype.html#cb226-2"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> DateD, <span class="at">y =</span> Sleep)) <span class="sc">+</span></span>
+<span id="cb226-3"><a href="datatype.html#cb226-3"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb226-4"><a href="datatype.html#cb226-4"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;日付&quot;</span>, <span class="at">y =</span> <span class="st">&quot;睡眠時間 (分)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb226-5"><a href="datatype.html#cb226-5"></a>    <span class="fu">theme_gray</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:datatype-date-6"></span>
+<img src="datatype_files/figure-html/datatype-date-6-1.png" alt="Songの睡眠時間" width="2100" />
+<p class="caption">
+図 8.4: Songの睡眠時間
+</p>
+</div>
+<p>しかし、Songがうっかり6月19日に記録するのを忘れたとします。つまり、<code>SongSleep</code>データの3行目が抜けている状況を考えてみましょう。データフレームの要素抽出については第<a href="datastructure.html#structure-dataframe">9.4</a>章で解説します。</p>
+<div class="sourceCode" id="cb227"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb227-1"><a href="datatype.html#cb227-1"></a>SongSleep2 <span class="ot">&lt;-</span> SongSleep[<span class="sc">-</span><span class="dv">3</span>, ]</span></code></pre></div>
+<p>中身をみると、以下のようになります。<code>Date</code>も<code>DateD</code>も同じように見えます。</p>
+<div class="sourceCode" id="cb228"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb228-1"><a href="datatype.html#cb228-1"></a>SongSleep2</span></code></pre></div>
+<pre><code>##         Date Sleep      DateD
+## 1 2017-06-17   173 2017-06-17
+## 2 2017-06-18   192 2017-06-18
+## 4 2017-06-20   259 2017-06-20
+## 5 2017-06-21   210 2017-06-21
+## 6 2017-06-22   214 2017-06-22
+## 7 2017-06-23   290 2017-06-23</code></pre>
+<p>この状態で横軸を<code>Date</code>にしたらどうなるでしょうか（図<a href="datatype.html#fig:datatype-date-9">8.5</a>）。</p>
+<div class="sourceCode" id="cb230"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb230-1"><a href="datatype.html#cb230-1"></a><span class="fu">ggplot</span>(SongSleep2, </span>
+<span id="cb230-2"><a href="datatype.html#cb230-2"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Date, <span class="at">y =</span> Sleep)) <span class="sc">+</span></span>
+<span id="cb230-3"><a href="datatype.html#cb230-3"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb230-4"><a href="datatype.html#cb230-4"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;日付&quot;</span>, <span class="at">y =</span> <span class="st">&quot;睡眠時間 (分)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb230-5"><a href="datatype.html#cb230-5"></a>    <span class="fu">theme_gray</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:datatype-date-9"></span>
+<img src="datatype_files/figure-html/datatype-date-9-1.png" alt="Songの睡眠時間" width="2100" />
+<p class="caption">
+図 8.5: Songの睡眠時間
+</p>
+</div>
+<p>一方、横軸を<code>DateD</code>にしたものが図<a href="datatype.html#fig:datatype-date-10">8.6</a>です。</p>
+<div class="sourceCode" id="cb231"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb231-1"><a href="datatype.html#cb231-1"></a><span class="fu">ggplot</span>(SongSleep2, </span>
+<span id="cb231-2"><a href="datatype.html#cb231-2"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> DateD, <span class="at">y =</span> Sleep)) <span class="sc">+</span></span>
+<span id="cb231-3"><a href="datatype.html#cb231-3"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb231-4"><a href="datatype.html#cb231-4"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;日付&quot;</span>, <span class="at">y =</span> <span class="st">&quot;睡眠時間 (分)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb231-5"><a href="datatype.html#cb231-5"></a>    <span class="fu">theme_gray</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:datatype-date-10"></span>
+<img src="datatype_files/figure-html/datatype-date-10-1.png" alt="Songの睡眠時間" width="2100" />
+<p class="caption">
+図 8.6: Songの睡眠時間
+</p>
+</div>
+<p>違いが分かりますかね。違いは抜けている6月19日です。図<a href="datatype.html#fig:datatype-date-9">8.5</a>を見ると、横軸の6月18日の次が20日になっています。一方、図<a href="datatype.html#fig:datatype-date-10">8.6</a>は19日になっており、ちゃんと空けてくれますね。これはDate型でない場合、データにないものは図に表示されないことを意味します。一方、Date型は抜けている日があっても、図に表示表示されます。一般のcharacter型またはfactor型でこのようなことを再現するためには、6月19日の列を追加し、睡眠時間を欠損値として指定する必要があります。たとえば、<code>SongSleep</code>データにおいて6月19日の行は温存したまま、睡眠時間だけを欠損値にしてみましょう。</p>
+<div class="sourceCode" id="cb232"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb232-1"><a href="datatype.html#cb232-1"></a>SongSleep3 <span class="ot">&lt;-</span> SongSleep</span>
+<span id="cb232-2"><a href="datatype.html#cb232-2"></a>SongSleep3<span class="sc">$</span>Sleep[SongSleep<span class="sc">$</span>Date <span class="sc">==</span> <span class="st">&quot;2017-06-19&quot;</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb232-3"><a href="datatype.html#cb232-3"></a></span>
+<span id="cb232-4"><a href="datatype.html#cb232-4"></a>SongSleep3</span></code></pre></div>
+<pre><code>##         Date Sleep      DateD
+## 1 2017-06-17   173 2017-06-17
+## 2 2017-06-18   192 2017-06-18
+## 3 2017-06-19    NA 2017-06-19
+## 4 2017-06-20   259 2017-06-20
+## 5 2017-06-21   210 2017-06-21
+## 6 2017-06-22   214 2017-06-22
+## 7 2017-06-23   290 2017-06-23</code></pre>
+<p>このように日付はあるが、睡眠時間が欠損している場合、図にしたものが図<a href="datatype.html#fig:datatype-date-12">8.7</a>です。</p>
+<div class="sourceCode" id="cb234"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb234-1"><a href="datatype.html#cb234-1"></a><span class="fu">ggplot</span>(SongSleep3, </span>
+<span id="cb234-2"><a href="datatype.html#cb234-2"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Date, <span class="at">y =</span> Sleep)) <span class="sc">+</span></span>
+<span id="cb234-3"><a href="datatype.html#cb234-3"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb234-4"><a href="datatype.html#cb234-4"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;日付&quot;</span>, <span class="at">y =</span> <span class="st">&quot;睡眠時間 (分)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb234-5"><a href="datatype.html#cb234-5"></a>    <span class="fu">theme_bw</span>()</span></code></pre></div>
+<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:datatype-date-12"></span>
+<img src="datatype_files/figure-html/datatype-date-12-1.png" alt="Songの睡眠時間" width="2100" />
+<p class="caption">
+図 8.7: Songの睡眠時間
+</p>
+</div>
+<p>横軸上に6月19日が表示されます。このようにDate型でなくてもDate型と同じように動かすことは可能ですが、非常に面倒です。その意味でDate型は時系列データを扱う際に非常に便利なデータ型です。</p>
+</div>
+<div id="date型の作り方" class="section level3" number="8.7.2">
+<h3><span class="header-section-number">8.7.2</span> Date型の作り方</h3>
+<p>Date型を作成方法はいくつかあります。</p>
+<ol style="list-style-type: decimal">
+<li>character型をDate型にする</li>
+<li>numeric型をDate型にする</li>
+</ol>
+<p>主に使う方法は1であり、既に前節でお見せしました<code>as.Date()</code>関数を使います。方法2もまた<code>as.Date()</code>を使いますが、これは「xxxx年xx月xx日から何日目」という書き方となり、起点となる日付 (<code>origin</code>)<a href="reference.html#fn42" class="footnote-ref" id="fnref42"><sup>42</sup></a>を指定する必要があります。</p>
+<p>ここでは方法1について解説します。日付を表すいくつかのベクトルを作ってみましょう。</p>
+<div class="sourceCode" id="cb236"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb236-1"><a href="datatype.html#cb236-1"></a>Date1 <span class="ot">&lt;-</span> <span class="st">&quot;2020-05-21&quot;</span></span>
+<span id="cb236-2"><a href="datatype.html#cb236-2"></a>Date2 <span class="ot">&lt;-</span> <span class="st">&quot;2020-5-21&quot;</span></span>
+<span id="cb236-3"><a href="datatype.html#cb236-3"></a>Date3 <span class="ot">&lt;-</span> <span class="st">&quot;2020/5/21&quot;</span></span>
+<span id="cb236-4"><a href="datatype.html#cb236-4"></a>Date4 <span class="ot">&lt;-</span> <span class="st">&quot;20/05/21&quot;</span></span>
+<span id="cb236-5"><a href="datatype.html#cb236-5"></a>Date5 <span class="ot">&lt;-</span> <span class="st">&quot;20200521&quot;</span></span>
+<span id="cb236-6"><a href="datatype.html#cb236-6"></a>Date6 <span class="ot">&lt;-</span> <span class="st">&quot;2020 05 21&quot;</span></span>
+<span id="cb236-7"><a href="datatype.html#cb236-7"></a>Date7 <span class="ot">&lt;-</span> <span class="st">&quot;2020.05.21&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb237"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb237-1"><a href="datatype.html#cb237-1"></a><span class="fu">as.Date</span>(Date1)</span></code></pre></div>
+<pre><code>## [1] &quot;2020-05-21&quot;</code></pre>
+<div class="sourceCode" id="cb239"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb239-1"><a href="datatype.html#cb239-1"></a><span class="fu">as.Date</span>(Date2)</span></code></pre></div>
+<pre><code>## [1] &quot;2020-05-21&quot;</code></pre>
+<div class="sourceCode" id="cb241"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb241-1"><a href="datatype.html#cb241-1"></a><span class="fu">as.Date</span>(Date3)</span></code></pre></div>
+<pre><code>## [1] &quot;2020-05-21&quot;</code></pre>
+<div class="sourceCode" id="cb243"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb243-1"><a href="datatype.html#cb243-1"></a><span class="fu">as.Date</span>(Date4, <span class="st">&quot;%y/%m/%d&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;2020-05-21&quot;</code></pre>
+<div class="sourceCode" id="cb245"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb245-1"><a href="datatype.html#cb245-1"></a><span class="fu">as.Date</span>(Date5, <span class="st">&quot;%Y%m%d&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;2020-05-21&quot;</code></pre>
+<div class="sourceCode" id="cb247"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb247-1"><a href="datatype.html#cb247-1"></a><span class="fu">as.Date</span>(Date6, <span class="st">&quot;%Y %m %d&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;2020-05-21&quot;</code></pre>
+<div class="sourceCode" id="cb249"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb249-1"><a href="datatype.html#cb249-1"></a><span class="fu">as.Date</span>(Date7, <span class="st">&quot;%Y.%m.%d&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;2020-05-21&quot;</code></pre>
+<p><code>Date1</code>、<code>Date2</code>、<code>Date3</code>のようなベクトルの場合、<code>as.Date()</code>のみでDate型に変換できます。つまり、日付が数字のみで構成され、年が4桁となっており、年月日が<code>-</code>または<code>/</code>で区切られている場合はこれでだけで十分です。しかし、年が2桁になっていたり、その他の記号が使われたり、区切られていない場合は、<code>fotmat =</code>引数を指定する必要があります。たとえば<code>Date4</code>は年が2桁となっているます。2桁の年は<code>%y</code>と表記します。この表記法の一部を以下の表で紹介します。</p>
+<table>
+<thead>
+<tr class="header">
+<th>表記</th>
+<th>説明</th>
+<th>例</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>%y</td>
+<td>年 (2桁)</td>
+<td>20</td>
+</tr>
+<tr class="even">
+<td>%Y</td>
+<td>年 (4桁)</td>
+<td>2020</td>
+</tr>
+<tr class="odd">
+<td>%m</td>
+<td>月 (数字)</td>
+<td>5, 10</td>
+</tr>
+<tr class="even">
+<td>%b</td>
+<td>月 (文字)</td>
+<td>Jan</td>
+</tr>
+<tr class="odd">
+<td>%B</td>
+<td>月 (文字)</td>
+<td>January</td>
+</tr>
+<tr class="even">
+<td>%d</td>
+<td>日</td>
+<td>5, 05, 13</td>
+</tr>
+</tbody>
+</table>
+<p>他にも様々な表記法がありますが、詳細は<code>?strptime</code>で確認してみてください。</p>
+<p>他にも、日本では使わない表記法ですが、月を英語で表記したり、日月年の順で表記する場合があります。後者は<code>format =</code>引数の順番を変えるだけで問題有りませんが、問題は前者です。そこで使うのが<code>%b</code>または<code>%B</code>です。<code>%b</code>は3文字の月表記で、<code>%B</code>はフルネームです。</p>
+<div class="sourceCode" id="cb251"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb251-1"><a href="datatype.html#cb251-1"></a><span class="fu">as.Date</span>(<span class="st">&quot;21may2020&quot;</span>,   <span class="at">format =</span> <span class="st">&quot;%d%b%Y&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] NA</code></pre>
+<div class="sourceCode" id="cb253"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb253-1"><a href="datatype.html#cb253-1"></a><span class="fu">as.Date</span>(<span class="st">&quot;May/21/2020&quot;</span>, <span class="at">format =</span> <span class="st">&quot;%b/%d/%Y&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] NA</code></pre>
+<p>うまくいかないですね。これはシステムの時間ロケールが日本になっているのが原因です。ロケール設定は<code>Sys.getlocale()</code>で確認できます。</p>
+<div class="sourceCode" id="cb255"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb255-1"><a href="datatype.html#cb255-1"></a><span class="fu">Sys.getlocale</span>(<span class="at">category =</span> <span class="st">&quot;LC_TIME&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;ja_JP.UTF-8&quot;</code></pre>
+<p>これを<code>Sys.setlocale()</code>を使って、<code>"C"</code>に変更します。</p>
+<div class="sourceCode" id="cb257"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb257-1"><a href="datatype.html#cb257-1"></a><span class="fu">Sys.setlocale</span>(<span class="at">category =</span> <span class="st">&quot;LC_TIME&quot;</span>, <span class="at">locale =</span> <span class="st">&quot;C&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;C&quot;</code></pre>
+<p>それではもう一回やってみましょう。</p>
+<div class="sourceCode" id="cb259"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb259-1"><a href="datatype.html#cb259-1"></a><span class="fu">as.Date</span>(<span class="st">&quot;21may2020&quot;</span>,   <span class="at">format =</span> <span class="st">&quot;%d%b%Y&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;2020-05-21&quot;</code></pre>
+<div class="sourceCode" id="cb261"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb261-1"><a href="datatype.html#cb261-1"></a><span class="fu">as.Date</span>(<span class="st">&quot;May/21/2020&quot;</span>, <span class="at">format =</span> <span class="st">&quot;%b/%d/%Y&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;2020-05-21&quot;</code></pre>
+<p>うまく動くことが確認できました。念の為に、ロケールを戻しておきます。</p>
+<div class="sourceCode" id="cb263"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb263-1"><a href="datatype.html#cb263-1"></a><span class="fu">Sys.setlocale</span>(<span class="at">category =</span> <span class="st">&quot;LC_TIME&quot;</span>, <span class="at">locale =</span> <span class="st">&quot;ja_JP.UTF-8&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;ja_JP.UTF-8&quot;</code></pre>
+</div>
+<div id="posixctposixlt型について" class="section level3" number="8.7.3">
+<h3><span class="header-section-number">8.7.3</span> POSIXct、POSIXlt型について</h3>
+<p>POSIXct、POSIXlt型は日付だけでなく時間の情報も含むデータ型です。これらは<code>as.POSIXct()</code>、<code>as.POSIXlt()</code>関数で作成することができます。どちらも見た目は同じデータ型ですが、内部構造がことなります<a href="reference.html#fn43" class="footnote-ref" id="fnref43"><sup>43</sup></a>。詳細は<code>?as.POSIXct</code>または<code>?as.POSIXlt</code>を参照してください。</p>
+<hr />
+</div>
+</div>
+<div id="type-na" class="section level2" number="8.8">
+<h2><span class="header-section-number">8.8</span> NA</h2>
+<p>NAは欠損値と呼ばれます。これは本来は値があるはずなのがなんらかの理由で欠損していることを意味します。表<a href="datatype.html#tab:datatype-na-1">8.3</a>の例を考えてみましょう。</p>
+<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:datatype-na-1">表 8.3: </span>4人の支持政党
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+ID
+</th>
+<th style="text-align:left;">
+名前
+</th>
+<th style="text-align:left;">
+支持政党あり
+</th>
+<th style="text-align:left;">
+政党名
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Yanai
+</td>
+<td style="text-align:left;">
+ない
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Song
+</td>
+<td style="text-align:left;">
+ある
+</td>
+<td style="text-align:left;">
+ラーメン大好き党
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+Shigemura
+</td>
+<td style="text-align:left;">
+ある
+</td>
+<td style="text-align:left;">
+鹿児島第一党
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+Tani
+</td>
+<td style="text-align:left;">
+ない
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+</tbody>
+</table>
+<p>3列目で支持政党があるケースのみ、4列目に値があります。YanaiとTaniの場合、支持する政党がないため、政治政党名が欠損しています。実際、多くのデータには欠損値が含まれています。世論調査データの場合はもっと多いです。理由としては「Q2で”はい”を選んだ場合のみQ3に進み、それ以外はQ4へ飛ばす」のようなのもありますが、単に回答を拒否した場合もあります。</p>
+<p>まずは欠損値が含まれたベクトル<code>na_vec1</code>を作ってみましょう。</p>
+<div class="sourceCode" id="cb265"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb265-1"><a href="datatype.html#cb265-1"></a>na_vec1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="cn">NA</span>, <span class="dv">3</span>, <span class="cn">NA</span>, <span class="dv">5</span>, <span class="dv">6</span>)</span>
+<span id="cb265-2"><a href="datatype.html#cb265-2"></a>na_vec1</span></code></pre></div>
+<pre><code>## [1]  1 NA  3 NA  5  6</code></pre>
+<p>つづいて、データ型を確認してみましょう。</p>
+<div class="sourceCode" id="cb267"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb267-1"><a href="datatype.html#cb267-1"></a><span class="fu">class</span>(na_vec1)</span></code></pre></div>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<p>NAが含まれていてもデータ型はnumericのままです。これは「一応、欠損しているが、ここに何らかの値が割り当てられるとしたらそれはnumeric型だろう」とRが判断しているからです。ある要素がNAか否かを判定するには<code>is.na()</code>関数を使います。</p>
+<div class="sourceCode" id="cb269"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb269-1"><a href="datatype.html#cb269-1"></a><span class="fu">is.na</span>(na_vec1)</span></code></pre></div>
+<pre><code>## [1] FALSE  TRUE FALSE  TRUE FALSE FALSE</code></pre>
+<p>2番目と4番目の要素が欠損していることが分かります。</p>
+<p>欠損値も要素の一つとしてカウントされるため、ベクトルの長さは6になります。ベクトルの長さは<code>length()</code>関数で確認できます。</p>
+<div class="sourceCode" id="cb271"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb271-1"><a href="datatype.html#cb271-1"></a><span class="fu">length</span>(na_vec1)</span></code></pre></div>
+<pre><code>## [1] 6</code></pre>
+<p><strong>欠損値の取り扱い</strong></p>
+<p>欠損値を含むデータの処理方法はやや特殊です。まず、<code>na_vec1</code>の要素全てに1を足してみましょう。</p>
+<div class="sourceCode" id="cb273"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb273-1"><a href="datatype.html#cb273-1"></a>na_vec1 <span class="sc">+</span> <span class="dv">1</span></span></code></pre></div>
+<pre><code>## [1]  2 NA  4 NA  6  7</code></pre>
+<p>この場合、欠損値の箇所には1が足されず、それ以外の要素のみに1を足した結果が返ってきます。これは直感的に考えると自然です。問題になるのは欠損値が含まれるベクトルを関数に入れた場合です。たとえば、numeric型ベクトル内の要素の総和を求めるには<code>sum()</code>関数を使います。<code>sum(c(1, 3, 5))</code>を入力すると9が返されます。<code>na_vec1</code>は欠損していない要素が1, 3, 5, 6であるため、総和は15のはずです。確認してみましょう。</p>
+<div class="sourceCode" id="cb275"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb275-1"><a href="datatype.html#cb275-1"></a><span class="fu">sum</span>(na_vec1)</span></code></pre></div>
+<pre><code>## [1] NA</code></pre>
+<p>このように欠損値を含むベクトルの総和はNAとなります。もし、欠損値を除いた要素の総和を求めるには、まずベクトルから欠損値を除去する必要があります。そのためには<code>is.na()</code>関数を使って<code>na_vec1</code>の要素を抽出します。ただし、<code>is.na()</code>を使うと、欠損値であるところが<code>TRUE</code>になるため、これを反転する必要があります。この場合は<code>!is.na()</code>関数を使います。それでは<code>is.na()</code>と<code>!is.na()</code>を使って要素を抽出してみましょう。</p>
+<div class="sourceCode" id="cb277"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb277-1"><a href="datatype.html#cb277-1"></a>na_vec1[<span class="fu">is.na</span>(na_vec1)]</span></code></pre></div>
+<pre><code>## [1] NA NA</code></pre>
+<div class="sourceCode" id="cb279"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb279-1"><a href="datatype.html#cb279-1"></a>na_vec1[<span class="sc">!</span><span class="fu">is.na</span>(na_vec1)]</span></code></pre></div>
+<pre><code>## [1] 1 3 5 6</code></pre>
+<p><code>!is.na()</code>を使うことで欠損値を除いた要素のみを取り出すことができました。これなら<code>sum()</code>関数も使えるでしょう。</p>
+<div class="sourceCode" id="cb281"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb281-1"><a href="datatype.html#cb281-1"></a><span class="fu">sum</span>(na_vec1[<span class="sc">!</span><span class="fu">is.na</span>(na_vec1)])</span></code></pre></div>
+<pre><code>## [1] 15</code></pre>
+<p>これで欠損値を除いた要素の総和を求めることができました。ただし、一部の関数には欠損値を自動的に除去するオプションを持つ場合があります。<code>sum()</code>関数のその一部であり、<code>na.rm = TRUE</code>オプションを付けると、欠損値を除いた総和を返します。</p>
+<div class="sourceCode" id="cb283"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb283-1"><a href="datatype.html#cb283-1"></a><span class="fu">sum</span>(na_vec1, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## [1] 15</code></pre>
+<p><strong>欠損値の使い方</strong></p>
+<p>主に欠損値を扱うのは入手したデータに含まれる欠損値に対してですが、NAをこちらから生成することもあります。それは空ベクトルを用意する時です。第<a href="programming.html#programming">10</a>章では関数の作り方について解説します。関数内で何らかの処理を行い、その結果を返すことになりますが、その結果を格納するベクトルを事前に作っておくこともできます。こちらの方がメモリの観点からは効率的です。以下は第<a href="programming.html#programming">10</a>章を読んでから読んでも構いません。</p>
+<p>もし、長さ10のベクトル<code>result_vec1</code>を返すとします。ベクトルの要素として1から10の数字が入るとします。一つ目の方法としてはまず、<code>result_vec1</code>に1を代入し、次は<code>c()</code>を使って要素を一つずつ足して行く手順です。</p>
+<div class="sourceCode" id="cb285"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb285-1"><a href="datatype.html#cb285-1"></a>result_vec1 <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb285-2"><a href="datatype.html#cb285-2"></a>result_vec1 <span class="ot">&lt;-</span> <span class="fu">c</span>(result_vec1, <span class="dv">2</span>)</span>
+<span id="cb285-3"><a href="datatype.html#cb285-3"></a>result_vec1 <span class="ot">&lt;-</span> <span class="fu">c</span>(result_vec1, <span class="dv">3</span>)</span>
+<span id="cb285-4"><a href="datatype.html#cb285-4"></a>result_vec1 <span class="ot">&lt;-</span> <span class="fu">c</span>(result_vec1, <span class="dv">4</span>)</span>
+<span id="cb285-5"><a href="datatype.html#cb285-5"></a>result_vec1 <span class="ot">&lt;-</span> <span class="fu">c</span>(result_vec1, <span class="dv">5</span>)</span>
+<span id="cb285-6"><a href="datatype.html#cb285-6"></a>result_vec1 <span class="ot">&lt;-</span> <span class="fu">c</span>(result_vec1, <span class="dv">6</span>)</span>
+<span id="cb285-7"><a href="datatype.html#cb285-7"></a>result_vec1 <span class="ot">&lt;-</span> <span class="fu">c</span>(result_vec1, <span class="dv">7</span>)</span>
+<span id="cb285-8"><a href="datatype.html#cb285-8"></a>result_vec1 <span class="ot">&lt;-</span> <span class="fu">c</span>(result_vec1, <span class="dv">8</span>)</span>
+<span id="cb285-9"><a href="datatype.html#cb285-9"></a>result_vec1 <span class="ot">&lt;-</span> <span class="fu">c</span>(result_vec1, <span class="dv">9</span>)</span>
+<span id="cb285-10"><a href="datatype.html#cb285-10"></a>result_vec1 <span class="ot">&lt;-</span> <span class="fu">c</span>(result_vec1, <span class="dv">10</span>)</span></code></pre></div>
+<p>二つ目の方法はまず、10個のNAが格納されたベクトル<code>Reuslt.Vec2</code>を作っておいて、その中に要素を置換してく方法です。</p>
+<div class="sourceCode" id="cb286"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb286-1"><a href="datatype.html#cb286-1"></a>result_vec2     <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">10</span>)</span>
+<span id="cb286-2"><a href="datatype.html#cb286-2"></a>result_vec2[<span class="dv">1</span>]  <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb286-3"><a href="datatype.html#cb286-3"></a>result_vec2[<span class="dv">2</span>]  <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb286-4"><a href="datatype.html#cb286-4"></a>result_vec2[<span class="dv">3</span>]  <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb286-5"><a href="datatype.html#cb286-5"></a>result_vec2[<span class="dv">4</span>]  <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb286-6"><a href="datatype.html#cb286-6"></a>result_vec2[<span class="dv">5</span>]  <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb286-7"><a href="datatype.html#cb286-7"></a>result_vec2[<span class="dv">6</span>]  <span class="ot">&lt;-</span> <span class="dv">6</span></span>
+<span id="cb286-8"><a href="datatype.html#cb286-8"></a>result_vec2[<span class="dv">7</span>]  <span class="ot">&lt;-</span> <span class="dv">7</span></span>
+<span id="cb286-9"><a href="datatype.html#cb286-9"></a>result_vec2[<span class="dv">8</span>]  <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<span id="cb286-10"><a href="datatype.html#cb286-10"></a>result_vec2[<span class="dv">9</span>]  <span class="ot">&lt;-</span> <span class="dv">9</span></span>
+<span id="cb286-11"><a href="datatype.html#cb286-11"></a>result_vec2[<span class="dv">10</span>] <span class="ot">&lt;-</span> <span class="dv">10</span></span></code></pre></div>
+<p>以上の手順を第<a href="programming.html#programming">10</a>章で紹介する<code>for()</code>を使って反復処理するとしたら、以下のようなコードになります。</p>
+<div class="sourceCode" id="cb287"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb287-1"><a href="datatype.html#cb287-1"></a><span class="co"># 方法1</span></span>
+<span id="cb287-2"><a href="datatype.html#cb287-2"></a>result_vec1 <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb287-3"><a href="datatype.html#cb287-3"></a></span>
+<span id="cb287-4"><a href="datatype.html#cb287-4"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">10</span>) {</span>
+<span id="cb287-5"><a href="datatype.html#cb287-5"></a>    result_vec1 <span class="ot">&lt;-</span> <span class="fu">c</span>(result_vec1, i)</span>
+<span id="cb287-6"><a href="datatype.html#cb287-6"></a>}</span>
+<span id="cb287-7"><a href="datatype.html#cb287-7"></a></span>
+<span id="cb287-8"><a href="datatype.html#cb287-8"></a><span class="co"># 方法2</span></span>
+<span id="cb287-9"><a href="datatype.html#cb287-9"></a>result_vec2 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">10</span>)</span>
+<span id="cb287-10"><a href="datatype.html#cb287-10"></a></span>
+<span id="cb287-11"><a href="datatype.html#cb287-11"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>) {</span>
+<span id="cb287-12"><a href="datatype.html#cb287-12"></a>    result_vec2[i] <span class="ot">&lt;-</span> i</span>
+<span id="cb287-13"><a href="datatype.html#cb287-13"></a>}</span></code></pre></div>
+<p>結果を確認してみましょう。</p>
+<div class="sourceCode" id="cb288"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb288-1"><a href="datatype.html#cb288-1"></a>result_vec1</span></code></pre></div>
+<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
+<div class="sourceCode" id="cb290"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb290-1"><a href="datatype.html#cb290-1"></a>result_vec2</span></code></pre></div>
+<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
+<p>コードの書き方は異なりますが、どれも結果は同じです。また、どちらが早いかというと、これくらいの計算ならどの方法でも同じです。ただし、より大規模の反復作業を行う場合、後者の方が時間が節約でき、コードの可読性も高いです。</p>
+<hr />
+</div>
+<div id="type-null" class="section level2" number="8.9">
+<h2><span class="header-section-number">8.9</span> NULL</h2>
+<p>NULLは「存在しない」、空っぽであることを意味します。先ほどのNAはデータは存在するはずなのに、何らかの理由で値が存在しない、または割り当てられていないことを意味しますが、NULLは「存在しません」。したがって、NULLが含まれたベクトルを作成しても表示されません。NULLが含まれた<code>null_vec1</code>を作ってみましょう。</p>
+<div class="sourceCode" id="cb292"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb292-1"><a href="datatype.html#cb292-1"></a>null_vec1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="cn">NULL</span>, <span class="dv">5</span>, <span class="dv">10</span>)</span>
+<span id="cb292-2"><a href="datatype.html#cb292-2"></a>null_vec1</span></code></pre></div>
+<pre><code>## [1]  1  3  5 10</code></pre>
+<p>3番目の要素であるNULLは表示されません。ということはNAと違って、データの長さも5ではなく4でしょう。確認してみます。</p>
+<div class="sourceCode" id="cb294"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb294-1"><a href="datatype.html#cb294-1"></a><span class="fu">length</span>(null_vec1)</span></code></pre></div>
+<pre><code>## [1] 4</code></pre>
+<p>この<code>null_vec1</code>のデータ型は何でしょう。</p>
+<div class="sourceCode" id="cb296"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb296-1"><a href="datatype.html#cb296-1"></a><span class="fu">class</span>(null_vec1)</span></code></pre></div>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<p><code>is.null()</code>関数もありますが、どうでしょうか。</p>
+<div class="sourceCode" id="cb298"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb298-1"><a href="datatype.html#cb298-1"></a><span class="fu">is.null</span>(null_vec1)</span></code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+<p>NULLは存在しないことを意味するため、<code>null_vec1</code>は要素が4のnumeric型ベクトルです。<code>is.null()</code>でNULLが判定できるのは<code>is.null(NULL)</code>のようなケースです。</p>
+<p>図<a href="datatype.html#fig:datatype-null-5">8.8</a>はNA型とNULL型の違いについてまとめたものです。</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:datatype-null-5"></span>
+<img src="figures/Datatype/NA_NULL.png" alt="NAとNULLの違い" width="85%" />
+<p class="caption">
+図 8.8: NAとNULLの違い
+</p>
+</div>
+<p>このNULLはいつ使うのでしょうか。実際、使う機会はあまりありません。強いて言えば、空っぽのリストを作成する際に使うケースがあります。リストについては第<a href="datastructure.html#datastructure">9</a>章で説明します。以下の例は第<a href="datastructure.html#datastructure">9</a>章を読み終わってから目を通して下さい。</p>
+<div class="sourceCode" id="cb300"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb300-1"><a href="datatype.html#cb300-1"></a>null_list1 <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Room1 =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,</span>
+<span id="cb300-2"><a href="datatype.html#cb300-2"></a>                   <span class="at">Room2 =</span> <span class="fu">c</span>(<span class="st">&quot;Yuki&quot;</span>, <span class="st">&quot;Jaehyun&quot;</span>, <span class="st">&quot;Hadley&quot;</span>),</span>
+<span id="cb300-3"><a href="datatype.html#cb300-3"></a>                   <span class="at">Room3 =</span> <span class="cn">NULL</span>)</span>
+<span id="cb300-4"><a href="datatype.html#cb300-4"></a></span>
+<span id="cb300-5"><a href="datatype.html#cb300-5"></a>null_list1</span></code></pre></div>
+<pre><code>## $Room1
+## [1] 1 2 3
+## 
+## $Room2
+## [1] &quot;Yuki&quot;    &quot;Jaehyun&quot; &quot;Hadley&quot; 
+## 
+## $Room3
+## NULL</code></pre>
+<p>このように予めリストの要素は作っておきたいが、とりあえず空けておく際に使います。続く分析の段階で<code>null_list1[["Room3"]]</code>に何かを格納したりすることに使えるでしょう。ちなみにこの場合は<code>is.null()</code>が使用可能です。</p>
+<div class="sourceCode" id="cb302"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb302-1"><a href="datatype.html#cb302-1"></a><span class="fu">is.null</span>(null_list1[[<span class="st">&quot;Room3&quot;</span>]])</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<hr />
+</div>
+<div id="type-nan" class="section level2" number="8.10">
+<h2><span class="header-section-number">8.10</span> NaN</h2>
+<p>NaNはnumeric型、中でもdouble型の一種ですが、これは計算できない値を意味します。つまり、NaN値を直接入力することはめったにありませんが、計算の結果として<code>NaN</code>が返されるケースがあります。代表的な例が0を0で割った場合です。実際、0を0で割ることはできません。ここでは0を0で割った値を含む<code>nan_vec1</code>作ってみましょう。</p>
+<div class="sourceCode" id="cb304"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb304-1"><a href="datatype.html#cb304-1"></a>nan_vec1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span><span class="sc">/</span><span class="dv">5</span>, <span class="dv">0</span><span class="sc">/</span><span class="dv">12</span>, <span class="dv">0</span><span class="sc">/</span><span class="dv">0</span>)</span>
+<span id="cb304-2"><a href="datatype.html#cb304-2"></a>nan_vec1</span></code></pre></div>
+<pre><code>## [1] 0.4 0.0 NaN</code></pre>
+<div class="sourceCode" id="cb306"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb306-1"><a href="datatype.html#cb306-1"></a><span class="fu">class</span>(nan_vec1)</span></code></pre></div>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<p>先ほどせつめいしましたように、NaNはnumeric型の一部ですので、データ型としてはnumeircになります。ある値がNaNか否かを判定するには<code>is.nan()</code>関数を使います。</p>
+<div class="sourceCode" id="cb308"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb308-1"><a href="datatype.html#cb308-1"></a><span class="fu">is.nan</span>(nan_vec1)</span></code></pre></div>
+<pre><code>## [1] FALSE FALSE  TRUE</code></pre>
+<hr />
+</div>
+<div id="type-inf" class="section level2" number="8.11">
+<h2><span class="header-section-number">8.11</span> Inf</h2>
+<p>Infもまたnumeric型、中でもdouble型の一部ですが、これは無限大を意味します。Infも通常、自分から作成するケースはあまりなく、結果として帰ってくる場合があります。一つの例が0以外の数値を0で割った場合です。それではなんらかの数値を0を割った値が含まれるベクトル<code>inf_vec1</code>を作ってみましょう。</p>
+<div class="sourceCode" id="cb310"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb310-1"><a href="datatype.html#cb310-1"></a>inf_vec1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">28</span><span class="sc">/</span><span class="dv">95</span>, <span class="dv">3</span><span class="sc">/</span><span class="dv">0</span>, <span class="sc">-</span><span class="dv">12</span><span class="sc">/</span><span class="dv">0</span>, <span class="dv">0</span><span class="sc">/</span><span class="dv">0</span>)</span>
+<span id="cb310-2"><a href="datatype.html#cb310-2"></a>inf_vec1</span></code></pre></div>
+<pre><code>## [1] 0.2947368       Inf      -Inf       NaN</code></pre>
+<div class="sourceCode" id="cb312"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb312-1"><a href="datatype.html#cb312-1"></a><span class="fu">class</span>(inf_vec1)</span></code></pre></div>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<p>正の値を0で割ったら<code>Inf</code>が負の値を0で割ったら<code>-Inf</code>が返ってきます。これは正の無限大、負の無限大を意味します。データ型はNaNと同様、numeric型ですが、<code>is.infinite()</code>を使うと、無限大か否かが判定できます。</p>
+<div class="sourceCode" id="cb314"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb314-1"><a href="datatype.html#cb314-1"></a><span class="fu">is.infinite</span>(inf_vec1)</span></code></pre></div>
+<pre><code>## [1] FALSE  TRUE  TRUE FALSE</code></pre>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="io.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="datastructure.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": null,
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["RN4E.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"toolbar": {
+"position": "fixed"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
