@@ -669,6 +669,42 @@ for (i in 1:10) {
 
 　`tidy = TRUE`を付けただけで、読みやすいコードになりました。ちなみに`tidy`オプションを使うためには事前に{formatR}パッケージをインストールしておく必要があります。ただし、{formatR}パッケージはR Markdwon内において読み込んでおく必要はありません。また、{formatR}パッケージは万能ではないため、普段から読みやすいコードを書くようにしましょう。
 
+### チャンクオプションのもう一つの書き方
+
+　これまでチャンクオプションは`{r}`の内部に指定すると述べましたが、チャンクオプションが多くなる場合、チャンクの第1行目が長くなり、コードの可読性が低下する可能性があります。ここで便利な機能が`#|`によるチャンクオプションの指定です。これはチャンク内部に`#|`を書いておけば、`#|`以降の内容がチャンクオプションとして認識される機能です。
+
+　図\@ref(fig:rmarkdown-chunk-1)の作図チャンクは以下のように書くことも可能です。
+
+````markdown
+```{r}
+#| fig.height: 5
+#| fig.width: 7
+#| fig.align: "center"
+#| fig.cap: "`iris`データセットの可視化"
+#| dpi: 72
+
+iris %>%
+  mutate(Species2 = recode(Species,
+                           "setosa"     = "セトナ",
+                           "versicolor" = "バーシクル",
+                           "virginica"  = "バージニカ")) %>%
+  ggplot() +
+  geom_point(aes(x = Sepal.Length, y = Sepal.Width, color = Species2)) +
+  labs(x = "萼片の長さ (cm)", y = "萼片の幅 (cm)", color = "品種") +
+  theme_minimal(base_size = 12)
+```
+````
+
+　もう一つの方法は、全て (あるいは、ほとんど)のチャンクに渡って共通するチャンクオプションの場合、最初に宣言しておくことです。もし、全ての図を中央に揃え (`fig.align = "center"`)、解像度を300dpi (`dpi = 300`)にするなら、後述するYAMLヘッダーに続く最初のチャンクを以下のように書きます。
+
+````markdown
+```{r, include = FALSE}
+knitr::opts_chunk$set(fig.align = "center", dpi = 300)
+```
+````
+
+　こう書いておくと、そのRMarkdownファイルの全てのチャンクに`fig.align = "center"`と`dpi = 300`オプションが付くようになります。一部のチャンクに`fig.align`や`dpi`のオプションを付ける場合、当該チャンクのオプションが優先されます。
+
 ---
 
 ## ヘッダーのオプション {#rmarkdown-header}
