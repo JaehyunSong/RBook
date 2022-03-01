@@ -7,7 +7,7 @@ url: https\://jaysong.net/RBook/
 site: bookdown::bookdown_site
 
 documentclass: ltjsbook
-bibliography: tex/reference.bib
+bibliography: tex/reference
 #biblio-style: tex/jecon
 
 link-citations: yes
