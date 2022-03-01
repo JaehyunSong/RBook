@@ -40,7 +40,7 @@
 
 　R Markdownファイルは大きく3つの領域に分けることができます（図\@ref(fig: rmarkdown-sample-1)）。まず、最初に`---`と`---`で囲まれた領域はヘッダー（Header）と呼ばれる領域です。ここでは題目、作成者情報の入力以外にも、文書全体に通じる設定を行います。これは第\@ref(rmarkdown-header)節で解説します。次はR Markdownの核心部であるチャンク（Chunk）です。チャンクは```` ```{r} ````と```` ``` ````で囲まれた領域であり、Rコードが入る箇所です。チャンクに関しましては第\@ref(rmarkdown-grammar)節の後半と第\@ref(rmarkdown-chunk)節で解説します。その他の領域がマークダウン（Markdown）であり、文書に該当します。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.8\linewidth]{figures/Markdown/SamplePage} 
 
@@ -255,17 +255,17 @@
 
 　R Markdownに画像を入れるには`![代替テキスト](ファイル名)`と入力します。当たり前ですが、画像ファイルがワーキングディレクトリにない場合はパスを指定する必要があります。`[代替テキスト]`は画像を読み込めなかった場合のテキストを意味します。これは画像が読み込めなかった場合の代替テキストでもありますが、視覚障害者用のウェブブラウザーのためにも使われます。これらのウェブブラウザーはテキストのみ出力されるものが多く、画像の代わりには代替テキストが読み込まれます。
 
-　例えば、`figure`フォルダー内の`Authors`フォルダー内の`SongYanai.jpg`というファイルを読み込むとしたら以下のように書きます。
+　例えば、`HTML`フォルダー内の`favicon.png`というファイルを読み込むとしたら以下のように書きます。
 
 **Input:**
 
 ```markdown
-![著者たちの写真](figures/Authors/SongYanai.jpg)
+![『私たちのR』ロゴ](HTML/favicon.png)
 ```
 
 **Output:**
 
-![著者たちの写真](figures/Authors/SongYanai.jpg)
+![『私たちのR』ロゴ](HTML/favicon.png){width=25%}
 
 ### リンク
 
@@ -616,7 +616,7 @@ iris %>%
   theme_minimal(base_size = 12)
 ```
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics{rmarkdown_files/figure-latex/rmarkdown-chunk-1-1} 
 
@@ -667,7 +667,7 @@ for (i in 1:10) {
 }
 ```
 
-　`tidy = TRUE`を付けただけで、読みやすいコードになりました。ちなみに`tidy`オプションを使うためには事前に`formatR`パッケージをインストールしておく必要があります。ただし、`formatR`パッケージはR Markdwon内において読み込んでおく必要はありません。また、`formatR`パッケージは万能ではないため、普段から読みやすいコードを書くようにしましょう。
+　`tidy = TRUE`を付けただけで、読みやすいコードになりました。ちなみに`tidy`オプションを使うためには事前に{formatR}パッケージをインストールしておく必要があります。ただし、{formatR}パッケージはR Markdwon内において読み込んでおく必要はありません。また、{formatR}パッケージは万能ではないため、普段から読みやすいコードを書くようにしましょう。
 
 ---
 

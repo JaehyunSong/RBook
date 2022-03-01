@@ -58,7 +58,7 @@ devtools::install_github("JaehyunSong/BalanceR")
 
 　先ほど述べたように、パッケージのインストールは道具セットの購入と収納に似ている。ただし、実際に道具セットを使うためには、それを自分の作業台上に載せた方が効率がいいだろう[^default-pacakge] [^load_direct]。この作業がパッケージの読み込み (load) である。インストールしたパッケージを読み込むには`library()`または`require()`関数を使う。`require()`は関数内に使う目的で設計された関数だが、パッケージを読み込むという点では全く同じである。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.75\linewidth]{Figures/Installation/Package_Workbench} 
 
@@ -193,7 +193,7 @@ install.packages("devtools")
 
 パッケージのインストールの祭、エラーが出る場合があります。とりわけ、R導入直後は必要とするライブラリがインストールされていないケースが多く、以下のようなエラーメッセージが表示されるケースがあります。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.75\linewidth]{Figures/Installation/Package_Ubuntu1} 
 

@@ -86,7 +86,7 @@ Yanai & Treatment & 95\\
 
 \begin{table}
 
-\caption{(\#tab:tidydata-intro-4)表\@ref(tab:tidydata1)を転置した場合}
+\caption{(\#tab:tidydata-intro-4)表\@ref(tab:tidydata-intro-3)を転置した場合}
 \centering
 \begin{tabular}[t]{l|l|l|l|l|l|l}
 \hline
@@ -120,7 +120,7 @@ Math\_Score & 90 & 90 & 80 & 25 & 100 & 95\\
 
 これらの情報がそれぞれデータの変数になるわけですが、整然データは一つの列が一つの変数を表します。それではまず、表\@ref(tab:tidydata-intro-1) (図\@ref(fig:tidydata-intro-5)の左)から考えてみましょう。この図には3つの情報が全て含まれています。しかし、数学成績は2列に渡って格納されており、「1列1変数」の条件を満たしておりません。一方、表\@ref(tab:tidydata-intro-3) (図\@ref(fig:tidydata-intro-5)の右)は投薬前後を表す`Treat`変数を作成し、その値に応じた数学成績が格納されており、「1列1変数」の条件を満たしています。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=1\linewidth]{Figures/Tidydata/TidyData1} 
 
@@ -135,7 +135,7 @@ Math\_Score & 90 & 90 & 80 & 25 & 100 & 95\\
 
 図\@ref(fig:tidydata-intro-6)の左は一行当たり、いくつの観察が含まれているでしょうか。そのためにはこのデータが何を観察しているかを考える必要があります。このデータは投薬**前後**の数学成績を観察し、量的に測定したものです。つまり、同じ人に対して2回観察を行ったことになります。したがって、投薬前の数学成績と投薬後の数学成績は別の観察であり、図\@ref(fig:tidydata-intro-6)の左は3行の表ですが、実は6回分の観察が含まれていることになります。1行に2つの観察が載っていることですね。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=1\linewidth]{Figures/Tidydata/TidyData2} 
 
@@ -195,7 +195,7 @@ Yanai & Treatment & Blood & 95\\
 
 この条件に反するケースはあまりないかも知れません。たとえば、「Hadleyは処置前後の数学成績が同じだし、一行にまとめよう」という意味で図\@ref(fig:tidydata-intro-8)の左のような表を作る方もいるかも知れませんが、あまりいないでしょう。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.5\linewidth]{Figures/Tidydata/TidyData3} 
 
@@ -245,7 +245,7 @@ Year & Month & Date & Stock\\
 
 [e-stat](https://www.e-stat.go.jp)などから[国勢調査データ](https://www.e-stat.go.jp/stat-search/database?page=1&toukei=00200521&tstat=000001080615)をダウンロードした経験はあるでしょうか。以下の図\@ref(fig:tidydata-intro-10)は2015年度国勢調査データの一部です。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=1\linewidth]{Figures/Tidydata/MessyData4} 
 
@@ -256,7 +256,7 @@ Year & Month & Date & Stock\\
 
 このデータの観察単位はなんでしょうか。データのの1行目は全国の人口を表しています。つまり、単位は国となります。しかし、2行目は北海道の人口です。この場合の観測単位は都道府県となります。つづいて、3行目は札幌市なので単位は市区町村になります。4行目は札幌市中央区、つまり観測単位が行政区になっています。そして14行目は函館市でまた単位は市区町村に戻っています。実際、会社や政府が作成するデータには図\@ref(fig:tidydata-intro-10)や図\@ref(fig:tidydata-intro-11)のようなものが多いです。とりわけ、図\@ref(fig:tidydata-intro-11)のように、最後の行に「合計」などが表記されている場合が多いです。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.65\linewidth]{Figures/Tidydata/TidyData4} 
 

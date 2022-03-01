@@ -461,6 +461,14 @@ factor_vec2
 
 ```{.r .numberLines}
 factor_vec2[2] <- "超好き"
+```
+
+```
+## Warning in `[<-.factor`(`*tmp*`, 2, value = "超好き"): invalid factor level, NA
+## generated
+```
+
+```{.r .numberLines}
 factor_vec2
 ```
 
@@ -512,11 +520,11 @@ class(factor_vec3)
 
 今回は3行目が`## Levels: どちらかといえば好き 好き めちゃ好き めちゃめちゃ好き`となり、順序に関する情報がなくなりました。また、`class()`で確認しましたデータ型に`"ordered"`が付いていません。これは順序なしfactor型であることを意味します。「順序付けしないならfactor型は要らないのでは...?」と思うかも知れませんが、これはこれで便利です。その例を考えてみましょう。
 
-分析においてfactor型はcharacter型に近い役割を果たしますが、factor型なりの長所もあります。それは図や表を作成する際です。例えば、横軸が都道府県名で、縦軸がその都道府県の財政力指数を表す棒グラフを作成するとします。たとえば、表\@ref(tab:datatype-factor-7)のようなデータがあるとします。このデータは3つの列で構成されており、`ID`と`Zaisei`列はnumeric型、`Pref`列はcharacter型です。
+分析においてfactor型はcharacter型に近い役割を果たしますが、factor型なりの長所もあります。それは図や表を作成する際です。例えば、横軸が都道府県名で、縦軸がその都道府県の財政力指数を表す棒グラフを作成するとします。たとえば、表\@ref(tab:datatype-factor-8)のようなデータがあるとします。このデータは3つの列で構成されており、`ID`と`Zaisei`列はnumeric型、`Pref`列はcharacter型です。
 
 \begin{table}
 
-\caption{(\#tab:datatype-factor-7)5都道府県のH29財政力指数}
+\caption{(\#tab:datatype-factor-8)5都道府県のH29財政力指数}
 \centering
 \begin{tabular}[t]{r|l|r}
 \hline
@@ -535,15 +543,15 @@ ID & Pref & Zaisei\\
 \end{tabular}
 \end{table}
 
-可視化については第\@ref(visualization1)章以降で詳しく解説しますが、この`Pref`列をcharacter型にしたままグラフにしますと図\@ref(fig:datatype-factor-8)のようになります。
+可視化については第\@ref(visualization1)章以降で詳しく解説しますが、この`Pref`列をcharacter型にしたままグラフにしますと図\@ref(fig:datatype-factor-9)のようになります。
 
-\begin{figure}
+\begin{figure}[H]
 
-{\centering \includegraphics{datatype_files/figure-latex/datatype-factor-8-1} 
+{\centering \includegraphics{datatype_files/figure-latex/datatype-factor-9-1} 
 
 }
 
-\caption{5都道府県のH29財政力指数}(\#fig:datatype-factor-8)
+\caption{5都道府県のH29財政力指数}(\#fig:datatype-factor-9)
 \end{figure}
 
 このようにアルファベット順で横軸が並び替えられます。別にこれでも問題ないと思う方もいるかも知れませんが、基本的に日本の都道府県は北から南の方へ並べるのが一般的な作法です[^PrefSort]。北海道と東京、大阪の間には順序関係はありません。しかし、表示される順番は固定したい。この場合、`Pref`列を順序なしfactor型にすれば良いです[^orderedfactor]。データフレームの列を修正する方法は第\@ref(datastructure)章で詳しく説明します。
@@ -558,15 +566,15 @@ zaisei_df$Pref <- factor(zaisei_df$Pref,
                          levels = c("Hokkaido", "Tokyo", "Aichi", "Osaka", "Fukuoka"))
 ```
 
-`zaisei_df`の`Pref`列をfactor型にしてから同じ図を描くと図\@ref(fig:datatype-factor-10)のようになります。
+`zaisei_df`の`Pref`列をfactor型にしてから同じ図を描くと図\@ref(fig:datatype-factor-11)のようになります。
 
-\begin{figure}
+\begin{figure}[H]
 
-{\centering \includegraphics{datatype_files/figure-latex/datatype-factor-10-1} 
+{\centering \includegraphics{datatype_files/figure-latex/datatype-factor-11-1} 
 
 }
 
-\caption{5都道府県のH29財政力指数}(\#fig:datatype-factor-10)
+\caption{5都道府県のH29財政力指数}(\#fig:datatype-factor-11)
 \end{figure}
 
 都道府県以外にもこのような例は多くあります。順序尺度で測定された変数が代表的な例です。他にも政党名を議席数順で表示させたい場合もfactor型は有効でしょう。
@@ -623,7 +631,7 @@ ggplot(SongSleep,
     theme_gray(base_size = 12)
 ```
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics{datatype_files/figure-latex/datatype-date-3-1} 
 
@@ -668,7 +676,7 @@ ggplot(SongSleep,
     theme_gray(base_size = 12)
 ```
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics{datatype_files/figure-latex/datatype-date-6-1} 
 
@@ -712,7 +720,7 @@ ggplot(SongSleep2,
     theme_gray(base_size = 12)
 ```
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics{datatype_files/figure-latex/datatype-date-9-1} 
 
@@ -732,7 +740,7 @@ ggplot(SongSleep2,
     theme_gray(base_size = 12)
 ```
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics{datatype_files/figure-latex/datatype-date-10-1} 
 
@@ -773,7 +781,11 @@ ggplot(SongSleep3,
     theme_bw()
 ```
 
-\begin{figure}
+```
+## Warning: Removed 1 rows containing missing values (geom_point).
+```
+
+\begin{figure}[H]
 
 {\centering \includegraphics{datatype_files/figure-latex/datatype-date-12-1} 
 
@@ -1224,7 +1236,7 @@ NULLは存在しないことを意味するため、`null_vec1`は要素が4のn
 
 図\@ref(fig:datatype-null-5)はNA型とNULL型の違いについてまとめたものです。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.85\linewidth]{figures/Datatype/NA_NULL} 
 

@@ -4,7 +4,7 @@
 
 ## 本章の内容
 
-　前章では`ggplot2`の仕組みおよびグラフィックの文法と良いグラフについて説明しました。本章では実際に簡単なグラフを作りながら`ggplot2`に慣れて頂きたいと思います。`ggplot2`で作れる図の種類は非常に多いですが、本章では、データサイエンスで頻繁に利用される以下の5つのプロットの作り方を紹介します。
+　前章では{ggplot2}の仕組みおよびグラフィックの文法と良いグラフについて説明しました。本章では実際に簡単なグラフを作りながら{ggplot2}に慣れて頂きたいと思います。{ggplot2}で作れる図の種類は非常に多いですが、本章では、データサイエンスで頻繁に利用される以下の5つのプロットの作り方を紹介します。
 
 1. [棒グラフ](#visual2-barplot)
 2. [ヒストグラム](#visual2-histogram)
@@ -16,7 +16,7 @@
 
 ## 実習用データ {#visual2-data}
 
-　実習の前に本章で使用するデータと`ggplot2`パッケージが含まれている`tidyverse`を読み込みます。
+　実習の前に本章で使用するデータと{ggplot2}パッケージが含まれている`tidyverse`を読み込みます。
 
 * [データ1: 国家別民主主義および政治的自由データ](Data/Countries.csv)
 * [データ2: COVID-19データ](Data/COVID19_Worldwide.csv)
@@ -25,6 +25,8 @@
 
 
 ```{.r .numberLines}
+pacman::p_load(tidyverse)
+
 Country_df <- read_csv("Data/Countries.csv")
 COVID19_df <- read_csv("Data/COVID19_Worldwide.csv", guess_max = 10000)
 ```
@@ -33,7 +35,7 @@ COVID19_df <- read_csv("Data/COVID19_Worldwide.csv", guess_max = 10000)
 
 \begin{table}
 
-\caption{(\#tab:unnamed-chunk-3)国家別民主主義および政治的自由データの詳細}
+\caption{(\#tab:visual2-sampledata-1)国家別民主主義および政治的自由データの詳細}
 \centering
 \begin{tabular}[t]{l|l|l}
 \hline
@@ -80,7 +82,7 @@ COVID19_df <- read_csv("Data/COVID19_Worldwide.csv", guess_max = 10000)
 
 \begin{table}
 
-\caption{(\#tab:unnamed-chunk-4)COVID-19データの詳細}
+\caption{(\#tab:visual2-sampledata-2)COVID-19データの詳細}
 \centering
 \begin{tabular}[t]{l|l}
 \hline
@@ -109,6 +111,100 @@ COVID19_df <- read_csv("Data/COVID19_Worldwide.csv", guess_max = 10000)
 
 ---
 
+## 日本語が含まれた図について {#visual2-japanese}
+
+(以下は作成中の内容)
+
+{ggplot2}で作成した図に日本語が含まれている場合、日本語が正しく表示されない場合があります。また、RStudioのPlotsペインには日本語が表示されていても、PDF/PNG/JPGなどのファイルとして出力した場合、表示されないケースもあります。{ggplot2}の使い方を解説する前に、ここでは日本語が正しく表示/出力されない場合の対処法について紹介します。
+
+### macOSの場合
+
+一つ一つの図にフォント族 (font famiily)を指定
+
+```r
+theme(text = element_text(family = "HiraginoSans-W3"))
+```
+
+または、`theme_bw()`や`theme_minimal()`など、特定のテーマを使用するのであればそのテーマのレイヤーにフォントを指定することもできる。たとえば、{ggplot2}のデフォルトテーマであるgrayテーマを使用するなら、{ggplot2}のオブジェクトに以下のようなレイヤーを追加する。
+
+```r
+theme_gray(base_familiy = "HiraginoSans-W3")
+```
+
+最初に宣言しておく
+
+```r
+theme_update(text = element_text(family = "HiraginoSans-W3"))
+```
+
+ただし、`geom_text()`、`geom_label()`、`annotate()`のような文字列を出力する幾何オブジェクトを使用する際は、各レイヤーごとにフォント族を指定する必要がある (`family = "HiraginoSans-W3"`)。
+
+ファイル (PDF)として出力する際は
+
+```r
+quartz(file = "出力するファイル名", type = "pdf", width = 幅, height = 高さ)
+{ggplot2}で作成した図のオブジェクト名
+dev.off()
+```
+
+### Windowsの場合
+
+### {ragg}の使用
+
+```r
+pacman::p_install(ragg)
+```
+
+以下のやり方でPlotsペインでの日本語問題は解決
+
+1. RStudioのTools>Global Options...
+2. 左のGeneral>右側上段のGraphicsタブ
+3. Graphic DeviceのBackendでAGGを選択
+
+RMarkdown (HTML出力)の場合、最初のチャンクに以下のコードを追加する。PNGの場合、解像度が低いと見た目があまり良くないため、dpiは150以上がオススメ
+
+```r
+knitr::opts_chunk$set(dev = "ragg_png", dpi = 300)
+```
+
+ファイルとして出力したい場合は (PNG)
+
+* **方法1:** `ragg::agg_png()`を使用
+* **方法2:** `ggsave()`に`device = ragg::agg_png`を指定
+
+ファイルとして出力したい場合は (PDF)
+
+<!--
+　使用しているPCのOSによっては、日本語、または漢字が□□□で出力されることもあります（豆腐化と呼ばれます）。この場合は、プロットで使用するフォント群 (font family)を指定する必要があります。たとえば、macOSの場合、ヒラギノ角コジックW3がよく使われます (W0からW9まであり、数字が大きくなると太字になります)。フォント群の指定は`theme_*()`関数の`base_family`引数で行います。ここの`theme_*()`ですが、`*`の箇所には`gray`や`bw`、`minimal`などが入ります。{ggplot2}が提供しているテーマについては[ここ](https://www.r-graph-gallery.com/192-ggplot-themes.html)を参照してください。また、`ggthemes`や`egg`、`hrbrthemes`などのパッケージを導入すると様々なテーマが利用可能になります。デフォルトのテーマは`gray`ですが、今回は`bw`にし、ヒラギノ角コジックW3 (`"HiraginoSans-W3"`)をフォント群として指定します。
+
+　Windowsの場合、`windowsFonts()`関数を使ってフォントを予め登録しておく必要があります。たとえば、Windowsが提供している游ゴジック体を「YuGothic」という名で登録する場合、以下のように登録します。
+
+```r
+windowsFonts(YuGothic = windowsFont("Yu Gothic"))
+```
+
+　もしGoogle社が公開しているNoto Sans CJK JPを「Noto」という名で登録するなら、
+
+```r
+windowsFonts(Noto = windowsFont("Noto Sans CJK JP"))
+```
+
+のように入力します。
+
+```r
+Country_df %>%
+  ggplot() +
+  geom_bar(aes(x = Continent)) +
+  labs(x = "大陸", y = "ケース数") +
+  theme_bw()
+```
+
+　もし、Windowsで「YuGothic」や「Noto」を使用するなら`base_family`の実引数として`"YuGothic"`や`"Noto"`を指定します。
+
+-->
+
+---
+
 ## 棒グラフ {#visual2-barplot}
 
 　棒グラフについては以下の2つのタイプについて説明します。
@@ -133,7 +229,7 @@ table(Country_df$Continent)
 ##      54      36      42      50       4
 ```
 
-　ケース数の棒グラフは、大陸名を横軸に、ケース数を縦軸にしたグラフです。それではグラフを作ってみます。データは`Country_df`であり、使う幾何オブジェクトは`geom_bar()`です。ここで必要な情報は横軸、つまり大陸 (`Continent`)のみです。縦軸も「ケース数」という情報も必要ですが、`ggplot2`が勝手に計算してくれるので、指定しません。また、`labs()`レイヤーを追加します。`labs()`レイヤーはマッピング要素のラベルを指定するものです。これを指定しない場合、`aes()`内で指定した変数名がそのまま出力されます。
+　ケース数の棒グラフは、大陸名を横軸に、ケース数を縦軸にしたグラフです。それではグラフを作ってみます。データは`Country_df`であり、使う幾何オブジェクトは`geom_bar()`です。ここで必要な情報は横軸、つまり大陸 (`Continent`)のみです。縦軸も「ケース数」という情報も必要ですが、{ggplot2}が勝手に計算してくれるので、指定しません。また、`labs()`レイヤーを追加します。`labs()`レイヤーはマッピング要素のラベルを指定するものです。これを指定しない場合、`aes()`内で指定した変数名がそのまま出力されます。
 
 
 ```{.r .numberLines}
@@ -145,38 +241,9 @@ Country_df %>%
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-6-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-barplot-2-1} \end{center}
 
-　使用しているPCのOSによっては、日本語、または漢字が□□□で出力されることもあります（豆腐化と呼ばれます）。この場合は、プロットで使用するフォント群 (font family)を指定する必要があります。たとえば、macOSの場合、ヒラギノ角コジックW3がよく使われます (W0からW9まであり、数字が大きくなると太字になります)。フォント群の指定は`theme_*()`関数の`base_family`引数で行います。ここの`theme_*()`ですが、`*`の箇所には`gray`や`bw`、`minimal`などが入ります。`ggplot2`が提供しているテーマについては[ここ](https://www.r-graph-gallery.com/192-ggplot-themes.html)を参照してください。また、`ggthemes`や`egg`、`hrbrthemes`などのパッケージを導入すると様々なテーマが利用可能になります。デフォルトのテーマは`gray`ですが、今回は`bw`にし、ヒラギノ角コジックW3 (`"HiraKakuProN-W3"`)をフォント群として指定します。
-
-　Windowsの場合、`windowsFonts()`関数を使ってフォントを予め登録しておく必要があります。たとえば、Windowsが提供している游ゴジック体を「YuGothic」という名で登録する場合、以下のように登録します。
-
-```r
-windowsFonts(YuGothic = windowsFont("Yu Gothic"))
-```
-
-　もしGoogle社が公開しているNoto Sans CJK JPを「Noto」という名で登録するなら、
-
-```r
-windowsFonts(Noto = windowsFont("Noto Sans CJK JP"))
-```
-
-のように入力します。
-
-
-```{.r .numberLines}
-Country_df %>%
-  ggplot() +
-  geom_bar(aes(x = Continent)) +
-  labs(x = "大陸", y = "ケース数") +
-  theme_bw(base_family = "HiraKakuProN-W3")
-```
-
-
-
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-7-1} \end{center}
-
-　これで初めてのggplot2を用いたグラフが完成しました。もし、Windowsで「YuGothic」や「Noto」を使用するなら`base_family`の実引数として`"YuGothic"`や`"Noto"`を指定します。
+　これで初めての{ggplot2}を用いたグラフが完成しましたね！
 
 ### 記述統計量のグラフ
 
@@ -211,12 +278,12 @@ Bar_df1 %>%
   ggplot() +
   geom_bar(aes(x = Continent, y = Democracy), stat = "identity") +
   labs(x = "大陸", y = "Polity IV スコアの平均値") +
-  theme_minimal(base_family = "HiraKakuProN-W3")
+  theme_minimal()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-9-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-barplot-4-1} \end{center}
 
 　考えてみれば、大陸名が英語になっていますね。図内の言語は統一するのが原則であり、図の言語は論文やレポート、報告書の言語とも一致させるべきです。ここは`Bar_df1`の`Continent`列の値を日本語に置換するだけでいいので、`recode()`関数を使います。`recode()`の使い方は第\@ref(handling2-mutate)章を参照してください。また、順番はローマ字順にしたいので、`fct_inorder()`を使って、`Bar_df1`における表示順でfactor化を行います。
 
@@ -233,12 +300,12 @@ Bar_df1 %>%
   ggplot() +
   geom_bar(aes(x = Continent, y = Democracy), stat = "identity") +
   labs(x = "大陸", y = "Polity IV スコアの平均値") +
-  theme_minimal(base_family = "HiraKakuProN-W3")
+  theme_minimal()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-10-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-barplot-5-1} \end{center}
 
 ### 次元を追加する
 
@@ -313,12 +380,12 @@ Bar_df2 %>%
   geom_bar(aes(x = Continent, y = Democracy, fill = OECD), 
            stat = "identity") +
   labs(x = "大陸", y = "Polity IV スコアの平均値") +
-  theme_minimal(base_family = "HiraKakuProN-W3")
+  theme_minimal()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-13-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-barplot-8-1} \end{center}
 
 　なんか思ったものと違うものが出てきました。たとえば、アメリカ大陸の場合、Polity IVスコアの平均値が約15ですが、明らかにおかしいです。なぜならPolity IVスコアの最大値は10だからです。これは2つの棒が積み上げられているからです。アメリカ大陸においてOECD加盟国の平均値は8.6、非加盟国のそれは6.55であり、足したら15.15になります。これをずらすためには`position`を設定する必要があります。しかし、`position`というのは`Bar_df2`の何かと変数の値を表すわけではないため、`aes()`の外側に入れます。そして、その値ですが、ここでは`"dodge"`を指定します。これは棒の位置が重ならないように調整することを意味します。この`position`のデフォルト値は`"stack"`であり、言葉通り「積み上げ」です。
 
@@ -329,12 +396,12 @@ Bar_df2 %>%
   geom_bar(aes(x = Continent, y = Democracy, fill = OECD), 
            stat = "identity", position = "dodge") +
   labs(x = "大陸", y = "Polity IV スコアの平均値") +
-  theme_minimal(base_family = "HiraKakuProN-W3")
+  theme_minimal()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-14-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-barplot-9-1} \end{center}
 
 　これで私たちが期待した図が出来上がりました。「`"dodge"`の方が普通なのになぜデフォルトが`"stack"`か」と思う方もいるかも知れませんが、実は`"stack"`も頻繁に使われます。それはケース数のグラフにおいてです。
 
@@ -385,12 +452,12 @@ Bar_df3 %>%
   geom_bar(aes(x = Continent, y = N, fill = OECD), 
            stat = "identity") +
   labs(x = "大陸", y = "国家数") +
-  theme_minimal(base_family = "HiraKakuProN-W3")
+  theme_minimal()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-16-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-barplot-11-1} \end{center}
 
 　この図は`position = "dodge"`でも良いと思いますが、大陸内の比率を考えるなら`position = "stack"`でも問題ないでしょう。また、積み上げグラフの特性上、大陸ごとの国数の合計も一瞬で判別できるといった長所もあります。`position = "dodoge"`だと、それが難しいですね。むろん、積み上げ棒グラフはベースラインが一致したいため、避けるべきという人も多いですし、著者 (SONG)も同意見です。どの図を作成するかは分析者の責任で判断しましょう。
 
@@ -406,16 +473,20 @@ Country_df %>%
   ggplot() +
   geom_histogram(aes(x = GDP)) +
   labs(x = "国内総生産 (100万米ドル)", y = "度数") +
-  theme_minimal(base_family = "HiraKakuProN-W3")
+  theme_minimal()
 ```
 
 ```
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
+```
+## Warning: Removed 1 rows containing non-finite values (stat_bin).
+```
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-17-1} \end{center}
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-histogram-1-1} \end{center}
 
 　ケース数の棒グラフのコードとほぼ同じです。横軸の数値が`2.0e+07`になっているのは`2 \times 10^7`、つまり2千万を意味します。普通に表記すると`20000000`になりますね。また、GDPの単位は100万ドルであるため、実際のGDPは20兆ドルになります。つまり、今のヒストグラムにおいて横軸の目盛りは5兆ドルになっています。この軸の数値を「0, 5e+06, 1e+07, 1.5e+07, 2e+07」から「0, 5, 10, 15, 20」 にし、X軸のラベルを「国内総生産 (100万米ドル)」から「国内総生産 (兆米ドル)」に替えてみましょう。ここで使うのは`scale_x_continuous()`関数です。これは横軸 (X軸)が連続変数 (continuous)の場合のスケール調整関数です。目盛りの再調整には`breaks`と`labels`引数が必要です。`breaks`は新しい目盛りの位置、`labels`は目盛りに表記する値です。それぞれベクトルが必要であり、`breaks`と`labels`の実引数の長さは必ず一致する必要があります。また、`breaks`は数値型ベクトルですが、`labels`は数値型でも文字型でも構いません。
 
@@ -427,16 +498,20 @@ Country_df %>%
   labs(x = "国内総生産 (兆米ドル)", y = "度数") +
   scale_x_continuous(breaks = c(0, 5000000, 10000000, 15000000, 20000000),
                      labels = c(0, 5, 10, 15, 20)) +
-  theme_minimal(base_family = "HiraKakuProN-W3")
+  theme_minimal()
 ```
 
 ```
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
+```
+## Warning: Removed 1 rows containing non-finite values (stat_bin).
+```
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-18-1} \end{center}
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-histogram-2-1} \end{center}
 
 　これで一通りヒストグラムが完成しました。ほんの一部の国は非常に高いGDPを誇っていることが分かります。GDPが10兆ドル以上の国はアメリカと中国のみであり、5兆ドルを国まで拡大しても日本が加わるだけです。そもそも1兆ドルを超える国はデータには16カ国しかなく、90%以上の国が図の非常に狭い範囲内 (0~1兆ドル)に集まっていることが分かります。
 
@@ -445,9 +520,13 @@ Country_df %>%
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
+```
+## Warning: Removed 1 rows containing non-finite values (stat_bin).
+```
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-19-1} \end{center}
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-histogram-3-1} \end{center}
 
 　この場合、2つの方法が考えられます。1つ目は方法は情報の損失を覚悟した上で、GDPが1兆ドル未満の国でヒストグラムを書く方法です。これはデータを`ggplot()`関数を渡す前に`filter()`を使って、`GDP`が100万未満のケースに絞るだけで出来ます。ただし、横軸の最大値が2000万でなく、100万になるため、目盛りを調整した方が良いでしょう。
 
@@ -460,7 +539,7 @@ Country_df %>%
   labs(x = "国内総生産 (兆米ドル)", y = "度数") +
   scale_x_continuous(breaks = seq(0, 1000000, 100000),
                      labels = seq(0, 1, 0.1)) +
-  theme_minimal(base_family = "HiraKakuProN-W3")
+  theme_minimal()
 ```
 
 ```
@@ -469,7 +548,7 @@ Country_df %>%
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-20-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-histogram-4-1} \end{center}
 
 　2つ目の方法は横軸を対数化することです。GDPを底10の対数化 (常用対数)をすると、10兆のような非常に大きい値があっても比較的に狭い範囲内にデータを収めることが出来ます。たとえば、10を常用対数化すると1, 1000は3, 10000000は7になります。自然対数 (底が$e$)も可能ですが、「読む」ためのグラフとしては底が10の方が読みやすいでしょう。横軸の変数が対数化されるということは、横軸のスケールを対数化することと同じです。そのためには`scale_x_continuous()`内に`trans`引数を指定し、`"log10"`を渡します。
 
@@ -482,16 +561,20 @@ Country_df %>%
   scale_x_continuous(breaks = seq(0, 20000000, by = 5000000),
                      labels = seq(0, 20, by = 5),
                      trans = "log10") +
-  theme_minimal(base_family = "HiraKakuProN-W3")
+  theme_minimal()
 ```
 
 ```
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
+```
+## Warning: Removed 1 rows containing non-finite values (stat_bin).
+```
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-21-1} \end{center}
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-histogram-5-1} \end{center}
 
 　対数化することによってGDPの分布が綺麗な形になりました。対数化すると横軸における目盛りの間隔が等間隔でないことに注意すべきです。0から5兆ドルの距離はかなり広めですが、5兆から10兆までの距離は短くなり、10兆から15兆までの距離は更に短くなります。したがって、この図から「世界のGDPは鐘型に分布している」と解釈することは出来ません。分布を可視化するには対数化する前の図が適します。
 
@@ -504,16 +587,20 @@ Country_df %>%
   geom_histogram(aes(x = GDP)) +
   labs(x = "国内総生産 (兆米ドル)", y = "度数") +
   scale_x_log10() +
-  theme_minimal(base_family = "HiraKakuProN-W3")
+  theme_minimal()
 ```
 
 ```
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
+```
+## Warning: Removed 1 rows containing non-finite values (stat_bin).
+```
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-22-1} \end{center}
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-histogram-6-1} \end{center}
 
 　横軸を修正するには`scale_x_continuous()`と同様、`breaks`と`labels`引数を指定します。
 
@@ -525,16 +612,20 @@ Country_df %>%
   labs(x = "国内総生産 (兆米ドル)", y = "度数") +
   scale_x_log10(breaks = c(0, 1000, 10000, 100000, 1000000, 10000000),
                 labels = c(0, 0.001, 0.01, 0.1, 1, 10)) +
-  theme_minimal(base_family = "HiraKakuProN-W3")
+  theme_minimal()
 ```
 
 ```
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
+```
+## Warning: Removed 1 rows containing non-finite values (stat_bin).
+```
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-23-1} \end{center}
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-histogram-7-1} \end{center}
 
 　他にも`coord_*()`関数群、つまり座標系の操作を用いて軸を対数化することも可能です。他にも、データを`ggplot()`を渡す前に変数を対数化するのもありでしょう。プログラミングにおいてある結果にたどり着く方法は複数あるので、色々試してみるのも良いでしょう。
 
@@ -550,16 +641,20 @@ Country_df %>%
   labs(x = "人間開発指数 (2018)", y = "ケース数") +
   scale_x_continuous(breaks = seq(0, 1, 0.1),
                      labels = seq(0, 1, 0.1)) +
-  theme_bw(base_family = "HiraKakuProN-W3")
+  theme_bw()
 ```
 
 ```
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
+```
+## Warning: Removed 6 rows containing non-finite values (stat_bin).
+```
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-24-1} \end{center}
+
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-histogram-8-1} \end{center}
 
 　これでもヒストグラムとしては十分すぎるかも知れませんが、色々調整してみましょう。まずは、棒の枠線を白にしてみましょう。枠線はデータ内の変数に対応していないため、`aes()`の外側に入れます。枠線を指定する引数は`color`です。ちなみに棒の色を指定する引数は`fill`です。また、警告メッセージも気になるので、`HDI_2018`が欠損している行を除外します。
 
@@ -572,7 +667,7 @@ Country_df %>%
   labs(x = "人間開発指数 (2018)", y = "ケース数") +
   scale_x_continuous(breaks = seq(0, 1, 0.1),
                      labels = seq(0, 1, 0.1)) +
-  theme_bw(base_family = "HiraKakuProN-W3")
+  theme_bw()
 ```
 
 ```
@@ -581,7 +676,7 @@ Country_df %>%
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-25-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-histogram-9-1} \end{center}
 
 　人によってはこちらの方が見やすかも知れません。
 
@@ -604,12 +699,12 @@ Country_df %>%
   labs(x = "人間開発指数 (2018)", y = "ケース数") +
   scale_x_continuous(breaks = seq(0, 1, 0.1),
                      labels = seq(0, 1, 0.1)) +
-  theme_bw(base_family = "HiraKakuProN-W3")
+  theme_bw()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-26-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-histogram-10-1} \end{center}
 
 　数えてみると棒が10個だということが分かります。
 
@@ -624,14 +719,14 @@ Country_df %>%
   labs(x = "人間開発指数 (2018)", y = "ケース数") +
   scale_x_continuous(breaks = seq(0, 1, 0.1),
                      labels = seq(0, 1, 0.1)) +
-  theme_bw(base_family = "HiraKakuProN-W3")
+  theme_bw()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-27-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-histogram-11-1} \end{center}
 
-　ヒストグラムが出力されましたが、棒の幅が`binwidth`で指定した0.1と一致することが分かります。たとえば、一番左の棒は0.35から0.45まで、つまり幅が0.1です。そして、一番右の棒は0.95から1.05に渡って位置します。ただし、ここでに疑問を持つ読者もいるでしょう「。なぜ0.3から0.4、0.4から0.5、...ではなく、0.35から0.45、0.45から0.55なのか」です。これは`ggplot2`の基本仕様です。ヒストグラムは度数分布表を基に作成されますが、本グラフの度数分布表は以下のようになります。
+　ヒストグラムが出力されましたが、棒の幅が`binwidth`で指定した0.1と一致することが分かります。たとえば、一番左の棒は0.35から0.45まで、つまり幅が0.1です。そして、一番右の棒は0.95から1.05に渡って位置します。ただし、ここでに疑問を持つ読者もいるでしょう「。なぜ0.3から0.4、0.4から0.5、...ではなく、0.35から0.45、0.45から0.55なのか」です。これは{ggplot2}の基本仕様です。ヒストグラムは度数分布表を基に作成されますが、本グラフの度数分布表は以下のようになります。
 
 \begin{table}
 \centering
@@ -668,12 +763,12 @@ Country_df %>%
   labs(x = "人間開発指数 (2018)", y = "ケース数") +
   scale_x_continuous(breaks = seq(0, 1, 0.1),
                      labels = seq(0, 1, 0.1)) +
-  theme_bw(base_family = "HiraKakuProN-W3")
+  theme_bw()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-29-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-histogram-13-1} \end{center}
 
 　ここまで抑えとけば、普段使われるヒストグラムは問題なく作れるでしょう。
 
@@ -682,9 +777,9 @@ Country_df %>%
 　ヒストグラムには以下のように密度の表す線を同時に載せるケースもあります。
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-30-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-histogram-14-1} \end{center}
 
-　この密度の線を追加するには`geom_density()`という幾何オブジェクトを追加する必要があります。密度の線を示すには、横軸と縦軸両方の情報が必要です。横軸は`HDI_2018`で問題ないですが、縦軸はどうでしょう。縦軸には密度の情報が必要ですが、`Country_df`にそのような情報はありません。幸い、`ggplot2`は`y = ..density..`と指定するだけで、自動的に`HDI_2018`のある時点における密度を計算してくれます。したがって、マッピングは`aes(x = HDI_2018, y = ..density..)`のように書きます。こうなるとマッピング要素`x`は`geom_histogram()`と`geom_density()`に共通するため、`ggplot()`に入れても問題ありません。
+　この密度の線を追加するには`geom_density()`という幾何オブジェクトを追加する必要があります。密度の線を示すには、横軸と縦軸両方の情報が必要です。横軸は`HDI_2018`で問題ないですが、縦軸はどうでしょう。縦軸には密度の情報が必要ですが、`Country_df`にそのような情報はありません。幸い、{ggplot2}は`y = ..density..`と指定するだけで、自動的に`HDI_2018`のある時点における密度を計算してくれます。したがって、マッピングは`aes(x = HDI_2018, y = ..density..)`のように書きます。こうなるとマッピング要素`x`は`geom_histogram()`と`geom_density()`に共通するため、`ggplot()`に入れても問題ありません。
 
 
 ```{.r .numberLines}
@@ -697,12 +792,12 @@ Country_df %>%
   labs(x = "人間開発指数 (2018)", y = "密度") +
   scale_x_continuous(breaks = seq(0, 1, 0.1),
                      labels = seq(0, 1, 0.1)) +
-  theme_bw(base_family = "HiraKakuProN-W3")
+  theme_bw()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-31-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-histogram-15-1} \end{center}
 
 　なんとも言えない微妙なグラフが出来ました。考えたものと全然違いますね。これはなぜでしょうか。それは`geom_density()`は**密度**を表す一方、`geom_histogram()`は**度数**を表すからです。2つは単位が全然違います。したがって、どちらかに単位を合わせる必要があり、この場合はヒストグラムの縦軸を度数でなく、密度に調整する必要があります。ヒストグラムの縦軸を密度にするためには、`y = ..density..`を指定するだけです。こうなると、`geom_histogram()`と`geom_density()`は`x`と`y`を共有するため、全部`ggplot()`内で指定しましょう。
 
@@ -716,12 +811,12 @@ Country_df %>%
   labs(x = "人間開発指数 (2018)", y = "密度") +
   scale_x_continuous(breaks = seq(0, 1, 0.1),
                      labels = seq(0, 1, 0.1)) +
-  theme_bw(base_family = "HiraKakuProN-W3")
+  theme_bw()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-32-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-histogram-16-1} \end{center}
 
 　これで密度を表す線が出来ました。
 
@@ -741,12 +836,12 @@ Country_df %>%
   labs(x = "人間開発指数 (2018)", y = "ケース数", fill = "OECD") +
   scale_x_continuous(breaks = seq(0, 1, 0.1),
                      labels = seq(0, 1, 0.1)) +
-  theme_bw(base_family = "HiraKakuProN-W3")
+  theme_bw()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-33-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-histogram-17-1} \end{center}
 
 　ヒストグラムが出来上がりました。OECD加盟国の場合、人間開発指数が相対的に高いことが分かります。しかし、積み上げヒストグラムになっています。これはある階級においてOECD加盟国と非加盟国の比率を比較する際に有効ですが、OECD加盟国と非加盟国の分布の違いを見るにはやや物足りません。したがって、棒グラフ同様、`position`引数で棒の位置を調整します。ただし、ヒストグラムの場合、`postion = "dodge"`は向いていないので、ここでは`position = "identity"`を指定します。しかし、この場合、棒が重なってしまうと、一方の棒が見えなくなる可能性もあるので、`alpha`引数で棒の透明度を調整します。`alpha`の値は0から1までであり、0になると、完全透明になります。ここでは0.5くらいにしてみましょう。
 
@@ -762,12 +857,12 @@ Country_df %>%
   labs(x = "人間開発指数 (2018)", y = "ケース数", fill = "OECD") +
   scale_x_continuous(breaks = seq(0, 1, 0.1),
                      labels = seq(0, 1, 0.1)) +
-  theme_bw(base_family = "HiraKakuProN-W3")
+  theme_bw()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-34-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-histogram-18-1} \end{center}
 
 　これで2つのヒストグラムを綺麗にオーバーラッピングできました。また、先ほど紹介しました`geom_density()`オブジェクトを重ねることも可能です。
 
@@ -787,12 +882,12 @@ Country_df %>%
   labs(x = "人間開発指数 (2018)", y = "密度", fill = "OECD") +
   scale_x_continuous(breaks = seq(0, 1, 0.1),
                      labels = seq(0, 1, 0.1)) +
-  theme_bw(base_family = "HiraKakuProN-W3")
+  theme_bw()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-35-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-histogram-19-1} \end{center}
 
 　この場合、OECD加盟国と非加盟国の密度をそれぞれ計算するため、ヒストグラムの見た目がこれまでのものと変わることに注意してください。
 
@@ -813,12 +908,12 @@ Country_df %>%
   scale_x_continuous(breaks = seq(0, 1, 0.1),
                      labels = seq(0, 1, 0.1)) +
   facet_wrap(~ OECD2, ncol = 1) +
-  theme_bw(base_family = "HiraKakuProN-W3")
+  theme_bw()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-36-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-histogram-20-1} \end{center}
 
 　OECDは加盟/非加盟だけですから、オーバーラッピングされたヒストグラムで十分かも知れません。しかし、大陸のように、3つ以上のグループになると、オーバーラッピングよりもファセットで分けた方が効率的です。たとえば、大陸ごとの人間開発指数のヒストグラムを作ってみましょう。
 
@@ -834,12 +929,12 @@ Country_df %>%
   scale_x_continuous(breaks = seq(0, 1, 0.1),
                      labels = seq(0, 1, 0.1)) +
   facet_wrap(~ Continent, ncol = 3) +
-  theme_bw(base_family = "HiraKakuProN-W3")
+  theme_bw()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-37-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-histogram-21-1} \end{center}
 
 
 ---
@@ -856,18 +951,17 @@ Country_df %>%
   filter(!is.na(HDI_2018)) %>%
   ggplot() +
   geom_boxplot(aes(y = HDI_2018)) +
-  labs(y = "人間開発指数 (2018)") +
-  theme_gray(base_family = "HiraKakuProN-W3")
+  labs(y = "人間開発指数 (2018)")
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-38-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-box-1-1} \end{center}
 
 　箱ひげ図の読み方は以下の通りです。
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-39-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-box-2-1} \end{center}
 
 　これで箱ひげ図は完成ですが、人間開発指数は0から1の相対を取るので、座標系の縦軸を調整してみましょう。座標系の操作は`coord_*()`関数群を使いますが、現在使っているのは直交座標系（デカルト座標系）ですので`coord_cartesian()`を使います。ここで縦軸の上限と下限を指定する引数が`ylim`であり、長さ2の数値型ベクトルが必要です。下限0、上限1ですので、`ylim = c(0, 1)`とします。
 
@@ -878,13 +972,12 @@ Country_df %>%
   ggplot() +
   geom_boxplot(aes(y = HDI_2018)) +
   labs(y = "人間開発指数 (2018)") +
-  coord_cartesian(ylim = c(0, 1)) +
-  theme_gray(base_family = "HiraKakuProN-W3")
+  coord_cartesian(ylim = c(0, 1))
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-40-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-box-3-1} \end{center}
 
 　まだまだ改善の余地はありますが、それなりの箱ひげ図の出来上がりです。しかし、一変数の箱ひげ図はあまり使われません。変数が1つだけならヒストグラムの方がより情報量は豊富でしょう。情報量が豊富ということはヒストグラムから（完璧には無理ですが）箱ひげ図を作ることは可能である一方、その逆は不可能か非常に難しいことを意味します。
 
@@ -897,13 +990,12 @@ Country_df %>%
   ggplot() +
   geom_boxplot(aes(x = Continent, y = HDI_2018)) +
   labs(x = "大陸", y = "人間開発指数 (2018)") +
-  coord_cartesian(ylim = c(0, 1)) +
-  theme_gray(base_family = "HiraKakuProN-W3")
+  coord_cartesian(ylim = c(0, 1))
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-41-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-box-4-1} \end{center}
 
 　いかがでしょうか。5大陸の分布を素早く確認することができました。ヨーロッパの場合、人間開発指数が高く、バラツキも小さいことが分かります。一方、アジアとアフリカはバラツキが非常に大きいですね。アメリカ大陸はバラツキは非常に小さいですが、極端に高い国や低い国が含まれています。このアメリカ大陸に3つの点がありますが、これは外れ値です。つまり、最小値より小さい、または最大値より大きいケースを表します。最小値より小さい、または最大値より大きいという表現に違和感を感じるかも知れません。実は一般的な箱ひげ図の最小値は「第1四分位点 - 1.5 $\times$ 四分位範囲」より大きい値の中での最小値です。同じく最大値は「第3四分位点 + 1.5 $\times$ 四分位範囲」より小さい値の中での最大値です。普通に分布している場合、ほとんどのケースは箱ひげ図の最小値と最大値の範囲内に収まりますが、極端に大きい値、小さい値が含まれる場合は箱ひげ図の最小値と最大値の範囲からはみ出る場合があります。
 
@@ -917,13 +1009,12 @@ Country_df %>%
   geom_boxplot(aes(x = Continent, y = HDI_2018, fill = Continent),
                show.legend = FALSE) +
   labs(x = "大陸", y = "人間開発指数 (2018)") +
-  coord_cartesian(ylim = c(0, 1)) +
-  theme_gray(base_family = "HiraKakuProN-W3")
+  coord_cartesian(ylim = c(0, 1))
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-42-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-box-5-1} \end{center}
 
 　彩りどりでちょっとテンションが上がる箱ひげ図ができました。
 
@@ -944,13 +1035,12 @@ Country_df %>%
   geom_boxplot(aes(fill = Continent),
                alpha = 0.5, show.legend = FALSE) +
   labs(x = "大陸", y = "人間開発指数 (2018)") +
-  coord_cartesian(ylim = c(0, 1)) +
-  theme_gray(base_family = "HiraKakuProN-W3")
+  coord_cartesian(ylim = c(0, 1))
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-43-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-box-6-1} \end{center}
 
 　点が透明ではあるものの、それでも重なっている箇所は相変わらず読みにくいです。この場合有効な方法がジッター（jitter）です。これは点の位置に若干のノイズを付けることによって、点が重ならないようにすることです。ジッターの方法は2つありますが、ここではジッター専用の幾何オブジェクト`geom_jitter()`を使います[^boxplot-jitter]。`geom_jitter()`はノイズが追加された散布図ですので、`geom_point()`と使い方はほぼ同じです。
 
@@ -966,13 +1056,12 @@ Country_df %>%
   geom_boxplot(aes(fill = Continent),
                alpha = 0.5, show.legend = FALSE) +
   labs(x = "大陸", y = "人間開発指数 (2018)") +
-  coord_cartesian(ylim = c(0, 1)) +
-  theme_gray(base_family = "HiraKakuProN-W3")
+  coord_cartesian(ylim = c(0, 1))
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-44-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-box-7-1} \end{center}
 
 　これで点が重ならなくなりましたが、ちょっと散らばりすぎるという印象もあります。この散らばり具合を調整する引数が`width`と`height`です。もちろん、これはデータの中身に対応する要素ではないため、`aes()`の外側にいれます。それぞれの実引数は0から1の間の数値になりますが、数字が大きいほど散らばり具合が大きくなり、0になるとジッター無しの散布図と同じものになります。ここでは横の散らばり具合を0.15（`width = 0.15`）、縦の散らばり具合は0（`height = 0`）にしてみましょう。そして、横軸が英語のままなので、これも日本語に直します。
 
@@ -992,13 +1081,12 @@ Country_df %>%
   geom_boxplot(aes(fill = Continent2),
                alpha = 0.5, show.legend = FALSE) +
   labs(x = "大陸", y = "人間開発指数 (2018)") +
-  coord_cartesian(ylim = c(0, 1)) +
-  theme_gray(base_family = "HiraKakuProN-W3")
+  coord_cartesian(ylim = c(0, 1))
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-45-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-box-8-1} \end{center}
 
 ### 次元を追加する
 
@@ -1031,12 +1119,12 @@ Country_df %>%
   # ファセット分割
   facet_wrap(~ Developed) +
   coord_cartesian(ylim = c(0, 1)) +
-  theme_bw(base_family = "HiraKakuProN-W3")
+  theme_bw()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-46-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-box-9-1} \end{center}
 
 　次の方法はファセットを分割せずに次元を追加する方法です。ファセットに分ける場合、「先進国における大陸別人間開発指数の分布」、「先進国外における大陸別人間開発指数の分布」は素早く読み取れますが、「ある大陸における先進国/その他の国の人間開発指数の分布」を比較するにはあまり向いておりません。なぜなら目の動線が長いからです。先進国とその他の国を大陸ごとに横に並べると視線の動線が短くなり比較しやすくなります。
 
@@ -1070,12 +1158,12 @@ Country_df %>%
   labs(x = "大陸", y = "人間開発指数 (2018)", fill = "",
        caption = "先進国: G7, G20, OECDのいずれかに加盟している国") +
   coord_cartesian(ylim = c(0, 1)) +
-  theme_bw(base_family = "HiraKakuProN-W3")
+  theme_bw()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-47-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-box-10-1} \end{center}
 
 　ファセット分割と色分け、どれが良いかという正解はありません。分析者の目的に依存するものです。もし、先進国の中での比較を強調したい場合はファセット分割が有効でしょう。しかし、同じ大陸内で先進国とその他の国の比較なら色分けの方が適切です。
 
@@ -1124,13 +1212,12 @@ Democracy_df %>%
   geom_boxplot(aes(x = Continent, y = Value, fill = Type)) +
   labs(x = "大陸", y = "民主主義の程度", fill = "指標") +
   scale_x_discrete(breaks = c("Africa", "America", "Asia","Europe", "Oceania"), 
-                   labels = c("アフリカ", "アメリカ", "アジア", "ヨーロッパ", "オセアニア")) +
-  theme_gray(base_family = "HiraKakuProN-W3")
+                   labels = c("アフリカ", "アメリカ", "アジア", "ヨーロッパ", "オセアニア"))
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-49-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-box-12-1} \end{center}
 
 　しかし、1つ問題があります。それはPolity IVは-10から10までの指標なのに対して、Freedom Houseは0から100までの指標になっている点です。この場合、正確な比較が出来ません。複数の変数を1つの箱ひげ図に出す際は、変数のスケールが一致させた方が良いでしょう。たとえば、複数の人、または団体に対する感情温度はスケールが0から100であるため、使えます。しかし、今回の場合はあまり良いケースではありません。
 
@@ -1155,13 +1242,12 @@ Democracy_df %>%
   geom_boxplot(aes(x = Continent, y = Value, fill = Type2)) +
   labs(x = "大陸", y = "民主主義の程度", fill = "指標") +
   scale_x_discrete(breaks = c("Africa", "America", "Asia","Europe", "Oceania"), 
-                   labels = c("アフリカ", "アメリカ", "アジア", "ヨーロッパ", "オセアニア")) +
-  theme_gray(base_family = "HiraKakuProN-W3")
+                   labels = c("アフリカ", "アメリカ", "アジア", "ヨーロッパ", "オセアニア"))
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-50-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-box-13-1} \end{center}
 
 　先よりは比較可能な図のように見えますが、あくまでも最小値と最大値を一致させたものであるため、厳密な意味ではこれもよくありません。複数の変数を1つの箱ひげ図としてまとめる場合は、スケールが一致するもののみを使うことを推奨します。
 
@@ -1177,12 +1263,16 @@ Country_df %>%
   ggplot() +
   geom_point(aes(x = PPP_per_capita, y = HDI_2018)) +
   labs(x = "一人当たり購買力平価GDP (USD)", y = "人間開発指数") +
-  theme_bw(base_family = "HiraKakuProN-W3")
+  theme_bw()
+```
+
+```
+## Warning: Removed 11 rows containing missing values (geom_point).
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-51-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-scatter-1-1} \end{center}
 
 　以下のメッセージが表示されますが、これは一人当たりGDP (購買力平価基準)または人間開発指数が欠損しているケースが11カ国あることを意味します。たとえば、教皇聖座 (Holy See; いわゆるバチカン)や西サハラ、ソマリアなどの国があります。
 
@@ -1227,12 +1317,12 @@ Country_df %>%
   geom_point(aes(x = PPP_per_capita, y = HDI_2018)) +
   labs(x = "一人当たり購買力平価GDP (USD)", y = "人間開発指数") +
   coord_trans(x = "log10") +
-  theme_bw(base_family = "HiraKakuProN-W3")
+  theme_bw()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-53-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-scatter-3-1} \end{center}
 
 　対数化してみたら、かなり綺麗な線形関係が確認できます。事実を言うと、そもそも人間開発指数は所得も評価項目であるため、線形関係があるのは当たり前です。
 
@@ -1249,12 +1339,12 @@ Country_df %>%
              alpha = 0.5) +
   labs(x = "一人あたり購買力平価GDP (USD)", y = "人間開発指数",
        size = "面積 (100万km2)") +
-  theme_bw(base_family = "HiraKakuProN-W3")
+  theme_bw()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-54-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-scatter-4-1} \end{center}
 
 　一人当たりGDPが非常に高い国の多くは面積が小さい国が多いですね。
 
@@ -1271,12 +1361,12 @@ Country_df %>%
                  size = Area, color = OECD)) +
   labs(x = "一人あたり購買力平価GDP (USD)", y = "人間開発指数",
        size = "面積 (100万km2)", color = "OECD加盟有無") +
-  theme_bw(base_family = "HiraKakuProN-W3")
+  theme_bw()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-55-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-scatter-5-1} \end{center}
 
 　色分けはされていますが、凡例を見ると想像したものとやや違いますね。なぜなら`OECD`変数が数値型になっているからです。実際のデータには`OECD = 0.5`や`OECD = 0.71`のような値は存在しませんが、数値型である以上、その値をとること自体は出来ます。したがって、0から1までの数値に対応できるように、色分けもグラデーションになっています。これを見やすく二分するためには、`OECD`変数をfactor型か文字型に変換する必要があります。
 
@@ -1291,12 +1381,12 @@ Country_df %>%
                  size = Area2, color = OECD2)) +
   labs(x = "一人あたり購買力平価GDP (USD)", y = "人間開発指数",
        size = "面積 (100万km2)", color = "OECD加盟有無") +
-  theme_bw(base_family = "HiraKakuProN-W3")
+  theme_bw()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-56-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-scatter-6-1} \end{center}
 
 　これで散布図の出来上がりです。2次元座標系で表現された散布図ですが、この図から分かる情報は何があるでしょうか。
 
@@ -1331,23 +1421,24 @@ Country_df %>%
                  size = Area2, color = Country2)) +
   labs(x = "一人あたり購買力平価GDP (USD)", y = "人間開発指数",
        size = "面積 (100万km2)", color = "国家") +
-  theme_bw(base_family = "HiraKakuProN-W3")
+  theme_bw()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-57-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-scatter-7-1} \end{center}
 
-　日本と韓国を見つけるのは大変ですが、目的達成と言えるでしょう。ただ、もっと楽な方法があります。それが[湯谷啓明](https://twitter.com/yutannihilation)さんが開発した`gghighlight`パッケージです。詳しい使い方は[湯谷さんによる解説ページ](https://cran.r-project.org/web/packages/gghighlight/vignettes/gghighlight.html)を参照して頂きますが、ここでは簡単な使い方のみ紹介します。まずは、`install.packages("gghighlight")`でパッケージをインストールし、読み込みます。
+　日本と韓国を見つけるのは大変ですが、目的達成と言えるでしょう。ただ、もっと楽な方法があります。それが[湯谷啓明](https://twitter.com/yutannihilation)さんが開発した{gghighlight}パッケージです。詳しい使い方は[湯谷さんによる解説ページ](https://cran.r-project.org/web/packages/gghighlight/vignettes/gghighlight.html)を参照して頂きますが、ここでは簡単な使い方のみ紹介します。まずは、`install.packages("gghighlight")`でパッケージをインストールし、読み込みます。
 
 
 ```{.r .numberLines}
 pacman::p_load(gghighlight)
 ```
 
-　続いてですが、国ごとに色分けする予定ですので、散布図の`color`は`Country`変数でマッピングします。そして、`gghighlight`幾何オブジェクトを追加します。まずは使い方からです。
+　続いてですが、国ごとに色分けする予定ですので、散布図の`color`は`Country`変数でマッピングします。そして、{gghighlight}幾何オブジェクトを追加します。まずは使い方からです。
 
-```r
+
+```{.r .numberLines}
 # gghighlight()の使い方
 gghighlight(条件式, label_params = list(引数1, 引数2, ...))
 ```
@@ -1365,7 +1456,7 @@ Country_df %>%
               label_params = list(size = 3)) +
   labs(x = "一人あたり購買力平価GDP (USD)", y = "人間開発指数",
        size = "面積 (100万km2)", color = "OECD加盟有無") +
-  theme_bw(base_family = "HiraKakuProN-W3")
+  theme_bw()
 ```
 
 ```
@@ -1374,7 +1465,7 @@ Country_df %>%
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-59-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-scatter-10-1} \end{center}
 
 　非常に簡単なやり方で点のハイライトが出来ました。これは後ほど紹介する折れ線グラフだけでなく、様々な幾何オブジェクトにも対応しています。湯谷さんの解説ページを参照して下さい。
 
@@ -1404,12 +1495,16 @@ COVID19_df %>%
                                 "100000", "1000000"),
                      trans = "log10") +
   labs(x = "月", y = "累積感染者数 (人)") +
-  theme_minimal(base_family = "HiraKakuProN-W3")
+  theme_minimal()
+```
+
+```
+## Warning: Transformation introduced infinite values in continuous y-axis
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-61-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-line-2-1} \end{center}
 
 　??????????????????
 
@@ -1427,12 +1522,12 @@ COVID19_df %>%
                                 "100000", "1000000"),
                      trans = "log10") +
   labs(x = "月", y = "累積感染者数 (人)") +
-  theme_minimal(base_family = "HiraKakuProN-W3")
+  theme_minimal()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-62-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-line-3-1} \end{center}
 
 　これで折れ線グラフは出力されましたが、どの線がどの国かが分かりませんね。`group`の場合、凡例が表示されないので、`group`でなく、`color`で色分けしてみましょう。
 
@@ -1446,12 +1541,12 @@ COVID19_df %>%
                                 "100000", "1000000"),
                      trans = "log10") +
   labs(x = "月", y = "累積感染者数 (人)") +
-  theme_minimal(base_family = "HiraKakuProN-W3")
+  theme_minimal()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-63-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-line-4-1} \end{center}
 
 　???????????????????
 
@@ -1471,12 +1566,12 @@ COVID19_df %>%
                                 "100000", "1000000"),
                      trans = "log10") +
   labs(x = "月", y = "累積感染者数 (人)", color = "国") +
-  theme_minimal(base_family = "HiraKakuProN-W3")
+  theme_minimal()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-64-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-line-5-1} \end{center}
 
 　これだけでもG7国のCOVID-19の状況が比較可能ですが、この図は改善の余地があります。それは凡例の順番です。できれば、一番最新の日付のデータを基準に凡例の順番を揃えることが出来たら、どの線がどの国かが分かりやすくなります。そこで登場するのは第\@ref(factor)章で紹介しました`fct_reorder2`関数です。実際にやってみましょう。
 
@@ -1492,12 +1587,12 @@ COVID19_df %>%
                                 "100000", "1000000"),
                      trans = "log10") +
   labs(x = "月", y = "累積感染者数 (人)", color = "国") +
-  theme_minimal(base_family = "HiraKakuProN-W3")
+  theme_minimal()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-65-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-line-6-1} \end{center}
 
 　これでより読みやすい図が出来上がりました。
 
@@ -1517,18 +1612,18 @@ COVID19_df %>%
                                 "100000", "1000000"),
                      trans = "log10") +
   labs(x = "月", y = "累積感染者数 (人)") +
-  theme_minimal(base_family = "HiraKakuProN-W3")
+  theme_minimal()
 ```
 
 
 
-\begin{center}\includegraphics{visualization2_files/figure-latex/unnamed-chunk-66-1} \end{center}
+\begin{center}\includegraphics{visualization2_files/figure-latex/visual2-line-7-1} \end{center}
 
 　情報量の損失を最小化しながら、一部の国のみをハイライトすることによって世界における日米中韓のトレンドが確認出来ました。
 
 ---
 
-## 図の保存
+## 図の保存 {#visual2-save}
 
 　綺麗な図も出来上がりましたので、みんなに自慢してみましょう。ただ、自慢のためにパソコンを持ち歩くのは大変なので、ファイルと保存してみんなに配りましょう。自慢する相手がいないなら[SONG](mailto:jasong@mail.doshisha.ac.jp)に自慢しても結構です。図のフォーマットはPNGかPDFが一般的です。JPEGなど圧縮フォーマットは絶対にダメです。PNGとPDFは前者はピクセルベース、後者がベクトルベースで、PDFの方が拡大してもカクカクせず綺麗です。ただし、一部の文書作成ソフトウェアでPDFを図として扱えない点や、サイズの問題 (複雑な図になるほど、PDFの方がサイズが大きくなる)もあるので、PNGを使うケースも多いです。むろん、LaTeXで文章を作成するなら、PDF一択です。
 
@@ -1539,9 +1634,10 @@ COVID19_df %>%
 
 ### `ggsave()`を利用した図の保存
 
-　`ggsave()`が`ggplot2`が提供する図の保存関数です。まずは、使い方から紹介します。
+　`ggsave()`が{ggplot2}が提供する図の保存関数です。まずは、使い方から紹介します。
 
-```r
+
+```{.r .numberLines}
 # ggsave()を利用した保存方法
 ggsave(filename = "ファイル名",
        plot     = 図のオブジェクト名,
@@ -1553,12 +1649,13 @@ ggsave(filename = "ファイル名",
 
 　`device`で指定可能なフォーマットとしては`"png"`、`"eps"`、`"ps"`、`"tex"`、`"pdf"`、`"jpeg"`、`"tiff"`、`"bmp"`、`"svg"`、`"wmf"`があります。また、`units`は`"in"` (インチ)、`"cm"`、`"mm"`が指定可能です。他にも`dpi`引数でdpi (dots per inch; 1平方インチにどれだけのドットの表現ができるか)の指定も可能ですが、デフォルトは300となっており、出版用としては一般的なdpiとなっています。それでは、本章の最初に作成した棒グラフを`BarPlot1`という名で保存し、`Figs`フォルダー内に`BarPlot1.png`として保存してみます。幅と高さは5インチにします。
 
-```r
+
+```{.r .numberLines}
 BarPlot1 <- Country_df %>%
   ggplot() +
   geom_bar(aes(x = Continent)) +
   labs(x = "大陸", y = "ケース数") +
-  theme_bw(base_family = "HiraKakuProN-W3")
+  theme_bw()
 
 ggsave(filename = "Figs/BarPlot.png",
        plot     = BarPlot1,
@@ -1572,7 +1669,8 @@ ggsave(filename = "Figs/BarPlot.png",
 
 　macOSを使用し、日本語などのマルチバイトの文字が含まれる図の場合、`ggsave()`が正しく作動しません。この場合は`quartz()`と`dev.off()`関数を利用して図を保存します。この関数の使い方は以下の通りです。
 
-```r
+
+```{.r .numberLines}
 # quartz()を利用した保存方法
 quartz(type = "pdf", file = "ファイル名", width = 図の幅, height = 図の高さ)
 作図のコード、または図オブジェクトの呼び出し
@@ -1583,20 +1681,22 @@ dev.off()
 
 　たとえば、最初に作成した図を`Figs`フォルダーの`BarPlot1.pdf`という名で保存し、幅と高さを5インチにするなら以下のようなコードになります。
 
-```r
+
+```{.r .numberLines}
 # 方法1
 quartz(type = "pdf", file = "Figs/BarPlot1.pdf", width = 5, height = 5)
 Country_df %>%
   ggplot() +
   geom_bar(aes(x = Continent)) +
   labs(x = "大陸", y = "ケース数") +
-  theme_bw(base_family = "HiraKakuProN-W3")
+  theme_bw()
 dev.off()
 ```
 
 　または、予め図をオブジェクトとして保存しておいたなら (先ほどの`BarPlot1`オブジェクトのように)、以下のようなコードも可能です。
 
-```r
+
+```{.r .numberLines}
 # 方法2
 quartz(type = "pdf", file = "Figs/BarPlot1.pdf", width = 5, height = 5)
 BarPlot1
@@ -1605,14 +1705,14 @@ dev.off()
 
 ---
 
-## まとめ
+## まとめ {#visual2-summary}
 
 　以上の話をまとめると、データが与えられた場合、ある図を作成するためには少なくとも以下の情報が必要です。
 
 1. どの幾何オブジェクトを使用するか
 2. その幾何オブジェクトに必要なマッピング要素は何か
 
-　座標系や、スケール、ラベルの設定なども最終的には必要ですが、これらは設定しなくても`ggplot2`自動的に生成してくれます。しかし、幾何オブジェクトとマッピングは必須です。幾何オブジェクトはグーグルで「ggplot 棒グラフ」や「ggplot 等高線図」などで検索すれば、どのような幾何オブジェクトが必要化が分かります。問題はマッピングです。この幾何オブジェクトに使える引数は何か、そしてどの引数を`aes()`の中に入れるべきかなどはコンソールで`?geom_barplot`などで検索すれば分かります。
+　座標系や、スケール、ラベルの設定なども最終的には必要ですが、これらは設定しなくても{ggplot2}自動的に生成してくれます。しかし、幾何オブジェクトとマッピングは必須です。幾何オブジェクトはグーグルで「ggplot 棒グラフ」や「ggplot 等高線図」などで検索すれば、どのような幾何オブジェクトが必要化が分かります。問題はマッピングです。この幾何オブジェクトに使える引数は何か、そしてどの引数を`aes()`の中に入れるべきかなどはコンソールで`?geom_barplot`などで検索すれば分かります。
 
 　筆者のオススメは以下のチートシートを印刷し、手元に置くことです。
 
@@ -1621,12 +1721,17 @@ dev.off()
 
 　2番目の資料は非常に分かりやすい資料ですが、Google Drive経由で公開されているため、いつリンクが切れかが不明です。念の為に本ページにも資料を転載します。
 
-![ggplot2 aesthetics cheatsheet](figures/Visualization2/ggplot_aesthetics_cheatsheet.png)
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.85\linewidth]{figures/Visualization2/ggplot_aesthetics_cheatsheet} 
+
+}
+
+\caption{ggplot2 aesthetics cheatsheet}(\#fig:visual2-summary-1)
+\end{figure}
 
 　青い点は「ほとんど」のケースにおいて`aes()`の中に位置する引数です。ただし、`geom_bar()`と`geom_histogram()`は自動的に度数を計算してくれるため、`x`と`y`一方だけでも可能です。黄色い資格は`aes()`の中でも、外でも使うことが可能な引数です。`aes()`の中ならマッピング要素となるため、データの変数と対応させる必要があります。ピンク色のひし形四角形は必ず`aes()`の外に位置する引数です。
 
 ---
 
-## 練習問題 {#visual2-excersie}
-
-`df`を用い、以下のような図を作成せよ。
+## 練習問題 {#visual2-excersie .unnumbered}

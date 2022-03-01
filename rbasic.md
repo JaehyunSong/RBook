@@ -84,7 +84,7 @@ Windows では、エクスプローラー (Explorer) （**注意：インター�
 
 　図\@ref(fig:rbasic-filesystem)はファイルシステムの例を示している。矢印の左側には、ドライブ内にあるファイル（の一部）が示されている。通常、これらのファイルは矢印の右側に示されているように、階層化されている。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.6\linewidth]{Figures/Rbasic/Filesystem1} 
 
@@ -174,7 +174,7 @@ Rが自動的に生成するファイルもどんどん溜まる。そう遠く�
 
 2. RStudio が起動したら、"File" から "New Project" を選択する。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.6\linewidth]{Figures/Rbasic/Project1} 
 
@@ -186,7 +186,7 @@ Rが自動的に生成するファイルもどんどん溜まる。そう遠く�
 3. 下の画面が表示されたら、 "New Directory" を選択する。ただし、既存のフォルダを利用したい場合は、
 "Existing Directory" を選ぶ。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.6\linewidth]{Figures/Rbasic/Project2} 
 
@@ -199,7 +199,7 @@ Rが自動的に生成するファイルもどんどん溜まる。そう遠く�
 4. 下の画面が表示されたら、"New Project" を選択する。
   - 前の手順で "Existing Directory" を選択した場合、この画面は表示されない。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.6\linewidth]{Figures/Rbasic/Project3} 
 
@@ -214,7 +214,7 @@ Rが自動的に生成するファイルもどんどん溜まる。そう遠く�
 
 - 手順3で "Existing Directory" を選んだ場合、プロジェクトのフォルダとして使う既存フォルダを選択する画面が表示される。
    
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.7\linewidth]{Figures/Rbasic/Project4} 
 
@@ -231,7 +231,7 @@ Rが自動的に生成するファイルもどんどん溜まる。そう遠く�
 　念のため、Finder（Macの場合）やエクスプローラー （Windows の場合）で、指定した場所にプロジェクトのフォルダ（上の例では `Ch04`）が生成されていることを確認しよう。
 プロジェクトフォルダを開いてみると、`Ch04.Rproj` というファイルが生成されていることがわかる（下の図）。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.8\linewidth]{Figures/Rbasic/Project5} 
 
@@ -253,7 +253,7 @@ Rが自動的に生成するファイルもどんどん溜まる。そう遠く�
 
 [^rbasic-newscript]: Mac では、command + shift + N、Windows では Ctrl + Shift + N のショートカットが使える。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=1\linewidth]{Figures/Rbasic/InputCode1} 
 

@@ -27,7 +27,7 @@ Linuxの場合、ディストリビューション (distribution)[^dist]によ�
 
 [^dist]: よく使われるディストリビューションとしては[Debian](https://www.debian.org)系とRed Hat系があります。シェアトップレベルの[Ubuntu](https://ubuntu.com)と[Mint](https://www.linuxmint.com)はDebian系です。ちなみに、個人向けのRed Hat Linuxは開発中止され、現在は[Fedora](https://getfedora.org)に受け継がれています。Red Hat系ではFedoraだけでなく、[CentOS](https://www.centos.org)も広く使われています。最近は[arch linux](https://www.archlinux.org)系の[manjaro linux](https://manjaro.org)も人気です。人気ディストリビューションにつしては[DistroWatch.com](https://distrowatch.com/dwres.php?resource=popularity)から最新ランキングを確認してください。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=1\linewidth]{Figures/Installation/R_Ubuntu1} 
 
@@ -50,7 +50,7 @@ R
 
 と入力するだけです。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=1\linewidth]{Figures/Installation/R_Ubuntu2} 
 
@@ -61,7 +61,7 @@ R
 
 2つ目の方法はApplicationから開く方法です。Ubuntuの左上の「Activities (アクティビティ)」または、左下のボタンをクリックします。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=1\linewidth]{Figures/Installation/R_Ubuntu3} 
 
@@ -72,7 +72,7 @@ R
 
 上段中央の検索で「R」を入力し、検索結果からRを選択します。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=1\linewidth]{Figures/Installation/R_Ubuntu4} 
 
@@ -125,7 +125,7 @@ Rをインストールする前に以下の2点を確認します。
 
 #### Rのダウンロードとインストール
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=1\linewidth]{Figures/Installation/R_Windows1} 
 
@@ -136,7 +136,7 @@ Rをインストールする前に以下の2点を確認します。
 
 CRAN (https://cran.r-project.org/)にアクセスし、「Download R for Windows」を選択します。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=1\linewidth]{Figures/Installation/R_Windows2} 
 
@@ -147,7 +147,7 @@ CRAN (https://cran.r-project.org/)にアクセスし、「Download R for Windows
 
 「base」を選択します。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=1\linewidth]{Figures/Installation/R_Windows3} 
 
@@ -160,7 +160,7 @@ CRAN (https://cran.r-project.org/)にアクセスし、「Download R for Windows
 
 インストールの途中、コンポーネントの選択画面が表示されます。「Core File」と「Message translation」にはチェックを入れますが、自分のパソコンのbitによって32bitか64bitかが決まります。多くの場合、64bitで問題ありませんが、以下のような方法で確認できます。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.5\linewidth]{Figures/Installation/R_Windows_Pre1} 
 
@@ -171,7 +171,7 @@ CRAN (https://cran.r-project.org/)にアクセスし、「Download R for Windows
 
 1. デスクトップ画面のPCを**右クリック**し、「プロパティ」を選択
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=1\linewidth]{Figures/Installation/R_Windows_Pre2} 
 
@@ -196,7 +196,7 @@ CRAN (https://cran.r-project.org/)にアクセスし、「Download R for Windows
 
 RStudioのインストール方法はもっと簡単です。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=1\linewidth]{Figures/Installation/RStudio1} 
 
@@ -207,7 +207,7 @@ RStudioのインストール方法はもっと簡単です。
 
 まず、RStudioのホームページ (https://rstudio.com)にアクセスし、「Download」をクリックします。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=1\linewidth]{Figures/Installation/RStudio2} 
 
@@ -218,7 +218,7 @@ RStudioのインストール方法はもっと簡単です。
 
 RStudio Desktopの「Download」を選択します。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=1\linewidth]{Figures/Installation/RStudio3} 
 
@@ -241,7 +241,7 @@ RStudio Desktopの「Download」を選択します。
 
 とりあえずインスールされたRStudioを立ち上げてみましょう。図\@ref(fig:RStudio1)のおような画面が表示されたら問題なくRStudioがインストールされていると考えて良いでしょう。図\@ref(fig:RStudio1)と完全に同じ画面が表示されなくても問題ゴザ会いません。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=1\linewidth]{Figures/Installation/RStudio_Setting1} 
 
@@ -271,7 +271,7 @@ RStudio Desktopの「Download」を選択します。
     * ちなみに、RStudioのテーマやフォントなどの設定は「Apperance」から調整できます。
 4. 「OK」を押してRStudioの画面に戻ったら、左下Paneの最小化ボタン (図\@ref(fig:PaneExample)の赤い四角形)をクリックし、最小化します。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=1\linewidth]{Figures/Installation/RStudio_Setting4} 
 

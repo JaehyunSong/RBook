@@ -6,7 +6,7 @@
 
 ## Rとは {#WhatIsR}
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.25\linewidth]{figures/AboutR/Rlogo} 
 
@@ -129,7 +129,7 @@
 
 [^aboutr-ichiran]: たとえば、「◯蘭」の注文システムのように。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.75\linewidth]{figures/AboutR/CUI_GUI} 
 
@@ -157,7 +157,7 @@
 
 * [R Commander](https://socialsciences.mcmaster.ca/jfox/Misc/Rcmdr/)
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.75\linewidth]{figures/AboutR/GUI_Rcmdr} 
 
@@ -168,7 +168,7 @@
 
 * [RKWard](https://rkward.kde.org)
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.75\linewidth]{figures/AboutR/GUI_RKWard} 
 
@@ -179,7 +179,7 @@
 
 * [JASP](https://jasp-stats.org)
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.75\linewidth]{figures/AboutR/GUI_JASP} 
 
@@ -190,7 +190,7 @@
 
 * [jamovi](https://www.jamovi.org)
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.75\linewidth]{figures/AboutR/GUI_jamovi} 
 
@@ -201,7 +201,7 @@
 
 * [R AnalyticFlow](https://r.analyticflow.com)
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.75\linewidth]{figures/AboutR/GUI_RAnalyticFlow} 
 
@@ -219,7 +219,7 @@
 　プログラマにとって優れたIDEを使うということは、優れた秘書を雇用するようなものだ。ファイルの管理、うろ覚えのコマンドの補完入力、コードの色分けなどを自動的に行ってくれる。さらに、コードの実行結果の画面をコードと同時に表示してくれたり、これまでの作業を記録してくれるなど、多くの作業を手助けしてくれる。Rにはいくつかの優れたIDEが用意されている。本書では代表的なIDEである [RStudio](https://rstudio.com) を使うことにする。ただし、プログラミングにIDEは必須ではない。IDEをインストールしなくても、本書を読む上で特に問題はない（RStudioに関する説明の部分を除く）が、Rの実行環境に特にこだわりがないなら RStudioの導入を強く推奨する。
 
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.75\linewidth]{figures/AboutR/IDE_RStudio} 
 
@@ -231,7 +231,7 @@
 
 　RStudio以外にもRのIDEはある。魔界において圧倒的なシェアを誇ると噂されるWindowsという名のOSを使用しているなら、[R Tools for Visual Studio](https://docs.microsoft.com/ja-jp/visualstudio/rtvs/installer?view=vs-2017) がRStudioの代替候補として有力だ。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.75\linewidth]{figures/AboutR/IDE_RTVS} 
 

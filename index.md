@@ -1,12 +1,15 @@
 --- 
 title: '私たちのR: ベストプラクティスの探究'
 author: "宋財泫 (Jaehyun Song)・矢内勇生 (Yuki Yanai)"
-date: '改訂: 2022-02-25'
+date: '改訂: 2022-03-01'
 description: 'R Not for Everyone: An Esoteric Guide.'
 url: https\://jaysong.net/RBook/
 site: bookdown::bookdown_site
+
+documentclass: ltjsbook
 bibliography: tex/reference.bib
-#biblio-style: tex/jecon
+biblio-style: tex/jecon
+
 link-citations: yes
 always_allow_html: yes
 github-repo: JaehyunSong/RBook
@@ -87,7 +90,7 @@ apple-touch-icon-size: 120
 
 ## 著者紹介 {-}
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.5\linewidth]{figures/Authors/SongYanai} 
 

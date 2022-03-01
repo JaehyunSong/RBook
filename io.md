@@ -571,7 +571,7 @@ write.csv(my_data, file = "Data/my_data.csv", row.names = FALSE)
 
 　これを実行すると、プロジェクトのフォルダの中にある `Data` フォルダに`my_data.csv`が生成される。`LibreOffice`や`Numbers`、`Excel`などを使って`my_data.csv`を開いてみると、先ほど作成したデータが保存されていることが確認できる。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.4\linewidth]{Figures/Rbasic/Export} 
 

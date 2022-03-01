@@ -1325,7 +1325,7 @@ myDF1 %>%
 
 まずは、複数のデータフレームまたはtibbleを縦に結合する方法について解説します。イメージとしては図\@ref(fig:handling2-merge-row-1)のようなものです。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.8\linewidth]{Figures/Handling2/Merge1} 
 
@@ -1503,7 +1503,7 @@ Binded_df3
 
 実はデータ分析においてデータの結合といえば、列の結合が一般的です。これは図\@ref(fig:handling2-merge-col-1)のような操作を意味します。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.8\linewidth]{Figures/Handling2/Merge2} 
 
@@ -1696,7 +1696,7 @@ df4
 
 (ref:inner-join) `inner_join()`の仕組み
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.8\linewidth]{Figures/Handling2/Merge_Inner} 
 
@@ -1733,7 +1733,7 @@ inner_join(df2, df4, by = "Pref")
 
 (ref:full-join) `full_join()`の仕組み
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.8\linewidth]{Figures/Handling2/Merge_Full} 
 
@@ -1773,7 +1773,7 @@ full_join(df2, df4, by = "Pref") %>%
 
 (ref:left-join) `left_join()`の仕組み
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.8\linewidth]{Figures/Handling2/Merge_Left} 
 
@@ -1786,7 +1786,7 @@ full_join(df2, df4, by = "Pref") %>%
 
 (ref:right-join) `right_join()`の仕組み
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.8\linewidth]{Figures/Handling2/Merge_Right} 
 

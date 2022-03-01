@@ -29,7 +29,7 @@
 
 これまでRとRStudioの導入について説明しましたが、これは自分のパソコンにインストールすることを前提としていました。したがって、パソコンを新しく買ったり、複数のパソコンを持つ場合は、それぞれに対してインストールと設定をする必要があります。これらの作業は慣れれば大したことではありませんが、それでも面倒だと思う方もいるでしょう。また、それぞれのパソコンにRとRStudioをインストールして常に同じ環境を維持するのも手間のかかる作業です。そこで一つの対案となるのが[RStudio Cloud](https://rstudio.cloud)です。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=1\linewidth]{Figures/Installation/RStudioCloud} 
 

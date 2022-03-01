@@ -8,7 +8,7 @@
 
 横軸、または縦軸が気温、成績、身長のような連続変数ではなく、都道府県や国、企業のような名目変数になる場合があります。たとえば、棒グラフの横軸は図\@ref(fig:factor-intro-1)のように、一般的に名目変数になる場合が多いです。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics{factor_files/figure-latex/factor-intro-1-1} 
 
@@ -69,7 +69,7 @@ Score_df %>%
   theme_gray(base_size = 12)
 ```
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics{factor_files/figure-latex/factor-intro-4-1} 
 
@@ -114,7 +114,7 @@ Score_df2 %>%
   theme_gray(base_size = 12)
 ```
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics{factor_files/figure-latex/factor-intro-6-1} 
 
@@ -165,7 +165,7 @@ Score_df_f1$Pref
 
 この`Score_df_f1`データを使って、図\@ref(fig:factor-intro-4)と全く同じコードを実行した結果が図\@ref(fig:factor-intro-9)です。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics{factor_files/figure-latex/factor-intro-9-1} 
 
@@ -208,7 +208,7 @@ Score_df_f1
 
 `Kanto`変数のデータ型は、`<dbl>`、つまりnumeric型です。しかし、これは明らかに名目変数ですね。これをこのまま`Kanto`を横軸にした図を出すと図\@ref(fig:factor-intro-11)のようになります。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics{factor_files/figure-latex/factor-intro-11-1} 
 
@@ -256,7 +256,7 @@ Score_df_f1$Kanto
 
 また、`"関東"`、`"その他"`の順になっていますね。これを図として出力した結果が図\@ref(fig:factor-intro-14)です。
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics{factor_files/figure-latex/factor-intro-14-1} 
 
@@ -675,8 +675,8 @@ levels(Score_df$Pref2)
 ```
 
 ```
-## [1] "京都府"   "神奈川県" "埼玉県"   "和歌山県" "千葉県"   "兵庫県"   "奈良県"  
-## [8] "東京都"   "大阪府"
+## [1] "京都府"   "兵庫県"   "埼玉県"   "和歌山県" "千葉県"   "大阪府"   "東京都"  
+## [8] "奈良県"   "神奈川県"
 ```
 
 ```{.r .numberLines}
@@ -684,8 +684,8 @@ levels(Score_df$Pref3)
 ```
 
 ```
-## [1] "大阪府"   "兵庫県"   "和歌山県" "埼玉県"   "神奈川県" "京都府"   "東京都"  
-## [8] "奈良県"   "千葉県"
+## [1] "大阪府"   "兵庫県"   "埼玉県"   "京都府"   "奈良県"   "和歌山県" "東京都"  
+## [8] "千葉県"   "神奈川県"
 ```
 
 ```{.r .numberLines}
@@ -693,8 +693,8 @@ levels(Score_df$Pref4)
 ```
 
 ```
-## [1] "和歌山県" "埼玉県"   "千葉県"   "兵庫県"   "神奈川県" "東京都"   "京都府"  
-## [8] "大阪府"   "奈良県"
+## [1] "埼玉県"   "千葉県"   "兵庫県"   "奈良県"   "神奈川県" "東京都"   "和歌山県"
+## [8] "京都府"   "大阪府"
 ```
 
 `Pref`から`Pref4`まで同じように見えますが、水準の順番が異なります (`Pref`はcharacter型だから水準がありません)。
@@ -854,7 +854,7 @@ Reorder2_df %>%
   theme_gray(base_size = 12)
 ```
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics{factor_files/figure-latex/factor-forcats-reorder2-2-1} 
 
@@ -941,7 +941,7 @@ Reorder2_df %>%
   theme_gray(base_size = 12)
 ```
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics{factor_files/figure-latex/factor-forcats-reorder2-8-1} 
 
