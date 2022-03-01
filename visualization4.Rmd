@@ -1398,13 +1398,15 @@ Bump_df %>%
 
 　ここでは2009年の衆院選と2010年の参院選における投票先の変化を沖積図で確認してみたいと思います。まずは、沖積図の作成に特化した{ggalluvial}パッケージをインストールし、読み込みます。
 
-```{r visual4-alluvial1, message = FALSE}
+```{r visual4-alluvial1}
+#| message: FALSE
 pacman::p_load(ggalluvial)
 ```
 
 　続きまして、実習用データを読み込みます。データは @Nakazawa:2014 の表3を元に筆者 (宋)が作成したものです。
 
-```{r visual4-alluvial2, message = FALSE}
+```{r visual4-alluvial2}
+#| message: FALSE
 Vote_0910 <- read_csv("Data/Vote_09_10.csv")
 
 head(Vote_0910, 20)
@@ -1418,7 +1420,8 @@ head(Vote_0910, 20)
 
 　たとえば、1番目の回答者は2009年に棄権し、2010年も棄権したことを意味する。また、5番目の回答者は2009年に自民党に投票し、2010年は共産党または社民党に投票したことを意味する。続いて、このデータを{ggalluvial}に適した形式のデータに加工します。具体的には「2009年棄権、かつ2010年棄権」、「2009年棄権、かつ2010年自民党投票」、...、「2009年民主党投票、かつ2010年自民党投票」のように全ての組み合わせに対し、該当するケース数を計算する必要があります。今回のデータだと、投票先はいずれも自民、民主、公明、共産・社民、その他、棄権、DK (わからない)の7であるため、49パターンができます。それぞれのパターンに該当するケース数を計算するためには`Vote09`と`Vote10`でデータをグループ化し、ケース数を計算します。
 
-```{r visual4-alluvial3, fig.height = 7}
+```{r visual4-alluvial3}
+#| fig.height: 7
 Vote_0910 <- Vote_0910 %>%
   group_by(Vote09, Vote10) %>%
   summarise(Freq    = n(),
@@ -1431,7 +1434,8 @@ Vote_0910
 
 　続いて、グラフを作成する前に投票先変数 (`Vote09`と`Vote10`)をfactor化します。可視化の際、投票先が出力される順番に決まりはありませんが、自民、民主、公明、...、DKの順が自然かと思います。むろん、こちらは自分から見て分かりやいように順番を決めましょう。ただし、2変数における水準 (level)の順番は一致させた方が良いでしょう。
 
-```{r visual4-alluvial4, warning = FALSE}
+```{r visual4-alluvial4}
+#| warning: FALSE
 Vote_0910 <- Vote_0910 %>%
   mutate(Vote09 = factor(Vote09, levels = c("自民", "民主", "公明", "共産・社民", 
                                             "その他", "棄権", "DK")),
@@ -1443,7 +1447,10 @@ Vote_0910 <- Vote_0910 %>%
 
 [^alluvial1]: 今回は2期間の変化を示していますが、3期以上の場合、`axis3`、`axis4`、...と追加してください。
 
-```{r visual4-alluvial5, fig.height = 7, warning = FALSE}
+```{r visual4-alluvial5}
+#| fig.height: 7
+#| warning: FALSE
+#| cache: TRUE
 Vote_0910 %>%
     ggplot(aes(y = Freq, axis1 = Vote09, axis2 = Vote10)) +
     geom_alluvium() +
@@ -1452,7 +1459,10 @@ Vote_0910 %>%
 
 　何かの図は出てきましたが、これだけだと、それぞれの四角形がどの政党を示しているのかが分かりませんね。四角形内に政党名を出力するためには{ggplot2}内蔵の`geom_text()`を使用します。マッピング要素は`ggplot()`内でマッピングしたものに加え、`label`が必要ですが、ここでは`after_stat(stratum)`を指定します。そして、`aes()`のその側に`stat = "stratum"`を指定するだけです。フォントの指定が必要な場合は`family`を使います。`theme_*()`内で`base_family`を指定した場合でも必要です。
 
-```{r visual4-alluvial6, fig.height = 7, warning = FALSE}
+```{r visual4-alluvial6}
+#| fig.height: 7
+#| warning: FALSE
+#| cache: TRUE
 Vote_0910 %>%
     ggplot(aes(y = Freq, axis1 = Vote09, axis2 = Vote10)) +
     geom_alluvium() +
@@ -1463,7 +1473,10 @@ Vote_0910 %>%
 
 　これで沖積図はとりあえず完成ですが、少し読みやすく加工してみましょう。たとえば、2010年に民主党に投票した回答者において2009年の投票先の割合を見たいとした場合、`geom_alluvium()`内に`fill = Vote09`をマッピングします。これで帯に2009年の投票先ごとの色付けができます。
 
-```{r visual4-alluvial7, fig.height = 7, warning = FALSE}
+```{r visual4-alluvial7}
+#| fig.height: 7
+#| warning: FALSE
+#| cache: TRUE
 Vote_0910 %>%
     ggplot(aes(y = Freq, axis1 = Vote09, axis2 = Vote10)) +
     geom_alluvium(aes(fill = Vote09)) +
@@ -1474,7 +1487,10 @@ Vote_0910 %>%
 
 　`fill = Vote10`とマッピングした場合は、感覚が変わります。実際にやってみましょう。
 
-```{r visual4-alluvial8, fig.height = 7, warning = FALSE}
+```{r visual4-alluvial8}
+#| fig.height: 7
+#| warning: FALSE
+#| cache: TRUE
 Alluvial_Plot <- Vote_0910 %>%
     ggplot(aes(y = Freq, axis1 = Vote09, axis2 = Vote10)) +
     geom_alluvium(aes(fill = Vote10)) +
@@ -1489,7 +1505,10 @@ Alluvial_Plot
 
 　最後に、図をもう少し加工してみましょう。まず、横軸に0.8、1.2、1.6、2.0となっている目盛りを修正し、1と2の箇所に「2009年衆院選」と「2010年参院選」を出力します。これは`scale_x_continuous()`で調整可能です。そして、`theme_minimal()`で余計なものを排除したテーマを適用します。最後に`theme()`内で全ての凡例を削除 (`legend.position = "none"`)し、パネルのグリッド (`panel.grid`)と縦軸・横軸のタイトル (`axis.title`)、縦軸の目盛りラベル (`axis.text.y`)を削除 (`element_blank()`)します。
 
-```{r visual4-alluvial9, fig.height = 7, warning = FALSE}
+```{r visual4-alluvial9}
+#| fig.height: 7
+#| warning: FALSE
+#| cache: TRUE
 Alluvial_Plot +
     scale_x_continuous(breaks = 1:2, 
                        labels = c("2009年衆院選", "2010年参院選")) +
