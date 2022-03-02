@@ -3,7 +3,8 @@ always_allow_html: true
 ---
 # 可視化[発展] {#visualization4}
 
-```{r visual4-common, include = FALSE}
+```{r visual4-common}
+#| include: FALSE
 source("_common.R")
 ```
 
@@ -28,7 +29,8 @@ source("_common.R")
 
 ---
 
-```{r visual4-setup, message = FALSE}
+```{r visual4-setup}
+#| message: FALSE
 pacman::p_load(tidyverse)
 
 Country_df <- read_csv("Data/Countries.csv")
@@ -43,7 +45,11 @@ COVID19_df <- read_csv("Data/COVID19_Worldwide.csv", guess_max = 10000)
 
 　以下の図は対数化した一人当たり購買力平価GDP（`PPP_per_capita`）のヒストグラムです。
 
-```{r visual4-violin1, echo = FALSE, cache = TRUE, message = FALSE}
+```{r visual4-violin1}
+#| echo: FALSE
+#| message: FALSE
+#| warning: FALSE
+#| cache: TRUE
 Country_df %>%
   ggplot() +
   geom_histogram(aes(x = log(PPP_per_capita)), 
@@ -56,7 +62,11 @@ Country_df %>%
 
 　このヒストグラムをなめらかにすると以下のような図になります。
 
-```{r visual4-violin2, echo = FALSE, cache = TRUE}
+```{r visual4-violin2}
+#| echo: FALSE
+#| message: FALSE
+#| warning: FALSE
+#| cache: TRUE
 Country_df %>%
   ggplot() +
   geom_density(aes(x = log(PPP_per_capita), y = ..density..), 
@@ -69,7 +79,11 @@ Country_df %>%
 
 　この密度曲線を上下対称にすると以下のような図となり、これがバイオリンプロットです。ヒストグラムのようにデータの分布が分かりやすくなります。
 
-```{r visual4-violin3, echo = FALSE, cache = TRUE}
+```{r visual4-violin3}
+#| echo: FALSE
+#| message: FALSE
+#| warning: FALSE
+#| cache: TRUE
 Country_df %>%
   ggplot() +
   geom_density(aes(x = log(PPP_per_capita), y = ..density..), 
@@ -84,7 +98,11 @@ Country_df %>%
 
 　しかし、この図の場合、ヒストグラムと同様、中央値や四分位数などの情報が含まれておりません。これらの箱ひげ図を使用した方が良いでしょう。バイオリンプロットの良い点はバイオリンの中に箱ひげ図を入れ、ヒストグラムと箱ひげ図両方の長所を取ることができる点です。たとえば、バイオリンプロットを90度回転させ、中にバイオリン図を入れると以下のようになります。
 
-```{r visual4-violin4, echo = FALSE, cache = TRUE}
+```{r visual4-violin4}
+#| echo: FALSE
+#| message: FALSE
+#| warning: FALSE
+#| cache: TRUE
 Country_df %>%
   ggplot() +
   geom_density(aes(x = log(PPP_per_capita), y = ..density..), 
@@ -101,7 +119,10 @@ Country_df %>%
 
 　それでは実際にバイオリンプロットを作ってみましょう。使い方は箱ひげ図（`geom_boxplot()`）と同じです。たとえば、横軸は大陸（`Continent`）に、縦軸は対数化した一人当たり購買力平価GDP（`PPP_per_capita`）にしたバイオリンプロットを作るには作るには`geom_violin()`幾何オブジェクトの中にマッピングするだけです。大陸ごとに色分けしたい場合は`fill`引数に`Continent`をマッピングします。
 
-```{r visual4-violin5, cache = TRUE}
+```{r visual4-violin5}
+#| message: FALSE
+#| warning: FALSE
+#| cache: TRUE
 Country_df %>%
     ggplot() +
     geom_violin(aes(x = Continent, y = PPP_per_capita, fill = Continent)) +
@@ -116,7 +137,10 @@ Country_df %>%
 
 　ここに箱ひげ図も載せたい場合は、`geom_violin()`オブジェクトの後に`geom_boxplot()`オブジェクトを入れるだけで十分です。
 
-```{r visual4-violin6, cache = TRUE}
+```{r visual4-violin6}
+#| message: FALSE
+#| warning: FALSE
+#| cache: TRUE
 Country_df %>%
     ggplot() +
     geom_violin(aes(x = Continent, y = PPP_per_capita, fill = Continent)) +
@@ -141,7 +165,11 @@ Country_df %>%
 
 　以下は`Country_df`の`PPP_per_capita`（常用対数変換）のヒストグラムです。
 
-```{r visual4-rug1, cache = TRUE}
+```{r visual4-rug1}
+#| echo: FALSE
+#| message: FALSE
+#| warning: FALSE
+#| cache: TRUE
 Country_df %>%
     drop_na(PPP_per_capita) %>%
     ggplot() +
@@ -157,7 +185,11 @@ Country_df %>%
 
 　ここで登場するのがラグプロットです。これは座標平面の端を使ってデータを一時現状に並べたものです。多くの場合、点ではなく、垂直線（｜）を使います。ラグプロットの幾何オブジェクトは{ggplot2}でデフォルトで提供されており、`geom_rug()`を使います。マッピングは`x`または`y`に対して行いますが、座標平面の下段にラグプロットを出力する場合は`x`に変数（ここでは`PPP_per_capita`）をマッピングします。
 
-```{r visual4-rug2, cache = TRUE}
+```{r visual4-rug2}
+#| echo: FALSE
+#| message: FALSE
+#| warning: FALSE
+#| cache: TRUE
 Country_df %>%
     drop_na(PPP_per_capita) %>%
     ggplot() +
@@ -173,7 +205,11 @@ Country_df %>%
 
 ラグプロットは散布図に使うことも可能です。散布図は一つ一つの点が具体的な値がマッピングされるため、情報量の損失はほぼないでしょう。それでも散布図にラグプロットを加える意味はあります。まず、`Country_df`のフリーダムハウス指数（`FH_Total`）と一人当たりPPP（`PPP_per_capita`）の散布図を作ってみましょう。
 
-```{r visual4-rug3, cache = TRUE}
+```{r visual4-rug3}
+#| echo: FALSE
+#| message: FALSE
+#| warning: FALSE
+#| cache: TRUE
 Country_df %>%
     drop_na(FH_Total, PPP_per_capita) %>%
     ggplot() +
@@ -189,7 +225,11 @@ Country_df %>%
 
 横軸と縦軸両方のラグプロットは、`geom_rug()`に`x`と`y`両方マッピングするだけです。
 
-```{r visual4-rug4, cache = TRUE}
+```{r visual4-rug4}
+#| echo: FALSE
+#| message: FALSE
+#| warning: FALSE
+#| cache: TRUE
 Country_df %>%
     drop_na(FH_Total, PPP_per_capita) %>%
     ggplot() +
@@ -206,7 +246,11 @@ Country_df %>%
 
 　{ggExtra}の`ggMarginal()`を使えば、ラグプロットでなく、箱ひげ図やヒストグラムを付けることも可能です。{ggplot2}で作図した図をオブジェクトとして格納し、`ggMarginal()`の第一引数として指定します。第一引数のみだと密度のだけ出力されるため、箱ひげ図を付けるためには`type = "boxplot"`を指定します（既定値は`"density"`）。ヒストグラムを出力する場合は`"histogram"`と指定します。
 
-```{r visual4-rug5, cache = TRUE}
+```{r visual4-rug5}
+#| echo: FALSE
+#| message: FALSE
+#| warning: FALSE
+#| cache: TRUE
 Scatter_Fig1 <- Country_df %>%
     drop_na(FH_Total, PPP_per_capita) %>%
     ggplot() +
