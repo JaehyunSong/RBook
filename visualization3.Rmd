@@ -1058,28 +1058,54 @@ ggarrange(Grid_Fig1, Grid_Fig2, nrow = 1, ncol = 2, align = "hv")
 
 　続きまして、3つの図を以下のように並べるとします。
 
-```{r visual3-merge-6, echo = FALSE}
-tibble(X1 = c("`Grid_Fig3`", "`Grid_Fig1`"), 
-       X2 = c("", "`Grid_Fig4`")) %>%
-  kable(col.names = NULL) %>%
-  kable_classic(full_width = FALSE) %>%
+```{r visual3-merge-6}
+#| echo: FALSE
+merge_tbl1 <- tibble(X1 = c("Grid_Fig3", "Grid_Fig1"), 
+                     X2 = c("", "Grid_Fig4")) %>%
+  kable(col.names = NULL, 
+        align     = "cc") %>%
   kable_styling(bootstrap_options = "bordered",
+                full_width        = FALSE,
                 latex_options     = "hold_position") %>%
-  column_spec(column = 1:2, 
-              border_left = TRUE, border_right = TRUE)
+  column_spec(column       = 1, 
+              border_left  = TRUE,
+              monospace    = TRUE) %>%
+  column_spec(column       = 2, 
+              border_right = TRUE,
+              monospace    = TRUE)
+  
+if (knitr::is_latex_output()) {
+  merge_tbl1 %>%
+    row_spec(0, monospace = TRUE)
+} else {
+  merge_tbl1
+}
 ```
 
 　今回は3つの図オブジェクトを入れるだけでは不十分です。なぜなら、`ggarrange()`関数は左上から右下の順番へ一つずつ図を入れるからです。もし、3つの図オブジェクトのみを入れると、以下のように配置されます。
 
-```{r visual3-merge-7, echo = FALSE}
-tibble(X1 = c("`Grid_Fig3`", "`Grid_Fig4`"), 
-       X2 = c("`Grid_Fig1`", "")) %>%
-  kable(col.names = NULL) %>%
-  kable_classic(full_width = FALSE) %>%
+```{r visual3-merge-7}
+#| echo: FALSE
+merge_tbl2 <- tibble(X1 = c("Grid_Fig3", "Grid_Fig4"), 
+                     X2 = c("Grid_Fig1", "")) %>%
+  kable(col.names = NULL, 
+        align     = "cc") %>%
   kable_styling(bootstrap_options = "bordered",
+                full_width        = FALSE,
                 latex_options     = "hold_position") %>%
-  column_spec(column = 1:2, 
-              border_left = TRUE, border_right = TRUE)
+  column_spec(column       = 1, 
+              border_left  = TRUE,
+              monospace    = TRUE) %>%
+  column_spec(column       = 2, 
+              border_right = TRUE,
+              monospace    = TRUE)
+
+if (knitr::is_latex_output()) {
+  merge_tbl2 %>%
+    row_spec(0, monospace = TRUE)
+} else {
+  merge_tbl2
+}
 ```
 
 　これを回避するためには空欄とするグリッドに`NULL`を指定する必要があります。

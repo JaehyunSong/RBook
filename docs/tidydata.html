@@ -1542,16 +1542,16 @@ Stock
 <p>以下では「1列1変数」の条件を満たすデータの作成に便利な<code>pivot_longer()</code>と<code>pivot_wider()</code>関数について解説します。この関数群はおなじみの{dplyr}でなく、{tidyr}パッケージが提供している関数ですが、どれも{tidyverse}パッケージ群に含まれているため、{tidyverse}パッケージを読み込むだけで十分です。本節では<code>pivot_longer()</code>を、次節では<code>pivot_wider()</code>を取り上げます。</p>
 <p>まず、<code>pivot_longer()</code>ですが、この関数は比較的に新しい関数であり、これまでは{tidyr}の<code>gather()</code>関数が使われてきました。しかし、<code>gahter()</code>関数は将来、なくなる予定の関数であり、今から{tidyr}を学習する方は<code>pivot_*()</code>関数群に慣れておきましょう。</p>
 <p>まずは{tidyverse}パッケージを読み込みます。</p>
-<div class="sourceCode" id="cb1183"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1183-1"><a href="tidydata.html#cb1183-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse)</span></code></pre></div>
+<div class="sourceCode" id="cb1181"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1181-1"><a href="tidydata.html#cb1181-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse)</span></code></pre></div>
 <p>今回は様々な形のデータを変形する作業をするので、あるデータセットを使うよりも、架空の簡単なデータを使います。</p>
-<div class="sourceCode" id="cb1184"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1184-1"><a href="tidydata.html#cb1184-1"></a>df1 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb1184-2"><a href="tidydata.html#cb1184-2"></a>  <span class="at">Name      =</span> <span class="fu">c</span>(<span class="st">&quot;Hadley&quot;</span>, <span class="st">&quot;Song&quot;</span>, <span class="st">&quot;Yanai&quot;</span>),</span>
-<span id="cb1184-3"><a href="tidydata.html#cb1184-3"></a>  <span class="at">Control   =</span> <span class="fu">c</span>(<span class="dv">90</span>, <span class="dv">80</span>, <span class="dv">100</span>),</span>
-<span id="cb1184-4"><a href="tidydata.html#cb1184-4"></a>  <span class="at">Treatment =</span> <span class="fu">c</span>(<span class="dv">90</span>, <span class="dv">25</span>, <span class="dv">95</span>),</span>
-<span id="cb1184-5"><a href="tidydata.html#cb1184-5"></a>  <span class="at">Gender    =</span> <span class="fu">c</span>(<span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Female&quot;</span>)</span>
-<span id="cb1184-6"><a href="tidydata.html#cb1184-6"></a>)</span>
-<span id="cb1184-7"><a href="tidydata.html#cb1184-7"></a></span>
-<span id="cb1184-8"><a href="tidydata.html#cb1184-8"></a>df1</span></code></pre></div>
+<div class="sourceCode" id="cb1182"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1182-1"><a href="tidydata.html#cb1182-1"></a>df1 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb1182-2"><a href="tidydata.html#cb1182-2"></a>  <span class="at">Name      =</span> <span class="fu">c</span>(<span class="st">&quot;Hadley&quot;</span>, <span class="st">&quot;Song&quot;</span>, <span class="st">&quot;Yanai&quot;</span>),</span>
+<span id="cb1182-3"><a href="tidydata.html#cb1182-3"></a>  <span class="at">Control   =</span> <span class="fu">c</span>(<span class="dv">90</span>, <span class="dv">80</span>, <span class="dv">100</span>),</span>
+<span id="cb1182-4"><a href="tidydata.html#cb1182-4"></a>  <span class="at">Treatment =</span> <span class="fu">c</span>(<span class="dv">90</span>, <span class="dv">25</span>, <span class="dv">95</span>),</span>
+<span id="cb1182-5"><a href="tidydata.html#cb1182-5"></a>  <span class="at">Gender    =</span> <span class="fu">c</span>(<span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Female&quot;</span>)</span>
+<span id="cb1182-6"><a href="tidydata.html#cb1182-6"></a>)</span>
+<span id="cb1182-7"><a href="tidydata.html#cb1182-7"></a></span>
+<span id="cb1182-8"><a href="tidydata.html#cb1182-8"></a>df1</span></code></pre></div>
 <pre><code>## # A tibble: 3 × 4
 ##   Name   Control Treatment Gender
 ##   &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt; 
@@ -1571,19 +1571,19 @@ Stock
 <p><code>Treat</code>変数が作成され、元々は変数名であった<code>"Control"</code>と<code>"Treatment"</code>が値として格納されます。この変数をキー変数と呼びます。そして、キー変数の値に応じた数学成績が<code>Math_Score</code>という変数でまとめられました。この変数を値変数と呼びます。</p>
 <p>「1列1変数」を満たさなかった最初のデータは「Wide型データ」、これを満たすようなデータは「Long型データ」と呼ばれます。これは相対的に最初のデータが横に広いから名付けた名前であって、「Wide型=雑然データ」もしくは「Long型=雑然データ」ではないことに注意してください<a href="reference.html#fn80" class="footnote-ref" id="fnref80"><sup>80</sup></a>。</p>
 <p>Wide型データをLong型へ変換する関数が<code>pivot_longer()</code>であり、基本的な使い方は以下の通りです。</p>
-<div class="sourceCode" id="cb1187"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1187-1"><a href="tidydata.html#cb1187-1"></a><span class="co"># pivot_longer()の使い方</span></span>
-<span id="cb1187-2"><a href="tidydata.html#cb1187-2"></a>データ名 <span class="sc">%&gt;%</span></span>
-<span id="cb1187-3"><a href="tidydata.html#cb1187-3"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols      =</span> <span class="fu">c</span>(まとめる変数1, まとめる変数2, ...),</span>
-<span id="cb1187-4"><a href="tidydata.html#cb1187-4"></a>               <span class="at">names_to  =</span> <span class="st">&quot;キー変数名&quot;</span>,</span>
-<span id="cb1187-5"><a href="tidydata.html#cb1187-5"></a>               <span class="at">values_to =</span> <span class="st">&quot;値変数名&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1185"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1185-1"><a href="tidydata.html#cb1185-1"></a><span class="co"># pivot_longer()の使い方</span></span>
+<span id="cb1185-2"><a href="tidydata.html#cb1185-2"></a>データ名 <span class="sc">%&gt;%</span></span>
+<span id="cb1185-3"><a href="tidydata.html#cb1185-3"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols      =</span> <span class="fu">c</span>(まとめる変数1, まとめる変数2, ...),</span>
+<span id="cb1185-4"><a href="tidydata.html#cb1185-4"></a>               <span class="at">names_to  =</span> <span class="st">&quot;キー変数名&quot;</span>,</span>
+<span id="cb1185-5"><a href="tidydata.html#cb1185-5"></a>               <span class="at">values_to =</span> <span class="st">&quot;値変数名&quot;</span>)</span></code></pre></div>
 <p>ここでは同じ変数が<code>Control</code>と<code>Treatment</code>変数で分けられているため、まとめる変数はこの2つであり、<code>cols = c(Control, Treatment)</code>と指定します。<code>Control</code>と<code>Treatment</code>は<code>"</code>で囲んでも、囲まなくても同じです。また、{dplyr}の<code>select()</code>関数で使える変数選択の関数 (<code>starts_with()</code>、<code>where()</code>など)や<code>:</code>演算子も使用可能です。また、<code>cols</code>引数は<code>pivot_longer()</code>の第2引数であるため、<code>cols =</code>は省略可能です（第一引数はパイプにより既に渡されています）。</p>
 <p><code>names_to</code>と<code>values_to</code>引数はそれぞれキー変数名と値変数名を指定する引数で、ここは必ず<code>"</code>で囲んでください。この<code>df1</code>をLong型へ変換し、<code>df1_L</code>と名付けるコードが以下のコードです。</p>
-<div class="sourceCode" id="cb1188"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1188-1"><a href="tidydata.html#cb1188-1"></a>df1_L <span class="ot">&lt;-</span> df1 <span class="sc">%&gt;%</span></span>
-<span id="cb1188-2"><a href="tidydata.html#cb1188-2"></a>  <span class="fu">pivot_longer</span>(Control<span class="sc">:</span>Treatment,</span>
-<span id="cb1188-3"><a href="tidydata.html#cb1188-3"></a>               <span class="at">names_to  =</span> <span class="st">&quot;Treat&quot;</span>,</span>
-<span id="cb1188-4"><a href="tidydata.html#cb1188-4"></a>               <span class="at">values_to =</span> <span class="st">&quot;Math_Score&quot;</span>)</span>
-<span id="cb1188-5"><a href="tidydata.html#cb1188-5"></a></span>
-<span id="cb1188-6"><a href="tidydata.html#cb1188-6"></a>df1_L</span></code></pre></div>
+<div class="sourceCode" id="cb1186"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1186-1"><a href="tidydata.html#cb1186-1"></a>df1_L <span class="ot">&lt;-</span> df1 <span class="sc">%&gt;%</span></span>
+<span id="cb1186-2"><a href="tidydata.html#cb1186-2"></a>  <span class="fu">pivot_longer</span>(Control<span class="sc">:</span>Treatment,</span>
+<span id="cb1186-3"><a href="tidydata.html#cb1186-3"></a>               <span class="at">names_to  =</span> <span class="st">&quot;Treat&quot;</span>,</span>
+<span id="cb1186-4"><a href="tidydata.html#cb1186-4"></a>               <span class="at">values_to =</span> <span class="st">&quot;Math_Score&quot;</span>)</span>
+<span id="cb1186-5"><a href="tidydata.html#cb1186-5"></a></span>
+<span id="cb1186-6"><a href="tidydata.html#cb1186-6"></a>df1_L</span></code></pre></div>
 <pre><code>## # A tibble: 6 × 4
 ##   Name   Gender Treat     Math_Score
 ##   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;          &lt;dbl&gt;
@@ -1595,14 +1595,14 @@ Stock
 ## 6 Yanai  Female Treatment         95</code></pre>
 <p>これだけでも<code>pivot_longer()</code>関数を使ってWide型からLong型への変換は問題なくできますが、以下ではもうちょっと踏み込んだ使い方について解説します。「ここまでで十分だよ」という方は、ここを飛ばしても構いません。</p>
 <p>今回の実習データ<code>df3</code>は3人の体重を3日間に渡って計測したものです。ただし、ドジっ子のSongは2日目にうっかり測るのを忘れており、欠損値となっています。</p>
-<div class="sourceCode" id="cb1190"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1190-1"><a href="tidydata.html#cb1190-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb1190-2"><a href="tidydata.html#cb1190-2"></a>  <span class="at">Name =</span> <span class="fu">c</span>(<span class="st">&quot;Hadley&quot;</span>, <span class="st">&quot;Song&quot;</span>, <span class="st">&quot;Yanai&quot;</span>),</span>
-<span id="cb1190-3"><a href="tidydata.html#cb1190-3"></a>  <span class="at">Day1 =</span> <span class="fu">c</span>(<span class="dv">75</span>, <span class="dv">120</span>, <span class="dv">70</span>),</span>
-<span id="cb1190-4"><a href="tidydata.html#cb1190-4"></a>  <span class="at">Day2 =</span> <span class="fu">c</span>(<span class="dv">73</span>,  <span class="cn">NA</span>, <span class="dv">69</span>),</span>
-<span id="cb1190-5"><a href="tidydata.html#cb1190-5"></a>  <span class="at">Day3 =</span> <span class="fu">c</span>(<span class="dv">71</span>, <span class="dv">140</span>, <span class="dv">71</span>)</span>
-<span id="cb1190-6"><a href="tidydata.html#cb1190-6"></a>)</span>
-<span id="cb1190-7"><a href="tidydata.html#cb1190-7"></a></span>
-<span id="cb1190-8"><a href="tidydata.html#cb1190-8"></a>df2</span></code></pre></div>
+<div class="sourceCode" id="cb1188"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1188-1"><a href="tidydata.html#cb1188-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb1188-2"><a href="tidydata.html#cb1188-2"></a>  <span class="at">Name =</span> <span class="fu">c</span>(<span class="st">&quot;Hadley&quot;</span>, <span class="st">&quot;Song&quot;</span>, <span class="st">&quot;Yanai&quot;</span>),</span>
+<span id="cb1188-3"><a href="tidydata.html#cb1188-3"></a>  <span class="at">Day1 =</span> <span class="fu">c</span>(<span class="dv">75</span>, <span class="dv">120</span>, <span class="dv">70</span>),</span>
+<span id="cb1188-4"><a href="tidydata.html#cb1188-4"></a>  <span class="at">Day2 =</span> <span class="fu">c</span>(<span class="dv">73</span>,  <span class="cn">NA</span>, <span class="dv">69</span>),</span>
+<span id="cb1188-5"><a href="tidydata.html#cb1188-5"></a>  <span class="at">Day3 =</span> <span class="fu">c</span>(<span class="dv">71</span>, <span class="dv">140</span>, <span class="dv">71</span>)</span>
+<span id="cb1188-6"><a href="tidydata.html#cb1188-6"></a>)</span>
+<span id="cb1188-7"><a href="tidydata.html#cb1188-7"></a></span>
+<span id="cb1188-8"><a href="tidydata.html#cb1188-8"></a>df2</span></code></pre></div>
 <pre><code>## # A tibble: 3 × 4
 ##   Name    Day1  Day2  Day3
 ##   &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -1610,12 +1610,12 @@ Stock
 ## 2 Song     120    NA   140
 ## 3 Yanai     70    69    71</code></pre>
 <p>まず、これをこれまでのやり方でLong型へ変形し、<code>df2_L</code>と名付けます。</p>
-<div class="sourceCode" id="cb1192"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1192-1"><a href="tidydata.html#cb1192-1"></a>df2_L <span class="ot">&lt;-</span> df2 <span class="sc">%&gt;%</span></span>
-<span id="cb1192-2"><a href="tidydata.html#cb1192-2"></a>  <span class="fu">pivot_longer</span>(<span class="fu">starts_with</span>(<span class="st">&quot;Day&quot;</span>),</span>
-<span id="cb1192-3"><a href="tidydata.html#cb1192-3"></a>               <span class="at">names_to  =</span> <span class="st">&quot;Days&quot;</span>,</span>
-<span id="cb1192-4"><a href="tidydata.html#cb1192-4"></a>               <span class="at">values_to =</span> <span class="st">&quot;Weight&quot;</span>)</span>
-<span id="cb1192-5"><a href="tidydata.html#cb1192-5"></a></span>
-<span id="cb1192-6"><a href="tidydata.html#cb1192-6"></a>df2_L</span></code></pre></div>
+<div class="sourceCode" id="cb1190"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1190-1"><a href="tidydata.html#cb1190-1"></a>df2_L <span class="ot">&lt;-</span> df2 <span class="sc">%&gt;%</span></span>
+<span id="cb1190-2"><a href="tidydata.html#cb1190-2"></a>  <span class="fu">pivot_longer</span>(<span class="fu">starts_with</span>(<span class="st">&quot;Day&quot;</span>),</span>
+<span id="cb1190-3"><a href="tidydata.html#cb1190-3"></a>               <span class="at">names_to  =</span> <span class="st">&quot;Days&quot;</span>,</span>
+<span id="cb1190-4"><a href="tidydata.html#cb1190-4"></a>               <span class="at">values_to =</span> <span class="st">&quot;Weight&quot;</span>)</span>
+<span id="cb1190-5"><a href="tidydata.html#cb1190-5"></a></span>
+<span id="cb1190-6"><a href="tidydata.html#cb1190-6"></a>df2_L</span></code></pre></div>
 <pre><code>## # A tibble: 9 × 3
 ##   Name   Days  Weight
 ##   &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt;
@@ -1634,13 +1634,13 @@ Stock
 <li><code>Days</code>列の値から<code>"Day"</code>を除去し、numeric型にする</li>
 </ol>
 <p>以上の作業を行うには、<code>dplyr</code>が便利でしょう。ちなみに<code>str_remove()</code>関数が初めて登場しましたが、これについては第<a href="string.html#string">16</a>章で詳細に解説します。簡単に説明しますと、<code>str_remove("X123", "X")</code>は<code>"X123"</code>から<code>"X"</code>を除去し、<code>"123"</code>のみ残す関すです。残された値が数字のみであってもデータ型はcharacter型なので、もう一回、numeric型に変換する必要があります<a href="reference.html#fn81" class="footnote-ref" id="fnref81"><sup>81</sup></a>。<code>dplyr</code>を使ったコードは以下の通りです。</p>
-<div class="sourceCode" id="cb1194"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1194-1"><a href="tidydata.html#cb1194-1"></a><span class="co"># 1. WeightがNAのケースを除去</span></span>
-<span id="cb1194-2"><a href="tidydata.html#cb1194-2"></a><span class="co"># 2. Days変数の値から&quot;Day&quot;を除去</span></span>
-<span id="cb1194-3"><a href="tidydata.html#cb1194-3"></a><span class="co"># 3. Days変数をnumeric型へ変換</span></span>
-<span id="cb1194-4"><a href="tidydata.html#cb1194-4"></a>df2_L <span class="sc">%&gt;%</span></span>
-<span id="cb1194-5"><a href="tidydata.html#cb1194-5"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Weight)) <span class="sc">%&gt;%</span>             <span class="co"># 1</span></span>
-<span id="cb1194-6"><a href="tidydata.html#cb1194-6"></a>  <span class="fu">mutate</span>(<span class="at">Days =</span> <span class="fu">str_remove</span>(Days, <span class="st">&quot;Day&quot;</span>), <span class="co"># 2</span></span>
-<span id="cb1194-7"><a href="tidydata.html#cb1194-7"></a>         <span class="at">Days =</span> <span class="fu">as.numeric</span>(Days))        <span class="co"># 3</span></span></code></pre></div>
+<div class="sourceCode" id="cb1192"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1192-1"><a href="tidydata.html#cb1192-1"></a><span class="co"># 1. WeightがNAのケースを除去</span></span>
+<span id="cb1192-2"><a href="tidydata.html#cb1192-2"></a><span class="co"># 2. Days変数の値から&quot;Day&quot;を除去</span></span>
+<span id="cb1192-3"><a href="tidydata.html#cb1192-3"></a><span class="co"># 3. Days変数をnumeric型へ変換</span></span>
+<span id="cb1192-4"><a href="tidydata.html#cb1192-4"></a>df2_L <span class="sc">%&gt;%</span></span>
+<span id="cb1192-5"><a href="tidydata.html#cb1192-5"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Weight)) <span class="sc">%&gt;%</span>             <span class="co"># 1</span></span>
+<span id="cb1192-6"><a href="tidydata.html#cb1192-6"></a>  <span class="fu">mutate</span>(<span class="at">Days =</span> <span class="fu">str_remove</span>(Days, <span class="st">&quot;Day&quot;</span>), <span class="co"># 2</span></span>
+<span id="cb1192-7"><a href="tidydata.html#cb1192-7"></a>         <span class="at">Days =</span> <span class="fu">as.numeric</span>(Days))        <span class="co"># 3</span></span></code></pre></div>
 <pre><code>## # A tibble: 8 × 3
 ##   Name    Days Weight
 ##   &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt;
@@ -1653,12 +1653,12 @@ Stock
 ## 7 Yanai      2     69
 ## 8 Yanai      3     71</code></pre>
 <p>実はこの作業、<code>pivot_longer()</code>内で行うことも可能です。たとえば、<code>values_to</code>で指定した変数の値が欠損しているケースを除去するには<code>values_drop_na</code>引数を<code>TRUE</code>に指定するだけです。</p>
-<div class="sourceCode" id="cb1196"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1196-1"><a href="tidydata.html#cb1196-1"></a><span class="co"># Weight変数がNAのケースを除去する</span></span>
-<span id="cb1196-2"><a href="tidydata.html#cb1196-2"></a>df2 <span class="sc">%&gt;%</span></span>
-<span id="cb1196-3"><a href="tidydata.html#cb1196-3"></a>  <span class="fu">pivot_longer</span>(<span class="fu">starts_with</span>(<span class="st">&quot;Day&quot;</span>),</span>
-<span id="cb1196-4"><a href="tidydata.html#cb1196-4"></a>               <span class="at">names_to       =</span> <span class="st">&quot;Days&quot;</span>,</span>
-<span id="cb1196-5"><a href="tidydata.html#cb1196-5"></a>               <span class="at">values_to      =</span> <span class="st">&quot;Weight&quot;</span>,</span>
-<span id="cb1196-6"><a href="tidydata.html#cb1196-6"></a>               <span class="at">values_drop_na =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1194"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1194-1"><a href="tidydata.html#cb1194-1"></a><span class="co"># Weight変数がNAのケースを除去する</span></span>
+<span id="cb1194-2"><a href="tidydata.html#cb1194-2"></a>df2 <span class="sc">%&gt;%</span></span>
+<span id="cb1194-3"><a href="tidydata.html#cb1194-3"></a>  <span class="fu">pivot_longer</span>(<span class="fu">starts_with</span>(<span class="st">&quot;Day&quot;</span>),</span>
+<span id="cb1194-4"><a href="tidydata.html#cb1194-4"></a>               <span class="at">names_to       =</span> <span class="st">&quot;Days&quot;</span>,</span>
+<span id="cb1194-5"><a href="tidydata.html#cb1194-5"></a>               <span class="at">values_to      =</span> <span class="st">&quot;Weight&quot;</span>,</span>
+<span id="cb1194-6"><a href="tidydata.html#cb1194-6"></a>               <span class="at">values_drop_na =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 8 × 3
 ##   Name   Days  Weight
 ##   &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt;
@@ -1671,16 +1671,16 @@ Stock
 ## 7 Yanai  Day2      69
 ## 8 Yanai  Day3      71</code></pre>
 <p>それでは、キー変数から共通する文字列を除去するにはどうすれば良いでしょうか。この場合、<code>names_prefix</code>引数を使います。これは<code>names_to</code>で指定した新しく出来る変数の値における接頭詞を指定し、それを除去する引数です。今回は<code>"Day1"</code>、<code>"Day2"</code>、<code>"Day3"</code>から<code>"Day"</code>を除去するので、<code>names_prefix = "Day"</code>と指定します。こうすることで、<code>Days</code>列から<code>"Day"</code>が除去されます。ただし、数字だけ残っても、そのデータ型はcharacter型ですので、このデータ型を変換する必要があります。ここで使うのが<code>names_transform</code>引数であり、これはlist型のオブジェクトを渡す必要があります。<code>Days</code>列をnumeric型にする場合は<code>list(Days = as.numeric)</code>です。複数の列のデータ型を変える場合、<code>list()</code>の中に追加していきます。それでは実際に走らせてみましょう。</p>
-<div class="sourceCode" id="cb1198"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1198-1"><a href="tidydata.html#cb1198-1"></a><span class="co"># 1. Day変数の値から&quot;Day&quot;を除去する</span></span>
-<span id="cb1198-2"><a href="tidydata.html#cb1198-2"></a><span class="co"># 2. Day変数をinteger型に変換</span></span>
-<span id="cb1198-3"><a href="tidydata.html#cb1198-3"></a><span class="co"># 3. Weight変数がNAのケースを除去する</span></span>
-<span id="cb1198-4"><a href="tidydata.html#cb1198-4"></a>df2 <span class="sc">%&gt;%</span></span>
-<span id="cb1198-5"><a href="tidydata.html#cb1198-5"></a>  <span class="fu">pivot_longer</span>(<span class="fu">starts_with</span>(<span class="st">&quot;Day&quot;</span>),</span>
-<span id="cb1198-6"><a href="tidydata.html#cb1198-6"></a>               <span class="at">names_to        =</span> <span class="st">&quot;Days&quot;</span>,</span>
-<span id="cb1198-7"><a href="tidydata.html#cb1198-7"></a>               <span class="at">names_prefix    =</span> <span class="st">&quot;Day&quot;</span>,                   <span class="co"># 1</span></span>
-<span id="cb1198-8"><a href="tidydata.html#cb1198-8"></a>               <span class="at">names_transform =</span> <span class="fu">list</span>(<span class="at">Days =</span> as.numeric), <span class="co"># 2</span></span>
-<span id="cb1198-9"><a href="tidydata.html#cb1198-9"></a>               <span class="at">values_to       =</span> <span class="st">&quot;Weight&quot;</span>,</span>
-<span id="cb1198-10"><a href="tidydata.html#cb1198-10"></a>               <span class="at">values_drop_na  =</span> <span class="cn">TRUE</span>)                    <span class="co"># 3</span></span></code></pre></div>
+<div class="sourceCode" id="cb1196"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1196-1"><a href="tidydata.html#cb1196-1"></a><span class="co"># 1. Day変数の値から&quot;Day&quot;を除去する</span></span>
+<span id="cb1196-2"><a href="tidydata.html#cb1196-2"></a><span class="co"># 2. Day変数をinteger型に変換</span></span>
+<span id="cb1196-3"><a href="tidydata.html#cb1196-3"></a><span class="co"># 3. Weight変数がNAのケースを除去する</span></span>
+<span id="cb1196-4"><a href="tidydata.html#cb1196-4"></a>df2 <span class="sc">%&gt;%</span></span>
+<span id="cb1196-5"><a href="tidydata.html#cb1196-5"></a>  <span class="fu">pivot_longer</span>(<span class="fu">starts_with</span>(<span class="st">&quot;Day&quot;</span>),</span>
+<span id="cb1196-6"><a href="tidydata.html#cb1196-6"></a>               <span class="at">names_to        =</span> <span class="st">&quot;Days&quot;</span>,</span>
+<span id="cb1196-7"><a href="tidydata.html#cb1196-7"></a>               <span class="at">names_prefix    =</span> <span class="st">&quot;Day&quot;</span>,                   <span class="co"># 1</span></span>
+<span id="cb1196-8"><a href="tidydata.html#cb1196-8"></a>               <span class="at">names_transform =</span> <span class="fu">list</span>(<span class="at">Days =</span> as.numeric), <span class="co"># 2</span></span>
+<span id="cb1196-9"><a href="tidydata.html#cb1196-9"></a>               <span class="at">values_to       =</span> <span class="st">&quot;Weight&quot;</span>,</span>
+<span id="cb1196-10"><a href="tidydata.html#cb1196-10"></a>               <span class="at">values_drop_na  =</span> <span class="cn">TRUE</span>)                    <span class="co"># 3</span></span></code></pre></div>
 <pre><code>## # A tibble: 8 × 3
 ##   Name    Days Weight
 ##   &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt;
@@ -1918,7 +1918,7 @@ Stock
 <p>変数名が日本語になっていますが、これは「読むための表」を読み込むことを仮定しています。このように変数名として日本語は使えますが、自分でデータセットを作成する際、変数名はローマ字にすることを強く推奨します。</p>
 <p>表<a href="tidydata.html#tab:tidydata-wider-1">15.7</a>の左の場合、<code>人口</code>列に総人口と外国人人口といった2つの変数の値が格納されているため、整然データではありません。これを整然データにしたものが右の表です。本節ではLong型データをWide型データへ変換する<code>pivot_wider()</code>関数を紹介します。この関数は同じく{tidyr}が提供している<code>spread()</code>関数とほぼ同じ関数ですが、今は<code>pivot_wider()</code>の使用が推奨されており、<code>spread()</code>はいずれか{tidyr}から外される予定です。</p>
 <p>まずは、実習用データを読み込みます。</p>
-<div class="sourceCode" id="cb1200"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1200-1"><a href="tidydata.html#cb1200-1"></a>df3 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;Data/Population2015.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1198"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1198-1"><a href="tidydata.html#cb1198-1"></a>df3 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;Data/Population2015.csv&quot;</span>)</span></code></pre></div>
 <pre><code>## Rows: 94 Columns: 4
 ## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
@@ -1927,7 +1927,7 @@ Stock
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<div class="sourceCode" id="cb1202"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1202-1"><a href="tidydata.html#cb1202-1"></a>df3</span></code></pre></div>
+<div class="sourceCode" id="cb1200"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1200-1"><a href="tidydata.html#cb1200-1"></a>df3</span></code></pre></div>
 <pre><code>## # A tibble: 94 × 4
 ##    都道府県 区分      人口   面積
 ##    &lt;chr&gt;    &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;
@@ -1990,10 +1990,10 @@ Stock
 </tbody>
 </table>
 <p>まずは変数名が日本語になっているので、<code>rename()</code>関数を使ってそれぞれ<code>Pref</code>、<code>Type</code>、<code>Population</code>、<code>Area</code>に変更します。</p>
-<div class="sourceCode" id="cb1204"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1204-1"><a href="tidydata.html#cb1204-1"></a>df3 <span class="ot">&lt;-</span> df3 <span class="sc">%&gt;%</span></span>
-<span id="cb1204-2"><a href="tidydata.html#cb1204-2"></a>  <span class="fu">rename</span>(<span class="st">&quot;Pref&quot;</span> <span class="ot">=</span> 都道府県, <span class="st">&quot;Type&quot;</span> <span class="ot">=</span> 区分, <span class="st">&quot;Population&quot;</span> <span class="ot">=</span> 人口, <span class="st">&quot;Area&quot;</span> <span class="ot">=</span> 面積)</span>
-<span id="cb1204-3"><a href="tidydata.html#cb1204-3"></a></span>
-<span id="cb1204-4"><a href="tidydata.html#cb1204-4"></a>df3</span></code></pre></div>
+<div class="sourceCode" id="cb1202"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1202-1"><a href="tidydata.html#cb1202-1"></a>df3 <span class="ot">&lt;-</span> df3 <span class="sc">%&gt;%</span></span>
+<span id="cb1202-2"><a href="tidydata.html#cb1202-2"></a>  <span class="fu">rename</span>(<span class="st">&quot;Pref&quot;</span> <span class="ot">=</span> 都道府県, <span class="st">&quot;Type&quot;</span> <span class="ot">=</span> 区分, <span class="st">&quot;Population&quot;</span> <span class="ot">=</span> 人口, <span class="st">&quot;Area&quot;</span> <span class="ot">=</span> 面積)</span>
+<span id="cb1202-3"><a href="tidydata.html#cb1202-3"></a></span>
+<span id="cb1202-4"><a href="tidydata.html#cb1202-4"></a>df3</span></code></pre></div>
 <pre><code>## # A tibble: 94 × 4
 ##    Pref   Type   Population   Area
 ##    &lt;chr&gt;  &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;
@@ -2009,10 +2009,10 @@ Stock
 ## 10 &lt;NA&gt;   外国人       2914 11638.
 ## # … with 84 more rows</code></pre>
 <p>次は、<code>Pref</code>列の欠損値を埋めましょう。ここの欠損値は、当該セルの一つ上のセルの値で埋まりますが、これは<code>fill()</code>関数で簡単に処理できます。欠損値を埋めたい変数名を<code>fill()</code>の引数として渡すだけです。</p>
-<div class="sourceCode" id="cb1206"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1206-1"><a href="tidydata.html#cb1206-1"></a>df3 <span class="ot">&lt;-</span> df3 <span class="sc">%&gt;%</span></span>
-<span id="cb1206-2"><a href="tidydata.html#cb1206-2"></a>  <span class="fu">fill</span>(Pref)</span>
-<span id="cb1206-3"><a href="tidydata.html#cb1206-3"></a></span>
-<span id="cb1206-4"><a href="tidydata.html#cb1206-4"></a>df3</span></code></pre></div>
+<div class="sourceCode" id="cb1204"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1204-1"><a href="tidydata.html#cb1204-1"></a>df3 <span class="ot">&lt;-</span> df3 <span class="sc">%&gt;%</span></span>
+<span id="cb1204-2"><a href="tidydata.html#cb1204-2"></a>  <span class="fu">fill</span>(Pref)</span>
+<span id="cb1204-3"><a href="tidydata.html#cb1204-3"></a></span>
+<span id="cb1204-4"><a href="tidydata.html#cb1204-4"></a>df3</span></code></pre></div>
 <pre><code>## # A tibble: 94 × 4
 ##    Pref   Type   Population   Area
 ##    &lt;chr&gt;  &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;
@@ -2028,16 +2028,16 @@ Stock
 ## 10 秋田県 外国人       2914 11638.
 ## # … with 84 more rows</code></pre>
 <p>そして、いよいよ<code>pivot_wider()</code>関数の出番ですが、基本的に使い方は以下の通りです。</p>
-<div class="sourceCode" id="cb1208"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1208-1"><a href="tidydata.html#cb1208-1"></a><span class="co"># pivot_wider()の使い方</span></span>
-<span id="cb1208-2"><a href="tidydata.html#cb1208-2"></a>データ名 <span class="sc">%&gt;%</span></span>
-<span id="cb1208-3"><a href="tidydata.html#cb1208-3"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from  =</span> キー変数名,</span>
-<span id="cb1208-4"><a href="tidydata.html#cb1208-4"></a>              <span class="at">values_from =</span> 値変数名)</span></code></pre></div>
+<div class="sourceCode" id="cb1206"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1206-1"><a href="tidydata.html#cb1206-1"></a><span class="co"># pivot_wider()の使い方</span></span>
+<span id="cb1206-2"><a href="tidydata.html#cb1206-2"></a>データ名 <span class="sc">%&gt;%</span></span>
+<span id="cb1206-3"><a href="tidydata.html#cb1206-3"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from  =</span> キー変数名,</span>
+<span id="cb1206-4"><a href="tidydata.html#cb1206-4"></a>              <span class="at">values_from =</span> 値変数名)</span></code></pre></div>
 <p>まず、キー変数名は列として展開する変数名であり、ここでは<code>Type</code>になります。そして、値変数名は展開される値の変数であり、ここでは<code>Population</code>になります。つまり、「<code>Population</code>を<code>Type</code>ごとに分けて別の列にする」ことになります。また、<code>values_from</code>引数は長さ2以上のベクトルを指定することで、複数の値変数を指定することも可能です。たとえば、<code>df3</code>に<code>Income</code>という平均所得を表す列があり、これらも総人口と外国人それぞれ異なる値を持っているとしたら、<code>values_from = c(Population, Income)</code>のように複数の値変数を指定することが出来ます。今回は値変数が1つのみですが、早速やってみましょう。</p>
-<div class="sourceCode" id="cb1209"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1209-1"><a href="tidydata.html#cb1209-1"></a>df3_W <span class="ot">&lt;-</span> df3 <span class="sc">%&gt;%</span></span>
-<span id="cb1209-2"><a href="tidydata.html#cb1209-2"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from  =</span> Type,</span>
-<span id="cb1209-3"><a href="tidydata.html#cb1209-3"></a>              <span class="at">values_from =</span> Population)</span>
-<span id="cb1209-4"><a href="tidydata.html#cb1209-4"></a></span>
-<span id="cb1209-5"><a href="tidydata.html#cb1209-5"></a>df3_W</span></code></pre></div>
+<div class="sourceCode" id="cb1207"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1207-1"><a href="tidydata.html#cb1207-1"></a>df3_W <span class="ot">&lt;-</span> df3 <span class="sc">%&gt;%</span></span>
+<span id="cb1207-2"><a href="tidydata.html#cb1207-2"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from  =</span> Type,</span>
+<span id="cb1207-3"><a href="tidydata.html#cb1207-3"></a>              <span class="at">values_from =</span> Population)</span>
+<span id="cb1207-4"><a href="tidydata.html#cb1207-4"></a></span>
+<span id="cb1207-5"><a href="tidydata.html#cb1207-5"></a>df3_W</span></code></pre></div>
 <pre><code>## # A tibble: 47 × 4
 ##    Pref     Area  総人口 外国人
 ##    &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
@@ -2053,12 +2053,12 @@ Stock
 ## 10 群馬県  6362. 1973115  37126
 ## # … with 37 more rows</code></pre>
 <p>また、日本語の変数名が出来てしまったので、それぞれ<code>Total</code>と<code>Foreigner</code>に変更し、<code>relocate()</code>関数を使って<code>Area</code>を最後の列に移動します。</p>
-<div class="sourceCode" id="cb1211"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1211-1"><a href="tidydata.html#cb1211-1"></a>df3_W <span class="ot">&lt;-</span> df3_W <span class="sc">%&gt;%</span></span>
-<span id="cb1211-2"><a href="tidydata.html#cb1211-2"></a>  <span class="fu">rename</span>(<span class="st">&quot;Total&quot;</span>     <span class="ot">=</span> 総人口,</span>
-<span id="cb1211-3"><a href="tidydata.html#cb1211-3"></a>         <span class="st">&quot;Foreigner&quot;</span> <span class="ot">=</span> 外国人) <span class="sc">%&gt;%</span></span>
-<span id="cb1211-4"><a href="tidydata.html#cb1211-4"></a>  <span class="fu">relocate</span>(Area, <span class="at">.after =</span> <span class="fu">last_col</span>())</span>
-<span id="cb1211-5"><a href="tidydata.html#cb1211-5"></a></span>
-<span id="cb1211-6"><a href="tidydata.html#cb1211-6"></a>df3_W</span></code></pre></div>
+<div class="sourceCode" id="cb1209"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1209-1"><a href="tidydata.html#cb1209-1"></a>df3_W <span class="ot">&lt;-</span> df3_W <span class="sc">%&gt;%</span></span>
+<span id="cb1209-2"><a href="tidydata.html#cb1209-2"></a>  <span class="fu">rename</span>(<span class="st">&quot;Total&quot;</span>     <span class="ot">=</span> 総人口,</span>
+<span id="cb1209-3"><a href="tidydata.html#cb1209-3"></a>         <span class="st">&quot;Foreigner&quot;</span> <span class="ot">=</span> 外国人) <span class="sc">%&gt;%</span></span>
+<span id="cb1209-4"><a href="tidydata.html#cb1209-4"></a>  <span class="fu">relocate</span>(Area, <span class="at">.after =</span> <span class="fu">last_col</span>())</span>
+<span id="cb1209-5"><a href="tidydata.html#cb1209-5"></a></span>
+<span id="cb1209-6"><a href="tidydata.html#cb1209-6"></a>df3_W</span></code></pre></div>
 <pre><code>## # A tibble: 47 × 4
 ##    Pref     Total Foreigner   Area
 ##    &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;
@@ -2082,9 +2082,9 @@ Stock
 <h2><span class="header-section-number">15.4</span> 列の操作</h2>
 <p>他にも「1列1変数」の条件を満たさないケースを考えましょう。<code>pivot_longer()</code>は1つの変数が複数の列に渡って格納されている際に使いましたが、今回は1つの列に複数の変数があるケースを考えてみましょう。たとえば、年月日が1つの列に入っている場合、これを年、月、日の3列で分割する作業です。また、これと関連して、列から文字列を除去し、数値のみ残す方法についても紹介します。</p>
 <p><a href="Data/COVID19_JK.csv">実習用データ</a>を読み込んでみましょう。</p>
-<div class="sourceCode" id="cb1213"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1213-1"><a href="tidydata.html#cb1213-1"></a>df4 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;Data/COVID19_JK.csv&quot;</span>)</span>
-<span id="cb1213-2"><a href="tidydata.html#cb1213-2"></a></span>
-<span id="cb1213-3"><a href="tidydata.html#cb1213-3"></a>df4</span></code></pre></div>
+<div class="sourceCode" id="cb1211"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1211-1"><a href="tidydata.html#cb1211-1"></a>df4 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;Data/COVID19_JK.csv&quot;</span>)</span>
+<span id="cb1211-2"><a href="tidydata.html#cb1211-2"></a></span>
+<span id="cb1211-3"><a href="tidydata.html#cb1211-3"></a>df4</span></code></pre></div>
 <pre><code>## # A tibble: 172 × 5
 ##       ID Date      Week  Confirmed_Japan Confirmed_Korea
 ##    &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;           &lt;chr&gt;          
@@ -2155,13 +2155,13 @@ Stock
 </tbody>
 </table>
 <p>このデータの場合、観察単位は「国 <span class="math inline">\(\times\)</span> 日」です。しかし、<code>df4</code>は1行に日本と韓国の情報が格納されており「1行1観察」の条件を満たしておりません。したがって、<code>pivot_longer()</code>を使ってLong型へ変換し、新しいデータの名前を<code>df4_L</code>と名付けます。</p>
-<div class="sourceCode" id="cb1215"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1215-1"><a href="tidydata.html#cb1215-1"></a>df4_L <span class="ot">&lt;-</span> df4 <span class="sc">%&gt;%</span></span>
-<span id="cb1215-2"><a href="tidydata.html#cb1215-2"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols         =</span> <span class="fu">starts_with</span>(<span class="st">&quot;Confirmed&quot;</span>), </span>
-<span id="cb1215-3"><a href="tidydata.html#cb1215-3"></a>               <span class="at">names_to     =</span> <span class="st">&quot;Country&quot;</span>,</span>
-<span id="cb1215-4"><a href="tidydata.html#cb1215-4"></a>               <span class="at">names_prefix =</span> <span class="st">&quot;Confirmed_&quot;</span>,</span>
-<span id="cb1215-5"><a href="tidydata.html#cb1215-5"></a>               <span class="at">values_to    =</span> <span class="st">&quot;Confirmed&quot;</span>)</span>
-<span id="cb1215-6"><a href="tidydata.html#cb1215-6"></a></span>
-<span id="cb1215-7"><a href="tidydata.html#cb1215-7"></a>df4_L</span></code></pre></div>
+<div class="sourceCode" id="cb1213"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1213-1"><a href="tidydata.html#cb1213-1"></a>df4_L <span class="ot">&lt;-</span> df4 <span class="sc">%&gt;%</span></span>
+<span id="cb1213-2"><a href="tidydata.html#cb1213-2"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols         =</span> <span class="fu">starts_with</span>(<span class="st">&quot;Confirmed&quot;</span>), </span>
+<span id="cb1213-3"><a href="tidydata.html#cb1213-3"></a>               <span class="at">names_to     =</span> <span class="st">&quot;Country&quot;</span>,</span>
+<span id="cb1213-4"><a href="tidydata.html#cb1213-4"></a>               <span class="at">names_prefix =</span> <span class="st">&quot;Confirmed_&quot;</span>,</span>
+<span id="cb1213-5"><a href="tidydata.html#cb1213-5"></a>               <span class="at">values_to    =</span> <span class="st">&quot;Confirmed&quot;</span>)</span>
+<span id="cb1213-6"><a href="tidydata.html#cb1213-6"></a></span>
+<span id="cb1213-7"><a href="tidydata.html#cb1213-7"></a>df4_L</span></code></pre></div>
 <pre><code>## # A tibble: 344 × 5
 ##       ID Date      Week  Country Confirmed
 ##    &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;    
@@ -2177,14 +2177,14 @@ Stock
 ## 10     5 2020/1/20 月    Korea   1人      
 ## # … with 334 more rows</code></pre>
 <p>続いて、新規感染者数を表す<code>Confirmed</code>列から「人」を除去しましょう。人間にとってはなんの問題もありませんが、パソコンにとって<code>1人</code>や<code>5人</code>は文字列に過ぎず、分析ができる状態ではありません。ここで使う関数が<code>parse_number()</code>です。引数として指定した列から数値のみ抽出します。<code>"$1000"</code>や<code>"1, 324, 392"</code>のような数値でありながら、character型として保存されている列から数値のみを取り出す際に使う関数です。使い方は以下の通りです。</p>
-<div class="sourceCode" id="cb1217"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1217-1"><a href="tidydata.html#cb1217-1"></a>データ名 <span class="sc">%&gt;%</span></span>
-<span id="cb1217-2"><a href="tidydata.html#cb1217-2"></a>  <span class="fu">mutate</span>(新しい変数名 <span class="ot">=</span> <span class="fu">parse_number</span>(数値のみ抽出する変数名))</span></code></pre></div>
+<div class="sourceCode" id="cb1215"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1215-1"><a href="tidydata.html#cb1215-1"></a>データ名 <span class="sc">%&gt;%</span></span>
+<span id="cb1215-2"><a href="tidydata.html#cb1215-2"></a>  <span class="fu">mutate</span>(新しい変数名 <span class="ot">=</span> <span class="fu">parse_number</span>(数値のみ抽出する変数名))</span></code></pre></div>
 <p>似たようなものとして<code>parse_character()</code>があり、これは逆に文字列のみ抽出する関数です。</p>
 <p>ここでは<code>Confimed</code>から数値のみ取り出し、<code>Confrimed</code>列に上書きし、それを<code>df4_S</code>と名付けます。</p>
-<div class="sourceCode" id="cb1218"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1218-1"><a href="tidydata.html#cb1218-1"></a>df4_S <span class="ot">&lt;-</span> df4_L <span class="sc">%&gt;%</span></span>
-<span id="cb1218-2"><a href="tidydata.html#cb1218-2"></a>  <span class="fu">mutate</span>(<span class="at">Confirmed =</span> <span class="fu">parse_number</span>(Confirmed))</span>
-<span id="cb1218-3"><a href="tidydata.html#cb1218-3"></a></span>
-<span id="cb1218-4"><a href="tidydata.html#cb1218-4"></a>df4_S</span></code></pre></div>
+<div class="sourceCode" id="cb1216"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1216-1"><a href="tidydata.html#cb1216-1"></a>df4_S <span class="ot">&lt;-</span> df4_L <span class="sc">%&gt;%</span></span>
+<span id="cb1216-2"><a href="tidydata.html#cb1216-2"></a>  <span class="fu">mutate</span>(<span class="at">Confirmed =</span> <span class="fu">parse_number</span>(Confirmed))</span>
+<span id="cb1216-3"><a href="tidydata.html#cb1216-3"></a></span>
+<span id="cb1216-4"><a href="tidydata.html#cb1216-4"></a>df4_S</span></code></pre></div>
 <pre><code>## # A tibble: 344 × 5
 ##       ID Date      Week  Country Confirmed
 ##    &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt;
@@ -2200,18 +2200,18 @@ Stock
 ## 10     5 2020/1/20 月    Korea           1
 ## # … with 334 more rows</code></pre>
 <p>それでは国、曜日ごとの新規感染者数を調べてみます。求める統計量は曜日ごとの新規感染者数の合計、平均、標準偏差です。まず、曜日は月から日の順になるよう、factor型に変換します。そして、国と曜日ごとに記述統計量を計算し、<code>df4_S_Summary1</code>という名で保存します。</p>
-<div class="sourceCode" id="cb1220"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1220-1"><a href="tidydata.html#cb1220-1"></a>df4_S <span class="ot">&lt;-</span> df4_S <span class="sc">%&gt;%</span></span>
-<span id="cb1220-2"><a href="tidydata.html#cb1220-2"></a>  <span class="fu">mutate</span>(<span class="at">Week =</span> <span class="fu">factor</span>(Week, </span>
-<span id="cb1220-3"><a href="tidydata.html#cb1220-3"></a>                       <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;月&quot;</span>, <span class="st">&quot;火&quot;</span>, <span class="st">&quot;水&quot;</span>, <span class="st">&quot;木&quot;</span>, <span class="st">&quot;金&quot;</span>, <span class="st">&quot;土&quot;</span>, <span class="st">&quot;日&quot;</span>)))</span>
-<span id="cb1220-4"><a href="tidydata.html#cb1220-4"></a></span>
-<span id="cb1220-5"><a href="tidydata.html#cb1220-5"></a>df4_S_Summary1 <span class="ot">&lt;-</span> df4_S <span class="sc">%&gt;%</span></span>
-<span id="cb1220-6"><a href="tidydata.html#cb1220-6"></a>  <span class="fu">group_by</span>(Country, Week) <span class="sc">%&gt;%</span></span>
-<span id="cb1220-7"><a href="tidydata.html#cb1220-7"></a>  <span class="fu">summarise</span>(<span class="at">Sum     =</span> <span class="fu">sum</span>(Confirmed,  <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb1220-8"><a href="tidydata.html#cb1220-8"></a>            <span class="at">Mean    =</span> <span class="fu">mean</span>(Confirmed, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb1220-9"><a href="tidydata.html#cb1220-9"></a>            <span class="at">SD      =</span> <span class="fu">sd</span>(Confirmed,   <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb1220-10"><a href="tidydata.html#cb1220-10"></a>            <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>)</span>
-<span id="cb1220-11"><a href="tidydata.html#cb1220-11"></a></span>
-<span id="cb1220-12"><a href="tidydata.html#cb1220-12"></a>df4_S_Summary1</span></code></pre></div>
+<div class="sourceCode" id="cb1218"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1218-1"><a href="tidydata.html#cb1218-1"></a>df4_S <span class="ot">&lt;-</span> df4_S <span class="sc">%&gt;%</span></span>
+<span id="cb1218-2"><a href="tidydata.html#cb1218-2"></a>  <span class="fu">mutate</span>(<span class="at">Week =</span> <span class="fu">factor</span>(Week, </span>
+<span id="cb1218-3"><a href="tidydata.html#cb1218-3"></a>                       <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;月&quot;</span>, <span class="st">&quot;火&quot;</span>, <span class="st">&quot;水&quot;</span>, <span class="st">&quot;木&quot;</span>, <span class="st">&quot;金&quot;</span>, <span class="st">&quot;土&quot;</span>, <span class="st">&quot;日&quot;</span>)))</span>
+<span id="cb1218-4"><a href="tidydata.html#cb1218-4"></a></span>
+<span id="cb1218-5"><a href="tidydata.html#cb1218-5"></a>df4_S_Summary1 <span class="ot">&lt;-</span> df4_S <span class="sc">%&gt;%</span></span>
+<span id="cb1218-6"><a href="tidydata.html#cb1218-6"></a>  <span class="fu">group_by</span>(Country, Week) <span class="sc">%&gt;%</span></span>
+<span id="cb1218-7"><a href="tidydata.html#cb1218-7"></a>  <span class="fu">summarise</span>(<span class="at">Sum     =</span> <span class="fu">sum</span>(Confirmed,  <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb1218-8"><a href="tidydata.html#cb1218-8"></a>            <span class="at">Mean    =</span> <span class="fu">mean</span>(Confirmed, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb1218-9"><a href="tidydata.html#cb1218-9"></a>            <span class="at">SD      =</span> <span class="fu">sd</span>(Confirmed,   <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb1218-10"><a href="tidydata.html#cb1218-10"></a>            <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>)</span>
+<span id="cb1218-11"><a href="tidydata.html#cb1218-11"></a></span>
+<span id="cb1218-12"><a href="tidydata.html#cb1218-12"></a>df4_S_Summary1</span></code></pre></div>
 <pre><code>## # A tibble: 14 × 5
 ##    Country Week    Sum  Mean    SD
 ##    &lt;chr&gt;   &lt;fct&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -2230,9 +2230,9 @@ Stock
 ## 13 Korea   土     2194  91.4  174.
 ## 14 Korea   日     2088  87    215.</code></pre>
 <p><code>df4_S_Summary1</code>はこの状態で整然データですが、もし人間が読むための表を作るなら、韓国と日本を別の列に分けた方が良いかも知れません。<code>pivot_wider()</code>を使って、日本と韓国のの新規感染者数を2列に展開します。</p>
-<div class="sourceCode" id="cb1222"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1222-1"><a href="tidydata.html#cb1222-1"></a>df4_S_Summary1 <span class="sc">%&gt;%</span></span>
-<span id="cb1222-2"><a href="tidydata.html#cb1222-2"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from  =</span> Country,</span>
-<span id="cb1222-3"><a href="tidydata.html#cb1222-3"></a>              <span class="at">values_from =</span> Sum<span class="sc">:</span>SD)</span></code></pre></div>
+<div class="sourceCode" id="cb1220"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1220-1"><a href="tidydata.html#cb1220-1"></a>df4_S_Summary1 <span class="sc">%&gt;%</span></span>
+<span id="cb1220-2"><a href="tidydata.html#cb1220-2"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from  =</span> Country,</span>
+<span id="cb1220-3"><a href="tidydata.html#cb1220-3"></a>              <span class="at">values_from =</span> Sum<span class="sc">:</span>SD)</span></code></pre></div>
 <pre><code>## # A tibble: 7 × 7
 ##   Week  Sum_Japan Sum_Korea Mean_Japan Mean_Korea SD_Japan SD_Korea
 ##   &lt;fct&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
@@ -2244,10 +2244,10 @@ Stock
 ## 6 土         3327      2194      133.        91.4     189.     174.
 ## 7 日         3244      2088      130.        87       179.     215.</code></pre>
 <p>これで人間にとって読みやすい表が出来ました。今は「日本の合計」、「韓国の合計」、「日本の平均」、…の順番ですが、これを日本と韓国それぞれまとめる場合は、<code>relocate()</code>を使います。</p>
-<div class="sourceCode" id="cb1224"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1224-1"><a href="tidydata.html#cb1224-1"></a>df4_S_Summary1 <span class="sc">%&gt;%</span></span>
-<span id="cb1224-2"><a href="tidydata.html#cb1224-2"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from  =</span> Country,</span>
-<span id="cb1224-3"><a href="tidydata.html#cb1224-3"></a>              <span class="at">values_from =</span> Sum<span class="sc">:</span>SD) <span class="sc">%&gt;%</span></span>
-<span id="cb1224-4"><a href="tidydata.html#cb1224-4"></a>  <span class="fu">relocate</span>(Week, <span class="fu">ends_with</span>(<span class="st">&quot;Japan&quot;</span>), <span class="fu">ends_with</span>(<span class="st">&quot;Korea&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb1222"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1222-1"><a href="tidydata.html#cb1222-1"></a>df4_S_Summary1 <span class="sc">%&gt;%</span></span>
+<span id="cb1222-2"><a href="tidydata.html#cb1222-2"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from  =</span> Country,</span>
+<span id="cb1222-3"><a href="tidydata.html#cb1222-3"></a>              <span class="at">values_from =</span> Sum<span class="sc">:</span>SD) <span class="sc">%&gt;%</span></span>
+<span id="cb1222-4"><a href="tidydata.html#cb1222-4"></a>  <span class="fu">relocate</span>(Week, <span class="fu">ends_with</span>(<span class="st">&quot;Japan&quot;</span>), <span class="fu">ends_with</span>(<span class="st">&quot;Korea&quot;</span>))</span></code></pre></div>
 <pre><code>## # A tibble: 7 × 7
 ##   Week  Sum_Japan Mean_Japan SD_Japan Sum_Korea Mean_Korea SD_Korea
 ##   &lt;fct&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;
@@ -2260,16 +2260,16 @@ Stock
 ## 7 日         3244      130.      179.      2088       87       215.</code></pre>
 <p>新規感染者が確認されるのは金〜日曜日が多いことが分かります。</p>
 <p>曜日ではなく、月ごとに記述統計料を計算する場合は、まず<code>Date</code>列を年、月、日に分割する必要があります。具体的には<code>Date</code>を<code>"/"</code>を基準に別ければいいです。そこで登場するのは<code>separate()</code>関数であり、使い方は以下の通りです。</p>
-<div class="sourceCode" id="cb1226"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1226-1"><a href="tidydata.html#cb1226-1"></a><span class="co"># separate()の使い方</span></span>
-<span id="cb1226-2"><a href="tidydata.html#cb1226-2"></a>データ名 <span class="sc">%&gt;%</span></span>
-<span id="cb1226-3"><a href="tidydata.html#cb1226-3"></a>  <span class="fu">separate</span>(<span class="at">cols =</span> 分割する変数名</span>
-<span id="cb1226-4"><a href="tidydata.html#cb1226-4"></a>           <span class="at">into =</span> 分割後の変数名,</span>
-<span id="cb1226-5"><a href="tidydata.html#cb1226-5"></a>           <span class="at">sep  =</span> <span class="st">&quot;分割する基準&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1224"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1224-1"><a href="tidydata.html#cb1224-1"></a><span class="co"># separate()の使い方</span></span>
+<span id="cb1224-2"><a href="tidydata.html#cb1224-2"></a>データ名 <span class="sc">%&gt;%</span></span>
+<span id="cb1224-3"><a href="tidydata.html#cb1224-3"></a>  <span class="fu">separate</span>(<span class="at">cols =</span> 分割する変数名</span>
+<span id="cb1224-4"><a href="tidydata.html#cb1224-4"></a>           <span class="at">into =</span> 分割後の変数名,</span>
+<span id="cb1224-5"><a href="tidydata.html#cb1224-5"></a>           <span class="at">sep  =</span> <span class="st">&quot;分割する基準&quot;</span>)</span></code></pre></div>
 <p><code>cols</code>には<code>Date</code>を指定し、<code>into</code>は新しく出来る列名を指定します。今回は<code>Date</code>が3列に分割されるので、長さ3のcharacter型ベクトルを指定します。ここでは<code>Year</code>、<code>Month</code>、<code>Day</code>としましょう。最後の<code>sep</code>引数は分割する基準となる文字を指定します。<code>df4</code>の<code>Date</code>は<code>"2020/06/29"</code>のように年月日が<code>"/"</code>で分けられているため、<code>"/"</code>を指定します。実際にやってみましょう。</p>
-<div class="sourceCode" id="cb1227"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1227-1"><a href="tidydata.html#cb1227-1"></a>df4_S <span class="ot">&lt;-</span> df4_S <span class="sc">%&gt;%</span></span>
-<span id="cb1227-2"><a href="tidydata.html#cb1227-2"></a>  <span class="fu">separate</span>(<span class="at">col =</span> Date, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">&quot;Year&quot;</span>, <span class="st">&quot;Month&quot;</span>, <span class="st">&quot;Day&quot;</span>), <span class="at">sep =</span> <span class="st">&quot;/&quot;</span>)</span>
-<span id="cb1227-3"><a href="tidydata.html#cb1227-3"></a></span>
-<span id="cb1227-4"><a href="tidydata.html#cb1227-4"></a>df4_S</span></code></pre></div>
+<div class="sourceCode" id="cb1225"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1225-1"><a href="tidydata.html#cb1225-1"></a>df4_S <span class="ot">&lt;-</span> df4_S <span class="sc">%&gt;%</span></span>
+<span id="cb1225-2"><a href="tidydata.html#cb1225-2"></a>  <span class="fu">separate</span>(<span class="at">col =</span> Date, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">&quot;Year&quot;</span>, <span class="st">&quot;Month&quot;</span>, <span class="st">&quot;Day&quot;</span>), <span class="at">sep =</span> <span class="st">&quot;/&quot;</span>)</span>
+<span id="cb1225-3"><a href="tidydata.html#cb1225-3"></a></span>
+<span id="cb1225-4"><a href="tidydata.html#cb1225-4"></a>df4_S</span></code></pre></div>
 <pre><code>## # A tibble: 344 × 7
 ##       ID Year  Month Day   Week  Country Confirmed
 ##    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;fct&gt; &lt;chr&gt;       &lt;dbl&gt;
@@ -2285,14 +2285,14 @@ Stock
 ## 10     5 2020  1     20    月    Korea           1
 ## # … with 334 more rows</code></pre>
 <p>新しく出来た変数は元の変数があった場所になります。ここまで来たら月ごとに新規感染者の記述統計量は計算できます。曜日ごとに行ったコードの<code>Week</code>を<code>Month</code>に変えるだけです。また、<code>Month</code>は数字のみで構成されたcharacter型であるため、このままでも問題なくソートされます。したがって、別途factor化の必要もありません（むろん、してもいいですし、むしろ推奨されます）。</p>
-<div class="sourceCode" id="cb1229"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1229-1"><a href="tidydata.html#cb1229-1"></a>df4_S_Summary2 <span class="ot">&lt;-</span> df4_S <span class="sc">%&gt;%</span></span>
-<span id="cb1229-2"><a href="tidydata.html#cb1229-2"></a>  <span class="fu">group_by</span>(Country, Month) <span class="sc">%&gt;%</span></span>
-<span id="cb1229-3"><a href="tidydata.html#cb1229-3"></a>  <span class="fu">summarise</span>(<span class="at">Sum     =</span> <span class="fu">sum</span>(Confirmed,  <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb1229-4"><a href="tidydata.html#cb1229-4"></a>            <span class="at">Mean    =</span> <span class="fu">mean</span>(Confirmed, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb1229-5"><a href="tidydata.html#cb1229-5"></a>            <span class="at">SD      =</span> <span class="fu">sd</span>(Confirmed,   <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb1229-6"><a href="tidydata.html#cb1229-6"></a>            <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>)</span>
-<span id="cb1229-7"><a href="tidydata.html#cb1229-7"></a></span>
-<span id="cb1229-8"><a href="tidydata.html#cb1229-8"></a>df4_S_Summary2</span></code></pre></div>
+<div class="sourceCode" id="cb1227"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1227-1"><a href="tidydata.html#cb1227-1"></a>df4_S_Summary2 <span class="ot">&lt;-</span> df4_S <span class="sc">%&gt;%</span></span>
+<span id="cb1227-2"><a href="tidydata.html#cb1227-2"></a>  <span class="fu">group_by</span>(Country, Month) <span class="sc">%&gt;%</span></span>
+<span id="cb1227-3"><a href="tidydata.html#cb1227-3"></a>  <span class="fu">summarise</span>(<span class="at">Sum     =</span> <span class="fu">sum</span>(Confirmed,  <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb1227-4"><a href="tidydata.html#cb1227-4"></a>            <span class="at">Mean    =</span> <span class="fu">mean</span>(Confirmed, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb1227-5"><a href="tidydata.html#cb1227-5"></a>            <span class="at">SD      =</span> <span class="fu">sd</span>(Confirmed,   <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb1227-6"><a href="tidydata.html#cb1227-6"></a>            <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>)</span>
+<span id="cb1227-7"><a href="tidydata.html#cb1227-7"></a></span>
+<span id="cb1227-8"><a href="tidydata.html#cb1227-8"></a>df4_S_Summary2</span></code></pre></div>
 <pre><code>## # A tibble: 14 × 5
 ##    Country Month   Sum    Mean     SD
 ##    &lt;chr&gt;   &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
@@ -2310,10 +2310,10 @@ Stock
 ## 12 Korea   5       729  23.5    16.2 
 ## 13 Korea   6      1348  44.9    10.4 
 ## 14 Korea   7       289  57.8     6.61</code></pre>
-<div class="sourceCode" id="cb1231"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1231-1"><a href="tidydata.html#cb1231-1"></a>df4_S_Summary2 <span class="sc">%&gt;%</span></span>
-<span id="cb1231-2"><a href="tidydata.html#cb1231-2"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from  =</span> Country,</span>
-<span id="cb1231-3"><a href="tidydata.html#cb1231-3"></a>              <span class="at">values_from =</span> Sum<span class="sc">:</span>SD) <span class="sc">%&gt;%</span></span>
-<span id="cb1231-4"><a href="tidydata.html#cb1231-4"></a>  <span class="fu">relocate</span>(Month, <span class="fu">ends_with</span>(<span class="st">&quot;Japan&quot;</span>), <span class="fu">ends_with</span>(<span class="st">&quot;Korea&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb1229"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1229-1"><a href="tidydata.html#cb1229-1"></a>df4_S_Summary2 <span class="sc">%&gt;%</span></span>
+<span id="cb1229-2"><a href="tidydata.html#cb1229-2"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from  =</span> Country,</span>
+<span id="cb1229-3"><a href="tidydata.html#cb1229-3"></a>              <span class="at">values_from =</span> Sum<span class="sc">:</span>SD) <span class="sc">%&gt;%</span></span>
+<span id="cb1229-4"><a href="tidydata.html#cb1229-4"></a>  <span class="fu">relocate</span>(Month, <span class="fu">ends_with</span>(<span class="st">&quot;Japan&quot;</span>), <span class="fu">ends_with</span>(<span class="st">&quot;Korea&quot;</span>))</span></code></pre></div>
 <pre><code>## # A tibble: 7 × 7
 ##   Month Sum_Japan Mean_Japan SD_Japan Sum_Korea Mean_Korea SD_Korea
 ##   &lt;chr&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;

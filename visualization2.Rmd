@@ -34,48 +34,62 @@ COVID19_df <- read_csv("Data/COVID19_Worldwide.csv", guess_max = 10000)
 
 　これらの変数はSONGが適当にインターネットなどで集めたデータであり、あくまでも実習用データとしてのみお使い下さい。各変数の詳細は以下の通りです。
 
-```{r visual2-sampledata-1, echo = FALSE, message = FALSE, cache = TRUE}
-data.frame(変数名 = paste0("`",names(Country_df),"`"),
-              説明 = c("国名", "人口", "面積", 
-                     "国内総生産 (GDP)", "GDP (購買力平価):",
-                     "一人あたりGDP", "一人あたりGDP (購買力平価)",
-                     "G7構成国", "G20構成国", "OECD構成国",
-                     "人間開発指数",
-                     "民主主義の程度", "民主主義の程度 (カテゴリ)",
-                     "政治的自由の指標", "市民的自由の指標",
-                     "政治的自由と市民的自由の合計",
-                     "総合評価", "大陸"),
-              詳細 = c("", "人", "km$^2$", 
-                     rep("100万米ドル", 2), 
-                     rep("米ドル", 2), 
-                     rep("1:構成国, 0:構成国以外", 3),
-                     "2018年基準", 
-                     "Polity IVから; -10:権威主義〜10:民主主義", 
-                     "",
-                     rep("2020年基準; Freedom Houseから", 3),
-                     "F:完全な自由; PF:一部自由; NF:不自由", 
-                     "")) %>%
-  kable(caption = "国家別民主主義および政治的自由データの詳細") %>%
-  kable_styling(bootstrap_options = "striped",
-                full_width        = FALSE,
-                latex_options     = "hold_position") %>%
-  row_spec(0, align = "c")
+```{r visual2-sampledata-1}
+#| echo: FALSE
+#| message: FALSE
+#| cache: TRUE
+data.frame(Var  = names(Country_df),
+           Name = c("国名", "人口", "面積", 
+                    "国内総生産 (GDP)", "GDP (購買力平価):",
+                    "一人あたりGDP", "一人あたりGDP (購買力平価)",
+                    "G7構成国", "G20構成国", "OECD構成国",
+                    "人間開発指数",
+                    "民主主義の程度", "民主主義の程度 (カテゴリ)",
+                    "政治的自由の指標", "市民的自由の指標",
+                    "政治的自由と市民的自由の合計",
+                    "総合評価", "大陸"),
+           Desc = c("", "人", "km$^2$", 
+                    rep("100万米ドル", 2), 
+                    rep("米ドル", 2), 
+                    rep("1:構成国, 0:構成国以外", 3),
+                    "2018年基準", 
+                    "Polity IVから; -10:権威主義〜10:民主主義", 
+                    "",
+                    rep("2020年基準; Freedom Houseから", 3),
+                    "F:完全な自由; PF:一部自由; NF:不自由", 
+                    "")) %>%
+    kable(caption   = "国家別民主主義および政治的自由データの詳細",
+          col.names = c("変数名", "説明", "備考"), 
+          booktabs  = TRUE, 
+          align     = "lll") %>%
+    kable_styling(bootstrap_options = "striped",
+                  full_width        = FALSE,
+                  latex_options     = "hold_position") %>%
+    row_spec(0, align = "c") %>%
+    column_spec(1, monospace = TRUE)
 ```
 
-```{r visual2-sampledata-2, echo = FALSE, message = FALSE, cache = TRUE}
-data.frame(変数名 = paste0("`",names(COVID19_df),"`"),
-              説明 = c("ID", "国名", "年月日",
-                     "COVID-19 新規感染者数（人）", 
-                     "COVID-19 累積感染者数（人）",
-                     "COVID-19 新規死亡者数（人）", 
-                     "COVID-19 累積死亡者数（人）",
-                     "COVID-19 新規検査数（人）", 
-                     "COVID-19 累積検査数（人）")) %>%
-  kable(caption = "COVID-19データの詳細") %>%
+```{r visual2-sampledata-2}
+#| echo: FALSE
+#| message: FALSE
+#| cache: TRUE
+data.frame(Var = names(COVID19_df),
+           Desc = c("ID", "国名", "年月日",
+                    "COVID-19 新規感染者数（人）", 
+                    "COVID-19 累積感染者数（人）",
+                    "COVID-19 新規死亡者数（人）", 
+                    "COVID-19 累積死亡者数（人）",
+                    "COVID-19 新規検査数（人）", 
+                    "COVID-19 累積検査数（人）")) %>%
+  kable(caption = "COVID-19データの詳細",
+        col.names = c("変数名", "説明"), 
+        booktabs  = TRUE, 
+        align     = "ll") %>%
   kable_styling(bootstrap_options = "striped",
                 full_width        = FALSE,
                 latex_options     = "hold_position") %>%
-  row_spec(0, align = "c")
+  row_spec(0, align = "c") %>%
+  column_spec(1, monospace = TRUE)
 ```
 
 ---
@@ -339,7 +353,12 @@ Bar_df3 %>%
 
 　ヒストグラムは棒グラフと非常に形が似ていますが、横軸が大陸のような離散変数でなく、連続変数であるのが特徴です。連続変数をいくつの区間 (階級)に分け、その区間内に属するケース数 (度数)を示したのが度数分布表、そして度数分布表をかしかしたものがヒストグラムです。連続変数を扱っているため、棒間に隙間がありません。それでもケース数の棒グラフと非常に似通っているため、マッピングの仕方も同じです。異なるのは幾何オブジェクトが`geom_bar()`でなく、`geom_histogram()`に変わるくらいです。世界の富がどのように分布しているかを確認するために、`Country_df`の`GDP`のヒストグラムを作ってみます。
 
-```{r visual2-histogram-1, fig.width = 8, fig.height = 4, cache = TRUE}
+```{r visual2-histogram-1}
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>% 
   ggplot() +
   geom_histogram(aes(x = GDP)) +
@@ -349,7 +368,12 @@ Country_df %>%
 
 　ケース数の棒グラフのコードとほぼ同じです。横軸の数値が`2.0e+07`になっているのは`2 \times 10^7`、つまり2千万を意味します。普通に表記すると`20000000`になりますね。また、GDPの単位は100万ドルであるため、実際のGDPは20兆ドルになります。つまり、今のヒストグラムにおいて横軸の目盛りは5兆ドルになっています。この軸の数値を「0, 5e+06, 1e+07, 1.5e+07, 2e+07」から「0, 5, 10, 15, 20」 にし、X軸のラベルを「国内総生産 (100万米ドル)」から「国内総生産 (兆米ドル)」に替えてみましょう。ここで使うのは`scale_x_continuous()`関数です。これは横軸 (X軸)が連続変数 (continuous)の場合のスケール調整関数です。目盛りの再調整には`breaks`と`labels`引数が必要です。`breaks`は新しい目盛りの位置、`labels`は目盛りに表記する値です。それぞれベクトルが必要であり、`breaks`と`labels`の実引数の長さは必ず一致する必要があります。また、`breaks`は数値型ベクトルですが、`labels`は数値型でも文字型でも構いません。
 
-```{r visual2-histogram-2, fig.width = 8, fig.height = 4, cache = TRUE}
+```{r visual2-histogram-2}
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>% 
   ggplot() +
   geom_histogram(aes(x = GDP)) +
@@ -361,7 +385,13 @@ Country_df %>%
 
 　これで一通りヒストグラムが完成しました。ほんの一部の国は非常に高いGDPを誇っていることが分かります。GDPが10兆ドル以上の国はアメリカと中国のみであり、5兆ドルを国まで拡大しても日本が加わるだけです。そもそも1兆ドルを超える国はデータには16カ国しかなく、90%以上の国が図の非常に狭い範囲内 (0~1兆ドル)に集まっていることが分かります。
 
-```{r visual2-histogram-3, echo = FALSE, fig.width = 8, fig.height = 4, cache = TRUE}
+```{r visual2-histogram-3}
+#| echo: FALSE
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>% 
   ggplot() +
   geom_histogram(aes(x = GDP)) +
@@ -375,7 +405,12 @@ Country_df %>%
 
 　この場合、2つの方法が考えられます。1つ目は方法は情報の損失を覚悟した上で、GDPが1兆ドル未満の国でヒストグラムを書く方法です。これはデータを`ggplot()`関数を渡す前に`filter()`を使って、`GDP`が100万未満のケースに絞るだけで出来ます。ただし、横軸の最大値が2000万でなく、100万になるため、目盛りを調整した方が良いでしょう。
 
-```{r visual2-histogram-4, fig.width = 8, fig.height = 4, cache = TRUE}
+```{r visual2-histogram-4}
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>% 
   filter(GDP < 1000000) %>%
   ggplot() +
@@ -388,7 +423,12 @@ Country_df %>%
 
 　2つ目の方法は横軸を対数化することです。GDPを底10の対数化 (常用対数)をすると、10兆のような非常に大きい値があっても比較的に狭い範囲内にデータを収めることが出来ます。たとえば、10を常用対数化すると1, 1000は3, 10000000は7になります。自然対数 (底が$e$)も可能ですが、「読む」ためのグラフとしては底が10の方が読みやすいでしょう。横軸の変数が対数化されるということは、横軸のスケールを対数化することと同じです。そのためには`scale_x_continuous()`内に`trans`引数を指定し、`"log10"`を渡します。
 
-```{r visual2-histogram-5, fig.width = 8, fig.height = 4, cache = TRUE}
+```{r visual2-histogram-5}
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>% 
   ggplot() +
   geom_histogram(aes(x = GDP)) +
@@ -403,7 +443,12 @@ Country_df %>%
 
 　対数化のもう一つの方法は`scale_x_continuous()`の代わりに`scale_x_log10()`を使うことです。使い方は`scale_x_continuous()`と同じですが、`trans = "log10"`の指定は不要です。
 
-```{r visual2-histogram-6, fig.width = 8, fig.height = 4, cache = TRUE}
+```{r visual2-histogram-6}
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>% 
   ggplot() +
   geom_histogram(aes(x = GDP)) +
@@ -414,7 +459,12 @@ Country_df %>%
 
 　横軸を修正するには`scale_x_continuous()`と同様、`breaks`と`labels`引数を指定します。
 
-```{r visual2-histogram-7, fig.width = 8, fig.height = 4, cache = TRUE}
+```{r visual2-histogram-7}
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>% 
   ggplot() +
   geom_histogram(aes(x = GDP)) +
@@ -430,7 +480,12 @@ Country_df %>%
 
 　棒グラフのようにもう一つの次元を追加してみましょう。まず、人間開発指数 (`HDI_2018`)の分布を示してみましょう。
 
-```{r visual2-histogram-8, fig.width = 8, fig.height = 4, cache = TRUE}
+```{r visual2-histogram-8}
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>%
   ggplot() +
   geom_histogram(aes(x = HDI_2018)) +
@@ -442,7 +497,12 @@ Country_df %>%
 
 　これでもヒストグラムとしては十分すぎるかも知れませんが、色々調整してみましょう。まずは、棒の枠線を白にしてみましょう。枠線はデータ内の変数に対応していないため、`aes()`の外側に入れます。枠線を指定する引数は`color`です。ちなみに棒の色を指定する引数は`fill`です。また、警告メッセージも気になるので、`HDI_2018`が欠損している行を除外します。
 
-```{r visual2-histogram-9, fig.width = 8, fig.height = 4, cache = TRUE}
+```{r visual2-histogram-9}
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>%
   filter(!is.na(HDI_2018)) %>%
   ggplot() +
@@ -465,7 +525,12 @@ Country_df %>%
 
 　区間数を指定することはすなわちヒストグラムの棒の数を指定することであり、`bins`引数で調整可能です。たとえば、棒の数を10個にするためには`geom_histogram()`内に`bins = 10`を指定します。むろん、棒の数もデータとは無関係であるため、`aes()`の外側に位置します。
 
-```{r visual2-histogram-10, fig.width = 8, fig.height = 4, cache = TRUE}
+```{r visual2-histogram-10}
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>%
   filter(!is.na(HDI_2018)) %>%
   ggplot() +
@@ -480,7 +545,12 @@ Country_df %>%
 
 　他にも区間の幅を指定することも可能です。区間の幅は棒の幅と一致します。たとえば、棒の幅を0.1にしてみましょう。棒の幅は`binwidth`で調整可能です。
 
-```{r visual2-histogram-11, fig.width = 8, fig.height = 4, cache = TRUE}
+```{r visual2-histogram-11}
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>%
   filter(!is.na(HDI_2018)) %>%
   ggplot() +
@@ -493,7 +563,10 @@ Country_df %>%
 
 　ヒストグラムが出力されましたが、棒の幅が`binwidth`で指定した0.1と一致することが分かります。たとえば、一番左の棒は0.35から0.45まで、つまり幅が0.1です。そして、一番右の棒は0.95から1.05に渡って位置します。ただし、ここでに疑問を持つ読者もいるでしょう「。なぜ0.3から0.4、0.4から0.5、...ではなく、0.35から0.45、0.45から0.55なのか」です。これは{ggplot2}の基本仕様です。ヒストグラムは度数分布表を基に作成されますが、本グラフの度数分布表は以下のようになります。
 
-```{r visual2-histogram-12, echo = FALSE, message = FALSE}
+```{r visual2-histogram-12}
+#| echo: FALSE
+#| message: FALSE
+#| warning: FALSE
 Country_df %>%
   filter(!is.na(HDI_2018)) %>%
     mutate(Class = cut(HDI_2018, seq(0.35, 1.05, 0.1))) %>%
@@ -502,7 +575,9 @@ Country_df %>%
     separate(col = Class, into = c("Start", "End"), sep = ",") %>%
     mutate(Start = parse_number(Start),
            End   = parse_number(End)) %>%
-  kable(col.names = c("から", "まで", "度数")) %>%
+  kable(col.names = c("から", "まで", "度数"),
+        booktabs  = TRUE,
+        align     = c("rrr")) %>%
   kable_styling(full_width    = FALSE,
                 latex_options = "hold_position") %>%
   row_spec(0, align = "c")
@@ -510,7 +585,12 @@ Country_df %>%
 
 　簡単に言うと、ヒストグラムの最初の棒は0を中央にした上で、棒の幅を0.1にしたとも言えます。これによってヒストグラムの境界線 (boundary)が、データより左右に0.05 (`binwidth`の半分)ずつ広くなります。もし、これを調整したい場合は、`boundary`引数を指定します。指定しない場合、`boundary`は「棒の広さ / 2」となります。棒がデータの範囲を超えないようにするためには、`geom_histogram()`内に`boundary = 0`を指定します。
 
-```{r visual2-histogram-13, fig.width = 8, fig.height = 4, cache = TRUE}
+```{r visual2-histogram-13}
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>%
   filter(!is.na(HDI_2018)) %>%
   ggplot() +
@@ -528,7 +608,13 @@ Country_df %>%
 
 　ヒストグラムには以下のように密度の表す線を同時に載せるケースもあります。
 
-```{r visual2-histogram-14, echo = FALSE, fig.width = 8, fig.height = 4, cache = TRUE}
+```{r visual2-histogram-14}
+#| echo: FALSE
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>%
   filter(!is.na(HDI_2018)) %>%
   ggplot(aes(x = HDI_2018, y = ..density..)) +
@@ -542,7 +628,12 @@ Country_df %>%
 
 　この密度の線を追加するには`geom_density()`という幾何オブジェクトを追加する必要があります。密度の線を示すには、横軸と縦軸両方の情報が必要です。横軸は`HDI_2018`で問題ないですが、縦軸はどうでしょう。縦軸には密度の情報が必要ですが、`Country_df`にそのような情報はありません。幸い、{ggplot2}は`y = ..density..`と指定するだけで、自動的に`HDI_2018`のある時点における密度を計算してくれます。したがって、マッピングは`aes(x = HDI_2018, y = ..density..)`のように書きます。こうなるとマッピング要素`x`は`geom_histogram()`と`geom_density()`に共通するため、`ggplot()`に入れても問題ありません。
 
-```{r visual2-histogram-15, fig.width = 8, fig.height = 4, cache = TRUE}
+```{r visual2-histogram-15}
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>%
   filter(!is.na(HDI_2018)) %>%
   # 全幾何オブジェクトにおいてxを共有するため、ここでマッピング指定
@@ -557,7 +648,12 @@ Country_df %>%
 
 　なんとも言えない微妙なグラフが出来ました。考えたものと全然違いますね。これはなぜでしょうか。それは`geom_density()`は**密度**を表す一方、`geom_histogram()`は**度数**を表すからです。2つは単位が全然違います。したがって、どちらかに単位を合わせる必要があり、この場合はヒストグラムの縦軸を度数でなく、密度に調整する必要があります。ヒストグラムの縦軸を密度にするためには、`y = ..density..`を指定するだけです。こうなると、`geom_histogram()`と`geom_density()`は`x`と`y`を共有するため、全部`ggplot()`内で指定しましょう。
 
-```{r visual2-histogram-16, fig.width = 8, fig.height = 4, cache = TRUE}
+```{r visual2-histogram-16}
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>%
   filter(!is.na(HDI_2018)) %>%
   ggplot(aes(x = HDI_2018, y = ..density..)) +
@@ -575,7 +671,12 @@ Country_df %>%
 
 　次元を追加するには棒グラフと同様、`aes()`内にマッピング要素を追加します。たとえば、OECD加盟有無によって人間開発指数の分布がどう異なるかを確認してみましょう。`OECD`変数は0/1であり、Rでは連続変数扱いになっているため、これを離散変数化するためには文字型かfactor型にする必要があります。`ifelse()`を使って、`OECD == 1`なら「OECD加盟国」、`OECD == 0`なら「OECD非加盟国」と置換したものを`OECD2`という列として追加します。そして、`OECD2`ごとに棒の色を変えるために、マッピング要素として`fill`を追加します。
 
-```{r visual2-histogram-17, fig.width = 8, fig.height = 4, cache = TRUE}
+```{r visual2-histogram-17}
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>%
   mutate(OECD2 = ifelse(OECD == 1, "加盟国", "非加盟国")) %>%
   filter(!is.na(HDI_2018)) %>%
@@ -591,7 +692,12 @@ Country_df %>%
 
 　ヒストグラムが出来上がりました。OECD加盟国の場合、人間開発指数が相対的に高いことが分かります。しかし、積み上げヒストグラムになっています。これはある階級においてOECD加盟国と非加盟国の比率を比較する際に有効ですが、OECD加盟国と非加盟国の分布の違いを見るにはやや物足りません。したがって、棒グラフ同様、`position`引数で棒の位置を調整します。ただし、ヒストグラムの場合、`postion = "dodge"`は向いていないので、ここでは`position = "identity"`を指定します。しかし、この場合、棒が重なってしまうと、一方の棒が見えなくなる可能性もあるので、`alpha`引数で棒の透明度を調整します。`alpha`の値は0から1までであり、0になると、完全透明になります。ここでは0.5くらいにしてみましょう。
 
-```{r visual2-histogram-18, fig.width = 8, fig.height = 4, cache = TRUE}
+```{r visual2-histogram-18}
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>%
   mutate(OECD2 = ifelse(OECD == 1, "OECD加盟国", "OECD非加盟国")) %>%
   filter(!is.na(HDI_2018)) %>%
@@ -607,7 +713,12 @@ Country_df %>%
 
 　これで2つのヒストグラムを綺麗にオーバーラッピングできました。また、先ほど紹介しました`geom_density()`オブジェクトを重ねることも可能です。
 
-```{r visual2-histogram-19, fig.width = 8, fig.height = 4, cache = TRUE}
+```{r visual2-histogram-19}
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>%
   mutate(OECD2 = ifelse(OECD == 1, "OECD加盟国", "OECD非加盟国")) %>%
   filter(!is.na(HDI_2018)) %>%
@@ -631,7 +742,12 @@ Country_df %>%
 
 　それではやってみましょう。`facet_wrap(~ OECD2)`を追加するだけです。2つのファセットを縦に並べるために、`ncol = 1`を追加します。2つのファセットを1列に並べるという意味です。
 
-```{r visual2-histogram-20, fig.width = 8, fig.height = 4, cache = TRUE}
+```{r visual2-histogram-20}
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>%
   mutate(OECD2 = ifelse(OECD == 1, "OECD加盟国", "OECD非加盟国")) %>%
   filter(!is.na(HDI_2018)) %>%
@@ -648,7 +764,12 @@ Country_df %>%
 
 　OECDは加盟/非加盟だけですから、オーバーラッピングされたヒストグラムで十分かも知れません。しかし、大陸のように、3つ以上のグループになると、オーバーラッピングよりもファセットで分けた方が効率的です。たとえば、大陸ごとの人間開発指数のヒストグラムを作ってみましょう。
 
-```{r visual2-histogram-21, fig.width = 8, fig.height = 4, cache = TRUE}
+```{r visual2-histogram-21}
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>%
   filter(!is.na(HDI_2018)) %>%
   ggplot() +

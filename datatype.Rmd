@@ -196,16 +196,21 @@ Factor型はラベル付きの数値型データです。Factor型の見た目�
 
 ```{r datatype-factor-1}
 #| echo: FALSE
-data.frame(
-    ID   = 1:5,
-    Name = c("Yanai", "Song", "Shigemura", "Tani", "Hadley"),
-    Cat  = c("めちゃめちゃ好き", "めちゃめちゃ好き", 
-             "どちらかといえば好き", "めちゃ好き", "好き")) %>% 
-    kable(caption = "猫好きの度合い") %>%
+data.frame(ID   = 1:5,
+           Name = c("Yanai", "Song", "Shigemura", "Tani", "Hadley"),
+           Cat  = c("めちゃめちゃ好き", 
+                    "めちゃめちゃ好き", 
+                    "どちらかといえば好き", 
+                    "めちゃ好き", 
+                    "好き")) %>% 
+    kable(caption  = "猫好きの度合い",
+          booktabs = TRUE, 
+          align    = "cll") %>%
     kable_styling(bootstrap_options = "striped", 
                   full_width        = FALSE, 
                   position          = "center",
-                  latex_options     = "hold_position")
+                  latex_options     = "hold_position") %>%
+    row_spec(0, align = "c")
 ```
 
 人間としてはこの表から、[重村](https://soheishigemura.com)という人がどれだけ猫が嫌いなのかが分かります。ただし、Rはそうではありません。Rは日本語どころか、人間の言葉は理解できません。各項目ごとに順番を付けてあげる必要がありますが、そのために使われるのがfactor型です。
@@ -273,11 +278,16 @@ zaisei_df <- data.frame(
     Zaisei = c(0.44396, 1.19157, 0.92840, 0.78683, 0.64322)
 )
 
-kable(zaisei_df, caption = "5都道府県のH29財政力指数") %>%
+zaisei_df %>%
+    kable(caption   = "5都道府県のH29財政力指数",
+          booktabs  = TRUE,
+          align     = "llr",
+          col.names = c("ID", "都道府県", "財政力指数")) %>%
     kable_styling(bootstrap_options = "striped", 
                   full_width        = FALSE, 
                   position          = "center",
-                  latex_options     = "hold_position")
+                  latex_options     = "hold_position") %>%
+    row_spec(0, align = "c")
 ```
 
 可視化については第\@ref(visualization1)章以降で詳しく解説しますが、この`Pref`列をcharacter型にしたままグラフにしますと図\@ref(fig:datatype-factor-9)のようになります。
@@ -470,14 +480,14 @@ as.Date(Date7, "%Y.%m.%d")
 
 `Date1`、`Date2`、`Date3`のようなベクトルの場合、`as.Date()`のみでDate型に変換できます。つまり、日付が数字のみで構成され、年が4桁となっており、年月日が`-`または`/`で区切られている場合はこれでだけで十分です。しかし、年が2桁になっていたり、その他の記号が使われたり、区切られていない場合は、`fotmat =`引数を指定する必要があります。たとえば`Date4`は年が2桁となっているます。2桁の年は`%y`と表記します。この表記法の一部を以下の表で紹介します。
 
-|表記|説明|例|
-|---|---|---|
-|%y|年 (2桁)|20|
-|%Y|年 (4桁)|2020|
-|%m|月 (数字)|5, 10|
-|%b|月 (文字)|Jan|
-|%B|月 (文字)|January|
-|%d|日|5, 05, 13|
+| 表記 | 説明      | 例       |
+|------|-----------|----------|
+| `%y` | 年 (2桁)  | 20       |
+| `%Y` | 年 (4桁)  | 2020     |
+| `%m` | 月 (数字) | 5, 10    |
+| `%b` | 月 (文字) | Jan      |
+| `%B` | 月 (文字) | January  |
+| `%d` | 日        | 5, 05, 13|
 
 他にも様々な表記法がありますが、詳細は`?strptime`で確認してみてください。
 
@@ -528,12 +538,15 @@ NAは欠損値と呼ばれます。これは本来は値があるはずなのが
 ```{r datatype-na-1}
 #| echo: FALSE
 data.frame(
-    ID           = 1:4,
-    名前         = c("Yanai", "Song", "Shigemura", "Tani"),
-    支持政党あり = c("ない", "ある", "ある", "ない"),
-    政党名       = c(NA, "ラーメン大好き党", "鹿児島第一党", NA)
+    ID    = 1:4,
+    Name  = c("Yanai", "Song", "Shigemura", "Tani"),
+    PID   = c("ない", "ある", "ある", "ない"),
+    Party = c(NA, "ラーメン大好き党", "鹿児島第一党", NA)
     ) %>%
-    kable(caption = "4人の支持政党") %>%
+    kable(caption   = "4人の支持政党",
+          col.names = c("ID", "名前", "支持政党の有無", "支持政党"),
+          booktabs  = TRUE,
+          align     = "crrr") %>%
     kable_styling(bootstrap_options = "striped", 
                   full_width        = FALSE, 
                   position          = "center",
@@ -699,7 +712,7 @@ NULLは存在しないことを意味するため、`null_vec1`は要素が4のn
 
 ```{r datatype-null-5}
 #| echo: FALSE
-#| out.width: "85%"
+#| out.width: "50%"
 #| fig.cap: "NAとNULLの違い"
 knitr::include_graphics("figures/Datatype/NA_NULL.png")
 ```

@@ -1547,16 +1547,9 @@ Tani
 <pre><code>## # … with 37 more rows, and 1 more variable: SDP &lt;dbl&gt;</code></pre>
 <p>これは表示されなかった行が37行あり、<code>SDP</code>という変数も表示されていないということです。他の違いとしては、tibble型の場合、最初にデータのサイズ (47行11列)が、各変数名の下にデータ型 (<code>&lt;int&gt;</code>、<code>&lt;chr&gt;</code>、<code>&lt;dbl&gt;</code>など)が表示されるという点です。</p>
 <p>本書はtibble型とdata.frame型を区別して解説はしませんが、一部の章・節においてはtibble型を念頭において解説をします。tibble型の作り方は先ほどのように<code>as_tibble()</code>使う方法もありますが、<code>readr::read_csv()</code>を使う方法もあります<a href="reference.html#fn48" class="footnote-ref" id="fnref48"><sup>48</sup></a>。<code>read_csv()</code>を使うと各列がどのようなデータ型として読み込まれたかも表示されるので便利です。{readr}パッケージは{tidyverse}に含まれているため、普段では以下のような使い方で十分です。</p>
-<div class="sourceCode" id="cb501"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb501-1"><a href="datastructure.html#cb501-1"></a>VoteDF3 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;Data/Vote.csv&quot;</span>)</span></code></pre></div>
-<pre><code>## Rows: 47 Columns: 11
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## chr  (1): Pref
-## dbl (10): ID, Zaisei, Over65, Under30, LDP, DPJ, Komei, Ishin, JCP, SDP
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<div class="sourceCode" id="cb503"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb503-1"><a href="datastructure.html#cb503-1"></a><span class="fu">class</span>(VoteDF3) <span class="co"># VoteDF3の構造</span></span></code></pre></div>
+<div class="sourceCode" id="cb501"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb501-1"><a href="datastructure.html#cb501-1"></a>VoteDF3 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;Data/Vote.csv&quot;</span>)</span>
+<span id="cb501-2"><a href="datastructure.html#cb501-2"></a></span>
+<span id="cb501-3"><a href="datastructure.html#cb501-3"></a><span class="fu">class</span>(VoteDF3) <span class="co"># VoteDF3の構造</span></span></code></pre></div>
 <pre><code>## [1] &quot;spec_tbl_df&quot; &quot;tbl_df&quot;      &quot;tbl&quot;         &quot;data.frame&quot;</code></pre>
 <p>tibble型とdata.frame型の最も大きな違いは、data.frame型の一つのセルには長さ1のベクトルしか入らない一方、tibble型は何でも入るという点です。つまり、tibble型なら一つのセルに数字や文字列だけでなく、長さ2以上のベクトル、後述するリスト型、行列、さらにはtibble型も入れることが出来ます。これについては本書の中盤以降に解説します。</p>
 <p>本書で「データフレーム」と書いた場合、それはtibbleでも適用可能です。ただし、tibbleと明示した場合、データフレームでは適用不可能です。</p>
@@ -1569,16 +1562,16 @@ Tani
 <div id="リスト型データの作成" class="section level3" number="9.5.1">
 <h3><span class="header-section-number">9.5.1</span> リスト型データの作成</h3>
 <p>ここではまず、2つのデータフレームを含むリストを作成してみます。それぞれのデータフレームはFIFA国別サッカーランキングであり<a href="reference.html#fn49" class="footnote-ref" id="fnref49"><sup>49</sup></a>、本書のサンプルデータの<code>FIFA_Women.csv</code>と<code>FIFA_Men.csv</code>です。まずは、2つのデータを読み込み、<code>Soccer_W</code>と<code>Soccer_M</code>という名のオブジェクトに格納しましょう。また、ここでは単に例を見せるだけなので、全データを利用するのではなく、最初の10行のみを利用します。</p>
-<div class="sourceCode" id="cb505"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb505-1"><a href="datastructure.html#cb505-1"></a>Soccer_W <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/FIFA_Women.csv&quot;</span>)</span>
-<span id="cb505-2"><a href="datastructure.html#cb505-2"></a>Soccer_M <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/FIFA_Men.csv&quot;</span>)</span>
-<span id="cb505-3"><a href="datastructure.html#cb505-3"></a></span>
-<span id="cb505-4"><a href="datastructure.html#cb505-4"></a>Soccer_W <span class="ot">&lt;-</span> Soccer_W[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, ]</span>
-<span id="cb505-5"><a href="datastructure.html#cb505-5"></a>Soccer_M <span class="ot">&lt;-</span> Soccer_M[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, ]</span></code></pre></div>
+<div class="sourceCode" id="cb503"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb503-1"><a href="datastructure.html#cb503-1"></a>Soccer_W <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/FIFA_Women.csv&quot;</span>)</span>
+<span id="cb503-2"><a href="datastructure.html#cb503-2"></a>Soccer_M <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/FIFA_Men.csv&quot;</span>)</span>
+<span id="cb503-3"><a href="datastructure.html#cb503-3"></a></span>
+<span id="cb503-4"><a href="datastructure.html#cb503-4"></a>Soccer_W <span class="ot">&lt;-</span> Soccer_W[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, ]</span>
+<span id="cb503-5"><a href="datastructure.html#cb503-5"></a>Soccer_M <span class="ot">&lt;-</span> Soccer_M[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, ]</span></code></pre></div>
 <p>リストの作成には<code>list()</code>関数に入れたいオブジェクト名を指定するだけです。それでは<code>List1</code>という名前で<code>Soccer_W</code>と<code>Soccer_M</code>データフレームを入れてみましょう。格納後は<code>List1</code>のデータ構造を<code>class()</code>で確認します</p>
-<div class="sourceCode" id="cb506"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb506-1"><a href="datastructure.html#cb506-1"></a>List1 <span class="ot">&lt;-</span> <span class="fu">list</span>(Soccer_W, Soccer_M)</span>
-<span id="cb506-2"><a href="datastructure.html#cb506-2"></a><span class="fu">class</span>(List1)</span></code></pre></div>
+<div class="sourceCode" id="cb504"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb504-1"><a href="datastructure.html#cb504-1"></a>List1 <span class="ot">&lt;-</span> <span class="fu">list</span>(Soccer_W, Soccer_M)</span>
+<span id="cb504-2"><a href="datastructure.html#cb504-2"></a><span class="fu">class</span>(List1)</span></code></pre></div>
 <pre><code>## [1] &quot;list&quot;</code></pre>
-<div class="sourceCode" id="cb508"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb508-1"><a href="datastructure.html#cb508-1"></a>List1</span></code></pre></div>
+<div class="sourceCode" id="cb506"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb506-1"><a href="datastructure.html#cb506-1"></a>List1</span></code></pre></div>
 <pre><code>## [[1]]
 ##    ID                Team Rank Points Prev_Points Confederation
 ## 1   1             Albania   75   1325        1316          UEFA
@@ -1605,8 +1598,8 @@ Tani
 ## 9   9           Argentina    9   1623        1623      CONMEBOL
 ## 10 10             Armenia  102   1213        1213          UEFA</code></pre>
 <p>一つのオブジェクトに2つのデータフレームが入っていますね。これは2つのデータフレームで構成された長さ2のリストです。ただし、どちらが女性ランキングで、どちらが男子ランキングか区別が難しいです。この場合、各データフレームに名前を付けることも可能です。</p>
-<div class="sourceCode" id="cb510"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb510-1"><a href="datastructure.html#cb510-1"></a>List2 <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Women =</span> Soccer_W, <span class="at">Men =</span> Soccer_M)</span>
-<span id="cb510-2"><a href="datastructure.html#cb510-2"></a>List2</span></code></pre></div>
+<div class="sourceCode" id="cb508"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb508-1"><a href="datastructure.html#cb508-1"></a>List2 <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Women =</span> Soccer_W, <span class="at">Men =</span> Soccer_M)</span>
+<span id="cb508-2"><a href="datastructure.html#cb508-2"></a>List2</span></code></pre></div>
 <pre><code>## $Women
 ##    ID                Team Rank Points Prev_Points Confederation
 ## 1   1             Albania   75   1325        1316          UEFA
@@ -1639,7 +1632,7 @@ Tani
 <p>リスト型の中身は何でもあり得るので、なんらかの操作方法があるわけではありません。リスト型の操作というのはリスト内の要素をどのように抽出するかであり、各要素 (データフレーム、行列、ベクトルなど)の操作はこれまで説明してきた方法と同じです。したがって、ここではリストを構成する要素を抽出する方法についてのみ解説します。</p>
 <p><strong>要素の番号を利用する方法</strong></p>
 <p><code>List1</code>は各要素に名前が付いていないため、番号で抽出します。たとえば、あるリストの<code>i</code>番目の要素を抽出するには<code>リスト名[[i]]</code>で抽出します。<code>[]</code>ではなく、<code>[[]]</code>であることに注意してください。それでは<code>List1</code>の1番目の要素を抽出してみましょう。</p>
-<div class="sourceCode" id="cb512"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb512-1"><a href="datastructure.html#cb512-1"></a>List1[[<span class="dv">1</span>]]</span></code></pre></div>
+<div class="sourceCode" id="cb510"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb510-1"><a href="datastructure.html#cb510-1"></a>List1[[<span class="dv">1</span>]]</span></code></pre></div>
 <pre><code>##    ID                Team Rank Points Prev_Points Confederation
 ## 1   1             Albania   75   1325        1316          UEFA
 ## 2   2             Algeria   85   1271        1271           CAF
@@ -1652,14 +1645,14 @@ Tani
 ## 9   9               Aruba  157    724         724      CONCACAF
 ## 10 10           Australia    7   1963        1963           AFC</code></pre>
 <p>このように<code>List1</code>内の1番目のデータが抽出されました。こちらのデータ構造は何でしょうか。</p>
-<div class="sourceCode" id="cb514"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb514-1"><a href="datastructure.html#cb514-1"></a><span class="fu">class</span>(List1[[<span class="dv">1</span>]])</span></code></pre></div>
+<div class="sourceCode" id="cb512"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb512-1"><a href="datastructure.html#cb512-1"></a><span class="fu">class</span>(List1[[<span class="dv">1</span>]])</span></code></pre></div>
 <pre><code>## [1] &quot;data.frame&quot;</code></pre>
 <p>既に予想したかと思いますが、データフレームとして抽出されました。ここから更に、3行目のデータを抽出するには、<code>[[]]</code>の後に<code>[3, ]</code>を付けます。</p>
-<div class="sourceCode" id="cb516"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb516-1"><a href="datastructure.html#cb516-1"></a>List1[[<span class="dv">1</span>]][<span class="dv">3</span>, ]</span></code></pre></div>
+<div class="sourceCode" id="cb514"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb514-1"><a href="datastructure.html#cb514-1"></a>List1[[<span class="dv">1</span>]][<span class="dv">3</span>, ]</span></code></pre></div>
 <pre><code>##   ID           Team Rank Points Prev_Points Confederation
 ## 3  3 American Samoa  133   1030        1030           OFC</code></pre>
 <p>先ほどリストの要素の抽出には「<code>[]</code>でなく、<code>[[]]</code>です」と申しましたが、実は<code>[]</code>も使用可能です。やってみましょう。</p>
-<div class="sourceCode" id="cb518"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb518-1"><a href="datastructure.html#cb518-1"></a>List1[<span class="dv">1</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb516"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb516-1"><a href="datastructure.html#cb516-1"></a>List1[<span class="dv">1</span>]</span></code></pre></div>
 <pre><code>## [[1]]
 ##    ID                Team Rank Points Prev_Points Confederation
 ## 1   1             Albania   75   1325        1316          UEFA
@@ -1673,15 +1666,15 @@ Tani
 ## 9   9               Aruba  157    724         724      CONCACAF
 ## 10 10           Australia    7   1963        1963           AFC</code></pre>
 <p><code>[[]]</code>を使った抽出とあまり変わらないですね。しかし、重要な違いが一つあります。それはデータ構造です。</p>
-<div class="sourceCode" id="cb520"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb520-1"><a href="datastructure.html#cb520-1"></a><span class="fu">class</span>(List1[<span class="dv">1</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb518"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb518-1"><a href="datastructure.html#cb518-1"></a><span class="fu">class</span>(List1[<span class="dv">1</span>])</span></code></pre></div>
 <pre><code>## [1] &quot;list&quot;</code></pre>
 <p><code>[]</code>で抽出したリストの要素のデータ構造もまたリスト型です。この場合、先ほどのように<code>[x, ]</code>を使って、<code>x</code>行目のデータを抽出することはできません。なぜなら、<code>[行, 列]</code>による要素の抽出はデータフレームのためのものであって、リスト型のためのものではないからです。</p>
-<div class="sourceCode" id="cb522"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb522-1"><a href="datastructure.html#cb522-1"></a>List1[<span class="dv">1</span>][<span class="dv">3</span>, ]</span></code></pre></div>
+<div class="sourceCode" id="cb520"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb520-1"><a href="datastructure.html#cb520-1"></a>List1[<span class="dv">1</span>][<span class="dv">3</span>, ]</span></code></pre></div>
 <pre><code>## Error in List1[1][3, ]: incorrect number of dimensions</code></pre>
 <p>このようにエラーが表示されます。</p>
 <p><strong>要素の名前を利用する方法</strong></p>
 <p><code>List2</code>のようにリストの要素に名前を付けた場合、これまでの方法に加え<code>[["要素名"]]</code>と<code>$要素名</code>を使った操作が可能です<a href="reference.html#fn50" class="footnote-ref" id="fnref50"><sup>50</sup></a>。<code>List2</code>から男子ランキング (<code>Men</code>)を抽出してみましょう。</p>
-<div class="sourceCode" id="cb524"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb524-1"><a href="datastructure.html#cb524-1"></a>List2[[<span class="st">&quot;Men&quot;</span>]]</span></code></pre></div>
+<div class="sourceCode" id="cb522"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb522-1"><a href="datastructure.html#cb522-1"></a>List2[[<span class="st">&quot;Men&quot;</span>]]</span></code></pre></div>
 <pre><code>##    ID                Team Rank Points Prev_Points Confederation
 ## 1   1         Afghanistan  149   1052        1052           AFC
 ## 2   2             Albania   66   1356        1356          UEFA
@@ -1693,7 +1686,7 @@ Tani
 ## 8   8 Antigua and Barbuda  126   1127        1127      CONCACAF
 ## 9   9           Argentina    9   1623        1623      CONMEBOL
 ## 10 10             Armenia  102   1213        1213          UEFA</code></pre>
-<div class="sourceCode" id="cb526"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb526-1"><a href="datastructure.html#cb526-1"></a>List2<span class="sc">$</span>Men</span></code></pre></div>
+<div class="sourceCode" id="cb524"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb524-1"><a href="datastructure.html#cb524-1"></a>List2<span class="sc">$</span>Men</span></code></pre></div>
 <pre><code>##    ID                Team Rank Points Prev_Points Confederation
 ## 1   1         Afghanistan  149   1052        1052           AFC
 ## 2   2             Albania   66   1356        1356          UEFA
@@ -1706,15 +1699,15 @@ Tani
 ## 9   9           Argentina    9   1623        1623      CONMEBOL
 ## 10 10             Armenia  102   1213        1213          UEFA</code></pre>
 <p>どれも結果は同じです。また、それぞれのデータ構造もデータフレームです。</p>
-<div class="sourceCode" id="cb528"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb528-1"><a href="datastructure.html#cb528-1"></a><span class="fu">class</span>(List2[[<span class="st">&quot;Men&quot;</span>]])</span></code></pre></div>
+<div class="sourceCode" id="cb526"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb526-1"><a href="datastructure.html#cb526-1"></a><span class="fu">class</span>(List2[[<span class="st">&quot;Men&quot;</span>]])</span></code></pre></div>
 <pre><code>## [1] &quot;data.frame&quot;</code></pre>
-<div class="sourceCode" id="cb530"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb530-1"><a href="datastructure.html#cb530-1"></a><span class="fu">class</span>(List2<span class="sc">$</span>Men)</span></code></pre></div>
+<div class="sourceCode" id="cb528"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb528-1"><a href="datastructure.html#cb528-1"></a><span class="fu">class</span>(List2<span class="sc">$</span>Men)</span></code></pre></div>
 <pre><code>## [1] &quot;data.frame&quot;</code></pre>
 <p>したがって、<code>[行番号, 列番号]</code>のようにデータフレームの操作が可能です。<code>Men</code>要素から10行目のデータを抽出してみましょう。</p>
-<div class="sourceCode" id="cb532"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb532-1"><a href="datastructure.html#cb532-1"></a>List2[[<span class="st">&quot;Men&quot;</span>]][<span class="dv">10</span>, ]</span></code></pre></div>
+<div class="sourceCode" id="cb530"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb530-1"><a href="datastructure.html#cb530-1"></a>List2[[<span class="st">&quot;Men&quot;</span>]][<span class="dv">10</span>, ]</span></code></pre></div>
 <pre><code>##    ID    Team Rank Points Prev_Points Confederation
 ## 10 10 Armenia  102   1213        1213          UEFA</code></pre>
-<div class="sourceCode" id="cb534"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb534-1"><a href="datastructure.html#cb534-1"></a>List2<span class="sc">$</span>Men[<span class="dv">10</span>, ]</span></code></pre></div>
+<div class="sourceCode" id="cb532"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb532-1"><a href="datastructure.html#cb532-1"></a>List2<span class="sc">$</span>Men[<span class="dv">10</span>, ]</span></code></pre></div>
 <pre><code>##    ID    Team Rank Points Prev_Points Confederation
 ## 10 10 Armenia  102   1213        1213          UEFA</code></pre>
 <p>もちろん、名前を付けた場合であっても、要素の番号を利用した操作も可能です。自分でリスト型を作成する際には各要素に名前を付けた方が分かりやすくて良いでしょう。</p>
@@ -1736,130 +1729,130 @@ Tani
 <div id="配列型データの作成" class="section level3" number="9.6.1">
 <h3><span class="header-section-number">9.6.1</span> 配列型データの作成</h3>
 <p>各行列は3行4列とし、4層構造とします。まずは、同じサイズの行列を作成し、それぞれ<code>Mat1</code>、<code>Mat2</code>、<code>Mat3</code>、<code>Mat4</code>と名付けます。</p>
-<div class="sourceCode" id="cb536"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb536-1"><a href="datastructure.html#cb536-1"></a>Mat1 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">12</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>), <span class="at">byrow =</span> <span class="cn">TRUE</span>, <span class="at">nrow =</span> <span class="dv">3</span>)</span>
-<span id="cb536-2"><a href="datastructure.html#cb536-2"></a>Mat2 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">12</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>), <span class="at">byrow =</span> <span class="cn">TRUE</span>, <span class="at">nrow =</span> <span class="dv">3</span>)</span>
-<span id="cb536-3"><a href="datastructure.html#cb536-3"></a>Mat3 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">12</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>), <span class="at">byrow =</span> <span class="cn">TRUE</span>, <span class="at">nrow =</span> <span class="dv">3</span>)</span>
-<span id="cb536-4"><a href="datastructure.html#cb536-4"></a>Mat4 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">12</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>), <span class="at">byrow =</span> <span class="cn">TRUE</span>, <span class="at">nrow =</span> <span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb534"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb534-1"><a href="datastructure.html#cb534-1"></a>Mat1 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">12</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>), <span class="at">byrow =</span> <span class="cn">TRUE</span>, <span class="at">nrow =</span> <span class="dv">3</span>)</span>
+<span id="cb534-2"><a href="datastructure.html#cb534-2"></a>Mat2 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">12</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>), <span class="at">byrow =</span> <span class="cn">TRUE</span>, <span class="at">nrow =</span> <span class="dv">3</span>)</span>
+<span id="cb534-3"><a href="datastructure.html#cb534-3"></a>Mat3 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">12</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>), <span class="at">byrow =</span> <span class="cn">TRUE</span>, <span class="at">nrow =</span> <span class="dv">3</span>)</span>
+<span id="cb534-4"><a href="datastructure.html#cb534-4"></a>Mat4 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">12</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>), <span class="at">byrow =</span> <span class="cn">TRUE</span>, <span class="at">nrow =</span> <span class="dv">3</span>)</span></code></pre></div>
 <p><code>sample()</code>関数は初めてですね。これは与えられたベクトルの要素から無作為に要素を抽出する関数です。<code>sample(1:12, n)</code>なら<code>c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,1 2)</code>から無作為に<code>n</code>個の要素を抽出するという意味です。<code>replace = TRUE</code>を指定すると、反復抽出、つまり、一回抽出された要素であっても抽出される可能性があることを意味します。デフォルトは<code>FALSE</code>ですが、この場合、一旦抽出された要素は二度と抽出されません。それではそれぞれの行列の中身を見てみましょう。</p>
-<div class="sourceCode" id="cb537"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb537-1"><a href="datastructure.html#cb537-1"></a>Mat1</span></code></pre></div>
+<div class="sourceCode" id="cb535"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb535-1"><a href="datastructure.html#cb535-1"></a>Mat1</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]    3    5    3    6
-## [2,]    2    1    8    1
-## [3,]    8    7    4    8</code></pre>
-<div class="sourceCode" id="cb539"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb539-1"><a href="datastructure.html#cb539-1"></a>Mat2</span></code></pre></div>
+## [1,]    6    1    5    9
+## [2,]    2    8    4    4
+## [3,]    9   11   12    9</code></pre>
+<div class="sourceCode" id="cb537"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb537-1"><a href="datastructure.html#cb537-1"></a>Mat2</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]    5   11    2    8
-## [2,]    4    9    9   11
-## [3,]    3    6    2    8</code></pre>
-<div class="sourceCode" id="cb541"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb541-1"><a href="datastructure.html#cb541-1"></a>Mat3</span></code></pre></div>
+## [1,]    8    9    1    9
+## [2,]    9    4    5    2
+## [3,]    2    8    9    5</code></pre>
+<div class="sourceCode" id="cb539"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb539-1"><a href="datastructure.html#cb539-1"></a>Mat3</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]   11    3    8    1
-## [2,]    3    8   12    3
-## [3,]    9    9    3    9</code></pre>
-<div class="sourceCode" id="cb543"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb543-1"><a href="datastructure.html#cb543-1"></a>Mat4</span></code></pre></div>
+## [1,]    3    9    7   10
+## [2,]   11    6    8    1
+## [3,]   12   11   10    9</code></pre>
+<div class="sourceCode" id="cb541"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb541-1"><a href="datastructure.html#cb541-1"></a>Mat4</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]   12    9   10    1
-## [2,]   12   10   11   10
-## [3,]   12    4    1    3</code></pre>
+## [1,]    8    4    1    8
+## [2,]   11    3    6   11
+## [3,]   11    9   11   11</code></pre>
 <p>配列型データを作成するには<code>array()</code>関数を使います。引数としては行列名を<code>c()</code>で繋ぎ<a href="reference.html#fn51" class="footnote-ref" id="fnref51"><sup>51</sup></a>、<code>dim =</code>でarrayの大きさを指定するだけです。配列を作成した後はそのデータ構造も確認してみましょう。</p>
-<div class="sourceCode" id="cb545"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb545-1"><a href="datastructure.html#cb545-1"></a>Array1 <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="fu">c</span>(Mat1, Mat2, Mat3, Mat4), <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">4</span>))</span>
-<span id="cb545-2"><a href="datastructure.html#cb545-2"></a><span class="fu">class</span>(Array1)</span></code></pre></div>
+<div class="sourceCode" id="cb543"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb543-1"><a href="datastructure.html#cb543-1"></a>Array1 <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="fu">c</span>(Mat1, Mat2, Mat3, Mat4), <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">4</span>))</span>
+<span id="cb543-2"><a href="datastructure.html#cb543-2"></a><span class="fu">class</span>(Array1)</span></code></pre></div>
 <pre><code>## [1] &quot;array&quot;</code></pre>
 <p><code>dim = c(m, n, z)</code>の部分ですが、これは「<code>m</code>行<code>n</code>列の行列が<code>z</code>枚重ねる」という意味です。今回は3行4列の行列を4枚重ねるので<code>dim = c(3, 4, 4)</code>です。それでは<code>Array1</code>の中身を見てみます。</p>
-<div class="sourceCode" id="cb547"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb547-1"><a href="datastructure.html#cb547-1"></a>Array1</span></code></pre></div>
+<div class="sourceCode" id="cb545"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb545-1"><a href="datastructure.html#cb545-1"></a>Array1</span></code></pre></div>
 <pre><code>## , , 1
 ## 
 ##      [,1] [,2] [,3] [,4]
-## [1,]    3    5    3    6
-## [2,]    2    1    8    1
-## [3,]    8    7    4    8
+## [1,]    6    1    5    9
+## [2,]    2    8    4    4
+## [3,]    9   11   12    9
 ## 
 ## , , 2
 ## 
 ##      [,1] [,2] [,3] [,4]
-## [1,]    5   11    2    8
-## [2,]    4    9    9   11
-## [3,]    3    6    2    8
+## [1,]    8    9    1    9
+## [2,]    9    4    5    2
+## [3,]    2    8    9    5
 ## 
 ## , , 3
 ## 
 ##      [,1] [,2] [,3] [,4]
-## [1,]   11    3    8    1
-## [2,]    3    8   12    3
-## [3,]    9    9    3    9
+## [1,]    3    9    7   10
+## [2,]   11    6    8    1
+## [3,]   12   11   10    9
 ## 
 ## , , 4
 ## 
 ##      [,1] [,2] [,3] [,4]
-## [1,]   12    9   10    1
-## [2,]   12   10   11   10
-## [3,]   12    4    1    3</code></pre>
+## [1,]    8    4    1    8
+## [2,]   11    3    6   11
+## [3,]   11    9   11   11</code></pre>
 <p>このように一つのオブジェクト内に複数の行列が格納されたオブジェクトが生成されます。</p>
 </div>
 <div id="配列型データの操作" class="section level3" number="9.6.2">
 <h3><span class="header-section-number">9.6.2</span> 配列型データの操作</h3>
 <p>配列型データの操作は行列型に似ていますが、層というもう一つの次元があるため、<code>行列名[行番号, 列番号]</code>ではなく、<code>配列名[行番号, 列番号, 層番号]</code>を使います。たとえば、<code>Array1</code>の3番目の行列を抽出したい場合、<code>Array1[, , 3]</code>と入力します。</p>
-<div class="sourceCode" id="cb549"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb549-1"><a href="datastructure.html#cb549-1"></a>Array1[, , <span class="dv">3</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb547"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb547-1"><a href="datastructure.html#cb547-1"></a>Array1[, , <span class="dv">3</span>]</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]   11    3    8    1
-## [2,]    3    8   12    3
-## [3,]    9    9    3    9</code></pre>
+## [1,]    3    9    7   10
+## [2,]   11    6    8    1
+## [3,]   12   11   10    9</code></pre>
 <p>また、2番目の行列の3行目・1列目の要素を抽出するなら<code>Array1[3, 1, 2]</code>と入力します。</p>
-<div class="sourceCode" id="cb551"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb551-1"><a href="datastructure.html#cb551-1"></a>Array1[<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">2</span>]</span></code></pre></div>
-<pre><code>## [1] 3</code></pre>
+<div class="sourceCode" id="cb549"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb549-1"><a href="datastructure.html#cb549-1"></a>Array1[<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">2</span>]</span></code></pre></div>
+<pre><code>## [1] 2</code></pre>
 <p>配列型における操作の特徴の一つは全ての行列が同じ大きさを持つため、層を貫通した操作ができるという点です。たとえば、全ての層の2行目を抽出するなら、層番号を指定せず、行番号のみで抽出します。</p>
-<div class="sourceCode" id="cb553"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb553-1"><a href="datastructure.html#cb553-1"></a>Array1[<span class="dv">2</span>, , ]</span></code></pre></div>
+<div class="sourceCode" id="cb551"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb551-1"><a href="datastructure.html#cb551-1"></a>Array1[<span class="dv">2</span>, , ]</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]    2    4    3   12
-## [2,]    1    9    8   10
-## [3,]    8    9   12   11
-## [4,]    1   11    3   10</code></pre>
-<p>ただ、返された結果は配列型でなく行列型であることに注意しましょう。たとえば、1番目の行列の2行目の要素は2, 1, 8, 1ですが、これは先ほど抽出された行列の1列目に該当します。また、2番目の行列の2行目の要素は4, 9, 9, 11であり、これは先ほどの抽出された行列の2列目となります。全層において特定の一列を抽出しても同じです。これは各層において抽出されたデータが行列でなく、ベクトルだからです。</p>
+## [1,]    2    9   11   11
+## [2,]    8    4    6    3
+## [3,]    4    5    8    6
+## [4,]    4    2    1   11</code></pre>
+<p>ただ、返された結果は配列型でなく行列型であることに注意しましょう。たとえば、1番目の行列の2行目の要素は2, 8, 4, 4ですが、これは先ほど抽出された行列の1列目に該当します。また、2番目の行列の2行目の要素は9, 4, 5, 2であり、これは先ほどの抽出された行列の2列目となります。全層において特定の一列を抽出しても同じです。これは各層において抽出されたデータが行列でなく、ベクトルだからです。</p>
 <p>一方、<strong>複数</strong>の行または列を抽出した場合、結果は配列型です。<code>Array1</code>の各層から1・2行目と1・2列目の要素、つまり大きさが2 <span class="math inline">\(\times\)</span> 2の行列を抽出してみましょう。</p>
-<div class="sourceCode" id="cb555"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb555-1"><a href="datastructure.html#cb555-1"></a>Array1[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, ]</span></code></pre></div>
+<div class="sourceCode" id="cb553"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb553-1"><a href="datastructure.html#cb553-1"></a>Array1[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, ]</span></code></pre></div>
 <pre><code>## , , 1
 ## 
 ##      [,1] [,2]
-## [1,]    3    5
-## [2,]    2    1
+## [1,]    6    1
+## [2,]    2    8
 ## 
 ## , , 2
 ## 
 ##      [,1] [,2]
-## [1,]    5   11
-## [2,]    4    9
+## [1,]    8    9
+## [2,]    9    4
 ## 
 ## , , 3
 ## 
 ##      [,1] [,2]
-## [1,]   11    3
-## [2,]    3    8
+## [1,]    3    9
+## [2,]   11    6
 ## 
 ## , , 4
 ## 
 ##      [,1] [,2]
-## [1,]   12    9
-## [2,]   12   10</code></pre>
+## [1,]    8    4
+## [2,]   11    3</code></pre>
 <p>このように各層において抽出されたデータが行列だからです。自分の操作から得られた結果がどのようなデータ型・データ構造かを予め知っておくことで分析の効率が上がるでしょう。</p>
 <p><strong>行列に名前を付けたい</strong></p>
 <p>今回は各行列に1, 2, 3, 4という番号のみ割り当てましたが、実は行列に名前を付けることも可能です。そのためには配列データ作成時、<code>dimnames =</code>引数を指定する必要があります。</p>
-<div class="sourceCode" id="cb557"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb557-1"><a href="datastructure.html#cb557-1"></a>Array2 <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="fu">c</span>(Mat1, Mat2, Mat3, Mat4), <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">4</span>),</span>
-<span id="cb557-2"><a href="datastructure.html#cb557-2"></a>                <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="cn">NULL</span>, </span>
-<span id="cb557-3"><a href="datastructure.html#cb557-3"></a>                                <span class="cn">NULL</span>, </span>
-<span id="cb557-4"><a href="datastructure.html#cb557-4"></a>                                <span class="fu">c</span>(<span class="st">&quot;M1&quot;</span>, <span class="st">&quot;M2&quot;</span>, <span class="st">&quot;M3&quot;</span>, <span class="st">&quot;M4&quot;</span>))</span>
-<span id="cb557-5"><a href="datastructure.html#cb557-5"></a>                )</span></code></pre></div>
+<div class="sourceCode" id="cb555"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb555-1"><a href="datastructure.html#cb555-1"></a>Array2 <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="fu">c</span>(Mat1, Mat2, Mat3, Mat4), <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">4</span>),</span>
+<span id="cb555-2"><a href="datastructure.html#cb555-2"></a>                <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="cn">NULL</span>, </span>
+<span id="cb555-3"><a href="datastructure.html#cb555-3"></a>                                <span class="cn">NULL</span>, </span>
+<span id="cb555-4"><a href="datastructure.html#cb555-4"></a>                                <span class="fu">c</span>(<span class="st">&quot;M1&quot;</span>, <span class="st">&quot;M2&quot;</span>, <span class="st">&quot;M3&quot;</span>, <span class="st">&quot;M4&quot;</span>))</span>
+<span id="cb555-5"><a href="datastructure.html#cb555-5"></a>                )</span></code></pre></div>
 <p><code>dimnames =</code>引数は必ず長さ3のリスト型である必要があります。1番目と2番目の要素は行名と列名ですが、行列において一般的に使われないため、ここでは<code>NULL</code>にし、3番目の要素、つまり各層の名前だけを指定します。ここではそれぞれの層を<code>M1</code>、<code>M2</code>、<code>M3</code>、<code>M4</code>と名付けました。ここで<code>M4</code>のみを抽出する場合は、以下のように操作します。</p>
-<div class="sourceCode" id="cb558"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb558-1"><a href="datastructure.html#cb558-1"></a>Array2[, , <span class="st">&quot;M4&quot;</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb556"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb556-1"><a href="datastructure.html#cb556-1"></a>Array2[, , <span class="st">&quot;M4&quot;</span>]</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]   12    9   10    1
-## [2,]   12   10   11   10
-## [3,]   12    4    1    3</code></pre>
+## [1,]    8    4    1    8
+## [2,]   11    3    6   11
+## [3,]   11    9   11   11</code></pre>
 <p>むろん、これまでと同様、番号で抽出することも可能です。</p>
-<div class="sourceCode" id="cb560"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb560-1"><a href="datastructure.html#cb560-1"></a>Array2[, , <span class="dv">4</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb558"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb558-1"><a href="datastructure.html#cb558-1"></a>Array2[, , <span class="dv">4</span>]</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]   12    9   10    1
-## [2,]   12   10   11   10
-## [3,]   12    4    1    3</code></pre>
+## [1,]    8    4    1    8
+## [2,]   11    3    6   11
+## [3,]   11    9   11   11</code></pre>
 <hr />
 </div>
 </div>
@@ -2101,7 +2094,7 @@ Syria
 <p><strong>問8</strong> <code>myTbl1</code>からランキングが20より上位の<strong>行</strong>を抽出せよ。</p>
 
 <p>この章で使うパッケージを読み込む。</p>
-<div class="sourceCode" id="cb562"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb562-1"><a href="datastructure.html#cb562-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse)</span></code></pre></div>
+<div class="sourceCode" id="cb560"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb560-1"><a href="datastructure.html#cb560-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse)</span></code></pre></div>
 </div>
 </div>
 </div>
