@@ -1,6 +1,7 @@
 # データの型 {#datatype}
 
-```{r datatype-common, include = FALSE}
+```{r datatype-common}
+#| include: FALSE
 source("_common.R")
 ```
 
@@ -10,14 +11,16 @@ source("_common.R")
 
 しかし、データ分析を行う際はベクトル以外のデータも多いです。行列や表がその典型例です。しかし、行列でも表でも中身の一つ一つの要素は長さ1のベクトルに過ぎません。たとえば、以下のような2行5列のベクトルがあるとします。ここで1行3列目の要素は`11`であり、長さ1の数値型ベクトルです。あるいは5列目は`c(23, 29)`であり、長さ2の数値型ベクトルです。
 
-```{r datatype-intro-1, echo = FALSE}
+```{r datatype-intro-1}
+#| echo: FALSE
 matrix(c(2, 3, 5, 7, 11, 
          13, 17, 19, 23, 29), nrow = 2)
 ```
 
 表についても考えてみましょう。以下の表の3行2列目の要素は`"American Samoa"`という長さ1の文字型ベクトルです。また、6列目は`c("UEFA", "CAF", "OFC", "UEFA", "CAF", "CONCACAF")`であり、これは長さ6の文字型ベクトルです。このようにRで扱う全てのデータは複数のベクトルが集まっているものです。
 
-```{r datatype-intro-2, echo = FALSE}
+```{r datatype-intro-2}
+#| echo: FALSE
 head(read.csv("Data/FIFA_Women.csv"))
 ```
 
@@ -191,15 +194,18 @@ Factor型はラベル付きの数値型データです。Factor型の見た目�
     
 以下の表\@ref(tab:datatype-factor-1)は5人の結果です。
 
-```{r datatype-factor-1, echo = FALSE}
+```{r datatype-factor-1}
+#| echo: FALSE
 data.frame(
     ID   = 1:5,
     Name = c("Yanai", "Song", "Shigemura", "Tani", "Hadley"),
     Cat  = c("めちゃめちゃ好き", "めちゃめちゃ好き", 
              "どちらかといえば好き", "めちゃ好き", "好き")) %>% 
-    knitr::kable(caption = "猫好きの度合い") %>%
-    kableExtra::kable_styling(bootstrap_options = "striped", 
-                  full_width = F, position = "center")
+    kable(caption = "猫好きの度合い") %>%
+    kable_styling(bootstrap_options = "striped", 
+                  full_width        = FALSE, 
+                  position          = "center",
+                  latex_options     = "hold_position")
 ```
 
 人間としてはこの表から、[重村](https://soheishigemura.com)という人がどれだけ猫が嫌いなのかが分かります。ただし、Rはそうではありません。Rは日本語どころか、人間の言葉は理解できません。各項目ごとに順番を付けてあげる必要がありますが、そのために使われるのがfactor型です。
@@ -270,12 +276,15 @@ zaisei_df <- data.frame(
 kable(zaisei_df, caption = "5都道府県のH29財政力指数") %>%
     kable_styling(bootstrap_options = "striped", 
                   full_width        = FALSE, 
-                  position          = "center")
+                  position          = "center",
+                  latex_options     = "hold_position")
 ```
 
 可視化については第\@ref(visualization1)章以降で詳しく解説しますが、この`Pref`列をcharacter型にしたままグラフにしますと図\@ref(fig:datatype-factor-9)のようになります。
 
-```{r datatype-factor-9, echo = FALSE, fig.cap = "5都道府県のH29財政力指数"}
+```{r datatype-factor-9}
+#| echo: FALSE
+#| fig.cap: "5都道府県のH29財政力指数"
 zaisei_df %>%
     ggplot() +
     geom_bar(aes(x = Pref, y = Zaisei), stat = "identity") +
@@ -296,7 +305,9 @@ zaisei_df$Pref <- factor(zaisei_df$Pref,
 
 `zaisei_df`の`Pref`列をfactor型にしてから同じ図を描くと図\@ref(fig:datatype-factor-11)のようになります。
 
-```{r datatype-factor-11, echo = FALSE, fig.cap = "5都道府県のH29財政力指数"}
+```{r datatype-factor-11}
+#| echo: FALSE
+#| fig.cap: "5都道府県のH29財政力指数"
 zaisei_df %>%
     ggplot() +
     geom_bar(aes(x = Pref, y = Zaisei), stat = "identity") +
@@ -336,7 +347,8 @@ SongSleep
 
 日付を横軸に、睡眠時間を縦軸にした散布図を描くと図\@ref{fig:datatype-date-3}のようになります。{ggplot2}を利用した作図については第\@ref{visualization}章で解説しますので、ここではDate型の特徴のみ理解してもらえたら十分です。
 
-```{r datatype-date-3, fig.cap = "Songの睡眠時間"}
+```{r datatype-date-3}
+#| fig.cap: "Songの睡眠時間"
 ggplot(SongSleep, 
        mapping = aes(x = Date, y = Sleep)) +
     geom_point() +
@@ -358,7 +370,8 @@ SongSleep
 
 図にすると実は先ほどの図と同じものが得られます。
 
-```{r datatype-date-6, fig.cap = "Songの睡眠時間"}
+```{r datatype-date-6}
+#| fig.cap: "Songの睡眠時間"
 ggplot(SongSleep, 
        mapping = aes(x = DateD, y = Sleep)) +
     geom_point() +
@@ -380,7 +393,8 @@ SongSleep2
 
 この状態で横軸を`Date`にしたらどうなるでしょうか（図\@ref(fig:datatype-date-9)）。
 
-```{r datatype-date-9, fig.cap = "Songの睡眠時間"}
+```{r datatype-date-9}
+#| fig.cap: "Songの睡眠時間"
 ggplot(SongSleep2, 
        mapping = aes(x = Date, y = Sleep)) +
     geom_point() +
@@ -390,7 +404,8 @@ ggplot(SongSleep2,
 
 一方、横軸を`DateD`にしたものが図\@ref(fig:datatype-date-10)です。
 
-```{r datatype-date-10, fig.cap = "Songの睡眠時間"}
+```{r datatype-date-10}
+#| fig.cap: "Songの睡眠時間"
 ggplot(SongSleep2, 
        mapping = aes(x = DateD, y = Sleep)) +
     geom_point() +
@@ -409,7 +424,8 @@ SongSleep3
 
 このように日付はあるが、睡眠時間が欠損している場合、図にしたものが図\@ref(fig:datatype-date-12)です。
 
-```{r datatype-date-12, fig.cap = "Songの睡眠時間"}
+```{r datatype-date-12}
+#| fig.cap: "Songの睡眠時間"
 ggplot(SongSleep3, 
        mapping = aes(x = Date, y = Sleep)) +
     geom_point() +
@@ -509,16 +525,19 @@ POSIXct、POSIXlt型は日付だけでなく時間の情報も含むデータ型
 
 NAは欠損値と呼ばれます。これは本来は値があるはずなのがなんらかの理由で欠損していることを意味します。表\@ref(tab:datatype-na-1)の例を考えてみましょう。
 
-```{r datatype-na-1, echo = FALSE, results = "asis"}
-knitr::kable(data.frame(
+```{r datatype-na-1}
+#| echo: FALSE
+data.frame(
     ID           = 1:4,
     名前         = c("Yanai", "Song", "Shigemura", "Tani"),
     支持政党あり = c("ない", "ある", "ある", "ない"),
     政党名       = c(NA, "ラーメン大好き党", "鹿児島第一党", NA)
-    ),
-    caption = "4人の支持政党") %>%
-    kableExtra::kable_styling(bootstrap_options = "striped", 
-                  full_width = F, position = "center")
+    ) %>%
+    kable(caption = "4人の支持政党") %>%
+    kable_styling(bootstrap_options = "striped", 
+                  full_width        = FALSE, 
+                  position          = "center",
+                  latex_options     = "hold_position")
 ```
 
 3列目で支持政党があるケースのみ、4列目に値があります。YanaiとTaniの場合、支持する政党がないため、政治政党名が欠損しています。実際、多くのデータには欠損値が含まれています。世論調査データの場合はもっと多いです。理由としては「Q2で"はい"を選んだ場合のみQ3に進み、それ以外はQ4へ飛ばす」のようなのもありますが、単に回答を拒否した場合もあります。
@@ -678,7 +697,10 @@ NULLは存在しないことを意味するため、`null_vec1`は要素が4のn
 
 図\@ref(fig:datatype-null-5)はNA型とNULL型の違いについてまとめたものです。
 
-```{r datatype-null-5, out.width = "85%", fig.cap = "NAとNULLの違い", echo = FALSE}
+```{r datatype-null-5}
+#| echo: FALSE
+#| out.width: "85%"
+#| fig.cap: "NAとNULLの違い"
 knitr::include_graphics("figures/Datatype/NA_NULL.png")
 ```
 

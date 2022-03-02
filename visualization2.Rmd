@@ -57,7 +57,8 @@ data.frame(変数名 = paste0("`",names(Country_df),"`"),
                      "")) %>%
   kable(caption = "国家別民主主義および政治的自由データの詳細") %>%
   kable_styling(bootstrap_options = "striped",
-                full_width        = FALSE) %>%
+                full_width        = FALSE,
+                latex_options     = "hold_position") %>%
   row_spec(0, align = "c")
 ```
 
@@ -72,7 +73,8 @@ data.frame(変数名 = paste0("`",names(COVID19_df),"`"),
                      "COVID-19 累積検査数（人）")) %>%
   kable(caption = "COVID-19データの詳細") %>%
   kable_styling(bootstrap_options = "striped",
-                full_width        = FALSE) %>%
+                full_width        = FALSE,
+                latex_options     = "hold_position") %>%
   row_spec(0, align = "c")
 ```
 
@@ -500,9 +502,10 @@ Country_df %>%
     separate(col = Class, into = c("Start", "End"), sep = ",") %>%
     mutate(Start = parse_number(Start),
            End   = parse_number(End)) %>%
-  knitr::kable(col.names = c("から", "まで", "度数")) %>%
-  kableExtra::kable_styling(full_width = FALSE) %>%
-  kableExtra::row_spec(0, align = "c")
+  kable(col.names = c("から", "まで", "度数")) %>%
+  kable_styling(full_width    = FALSE,
+                latex_options = "hold_position") %>%
+  row_spec(0, align = "c")
 ```
 
 　簡単に言うと、ヒストグラムの最初の棒は0を中央にした上で、棒の幅を0.1にしたとも言えます。これによってヒストグラムの境界線 (boundary)が、データより左右に0.05 (`binwidth`の半分)ずつ広くなります。もし、これを調整したい場合は、`boundary`引数を指定します。指定しない場合、`boundary`は「棒の広さ / 2」となります。棒がデータの範囲を超えないようにするためには、`geom_histogram()`内に`boundary = 0`を指定します。

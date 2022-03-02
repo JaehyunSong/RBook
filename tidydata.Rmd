@@ -21,7 +21,8 @@ tibble(Name      = c("Hadley", "Song", "Yanai"),
     kable(caption = "Messy Dataの例 (1)",
           booktabs = TRUE) %>%
     kable_styling(bootstrap_options = "striped",
-                  full_width        = FALSE) %>%
+                  full_width        = FALSE,
+                  latex_options     = "hold_position") %>%
     row_spec(0, align = "c")
 ```
 
@@ -34,7 +35,8 @@ tibble(Treat     = c("Control", "Treatment"),
        Yanai     = c(100, 95)) %>%
     kable(caption = "Messy Dataの例 (2)", booktabs = TRUE) %>%
     kable_styling(bootstrap_options = "striped",
-                  full_width        = FALSE) %>%
+                  full_width        = FALSE,
+                  latex_options     = "hold_position") %>%
     row_spec(0, align = "c")
 ```
 
@@ -59,9 +61,9 @@ tibble(Name       = rep(c("Hadley", "Song", "Yanai"), each = 2),
        Treat      = rep(c("Control", "Treatment"), 3),
        Math_Score = c(90, 90, 80, 25, 100, 95)) %>%
     kable(caption = "整然データの例") %>%
-    kable_styling(bootstrap_options = c("striped", "hover", "condensed",
-                                        "responsive"),
-                  full_width = FALSE) %>%
+    kable_styling(bootstrap_options = "striped",
+                  full_width        = FALSE,
+                  latex_options     = "hold_position") %>%
     row_spec(0, align = "c")
 ```
 
@@ -79,7 +81,8 @@ tibble(Name       = c("Treat", "Math_Score"),
                         "Song", "Song", "Yanai", "Yanai"),
           caption = "表\\@ref(tab:tidydata-intro-3)を転置した場合") %>%
     kable_styling(bootstrap_options = "striped",
-                  full_width        = FALSE) %>%
+                  full_width        = FALSE,
+                  latex_options     = "hold_position") %>%
     row_spec(0, align = "c")
 ```
 
@@ -138,9 +141,9 @@ df2 <- df1 %>%
 kable(list(df1, df2), 
       caption = "1行1観察の例",
       booktabs = TRUE) %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed",
-                                      "responsive"),
-                full_width = FALSE)
+  kable_styling(bootstrap_options = "striped",
+                full_width        = FALSE,
+                latex_options     = "hold_position")
 ```
 
 3人に投薬前後に数学成績と最高血圧を測定した場合の観察回数は何回でしょう。3人 $\times$ 2時点 $\times$ 2指標の測定だから12回の測定でしょうか。ならば、表\@ref(tab:tidydata-intro-7)の右が整然データでしょう。しかし、この場合、1列1変数という条件が満たされなくなります。`Value`列には数学成績と血圧が混在しており、2つの変数になります。ならば、どれも整然データではないということでしょうか。実は整然データは表\@ref(tab:tidydata-intro-7)の左です。なぜなら、「1観察=1値」ではないからです。データにおける観察とは観察単位ごとに測定された**値の集合**です。観察対象とは人や自治体、企業、国などだけでなく、時間も含まれます。たとえば、人の特徴 (性別、身長、所得、政治関心など)を測定しもの、ある日の特徴 (気温、株価など)を測定したもの全てが観察です。むろん、人 $\times$ 時間のような組み合わせが観察単位ともなり得ます。この一つ一つの観察単位から得られた値の集合が観察です。表\@ref(tab:tidydata-intro-7)の分析単位は「人 $\times$ 時間」です。成績や最高血圧は分析単位が持つ特徴や性質であって、分析単位ではありません。
@@ -170,9 +173,9 @@ df2 <- df1 %>%
 kable(list(df1, df2), 
       caption = "日付の扱い方",
       booktabs = TRUE) %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed",
-                                      "responsive"),
-                full_width = FALSE)
+  kable_styling(bootstrap_options = "striped",
+                full_width        = FALSE,
+                latex_options     = "hold_position")
 ```
 
 表\@ref(tab:tidydata-intro-9)の左側の表はどうでしょうか。5日間の株価を記録した架空のデータですが、たしかに`Date`列には日付が1つずつ、`Stock`には株価の値が1つずつ格納されています。しかし、解釈によっては「`Date`に年、月、日といった3つの値が含まれているぞ」と見ることもできます。この解釈に基づく場合、表\@ref(tab:tidydata-intro-9)の右側の表が整然データとなり、左側は雑然データとなります。このケースは第一条件であった「一列一変数」とも関係します。なぜなら、`Date`という列が年・月・日といった3変数で構成されているとも解釈できるからです。
@@ -358,9 +361,9 @@ df2 <- df1 %>%
 kable(list(df1, df2), 
       caption = "Long型データの例",
       booktabs = TRUE) %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed",
-                                      "responsive"),
-                full_width = FALSE)
+  kable_styling(bootstrap_options = "striped",
+                full_width        = FALSE,
+                latex_options     = "hold_position")
 ```
 
 変数名が日本語になっていますが、これは「読むための表」を読み込むことを仮定しています。このように変数名として日本語は使えますが、自分でデータセットを作成する際、変数名はローマ字にすることを強く推奨します。
@@ -384,8 +387,9 @@ data.frame(変数名 = c("`都道府県`", "`区分`", "`人口`", "`面積`"),
                      "人口 (人)",
                      "面積 (km$^2$)")) %>%
   kable() %>%
-    kable_styling(bootstrap_options = "striped",
-                  full_width        = FALSE) %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width        = FALSE,
+                latex_options     = "hold_position") %>%
   row_spec(0, align = "c")
 ```
 
@@ -466,7 +470,8 @@ data.frame(変数名 = c("`ID`", "`Date`", "`Week`",
                      "新規感染者数 (日本)", "新規感染者数 (韓国)")) %>%
   kable() %>%
     kable_styling(bootstrap_options = "striped",
-                  full_width        = FALSE) %>%
+                  full_width        = FALSE,
+                  latex_options     = "hold_position") %>%
   row_spec(0, align = "c")
 ```
 

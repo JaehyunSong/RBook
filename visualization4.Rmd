@@ -56,8 +56,7 @@ Country_df %>%
                  fill = "orange", color = "white") +
   coord_cartesian(ylim = c(-15, 15)) +
   labs(x = "一人当たり購買力平価GDP (対数)", y = "国数") +
-  theme_minimal(base_family = "HiraKakuProN-W3",
-                base_size   = 16)
+  theme_minimal(base_size = 16)
 ```
 
 　このヒストグラムをなめらかにすると以下のような図になります。
@@ -73,8 +72,7 @@ Country_df %>%
                fill = "orange") +
   coord_cartesian(ylim = c(-0.3, 0.3)) +
   labs(x = "一人当たり購買力平価GDP (対数)", y = "密度") +
-  theme_minimal(base_family = "HiraKakuProN-W3",
-                base_size   = 16)
+  theme_minimal(base_size = 16)
 ```
 
 　この密度曲線を上下対称にすると以下のような図となり、これがバイオリンプロットです。ヒストグラムのようにデータの分布が分かりやすくなります。
@@ -92,8 +90,7 @@ Country_df %>%
                fill = "orange") +
   coord_cartesian(ylim = c(-0.3, 0.3)) +
   labs(x = "一人当たり購買力平価GDP (対数)", y = "") +
-  theme_minimal(base_family = "HiraKakuProN-W3",
-                base_size   = 16)
+  theme_minimal(base_size = 16)
 ```
 
 　しかし、この図の場合、ヒストグラムと同様、中央値や四分位数などの情報が含まれておりません。これらの箱ひげ図を使用した方が良いでしょう。バイオリンプロットの良い点はバイオリンの中に箱ひげ図を入れ、ヒストグラムと箱ひげ図両方の長所を取ることができる点です。たとえば、バイオリンプロットを90度回転させ、中にバイオリン図を入れると以下のようになります。
@@ -112,8 +109,7 @@ Country_df %>%
   geom_boxplot(aes(x = log(PPP_per_capita)), width = 0.15) +
   coord_flip(ylim = c(-0.3, 0.3)) +
   labs(x = "一人当たり購買力平価GDP (対数)", y = "") +
-  theme_minimal(base_family = "HiraKakuProN-W3",
-                base_size   = 16) +
+  theme_minimal(base_size = 16) +
   theme(axis.text.x  = element_blank())
 ```
 
@@ -131,8 +127,7 @@ Country_df %>%
                        labels = c(0, 1000, 10000, 100000),
                        trans  = "log10") + # y軸を対数化
     guides(fill = "none") + # fillのマッピング情報の凡例を隠す
-    theme_minimal(base_family = "HiraKakuProN-W3",
-                  base_size   = 16)
+    theme_minimal(base_size = 16)
 ```
 
 　ここに箱ひげ図も載せたい場合は、`geom_violin()`オブジェクトの後に`geom_boxplot()`オブジェクトを入れるだけで十分です。
@@ -151,8 +146,7 @@ Country_df %>%
                        labels = c(0, 1000, 10000, 100000),
                        trans = "log10") +
     guides(fill = "none") +
-    theme_minimal(base_family = "HiraKakuProN-W3",
-                  base_size   = 16)
+    theme_minimal(base_size = 16)
 ```
 
 　箱ひげ図は四分位範囲、四分位数、最小値、最大値などの情報を素早く読み取れますが、どの値当たりが分厚いかなどの情報が欠けています。これをバイオリンプロットで補うことで、よりデータの分布を的確に把握することができます。
@@ -277,8 +271,7 @@ Country_df %>%
   ggplot() +
   geom_density(aes(x = HDI_2018), fill = "gray70", bw = 0.054) +
   labs(x = "2018年人間開発指数", y = "大陸") +
-  theme_minimal(base_family = "HiraKakuProN-W3",
-                base_size   = 12)
+  theme_minimal(base_size = 12)
 ```
 
 　これを大陸ごとに出力する場合、ファセット分割を行います。今回は大陸ごとに1列（`ncol = 1`）でファセットを分割します。
@@ -289,8 +282,7 @@ Country_df %>%
   geom_density(aes(x = HDI_2018), fill = "gray70", bw = 0.054) +
   labs(x = "2018年人間開発指数", y = "大陸") +
   facet_wrap(~Continent, ncol = 1) +
-  theme_minimal(base_family = "HiraKakuProN-W3",
-                base_size   = 12)
+  theme_minimal(base_size = 12)
 ```
 
 　それでは上のグラフをリッジプロットとして作図してみましょう。今回は{ggridges}パッケージを使います。
@@ -307,8 +299,7 @@ Country_df %>%
   geom_density_ridges(aes(x = HDI_2018, y = Continent), 
                       alpha = 0.5) +
   labs(x = "2018年人間開発指数", y = "大陸") +
-  theme_minimal(base_family = "HiraKakuProN-W3",
-                base_size   = 12)
+  theme_minimal(base_size = 12)
 ```
 
 先ほど作図した図と非常に似た図が出来上がりました。ファセット分割に比べ、空間を最大限に活用していることが分かります。ファセットラベルがなく、グループ名が縦軸上に位置するからです。また、リッジプロットの特徴は密度曲線がオーバラップする点ですが、以下のように`scale = 1`を指定すると、オーバラップなしで作成することも可能です。もし、`scale = 3`にすると最大2つの密度曲線が重なることになります。たとえば最下段のアフリカはアメリカの行と若干オーバラップしていますが、`scale = 3`の場合、アジアの行までオーバーラップされうることになります。
@@ -319,8 +310,7 @@ Country_df %>%
   geom_density_ridges(aes(x = HDI_2018, y = Continent), 
                       scale = 1, alpha = 0.5) +
   labs(x = "2018年人間開発指数", y = "大陸") +
-  theme_minimal(base_family = "HiraKakuProN-W3",
-                base_size   = 12)
+  theme_minimal(base_size = 12)
 ```
 
 　また、横軸の値に応じて背景の色をグラデーションで表現することも可能です。この場合、`geom_density_ridges()`幾何オブジェクトでなく、`geom_density_ridges_gradient()`を使い、`fill`にもマッピングをする必要があります。横軸（`x`）の値に応じて色塗りをする場合、`fill = stat(x)`とします。デフォルトでは横軸の値が高いほど空色、低いほど黒になります。ここでは高いほど黄色、低いほど紫ににするため、色弱にも優しい`scale_fill_viridis_c()`を使い[^viridis]、カラーオプションはplasmaにします（`option = "c"`）。
@@ -334,8 +324,7 @@ Country_df %>%
                                alpha = 0.5) +
   scale_fill_viridis_c(option = "C") +
   labs(x = "2018年人間開発指数", y = "大陸", fill = "2018年人間開発指数") +
-  theme_minimal(base_family = "HiraKakuProN-W3",
-                base_size   = 12) +
+  theme_minimal(base_size = 12) +
   theme(legend.position = "bottom")
 ```
 
@@ -349,8 +338,7 @@ Country_df %>%
                       alpha = 0.5, jittered_points = TRUE) +
   guides(fill = "none", point_color = "none") + # 凡例を削除
   labs(x = "2018年人間開発指数", y = "大陸") +
-  theme_minimal(base_family = "HiraKakuProN-W3",
-                base_size   = 12)
+  theme_minimal(base_size = 12)
 ```
 
 　他にも密度曲線の下側にラグプロットを付けることも可能です。こうすれば点ごとに色訳をする必要もなくなります。ラグプロットを付けるためには点の形（`point_shape`）を「|」にする必要があります。ただ、これだけだと「|」が密度曲線内部に散らばる（jittered）だけです。散らばりをなくす、つまり密度曲線の下段に固定する必要があり、これは`aes()`その外側に`position = position_points_jitter(width = 0, height = 0)`を指定することで出来ます。
@@ -364,8 +352,7 @@ Country_df %>%
                       point_shape = "|", point_size = 3) +
   guides(fill = "none") +
   labs(x = "2018年人間開発指数", y = "大陸") +
-  theme_minimal(base_family = "HiraKakuProN-W3",
-                base_size   = 12)
+  theme_minimal(base_size = 12)
 ```
 
 　最後に密度曲線でなく、ヒストグラムで示す方法を紹介します。これは`geom_density_ridges()`の内部に`stat = "binline"`を指定するだけです。
@@ -376,8 +363,7 @@ Country_df %>%
   geom_density_ridges(aes(x = HDI_2018, y = Continent), alpha = 0.5,
                       stat = "binline") +
   labs(x = "2018年人間開発指数", y = "大陸") +
-  theme_minimal(base_family = "HiraKakuProN-W3",
-                base_size   = 12)
+  theme_minimal(base_size = 12)
 ```
 
 ---
@@ -557,8 +543,7 @@ Country_df %>%
   ggplot() +
   geom_bar(aes(y = Country, x = PPP_per_capita), stat = "identity") +
   labs(x = "一人あたり購買力平価GDP", y = "国") +
-  theme_bw(base_family = "HiraKakuProN-W3",
-           base_size   = 12)
+  theme_bw(base_size = 12)
 ```
 
 ここで登場するのがロリーポップチャートです。ロリーポップチャートの構成要素は棒とキャンディーの部分です。棒は線になるため`geom_segement()`を、キャンディーは散布図`geom_point()`を使います。散布図については既に第\@ref(visualization2)章で説明しましたので、ここでは`geom_segment()`について説明します。
@@ -576,8 +561,7 @@ Country_df %>%
                    x = 0, xend = PPP_per_capita)) +
   geom_point(aes(y = Country, x = PPP_per_capita), color = "orange") +
   labs(x = "一人あたり購買力平価GDP (USD)", y = "国") +
-  theme_bw(base_family = "HiraKakuProN-W3",
-           base_size   = 12) +
+  theme_bw(base_size = 12) +
   theme(panel.grid.major.y = element_blank(),
         panel.border = element_blank(),
         axis.ticks.y = element_blank())
@@ -595,8 +579,7 @@ Country_df %>%
                    x = 0, xend = PPP_per_capita)) +
   geom_point(aes(y = Country, x = PPP_per_capita), color = "orange") +
   labs(x = "一人あたり購買力平価GDP (USD)", y = "国") +
-  theme_bw(base_family = "HiraKakuProN-W3",
-           base_size   = 12) +
+  theme_bw(base_size = 12) +
   theme(panel.grid.major.y = element_blank(),
         panel.border = element_blank(),
         axis.ticks.y = element_blank())
@@ -617,8 +600,7 @@ Country_df %>%
   geom_point(aes(y = Country, x = PPP_per_capita, color = OECD)) +
   scale_color_manual(values = c("OECD" = "orange", "non-OECD" = "royalblue")) +
   labs(x = "一人あたり購買力平価GDP (USD)", y = "国", color = "") +
-  theme_bw(base_family = "HiraKakuProN-W3",
-           base_size   = 12) +
+  theme_bw(base_size = 12) +
   theme(panel.grid.major.y = element_blank(),
         panel.border       = element_blank(),
         axis.ticks.y       = element_blank(),
@@ -640,8 +622,7 @@ Country_df %>%
                    y = 0, yend = PPP_per_capita)) +
   geom_point(aes(x = Country, y = PPP_per_capita), color = "orange") +
   labs(x = "国", y = "一人あたり購買力平価GDP (USD)") +
-  theme_bw(base_family = "HiraKakuProN-W3",
-           base_size   = 12) +
+  theme_bw(base_size = 12) +
   theme(panel.grid.major.y = element_blank(),
         panel.border = element_blank(),
         axis.ticks.y = element_blank(),
@@ -731,8 +712,7 @@ Country_df %>%
     scale_y_continuous(breaks = seq(0, 120000, by = 10000),
                        labels = seq(0, 120000, by = 10000)) +
     coord_cartesian(ylim = c(0, 120000)) +
-    theme_bw(base_family = "HiraKakuProN-W3",
-             base_size = 12)
+    theme_bw(base_size = 12)
 ```
 
 　これを見ると、国の自由度と所得の間に関係が見られるのはOECD加盟国で、非加盟国では非常に関係が弱いことが分かります。
@@ -749,8 +729,7 @@ Country_df %>%
     scale_y_continuous(breaks = seq(0, 120000, by = 10000),
                        labels = seq(0, 120000, by = 10000)) +
     coord_cartesian(ylim = c(0, 120000)) +
-    theme_bw(base_family = "HiraKakuProN-W3",
-             base_size = 12)
+    theme_bw(base_size = 12)
 ```
 
 　{ggplot2}が提供する平滑化ラインにはLOESSと回帰直線以外にも`"glm"`や`"gam"`などがります。詳細はRコンソール上で`?geom_smooth`を入力し、ヘルプを参照してください。
@@ -805,8 +784,7 @@ Heatmap_df1 %>%
   ggplot() +
   geom_tile(aes(x = Continent, y = Income, fill = N)) +
   labs(x = "大陸", y = "一人当たり購買力平価GDP（ドル）", fill = "国家数") +
-  theme_bw(base_family = "HiraKakuProN-W3",
-           base_size = 12) +
+  theme_bw(base_size = 12) +
   theme(panel.grid = element_blank()) # グリッドラインを消す
 ```
 
@@ -821,8 +799,7 @@ Heatmap_df1 %>%
   labs(x = "大陸", y = "一人当たり購買力平価GDP（ドル）", fill = "国家数") +
   scale_fill_gradient(low  = "cornsilk", 
                       high = "brown3") +
-  theme_bw(base_family = "HiraKakuProN-W3",
-           base_size = 12) +
+  theme_bw(base_size = 12) +
   theme(panel.grid = element_blank()) # グリッドラインを消す
 ```
 
@@ -855,8 +832,7 @@ Heatmap_df2 %>%
                        mid  = "cornsilk",
                        high = "brown3",
                        midpoint = 0.75) +
-  theme_bw(base_family = "HiraKakuProN-W3",
-           base_size = 12) +
+  theme_bw(base_size = 12) +
   theme(legend.position = "bottom",
         panel.grid      = element_blank())
 ```
@@ -872,8 +848,7 @@ Country_df %>%
   ggplot(aes(x = FH_Total, y = HDI_2018)) +
   geom_density_2d() +
   labs(x = "フリーダム・ハウス・スコア", y = "人間開発指数 (2018)") +
-  theme_minimal(base_family = "HiraKakuProN-W3",
-                base_size = 12)
+  theme_minimal(base_size = 12)
 ```
 
 ```{r visual4-contour2}
@@ -882,8 +857,7 @@ Country_df %>%
   geom_point() +
   geom_density_2d() +
   labs(x = "フリーダム・ハウス・スコア", y = "人間開発指数 (2018)") +
-  theme_minimal(base_family = "HiraKakuProN-W3",
-                base_size = 12)
+  theme_minimal(base_size = 12)
 ```
 
 ```{r visual4-contour3}
@@ -892,8 +866,7 @@ Country_df %>%
   geom_density_2d_filled() +
   labs(x = "フリーダム・ハウス・スコア", y = "人間開発指数 (2018)",
        fill = "密度") +
-  theme_minimal(base_family = "HiraKakuProN-W3",
-                base_size = 12)
+  theme_minimal(base_size = 12)
 ```
 
 　`geom_density_2d_filled()`オブジェクトの後に`geom_density_2d()`オブジェクトを重ねると、区間の区画線を追加することもできます。
@@ -905,8 +878,7 @@ Country_df %>%
   geom_density_2d(color = "black") +
   labs(x = "フリーダム・ハウス・スコア", y = "人間開発指数 (2018)",
        fill = "密度") +
-  theme_minimal(base_family = "HiraKakuProN-W3",
-                base_size = 12)
+  theme_minimal(base_size = 12)
 ```
 
 　色が気に入らない場合、自分で調整することも可能です。`scale_fill_manual()`で各区間ごとの色を指定することもできませんが、あまり効率的ではありません。ここでは`scale_fill_brewer()`関数を使って、[ColorBrewer](https://colorbrewer2.org/)のパレットを使ってみましょう。引数なしでも使えますが、既定値のパレットは区間が9つまで対応します。今回の等高線図は全部で10区間ですので、あまり適切ではありません。ここでは11区間まで対応可能な`"Spectral"`パレットを使いますが、これは`palette`引数で指定できます。
@@ -918,8 +890,7 @@ Country_df %>%
   scale_fill_brewer(palette = "Spectral") +
   labs(x = "フリーダム・ハウス・スコア", y = "人間開発指数 (2018)",
        fill = "密度") +
-  theme_minimal(base_family = "HiraKakuProN-W3",
-                base_size = 12)
+  theme_minimal(base_size = 12)
 ```
 
 　`palette`で指定可能なカラーパレットの一覧は{RColorBrewer}の`display.brewer.all()`関数で確認することが出来ます。各パレットが何区間まで対応できるかを見てから自分でパレットを作成することも可能ですが、詳細はネット上の各種記事を参照してください。
@@ -970,7 +941,6 @@ world_map %>%
   # 人口が少ない国はcornflowerblue色に、多い国はbrown3色とする
   scale_fill_gradient(low = "cornflowerblue", high = "brown3") +
   labs(fill = "人口") +
-  theme_minimal(base_family = "HiraginoSans-W3") +
   theme_void()
 ```
 
@@ -983,7 +953,7 @@ world_map %>%
   scale_fill_gradient(low = "cornflowerblue", high = "brown3") +
   labs(fill = "人口") +
   coord_sf(xlim = c(90, 150), ylim = c(10, 50)) +
-  theme_minimal(base_family = "HiraKakuProN-W3") +
+  theme_minimal() +
   theme(legend.position = "bottom")
 ```
 
@@ -1034,7 +1004,7 @@ asia_map %>%
   geom_sf(aes(fill = Population)) +
   scale_fill_brewer(palette = "Blues", drop = FALSE) +
   labs(fill = "人口") +
-  theme_void(base_family = "HiraginoSans-W3") +
+  theme_void() +
   theme(legend.position = "bottom")
 ```
 
@@ -1126,7 +1096,7 @@ Japan_Map %>%
     ggplot() +
     geom_sf(aes(fill = Density2)) +
     labs(fill = "人口密度 (km^2)") +
-    theme_void(base_family = "HiraginoSans-W3")
+    theme_void()
 ```
 
 　世界地図でも同じやり方でデータの結合が可能です。この場合はISO3コードかISO2コードがキー変数となります。ISO3コードは`iso_a3`、ISO2コードは`iso_a2`列に格納されています。他に使用可能なキー変数は`iso_n3`であり、こちらは各国を識別する3桁の数字となります。
@@ -1183,7 +1153,7 @@ Osaka_map %>%
   geom_sf(aes(fill = Student_Ratio)) +
   scale_fill_gradient(low = "white", high = "black") +
   labs(fill = "1万人当たり学生数 (人)") +
-  theme_minimal(base_family = "HiraginoSans-W3") +
+  theme_minimal() +
   theme(legend.position = "bottom")
 ```
 
@@ -1512,7 +1482,7 @@ Vote_0910 %>%
     geom_alluvium() +
     geom_stratum() +
     geom_text(aes(label = after_stat(stratum)), 
-              stat = "stratum", family = "HiraginoSans-W3")
+              stat = "stratum")
 ```
 
 　これで沖積図はとりあえず完成ですが、少し読みやすく加工してみましょう。たとえば、2010年に民主党に投票した回答者において2009年の投票先の割合を見たいとした場合、`geom_alluvium()`内に`fill = Vote09`をマッピングします。これで帯に2009年の投票先ごとの色付けができます。
@@ -1556,8 +1526,7 @@ Alluvial_Plot
 Alluvial_Plot +
     scale_x_continuous(breaks = 1:2, 
                        labels = c("2009年衆院選", "2010年参院選")) +
-    theme_minimal(base_family = "HiraginoSans-W3",
-                  base_size   = 16) +
+    theme_minimal(base_size = 16) +
     theme(legend.position = "none",
           panel.grid = element_blank(),
           axis.title = element_blank(),
@@ -1744,7 +1713,7 @@ Mosaic_df %>%
     geom_mosaic(aes(x = product(Polity, Continent), fill = Polity), 
                 na.rm = TRUE) +
     labs(x = "Continent", y = "Polity Type") +
-    theme_minimal(base_size   = 16) +
+    theme_minimal(base_size = 16) +
     theme(legend.position = "none",
           panel.grid      = element_blank(),
           axis.text.x     = element_text(angle = 90, vjust = 0.5, hjust = 1))
@@ -1759,7 +1728,7 @@ Mosaic_df %>%
                 na.rm = TRUE) +
     labs(x = "Continent", y = "Polity Type") +
     facet_wrap(~PPP, ncol = 2) +
-    theme_minimal(base_size   = 16) +
+    theme_minimal(base_size = 16) +
     theme(legend.position = "none",
           panel.grid      = element_blank(),
           axis.text.x     = element_text(angle = 90, vjust = 0.5, hjust = 1))
@@ -1776,7 +1745,7 @@ Mosaic_df %>%
                 na.rm = TRUE) +
     labs(x = "Continent", y = "Polity Type") +
     facet_wrap(~PPP, ncol = 2, scale = "free") +
-    theme_minimal(base_size   = 16) +
+    theme_minimal(base_size = 16) +
     theme(legend.position = "none",
           panel.grid      = element_blank(),
           axis.text.x     = element_text(angle = 90, vjust = 0.5, hjust = 1))
@@ -1791,7 +1760,7 @@ Mosaic_df %>%
                 na.rm = TRUE) +
     labs(x = "Continent", y = "Polity Type", fill = "Polity Type") +
     facet_wrap(~PPP, ncol = 2, scale = "free_x") +
-    theme_minimal(base_size   = 16) +
+    theme_minimal(base_size = 16) +
     theme(panel.grid  = element_blank(),
           axis.text.y = element_blank(),
           axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
