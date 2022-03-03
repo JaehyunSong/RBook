@@ -646,7 +646,8 @@ Nested_Data %>%
 
 ```{r iteration-split-16}
 Nested_Data %>%
-  mutate(Model  = map(data, ~lm(PPP_per_capita ~ FH_Total + Population, data = .x)),
+  mutate(Model  = map(data, ~lm(PPP_per_capita ~ FH_Total + Population, 
+                                data = .x)),
          Model2 = map(Model, broom::tidy, conf.int = TRUE)) %>%
   select(-c(data, Model)) %>%
   unnest(cols = Model2)

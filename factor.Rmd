@@ -1,6 +1,7 @@
 # データハンドリング [基礎編: factor型] {#factor}
 
-```{r factor-common, include = FALSE}
+```{r factor-common}
+#| include: FALSE
 source("_common.R")
 ```
 
@@ -10,7 +11,12 @@ source("_common.R")
 
 横軸、または縦軸が気温、成績、身長のような連続変数ではなく、都道府県や国、企業のような名目変数になる場合があります。たとえば、棒グラフの横軸は図\@ref(fig:factor-intro-1)のように、一般的に名目変数になる場合が多いです。
 
-```{r factor-intro-1, fig.width = 6, fig.height = 3, message = FALSE, echo = FALSE, fig.cap = "横軸が名目変数の棒グラフ"}
+```{r factor-intro-1}
+#| echo: FALSE
+#| message: FALSE
+#| fig.width: 6
+#| fig.height: 3
+#| fig.cap: "横軸が名目変数の棒グラフ"
 df <- read_csv("Data/Ramen.csv")
 
 df %>%
@@ -33,7 +39,8 @@ df %>%
 
 たとえば、[前章で使用したデータ](Data/Ramen.csv)を用いて、都道府県ごとの口コミ評価の平均値を計算し、その結果を`Score_df`として保存します。
 
-```{r factor-intro-2, eval = FALSE}
+```{r factor-intro-2}
+#| eval: FALSE
 # tidyverseパッケージの読み込み
 pacman::p_load(tidyverse)
 # データの読み込み
@@ -49,9 +56,12 @@ Score_df <- df %>%
 Score_df
 ```
 
-この時点で勝手にロケール順になります。実際、表示された`Score_df`を見ると`Pref`の下に`<chr>`と表記されており、`Pref`はcharacter型であることが分かります。これをこのまま棒グラフに出してみましょう。可視化の方法はこれから詳細に解説するので、ここでは結果だけに注目してください。
+この時点で勝手にロケール順になります。実際、表示された`Score_df`を見ると`Pref`の下に`<chr>`と表記されており、`Pref`はcharacter型であることが分かります。これをこのまま棒グラフに出してみましょう。可視化の方法は第\@ref(visualization1)章以降で詳細に解説するので、ここでは結果だけに注目してください。
 
-```{r factor-intro-4, fig.width = 6, fig.height = 3, fig.cap = "Prefがcharacter型の場合 (1)"}
+```{r factor-intro-4}
+#| fig.width: 6
+#| fig.height: 3
+#| fig.cap: "Prefがcharacter型の場合 (1)"
 Score_df %>%
   ggplot() +
   geom_bar(aes(x = Pref, y = Score), stat = "identity") +
@@ -70,7 +80,10 @@ Score_df2
 
 ここでも`Pref`はcharacter型ですが、とりあえず、これで図を出してみます。
 
-```{r factor-intro-6, fig.width = 6, fig.height = 3, fig.cap = "Prefがcharacter型の場合 (2)"}
+```{r factor-intro-6}
+#| fig.width: 6
+#| fig.height: 3
+#| fig.cap: "Prefがcharacter型の場合 (2)"
 Score_df2 %>%
   ggplot() +
   geom_bar(aes(x = Pref, y = Score), stat = "identity") +
@@ -97,7 +110,11 @@ Score_df_f1$Pref
 
 この`Score_df_f1`データを使って、図\@ref(fig:factor-intro-4)と全く同じコードを実行した結果が図\@ref(fig:factor-intro-9)です。
 
-```{r factor-intro-9, echo = FALSE, fig.width = 6, fig.height = 3, fig.cap = "Prefがfactor型の場合 (1)"}
+```{r factor-intro-9}
+#| echo: FALSE
+#| fig.width: 6
+#| fig.height: 3
+#| fig.cap: "Prefがfactor型の場合"
 Score_df_f1 %>%
   ggplot() +
   geom_bar(aes(x = Pref, y = Score), stat = "identity") +
@@ -123,7 +140,11 @@ Score_df_f1
 
 `Kanto`変数のデータ型は、`<dbl>`、つまりnumeric型です。しかし、これは明らかに名目変数ですね。これをこのまま`Kanto`を横軸にした図を出すと図\@ref(fig:factor-intro-11)のようになります。
 
-```{r factor-intro-11, echo = FALSE, fig.width = 3, fig.height = 3, fig.cap = "Kantoがnumeric型の場合"}
+```{r factor-intro-11}
+#| echo: FALSE
+#| fig.width: 3
+#| fig.height: 3
+#| fig.cap: "Kantoがnumeric型の場合"
 Score_df_f1 %>%
   ggplot() +
   geom_bar(aes(x = Kanto, y = Score), stat = "identity") +
@@ -148,7 +169,11 @@ Score_df_f1$Kanto
 
 また、`"関東"`、`"その他"`の順になっていますね。これを図として出力した結果が図\@ref(fig:factor-intro-14)です。
 
-```{r factor-intro-14, echo = FALSE, fig.width = 3, fig.height = 3, fig.cap = "Kantoがfactor型の場合"}
+```{r factor-intro-14}
+#| echo: FALSE
+#| fig.width: 3
+#| fig.height: 3
+#| fig.cap: "Kantoがfactor型の場合"
 Score_df_f1 %>%
   ggplot() +
   geom_bar(aes(x = Kanto, y = Score), stat = "identity") +
@@ -166,7 +191,8 @@ Score_df_f1 %>%
 
 `Score_df_f1`の`f1`は`Score`が高い順になっています。これを50音順に変更する際、`fct_relevel()`関数を使います。
 
-```{r factor-forcats-relevel-1, eval = FALSE}
+```{r factor-forcats-relevel-1}
+#| eval: FALSE
 # 新しい変数名と元となる変数名が一致すると上書きになる
 データフレーム名 %>%
   mutate(新しい変数名 = fct_releve(元となる変数名, 
@@ -216,7 +242,8 @@ levels(Score_df_f1$Pref4) # Pref4の水準
 
 `fct_recode()`は水準のラベルを変更する時に使う関数で、以下のように使います。
 
-```{r factor-forcats-recode-1, eval = FALSE}
+```{r factor-forcats-recode-1}
+#| eval: FALSE
 # 新しい変数名と元となる変数名が一致すると上書きになる
 データフレーム名 %>%
   mutate(新しい変数名 = fct_recode(元となる変数名, 
@@ -340,7 +367,8 @@ levels(df4$Q1_R)
 
 「答えたくない」が最初の順番に来ましてね。できれば、「そう思わない」〜「そう思う」、「答えたくない」の順番にしたいところです。ここで使うのが`fct_shift()`ですが、書き方がややこしいので、噛み砕いて解説します。
 
-```{r factor-forcats-shift-3, eval = FALSE}
+```{r factor-forcats-shift-3}
+#| eval: FALSE
 # fct_shift()の使い方
 データ名 %>%
   mutate(新しい変数名 = fct_shift(元の変数名, n = 左方向へずらす個数))
@@ -349,18 +377,24 @@ levels(df4$Q1_R)
 問題は`n =`引数ですが、その挙動については以下の表を参照してください。
 
 ```{r factor-forcats-shift-4, echo = FALSE, message = FALSE}
-tibble(水準の順番 = c("`n = -2`", "`n = -1`", "`n = 0`",
-                     "`n = 1`", "`n = 2`"),
-                `1番目` = c("`E`", "`F`", "`A`", "`B`", "`C`"),
-                `2番目` = c("`F`", "`A`", "`B`", "`C`", "`D`"),
-                `3番目` = c("`A`", "`B`", "`C`", "`D`", "`E`"),
-                `4番目` = c("`B`", "`C`", "`D`", "`E`", "`F`"),
-                `5番目` = c("`C`", "`D`", "`E`", "`F`", "`A`"),
-                `6番目` = c("`D`", "`E`", "`F`", "`A`", "`B`")) %>%
-    kable(align = c("l", "c", "c", "c", "c", "c", "c")) %>%
+#| echo: FALSE
+#| message: FALSE
+tibble(Order = c("n = -2", "n = -1", "n = 0",
+                 "n = 1", "n = 2"),
+       L1    = c('"E"', '"F"', '"A"', '"B"', '"C"'),
+       L2    = c('"F"', '"A"', '"B"', '"C"', '"D"'),
+       L3    = c('"A"', '"B"', '"C"', '"D"', '"E"'),
+       L4    = c('"B"', '"C"', '"D"', '"E"', '"F"'),
+       L5    = c('"C"', '"D"', '"E"', '"F"', '"A"'),
+       L6    = c('"D"', '"E"', '"F"', '"A"', '"B"')) %>%
+    kable(col.names = c("水準の順番", paste0(1:6, "番目")), 
+          booktabs  = TRUE, 
+          align     = "lcccccc") %>%
     kable_styling(bootstrap_options = "striped",
                   full_width        = FALSE,
-                  latex_options     = "hold_position")
+                  latex_options     = "hold_position") %>%
+    row_spec(0, align = "c") %>%
+    column_spec(1:7, monospace = TRUE)
 ```
 
 具体的には水準は左方向へ`n`個移動します。元の水準が`A`, `B`, `C`, ..., `F`の順で、`n = 1`の場合、`A`が`F`の後ろへ移動し、`B`, `C`, `D`, `E`, `F`が前の方へ1つずつ移動します。逆に右側へ1つ移動したい場合は`n = -1`のように書きます。今回は最初の水準を最後に移動させたいので、`n = 1`と指定します。
@@ -398,7 +432,8 @@ levels(Score_df$Pref4)
 
 `fct_infreq()`は出現頻度順に並び替える関数でしたが、それと似たような関数として`fct_reorder()`があります。ただし、これは出現頻度を基準にするのではなく、ある変数の平均値が低い順、中央値が高い順などでソートされます。まずは使い方から確認します。
 
-```{r factor-forcats-reorder-1, eval = FALSE}
+```{r factor-forcats-reorder-1}
+#| eval: FALSE
 データ名 %>%
   mutate(新しい変数名 = fct_reorder(元の変数名, 基準となる変数, 
                                    関数名, 関数の引数))
@@ -475,7 +510,9 @@ Reorder2_df
 
 可視化のコードはとりあえず無視し、グラフを出力してみましょう。
 
-```{r factor-forcats-reorder2-2, fig.cap = "国名の順番を変更する前", fig.height = 3.5}
+```{r factor-forcats-reorder2-2}
+#| fig.height: 3.5
+#| fig.cap: "国名の順番を変更した前"
 Reorder2_df %>%
   ggplot() +
   geom_line(aes(x = Date, y = NewPat, color = Country),
@@ -501,7 +538,8 @@ Reorder2_df %>%
 
 このように、水準を調整する際に2つの変数 (`Date`と`NewPat`)が使用されます。`fct_reorder2()`は`fct_reorder()`と買い方がほぼ同じですが、基準となる変数がもう一つ加わります。
 
-```{r factor-forcats-reorder2-5, eval = FALSE}
+```{r factor-forcats-reorder2-5}
+#| eval: FALSE
 データ名 %>%
   mutate(新しい変数名 = fct_reorder2(元の変数名, 
                                     基準となる変数1, 基準となる変数2,
@@ -523,7 +561,9 @@ levels(Reorder2_df$Country2)
 
 ちゃんと7月1日の新規感染者数基準で水準の順番が調整されましたので、これを使ってグラフをもう一回作ってみます。
 
-```{r factor-forcats-reorder2-8, fig.cap = "国名の順番を変更した後", fig.height = 3.5}
+```{r factor-forcats-reorder2-8}
+#| fig.height: 3.5
+#| fig.cap: "国名の順番を変更した後"
 Reorder2_df %>%
   ggplot() +
   geom_line(aes(x = Date, y = NewPat, color = Country2),

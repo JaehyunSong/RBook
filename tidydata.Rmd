@@ -18,12 +18,12 @@ source("_common.R")
 tibble(Name      = c("Hadley", "Song", "Yanai"),
        Control   = c(90, 80, 100),
        Treatment = c(90, 25, 95)) %>%
-    kable(caption = "Messy Dataの例 (1)",
-          booktabs = TRUE) %>%
-    kable_styling(bootstrap_options = "striped",
-                  full_width        = FALSE,
-                  latex_options     = "hold_position") %>%
-    row_spec(0, align = "c")
+  kable(caption = "Messy Dataの例 (1)",
+        booktabs = TRUE) %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width        = FALSE,
+                latex_options     = "hold_position") %>%
+  row_spec(0, align = "c")
 ```
 
 また、以上の表は転置も可能であり、以下のように表現することが可能です (表\@ref(tab:tidydata-intro-2))。
@@ -381,16 +381,19 @@ df3
 このデータは2015年国勢調査から抜粋したデータであり、各変数の詳細は以下の通りです。
 
 ```{r tidydata-wider-3, echo = FALSE, message = FALSE}
-data.frame(変数名 = c("`都道府県`", "`区分`", "`人口`", "`面積`"),
-              説明 = c("都道府県名",
-                     "総人口/外国人人口の区分",
-                     "人口 (人)",
-                     "面積 (km$^2$)")) %>%
-  kable() %>%
-  kable_styling(bootstrap_options = "striped",
-                full_width        = FALSE,
-                latex_options     = "hold_position") %>%
-  row_spec(0, align = "c")
+data.frame(Var  = c("都道府県", "区分", "人口", "面積"),
+           Desc = c("都道府県名",
+                    "総人口/外国人人口の区分",
+                    "人口 (人)",
+                    "面積 (km$^2$)")) %>%
+  kable(col.names = c("変数名", "説明"), 
+        booktabs  = TRUE, 
+        align     = "ll") %>%
+    kable_styling(bootstrap_options = "striped",
+                  full_width        = FALSE,
+                  latex_options     = "hold_position") %>%
+    row_spec(0, align = "c") %>%
+    column_spec(1, monospace = TRUE)
 ```
 
 まずは変数名が日本語になっているので、`rename()`関数を使ってそれぞれ`Pref`、`Type`、`Population`、`Area`に変更します。
@@ -464,15 +467,18 @@ df4
 このデータは2020年1月16日から2020年7月5日まで、COVID-19 (新型コロナ)の新規感染者数を日本と韓国を対象に収集したものです。データはWikipedia ([日本](https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Japan) / [韓国](https://en.wikipedia.org/wiki/COVID-19_pandemic_in_South_Korea))から収集しました。韓国の新規感染者数は最初の4日分が欠損値のように見えますが、最初の感染者が確認されたのが1月20日のため、1月19日までは欠損となっています。
 
 ```{r tidydata-separate-2, echo = FALSE, message = FALSE}
-data.frame(変数名 = c("`ID`", "`Date`", "`Week`", 
-                   "`Confirmed_Japan`", "`Confirmed_Korea`"),
-              説明 = c("ケースID", "年月日", "曜日", 
-                     "新規感染者数 (日本)", "新規感染者数 (韓国)")) %>%
-  kable() %>%
-    kable_styling(bootstrap_options = "striped",
-                  full_width        = FALSE,
-                  latex_options     = "hold_position") %>%
-  row_spec(0, align = "c")
+data.frame(Vars = c("ID", "Date", "Week", 
+                    "Confirmed_Japan", "Confirmed_Korea"),
+           Desc = c("ケースID", "年月日", "曜日", 
+                    "新規感染者数 (日本)", "新規感染者数 (韓国)")) %>%
+  kable(col.names = c("変数名", "説明"), 
+        booktabs  = TRUE, 
+        align     = "ll") %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width        = FALSE,
+                latex_options     = "hold_position") %>%
+  row_spec(0, align = "c") %>%
+  column_spec(1, monospace = TRUE)
 ```
 
 このデータの場合、観察単位は「国 $\times$ 日」です。しかし、`df4`は1行に日本と韓国の情報が格納されており「1行1観察」の条件を満たしておりません。したがって、`pivot_longer()`を使ってLong型へ変換し、新しいデータの名前を`df4_L`と名付けます。
