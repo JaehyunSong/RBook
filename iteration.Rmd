@@ -4,7 +4,8 @@ always_allow_html: true
 
 # 反復処理 {#iteration}
 
-```{r iteration-common, include = FALSE}
+```{r iteration-common}
+#| include: FALSE
 source("_common.R")
 ```
 
@@ -51,7 +52,8 @@ for (i in num_vec) {
 
 実はこれと同じ役割をする関数がRには内蔵されており、それが`lapply()`関数です。
 
-```{r iteration-intro-4, eval = FALSE}
+```{r iteration-intro-4}
+#| eval: FALSE
 lapply(オブジェクト名, 関数名, 関数の引数)
 ```
 
@@ -128,7 +130,8 @@ map_dbl(num_vec, ~(.x + 2) / 3)
 
 かなり短めなコードで「`num_vec`の全要素に2を足して3で割る」処理ができました。一方、`sapply()`や`lapply()`のような`*apply()`関数群だとラムダ式を使うことはできません。現在のメモリ上にある関数のみしか使うことができません。
 
-```{r iteration-intro-14, error = TRUE}
+```{r iteration-intro-14}
+#| error: TRUE
 sapply(num_vec, ~(.x + 2) / 3)
 ```
 
@@ -189,7 +192,11 @@ map_dbl(num_list, `[`, 3)
 
 (ref:map-caption1) `map_*()`関数群のイメージ
 
-```{r iteration-intro-21, out.width="100%", fig.cap = "(ref:map-caption1)", echo = FALSE}
+```{r iteration-intro-21}
+#| echo: FALSE
+#| out.width: "100%"
+#| fig.cap: "(ref:map-caption1)"
+#| cache: TRUE
 knitr::include_graphics("figures/Iteration/map_inside.png")
 ```
 
@@ -419,7 +426,8 @@ Country_df <- read_csv("Data/Countries.csv")
 
 まずは、サンプルを分割し、それぞれの下位サンプルを使った分析を繰り返す方法について解説します。サンプルを分割する方法は2つありますが、最初はR内蔵関数である`split()`関数を使った方法について紹介します。
 
-```{r iteration-model1-2, eval = FALSE}
+```{r iteration-model1-2}
+#| eval: FALSE
 # split()の使い方
 新しいオブジェクト名 <- split(データ名, 分割の基準となるベクトル)
 ```
@@ -444,7 +452,8 @@ Split_Data
 
 それでは分割された各サンプルに対して`Polity_Score`と`FH_Total`の相関係数を計算してみましょう。その前に相関分析の方法について調べてみましょう。Rには相関分析の関数が2つ用意されています。単純に相関係数のみを計算するなら`cor()`、係数の不確実性（標準誤差、信頼区間など）まで計算し、検定を行うなら`cor.test()`を使用します。ここではより汎用性の高い`cor.test()`の使い方について紹介します。
 
-```{r iteration-model1-6, eval = FALSE}
+```{r iteration-model1-6}
+#| eval: FALSE
 # 相関分析: 方法1
 cor.test(~ 変数名1 + 変数名2, data = データ名)
 
@@ -504,7 +513,8 @@ Nested_Data
 
 ちなみに`group_by()`と`nest()`は`group_nest()`を使って以下のようにまとめることも可能です。
 
-```{r iteration-split-2, eval = FALSE}
+```{r iteration-split-2}
+#| eval: FALSE
 Nested_Data <- Country_df %>% 
   group_nest(Continent)
 ```
@@ -527,7 +537,11 @@ Nested_Data %>%
 
 {dplyr}の`group_by()`関数と{tidyr}の`nest()`、`unnest()`関数を組み合わせることでデータを入れ子型データへ変換したり、解除することができます。以上の流れを図式化したものが以下の図\@ref(fig:iteration-split-5)です。
 
-```{r iteration-split-5, out.width="100%", fig.cap = "入れ子型データの生成過程", echo = FALSE}
+```{r iteration-split-5}
+#| echo: FALSE
+#| out.width: "100%"
+#| fig.cap: "入れ子型データの生成過程"
+#| cache: TRUE
 knitr::include_graphics("figures/Iteration/nested_data.png")
 ```
 
@@ -542,7 +556,7 @@ Nested_Data2
 
 `Cor_test`という列が追加され、htestというクラス（S3クラス）オブジェクトが格納されていることが分かります。ちゃんと相関分析のオブジェクトが格納されているか、確認してみましょう。
 
-```{r iteration-split-7, row.print = 25}
+```{r iteration-split-7}
 Nested_Data2$Cor_test
 ```
 
@@ -654,7 +668,8 @@ Nested_Data %>%
 
 以上のコードをよりコンパクトにまとめると以下のようなコードとなります。
 
-```{r iteration-split-18, eval = FALSE}
+```{r iteration-split-18}
+#| eval: FALSE
 # {purrr}使用
 Nested_Data %>%
   mutate(Model = map(data, ~lm(PPP_per_capita ~ FH_Total + Population, 
@@ -667,7 +682,8 @@ Nested_Data %>%
 
 {purrr}パッケージを使用しない例も紹介します。むろん、以下のコードは可能な限り面倒な書き方をしています。`for()`文や`split()`と`*apply()`関数を組み合わせると以下の例よりも簡潔なコードは作成できます。R上級者になるためには{tidyverse}的な書き方だけでなく、ネイティブRの書き方にも慣れる必要があります。ぜひ挑戦してみましょう。
 
-```{r iteration-split-19, eval = FALSE}
+```{r iteration-split-19}
+#| eval: FALSE
 # {purrr}を使用しない場合
 # FH_Totalの係数と標準誤差のみを抽出する例
 lm_fit1 <- lm(PPP_per_capita ~ FH_Total + Population, 
@@ -886,7 +902,8 @@ RDD_df
 
 以上の理由により、やはりRDDは専用のパッケージを使った方が良いかも知れません。既に読み込んである{rdrobust}も推定可能ですが、ここでは{rdd}パッケージを使ってみましょう。{rdd}パッケージによるRDDは`RDestimate()`関数を使います。実際の例を確認してみましょう。`map()`を使う前に、オブジェクトの構造を把握しておくことは重要です。
 
-```{r iteration-range-17, eval = FALSE}
+```{r iteration-range-17}
+#| eval: FALSE
 # cutpoint引数の既定値は0であるため、今回の例では省略可能
 RDestimate(応答変数 ~ 割当変数, data = データオブジェクト, cutpoint = 閾値, bw = バンド幅)
 ```
@@ -987,14 +1004,16 @@ broom::tidy(Diff_test)
 
 `t.test()`の第一引数だけを変えながら推定をすれば良いでしょう。この第一引数、たとえば`PPP ~ G20`の方はformula型と呼ばれるRにおけるデータ型の一つです。これはcharacter型でないことに注意してください。
 
-```{r iteration-vars-3, error = TRUE}
+```{r iteration-vars-3}
+#| error: TRUE
 Formula1 <- "PPP ~ G20"
 t.test(Formula1, data = Country_df)
 ```
 
 このようにエラーが出ます。この`Formula`を`as.formula()`関数を使ってformula型に変換し、推定をやってみると問題なく推定できることが分かります。
 
-```{r iteration-vars-4, error = TRUE}
+```{r iteration-vars-4}
+#| error: TRUE
 Formula2 <- as.formula(Formula1)
 t.test(Formula2, data = Country_df)
 ```
@@ -1043,7 +1062,8 @@ formula型になっていることが分かります。
 
 もう一つの方法としては最初からfromula型の変数を入れても良いでしょう。推定するモデルが多くない場合は、こちらの方が簡単かも知れません。たとえば、これまでの作業を直接formula型を格納する形式で行うなら以下のようになります。
 
-```{r iteration-vars-10, eval = FALSE}
+```{r iteration-vars-10}
+#| eval: FALSE
 # 方法1
 Diff_df <- tibble(Group = c("G7", "G20", "OECD"),
                   Formula = c(PPP ~ G7, 

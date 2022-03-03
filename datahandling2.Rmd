@@ -1,12 +1,14 @@
 # データハンドリング [基礎編: 拡張] {#datahandling2}
 
-```{r handling2-common, include = FALSE}
+```{r handling2-common}
+#| include: FALSE
 source("_common.R")
 ```
 
 前章ではデータの一部 (subset)を抽出する方法について説明しましたが、本章はデータを拡張する、あるいは全く別のデータが得られるような処理について解説します。後者は主に元のデータを要約し (記述統計量)、その結果を出力する方法で、前者はデータ内の変数に基づき、指定された計算を行った結果を新しい列として追加する方法です。今回も[前章と同じデータ](Data/Ramen.csv)を使用します。
 
-```{r handling2-setup, message = FALSE}
+```{r handling2-setup}
+#| message: FALSE
 pacman::p_load(tidyverse)
 # データのパスは適宜修正すること
 # 文字化けが生じる場合、以下のコードに書き換える。
@@ -26,7 +28,8 @@ df <- read_csv("Data/Ramen.csv")
 
 `summarise()`関数の使い方は以下の通りです。
 
-```{r handling2-summarise-1, eval = FALSE}
+```{r handling2-summarise-1}
+#| eval: FALSE
 # summarise()関数の使い方
 データフレーム名 %>%
   summarise(新しい変数名 = 関数名(計算の対象となる変数名))
@@ -79,7 +82,8 @@ df %>%
 
 まずは、複数の変数に対して同じ記述統計量を求める例を考えてみましょう。たとえば、`Budget`、`ScoreN`、`Score`に対して平均値を求める例です。これは`across()`関数を使うとよりコードが短くなります。まずは`across()`関数の書き方から見ましょう。
 
-```{r handling2-summarise-6, eval = FALSE}
+```{r handling2-summarise-6}
+#| eval: FALSE
 # across()の使い方
 データフレーム名 %>%
   summarise(across(変数名のベクトル, 記述統計を計算する関数名, 関数の引数))
@@ -108,7 +112,8 @@ df %>%
 
 この作業も`across()`を使ってより短縮することができます。ここではラムダ式の知識が必要になります。ラムダ関数とは関数名を持たない[無名関数 (anonymous functions)](https://ja.wikipedia.org/wiki/無名関数)を意味しますが、詳細は割愛します。興味のある読者は[Wikipedia](https://ja.wikipedia.org/wiki/無名関数)などを参照してください。簡単にいうとその場で即席に関数を作成し、計算が終わったら破棄する関数です。ただ、Rは基本的にラムダ式を提供しているのではなく、`purrr`パッケージのラムダ式スタイルを使用します。まずは、書き方から確認します。
 
-```{r handling2-summarise-9, eval = FALSE}
+```{r handling2-summarise-9}
+#| eval: FALSE
 # ラムダ式を用いたacross()の使い方
 データフレーム名 %>%
   summarise(across(変数名のベクトル, .fns = list(結果の変数名 = ラムダ式)))
@@ -127,7 +132,8 @@ df %>%
 
 ラムダ式を第\@ref(programming)章で解説した自作関数で表現すると、以下のようになります。
 
-```{r handling2-summarise-11, eval = FALSE}
+```{r handling2-summarise-11}
+#| eval: FALSE
 # 以下の3つは同じ機能をする関数である
 
 # ラムダ式
@@ -440,9 +446,10 @@ df %>%
 
 ### `mutate()`関数の使い方
 
-続いて、データフレーム内の変数を用いて計算を行い、その結果を新しい列として格納する`mutate()`関数について紹介します。まず、`mutate()`関数の書き方からです。
+続いて、データフレーム内の変数を用いて計算を行い、その結果を新しい列として格納する`mutate()`関数について紹介します。`mutate()`関数は新しい列を追加することが主な目的ですが、既存の列を修正することも可能です。まず、`mutate()`関数の書き方からです。
 
-```{r handling2-mutate-1, eval = FALSE}
+```{r handling2-mutate-1}
+#| eval: FALSE
 # mutate()関数の使い方
 データフレーム名 %>%
   mutate(新しい変数名 = 処理内容)
@@ -460,7 +467,8 @@ df %>%
 
 `mutate()`は3行目に登場しますが、これは`Walk`を60に割った結果を`Walk_Hour`としてデータフレームの最後の列として格納することを意味します。もし、最後の列でなく、ある変数の前、または後にしたい場合は、`.before`または`.after`引数を追加します。これは`select()`関数の`.before`と`.after`と同じ使い方です。たとえば、新しく出来た`Walk_Hour`を`ID`と`Name`の間に入れたい場合は
 
-```{r handling2-mutate-3, eval = FALSE}
+```{r handling2-mutate-3}
+#| eval: FALSE
 # コードの3行名を修正 (.before使用)
 mutate(Walk_Hour = Walk / 60,
        .before   = Name)
@@ -492,31 +500,33 @@ df2 %>%
 
 このように、データ内の変数を用いた計算結果を新しい列として追加する場合は、`mutate()`が便利です。これを`mutate()`を使わずに処理する場合、以下のようなコードになりますが、可読性が相対的に低いことが分かります。
 
-```{r handling2-mutate-6, eval = FALSE}
+```{r handling2-mutate-6}
+#| eval: FALSE
 df2$ScoreN_Mean <- df2$ScoreN_Sum / df2$N
 df2 <- df2[, c("Pref", "Budget_Mean", "Walk_Mean", 
                "ScoreN_Sum", "ScoreN_Mean", "Score_Mean", "N")]
 ```
 
-むろんですが、計算には`+`や`/`のような演算子だけでなく、関数を使うことも可能です。たとえば、`Budget`が1000円未満なら`"Cheap"`、1000円以上なら`"Expensive"`と示す変数`Budget2`を作成する場合は`ifelse()`関数が使えます。
+むろんですが、計算には`+`や`/`のような演算子だけでなく、関数を使うことも可能です。たとえば、`Budget`が1000円未満なら`"Cheap"`、1000円以上なら`"Expensive"`と示す変数`Budget2`を作成する場合は`if_else()`関数 (または、`ifelse()`関数) が使えます。
 
 ```{r handling2-mutate-7}
 df %>% 
-  mutate(Budget2 = ifelse(Budget < 1000, "Cheap", "Expensive")) %>%
+  mutate(Budget2 = if_else(Budget < 1000, "Cheap", "Expensive")) %>%
   filter(!is.na(Budget2)) %>% # Budget2が欠損した店舗を除外
   group_by(Pref, Budget2) %>% # PrefとBudget2でグループ化
   summarise(N = n(),          # 店舗数を表示
             .groups = "drop")
 ```
 
-これは各都府県ごとの予算1000円未満の店と以上の店の店舗数をまとめた表となります。もし、500円未満なら`"Cheap"`、500円以上~1000円未満なら`"Reasonable"`、1000円以上なら`"Expensive"`になる`Budget3`変数を作るにはどうすればよいでしょうか。第\@ref(programming)章で紹介しました`ifelse()`を重ねることも出来ますが、ここでは`case_when()`関数が便利です。まずは、`ifelse()`を使ったコードは以下の通りです。
+これは各都府県ごとの予算1000円未満の店と以上の店の店舗数をまとめた表となります。もし、500円未満なら`"Cheap"`、500円以上~1000円未満なら`"Reasonable"`、1000円以上なら`"Expensive"`になる`Budget3`変数を作るにはどうすればよいでしょうか。第\@ref(programming)章で紹介しました`if_else()`を重ねることも出来ますが、ここでは`case_when()`関数が便利です。まずは、`if_else()`を使ったコードは以下の通りです。
 
-```{r handling2-mutate-8, eval = FALSE}
-# ifelse()を使う場合
+```{r handling2-mutate-8}
+#| eval: FALSE
+# if_else()を使う場合
 df %>% 
-  mutate(Budget3 = ifelse(Budget < 500, "Cheap", 
-                          ifelse(Budget >= 500 & Budget < 1000, "Reasonable",
-                                 "Expensive"))) %>%
+  mutate(Budget3 = if_else(Budget < 500, "Cheap", 
+                           if_else(Budget >= 500 & Budget < 1000, "Reasonable",
+                                   "Expensive"))) %>%
   filter(!is.na(Budget3)) %>%
   group_by(Pref, Budget3) %>%
   summarise(N = n(),         
@@ -525,7 +535,7 @@ df %>%
 
 `case_when()`を使うと以下のような書き方になります。
 
-```{r handling2-mutate-9, eval = FALSE}
+```{r handling2-mutate-9}
 # case_when()を使う場合
 df %>% 
   mutate(Budget3 = case_when(Budget < 500                  ~ "Cheap",
@@ -542,20 +552,70 @@ df %>%
 
 書く手間の観点では`case_when()`は`ifelse()`と大きく違いはないかも知れませんが、コードが非常に読みやすくなっています。`case_when()`関数の書き方は以下の通りです。
 
-```{r handling2-mutate-10, eval = FALSE}
+```{r handling2-mutate-10}
+#| eval: FALSE
 # case_when()の使い方
 データフレーム名 %>%
   mutate(新変数名 = case_when(条件1 ~ 条件1を満たす場合の結果値, 
                              条件2 ~ 条件2を満たす場合の結果値, 
                              条件3 ~ 条件3を満たす場合の結果値, 
-                             ...))
+                             ...,
+                            TRUE ~ その他の場合の結果値))
 ```
 
-似たような機能をする関数として`recode()`関数があります[^handling2-recode]。これは変数の値を単純に置換したい場合に便利な関数です。たとえば、都府県名をローマ字に変換するケースを考えてみましょう。
+`case_when()`内部での判定は先に指定された条件から順番に行われます。条件1に満たされない場合は、条件2で判定し、その条件2に満たされない場合は条件3、...、そして全て満たされなかった場合は`TRUE ~`以降の値を返すといった感覚です。したがって、先ほどのコードにおける`Budget >= 500 & Budget < 1000`は効率的ではありません。簡略化すると以下のようになります。
+
+```{r handling2-mutate-11}
+df %>% 
+  mutate(Budget3 = case_when(Budget < 500   ~ "Cheap",
+                             Budget < 1000  ~ "Reasonable",
+                             Budget >= 1000 ~ "Expensive"),
+         Budget3 = factor(Budget3, 
+                          levels = c("Cheap", "Reasonable", "Expensive"))) %>%
+  filter(!is.na(Budget3)) %>%
+  group_by(Pref, Budget3) %>%
+  summarise(N = n(),         
+            .groups = "drop")
+```
+
+ただし、この`TRUE`には注意が必要です。たとえば、以下のようなコードを考えてみましょう。
+
+```{r handling2-mutate-12}
+df %>% 
+  mutate(Budget3 = case_when(Budget < 500   ~ "Cheap",
+                             Budget < 1000  ~ "Reasonable",
+                             TRUE           ~ "Expensive"),
+         Budget3 = factor(Budget3, 
+                          levels = c("Cheap", "Reasonable", "Expensive"))) %>%
+  filter(!is.na(Budget3)) %>%
+  group_by(Pref, Budget3) %>%
+  summarise(N = n(),         
+            .groups = "drop")
+```
+
+結果が異なりますね。なぜなら`Budget`の値が欠損値であっても`"Expensive"`と判定されるからです。対処方法としましては`mutate()`の前に`filter()`を使って`Budget3`が欠損した行を削除するか、`Budget`が欠損した場合の値を`case_when()`内部に指定するかです。以下の例は`Budget`が欠損した場合の処理内容を加えたものです。
+
+```{r handling2-mutate-13}
+df %>% 
+  mutate(Budget3 = case_when(is.na(Budget)  ~ NA_character_,
+                             Budget < 500   ~ "Cheap",
+                             Budget < 1000  ~ "Reasonable",
+                             TRUE           ~ "Expensive"),
+         Budget3 = factor(Budget3, 
+                          levels = c("Cheap", "Reasonable", "Expensive"))) %>%
+  filter(!is.na(Budget3)) %>%
+  group_by(Pref, Budget3) %>%
+  summarise(N = n(),         
+            .groups = "drop")
+```
+
+`Budget3`はcharacter型変数となるので、欠損値のタイプも`NA_character_`にします。もし、numeric型変数を作成するなら`NA_real_`を使います。`if_else()`や`case_when()`など、{dplyr}が提供する関数は欠損値の型にも厳しいので、`NA`だけだとエラーが帰ってきます。
+
+これまでの`case_when()`関数に似たような機能をする関数として`recode()`関数があります[^handling2-recode]。これは変数の値を単純に置換したい場合に便利な関数です。たとえば、都府県名をローマ字に変換するケースを考えてみましょう。
 
 [^handling2-recode]: `recode()`関数は他にも{car}パッケージでも提供されています。{car}も広く使われている依存パッケージの一つであるため、`dplyr::recode()`と明示した方が良いかも知れません。
 
-```{r handling2-mutate-11}
+```{r handling2-mutate-14}
 # recode()を使う場合
 df2 %>% 
   mutate(Pref2 = recode(Pref,
@@ -573,15 +633,16 @@ df2 %>%
 
 使い方は非常に直感的です。
 
-```{r handling2-mutate-12, eval = FALSE}
+```{r handling2-mutate-15}
+#| eval: FALSE
 # recode()の使い方
 データフレーム名 %>%
   mutate(新変数名 = recode(元の変数名,
-                            元の値1 =  新しい値1, 
-                            元の値2 =  新しい値2, 
-                            元の値3 =  新しい値3, 
-                            ...,
-                            .default = 該当しない場合の値))
+                           元の値1 =  新しい値1, 
+                           元の値2 =  新しい値2, 
+                           元の値3 =  新しい値3, 
+                           ...,
+                           .default = 該当しない場合の値))
 ```
 
 最後の`.default`引数は、もし該当する値がない場合に返す値を意味し、長さ1のベクトルを指定します。もし、指定しない場合は`NA`が表示されます。また、ここには紹介しておりませんでしたが、`.missing`引数もあり、これは欠損値の場合に返す値を意味します。
@@ -590,7 +651,7 @@ df2 %>%
 
 `recode()`は値をまとめる際にも便利です。たとえば、`EastJapan`という変数を作成し、関東なら`1`を、それ以外なら`0`を付けるとします。そして、これは`Pref`変数の後に位置づけます。
 
-```{r handling2-mutate-13}
+```{r handling2-mutate-16}
 # 都府県を関東か否かでまとめる
 df2 %>% 
   mutate(EastJapan = recode(Pref,
@@ -609,7 +670,7 @@ df2 %>%
 
 ただし、関東以外は全て0になるため、以下のように省略することも可能です。
 
-```{r handling2-mutate-14}
+```{r handling2-mutate-17}
 # .default引数を指定する場合
 df3 <- df2 %>% 
   mutate(EastJapan = recode(Pref,
@@ -625,13 +686,13 @@ df3
 
 新しく出来た`EastJapan`のデータ型はなんでしょうか。
 
-```{r handling2-mutate-15}
+```{r handling2-mutate-18}
 class(df3$EastJapan)
 ```
 
 `EastJapan`はnumeric型ですね。もし、これをfactor型にしたい場合はどうすればよいでしょうか。それは`mutate()`内で`EastJapan`を生成した後に`factor()`関数を使うだけです。
 
-```{r handling2-mutate-16}
+```{r handling2-mutate-19}
 # EastJapan変数をfactor型にする
 df3 <- df2 %>% 
   mutate(EastJapan = recode(Pref,
@@ -648,7 +709,7 @@ df3$EastJapan
 
 `EastJapan`がfactor型になりました。実は、`recode`は再コーディングと同時にfactor化をしてくれる機能があります。ただし、`recode()`関数でなく、`recode_factor()`関数を使います。
 
-```{r handling2-mutate-17}
+```{r handling2-mutate-20}
 # recode_factor()を使う方法
 df3 <- df2 %>% 
   mutate(EastJapan = recode_factor(Pref,
@@ -731,13 +792,17 @@ myDF1 %>%
 
 まずは、複数のデータフレームまたはtibbleを縦に結合する方法について解説します。イメージとしては図\@ref(fig:handling2-merge-row-1)のようなものです。
 
-```{r handling2-merge-row-1, out.width = "80%", fig.cap = "行の結合", echo = FALSE}
+```{r handling2-merge-row-1}
+#| echo: FALSE
+#| out.width: "80%"
+#| fig.cap: "行の結合"
 knitr::include_graphics("Figures/Handling2/Merge1.png")
 ```
 
 行を結合する際には{dplyr}パッケージの`bind_rows()`関数を使います。この関数の使い方は以下の通りです。
 
-```{r handling2-merge-row-2, eval = FALSE}
+```{r handling2-merge-row-2}
+#| eval: FALSE
 # 新しいデータ名ではなく、既にあるデータ名にすると上書きとなる
 新しいデータ名 <-  bind_rows(データ1, データ2, ...)
 ```
@@ -784,7 +849,8 @@ Binded_df2
 
 このように変数の順番が異なっても、先に指定したデータの変数順で問題なく結合できました。これまでの作業は{dplyr}パッケージの`bind_rows()`を使わずに、R内蔵関数の`rbind()`でも同じやり方でできます。`bind_rows()`の特徴は、変数名が一致しない場合、つまり今回の例だと`rbind_df4`が含まれる場合です。`rbind_df1`から`rbind_df3`までは順番が違っても`X1`、`X2`、`X3`変数で構成されていました。一方、`rbind_dr4`には`X3`がなく、新たに`X4`という変数があります。これを`rbind()`関数で結合するとエラーが出力されます。
 
-```{r handling2-merge-row-6, error = TRUE}
+```{r handling2-merge-row-6}
+#| error: TRUE
 # rbind()を使う場合
 rbind(rbind_df1, rbind_df2, rbind_df3, rbind_df4)
 ```
@@ -804,7 +870,10 @@ Binded_df3
 
 実はデータ分析においてデータの結合といえば、列の結合が一般的です。これは図\@ref(fig:handling2-merge-col-1)のような操作を意味します。
 
-```{r handling2-merge-col-1, out.width = "80%", fig.cap = "列の結合", echo = FALSE}
+```{r handling2-merge-col-1}
+#| echo: FALSE
+#| out.width: "80%"
+#| fig.cap: "列の結合"
 knitr::include_graphics("Figures/Handling2/Merge2.png")
 ```
 
@@ -824,7 +893,8 @@ df2
 
 ラーメン屋の店舗ですが、たしかにデータには埼玉、東京、大阪などは1000店舗しか入っておりません。実はもっと多いですが、ぐるなびAPIの仕様上、最大1000店舗しか情報取得が出来ないからです。ここに実際の店舗数が入っている新しいデータセット、[Ramen2.csv](Data/Ramen2.csv)があります。これを読み込み、`df3`という名で格納しましょう。
 
-```{r handling2-merge-col-3, message = FALSE}
+```{r handling2-merge-col-3}
+#| message: FALSE
 df3 <- read_csv("Data/Ramen2.csv")
 
 df3
@@ -877,7 +947,8 @@ df3 %>%
 
 しかし、このような方法は非効率的です。そもそも`df3`から得られた結果の順番と`df2`の順番も一致しないので、一々対照しながらベクトルを作ることになります。ここで登場する関数が{dplyr}の`*_join()`関数群です。この関数群には4つの関数が含まれており、以下のような使い方になります。
 
-```{r handling2-merge-col-6, eval = FALSE}
+```{r handling2-merge-col-6}
+#| eval: FALSE
 # 新しいデータ名ではなく、データ1またはデータ2の名前に格納すると上書きとなる
 
 # 1. データ1を基準に結合
@@ -914,7 +985,10 @@ df4
 
 (ref:inner-join) `inner_join()`の仕組み
 
-```{r handling2-merge-col-8, out.width = "80%", fig.cap = "(ref:inner-join)", echo = FALSE}
+```{r handling2-merge-col-8}
+#| echo: FALSE
+#| out.width: "80%"
+#| fig.cap: "(ref:inner-join)"
 knitr::include_graphics("Figures/Handling2/Merge_Inner.png")
 ```
 
@@ -930,7 +1004,10 @@ inner_join(df2, df4, by = "Pref")
 
 (ref:full-join) `full_join()`の仕組み
 
-```{r handling2-merge-col-10, out.width = "80%", fig.cap = "(ref:full-join)", echo = FALSE}
+```{r handling2-merge-col-10}
+#| echo: FALSE
+#| out.width: "80%"
+#| fig.cap: "(ref:full-join)"
 knitr::include_graphics("Figures/Handling2/Merge_Full.png")
 ```
 
@@ -947,7 +1024,10 @@ full_join(df2, df4, by = "Pref") %>%
 
 (ref:left-join) `left_join()`の仕組み
 
-```{r handling2-merge-col-12, out.width = "80%", fig.cap = "(ref:left-join)", echo = FALSE}
+```{r handling2-merge-col-12}
+#| echo: FALSE
+#| out.width: "80%"
+#| fig.cap: "(ref:left-join)"
 knitr::include_graphics("Figures/Handling2/Merge_Left.png")
 ```
 
@@ -955,7 +1035,10 @@ knitr::include_graphics("Figures/Handling2/Merge_Left.png")
 
 (ref:right-join) `right_join()`の仕組み
 
-```{r handling2-merge-col-13, out.width = "80%", fig.cap = "(ref:right-join)", echo = FALSE}
+```{r handling2-merge-col-13}
+#| echo: FALSE
+#| out.width: "80%"
+#| fig.cap: "(ref:right-join)"
 knitr::include_graphics("Figures/Handling2/Merge_Right.png")
 ```
 
