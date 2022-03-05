@@ -400,7 +400,7 @@ table(Switch_No)
 
 ---
 
-## 応用1: 円周率の計算 {#monte-pi}
+## 例3: 円周率の計算 {#monte-pi}
 
 　今回はもう一つの例として、円周率 ($\pi$)の計算を紹介したいと思います。$\pi$は無理数であるため、厳密な計算は出来ませんが、モンテカルロ・シミュレーションである程度近似できます。たとえば、半径1 ($r = 1$)の円を考えてみましょう。
 
@@ -547,11 +547,11 @@ pi_df2 %>%
 
 ---
 
-## 応用2: ブートストラップ法 {#monte-bootstrap}
+## 例4: ブートストラップ法 {#monte-bootstrap}
 
 　最後に、様々な分析から得られた統計量の不確実性を計算する方法の一つであるブートストラップ法 (bootstrapping)について説明します。たとえば、平均値の差分の検定 (*t*検定)差、回帰分析における標準誤差などはRの`t.test()`、`lm()`関数を使用すれば瞬時に計算できます。こちらの標準誤差はデータを与えられれば、常に同じ値が得られるもので、何らかの計算式があります。しかし、世の中にはモデルが複雑すぎて、統計量の標準誤差がうまく計算できないケースもあります。そこで登場するのがブートストラップ法を用いると、不確実性の近似値が得られます。ブートストラップ法は @Efron:1979 が提案した以来、データ分析において広く使われています。ブートストラップ法については優れた教科書が多くあるので詳細な説明は割愛し、以下ではブートストラップ法の簡単な例を紹介します。
 
-　ブートストラップにおいて重要なのは元のデータセットのサンプルサイズを$n$とした場合、復元抽出を用いてサンプルサイズ$n$のデータセットをもう一度構築することです。そしてその平均値を計算します。これらの手順を5000回繰り返せば、5000個の平均値が得られます。この5000個の平均値の平均値は元のデータセットの平均値に近似し、5000個の平均値の標準偏差は元のデータセットの平均値の標準誤差に近似できます。これは本当でしょうか。実際にやってみましょう。
+　ブートストラップにおいて重要なのは元のデータセットのサンプルサイズを$n$とした場合、復元抽出を用いてサンプルサイズ$n$のデータセットをもう一度構築することです。そしてその平均値を計算します。これらの手順を5000回繰り返せば、5000個の平均値が得られます。この5000個の平均値の平均値は元のデータセットの平均値に近似し、5000個の平均値の標準偏差は元のデータセットの平均値の標準誤差 (標準誤差)に近似できます。これは本当でしょうか。実際にやってみましょう。
 
 　まずは、長さ100のベクトルを2つ作成します。この2つのベクトルは平均値が0.7、0.9、標準偏差1の正規分布に従うとします。
 
@@ -599,83 +599,73 @@ for (i in 1:n_trials) {
 　`Result_vec`には平均値の差分が10000個格納されており、これらの値の平均値をブートストラップ推定量 (bootstrap estimate)と呼ぶとします。
 
 ```{r monte-boot3}
-mean(Result_vec) # ブートストラップ推定量 (平均値の差分の平均値)
+# 元のデータの平均値の差分
+delta <- mean(Data1) - mean(Data2)
+delta
+# ブートストラップ推定量 (平均値の差分の平均値)
+boot_delta <- mean(Result_vec)
+boot_delta
+# ブートストラップ推定量のバイアス
+boot_b <- delta - boot_delta
 ```
 
-　実際の平均値の差分は`r mean(Data1) - mean(Data2)`、ブートストラップ推定量は `r mean(Result_vec)`であるため、その差は`r mean(Result_vec) - (mean(Data1) - mean(Data2))`です。これをブートストラップ推定量のバイアスと呼びます。
+　実際の平均値の差分 ($\delta_0$) は`r mean(Data1) - mean(Data2)`、ブートストラップ推定量 ($\delta^*$) は `r mean(Result_vec)`であるため、その差は`r (mean(Data1) - mean(Data2)) - mean(Result_vec)`です。これをブートストラップ推定量のバイアス ($b$) と呼びます。
 
 　ただし、我々に興味があるのは平均値の差分ではありません。平均値の差分はブートストラップ法を用いなくても普通に計算できるからです。ここで重要なのは平均値の差分の不確実性、つまり標準誤差でしょう。ブートストラップ推定量の標準誤差は`Result_vec`の標準偏差を計算するだけで十分です。
 
 ```{r monte-boot4}
-sd(Result_vec) # ブートストラップ推定量の標準誤差
+boot_se <- sd(Result_vec) # ブートストラップ推定量の標準偏差
 ```
+
+　ブートストラップ推定量の標準偏差 ($\mbox{se}^*$)は約`r round(sd(Result_vec), 3)`であり、*t*検定の結果から得られた標準誤差`r round(ttest_result$stderr, 3)`と非常に近い値が得られました。
+
+　95%信頼区間を計算してみます。百分位数信頼区間 (Percentile CI)は`Result_Vec`の左側の領域が2.5%、右側の領域が2.5%となる区間ですので、`quantile()`関数で計算することができます。
 
 ```{r monte-boot5}
-# 平均値の差分の平均値 / 平均値の差分の標準偏差
-mean(Result_vec) / sd(Result_vec)
-```
-
-```{r monte-boot6}
-# p値
-(1 - pt(abs(mean(Result_vec) / sd(Result_vec)), df = 198)) * 2
-```
-
-```{r monte-boot7}
 # 95%信頼区間
 quantile(Result_vec, c(0.025, 0.975))
 ```
 
-`Result_vec`のヒストグラムと$\mu$ = -0.307、$\sigma$ = 0.141の正規分布を重ねて見る（-0.307と0.141は$t$検定から得られた数値）。
+　バイアスを補正しないWald信頼区間は$\delta_0 \pm 1.96 \times \mbox{se}^*$のように計算します (1.96は標準正規分布の累積密度分布において下側領域が0.975となる点です。)。
 
-```{r monte-boot8, message = FALSE}
-enframe(Result_vec) %>%
-    ggplot() +
-    geom_histogram(aes(x = value, y = ..density..), color = "white") +
-    stat_function(aes(color = "Density"),
-                  size = 2, fun = dnorm, n = 101, 
-                  args = list(mean = -0.307, sd = 0.141)) +
-    scale_color_discrete(labels = c("Density" = expression(paste(mu ~ "= -0.307, " ~ sigma ~ "= 0.141 の正規分布")))) +
-    labs(x = "平均値の差分", y = "密度", color = "") +
-    theme_bw(base_size = 12) +
-    theme(legend.position = "bottom")
+```{r monte-boot6}
+delta + qnorm(c(0.025, 0.975)) * boot_se
 ```
 
-$t$検定とブートストラップ法の比較
+　バイアス修正Wald信頼区間は$(\delta_0 - b) \pm 1.96 \times \mbox{se}^*$です。
+
+```{r monte-boot7}
+(delta - boot_b) + qnorm(c(0.025, 0.975)) * boot_se
+```
+
+　これまでの結果を比較してみましょう。
 
 ```{r monte-boot9}
 #| echo: FALSE
 #| message: FALSE
-#| include: FALSE
-pacman::p_load(gt)
-tibble(Stat1 = c("(1): 平均値の差分", 
-                 "(2): 標準誤差", 
-                 "(3): 検定統計量", 
-                 "(4): p値", 
-                 "(5): 95%信頼区間の下限", 
-                 "(6): 95%信頼区間の上限"),
-       ttest = c(-diff(ttest_result$estimate), 
-                 ttest_result$stderr,
-                 ttest_result$statistic, 
-                 ttest_result$p.value,
-                 ttest_result$conf.int[1], 
-                 ttest_result$conf.int[2]),
-       Stat2 = c("(1): 平均値の差分の平均値", 
-                 "(2): 平均値の差分の標準偏差", 
-                 "(3): (1) / (2)", 
-                 "(4): p値",
-                 "(5): 95%信頼区間の下限", 
-                 "(6): 95%信頼区間の上限"),
-       boot  = c(mean(Result_vec), 
-                 sd(Result_vec), 
-                 mean(Result_vec) / sd(Result_vec),
-                 (1 - pt(abs(mean(Result_vec) / sd(Result_vec)), df = 198)) * 2,
-                 quantile(Result_vec, 0.025),
-                 quantile(Result_vec, 0.975))
-       ) %>%
-    gt() %>%
-    fmt_number(columns = c(2, 4), decimals = 3) %>%
-    cols_label("Stat1" = "統計量", "ttest" = "値",
-               "Stat2" = "統計量", "boot" = "値") %>%
-    tab_spanner(label = md("**t検定**"), columns = 1:2) %>%
-    tab_spanner(label = md("**ブートストラップ法**"), columns = 3:4)
+tibble(
+    Stat1 = c("(1): 平均値の差分", 
+              "(2): 標準誤差", 
+              "(3): 95%信頼区間", 
+              "(4): 95%信頼区間 (百分位数)", 
+              "(5): 95%信頼区間 (Wald)",
+              "(6): 95%信頼区間 (バイアス修正Wald)"),
+    ttest = c(round(-diff(ttest_result$estimate), 3), 
+              round(ttest_result$stderr, 3),
+              paste0("[", round(ttest_result$conf.int[1], 3), ", ",
+                     round(ttest_result$conf.int[2], 3), "]"),
+              "", "", ""),
+    boot  = c(round(mean(Result_vec), 3), 
+              round(sd(Result_vec), 3),
+              "",
+              paste0("[", paste0(round(quantile(Result_vec, c(0.025, 0.975)), 3), collapse = ", "), "]"),
+              paste0("[", paste0(round(delta + qnorm(c(0.025, 0.975)) * boot_se, 3), collapse = ", "), "]"),
+              paste0("[", paste0(round(delta - boot_b + qnorm(c(0.025, 0.975)) * boot_se, 3), collapse = ", "), "]"))
+) %>%
+    kable(col.names = c("", "t検定", "ブートストラップ"),
+          align     = "lrr") %>%
+    kable_styling(full_width        = FALSE,
+                  latex_options     = "hold_position")
 ```
+
+　今回の例は`t.test()`関数を使えば一発で終わる問題ですが、モデルが複雑になれば推定量の不確実性の計算が難しくなるケースがあります。その時に力を発揮するのがブートストラップ方であり、{boot}、{bootstrap}、{simpleboot}など様々なパッケージが利用可能です。

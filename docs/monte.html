@@ -673,8 +673,8 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="29.3" data-path="monte.html"><a href="monte.html#monte-birthday"><i class="fa fa-check"></i><b>29.3</b> 例1: 誕生日問題</a></li>
 <li class="chapter" data-level="29.4" data-path="monte.html"><a href="monte.html#monte-montyhall"><i class="fa fa-check"></i><b>29.4</b> 例2: モンティ・ホール問題</a></li>
-<li class="chapter" data-level="29.5" data-path="monte.html"><a href="monte.html#monte-pi"><i class="fa fa-check"></i><b>29.5</b> 応用1: 円周率の計算</a></li>
-<li class="chapter" data-level="29.6" data-path="monte.html"><a href="monte.html#monte-bootstrap"><i class="fa fa-check"></i><b>29.6</b> 応用2: ブートストラップ法</a></li>
+<li class="chapter" data-level="29.5" data-path="monte.html"><a href="monte.html#monte-pi"><i class="fa fa-check"></i><b>29.5</b> 例3: 円周率の計算</a></li>
+<li class="chapter" data-level="29.6" data-path="monte.html"><a href="monte.html#monte-bootstrap"><i class="fa fa-check"></i><b>29.6</b> 例4: ブートストラップ法</a></li>
 </ul></li>
 <li class="chapter" data-level="30" data-path="scraping.html"><a href="scraping.html"><i class="fa fa-check"></i><b>30</b> スクレイピング</a></li>
 <li class="chapter" data-level="31" data-path="api.html"><a href="api.html"><i class="fa fa-check"></i><b>31</b> API</a></li>
@@ -734,7 +734,7 @@ div.csl-indent {
 <p>　サイコロを3回振るコードを書くなら、値の集合（<code>x</code>）は<code>c(1, 2, 3, 4, 5, 6)</code>、または<code>1:6</code>で、抽出の回数（<code>size</code>）は3となります。また、一回出た目も抽出される可能性があるため、復元抽出を行う必要があります（<code>replace = TRUE</code>）。そして各目が出る確率は1/6ですが、各値が抽出される確率が等しい場合、省略可能です。</p>
 <div class="sourceCode" id="cb1992"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1992-1"><a href="monte.html#cb1992-1"></a><span class="co"># この場合、prob引数は省略可能</span></span>
 <span id="cb1992-2"><a href="monte.html#cb1992-2"></a><span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">3</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">6</span>, <span class="dv">6</span>))</span></code></pre></div>
-<pre><code>## [1] 2 5 1</code></pre>
+<pre><code>## [1] 6 1 5</code></pre>
 <p>　今回はサイコロを1万回振り、それぞれの目が出た回数を棒グラフとして示してみます。無作為に抽出された値であれば、各目が出る回数は等しいはずです。ベクトルに対して<code>table()</code>関数を使うと、各要素が出現した回数が出力され、このオブジェクトを<code>barplot()</code>関数に渡すと棒グラフを作成することができます。</p>
 <div class="sourceCode" id="cb1994"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1994-1"><a href="monte.html#cb1994-1"></a>Dice_vec <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">10</span><span class="sc">^</span><span class="dv">4</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb1994-2"><a href="monte.html#cb1994-2"></a><span class="fu">table</span>(Dice_vec) <span class="sc">%&gt;%</span> <span class="fu">barplot</span>()</span></code></pre></div>
@@ -1164,7 +1164,7 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <hr />
 </div>
 <div id="monte-pi" class="section level2" number="29.5">
-<h2><span class="header-section-number">29.5</span> 応用1: 円周率の計算</h2>
+<h2><span class="header-section-number">29.5</span> 例3: 円周率の計算</h2>
 <p>　今回はもう一つの例として、円周率 (<span class="math inline">\(\pi\)</span>)の計算を紹介したいと思います。<span class="math inline">\(\pi\)</span>は無理数であるため、厳密な計算は出来ませんが、モンテカルロ・シミュレーションである程度近似できます。たとえば、半径1 (<span class="math inline">\(r = 1\)</span>)の円を考えてみましょう。</p>
 <p><img src="montecarlo_files/figure-html/monte-pi1-1.png" width="2100" style="display: block; margin: auto;" /></p>
 <p>　円の面積は<span class="math inline">\(r^2\pi\)</span>であるため、この円の面積は<span class="math inline">\(\pi\)</span>です。また、四角形は辺の長さが2の正四角形ですから面積は4です。続いて、四角形の範囲内の点を付けます。無作為に20個を付けてみます。</p>
@@ -1231,8 +1231,8 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <pre><code>## # A tibble: 2 × 2
 ##   in_circle     N
 ##   &lt;chr&gt;     &lt;int&gt;
-## 1 円内         82
-## 2 円外         18</code></pre>
+## 1 円外         18
+## 2 円内         82</code></pre>
 <p>　円内の点は82個、円外の点は18ですね。つまり、<span class="math inline">\(\frac{\pi}{4} = 0.82\)</span>であり、<span class="math inline">\(\pi = 0.82 \times 4 = 3.28\)</span>です。</p>
 <div class="sourceCode" id="cb2052"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2052-1"><a href="monte.html#cb2052-1"></a><span class="dv">82</span> <span class="sc">/</span> <span class="dv">100</span> <span class="sc">*</span> <span class="dv">4</span></span></code></pre></div>
 <pre><code>## [1] 3.28</code></pre>
@@ -1269,9 +1269,9 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <hr />
 </div>
 <div id="monte-bootstrap" class="section level2" number="29.6">
-<h2><span class="header-section-number">29.6</span> 応用2: ブートストラップ法</h2>
+<h2><span class="header-section-number">29.6</span> 例4: ブートストラップ法</h2>
 <p>　最後に、様々な分析から得られた統計量の不確実性を計算する方法の一つであるブートストラップ法 (bootstrapping)について説明します。たとえば、平均値の差分の検定 (<em>t</em>検定)差、回帰分析における標準誤差などはRの<code>t.test()</code>、<code>lm()</code>関数を使用すれば瞬時に計算できます。こちらの標準誤差はデータを与えられれば、常に同じ値が得られるもので、何らかの計算式があります。しかし、世の中にはモデルが複雑すぎて、統計量の標準誤差がうまく計算できないケースもあります。そこで登場するのがブートストラップ法を用いると、不確実性の近似値が得られます。ブートストラップ法は <span class="citation">Efron (<a href="#ref-Efron:1979" role="doc-biblioref">1979</a>)</span> が提案した以来、データ分析において広く使われています。ブートストラップ法については優れた教科書が多くあるので詳細な説明は割愛し、以下ではブートストラップ法の簡単な例を紹介します。</p>
-<p>　ブートストラップにおいて重要なのは元のデータセットのサンプルサイズを<span class="math inline">\(n\)</span>とした場合、復元抽出を用いてサンプルサイズ<span class="math inline">\(n\)</span>のデータセットをもう一度構築することです。そしてその平均値を計算します。これらの手順を5000回繰り返せば、5000個の平均値が得られます。この5000個の平均値の平均値は元のデータセットの平均値に近似し、5000個の平均値の標準偏差は元のデータセットの平均値の標準誤差に近似できます。これは本当でしょうか。実際にやってみましょう。</p>
+<p>　ブートストラップにおいて重要なのは元のデータセットのサンプルサイズを<span class="math inline">\(n\)</span>とした場合、復元抽出を用いてサンプルサイズ<span class="math inline">\(n\)</span>のデータセットをもう一度構築することです。そしてその平均値を計算します。これらの手順を5000回繰り返せば、5000個の平均値が得られます。この5000個の平均値の平均値は元のデータセットの平均値に近似し、5000個の平均値の標準偏差は元のデータセットの平均値の標準誤差 (標準誤差)に近似できます。これは本当でしょうか。実際にやってみましょう。</p>
 <p>　まずは、長さ100のベクトルを2つ作成します。この2つのベクトルは平均値が0.7、0.9、標準偏差1の正規分布に従うとします。</p>
 <p><span class="math display">\[
 \begin{aligned}
@@ -1318,35 +1318,111 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <span id="cb2061-8"><a href="monte.html#cb2061-8"></a>    Result_vec[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(Sample1) <span class="sc">-</span> <span class="fu">mean</span>(Sample2)</span>
 <span id="cb2061-9"><a href="monte.html#cb2061-9"></a>}</span></code></pre></div>
 <p>　<code>Result_vec</code>には平均値の差分が10000個格納されており、これらの値の平均値をブートストラップ推定量 (bootstrap estimate)と呼ぶとします。</p>
-<div class="sourceCode" id="cb2062"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2062-1"><a href="monte.html#cb2062-1"></a><span class="fu">mean</span>(Result_vec) <span class="co"># ブートストラップ推定量 (平均値の差分の平均値)</span></span></code></pre></div>
+<div class="sourceCode" id="cb2062"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2062-1"><a href="monte.html#cb2062-1"></a><span class="co"># 元のデータの平均値の差分</span></span>
+<span id="cb2062-2"><a href="monte.html#cb2062-2"></a>delta <span class="ot">&lt;-</span> <span class="fu">mean</span>(Data1) <span class="sc">-</span> <span class="fu">mean</span>(Data2)</span>
+<span id="cb2062-3"><a href="monte.html#cb2062-3"></a>delta</span></code></pre></div>
+<pre><code>## [1] -0.3066445</code></pre>
+<div class="sourceCode" id="cb2064"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2064-1"><a href="monte.html#cb2064-1"></a><span class="co"># ブートストラップ推定量 (平均値の差分の平均値)</span></span>
+<span id="cb2064-2"><a href="monte.html#cb2064-2"></a>boot_delta <span class="ot">&lt;-</span> <span class="fu">mean</span>(Result_vec)</span>
+<span id="cb2064-3"><a href="monte.html#cb2064-3"></a>boot_delta</span></code></pre></div>
 <pre><code>## [1] -0.3045563</code></pre>
-<p>　実際の平均値の差分は-0.3066445、ブートストラップ推定量は -0.3045563であるため、その差は0.0020881です。これをブートストラップ推定量のバイアスと呼びます。</p>
+<div class="sourceCode" id="cb2066"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2066-1"><a href="monte.html#cb2066-1"></a><span class="co"># ブートストラップ推定量のバイアス</span></span>
+<span id="cb2066-2"><a href="monte.html#cb2066-2"></a>boot_b <span class="ot">&lt;-</span> delta <span class="sc">-</span> boot_delta</span></code></pre></div>
+<p>　実際の平均値の差分 (<span class="math inline">\(\delta_0\)</span>) は-0.3066445、ブートストラップ推定量 (<span class="math inline">\(\delta^*\)</span>) は -0.3045563であるため、その差は-0.0020881です。これをブートストラップ推定量のバイアス (<span class="math inline">\(b\)</span>) と呼びます。</p>
 <p>　ただし、我々に興味があるのは平均値の差分ではありません。平均値の差分はブートストラップ法を用いなくても普通に計算できるからです。ここで重要なのは平均値の差分の不確実性、つまり標準誤差でしょう。ブートストラップ推定量の標準誤差は<code>Result_vec</code>の標準偏差を計算するだけで十分です。</p>
-<div class="sourceCode" id="cb2064"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2064-1"><a href="monte.html#cb2064-1"></a><span class="fu">sd</span>(Result_vec) <span class="co"># ブートストラップ推定量の標準誤差</span></span></code></pre></div>
-<pre><code>## [1] 0.1404988</code></pre>
-<div class="sourceCode" id="cb2066"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2066-1"><a href="monte.html#cb2066-1"></a><span class="co"># 平均値の差分の平均値 / 平均値の差分の標準偏差</span></span>
-<span id="cb2066-2"><a href="monte.html#cb2066-2"></a><span class="fu">mean</span>(Result_vec) <span class="sc">/</span> <span class="fu">sd</span>(Result_vec)</span></code></pre></div>
-<pre><code>## [1] -2.167679</code></pre>
-<div class="sourceCode" id="cb2068"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2068-1"><a href="monte.html#cb2068-1"></a><span class="co"># p値</span></span>
-<span id="cb2068-2"><a href="monte.html#cb2068-2"></a>(<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pt</span>(<span class="fu">abs</span>(<span class="fu">mean</span>(Result_vec) <span class="sc">/</span> <span class="fu">sd</span>(Result_vec)), <span class="at">df =</span> <span class="dv">198</span>)) <span class="sc">*</span> <span class="dv">2</span></span></code></pre></div>
-<pre><code>## [1] 0.03137631</code></pre>
-<div class="sourceCode" id="cb2070"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2070-1"><a href="monte.html#cb2070-1"></a><span class="co"># 95%信頼区間</span></span>
-<span id="cb2070-2"><a href="monte.html#cb2070-2"></a><span class="fu">quantile</span>(Result_vec, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb2067"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2067-1"><a href="monte.html#cb2067-1"></a>boot_se <span class="ot">&lt;-</span> <span class="fu">sd</span>(Result_vec) <span class="co"># ブートストラップ推定量の標準偏差</span></span></code></pre></div>
+<p>　ブートストラップ推定量の標準偏差 (<span class="math inline">\(\mbox{se}^*\)</span>)は約0.14であり、<em>t</em>検定の結果から得られた標準誤差0.141と非常に近い値が得られました。</p>
+<p>　95%信頼区間を計算してみます。百分位数信頼区間 (Percentile CI)は<code>Result_Vec</code>の左側の領域が2.5%、右側の領域が2.5%となる区間ですので、<code>quantile()</code>関数で計算することができます。</p>
+<div class="sourceCode" id="cb2068"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2068-1"><a href="monte.html#cb2068-1"></a><span class="co"># 95%信頼区間</span></span>
+<span id="cb2068-2"><a href="monte.html#cb2068-2"></a><span class="fu">quantile</span>(Result_vec, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span></code></pre></div>
 <pre><code>##        2.5%       97.5% 
 ## -0.58084484 -0.02999534</code></pre>
-<p><code>Result_vec</code>のヒストグラムと<span class="math inline">\(\mu\)</span> = -0.307、<span class="math inline">\(\sigma\)</span> = 0.141の正規分布を重ねて見る（-0.307と0.141は<span class="math inline">\(t\)</span>検定から得られた数値）。</p>
-<div class="sourceCode" id="cb2072"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2072-1"><a href="monte.html#cb2072-1"></a><span class="fu">enframe</span>(Result_vec) <span class="sc">%&gt;%</span></span>
-<span id="cb2072-2"><a href="monte.html#cb2072-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb2072-3"><a href="monte.html#cb2072-3"></a>    <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">y =</span> ..density..), <span class="at">color =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
-<span id="cb2072-4"><a href="monte.html#cb2072-4"></a>    <span class="fu">stat_function</span>(<span class="fu">aes</span>(<span class="at">color =</span> <span class="st">&quot;Density&quot;</span>),</span>
-<span id="cb2072-5"><a href="monte.html#cb2072-5"></a>                  <span class="at">size =</span> <span class="dv">2</span>, <span class="at">fun =</span> dnorm, <span class="at">n =</span> <span class="dv">101</span>, </span>
-<span id="cb2072-6"><a href="monte.html#cb2072-6"></a>                  <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> <span class="sc">-</span><span class="fl">0.307</span>, <span class="at">sd =</span> <span class="fl">0.141</span>)) <span class="sc">+</span></span>
-<span id="cb2072-7"><a href="monte.html#cb2072-7"></a>    <span class="fu">scale_color_discrete</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Density&quot;</span> <span class="ot">=</span> <span class="fu">expression</span>(<span class="fu">paste</span>(mu <span class="sc">~</span> <span class="st">&quot;= -0.307, &quot;</span> <span class="sc">~</span> sigma <span class="sc">~</span> <span class="st">&quot;= 0.141 の正規分布&quot;</span>)))) <span class="sc">+</span></span>
-<span id="cb2072-8"><a href="monte.html#cb2072-8"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;平均値の差分&quot;</span>, <span class="at">y =</span> <span class="st">&quot;密度&quot;</span>, <span class="at">color =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb2072-9"><a href="monte.html#cb2072-9"></a>    <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
-<span id="cb2072-10"><a href="monte.html#cb2072-10"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
-<p><img src="montecarlo_files/figure-html/monte-boot8-1.png" width="2100" style="display: block; margin: auto;" /></p>
-<p><span class="math inline">\(t\)</span>検定とブートストラップ法の比較</p>
+<p>　バイアスを補正しないWald信頼区間は<span class="math inline">\(\delta_0 \pm 1.96 \times \mbox{se}^*\)</span>のように計算します (1.96は標準正規分布の累積密度分布において下側領域が0.975となる点です。)。</p>
+<div class="sourceCode" id="cb2070"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2070-1"><a href="monte.html#cb2070-1"></a>delta <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>)) <span class="sc">*</span> boot_se</span></code></pre></div>
+<pre><code>## [1] -0.58201710 -0.03127185</code></pre>
+<p>　バイアス修正Wald信頼区間は<span class="math inline">\((\delta_0 - b) \pm 1.96 \times \mbox{se}^*\)</span>です。</p>
+<div class="sourceCode" id="cb2072"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb2072-1"><a href="monte.html#cb2072-1"></a>(delta <span class="sc">-</span> boot_b) <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>)) <span class="sc">*</span> boot_se</span></code></pre></div>
+<pre><code>## [1] -0.57992897 -0.02918372</code></pre>
+<p>　これまでの結果を比較してみましょう。</p>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+t検定
+</th>
+<th style="text-align:right;">
+ブートストラップ
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(1): 平均値の差分
+</td>
+<td style="text-align:right;">
+-0.307
+</td>
+<td style="text-align:right;">
+-0.305
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+(2): 標準誤差
+</td>
+<td style="text-align:right;">
+0.141
+</td>
+<td style="text-align:right;">
+0.14
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+(3): 95%信頼区間
+</td>
+<td style="text-align:right;">
+[-0.585, -0.028]
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+(4): 95%信頼区間 (百分位数)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+[-0.581, -0.03]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+(5): 95%信頼区間 (Wald)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+[-0.582, -0.031]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+(6): 95%信頼区間 (バイアス修正Wald)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+[-0.58, -0.029]
+</td>
+</tr>
+</tbody>
+</table>
+<p>　今回の例は<code>t.test()</code>関数を使えば一発で終わる問題ですが、モデルが複雑になれば推定量の不確実性の計算が難しくなるケースがあります。その時に力を発揮するのがブートストラップ方であり、{boot}、{bootstrap}、{simpleboot}など様々なパッケージが利用可能です。</p>
 
 </div>
 </div>
