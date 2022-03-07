@@ -1,9 +1,9 @@
 #!/usr/bin/env perl
 
-$latex      = 'uplatex %O -synctex=1 -interaction=nonstopmode -file-line-error %S';
+$latex      = 'lualatex %O -synctex=1 -interaction=nonstopmode -file-line-error %S';
 $lualatex   = 'lualatex %O -synctex=1 -interaction=nonstopmode -file-line-error %S';
-$xelatex    = 'xelatex %O -synctex=1 -shell-escape -interaction=nonstopmode -file-line-error %S';
-$pdflatex   = 'pdflatex %O -synctex=1 -interaction=nonstopmode -file-line-error %S';
+$xelatex    = 'lualatex %O -synctex=1 -interaction=nonstopmode -file-line-error %S';
+$pdflatex   = 'lualatex %O -synctex=1 -interaction=nonstopmode -file-line-error %S';
 
 $biber      = 'biber %O --bblencoding=utf8 -u -U --output_safechars %B';
 $bibtex     = 'upbibtex %O %B';

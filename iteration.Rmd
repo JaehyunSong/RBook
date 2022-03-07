@@ -172,7 +172,7 @@ for (i in 1:length(num_list)) {
 Return_vec
 ```
 
-以上の例は`sapply()`、または`map_dbl`関数を使うとより短くすることができます。
+以上の例は`sapply()`、または`map_dbl()`関数を使うとより短くすることができます。
 
 ```{r iteration-intro-19}
 sapply(num_list, mean, na.rm = TRUE)
@@ -223,7 +223,8 @@ num_vec2 <- c(1, 0, 1, 0, 1)
 
 続いて`map2_dbl()`関数を使用し`num_vec`と`num_vec2`の掛け算を行います。`map2_*()`の使い方は`map_*()`とほぼ同様です。
 
-```{r iteration-two-args-2, eval = FALSE}
+```{r iteration-two-args-2}
+#| eval: FALSE
 map2_dbl(データ1, データ2, 関数 or ラムダ式, 追加の引数)
 ```
 
@@ -982,7 +983,7 @@ RDD_df %>%
   geom_ribbon(aes(x = BW, ymin = CI_lwr, ymax = CI_upr), alpha = 0.5) +
   geom_line(aes(x = BW, y = LATE), size = 1) +
   labs(x = "Bandwidth", y = "Local Average Treatment Effect (%p)") +
-  theme_minimal()
+  theme_minimal(base_size = 12)
 ```
 
 ### 説明・応答変数を指定したモデル推定 {#iteration-variables}
@@ -995,7 +996,7 @@ Diff_test <- t.test(PPP ~ G20, data = Country_df)
 Diff_test
 ```
 
-ここからいくつかの情報が読み取れます。まず、OECD加盟国のPPPは4957943、非加盟国は211287です。その差分は-4746656です。また、t値は-3.4136、p値は0.003です。これらの情報を効率よく抽出するには`broom::tidy()`が便利です。
+ここからいくつかの情報が読み取れます。まず、OECD加盟国のPPPは4957943、非加盟国は211287です。その差分は-4746656です。また、*t*値は-3.4136、*p*値は0.003です。これらの情報を効率よく抽出するには`broom::tidy()`が便利です。
 
 ```{r iteration-vars-2}
 broom::tidy(Diff_test)
@@ -1044,7 +1045,7 @@ Diff_df
 class(Diff_df$Formula[[1]])
 ```
 
-character型ですね。続いて、`map()`関数を使用してFormula列をformula型に変換します。
+character型ですね。続いて、`map()`関数を使用して`Formula`列をformula型に変換します。
 
 ```{r iteration-vars-8}
 Diff_df <- Diff_df %>%
@@ -1061,12 +1062,14 @@ class(Diff_df$Formula[[1]])
 
 formula型になっていることが分かります。
 
-もう一つの方法としては最初からfromula型の変数を入れても良いでしょう。推定するモデルが多くない場合は、こちらの方が簡単かも知れません。たとえば、これまでの作業を直接formula型を格納する形式で行うなら以下のようになります。
+もう一つの方法としては最初からfromula型の変数を入れても良いでしょう。推定するモデルが多くない場合は、こちらの方が簡単かも知れません。たとえば、これまでの作業を直接formula型を格納する形式で行うなら以下のようになります[^enframe]。
+
+[^enframe]: `enframe()`関数が登場しましたが、これはベクトル型、またはリスト型オブジェクトをtibble型に変換する関数です。
 
 ```{r iteration-vars-10}
 #| eval: FALSE
 # 方法1
-Diff_df <- tibble(Group = c("G7", "G20", "OECD"),
+Diff_df <- tibble(Group   = c("G7", "G20", "OECD"),
                   Formula = c(PPP ~ G7, 
                               PPP ~ G20, 
                               PPP ~ OECD))
@@ -1135,7 +1138,7 @@ Diff_df %>%
   scale_color_manual(values = c("統計的有意"   = "black",
                                 "統計的非有意" = "gray70")) +
   labs(x = "非加盟国のPPP - 加盟国のPPP", y = "グループ", color = "") +
-  theme_minimal(base_size = 12)
+  theme_minimal(base_size = 12) +
   theme(legend.position = "bottom")
 ```
 
