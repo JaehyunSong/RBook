@@ -14,7 +14,7 @@ source("_common.R")
 4. [散布図](#visual2-scatter)
 5. [折れ線グラフ](#visual2-line)
 
-　その他の図や、図の細かい修正については第\@ref(visualization3)章で解説します。
+　その他の図や、図の細かい修正については第\@ref(visualization3)章で解説します。また、使用するPCの環境によっては図の文字化けが生じる可能性があります。この場合は第\@ref(visual2-japanese)章を参照してください。
 
 ## 実習用データ {#visual2-data}
 
@@ -91,100 +91,6 @@ data.frame(Var = names(COVID19_df),
   row_spec(0, align = "c") %>%
   column_spec(1, monospace = TRUE)
 ```
-
----
-
-## 日本語が含まれた図について {#visual2-japanese}
-
-(以下は作成中の内容)
-
-{ggplot2}で作成した図に日本語が含まれている場合、日本語が正しく表示されない場合があります。また、RStudioのPlotsペインには日本語が表示されていても、PDF/PNG/JPGなどのファイルとして出力した場合、表示されないケースもあります。{ggplot2}の使い方を解説する前に、ここでは日本語が正しく表示/出力されない場合の対処法について紹介します。
-
-### macOSの場合
-
-一つ一つの図にフォント族 (font famiily)を指定
-
-```r
-theme(text = element_text(family = "HiraginoSans-W3"))
-```
-
-または、`theme_bw()`や`theme_minimal()`など、特定のテーマを使用するのであればそのテーマのレイヤーにフォントを指定することもできる。たとえば、{ggplot2}のデフォルトテーマであるgrayテーマを使用するなら、{ggplot2}のオブジェクトに以下のようなレイヤーを追加する。
-
-```r
-theme_gray(base_familiy = "HiraginoSans-W3")
-```
-
-最初に宣言しておく
-
-```r
-theme_update(text = element_text(family = "HiraginoSans-W3"))
-```
-
-ただし、`geom_text()`、`geom_label()`、`annotate()`のような文字列を出力する幾何オブジェクトを使用する際は、各レイヤーごとにフォント族を指定する必要がある (`family = "HiraginoSans-W3"`)。
-
-ファイル (PDF)として出力する際は
-
-```r
-quartz(file = "出力するファイル名", type = "pdf", width = 幅, height = 高さ)
-{ggplot2}で作成した図のオブジェクト名
-dev.off()
-```
-
-### Windowsの場合
-
-### {ragg}の使用
-
-```r
-pacman::p_install(ragg)
-```
-
-以下のやり方でPlotsペインでの日本語問題は解決
-
-1. RStudioのTools>Global Options...
-2. 左のGeneral>右側上段のGraphicsタブ
-3. Graphic DeviceのBackendでAGGを選択
-
-RMarkdown (HTML出力)の場合、最初のチャンクに以下のコードを追加する。PNGの場合、解像度が低いと見た目があまり良くないため、dpiは150以上がオススメ
-
-```r
-knitr::opts_chunk$set(dev = "ragg_png", dpi = 300)
-```
-
-ファイルとして出力したい場合は (PNG)
-
-* **方法1:** `ragg::agg_png()`を使用
-* **方法2:** `ggsave()`に`device = ragg::agg_png`を指定
-
-ファイルとして出力したい場合は (PDF)
-
-<!--
-　使用しているPCのOSによっては、日本語、または漢字が□□□で出力されることもあります（豆腐化と呼ばれます）。この場合は、プロットで使用するフォント群 (font family)を指定する必要があります。たとえば、macOSの場合、ヒラギノ角コジックW3がよく使われます (W0からW9まであり、数字が大きくなると太字になります)。フォント群の指定は`theme_*()`関数の`base_family`引数で行います。ここの`theme_*()`ですが、`*`の箇所には`gray`や`bw`、`minimal`などが入ります。{ggplot2}が提供しているテーマについては[ここ](https://www.r-graph-gallery.com/192-ggplot-themes.html)を参照してください。また、`ggthemes`や`egg`、`hrbrthemes`などのパッケージを導入すると様々なテーマが利用可能になります。デフォルトのテーマは`gray`ですが、今回は`bw`にし、ヒラギノ角コジックW3 (`"HiraginoSans-W3"`)をフォント群として指定します。
-
-　Windowsの場合、`windowsFonts()`関数を使ってフォントを予め登録しておく必要があります。たとえば、Windowsが提供している游ゴジック体を「YuGothic」という名で登録する場合、以下のように登録します。
-
-```r
-windowsFonts(YuGothic = windowsFont("Yu Gothic"))
-```
-
-　もしGoogle社が公開しているNoto Sans CJK JPを「Noto」という名で登録するなら、
-
-```r
-windowsFonts(Noto = windowsFont("Noto Sans CJK JP"))
-```
-
-のように入力します。
-
-```r
-Country_df %>%
-  ggplot() +
-  geom_bar(aes(x = Continent)) +
-  labs(x = "大陸", y = "ケース数") +
-  theme_bw()
-```
-
-　もし、Windowsで「YuGothic」や「Noto」を使用するなら`base_family`の実引数として`"YuGothic"`や`"Noto"`を指定します。
-
--->
 
 ---
 
@@ -1328,32 +1234,101 @@ COVID19_df %>%
 
 ---
 
+## 日本語が含まれた図について {#visual2-japanese}
+
+(以下は作成中の内容)
+
+　{ggplot2}で作成した図に日本語が含まれている場合、日本語が正しく表示されない場合があります。また、RStudioのPlotsペインには日本語が表示されていても、PDF/PNG/JPGなどのファイルとして出力した場合、表示されないケースもあります。{ggplot2}の使い方を解説する前に、ここでは日本語が正しく表示/出力されない場合の対処法について紹介します。
+
+### macOSの場合
+
+　今後紹介する{ggplot2}の図の最後に以下のようなレイヤーを追加すればヒラギノフォントを使用することができます。
+
+```{r visual2-japanese-mac-1}
+#| eval: FALSE
+theme(text = element_text(family = "HiraginoSans-W3"))
+```
+
+　または、`theme_bw()`や`theme_minimal()`など、特定のテーマを使用するのであればそのテーマのレイヤーにフォントを指定することもできます。たとえば、{ggplot2}のデフォルトテーマであるgrayテーマを使用するなら、{ggplot2}のオブジェクトに以下のようなレイヤーを追加する。
+
+```{r visual2-japanese-mac-2}
+#| eval: FALSE
+theme_gray(base_familiy = "HiraginoSans-W3")
+```
+
+　もう一つの方法としましては、コードの最初に以下のようなコードを追加します。このコードが実行された以降の図には全てヒラギノフォントが適用されます。
+
+```{r visual2-japanese-mac-3}
+#| eval: FALSE
+theme_update(text = element_text(family = "HiraginoSans-W3"))
+```
+
+　ただし、いずれの方法でも、`geom_text()`、`geom_label()`、`annotate()`のような文字列を出力する幾何オブジェクトを使用する際は、各レイヤーごとにフォント族を指定する必要があります (幾何オブジェクト内に`family = "HiraginoSans-W3"`を追加)。
+
+　作成した図ファイル (PDF) として出力 (保存) する際は`quartz()`関数と`dev.off()`関数の間に{ggplot2}で作成したオブジェクト名を入れるだけです。図でフォントが正しく指定されていれば、問題なく日本語を含まれたPDF形式の図が保存できます。
+
+```{r visual2-japanese-mac-4}
+#| eval: FALSE
+quartz(file = "出力するファイル名", type = "pdf", width = 幅, height = 高さ)
+{ggplot2}で作成した図のオブジェクト名
+dev.off()
+```
+
+　PNG形式の図を保存する場合は、後述する{ragg}パッケージの仕様をおすすめします。
+
+### Windowsの場合
+
+???
+
+### {ragg}の使用
+
+　{ragg}パッケージを使用すると、使用するOSと関係なくRStudioのPlotsペイン、R Markdown (HTML出力)の文字化けを回避することができます。{ragg}はインストールのみで十分であり、別途読み込む必要がないため、インストールだけします。
+
+```{r visual2-japanese-ragg-1}
+#| eval: FALSE
+pacman::p_install(ragg)
+```
+
+　RStudio上の文字化けを回避するためには、RStudioの設定を以下のように変更します。
+
+1. RStudioのTools>Global Options...
+2. 左のGeneral>右側上段のGraphicsタブ
+3. Graphic DeviceのBackendでAGGを選択
+
+　R Markdown (HTML出力)の場合、YAMLヘッダーの直後に以下のようなチャンクを追加します。チャンクのオプションとして`include = FALSE`を指定しておけば、出力結果にコードが表示されなくなるため、指定するのを推奨します。`dpi`は任意の値で良いですが、PNG形式の場合、解像度が低いと見た目があまり良くないため、150以上に設定することをおすすめします。Web表示だけなら150でも良いですが、印刷を考えると300がおすすめです。
+
+```{r visual2-japanese-ragg-2}
+#| eval: FALSE
+knitr::opts_chunk$set(dev = "ragg_png", dpi = 300)
+```
+
+---
+
 ## 図の保存 {#visual2-save}
 
 　綺麗な図も出来上がりましたので、みんなに自慢してみましょう。ただ、自慢のためにパソコンを持ち歩くのは大変なので、ファイルと保存してみんなに配りましょう。自慢する相手がいないなら[SONG](mailto:jasong@mail.doshisha.ac.jp)に自慢しても結構です。図のフォーマットはPNGかPDFが一般的です。JPEGなど圧縮フォーマットは絶対にダメです。PNGとPDFは前者はピクセルベース、後者がベクトルベースで、PDFの方が拡大してもカクカクせず綺麗です。ただし、一部の文書作成ソフトウェアでPDFを図として扱えない点や、サイズの問題 (複雑な図になるほど、PDFの方がサイズが大きくなる)もあるので、PNGを使うケースも多いです。むろん、LaTeXで文章を作成するなら、PDF一択です。
 
-　保存方法として以下の2つを紹介します。
-
-1. `ggsave()`を利用: 簡単。ただし、macOSで日本語が含まれるPDFとして保存する場合は問題が生じる。
-2. `quartz()`を利用: macOS、かつ日本語が含まれるPDFならこちらを利用
+　保存方法として以下の3つを紹介します。
 
 ### `ggsave()`を利用した図の保存
 
 　`ggsave()`が{ggplot2}が提供する図の保存関数です。まずは、使い方から紹介します。
 
-```{r visual2-save-1, eval = FALSE}
+```{r visual2-save-ggsave-1, eval = FALSE}
 # ggsave()を利用した保存方法
 ggsave(filename = "ファイル名",
        plot     = 図のオブジェクト名,
        device   = "pdf"や"png"など,
        width    = 図の幅,
        height   = 図の高さ、
-       units    = "in"や"cm"など、幅/高さの単位)
+       units    = "in"や"cm"など、幅/高さの単位,
+       dpi      = 図の解像度)
 ```
 
 　`device`で指定可能なフォーマットとしては`"png"`、`"eps"`、`"ps"`、`"tex"`、`"pdf"`、`"jpeg"`、`"tiff"`、`"bmp"`、`"svg"`、`"wmf"`があります。また、`units`は`"in"` (インチ)、`"cm"`、`"mm"`が指定可能です。他にも`dpi`引数でdpi (dots per inch; 1平方インチにどれだけのドットの表現ができるか)の指定も可能ですが、デフォルトは300となっており、出版用としては一般的なdpiとなっています。それでは、本章の最初に作成した棒グラフを`BarPlot1`という名で保存し、`Figs`フォルダー内に`BarPlot1.png`として保存してみます。幅と高さは5インチにします。
 
-```{r visual2-save-2, eval = FALSE}
+```{r visual2-save-ggsave-2}
+#| eval: FALSE
 BarPlot1 <- Country_df %>%
   ggplot() +
   geom_bar(aes(x = Continent)) +
@@ -1372,7 +1347,7 @@ ggsave(filename = "Figs/BarPlot.png",
 
 　macOSを使用し、日本語などのマルチバイトの文字が含まれる図の場合、`ggsave()`が正しく作動しません。この場合は`quartz()`と`dev.off()`関数を利用して図を保存します。この関数の使い方は以下の通りです。
 
-```{r visual2-save-3, eval = FALSE}
+```{r visual2-save-quartz-1, eval = FALSE}
 # quartz()を利用した保存方法
 quartz(type = "pdf", file = "ファイル名", width = 図の幅, height = 図の高さ)
 作図のコード、または図オブジェクトの呼び出し
@@ -1383,7 +1358,7 @@ dev.off()
 
 　たとえば、最初に作成した図を`Figs`フォルダーの`BarPlot1.pdf`という名で保存し、幅と高さを5インチにするなら以下のようなコードになります。
 
-```{r visual2-save-4, eval = FALSE}
+```{r visual2-save-quartz-4, eval = FALSE}
 # 方法1
 quartz(type = "pdf", file = "Figs/BarPlot1.pdf", width = 5, height = 5)
 Country_df %>%
@@ -1403,6 +1378,38 @@ BarPlot1
 dev.off()
 ```
 
+{ragg}が導入されている状態で、図をPNG形式のファイルとして保存 (出力) したい場合は、2つの方法があります。
+
+### {ragg}が導入済みの場合
+
+PNG形式限定
+
+**方法1:** `ragg::agg_png()`を使用する。
+
+　これは`ragg::agg_png()`関数と`dev.off()`関数の間に{ggplot2}で作成したオブジェクト名を入れる方法でmacOSの`quartz()`関数とほぼ同じ使い方です。ただし、仮引数名が異なるため、注意してください。また、`dpi`の仮引数は存在せず、代わりに`res`を使います。
+
+```{r visual2-save-ragg-1, eval = FALSE}
+ragg::agg_png(filename = "出力するファイル名", res = 300, 
+              width = 幅, height = 高さ)
+{ggplot2}で作成した図のオブジェクト名
+dev.off()
+```
+
+**方法2:** `ggsave()`に`device = ragg::agg_png`を指定する。
+
+　この方法は{ggplot2}が提供する`ggsave()`関数を使用する方法です。ここでは`device`に`ragg:agg_png`を指定すれば、日本語が文字化けせずPNG形式のファイルとして保存されます。
+
+```{r visual2-save-ragg-2, eval = FALSE}
+ggsave(filename = "出力するファイル名", 
+       plot     = 図のオブジェクト名,
+       device   = ragg::agg_png,
+       dpi      = 150,
+       width    = 幅, 
+       height   = 高さ)
+```
+
+　PDFファイルとして出力したい場合は各OSごとの説明を参照してください。
+
 ---
 
 ## まとめ {#visual2-summary}
@@ -1421,7 +1428,10 @@ dev.off()
 
 　2番目の資料は非常に分かりやすい資料ですが、Google Drive経由で公開されているため、いつリンクが切れかが不明です。念の為に本ページにも資料を転載します。
 
-```{r visual2-summary-1, out.width="85%", fig.cap = "ggplot2 aesthetics cheatsheet", echo = FALSE}
+```{r visual2-summary-1}
+#| echo: FALSE
+#| out.width: "85%"
+#| fig.cap: "ggplot2 aesthetics cheatsheet"
 knitr::include_graphics("figures/Visualization2/ggplot_aesthetics_cheatsheet.png")
 ```
 
