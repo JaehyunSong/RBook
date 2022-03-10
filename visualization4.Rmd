@@ -266,7 +266,8 @@ ggExtra::ggMarginal(Scatter_Fig1, type = "boxplot")
 
 　リッジプロットを作成する前に、`geom_density()`幾何オブジェクトを用い、変数の密度曲線（density curve）を作ってみます。マッピングは`x`に対し、分布を出力する変数名を指定します。また、密度曲線内部に色塗り（`fill`）をし、曲線を計算する際のバンド幅（`bw`）は0.054にします。`bw`が大きいほど、なめらかな曲線になります。
 
-```{r visual4-ridge1, cache = TRUE}
+```{r visual4-ridge1}
+#| cache: TRUE
 Country_df %>%
   ggplot() +
   geom_density(aes(x = HDI_2018), fill = "gray70", bw = 0.054) +
@@ -276,7 +277,8 @@ Country_df %>%
 
 　これを大陸ごとに出力する場合、ファセット分割を行います。今回は大陸ごとに1列（`ncol = 1`）でファセットを分割します。
 
-```{r visual4-ridge2, cache = TRUE}
+```{r visual4-ridge2}
+#| cache: TRUE
 Country_df %>%
   ggplot() +
   geom_density(aes(x = HDI_2018), fill = "gray70", bw = 0.054) +
@@ -287,13 +289,15 @@ Country_df %>%
 
 　それでは上のグラフをリッジプロットとして作図してみましょう。今回は{ggridges}パッケージを使います。
 
-```{r visual4-ridge3, message = FALSE}
+```{r visual4-ridge3}
+#| message: FALSE
 pacman::p_load(ggridges)
 ```
 
 　使用する幾何オブジェクトは`geom_density_ridges()`です。似たような幾何オブジェクトとして`geom_ridgeline()`がありますが、こちらは予め密度曲線の高さを計算しておく必要があります。一方、`geom_density_ridges()`は変数だけ指定すれば密度を自動的に計算してくれます。マッピングは`x`と`y`に対し、それぞれ分布を出力する変数名とグループ変数名を指定します。また、密度曲線が重なるケースもあるため、透明度（`alpha`）も0.5にしておきましょう。ここでは別途指定しませんが、ハンド幅も指定可能であり、`aes()`の外側に`bandwidth`を指定するだけです。
 
-```{r visual4-ridge4, cache = TRUE}
+```{r visual4-ridge4}
+#| cache: TRUE
 Country_df %>%
   ggplot() +
   geom_density_ridges(aes(x = HDI_2018, y = Continent), 
@@ -304,7 +308,8 @@ Country_df %>%
 
 先ほど作図した図と非常に似た図が出来上がりました。ファセット分割に比べ、空間を最大限に活用していることが分かります。ファセットラベルがなく、グループ名が縦軸上に位置するからです。また、リッジプロットの特徴は密度曲線がオーバラップする点ですが、以下のように`scale = 1`を指定すると、オーバラップなしで作成することも可能です。もし、`scale = 3`にすると最大2つの密度曲線が重なることになります。たとえば最下段のアフリカはアメリカの行と若干オーバラップしていますが、`scale = 3`の場合、アジアの行までオーバーラップされうることになります。
 
-```{r visual4-ridge5, cache = TRUE}
+```{r visual4-ridge5}
+#| cache: TRUE
 Country_df %>%
   ggplot() +
   geom_density_ridges(aes(x = HDI_2018, y = Continent), 
@@ -317,7 +322,8 @@ Country_df %>%
 
 [^viridis]: 最後の`_c`はマッピングする変数（ここでは`HDI_2018`）が連続変数（**c**ontinuous）であることを意味します。
 
-```{r visual4-ridge6, cache = TRUE}
+```{r visual4-ridge6}
+#| cache: TRUE
 Country_df %>%
   ggplot() +
   geom_density_ridges_gradient(aes(x = HDI_2018, y = Continent, fill = stat(x)), 
@@ -330,7 +336,8 @@ Country_df %>%
 
 密度曲線は基本的にはなめらかな曲線であるため、データが存在しない箇所にも密度が高く見積もられるケースがあります。全体的な分布を俯瞰するには良いですが、情報の損失は避けられません。そこで出てくるのが点付きのリッジプロットです。`HDI_2018`の個々の値を点で出力するには`jittered_points = TRUE`を指定するだけです。これだけで密度曲線の内側に点が若干のズレ付き（jitter）で出力されます。ただし、密度曲線がオーバーラップされるリッジプロットの特徴を考えると、グループごとに点の色分けをする必要があります（同じ色になると、どのグループの点かが分からなくなるので）。この場合、`point_color`に対し、グループ変数（`Continent`）をマッピングします。また、密度曲線の色と合わせるために密度曲線の色塗りも`fill`で指定します。
 
-```{r visual4-ridge7, cache = TRUE}
+```{r visual4-ridge7}
+#| cache: TRUE
 Country_df %>%
   ggplot() +
   geom_density_ridges(aes(x = HDI_2018, y = Continent, fill = Continent,
@@ -343,7 +350,8 @@ Country_df %>%
 
 　他にも密度曲線の下側にラグプロットを付けることも可能です。こうすれば点ごとに色訳をする必要もなくなります。ラグプロットを付けるためには点の形（`point_shape`）を「|」にする必要があります。ただ、これだけだと「|」が密度曲線内部に散らばる（jittered）だけです。散らばりをなくす、つまり密度曲線の下段に固定する必要があり、これは`aes()`その外側に`position = position_points_jitter(width = 0, height = 0)`を指定することで出来ます。
 
-```{r visual4-ridge8, cache = TRUE}
+```{r visual4-ridge8}
+#| cache: TRUE
 Country_df %>%
   ggplot() +
   geom_density_ridges(aes(x = HDI_2018, y = Continent, fill = Continent), 
@@ -357,7 +365,8 @@ Country_df %>%
 
 　最後に密度曲線でなく、ヒストグラムで示す方法を紹介します。これは`geom_density_ridges()`の内部に`stat = "binline"`を指定するだけです。
 
-```{r visual4-ridge9, cache = TRUE}
+```{r visual4-ridge9}
+#| cache: TRUE
 Country_df %>%
   ggplot() +
   geom_density_ridges(aes(x = HDI_2018, y = Continent), alpha = 0.5,
@@ -376,7 +385,9 @@ $$
 \text{PPP per capita} = \beta_0 + \beta_1 \cdot \text{FH}\_\text{Total} + \varepsilon
 $$
 
-```{r visual4-pointrage1, echo = FALSE, cache = TRUE}
+```{r visual4-pointrage1}
+#| echo: FALSE
+#| cache: TRUE
 Pointrange_df <- Country_df %>%
     filter(Continent != "Oceania") %>%
     group_by(Continent) %>%
@@ -389,7 +400,8 @@ Pointrange_df <- Country_df %>%
            Conf_lwr = conf.low, Conf_upr = conf.high) 
 ```
 
-```r
+```{r visual4-pointrage2}
+#| eval: FALSE
 Pointrange_df <- tibble(
     Continent = c("Asia", "Europe", "Africa", "America"),
     Coef      = c(65.3, 588.0, 53.4, 316.0),
@@ -398,13 +410,14 @@ Pointrange_df <- tibble(
 )
 ```
 
-```{r visual4-pointrage2, cache = TRUE}
+```{r visual4-pointrage3}
 Pointrange_df
 ```
 
 　実は以上のデータは以下のようなコードで作成されています。{purrr}パッケージの使い方に慣れる必要があるので、第\@ref(iteration)章を参照してください。
 
-```r
+```{r visual4-pointrage4}
+#| eval: FALSE
 Pointrange_df <- Country_df %>%
     filter(Continent != "Oceania") %>%
     group_by(Continent) %>%
@@ -419,7 +432,8 @@ Pointrange_df <- Country_df %>%
 
 この`Pointrange_df`を用いて横軸は大陸（`Continent`）、縦軸には点推定値（`Coef`）と95%信頼区間（`Conf_lwr`と`Conf_upr`）を出力します。ここで使う幾何オブジェクトは`geom_pointrange()`です。横軸`x`と点推定値`y`、95%信頼区間の下限の`ymin`、上限の`ymax`にマッピングします。エラーバー付き散布図を立てに並べたい場合は`y`と`x`、`xmin`、`xmax`にマッピングします。
 
-```{r visual4-pointrage3, cache = TRUE}
+```{r visual4-pointrage5}
+#| cache: TRUE
 Pointrange_df %>%
     ggplot() +
     geom_hline(yintercept = 0, linetype = 2) +
@@ -432,7 +446,9 @@ Pointrange_df %>%
 
 ここでもう一つの次元を追加することもあるでしょう。たとえば、複数のモデルを比較した場合がそうかもしれません。以下の`Pointrange_df2`について考えてみましょう。
 
-```{r visual4-pointrage4, echo = FALSE, cache = TRUE}
+```{r visual4-pointrage6}
+#| echo: FALSE
+#| cache: TRUE
 Pointrange_df2 <-Country_df %>%
     filter(Continent != "Oceania") %>%
     group_by(Continent) %>%
@@ -452,7 +468,8 @@ Pointrange_df2 <-Country_df %>%
     mutate(Term = if_else(Term == "FH_CL", "Civic Liberty", "Political Right"))
 ```
 
-```r
+```{r visual4-pointrage7}
+#| eval: FALSE
 Pointrange_df2 <- tibble(
     Continent = rep(c("Asia", "Europe", "Africa", "America"), each = 2),
     Term      = rep(c("Civic Liverty", "Political Right"), 4),
@@ -464,7 +481,7 @@ Pointrange_df2 <- tibble(
                   232.697, 241.057, 900.863, 1092.331))
 ```
 
-```{r visual4-pointrage5, cache = TRUE}
+```{r visual4-pointrage8}
 Pointrange_df2
 ```
 
@@ -479,7 +496,8 @@ $$
 
 　どの説明変数を用いたかでエラーバーと点の色分けを行う場合、`color`に対して`Term`をマッピングします。
 
-```{r visual4-pointrage6, cache = TRUE}
+```{r visual4-pointrage9}
+#| cache: TRUE
 Pointrange_df2 %>%
     ggplot() +
     geom_hline(yintercept = 0, linetype = 2) +
@@ -494,7 +512,8 @@ Pointrange_df2 %>%
 
 　何か違いますね。この2つのエラーバーと点の位置をずらす必要があるようです。これは3次元以上の棒グラフで使った`position`引数で調整可能です。今回は実引数として`position_dodge(0.5)`を指定してみましょう。
 
-```{r visual4-pointrage7, cache = TRUE}
+```{r visual4-pointrage10}
+#| cache: TRUE
 Pointrange_df2 %>%
     ggplot() +
     geom_hline(yintercept = 0, linetype = 2) +
@@ -510,7 +529,8 @@ Pointrange_df2 %>%
 
 　これで完成です。更に、$\alpha = 0.05$水準で統計的に有意か否かを透明度で示し、透明度の凡例を非表示にしてみましょう。$\alpha = 0.05$水準で統計的に有意か否かは95%信頼区間の上限と下限の積が0より大きいか否かで判定できます。`ggplot()`にデータを渡す前に統計的有意か否かを意味する`Sig`変数を作成し、`geom_pointrage()`の内部では`alpha`に`Sig`をマッピングします。
 
-```{r visual4-pointrage8, cache = TRUE}
+```{r visual4-pointrage11}
+#| cache: TRUE
 Pointrange_df2 %>%
     mutate(Sig = if_else(Conf_lwr * Conf_upr > 0, 
                          "Significant", "Insignificant")) %>%
@@ -1032,7 +1052,8 @@ ne_countries(scale = "large", country = "Japan", returnclass = "sf") %>%
 
 　ただ、日本地図を出すという場合、多くは都道府県レベルでマッピングが目的でしょう。世界地図のマッピングならこれで問題ありませんが、一国だけなら、その下の自治体の境界線も必要です。したがって、先ほど使用しましたパッケージのより高解像度の地図が含まれている{rnaturalearthhires}をインストールし、読み込みましょう。`r format(Sys.Date(), "%Y年%b月%d日")`現在、{rnaturalearthhires}はCRANに登録されておらず、GitHubの[ropensciレポジトリー](https://github.com/ropensci)のみで公開されているため、今回は{pacman}の`p_load()`でなく、`p_load_gh()`を使用します。
 
-```{r visual4-map12, message = FALSE}
+```{r visual4-map12}
+#| message: FALSE
 pacman::p_load_gh("ropensci/rnaturalearthhires")
 ```
 
@@ -1163,7 +1184,10 @@ Osaka_map %>%
 
 　近年、因果推論の界隈でよく登場する非巡回有向グラフ（DAG）ですが、「グラフ」からも分かるように、DAGの考え方に基づく因果推論の研究には多くの図が登場します。DAGを作図するには{ggplot2}のみでも可能ですが、{dagitty}パッケージでDAGの情報を含むオブジェクトを生成し、{ggdag}で作図した方が簡単です。以下の図はDAGの一例です。
 
-```{r visual4-dag1, message = FALSE, echo= FALSE, cache = TRUE}
+```{r visual4-dag1}
+#| echo: FALSE
+#| message: FALSE
+#| cache: TRUE
 pacman::p_load(dagitty, ggdag)
 
 dagify(X ~ Z,
@@ -1177,13 +1201,15 @@ dagify(X ~ Z,
 
 　それではまず、以上の図を作ってみましょう。最初のステップとして{dagitty}と{ggdag}をインストールし、読み込みましょう。
 
-```{r visual4-dag2, eval = FALSE}
+```{r visual4-dag2}
+#| eval: FALSE
 pacman::p_load(dagitty, ggdag)
 ```
 
 　つづいて、DAGの情報を含むオブジェクトを作成します。使用する関数は`dagify()`であり、ここには`結果 ~ 原因`の形で各ノード間の関係を記述します。先ほどの図では`X`は`Y`の原因（`X ~ Y`）、`Z`は`X`と`Y`の原因（`X ~ Z`と`Y ~ Z`）です。これらの情報を`dagify()`内で指定します。
 
-```{r visual4-dag3, cache = TRUE}
+```{r visual4-dag3}
+#| cache: TRUE
 DAG_data1 <- dagify(X ~ Z,
                     Y ~ Z,
                     Y ~ X,
@@ -1195,7 +1221,8 @@ DAG_data1
 
 　`Y ~ X`と`Y ~ Z`は`Y ~ X + Z`とまとめることも可能です。これは「`Y`の原因は`X`と`Z`である」という意味であり、「`Y`の原因は`X`であり、`Y`の原因は`Z`である」と同じ意味です。また、DAGを作図する際、`dagify()`内に`exposure`と`outcome`は不要ですが、もし`adjustmentSets()`関数などを使って統制変数を特定したい場合は処置変数（`exposure`）と応答変数（`outcome`）にそれぞれ変数名を指定します。ちなみに、以上のコードは以下のように書くことも可能です。
 
-```{r visual4-dag4, cache = TRUE}
+```{r visual4-dag4}
+#| cache: TRUE
 DAG_data1 <- dagitty(
   "dag{
   X -> Y
@@ -1209,14 +1236,16 @@ DAG_data1
 
 　格納された`DAG_data1`オブジェクトのクラスは`"dagitty"`です。`"dagitty"`の可視化には{ggdag}の`ggdag()`を使用します。
 
-```{r visual4-dag5, cache = TRUE}
+```{r visual4-dag5}
+#| cache: TRUE
 DAG_data1 %>%
   ggdag()
 ```
 
 　DAGにおいて背景、軸の目盛り、ラベルは不要ですので、`theme_dag_blank()`テーマを指定して全て除去します。
 
-```{r visual4-dag6, cache = TRUE}
+```{r visual4-dag6}
+#| cache: TRUE
 DAG_data1 %>%
   ggdag() +
   theme_dag_blank()
@@ -1226,14 +1255,16 @@ DAG_data1 %>%
 
 　読者の多くは以上のグラフと異なるものが得られたかも知れません。ノード間の関係は同じはずですが、ノードの位置が異なるでしょう。また、同じコードを実行する度にノードの位置は変わります。以下ではノードの位置を固定する方法について紹介します。位置を指定するには`dagify()`内で`coords`引数に各ノードの情報が格納されたリスト型オブジェクトを指定する必要があります。リストの長さは2であり、それぞれの名前は`x`と`y`です。そしてリストの各要素にはベクトルが入ります。たとえば、ノード`X`の位置を (1, 1)、`Y`の位置を (3, 1)、`Z`の位置を (2, 2)に指定してみましょう。`dagify()`内で直接リストを書くことも可能ですが、コードの可読性が落ちるため、別途のオブジェクト（`DAG_Pos2`）として格納しておきます。
 
-```{r visual4-dag7, cache = TRUE}
+```{r visual4-dag7}
+#| cache: TRUE
 DAG_Pos2  <- list(x = c(X = 1, Y = 3, Z = 2),
                   y = c(X = 1, Y = 1, Z = 2))
 ```
 
 　続いて、`dagify()`内で`coords`引数を追加し、ノードの位置情報が格納されている`DAG_Pos2`を指定します。
 
-```{r visual4-dag8, cache = TRUE}
+```{r visual4-dag8}
+#| cache: TRUE
 DAG_data2 <- dagify(X ~ Z,
                     Y ~ X + Z,
                     exposure = "X",
@@ -1245,7 +1276,8 @@ DAG_data2
 
 　可視化の方法は同じです。
 
-```{r visual4-dag9, cache = TRUE}
+```{r visual4-dag9}
+#| cache: TRUE
 DAG_data2 %>%
   ggdag() +
   theme_dag_blank()
@@ -1253,7 +1285,8 @@ DAG_data2 %>%
 
 　以上の使い方だけでも、ほとんどのDAGは描けるでしょう。また、ノードを若干オシャレ（?）にするには、`ggdag()`内で`stylized = TRUE`を指定します。
 
-```{r visual4-dag10, cache = TRUE}
+```{r visual4-dag10}
+#| cache: TRUE
 DAG_Pos3  <- list(x = c(X1 = 3, X2 = 3, X3 = 1, T = 2, Y = 4),
                   y = c(X1 = 1, X2 = 2, X3 = 2, T = 3, Y = 3))
 
@@ -1271,13 +1304,15 @@ DAG_data3 %>%
 
 　可視化の話ではありませんが、`adjustmentSets()`関数を用いると、処置変数`T`の総効果（total effect）を推定するためにはどの変数を統制（調整）する必要があるかを調べることも可能です。
 
-```{r visual4-dag11, cache = TRUE}
+```{r visual4-dag11}
+#| cache: TRUE
 adjustmentSets(DAG_data3, effect = "total")
 ```
 
 　`X3`変数のみ統制すれば良いという結果が得られました。また、`T`から`Y`への直接効果（direct effect）の場合、`effect = "direct"`を指定します。
 
-```{r visual4-dag12, cache = TRUE}
+```{r visual4-dag12}
+#| cache: TRUE
 adjustmentSets(DAG_data3, effect = "direct")
 ```
 
@@ -1293,13 +1328,15 @@ adjustmentSets(DAG_data3, effect = "direct")
 
 [^bump1]: これから登場する`geom_bump()`幾何オブジェクトが使えるようになります。{ggbump}を使用せず、{ggplot2}が提供する`geom_line()`でも代替可能です。`geom_line()`の場合、直線で順位の変化が表示され、`geom_bump()`の場合は曲線で表示されます。丸い感じの図を好まない方なら、{ggbump}を読み込まず、`geom_bump()`を`geom_line()`に書き換えてください。
 
-```{r visual4-bump1, message = FALSE}
+```{r visual4-bump1}
+#| message: FALSE
 pacman::p_load(ggbump)
 ```
 
 　ここではG7構成国の100万人当り新型コロナ感染者数の順位がどのように変化したのかを2020年4月から7月まで1ヶ月単位で表したデータが必要です。データは以下のようなコードで作成しますが、[本書のサポートページ](https://github.com/JaehyunSong/RBook)からもダウンロード可能です。
 
-```{r visual4-bump2, cache = TRUE}
+```{r visual4-bump2}
+#| cache: TRUE
 Bump_df <- left_join(COVID19_df, Country_df, by = "Country") %>%
   select(Country, Date, Population, Confirmed_Total, G7) %>%
   separate(Date, into = c("Year", "Month", "Day"), sep = "/") %>%
@@ -1313,7 +1350,8 @@ Bump_df <- left_join(COVID19_df, Country_df, by = "Country") %>%
   select(Country, Month, New_Cases_per_million)
 ```
 
-```{r visual4-bump3, cache = TRUE}
+```{r visual4-bump3}
+#| cache: TRUE
 Bump_df <- Bump_df %>%
   group_by(Month) %>%
   mutate(Rank = rank(New_Cases_per_million, ties.method = "random")) %>%
@@ -1323,19 +1361,17 @@ Bump_df <- Bump_df %>%
 
 　必要なデータは以下のような形式です。ちなみにバンプチャートを作成するためには最後の`New_Cases_per_million`列 (100万人当り新型コロナ感染者数)は不要です。つまり、国名、月、順位のみで十分です。
 
-```r
+```{r visual4-bump4}
+#| eval: FALSE
 # 以上のコードを省略し、加工済みのデータを読み込んでもOK
 # Bump_df <- read_csv("Data/Bumpchart.csv")
 Bump_df
 ```
 
-```{r visual4-bump4, echo = FALSE}
-DT::datatable(Bump_df)
-```
-
 　それでは{ggbump}が提供する`geom_bump()`幾何オブジェクトを使用し、簡単なバンプチャートを作成してみましょう。必要なマッピング要素は`x`と`y`、`color`です。`x`には時間を表す変数である`Month`を、`y`には順位を表す`Rank`をマッピングします。また、7本の線が出るため、月と順位、それぞれの値がどの国の値かを特定する必要があります。`groups`に国名である`Country`をマッピングしても線は引けますが、どの線がどの国かが分からなくなるため、`color`に`Country`をマッピングし、線の色分けをします。
 
-```{r visual4-bump5, cache = TRUE}
+```{r visual4-bump5}
+#| cache: TRUE
 Bump_df %>%
   ggplot(aes(x = Month, y = Rank, color = Country)) +
   geom_bump()
@@ -1343,7 +1379,8 @@ Bump_df %>%
 
 　これで最低限のバンプチャートはできましたが、もう少し見やすく、可愛くしてみましょう。今は線が細いのでややぶ厚めにします。これは`geom_bump()`レイヤーの`size`引数で指定可能です。また、各月に点を付けることによって、同時期における順位の比較をよりしやすくしてみましょう。これは散布図と同じであるため、`geom_point()`幾何オブジェクトを使用します。
 
-```{r visual4-bump6, cache = TRUE}
+```{r visual4-bump6}
+#| cache: TRUE
 Bump_df %>%
   ggplot(aes(x = Month, y = Rank, color = Country)) +
   geom_point(size = 7) +
@@ -1353,7 +1390,8 @@ Bump_df %>%
 
 　これでだいぶ見やすくなりましたが、凡例における国名の順番がやや気になりますね。7月の時点において順位が最も高い国はアメリカ、最も低い国は日本ですが、凡例の順番はアルファベット順となっています。この凡例の順番を7月時点における`Rank`の値に合わせた方がより見やすいでしょう。ここで第\@ref(factor-forcat-reorder2)で紹介しました`fct_reorder2()`を使って`Country`変数の水準 (level)を7月時点における`Rank`の順位に合わせます。この場合、`Country`変数 (`.f = Country`)の水準を`Month`が (`.x = Month`)最も大きい (`.fun = last2`)時点における`Rank`の順番に合わせる (`.y = Rank`)こととなります。`fct_reorder2()`内の引数の順番の既定値は`.f`、`.x`、`.y`、`.fun`となります。
 
-```{r visual4-bump7, cache = TRUE}
+```{r visual4-bump7}
+#| cache: TRUE
 Bump_df %>%
   mutate(Country = fct_reorder2(Country, Month, Rank, last2)) %>%
   ggplot(aes(x = Month, y = Rank, color = Country)) +
@@ -1364,7 +1402,8 @@ Bump_df %>%
 
 　最後に縦軸の目盛りラベルを付けます。上に行くほど順位が高くなりますので、1を7に、2を6に、...、7を1に変更します。また、図内のグリッドも不要ですので、`theme()`を使用し、グリッドを削除します (`panel.grid = element_blank()`)。
 
-```{r visual4-bump8, cache = TRUE}
+```{r visual4-bump8}
+#| cache: TRUE
 Bump_df %>%
   mutate(Country = fct_reorder2(Country, Month, Rank, last2)) %>%
   ggplot(aes(x = Month, y = Rank, color = Country)) +
@@ -1381,7 +1420,8 @@ Bump_df %>%
 
 　最後にもう一点調整が必要ですが、それは座標系です。図の座標系は`ggplot()`関数で使用するデータに基づきます。`Bump_df`の場合、横軸 (`Month`)は4から7です。しかし、文字列を追加した場合、文字列がすべて出力されないかも知れません。したがって、座標系を横方向に広める必要があります。今回は3から8までに調整します。座標系や文字列の位置調整は出力結果を見ながら、少しずつ調整していきましょう。
 
-```{r visual4-bump9, cache = TRUE}
+```{r visual4-bump9}
+#| cache: TRUE
 Bump_df %>%
   ggplot(aes(x = Month, y = Rank, color = Country)) +
   geom_point(size = 7) +
@@ -1618,7 +1658,8 @@ Country_df %>%
 
 　ちなみに以上の図を円グラフにすると以下のようになります（国名は人口の割合が2.5%を超える国のみ表示）。ツリーマップと比較してかなり読みにくいことが分かります。
 
-```{r visual4-tree7, cache = TRUE}
+```{r visual4-tree7}
+#| cache: TRUE
 Country_df %>%
   filter(Continent == "Asia") %>%
   arrange(Population) %>%
@@ -1652,11 +1693,13 @@ Country_df %>%
 
 モザイクプロットは2つの離散変数（おもに名目変数）の関係を可視化するために @Hargian_Kleiner:1984 が考案した図です。2つの名目変数間の関係を見る際によく使われるものはクロス表（クロス集計表）でしょう。
 
-```{r visual4-mosaic1, message = FALSE}
+```{r visual4-mosaic1}
+#| message: FALSE
 pacman::p_load(ggmosaic)
 ```
 
-```{r visual4-mosaic2, cache = TRUE}
+```{r visual4-mosaic2}
+#| cache: TRUE
 Mosaic_df <- Country_df %>%
     select(Country, Continent, Polity = Polity_Type, PPP = PPP_per_capita) %>%
     mutate(Continent = factor(Continent, 
@@ -1671,24 +1714,30 @@ Mosaic_df <- Country_df %>%
     drop_na()
 ```
 
-```{r visual4-mosaic3, cache = TRUE}
+```{r visual4-mosaic3}
+#| cache: TRUE
 head(Mosaic_df)
 ```
 
 　クロス表を作成する内蔵関数としては`table()`があります。2つの変数が必要となり、第一引数が行、第二引数が列を表します。
 
-```{r visual4-mosaic4, cache = TRUE}
+```{r visual4-mosaic4}
+#| cache: TRUE
 Mosaic_Tab <- table(Mosaic_df$Continent, Mosaic_df$Polity)
 Mosaic_Tab
 ```
 
 　この`Mosaic_Tab`のクラスは`"table"`ですが、`"table"`クラスのオブジェクトを`plot()`に渡すと別途のパッケージを使わずモザイクプロットを作成することができます。
 
-```{r visual4-mosaic5, cache = TRUE, echo = FALSE}
+```{r visual4-mosaic5}
+#| echo: FALSE
 par(family = "HiraKakuProN-W3")
 ```
 
-```{r visual4-mosaic6, cache = TRUE, fig.width = 5, fig.height = 5}
+```{r visual4-mosaic6}
+#| cache: TRUE
+#| fig.width: 5
+#| fig.height: 5
 plot(Mosaic_Tab)
 ```
 
@@ -1696,7 +1745,10 @@ plot(Mosaic_Tab)
 
 　`geom_mosaic()`の場合、`x`のみのマッピングで十分です。ただし、特定の変数を指定するのではなく、`product(変数1, 変数2)`を`x`にマッピングする必要があります。`table()`関数同様、変数1は行、変数2は列です。また、欠損値が含まれている行がある場合は、`aes()`の外側に`na.rm = TRUE`を指定する必要があります。今回は`drop_na()`で欠損値をすべて除外しましたが、念の為に指定しておきます。
 
-```{r visual4-mosaic7, cache = TRUE, fig.width = 5, fig.height = 5}
+```{r visual4-mosaic7}
+#| cache: TRUE
+#| fig.width: 5
+#| fig.height: 5
 Mosaic_df %>%
     ggplot() +
     geom_mosaic(aes(x = product(Polity, Continent)), na.rm = TRUE) +
@@ -1707,7 +1759,10 @@ Mosaic_df %>%
 
 　これで出来上がりですが、`"table"`オブジェクトを`plot()`に渡した結果とあまり変わらないですね。続いて、この図を少し改良してみましょう。まずはセルの色分けですが、これは`fill`に色分けする変数をマッピングするだけです。今回は政治体制ごとにセルを色分けしましょう。また、文字を大きめにし、横軸の目盛りラベルを回転します。
 
-```{r visual4-mosaic8, cache = TRUE, fig.width = 5, fig.height = 5}
+```{r visual4-mosaic8}
+#| cache: TRUE
+#| fig.width: 5
+#| fig.height: 5
 Mosaic_df %>%
     ggplot() +
     geom_mosaic(aes(x = product(Polity, Continent), fill = Polity), 
@@ -1721,7 +1776,10 @@ Mosaic_df %>%
 
 　次元を追加するためにはファセット分割を使います。たとえば、一人当たりPPP GDPの高低（`PPP`）でファセットを分割する場合、`facet_wrap(~PPP)`レイヤーを足すだけです。
 
-```{r visual4-mosaic9, cache = TRUE, fig.width = 8, fig.height = 5}
+```{r visual4-mosaic9}
+#| cache: TRUE
+#| fig.width: 8
+#| fig.height: 5
 Mosaic_df %>%
     ggplot() +
     geom_mosaic(aes(x = product(Polity, Continent), fill = Polity), 
@@ -1738,7 +1796,10 @@ Mosaic_df %>%
 
 [^facet_scale]: 他にも**縦**軸のみ共有する`"free_x"`、横軸のみ共有する`"free_y"`があり、既定値は`"fixed"`です。
 
-```{r visual4-mosaic10, cache = TRUE, fig.width = 8, fig.height = 5}
+```{r visual4-mosaic10}
+#| cache: TRUE
+#| fig.width: 8
+#| fig.height: 5
 Mosaic_df %>%
     ggplot() +
     geom_mosaic(aes(x = product(Polity, Continent), fill = Polity), 
@@ -1753,7 +1814,10 @@ Mosaic_df %>%
 
 　右側ファセットの横軸ラベルが重なってしまいましたが、これでとりあえず完成です。アフリカにおけるOpen AnocracyとClosed Anocracyの頻度が0であるため、これは仕方ありません。一つの対処方法としては以下のように縦軸目盛りを削除し、凡例で代替することが考えられます。
 
-```{r visual4-mosaic11, cache = TRUE, fig.width = 9, fig.height = 5}
+```{r visual4-mosaic11}
+#| cache: TRUE
+#| fig.width: 9
+#| fig.height: 5
 Mosaic_df %>%
     ggplot() +
     geom_mosaic(aes(x = product(Polity, Continent), fill = Polity), 
