@@ -556,7 +556,9 @@ Pointrange_df2 %>%
 
 　まず、`Country_df`を用い、ヨーロッパ諸国の一人当たりPPP GDP（`PPP_per_capita`）の棒グラフを作るとします。`PPP_per_capita`が欠損していないヨーロッパの国は46行であり、非常に棒が多い棒グラフになります。
 
-```{r visual4-lollipop1, fig.height = 7, cache = TRUE}
+```{r visual4-lollipop1}
+#| fig.height: 7
+#| cache: TRUE
 Country_df %>%
   filter(Continent == "Europe") %>%
   drop_na(PPP_per_capita) %>%
@@ -572,7 +574,9 @@ Country_df %>%
 
 　`geom_segment()`で水平線を描いたら、次は散布図をオーバーラップさせます。点の横軸上の位置は`PPP_per_capita`、縦軸上の位置は`Country`です。
 
-```{r visual4-lollipop2, fig.height = 7, cache = TRUE}
+```{r visual4-lollipop2}
+#| fig.height: 7
+#| cache: TRUE
 Country_df %>%
   filter(Continent == "Europe") %>%
   drop_na(PPP_per_capita) %>%
@@ -589,7 +593,9 @@ Country_df %>%
 
 　これで完成です。もし一人当たりPPP GDP順で並べ替えたい場合は`fct_reorder()`を使います。`Country`を`PPP_per_capita`の低い方を先にくるようにするなら、`fct_reorder(Country, PPP_per_capita)`です。縦に並ぶの棒グラフなら最初に来る水準が下に位置されます。もし、順番を逆にしたいなら、更に`fct_rev()`で水準の順番を逆転させます。
 
-```{r visual4-lollipop3, fig.height = 7, cache = TRUE}
+```{r visual4-lollipop3}
+#| fig.height: 7
+#| cache: TRUE
 Country_df %>%
   filter(Continent == "Europe") %>%
   drop_na(PPP_per_capita) %>%
@@ -607,7 +613,9 @@ Country_df %>%
 
 　ロリーポップロリーポップチャートで次元を追加するには点（キャンディー）の色分けが考えられます。たとえば、OECD加盟国か否かの次元を追加する場合、`geom_point()`において`color`をマッピングするだけです。
 
-```{r visual4-lollipop4, fig.height = 7.1, cache = TRUE}
+```{r visual4-lollipop4}
+#| fig.height: 7.1
+#| cache: TRUE
 Country_df %>%
   filter(Continent == "Europe") %>%
   drop_na(PPP_per_capita) %>%
@@ -631,7 +639,9 @@ Country_df %>%
 
 　以下のようにロリーポップを横に並べることもできますが、棒の数が多いケースがほとんどであるロリーポップチャートではラベルの回転が必要になるため、読みにくくなるかも知れません。
 
-```{r visual4-lollipop5, fig.height = 7, cache = TRUE}
+```{r visual4-lollipop5}
+#| fig.height: 7
+#| cache: TRUE
 Country_df %>%
   filter(Continent == "Europe") %>%
   drop_na(PPP_per_capita) %>%
@@ -655,7 +665,9 @@ Country_df %>%
 
 2次元平面上に散布図をプロットし、二変数間の関係を一本の線で要約するのは平滑化ラインです。{ggplot2}では`geom_smooth()`幾何オブジェクトを重ねることで簡単に平滑化ラインをプロットすることができます。まずは、横軸をフリーダムハウス・スコア（`FH_Total`）、縦軸を一人当たり購買力平価GDP（`PPP_per_capita`）にした散布図を出力し、その上に平滑化ラインを追加してみましょう。`geom_smooth()`にもマッピングが必要で、`aes()`の内部に`x`と`y`をマッピングします。今回は`geom_point()`と`geom_smooth()`が同じマッピング情報を共有するため、`ggplot()`内部でマッピングします。
 
-```{r visual4-smooth1, fig.height = 4, cache = TRUE}
+```{r visual4-smooth1}
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>%
     ggplot(aes(x = FH_Total, y = PPP_per_capita)) +
     geom_point() +
@@ -670,7 +682,9 @@ Country_df %>%
 
 　LOESS平滑化の場合、`span`引数を使って滑らかさを調整することができます。`span`の既定値は0.75ですが、これが小さいほど散布図によりフィットしたラインが引かれ、よりギザギザな線になります。たとえば、`span`を0.25にすると以下のようなグラフが得られます。
 
-```{r visual4-smooth2, fig.height = 4, cache = TRUE}
+```{r visual4-smooth2}
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>%
     ggplot(aes(x = FH_Total, y = PPP_per_capita)) +
     geom_point() +
@@ -683,7 +697,9 @@ Country_df %>%
 
 　他にも定番の回帰直線を引くこともできます。`method`の実引数を`"lm"`に変えるだけです。
 
-```{r visual4-smooth3, fig.height = 4, cache = TRUE}
+```{r visual4-smooth3}
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>%
     ggplot(aes(x = FH_Total, y = PPP_per_capita)) +
     geom_point() +
@@ -696,7 +712,9 @@ Country_df %>%
 
 　信頼区間は既定値だと95%信頼区間が表示されますが、`level`引数で調整することができます。たとえば、99.9%信頼区間を表示したい場合、`level = 0.999`を指定します。
 
-```{r visual4-smooth4, fig.height = 4, cache = TRUE}
+```{r visual4-smooth4}
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>%
     ggplot(aes(x = FH_Total, y = PPP_per_capita)) +
     geom_point() +
@@ -709,7 +727,9 @@ Country_df %>%
 
 　信頼区間を消したい場合は`se = FALSE`を指定します（既定値は`TRUE`）。
 
-```{r visual4-smooth5, fig.height = 4, cache = TRUE}
+```{r visual4-smooth5}
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>%
     ggplot(aes(x = FH_Total, y = PPP_per_capita)) +
     geom_point() +
@@ -722,7 +742,9 @@ Country_df %>%
 
 　最後にデータのサブセットごとに回帰直線を引く方法について説明します。散布図で色分けを行う場合、`aes()`内で`color`引数を指定しますが、これだけで十分です。今回はこれまでの散布図をOECD加盟有無ごとに色分けし、それぞれ別の回帰直線を重ねてみましょう。回帰直線も色分けしたいので`color`引数で次元を増やす必要があり、これは`geom_point()`と共通であるため、`ggplot()`内でマッピングします。
 
-```{r visual4-smooth6, fig.height = 4, cache = TRUE}
+```{r visual4-smooth6}
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>%
     mutate(OECD = if_else(OECD == 1, "加盟国", "非加盟国")) %>%
     ggplot(aes(x = FH_Total, y = PPP_per_capita, color = OECD)) +
@@ -739,7 +761,9 @@ Country_df %>%
 
 　あまりいい方法ではないと思いますが、散布図は色（`color`）で分け、回帰直線は線の種類（`linetype`）で分けるならどうすれば良いでしょうか。この場合は`color`は`geom_point()`内部で、`linetype`は`geom_smooth()`でマッピングします。
 
-```{r visual4-smooth7, fig.height = 4, cache = TRUE}
+```{r visual4-smooth7}
+#| fig.height: 4
+#| cache: TRUE
 Country_df %>%
     mutate(OECD = if_else(OECD == 1, "加盟国", "非加盟国")) %>%
     ggplot(aes(x = FH_Total, y = PPP_per_capita)) +
@@ -788,7 +812,7 @@ Heatmap_df
 
 　次は`group_by()`と`summarise()`を使って、各カテゴリーに属するケース数を計算し、`N`という名の列として追加します。
 
-```{r visual4-heatmap2, cache = TRUE}
+```{r visual4-heatmap2}
 Heatmap_df1 <- Heatmap_df %>%
   group_by(Continent, Income) %>%
   summarise(N       = n(),
@@ -799,7 +823,8 @@ Heatmap_df1
 
 　これでデータの準備は終わりました。ヒートマップを作成する幾何オブジェクトは`geom_tile()`です。同時分布を示したい変数を、それぞれ`x`と`y`にマッピングし、密度、または度数を表す変数を`fill`にマッピングします。ここでは横軸を大陸（`Continent`）、縦軸を一人当たり購買力平価GDP（`Income`）とし、`fill`には`N`変数をマッピングします。
 
-```{r visual4-heatmap3, cache = TRUE}
+```{r visual4-heatmap3}
+#| cache: TRUE
 Heatmap_df1 %>%
   ggplot() +
   geom_tile(aes(x = Continent, y = Income, fill = N)) +
@@ -812,7 +837,8 @@ Heatmap_df1 %>%
 
 　色をカスタマイズするには`scale_fill_gradient()`です。これは第\@ref(visualization3)章で紹介しました`scale_color_gradient()`と使い方は同じです。`scale_fill_gradient()`は中間点なし、`scale_fill_gradient2()`は中間点ありの場合に使いますが、ここでは度数が小さい場合は<span style="color:#FFF8DC;font-weight:bold;">cornsilk</span>色を、大きい場合は<span style="color:#cd3333;font-weight:bold;">brown3</span>色を使います。それぞれ`low`と`high`に色を指定するだけです。
 
-```{r visual4-heatmap4, cache = TRUE}
+```{r visual4-heatmap4}
+#| cache: TRUE
 Heatmap_df1 %>%
   ggplot() +
   geom_tile(aes(x = Continent, y = Income, fill = N)) +
@@ -831,7 +857,8 @@ Heatmap_df1 %>%
 
 　ここでは大陸と所得ごとに人間開発指数の平均値を表すヒートマップを作ってみましょう。大陸（`Continent`）と所得（`Income`）でグループ化し、人間開発指数（`HDI_2018`）の平均値を計算したものを`Heatmap_df2`という名のオブジェクトとして格納します。
 
-```{r visual4-heatmap5, cache = TRUE}
+```{r visual4-heatmap5}
+#| cache: TRUE
 Heatmap_df2 <- Heatmap_df %>%
   group_by(Continent, Income) %>%
   summarise(HDI     = mean(HDI_2018, na.rm = TRUE),
@@ -842,7 +869,8 @@ Heatmap_df2
 
 　作図の方法は前回と同じですが、今回はタイルの色塗り（`fill`）を人間開発指数の平均値（`HDI`）でマッピングする必要があります。他の箇所は同じコードでも良いですが、ここでは色塗りの際、中間点を指定してみましょう。たとえば人間開発指数が0.75なら色を<span style="color:#fff8dc;font-weight:bold;background-color:#000000;">cornsilk</span>色とし、これより低いっほど<span style="color:#6495ED;font-weight:bold;">cornflowerblue</span>色に、高いほど<span style="color:#cd3333;font-weight:bold;">brown3</span>色になるように指定します。中間点を持つグラデーション色塗りは`scale_fill_gradient2()`で調整することができます。使い方は`scale_fill_gradient()`とほぼ同じですが、中間点の色（`mid`）と中間点の値（`midpoint`）をさらに指定する必要があります。
 
-```{r visual4-heatmap6, cache = TRUE}
+```{r visual4-heatmap6}
+#| cache: TRUE
 Heatmap_df2 %>%
   ggplot() +
   geom_tile(aes(x = Continent, y = Income, fill = HDI)) +
@@ -864,6 +892,7 @@ Heatmap_df2 %>%
 連続変数$\times$連続変数の同時分布
 
 ```{r visual4-contour1}
+#| cache: TRUE
 Country_df %>%
   ggplot(aes(x = FH_Total, y = HDI_2018)) +
   geom_density_2d() +
@@ -872,6 +901,7 @@ Country_df %>%
 ```
 
 ```{r visual4-contour2}
+#| cache: TRUE
 Country_df %>%
   ggplot(aes(x = FH_Total, y = HDI_2018)) +
   geom_point() +
@@ -881,6 +911,7 @@ Country_df %>%
 ```
 
 ```{r visual4-contour3}
+#| cache: TRUE
 Country_df %>%
   ggplot(aes(x = FH_Total, y = HDI_2018)) +
   geom_density_2d_filled() +
@@ -892,6 +923,7 @@ Country_df %>%
 　`geom_density_2d_filled()`オブジェクトの後に`geom_density_2d()`オブジェクトを重ねると、区間の区画線を追加することもできます。
 
 ```{r visual4-contour4}
+#| cache: TRUE
 Country_df %>%
   ggplot(aes(x = FH_Total, y = HDI_2018)) +
   geom_density_2d_filled() +
@@ -904,6 +936,7 @@ Country_df %>%
 　色が気に入らない場合、自分で調整することも可能です。`scale_fill_manual()`で各区間ごとの色を指定することもできませんが、あまり効率的ではありません。ここでは`scale_fill_brewer()`関数を使って、[ColorBrewer](https://colorbrewer2.org/)のパレットを使ってみましょう。引数なしでも使えますが、既定値のパレットは区間が9つまで対応します。今回の等高線図は全部で10区間ですので、あまり適切ではありません。ここでは11区間まで対応可能な`"Spectral"`パレットを使いますが、これは`palette`引数で指定できます。
 
 ```{r visual4-contour5}
+#| cache: TRUE
 Country_df %>%
   ggplot(aes(x = FH_Total, y = HDI_2018)) +
   geom_density_2d_filled() +
@@ -915,7 +948,10 @@ Country_df %>%
 
 　`palette`で指定可能なカラーパレットの一覧は{RColorBrewer}の`display.brewer.all()`関数で確認することが出来ます。各パレットが何区間まで対応できるかを見てから自分でパレットを作成することも可能ですが、詳細はネット上の各種記事を参照してください。
 
-```{r visual4-contour6, fig.height = 8, fig.cap = "{RColorBrewer}が提供するパレート一覧"}
+```{r visual4-contour6}
+#| fig.height: 8
+#| fig.cap: "{RColorBrewer}が提供するパレート一覧"
+#| cache: TRUE
 RColorBrewer::display.brewer.all()
 ```
 
@@ -944,6 +980,7 @@ class(world_map)
 　クラスはdata.frameとsfであり、実際、`world_map`を出力してみると、見た目がデータフレームであることが分かります。地図の出力は`geom_sf()`幾何オブジェクトを使用します。とりあえず、やってみましょう。
 
 ```{r visual4-map3}
+#| cache: TRUE
 world_map %>% 
   ggplot() +
   geom_sf() +
@@ -955,6 +992,7 @@ world_map %>%
 　他にも自分で構築したデータがあるなら、データを結合して使用すれば良いでしょう。これについては後述します。
 
 ```{r visual4-map4}
+#| cache: TRUE
 world_map %>% 
   ggplot() +
   geom_sf(aes(fill = pop_est)) +
@@ -967,6 +1005,7 @@ world_map %>%
 　もし、世界でなく一部の地域だけを出力するなら、`coord_sf()`で座標系を調整します。東アジアと東南アジアの一部を出力したいとします。この場合、経度は90度から150度まで、緯度は10度から50度に絞ることになります。経度は`xlim`で、緯度は`ylim`で調整します。
 
 ```{r visual4-map5}
+#| cache: TRUE
 world_map %>% 
   ggplot() +
   geom_sf(aes(fill = pop_est)) +
@@ -980,6 +1019,7 @@ world_map %>%
 　他にも`ne_countries()`内に`continent`引数を指定し、特定の大陸だけを読み込むことで可能です。ここではアジアの国のみを抽出し、`asia_map`という名のオブジェクトとして格納します。解像度は中程度とします。
 
 ```{r visual4-map6}
+#| cache: TRUE
 asia_map <- ne_countries(scale = "medium", continent = "Asia", 
                          returnclass = "sf")
 
@@ -994,6 +1034,7 @@ asia_map %>%
 　アジアの中から更に東アジアに絞りたい場合は`filter()`を使用し、`subregion`列を基準に抽出することも可能です。
 
 ```{r visual4-map7}
+#| cache: TRUE
 asia_map %>%
     filter(subregion == "Eastern Asia") %>%
     ggplot() +
@@ -1011,6 +1052,7 @@ unique(asia_map$subregion)
 　これまで使用してきたデータがデータフレームと同じ見た目をしているため、{dplyr}を用いたデータハンドリングも可能です。たとえば、人口を連続変数としてでなく、factor型に変換してからマッピングをしてみましょう。
 
 ```{r visual4-map9}
+#| cache: TRUE
 asia_map %>% 
   mutate(Population = case_when(pop_est < 10000000  ~ "1千万未満",
                                 pop_est < 50000000  ~ "5千万未満",
@@ -1035,6 +1077,7 @@ asia_map %>%
 　次は日本地図の出力についてです。日本全土だけを出力するなら、これまで使いました`ne_countries`に`country`引数を指定するだけで使えます。たとえば、日本の地図だけなら、`country = "Japan"`を指定します。
 
 ```{r visual4-map10}
+#| cache: TRUE
 ne_countries(scale = "small", country = "Japan", returnclass = "sf") %>%
     ggplot() +
     geom_sf() +
@@ -1044,6 +1087,7 @@ ne_countries(scale = "small", country = "Japan", returnclass = "sf") %>%
 　これだと、物足りない感があるので、もう少し高解像度の地図にしてみましょう。高解像度の地図データを読み込む際は`scale = "large"`を指定します。
 
 ```{r visual4-map11}
+#| cache: TRUE
 ne_countries(scale = "large", country = "Japan", returnclass = "sf") %>%
     ggplot() +
     geom_sf() +
@@ -1060,6 +1104,7 @@ pacman::p_load_gh("ropensci/rnaturalearthhires")
 　地図データの抽出には`ne_states()`関数を使用します。第一引数として国家名を指定し、地図データのクラスはsfとします。抽出したデータの使い方は世界地図の時と同じです。
 
 ```{r visual4-map13}
+#| cache: TRUE
 Japan_Map <- ne_states("Japan", returnclass = "sf")
 
 Japan_Map %>%
@@ -1105,6 +1150,7 @@ Japan_Map
 　それではマッピングをしてみましょう。人口密度を5つのカテゴリーに順序付きfactor化してから、そのカテゴリーに応じて色塗りをします。
 
 ```{r visual4-map18}
+#| cache: TRUE
 Japan_Map %>%
     mutate(Density2 = case_when(Density >= 3000 ~ "3000人以上",
                                 Density >= 1000 ~ "1000人以上",
@@ -1142,6 +1188,7 @@ class(Osaka_map)
 　プロットの方法は同じです。
 
 ```{r visual4-map21}
+#| cache: TRUE
 Osaka_map %>%
   ggplot() +
   geom_sf() +
@@ -1168,6 +1215,7 @@ Osaka_map <- left_join(Osaka_map, Osaka_Student, by = "Code")
 　最後にマッピングです。ここでは人口1万人当たり学生数を`Student_Ratio`という列として追加し、こちらの値に合わせて色塗りをしてみましょう。`scale_fill_gradient()`を使用し、人口1万人当たり学生数が少ないほど白、多いほど黒塗りします。
 
 ```{r visual4-map24}
+#| cache: TRUE
 Osaka_map %>%
   mutate(Student_Ratio = Student / Pop * 10000) %>%
   ggplot() +
@@ -1450,7 +1498,7 @@ Bump_df %>%
 
 　沖積図 (alluvial plot)は同じ対象を複数回観察したデータ（パネル・データなど）から変化を示すことに適したグラフです。たとえば、同じ回答者を対象に2回世論調査を実施し、1回目調査時の支持政党と2回目調査時の支持政党を変化を見ることも可能です。もし、変化が大きい場合は政党支持態度は弱いこととなりますし、変化が小さい場合は安定していると解釈できるでしょう。
 
-　ここでは2009年の衆院選と2010年の参院選における投票先の変化を沖積図で確認してみたいと思います。まずは、沖積図の作成に特化した{ggalluvial}パッケージをインストールし、読み込みます。
+　ここでは2020年の選挙と2021年の選挙における有権者の投票先の変化を沖積図で確認してみたいと思います。まずは、沖積図の作成に特化した{ggalluvial}パッケージをインストールし、読み込みます。
 
 ```{r visual4-alluvial1}
 #| message: FALSE
@@ -1484,9 +1532,9 @@ Vote_2021 <- Vote_2021 %>%
 Vote_2021
 ```
 
-　2020年の調査で「わからない」と回答し、2021年の調査でも「わからない」と回答した回答者数は111名、2020年の調査で「わからない」と回答し、2021年の調査では「棄権」と回答した回答者数は8名、...といったことが分かりますね。
+　2020年の調査で「わからない」と回答し、2021年の調査でも「わからない」と回答した回答者数は111名、2020年の調査で「わからない」と回答し、2021年の調査では「その他」と回答した回答者数は8名、...といったことが分かりますね。
 
-　続いて、グラフを作成する前に投票先変数 (`Vote20`と`Vote21`)をfactor化します。可視化の際、投票先が出力される順番に決まりはありませんが、自民、民主、公明、...、DKの順が自然かと思います。むろん、こちらは自分から見て分かりやいように順番を決めましょう。ただし、2変数における水準 (level)の順番は一致させた方が良いでしょう。
+　続いて、グラフを作成する前に投票先変数 (`Vote20`と`Vote21`)をfactor化します。可視化の際、投票先が出力される順番に決まりはありませんが、政党A、政党B、政党C、...、DKの順が自然かと思います。むろん、こちらは自分から見て分かりやいように順番を決めましょう。ただし、2変数における水準 (level)の順番は一致させた方が良いでしょう。
 
 ```{r visual4-alluvial4}
 #| warning: FALSE
@@ -1511,7 +1559,7 @@ Vote_2021 %>%
     geom_stratum()
 ```
 
-　何かの図は出てきましたが、これだけだと、それぞれの四角形がどの政党を示しているのかが分かりませんね。四角形内に政党名を出力するためには{ggplot2}内蔵の`geom_text()`を使用します。マッピング要素は`ggplot()`内でマッピングしたものに加え、`label`が必要ですが、ここでは`after_stat(stratum)`を指定します。そして、`aes()`のその側に`stat = "stratum"`を指定するだけです。フォントの指定が必要な場合は`family`を使います。`theme_*()`内で`base_family`を指定した場合でも必要です。
+　何かの図は出てきましたが、これだけだと、それぞれの四角形がどの政党を示しているのかが分かりませんね。四角形内に政党名を出力するためには{ggplot2}内蔵の`geom_text()`を使用します。マッピング要素は`ggplot()`内でマッピングしたものに加え、`label`が必要ですが、ここでは`after_stat(stratum)`を指定します。そして、`aes()`のその側に`stat = "stratum"`を指定するだけです。もし、文字化けが生じる場合は、`geom_text()`内にフォントの指定が必要があり、`family`を使います (たとえば、`family = "HiraginoSans-W3"`など)。`theme_*()`内で`base_family`を指定した場合でも必要です。
 
 ```{r visual4-alluvial6}
 #| fig.height: 7
@@ -1536,7 +1584,7 @@ Vote_2021 %>%
     geom_alluvium(aes(fill = Vote20)) +
     geom_stratum() +
     geom_text(aes(label = after_stat(stratum)), 
-              stat = "stratum", family = "HiraginoSans-W3")
+              stat = "stratum")
 ```
 
 　`fill = Vote21`とマッピングした場合は、感覚が変わります。実際にやってみましょう。
@@ -1583,13 +1631,15 @@ Alluvial_Plot +
 
 　ツリーマップを作成するためには{treemapify}パッケージの`geom_treemap()`幾何オブジェクトを使用します。まず、{treemapify}をインストールし、読み込みます。
 
-```{r visual4-tree1, message = FALSE}
+```{r visual4-tree1}
+#| message: FALSE
 pacman::p_load(treemapify)
 ```
 
 　ここでは`Country_df`からアジア諸国の人口（`Population`）をツリーマップをして可視化したいと思います。`geom_treemap()`の場合、各長方形は面積の情報のみを持ちます。この面積の情報を`area`にマッピングします。
 
-```{r visual4-tree2, cache = TRUE}
+```{r visual4-tree2}
+#| cache: TRUE
 Country_df %>%
   filter(Continent == "Asia") %>%
   ggplot() +
@@ -1600,7 +1650,8 @@ Country_df %>%
 
 [^tree_mapping]: 今回の例だと、`label`も`ggplot()`内部でマッピング可能です。
 
-```{r visual4-tree3, cache = TRUE}
+```{r visual4-tree3}
+#| cache: TRUE
 Country_df %>%
   filter(Continent == "Asia") %>%
   ggplot(aes(area = Population)) +
@@ -1610,7 +1661,8 @@ Country_df %>%
 
 　これでツリーマップが完成しました。インドと中国の存在感がかなり大きいですね。更にラベルのサイズを長方形に合わせると、その存在感をより高めることができます。ラベルの大きさを長方形に合わせるには`geom_treepmap_text()`の内部に`grow = TRUE`を指定します。
 
-```{r visual4-tree4, cache = TRUE}
+```{r visual4-tree4}
+#| cache: TRUE
 Country_df %>%
   filter(Continent == "Asia") %>%
   ggplot(aes(area = Population, label = Country)) +
@@ -1621,7 +1673,8 @@ Country_df %>%
 
 　ここで更に次元を追加するために、色塗りをしてみましょう。たとえば、G20加盟国か否かで色分けをしたい場合、`fill`に`G20`をマッピングします。ただし、今のままだと`G20`は連続変数扱いになりますので、character型、またはfactor型に変換します。
 
-```{r visual4-tree5, cache = TRUE}
+```{r visual4-tree5}
+#| cache: TRUE
 Country_df %>%
   mutate(G20 = if_else(G20 == 1, "Member", "Non-member")) %>%
   filter(Continent == "Asia") %>%
@@ -1639,7 +1692,8 @@ Country_df %>%
 
 　連続変数でマッピングされた色塗り（`fill`）の調整には`scale_fill_gradient()`、または`scale_fill_gradient2()`を使います。前者は中間点なし、後者は中間点ありです。これらの使い方は第\@ref(visualization3)章で紹介しました`scale_color_gradient()`と同じです。
 
-```{r visual4-tree6, cache = TRUE}
+```{r visual4-tree6}
+#| cache: TRUE
 Country_df %>%
   filter(Continent == "Asia") %>%
   ggplot(aes(area = Population, fill = HDI_2018,
