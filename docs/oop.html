@@ -786,11 +786,9 @@ div.csl-indent {
 ##  1.3333 -0.2667 -1.8667 -0.4667  0.9333  0.3333 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)   
-## (Intercept)  -1.6333     1.0546  -1.549  0.19637   
-## X             1.3000     0.1528   8.510  0.00105 **
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+##             Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)  -1.6333     1.0546  -1.549  0.19637
+## X             1.3000     0.1528   8.510  0.00105
 ## 
 ## Residual standard error: 1.278 on 4 degrees of freedom
 ## Multiple R-squared:  0.9477, Adjusted R-squared:  0.9346 
@@ -826,7 +824,7 @@ div.csl-indent {
 <div class="sourceCode" id="cb1902"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1902-1"><a href="oop.html#cb1902-1"></a>summary</span></code></pre></div>
 <pre><code>## function (object, ...) 
 ## UseMethod(&quot;summary&quot;)
-## &lt;bytecode: 0x7fcb7884d970&gt;
+## &lt;bytecode: 0x7f89fe867e08&gt;
 ## &lt;environment: namespace:base&gt;</code></pre>
 <p>しかし、多態性を持つ関数の内部を見ることはできません。そもそも<code>summary()</code>関数はクラスごとに異なるコードを持っているため、<code>summary</code>だけでは「どのクラスの<code>summary()</code>か」が分かりません。それでもRには<code>summary()</code>関数が存在し、それをジェネリック関数（generic function）と呼びます。内部には<code>UseMethod("summary")</code>のみが書かれており、これは「この<code>summary()</code>関数は様々なクラスのメソッドとして機能するぞ」と宣言しているだけです。各クラスに対応したメソッドの内部を見るには<code>getS3method("メソッド名", "クラス名")</code>を使います。<code>summary()</code>メソッドは<code>numeric</code>型が別途指定されていないため、<code>"defualt"</code>となります。</p>
 <div class="sourceCode" id="cb1904"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1904-1"><a href="oop.html#cb1904-1"></a><span class="fu">getS3method</span>(<span class="st">&quot;summary&quot;</span>, <span class="st">&quot;default&quot;</span>)</span></code></pre></div>
@@ -881,7 +879,7 @@ div.csl-indent {
 ##     class(value) &lt;- c(&quot;summaryDefault&quot;, &quot;table&quot;)
 ##     value
 ## }
-## &lt;bytecode: 0x7fcb9f422628&gt;
+## &lt;bytecode: 0x7f8a18f0d870&gt;
 ## &lt;environment: namespace:base&gt;</code></pre>
 <p>Rにはメソッドがクラス内部で定義されず、別途の<code>メソッド名.クラス名()</code>といった関数として作成されています。そしてジェネリック関数によって一つの関数の「ように」まとまっています。このように、ジェネリック関数経由でメソッドを呼び出すことをメソッド・ディスパッチ（method dispatch）と呼びます。</p>
 </div>
@@ -926,12 +924,12 @@ div.csl-indent {
 <span id="cb1909-14"><a href="oop.html#cb1909-14"></a></span>
 <span id="cb1909-15"><a href="oop.html#cb1909-15"></a>My_Score1 <span class="co"># My_Score1の内部を見る</span></span></code></pre></div>
 <pre><code>## $Score1
-##  [1] 47.33249 52.25838 48.05133 49.10813 50.49247 50.38184 44.69906 47.32714
-##  [9] 56.97378 69.68647
+##  [1] 51.72732 48.94372 48.97204 68.36083 40.28379 49.00829 56.55859 64.19226
+##  [9] 55.55692 47.90559
 ## 
 ## $Score2
-##  [1] 49.78858 54.44777 52.83652 35.88427 57.66267 29.91163 54.53887 42.30149
-##  [9] 53.52425 45.75313
+##  [1] 54.19842 41.45626 44.23425 51.87440 57.67488 52.62663 49.20461 52.43199
+##  [9] 61.45096 66.00180
 ## 
 ## attr(,&quot;class&quot;)
 ## [1] &quot;Score&quot;</code></pre>
@@ -951,12 +949,12 @@ div.csl-indent {
 <span id="cb1913-11"><a href="oop.html#cb1913-11"></a></span>
 <span id="cb1913-12"><a href="oop.html#cb1913-12"></a>My_Score2 <span class="co"># My_Score2の内部を見る</span></span></code></pre></div>
 <pre><code>## $Score1
-##  [1] 41.89491 51.77050 42.17117 56.25614 54.67337 45.82457 44.49796 44.14227
-##  [9] 48.22112 69.61126
+##  [1] 61.24887 49.77370 31.90786 54.37948 47.33887 44.26110 60.75511 54.71815
+##  [9] 46.08115 54.25642
 ## 
 ## $Score2
-##  [1] 58.62273 33.65448 66.34703 47.58154 62.75962 53.12593 44.37109 58.01241
-##  [9] 51.81184 62.87730
+##  [1] 49.66085 50.29404 45.23850 48.92749 52.87157 58.96160 51.99823 52.36471
+##  [9] 51.87032 52.65594
 ## 
 ## attr(,&quot;class&quot;)
 ## [1] &quot;Score&quot;</code></pre>
@@ -979,8 +977,8 @@ div.csl-indent {
 <span id="cb1917-6"><a href="oop.html#cb1917-6"></a><span class="fu">mean</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>)) <span class="co"># R内蔵関数のmean()を使う</span></span></code></pre></div>
 <pre><code>## [1] 6</code></pre>
 <div class="sourceCode" id="cb1919"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1919-1"><a href="oop.html#cb1919-1"></a><span class="fu">mean</span>(My_Score1) <span class="co"># Scoreクラスのメソッドであるmean()を使う</span></span></code></pre></div>
-<pre><code>## [1] 51.63111
-## [1] 47.66492</code></pre>
+<pre><code>## [1] 53.15094
+## [1] 53.11542</code></pre>
 <p><code>mean(c(1, 3, 5, 7, 9, 11))</code>は引数がnumeric型ベクトルであるため、既存の<code>mean()</code>関数が使用されます。一方、<code>mean(My_Score1)</code>は引数がScoreクラスであるため、<code>mean.Score()</code>が使用されます。このように<code>mean_Score()</code>のような別途の関数を作る必要なく、既存の関数名が利用できます。実際、<code>methods(mean)</code>を実行すると、Scoreクラスのメソッドとして<code>mean()</code>関数が用意されたことを確認できます。</p>
 <div class="sourceCode" id="cb1921"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1921-1"><a href="oop.html#cb1921-1"></a><span class="fu">methods</span>(mean)</span></code></pre></div>
 <pre><code>## [1] mean.Date        mean.default     mean.difftime    mean.POSIXct    
@@ -1032,8 +1030,8 @@ div.csl-indent {
 ## see &#39;?methods&#39; for accessing help and source code</code></pre>
 <p><code>my_func()</code>関数はScoreとCatといった2種類のクラスで使われることが確認できます。それでは問題なく作動するかを確認してみましょう。<code>My_Score1</code>と<code>My_Cat</code>を、それぞれ<code>my_func()</code>に渡します。</p>
 <div class="sourceCode" id="cb1933"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1933-1"><a href="oop.html#cb1933-1"></a><span class="fu">my_func</span>(My_Score1)</span></code></pre></div>
-<pre><code>## [1] 51.63111
-## [1] 47.66492</code></pre>
+<pre><code>## [1] 53.15094
+## [1] 53.11542</code></pre>
 <div class="sourceCode" id="cb1935"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1935-1"><a href="oop.html#cb1935-1"></a><span class="fu">my_func</span>(My_Cat)</span></code></pre></div>
 <pre><code>## [1] &quot;矢内: にゃーにゃー&quot;</code></pre>
 <p>同じ関数名でも、オブジェクトのクラスによって異なる処理が行われることが分かります。</p>

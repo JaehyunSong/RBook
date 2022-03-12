@@ -941,8 +941,8 @@ Hadley
 ## Levels: どちらかといえば好き &lt; 好き &lt; めちゃ好き &lt; めちゃめちゃ好き</code></pre>
 <p>いくつかの点で異なります。まず、文字列であるにもかかわらず、<code>"</code>で囲まれていいない点です。そして3行目に<code>4 Levels:</code>というのが追加されている点です。このlevelは「水準」と呼ばれるものです。<code>4 Levels</code>ですから、<code>factor_vec2</code>は4つの水準で構成されていることを意味します。Factor型の値は予め指定された水準以外の値を取ることはできません。たとえば、2番目の要素を「超好き」に変えてみましょう。</p>
 <div class="sourceCode" id="cb210"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb210-1"><a href="datatype.html#cb210-1"></a>factor_vec2[<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="st">&quot;超好き&quot;</span></span></code></pre></div>
-<pre><code>## Warning in `[&lt;-.factor`(`*tmp*`, 2, value = &quot;超好き&quot;): invalid factor level, NA
-## generated</code></pre>
+<pre><code>## Warning in `[&lt;-.factor`(`*tmp*`, 2, value = &quot;超好き&quot;): 不正な因子水準です。NA が
+## 発生しました</code></pre>
 <div class="sourceCode" id="cb212"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb212-1"><a href="datatype.html#cb212-1"></a>factor_vec2</span></code></pre></div>
 <pre><code>## [1] めちゃめちゃ好き     &lt;NA&gt;                 どちらかといえば好き
 ## [4] めちゃ好き           好き                
@@ -1256,12 +1256,12 @@ Fukuoka
 <p>他にも様々な表記法がありますが、詳細は<code>?strptime</code>で確認してみてください。</p>
 <p>他にも、日本では使わない表記法ですが、月を英語で表記したり、日月年の順で表記する場合があります。後者は<code>format =</code>引数の順番を変えるだけで問題有りませんが、問題は前者です。そこで使うのが<code>%b</code>または<code>%B</code>です。<code>%b</code>は3文字の月表記で、<code>%B</code>はフルネームです。</p>
 <div class="sourceCode" id="cb253"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb253-1"><a href="datatype.html#cb253-1"></a><span class="fu">as.Date</span>(<span class="st">&quot;21may2020&quot;</span>,   <span class="at">format =</span> <span class="st">&quot;%d%b%Y&quot;</span>)</span></code></pre></div>
-<pre><code>## [1] &quot;2020-05-21&quot;</code></pre>
+<pre><code>## [1] NA</code></pre>
 <div class="sourceCode" id="cb255"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb255-1"><a href="datatype.html#cb255-1"></a><span class="fu">as.Date</span>(<span class="st">&quot;May/21/2020&quot;</span>, <span class="at">format =</span> <span class="st">&quot;%b/%d/%Y&quot;</span>)</span></code></pre></div>
-<pre><code>## [1] &quot;2020-05-21&quot;</code></pre>
+<pre><code>## [1] NA</code></pre>
 <p>うまくいかないですね。これはシステムの時間ロケールが日本になっているのが原因です。ロケール設定は<code>Sys.getlocale()</code>で確認できます。</p>
 <div class="sourceCode" id="cb257"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb257-1"><a href="datatype.html#cb257-1"></a><span class="fu">Sys.getlocale</span>(<span class="at">category =</span> <span class="st">&quot;LC_TIME&quot;</span>)</span></code></pre></div>
-<pre><code>## [1] &quot;en_US.UTF-8&quot;</code></pre>
+<pre><code>## [1] &quot;ja_JP.UTF-8&quot;</code></pre>
 <p>これを<code>Sys.setlocale()</code>を使って、<code>"C"</code>に変更します。</p>
 <div class="sourceCode" id="cb259"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb259-1"><a href="datatype.html#cb259-1"></a><span class="fu">Sys.setlocale</span>(<span class="at">category =</span> <span class="st">&quot;LC_TIME&quot;</span>, <span class="at">locale =</span> <span class="st">&quot;C&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;C&quot;</code></pre>
