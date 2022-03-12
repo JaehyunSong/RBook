@@ -1457,47 +1457,47 @@ Bump_df %>%
 pacman::p_load(ggalluvial)
 ```
 
-　続きまして、実習用データを読み込みます。データは @Nakazawa:2014 の表3を元に筆者 (宋)が作成したものです。
+　続きまして、実習用データを読み込みます。データは架空のデータです。
 
 ```{r visual4-alluvial2}
 #| message: FALSE
-Vote_0910 <- read_csv("Data/Vote_09_10.csv")
+Vote_2021 <- read_csv("Data/Vote_20_21.csv")
 
-head(Vote_0910, 20)
+head(Vote_2021, 20)
 ```
 
 |変数名|説明|
 |---|---|
 |`ID`|回答者ID|
-|`Vote09`|2009年衆院選における投票先|
-|`Vote10`|2010年参院選における投票先|
+|`Vote20`|2020年選挙における投票先|
+|`Vote21`|2021年選挙における投票先|
 
-　たとえば、1番目の回答者は2009年に棄権し、2010年も棄権したことを意味する。また、5番目の回答者は2009年に自民党に投票し、2010年は共産党または社民党に投票したことを意味する。続いて、このデータを{ggalluvial}に適した形式のデータに加工します。具体的には「2009年棄権、かつ2010年棄権」、「2009年棄権、かつ2010年自民党投票」、...、「2009年民主党投票、かつ2010年自民党投票」のように全ての組み合わせに対し、該当するケース数を計算する必要があります。今回のデータだと、投票先はいずれも自民、民主、公明、共産・社民、その他、棄権、DK (わからない)の7であるため、49パターンができます。それぞれのパターンに該当するケース数を計算するためには`Vote09`と`Vote10`でデータをグループ化し、ケース数を計算します。
+　たとえば、1番目の回答者は2020年に棄権し、2021年も棄権したことを意味する。また、5番目の回答者は2020年に政党Bに投票し、2021年は政党Cに投票したことを意味する。続いて、このデータを{ggalluvial}に適した形式のデータに加工します。具体的には「2020年棄権、かつ2021年棄権」、「2020年棄権、かつ2021年政党Aへ投票」、...、「2020年政党Bへ投票、かつ2021年政党Aへ投票」のように全ての組み合わせに対し、該当するケース数を計算する必要があります。今回のデータだと、投票先はいずれも政党A、政党B、政党C、政党D、その他、棄権、DK (わからない)の7であるため、49パターンができます。それぞれのパターンに該当するケース数を計算するためには`Vote20`と`Vote21`でデータをグループ化し、ケース数を計算します。
 
 ```{r visual4-alluvial3}
 #| fig.height: 7
-Vote_0910 <- Vote_0910 %>%
-  group_by(Vote09, Vote10) %>%
+Vote_2021 <- Vote_2021 %>%
+  group_by(Vote20, Vote21) %>%
   summarise(Freq    = n(),
             .groups = "drop")
 
-Vote_0910
+Vote_2021
 ```
 
-　2009年の調査で「わからない」と回答し、2010年の調査でも「わからない」と回答した回答者数は111名、2009年の調査で「わからない」と回答し、2010年の調査では「棄権」と回答した回答者数は8名、...といったことが分かりますね。
+　2020年の調査で「わからない」と回答し、2021年の調査でも「わからない」と回答した回答者数は111名、2020年の調査で「わからない」と回答し、2021年の調査では「棄権」と回答した回答者数は8名、...といったことが分かりますね。
 
-　続いて、グラフを作成する前に投票先変数 (`Vote09`と`Vote10`)をfactor化します。可視化の際、投票先が出力される順番に決まりはありませんが、自民、民主、公明、...、DKの順が自然かと思います。むろん、こちらは自分から見て分かりやいように順番を決めましょう。ただし、2変数における水準 (level)の順番は一致させた方が良いでしょう。
+　続いて、グラフを作成する前に投票先変数 (`Vote20`と`Vote21`)をfactor化します。可視化の際、投票先が出力される順番に決まりはありませんが、自民、民主、公明、...、DKの順が自然かと思います。むろん、こちらは自分から見て分かりやいように順番を決めましょう。ただし、2変数における水準 (level)の順番は一致させた方が良いでしょう。
 
 ```{r visual4-alluvial4}
 #| warning: FALSE
-Vote_0910 <- Vote_0910 %>%
-  mutate(Vote09 = factor(Vote09, levels = c("自民", "民主", "公明", "共産・社民", 
+Vote_2021 <- Vote_2021 %>%
+  mutate(Vote20 = factor(Vote20, levels = c("政党A", "政党B", "政党C", "政党D", 
                                             "その他", "棄権", "DK")),
-         Vote10 = factor(Vote10, levels = c("自民", "民主", "公明", "共産・社民", 
+         Vote21 = factor(Vote21, levels = c("政党A", "政党B", "政党C", "政党D", 
                                             "その他", "棄権", "DK")))
 ```
 
-　それでは沖積図を描いてみましょう。使用する幾何オブジェクトは`geom_alluvium()`と`geom_stratum()`です。必ずこの順番でレイヤーを重ねてください。マッピングは`y`、`axis1`、`axis2`に対し、`y`には当該パターン内のケース数 (`Freq`)、`axis1`は2009年の投票先 (`Vote09`)、`axis2`は2010年の投票先 (`Vote10`)を指定します[^alluvial1]。これらのマッピングは`geom_stratum()`と`geom_alluvim()`共通であるため、`ggplot()`内でマッピングした方が効率的です。
+　それでは沖積図を描いてみましょう。使用する幾何オブジェクトは`geom_alluvium()`と`geom_stratum()`です。必ずこの順番でレイヤーを重ねてください。マッピングは`y`、`axis1`、`axis2`に対し、`y`には当該パターン内のケース数 (`Freq`)、`axis1`は2009年の投票先 (`Vote20`)、`axis2`は2010年の投票先 (`Vote21`)を指定します[^alluvial1]。これらのマッピングは`geom_stratum()`と`geom_alluvim()`共通であるため、`ggplot()`内でマッピングした方が効率的です。
 
 [^alluvial1]: 今回は2期間の変化を示していますが、3期以上の場合、`axis3`、`axis4`、...と追加してください。
 
@@ -1505,8 +1505,8 @@ Vote_0910 <- Vote_0910 %>%
 #| fig.height: 7
 #| warning: FALSE
 #| cache: TRUE
-Vote_0910 %>%
-    ggplot(aes(y = Freq, axis1 = Vote09, axis2 = Vote10)) +
+Vote_2021 %>%
+    ggplot(aes(y = Freq, axis1 = Vote20, axis2 = Vote21)) +
     geom_alluvium() +
     geom_stratum()
 ```
@@ -1517,37 +1517,37 @@ Vote_0910 %>%
 #| fig.height: 7
 #| warning: FALSE
 #| cache: TRUE
-Vote_0910 %>%
-    ggplot(aes(y = Freq, axis1 = Vote09, axis2 = Vote10)) +
+Vote_2021 %>%
+    ggplot(aes(y = Freq, axis1 = Vote20, axis2 = Vote21)) +
     geom_alluvium() +
     geom_stratum() +
     geom_text(aes(label = after_stat(stratum)), 
               stat = "stratum")
 ```
 
-　これで沖積図はとりあえず完成ですが、少し読みやすく加工してみましょう。たとえば、2010年に民主党に投票した回答者において2009年の投票先の割合を見たいとした場合、`geom_alluvium()`内に`fill = Vote09`をマッピングします。これで帯に2009年の投票先ごとの色付けができます。
+　これで沖積図はとりあえず完成ですが、少し読みやすく加工してみましょう。たとえば、2020年に政党Aに投票した回答者における2021年の投票先の割合を見たいとした場合、`geom_alluvium()`内に`fill = Vote20`をマッピングします。これで帯に2020年の投票先ごとの色付けができます。
 
 ```{r visual4-alluvial7}
 #| fig.height: 7
 #| warning: FALSE
 #| cache: TRUE
-Vote_0910 %>%
-    ggplot(aes(y = Freq, axis1 = Vote09, axis2 = Vote10)) +
-    geom_alluvium(aes(fill = Vote09)) +
+Vote_2021 %>%
+    ggplot(aes(y = Freq, axis1 = Vote20, axis2 = Vote21)) +
+    geom_alluvium(aes(fill = Vote20)) +
     geom_stratum() +
     geom_text(aes(label = after_stat(stratum)), 
               stat = "stratum", family = "HiraginoSans-W3")
 ```
 
-　`fill = Vote10`とマッピングした場合は、感覚が変わります。実際にやってみましょう。
+　`fill = Vote21`とマッピングした場合は、感覚が変わります。実際にやってみましょう。
 
 ```{r visual4-alluvial8}
 #| fig.height: 7
 #| warning: FALSE
 #| cache: TRUE
-Alluvial_Plot <- Vote_0910 %>%
-    ggplot(aes(y = Freq, axis1 = Vote09, axis2 = Vote10)) +
-    geom_alluvium(aes(fill = Vote10)) +
+Alluvial_Plot <- Vote_2021 %>%
+    ggplot(aes(y = Freq, axis1 = Vote20, axis2 = Vote21)) +
+    geom_alluvium(aes(fill = Vote21)) +
     geom_stratum() +
     geom_text(aes(label = after_stat(stratum)), 
               stat = "stratum", family = "HiraginoSans-W3")
@@ -1555,9 +1555,9 @@ Alluvial_Plot <- Vote_0910 %>%
 Alluvial_Plot
 ```
 
-　この場合、2009年に民主党に投票した人が2010年にどこに流れたかが分かりやすくなります。`Vote09`に色分けするか、`Vote10`に色分けするかは作成する人が決める問題であり、自分の主張・メッセージに適したマッピングをしましょう。
+　この場合、2020年に政党Aに投票した人が2021年にどこに流れたかが分かりやすくなります。`Vote20`に色分けするか、`Vote21`に色分けするかは作成する人が決める問題であり、自分の主張・メッセージに適したマッピングをしましょう。
 
-　最後に、図をもう少し加工してみましょう。まず、横軸に0.8、1.2、1.6、2.0となっている目盛りを修正し、1と2の箇所に「2009年衆院選」と「2010年参院選」を出力します。これは`scale_x_continuous()`で調整可能です。そして、`theme_minimal()`で余計なものを排除したテーマを適用します。最後に`theme()`内で全ての凡例を削除 (`legend.position = "none"`)し、パネルのグリッド (`panel.grid`)と縦軸・横軸のタイトル (`axis.title`)、縦軸の目盛りラベル (`axis.text.y`)を削除 (`element_blank()`)します。
+　最後に、図をもう少し加工してみましょう。まず、横軸に0.8、1.2、1.6、2.0となっている目盛りを修正し、1と2の箇所に「2020年選挙」と「2021年選挙」を出力します。これは`scale_x_continuous()`で調整可能です。そして、`theme_minimal()`で余計なものを排除したテーマを適用します。最後に`theme()`内で全ての凡例を削除 (`legend.position = "none"`)し、パネルのグリッド (`panel.grid`)と縦軸・横軸のタイトル (`axis.title`)、縦軸の目盛りラベル (`axis.text.y`)を削除 (`element_blank()`)します。
 
 ```{r visual4-alluvial9}
 #| fig.height: 7
@@ -1565,7 +1565,7 @@ Alluvial_Plot
 #| cache: TRUE
 Alluvial_Plot +
     scale_x_continuous(breaks = 1:2, 
-                       labels = c("2009年衆院選", "2010年参院選")) +
+                       labels = c("2020年選挙", "2021年選挙")) +
     theme_minimal(base_size = 16) +
     theme(legend.position = "none",
           panel.grid = element_blank(),
