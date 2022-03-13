@@ -889,18 +889,25 @@ Heatmap_df2 %>%
 
 ## 等高線図 {#visual4-contour}
 
-連続変数$\times$連続変数の同時分布
+　ヒートマップを使えば、離散変数$\times$離散変数の同時分布を可視化することは出来ますが、連続変数$\times$連続変数の同時分布を可視化するには限界があります。むろん、一つ一つのタイルを小さくすることも出来ますが、効率的な方法ではないでしょう。ここで活躍するのが等高線図 (contour plot) です。
+
+
+　たとえば、`Country_df`の`FH_Total`と`HDI_2018`の分布は散布図を通じて可視化することができます。
 
 ```{r visual4-contour1}
+#| warning: FALSE
 #| cache: TRUE
 Country_df %>%
-  ggplot(aes(x = FH_Total, y = HDI_2018)) +
-  geom_density_2d() +
+  ggplot() +
+  geom_point(aes(x = FH_Total, y = HDI_2018)) +
   labs(x = "フリーダム・ハウス・スコア", y = "人間開発指数 (2018)") +
   theme_minimal(base_size = 12)
 ```
 
+　右上に点が集まっていることから、密度の高い箇所だと考えられます。この密度を示す等高線図の幾何オブジェクトは`geom_density_2d()`です。マッピング要素は`geom_point()`と同じなので、マッピングは`ggplot()`内で行い、`geom_density_2d()`レイヤーを使いしてみましょう。
+
 ```{r visual4-contour2}
+#| warning: FALSE
 #| cache: TRUE
 Country_df %>%
   ggplot(aes(x = FH_Total, y = HDI_2018)) +
@@ -910,7 +917,10 @@ Country_df %>%
   theme_minimal(base_size = 12)
 ```
 
+　密度に応じて色塗りをする場合は`geom_density_2d()`の代わりに`geom_density_2d_filled()`を使います。
+
 ```{r visual4-contour3}
+#| warning: FALSE
 #| cache: TRUE
 Country_df %>%
   ggplot(aes(x = FH_Total, y = HDI_2018)) +
@@ -923,6 +933,7 @@ Country_df %>%
 　`geom_density_2d_filled()`オブジェクトの後に`geom_density_2d()`オブジェクトを重ねると、区間の区画線を追加することもできます。
 
 ```{r visual4-contour4}
+#| warning: FALSE
 #| cache: TRUE
 Country_df %>%
   ggplot(aes(x = FH_Total, y = HDI_2018)) +
@@ -936,6 +947,7 @@ Country_df %>%
 　色が気に入らない場合、自分で調整することも可能です。`scale_fill_manual()`で各区間ごとの色を指定することもできませんが、あまり効率的ではありません。ここでは`scale_fill_brewer()`関数を使って、[ColorBrewer](https://colorbrewer2.org/)のパレットを使ってみましょう。引数なしでも使えますが、既定値のパレットは区間が9つまで対応します。今回の等高線図は全部で10区間ですので、あまり適切ではありません。ここでは11区間まで対応可能な`"Spectral"`パレットを使いますが、これは`palette`引数で指定できます。
 
 ```{r visual4-contour5}
+#| warning: FALSE
 #| cache: TRUE
 Country_df %>%
   ggplot(aes(x = FH_Total, y = HDI_2018)) +
@@ -965,7 +977,8 @@ RColorBrewer::display.brewer.all()
 
 　今回使用するパッケージは{rnaturalearth}、{rnaturalearthdata}、{rgeos}です。他にも使うパッケージはありますが、世界地図ならとりあえずこれで十分です。
 
-```{r visual4-map1, message = FALSE}
+```{r visual4-map1}
+#| message: FALSE
 pacman::p_load(rnaturalearth, rnaturalearthdata, rgeos)
 ```
 
@@ -1172,7 +1185,8 @@ Japan_Map %>%
 
 　また日本地図のマッピングですが、今回は市区町村レベルまで見てみましょう。`ne_states()`では市区町村までマッピングすることはできませんので、今回は徳島大学の[瓜生真也](https://twitter.com/u_ribo)先生が公開しました{jpndistrict}を使います。
 
-```{r visual4-map19, message = FALSE}
+```{r visual4-map19}
+#| message: FALSE
 pacman::p_load_gh("uribo/jpndistrict")
 ```
 
@@ -1514,11 +1528,11 @@ Vote_2021 <- read_csv("Data/Vote_20_21.csv")
 head(Vote_2021, 20)
 ```
 
-|変数名|説明|
-|---|---|
-|`ID`|回答者ID|
-|`Vote20`|2020年選挙における投票先|
-|`Vote21`|2021年選挙における投票先|
+| 変数名   | 説明                                 |
+|:---------|:-------------------------------------|
+| `ID`     | 回答者ID                             |
+| `Vote20` | 2020年選挙における当該回答者の投票先 |
+| `Vote21` | 2021年選挙における当該回答者の投票先 |
 
 　たとえば、1番目の回答者は2020年に棄権し、2021年も棄権したことを意味する。また、5番目の回答者は2020年に政党Bに投票し、2021年は政党Cに投票したことを意味する。続いて、このデータを{ggalluvial}に適した形式のデータに加工します。具体的には「2020年棄権、かつ2021年棄権」、「2020年棄権、かつ2021年政党Aへ投票」、...、「2020年政党Bへ投票、かつ2021年政党Aへ投票」のように全ての組み合わせに対し、該当するケース数を計算する必要があります。今回のデータだと、投票先はいずれも政党A、政党B、政党C、政党D、その他、棄権、DK (わからない)の7であるため、49パターンができます。それぞれのパターンに該当するケース数を計算するためには`Vote20`と`Vote21`でデータをグループ化し、ケース数を計算します。
 
