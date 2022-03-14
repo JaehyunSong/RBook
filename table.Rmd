@@ -1,12 +1,144 @@
+---
+always_allow_html: true
+---
+
 # 表の作成 {#table}
 
-```{r table-common, include = FALSE}
+```{r table-common}
+#| include: FALSE
 source("_common.R")
 ```
 
-```{r table-setup, message = FALSE, warning = FALSE}
-pacman::p_load(tidyverse, kableExtra, gt)
+```{r table-setup}
+#| message: FALSE
+#| warning: FALSE
+pacman::p_load(tidyverse, kableExtra, gt, DT)
+
+country_df <- read_csv("Data/Countries.csv")
 ```
 
-{kableExtra}と{gt}
+HTML出力のみならどっちでも問題ないが、{gt}が使いやすい。
 
+ただし、{gt}は開発途上であり、PDF出力との相性が現在 (`r Sys.Date()`)、優れているとはいい難いので、PDF出力まで考えているのであれば{knitr}の`kable()` + {kableExtra}を推奨
+
+## {kableExtra}の使い方 {#table-kbl}
+
+`country_df`の`Population` (100万で割った値)、`Area` (1万で割った値)、`PPP_per_capita` (1万で割った値)、`HDI_2018`、`Polity_Score`の記述統計
+
+コード入力が面倒であれば、コピペでOK
+
+```{r table-kbl-1}
+country_desc <- country_df %>%
+    mutate(Population     = Population / 1000000,
+           Area           = Area / 10000,
+           PPP_per_capita = PPP_per_capita / 10000) %>%
+    select(Population, Area, PPP_per_capita, HDI_2018, Polity_Score) %>%
+    rename(PPP    = PPP_per_capita,
+           HDI    = HDI_2018,
+           Polity = Polity_Score) %>%
+    summarise(across(everything(),
+                     .fns = list("Mean" = ~mean(.x, na.rm = TRUE),
+                                 "SD"   = ~sd(.x, na.rm = TRUE),
+                                 "Min"  = ~min(.x, na.rm = TRUE),
+                                 "Max"  = ~max(.x, na.rm = TRUE),
+                                 "Obs"  = ~sum(!is.na(.x))))) %>%
+    pivot_longer(cols = everything(),
+                 names_to = "Label",
+                 values_to = "Value") %>%
+    separate(col = "Label",
+             into = c("Variable", "Stat")) %>%
+    pivot_wider(names_from  = Stat,
+                values_from = Value)
+```
+
+```{r table-kbl-2}
+country_desc
+```
+
+{summarytools}の`descr()`を使う場合
+
+```{r table-kbl-3}
+#| message: FALSE
+pacman::p_load(summarytools)
+
+country_desc <- country_df %>%
+    mutate(Population     = Population / 1000000,
+           Area           = Area / 10000,
+           PPP_per_capita = PPP_per_capita / 10000) %>%
+    select(Population, Area, PPP_per_capita, HDI_2018, Polity_Score) %>%
+    descr(stats = c("mean", "sd", "min", "max", "n.valid"),
+          order = "preserve", transpose = TRUE) %>%
+    as_tibble() %>%
+    mutate(Variable = c("Population", "Area", "PPP", "HDI", "Polity"),
+           .before  = Mean) %>%
+    rename(SD = Std.Dev, Obs = N.Valid)
+```
+
+```{r table-kbl-4}
+country_desc
+```
+
+表の出力
+
+```{r table-kbl-5}
+kbl(country_desc)
+```
+
+小数点桁数の調整
+
+```{r table-kbl-6}
+country_desc %>%
+    kbl(digits = 3)
+```
+
+## {gt}の使い方 {#table-gt}
+
+そのまま`country_desc`を使用
+
+表の出力
+
+```{r table-gt-1}
+gt(country_desc)
+```
+
+小数点桁数の調整
+
+```{r table-gt-2}
+country_desc %>%
+    gt() %>%
+    fmt_number(columns = 2:5, decimals = 3)
+```
+
+## データの出力 {#table-dataout}
+
+通常の出力の場合
+
+```{r table-dataout-1}
+country_df
+```
+
+{DT}パッケージの`datatable()`関数を使用した場合
+
+```{r table-dataout-2}
+#| eval: FALSE
+datatable(country_df)
+```
+
+`r if (knitr::is_latex_output()) '<!--'` 
+
+```{r table-dataout-3}
+#| echo: FALSE
+datatable(country_df)
+```
+
+`r if (knitr::is_latex_output()) '-->'`
+
+`r if (knitr::is_html_output()) '<!--'` 
+
+```{r table-dataout-4}
+#| echo: FALSE
+#| out.width: "100%"
+knitr::include_graphics("figures/Table/DT.png")
+```
+
+`r if (knitr::is_html_output()) '-->'`

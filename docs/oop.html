@@ -54,6 +54,14 @@
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.21/datatables.js"></script>
+<link href="libs/dt-core-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.11.3/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.11.3/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-165592410-1"></script>
 <script>
@@ -605,7 +613,12 @@ div.csl-indent {
 <li class="chapter" data-level="22.6" data-path="rmarkdown2.html"><a href="rmarkdown2.html#rmakrdown2-shiny"><i class="fa fa-check"></i><b>22.6</b> Webアプリケーション</a></li>
 <li class="chapter" data-level="22.7" data-path="rmarkdown2.html"><a href="rmarkdown2.html#rmakrdown2-tutorial"><i class="fa fa-check"></i><b>22.7</b> チュートリアル</a></li>
 </ul></li>
-<li class="chapter" data-level="23" data-path="table.html"><a href="table.html"><i class="fa fa-check"></i><b>23</b> 表の作成</a></li>
+<li class="chapter" data-level="23" data-path="table.html"><a href="table.html"><i class="fa fa-check"></i><b>23</b> 表の作成</a>
+<ul>
+<li class="chapter" data-level="23.1" data-path="table.html"><a href="table.html#table-kbl"><i class="fa fa-check"></i><b>23.1</b> {kableExtra}の使い方</a></li>
+<li class="chapter" data-level="23.2" data-path="table.html"><a href="table.html#table-gt"><i class="fa fa-check"></i><b>23.2</b> {gt}の使い方</a></li>
+<li class="chapter" data-level="23.3" data-path="table.html"><a href="table.html#table-dataout"><i class="fa fa-check"></i><b>23.3</b> データの出力</a></li>
+</ul></li>
 <li class="chapter" data-level="24" data-path="visualization5.html"><a href="visualization5.html"><i class="fa fa-check"></i><b>24</b> モデルの可視化</a></li>
 <li class="chapter" data-level="25" data-path="renv.html"><a href="renv.html"><i class="fa fa-check"></i><b>25</b> 分析環境の管理</a></li>
 <li class="part"><span><b>VI 中級者向け</b></span></li>
@@ -700,22 +713,22 @@ div.csl-indent {
 <hr />
 <div id="oop-intro" class="section level2" number="28.1">
 <h2><span class="header-section-number">28.1</span> まずは例から</h2>
-<div class="sourceCode" id="cb1863"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1863-1"><a href="oop.html#cb1863-1"></a>Vector1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">12</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">10</span>, <span class="dv">1</span>)</span>
-<span id="cb1863-2"><a href="oop.html#cb1863-2"></a>Vector2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;D&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;E&quot;</span>, <span class="st">&quot;A&quot;</span>, <span class="st">&quot;A&quot;</span>, <span class="st">&quot;D&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;C&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb1864"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1864-1"><a href="oop.html#cb1864-1"></a><span class="fu">summary</span>(Vector1)</span></code></pre></div>
+<div class="sourceCode" id="cb1872"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1872-1"><a href="oop.html#cb1872-1"></a>Vector1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">12</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">10</span>, <span class="dv">1</span>)</span>
+<span id="cb1872-2"><a href="oop.html#cb1872-2"></a>Vector2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;D&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;E&quot;</span>, <span class="st">&quot;A&quot;</span>, <span class="st">&quot;A&quot;</span>, <span class="st">&quot;D&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;C&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1873"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1873-1"><a href="oop.html#cb1873-1"></a><span class="fu">summary</span>(Vector1)</span></code></pre></div>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##    1.00    3.25    5.00    5.70    8.50   12.00</code></pre>
-<div class="sourceCode" id="cb1866"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1866-1"><a href="oop.html#cb1866-1"></a><span class="fu">summary</span>(Vector2)</span></code></pre></div>
+<div class="sourceCode" id="cb1875"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1875-1"><a href="oop.html#cb1875-1"></a><span class="fu">summary</span>(Vector2)</span></code></pre></div>
 <pre><code>##    Length     Class      Mode 
 ##        10 character character</code></pre>
 <p>同じ<code>summary()</code>関数ですが、中のデータのタイプによって動きが異なります。これがオブジェクト指向プログラミングにおいて「<strong>多態性</strong> (polymorphism)」と呼ばれる概念です。同じ関数でもデータ型、またはデータ構造に応じて異なる動きをすることです。ここでのデータ型やデータ構造を、OOPでは「<strong>クラス</strong> (class)」と呼びます。クラスは<code>class()</code>関数で確認することができます。</p>
-<div class="sourceCode" id="cb1868"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1868-1"><a href="oop.html#cb1868-1"></a><span class="fu">class</span>(Vector1)</span></code></pre></div>
+<div class="sourceCode" id="cb1877"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1877-1"><a href="oop.html#cb1877-1"></a><span class="fu">class</span>(Vector1)</span></code></pre></div>
 <pre><code>## [1] &quot;numeric&quot;</code></pre>
-<div class="sourceCode" id="cb1870"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1870-1"><a href="oop.html#cb1870-1"></a><span class="fu">class</span>(Vector2)</span></code></pre></div>
+<div class="sourceCode" id="cb1879"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1879-1"><a href="oop.html#cb1879-1"></a><span class="fu">class</span>(Vector2)</span></code></pre></div>
 <pre><code>## [1] &quot;character&quot;</code></pre>
 <p><code>Vector1</code>はnumeric、<code>Vector2</code>はcharacterです。もし、無理矢理に<code>Vector1</code>のクラスをcharacterに変えればどうなるでしょうか。クラスの変更は<code>class(オブジェクト名) &lt;- "クラス名"</code>でできます。一つのオブジェクトは複数のクラスが持てますが、これはOOPの「<strong>継承</strong> (inheritance)」概念に関係するので後で解説します。ここではまず、<code>Vector1</code>のクラスをcharacterにし、もう一回<code>summary()</code>を使ってみましょう。</p>
-<div class="sourceCode" id="cb1872"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1872-1"><a href="oop.html#cb1872-1"></a><span class="fu">class</span>(Vector1) <span class="ot">&lt;-</span> <span class="st">&quot;character&quot;</span></span>
-<span id="cb1872-2"><a href="oop.html#cb1872-2"></a><span class="fu">summary</span>(Vector1)</span></code></pre></div>
+<div class="sourceCode" id="cb1881"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1881-1"><a href="oop.html#cb1881-1"></a><span class="fu">class</span>(Vector1) <span class="ot">&lt;-</span> <span class="st">&quot;character&quot;</span></span>
+<span id="cb1881-2"><a href="oop.html#cb1881-2"></a><span class="fu">summary</span>(Vector1)</span></code></pre></div>
 <pre><code>##    Length     Class      Mode 
 ##        10 character character</code></pre>
 <p>データの中身は変わっていませんが、<code>summary()</code>関数の動き方が変わりました。このように、Rで頻繁に使う<code>summary()</code>、<code>print()</code>、<code>plot()</code>などの関数は様々なクラスの対応しております。<code>lm()</code>関数を使った回帰分析の結果オブジェクトのクラス名は<code>lm</code>であり、その結果を見るためにも<code>summary()</code>関数を使います。他にも<code>plot(lmオブジェクト名)</code>をすると回帰診断の図が表示されます。これができないと、各クラスに応じた関数を作成する必要がありますね。numeric型専用の<code>numeric_print()</code>、character型専用の<code>character_print()</code>、lm型専用の<code>lm_plot()</code>など…、覚えなきゃいけない関数が増えてきます。ユーザー側でも大変ですが、コードを作成する側も大変です。実際、図<a href="oop.html#fig:oop-intro-5">28.1</a><a href="reference.html#fn108" class="footnote-ref" id="fnref108"><sup>108</sup></a>を見ると、プログラマーにとって最も大変な仕事は「名付け」であることが分かります。</p>
@@ -741,23 +754,23 @@ div.csl-indent {
 <h3><span class="header-section-number">28.2.1</span> オブジェクト</h3>
 <p>ここは第<a href="programming.html#programming">10</a>章の内容の繰り返しですが、<strong>オブジェクト (object)</strong> とはメモリに割り当てられた「何か」です。「何か」に該当するのは、ベクトル (vector)、行列 (matrix)、データフレーム (data frame)、リスト (list)、関数 (function) などがあります。一般的に、オブジェクトにはそれぞれ固有の（つまり、他のオブジェクトと重複しない）名前が付いています。</p>
 <p>たとえば、1から5までの自然数の数列を</p>
-<div class="sourceCode" id="cb1874"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1874-1"><a href="oop.html#cb1874-1"></a>my_vec1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)  <span class="co"># my_vec1 &lt;- 1:5 でも同じ</span></span></code></pre></div>
+<div class="sourceCode" id="cb1883"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1883-1"><a href="oop.html#cb1883-1"></a>my_vec1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)  <span class="co"># my_vec1 &lt;- 1:5 でも同じ</span></span></code></pre></div>
 <p>のように<code>my_vec1</code>という名前のオブジェクトに格納します。オブジェクトに名前をつけてメモリに割り当てると、その後 <code>my_vec1</code> と入力するだけでそのオブジェクトの中身を読み込むことができるようになります。</p>
 <p>ここで、次のように <code>my_vec1</code>の要素を2倍にする操作を考えてみましょう。</p>
-<div class="sourceCode" id="cb1875"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1875-1"><a href="oop.html#cb1875-1"></a>my_vec1 <span class="sc">*</span> <span class="dv">2</span></span></code></pre></div>
+<div class="sourceCode" id="cb1884"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1884-1"><a href="oop.html#cb1884-1"></a>my_vec1 <span class="sc">*</span> <span class="dv">2</span></span></code></pre></div>
 <pre><code>## [1]  2  4  6  8 10</code></pre>
 <p><code>my_vec1</code>は、先ほど定義したオブジェクトです。では<code>2</code>はどうでしょうか。<code>2</code>はメモリに割り当てられていないので、オブジェクトではないでしょうか。実は、この数字 <code>2</code> もオブジェクトです。計算する瞬間のみ<code>2</code>がメモリに割り当てられ、計算が終わったらメモリから消されると考えれば良いでしょう。むろん、<code>*</code> のような演算子でさえもオブジェクトです。</p>
 </div>
 <div id="クラス-1" class="section level3" number="28.2.2">
 <h3><span class="header-section-number">28.2.2</span> クラス</h3>
 <p><strong>クラス (class)</strong> とはオブジェクトを特徴づける属性のことです。既に何度か <code>class()</code> 関数を使ってデータ型やデータ構造を確認しましたが、<code>class()</code>関数でオブジェクトのクラスを確認することができます。先ほど、<code>my_vec1</code>も<code>*</code>も<code>2</code>もオブジェクトであると説明しました。これらがすべてオブジェクトであるということは、何らかのクラス属性を持っているというこです。また、<code>class()</code>関数そのものもオブジェクトなので、何らかのクラスを持ちます。確認してみましょう。</p>
-<div class="sourceCode" id="cb1877"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1877-1"><a href="oop.html#cb1877-1"></a><span class="fu">class</span>(my_vec1)</span></code></pre></div>
+<div class="sourceCode" id="cb1886"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1886-1"><a href="oop.html#cb1886-1"></a><span class="fu">class</span>(my_vec1)</span></code></pre></div>
 <pre><code>## [1] &quot;numeric&quot;</code></pre>
-<div class="sourceCode" id="cb1879"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1879-1"><a href="oop.html#cb1879-1"></a><span class="fu">class</span>(<span class="st">`</span><span class="at">*</span><span class="st">`</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1888"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1888-1"><a href="oop.html#cb1888-1"></a><span class="fu">class</span>(<span class="st">`</span><span class="at">*</span><span class="st">`</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;function&quot;</code></pre>
-<div class="sourceCode" id="cb1881"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1881-1"><a href="oop.html#cb1881-1"></a><span class="fu">class</span>(<span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1890"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1890-1"><a href="oop.html#cb1890-1"></a><span class="fu">class</span>(<span class="dv">2</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;numeric&quot;</code></pre>
-<div class="sourceCode" id="cb1883"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1883-1"><a href="oop.html#cb1883-1"></a><span class="fu">class</span>(class)</span></code></pre></div>
+<div class="sourceCode" id="cb1892"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1892-1"><a href="oop.html#cb1892-1"></a><span class="fu">class</span>(class)</span></code></pre></div>
 <pre><code>## [1] &quot;function&quot;</code></pre>
 <p>統計分析をする際に、Rのクラスを意識することはあまりありません。しかし、Rでオブジェクト指向プログラミングを行う際は、オブジェクトのクラスを厳密に定義する必要があります。</p>
 <p>Rにおける全てはオブジェクトであり、全てのオブジェクトは一つ以上クラスが付与されています。このクラスの考え方はプログラミング言語によって異なります。たとえば、Pythonの場合、一つのクラスの内部にはオブジェクトのデータ構造が定義され、そのクラスで使用可能な関数も含んでいます。また、データを含む場合もあります。このようにクラス内部にデータ、データ構造、専用関数などを格納することをカプセル化（encapsulation）と呼びます。</p>
@@ -766,17 +779,17 @@ div.csl-indent {
 <div id="メソッドと多態性" class="section level3" number="28.2.3">
 <h3><span class="header-section-number">28.2.3</span> メソッドと多態性</h3>
 <p>各クラス専用の関数をメソッド（method）と呼びます。たとえば、<code>summary()</code>関数を考えてみましょう。<code>lm()</code>関数を用いた回帰分析から得られたオブジェクトのクラスは<code>lm</code>であり、<code>c()</code>で作られた数値型ベクトルのクラスは<code>numeric</code>です。しかし、同じ<code>summary()</code>関数ですが、引数のクラスが<code>lm</code>か<code>numeric</code>かによって異なる動きを見せます。その例を見ましょう。</p>
-<div class="sourceCode" id="cb1885"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1885-1"><a href="oop.html#cb1885-1"></a>X <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>)</span>
-<span id="cb1885-2"><a href="oop.html#cb1885-2"></a>Y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">7</span>, <span class="dv">11</span>, <span class="dv">13</span>)</span>
-<span id="cb1885-3"><a href="oop.html#cb1885-3"></a>lm_class <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> X)</span>
-<span id="cb1885-4"><a href="oop.html#cb1885-4"></a><span class="fu">class</span>(X)</span></code></pre></div>
+<div class="sourceCode" id="cb1894"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1894-1"><a href="oop.html#cb1894-1"></a>X <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>)</span>
+<span id="cb1894-2"><a href="oop.html#cb1894-2"></a>Y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">7</span>, <span class="dv">11</span>, <span class="dv">13</span>)</span>
+<span id="cb1894-3"><a href="oop.html#cb1894-3"></a>lm_class <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> X)</span>
+<span id="cb1894-4"><a href="oop.html#cb1894-4"></a><span class="fu">class</span>(X)</span></code></pre></div>
 <pre><code>## [1] &quot;numeric&quot;</code></pre>
-<div class="sourceCode" id="cb1887"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1887-1"><a href="oop.html#cb1887-1"></a><span class="fu">class</span>(lm_class)</span></code></pre></div>
+<div class="sourceCode" id="cb1896"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1896-1"><a href="oop.html#cb1896-1"></a><span class="fu">class</span>(lm_class)</span></code></pre></div>
 <pre><code>## [1] &quot;lm&quot;</code></pre>
-<div class="sourceCode" id="cb1889"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1889-1"><a href="oop.html#cb1889-1"></a><span class="fu">summary</span>(X)</span></code></pre></div>
+<div class="sourceCode" id="cb1898"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1898-1"><a href="oop.html#cb1898-1"></a><span class="fu">summary</span>(X)</span></code></pre></div>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##     1.0     3.5     6.0     6.0     8.5    11.0</code></pre>
-<div class="sourceCode" id="cb1891"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1891-1"><a href="oop.html#cb1891-1"></a><span class="fu">summary</span>(lm_class)</span></code></pre></div>
+<div class="sourceCode" id="cb1900"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1900-1"><a href="oop.html#cb1900-1"></a><span class="fu">summary</span>(lm_class)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Y ~ X)
@@ -786,15 +799,17 @@ div.csl-indent {
 ##  1.3333 -0.2667 -1.8667 -0.4667  0.9333  0.3333 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)  -1.6333     1.0546  -1.549  0.19637
-## X             1.3000     0.1528   8.510  0.00105
+##             Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept)  -1.6333     1.0546  -1.549  0.19637   
+## X             1.3000     0.1528   8.510  0.00105 **
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Residual standard error: 1.278 on 4 degrees of freedom
 ## Multiple R-squared:  0.9477, Adjusted R-squared:  0.9346 
 ## F-statistic: 72.43 on 1 and 4 DF,  p-value: 0.001046</code></pre>
 <p>このように同じ関数でもクラスによって異なる動作をすることを多態性 (polymorphism)と呼びます。しかし、実はRにおいてこれらの関数は別途作られた関数です。つまり、<code>summary()</code>という関数がクラスごとに定義されていることを意味します。<code>summary()</code>関数がどのクラスで使用可能かを確認するためには<code>methods()</code>関数を使います。</p>
-<div class="sourceCode" id="cb1893"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1893-1"><a href="oop.html#cb1893-1"></a><span class="fu">methods</span>(<span class="st">&quot;summary&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1902"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1902-1"><a href="oop.html#cb1902-1"></a><span class="fu">methods</span>(<span class="st">&quot;summary&quot;</span>)</span></code></pre></div>
 <pre><code>##  [1] summary,ANY-method                  summary,DBIObject-method           
 ##  [3] summary.aov                         summary.aovlist*                   
 ##  [5] summary.aspell*                     summary.check_packages_in_dir*     
@@ -821,13 +836,13 @@ div.csl-indent {
 ## [47] summary.warnings                   
 ## see &#39;?methods&#39; for accessing help and source code</code></pre>
 <p>このように47種類のクラスに対して<code>summary()</code>関数が定義されています<a href="reference.html#fn109" class="footnote-ref" id="fnref109"><sup>109</sup></a>。この関数の内部を確認するにはどうすれば良いでしょうか。関数のコードを見るときにはコンソール上に<code>関数名</code>を入力するだけです（<code>()</code>は不要）。</p>
-<div class="sourceCode" id="cb1895"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1895-1"><a href="oop.html#cb1895-1"></a>summary</span></code></pre></div>
+<div class="sourceCode" id="cb1904"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1904-1"><a href="oop.html#cb1904-1"></a>summary</span></code></pre></div>
 <pre><code>## function (object, ...) 
 ## UseMethod(&quot;summary&quot;)
-## &lt;bytecode: 0x7fbd26458208&gt;
+## &lt;bytecode: 0x7fc6c1bd97e8&gt;
 ## &lt;environment: namespace:base&gt;</code></pre>
 <p>しかし、多態性を持つ関数の内部を見ることはできません。そもそも<code>summary()</code>関数はクラスごとに異なるコードを持っているため、<code>summary</code>だけでは「どのクラスの<code>summary()</code>か」が分かりません。それでもRには<code>summary()</code>関数が存在し、それをジェネリック関数（generic function）と呼びます。内部には<code>UseMethod("summary")</code>のみが書かれており、これは「この<code>summary()</code>関数は様々なクラスのメソッドとして機能するぞ」と宣言しているだけです。各クラスに対応したメソッドの内部を見るには<code>getS3method("メソッド名", "クラス名")</code>を使います。<code>summary()</code>メソッドは<code>numeric</code>型が別途指定されていないため、<code>"defualt"</code>となります。</p>
-<div class="sourceCode" id="cb1897"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1897-1"><a href="oop.html#cb1897-1"></a><span class="fu">getS3method</span>(<span class="st">&quot;summary&quot;</span>, <span class="st">&quot;default&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1906"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1906-1"><a href="oop.html#cb1906-1"></a><span class="fu">getS3method</span>(<span class="st">&quot;summary&quot;</span>, <span class="st">&quot;default&quot;</span>)</span></code></pre></div>
 <pre><code>## function (object, ..., digits, quantile.type = 7) 
 ## {
 ##     if (is.factor(object)) 
@@ -879,15 +894,15 @@ div.csl-indent {
 ##     class(value) &lt;- c(&quot;summaryDefault&quot;, &quot;table&quot;)
 ##     value
 ## }
-## &lt;bytecode: 0x7fbd15d1b670&gt;
+## &lt;bytecode: 0x7fc6b2af5e78&gt;
 ## &lt;environment: namespace:base&gt;</code></pre>
 <p>Rにはメソッドがクラス内部で定義されず、別途の<code>メソッド名.クラス名()</code>といった関数として作成されています。そしてジェネリック関数によって一つの関数の「ように」まとまっています。このように、ジェネリック関数経由でメソッドを呼び出すことをメソッド・ディスパッチ（method dispatch）と呼びます。</p>
 </div>
 <div id="継承" class="section level3" number="28.2.4">
 <h3><span class="header-section-number">28.2.4</span> 継承</h3>
 <p>クラスの継承 (inheritance)は一つのオブジェクトが2つ以上のクラスを持つ場合、子クラスが親クラスの特徴を継承することを意味します。たとえば、データフレームの拡張版とも言えるtibbleの場合、複数のクラスを持っています。</p>
-<div class="sourceCode" id="cb1899"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1899-1"><a href="oop.html#cb1899-1"></a>my_tibble <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">X =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">Y =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span>
-<span id="cb1899-2"><a href="oop.html#cb1899-2"></a><span class="fu">class</span>(my_tibble)</span></code></pre></div>
+<div class="sourceCode" id="cb1908"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1908-1"><a href="oop.html#cb1908-1"></a>my_tibble <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">X =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">Y =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span>
+<span id="cb1908-2"><a href="oop.html#cb1908-2"></a><span class="fu">class</span>(my_tibble)</span></code></pre></div>
 <pre><code>## [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
 <p>この<code>my_tibble</code>は<code>tlb_df</code>と<code>tbl</code>、<code>data.frame</code>といった3つのクラスを持っており、先に出てきたものが子クラス、後に出てくるものが親クラスです。<code>tbl</code>クラスと<code>data.frame</code>クラス両方に同じメソッドが定義されている場合、まず子クラスである<code>メソッド.tbl()</code>が実行されます。もし、子クラスにメソッドが定義されていない場合は<code>tbl</code>の親クラスである<code>data.frame</code>のメソッドが実行されます。tibbleはデータフレームとは異なるクラスのオブジェクトですが、データフレームと（ほぼ）同じ操作ができるのは、クラスが継承されるからです。クラスの継承ができないと、tibbleで使える全ての関数（列や行の抽出に使う<code>[</code>や<code>$</code>なども！）を全て一から定義する必要がありますが<a href="reference.html#fn110" class="footnote-ref" id="fnref110"><sup>110</sup></a>、継承を使うことによってこのような手間を省くことが出来ます。</p>
 <hr />
@@ -898,67 +913,67 @@ div.csl-indent {
 <div id="オブジェクトに任意のクラスを付ける" class="section level3" number="28.3.1">
 <h3><span class="header-section-number">28.3.1</span> オブジェクトに任意のクラスを付ける</h3>
 <p>クラスを変えるのは簡単です。<code>class(オブジェクト) &lt;- "新しいクラス名"</code>だけです。つまり、関数から何かの結果を返す直前にクラスを変更すれば良いです。</p>
-<div class="sourceCode" id="cb1901"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1901-1"><a href="oop.html#cb1901-1"></a><span class="co"># 方法1</span></span>
-<span id="cb1901-2"><a href="oop.html#cb1901-2"></a>関数名 <span class="ot">&lt;-</span> <span class="cf">function</span>(...) {</span>
-<span id="cb1901-3"><a href="oop.html#cb1901-3"></a>  </span>
-<span id="cb1901-4"><a href="oop.html#cb1901-4"></a>  ...</span>
-<span id="cb1901-5"><a href="oop.html#cb1901-5"></a>  </span>
-<span id="cb1901-6"><a href="oop.html#cb1901-6"></a>  <span class="fu">class</span>(返すオブジェクト名) <span class="ot">&lt;-</span> <span class="st">&quot;任意のクラス名&quot;</span></span>
-<span id="cb1901-7"><a href="oop.html#cb1901-7"></a>  </span>
-<span id="cb1901-8"><a href="oop.html#cb1901-8"></a>  返すオブジェクト名 <span class="co"># return(オブジェクト名) でもOK</span></span>
-<span id="cb1901-9"><a href="oop.html#cb1901-9"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb1910"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1910-1"><a href="oop.html#cb1910-1"></a><span class="co"># 方法1</span></span>
+<span id="cb1910-2"><a href="oop.html#cb1910-2"></a>関数名 <span class="ot">&lt;-</span> <span class="cf">function</span>(...) {</span>
+<span id="cb1910-3"><a href="oop.html#cb1910-3"></a>  </span>
+<span id="cb1910-4"><a href="oop.html#cb1910-4"></a>  ...</span>
+<span id="cb1910-5"><a href="oop.html#cb1910-5"></a>  </span>
+<span id="cb1910-6"><a href="oop.html#cb1910-6"></a>  <span class="fu">class</span>(返すオブジェクト名) <span class="ot">&lt;-</span> <span class="st">&quot;任意のクラス名&quot;</span></span>
+<span id="cb1910-7"><a href="oop.html#cb1910-7"></a>  </span>
+<span id="cb1910-8"><a href="oop.html#cb1910-8"></a>  返すオブジェクト名 <span class="co"># return(オブジェクト名) でもOK</span></span>
+<span id="cb1910-9"><a href="oop.html#cb1910-9"></a>}</span></code></pre></div>
 <p>たとえば、入力された2つのベクトル（<code>x</code>と<code>y</code>）をリスト構造とし、クラス名をScoreにするにはどうすれば良いでしょうか。</p>
-<div class="sourceCode" id="cb1902"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1902-1"><a href="oop.html#cb1902-1"></a>Make_Score1 <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
-<span id="cb1902-2"><a href="oop.html#cb1902-2"></a>  </span>
-<span id="cb1902-3"><a href="oop.html#cb1902-3"></a>  <span class="co"># resultリストにxとyを格納</span></span>
-<span id="cb1902-4"><a href="oop.html#cb1902-4"></a>  result <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Score1 =</span> x, <span class="at">Score2 =</span> y)</span>
-<span id="cb1902-5"><a href="oop.html#cb1902-5"></a>  </span>
-<span id="cb1902-6"><a href="oop.html#cb1902-6"></a>  <span class="co"># 以下は attr(result, &quot;class&quot;) &lt;- &quot;Score&quot; も可</span></span>
-<span id="cb1902-7"><a href="oop.html#cb1902-7"></a>  <span class="fu">class</span>(result) <span class="ot">&lt;-</span> <span class="st">&quot;Score&quot;</span> <span class="co"># resultのクラスを&quot;Score&quot;とする</span></span>
-<span id="cb1902-8"><a href="oop.html#cb1902-8"></a>  </span>
-<span id="cb1902-9"><a href="oop.html#cb1902-9"></a>  result                   <span class="co"># resultを返す</span></span>
-<span id="cb1902-10"><a href="oop.html#cb1902-10"></a>}</span>
-<span id="cb1902-11"><a href="oop.html#cb1902-11"></a></span>
-<span id="cb1902-12"><a href="oop.html#cb1902-12"></a>My_Score1 <span class="ot">&lt;-</span> <span class="fu">Make_Score1</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="dv">50</span>, <span class="dv">10</span>),</span>
-<span id="cb1902-13"><a href="oop.html#cb1902-13"></a>                         <span class="at">y =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="dv">50</span>, <span class="dv">10</span>))</span>
-<span id="cb1902-14"><a href="oop.html#cb1902-14"></a></span>
-<span id="cb1902-15"><a href="oop.html#cb1902-15"></a>My_Score1 <span class="co"># My_Score1の内部を見る</span></span></code></pre></div>
+<div class="sourceCode" id="cb1911"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1911-1"><a href="oop.html#cb1911-1"></a>Make_Score1 <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
+<span id="cb1911-2"><a href="oop.html#cb1911-2"></a>  </span>
+<span id="cb1911-3"><a href="oop.html#cb1911-3"></a>  <span class="co"># resultリストにxとyを格納</span></span>
+<span id="cb1911-4"><a href="oop.html#cb1911-4"></a>  result <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Score1 =</span> x, <span class="at">Score2 =</span> y)</span>
+<span id="cb1911-5"><a href="oop.html#cb1911-5"></a>  </span>
+<span id="cb1911-6"><a href="oop.html#cb1911-6"></a>  <span class="co"># 以下は attr(result, &quot;class&quot;) &lt;- &quot;Score&quot; も可</span></span>
+<span id="cb1911-7"><a href="oop.html#cb1911-7"></a>  <span class="fu">class</span>(result) <span class="ot">&lt;-</span> <span class="st">&quot;Score&quot;</span> <span class="co"># resultのクラスを&quot;Score&quot;とする</span></span>
+<span id="cb1911-8"><a href="oop.html#cb1911-8"></a>  </span>
+<span id="cb1911-9"><a href="oop.html#cb1911-9"></a>  result                   <span class="co"># resultを返す</span></span>
+<span id="cb1911-10"><a href="oop.html#cb1911-10"></a>}</span>
+<span id="cb1911-11"><a href="oop.html#cb1911-11"></a></span>
+<span id="cb1911-12"><a href="oop.html#cb1911-12"></a>My_Score1 <span class="ot">&lt;-</span> <span class="fu">Make_Score1</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="dv">50</span>, <span class="dv">10</span>),</span>
+<span id="cb1911-13"><a href="oop.html#cb1911-13"></a>                         <span class="at">y =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="dv">50</span>, <span class="dv">10</span>))</span>
+<span id="cb1911-14"><a href="oop.html#cb1911-14"></a></span>
+<span id="cb1911-15"><a href="oop.html#cb1911-15"></a>My_Score1 <span class="co"># My_Score1の内部を見る</span></span></code></pre></div>
 <pre><code>## $Score1
-##  [1] 45.18609 53.21329 65.55463 43.70802 49.08437 52.32820 38.53442 40.52758
-##  [9] 41.55499 43.66723
+##  [1] 53.04781 60.08795 65.22310 39.25454 45.80100 52.92986 50.50311 54.47014
+##  [9] 50.70787 56.31206
 ## 
 ## $Score2
-##  [1] 36.37648 39.04443 45.72623 55.44854 43.30736 49.45162 37.88850 45.37857
-##  [9] 34.34757 39.66689
+##  [1] 64.67415 46.92651 45.51000 37.43255 34.46356 56.10416 52.26649 37.75582
+##  [9] 37.74994 58.79862
 ## 
 ## attr(,&quot;class&quot;)
 ## [1] &quot;Score&quot;</code></pre>
-<div class="sourceCode" id="cb1904"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1904-1"><a href="oop.html#cb1904-1"></a><span class="fu">class</span>(My_Score1) <span class="co"># My_Score1のクラスを表示</span></span></code></pre></div>
+<div class="sourceCode" id="cb1913"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1913-1"><a href="oop.html#cb1913-1"></a><span class="fu">class</span>(My_Score1) <span class="co"># My_Score1のクラスを表示</span></span></code></pre></div>
 <pre><code>## [1] &quot;Score&quot;</code></pre>
 <p>もう一つの方法は<code>structure()</code>関数を使う方法です。<code>sturcture()</code>の第1引数に返すオブジェクト名を指定し、<code>class = "クラス名"</code>引数でクラスを指定します。</p>
-<div class="sourceCode" id="cb1906"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1906-1"><a href="oop.html#cb1906-1"></a>Make_Score2 <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
-<span id="cb1906-2"><a href="oop.html#cb1906-2"></a>  </span>
-<span id="cb1906-3"><a href="oop.html#cb1906-3"></a>  <span class="co"># resultリストにxとyを格納</span></span>
-<span id="cb1906-4"><a href="oop.html#cb1906-4"></a>  result <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Score1 =</span> x, <span class="at">Score2 =</span> y)</span>
-<span id="cb1906-5"><a href="oop.html#cb1906-5"></a>  </span>
-<span id="cb1906-6"><a href="oop.html#cb1906-6"></a>  <span class="fu">structure</span>(result, <span class="at">class =</span> <span class="st">&quot;Score&quot;</span>) <span class="co"># resultを返す</span></span>
-<span id="cb1906-7"><a href="oop.html#cb1906-7"></a>}</span>
-<span id="cb1906-8"><a href="oop.html#cb1906-8"></a></span>
-<span id="cb1906-9"><a href="oop.html#cb1906-9"></a>My_Score2 <span class="ot">&lt;-</span> <span class="fu">Make_Score2</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="dv">50</span>, <span class="dv">10</span>),</span>
-<span id="cb1906-10"><a href="oop.html#cb1906-10"></a>                         <span class="at">y =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="dv">50</span>, <span class="dv">10</span>))</span>
-<span id="cb1906-11"><a href="oop.html#cb1906-11"></a></span>
-<span id="cb1906-12"><a href="oop.html#cb1906-12"></a>My_Score2 <span class="co"># My_Score2の内部を見る</span></span></code></pre></div>
+<div class="sourceCode" id="cb1915"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1915-1"><a href="oop.html#cb1915-1"></a>Make_Score2 <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
+<span id="cb1915-2"><a href="oop.html#cb1915-2"></a>  </span>
+<span id="cb1915-3"><a href="oop.html#cb1915-3"></a>  <span class="co"># resultリストにxとyを格納</span></span>
+<span id="cb1915-4"><a href="oop.html#cb1915-4"></a>  result <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Score1 =</span> x, <span class="at">Score2 =</span> y)</span>
+<span id="cb1915-5"><a href="oop.html#cb1915-5"></a>  </span>
+<span id="cb1915-6"><a href="oop.html#cb1915-6"></a>  <span class="fu">structure</span>(result, <span class="at">class =</span> <span class="st">&quot;Score&quot;</span>) <span class="co"># resultを返す</span></span>
+<span id="cb1915-7"><a href="oop.html#cb1915-7"></a>}</span>
+<span id="cb1915-8"><a href="oop.html#cb1915-8"></a></span>
+<span id="cb1915-9"><a href="oop.html#cb1915-9"></a>My_Score2 <span class="ot">&lt;-</span> <span class="fu">Make_Score2</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="dv">50</span>, <span class="dv">10</span>),</span>
+<span id="cb1915-10"><a href="oop.html#cb1915-10"></a>                         <span class="at">y =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="dv">50</span>, <span class="dv">10</span>))</span>
+<span id="cb1915-11"><a href="oop.html#cb1915-11"></a></span>
+<span id="cb1915-12"><a href="oop.html#cb1915-12"></a>My_Score2 <span class="co"># My_Score2の内部を見る</span></span></code></pre></div>
 <pre><code>## $Score1
-##  [1] 48.74983 37.58063 43.69978 48.02373 56.86220 50.94208 26.62861 53.57419
-##  [9] 48.70455 44.02402
+##  [1] 62.68784 55.71233 53.27104 52.62752 61.45996 56.74981 59.37038 40.91636
+##  [9] 48.37741 41.62580
 ## 
 ## $Score2
-##  [1] 51.04115 46.52370 44.38158 59.28605 55.11490 57.56212 54.41542 59.91715
-##  [9] 37.12304 52.78880
+##  [1] 69.47243 54.53866 58.14224 55.11222 59.94869 51.70797 59.48511 72.92605
+##  [9] 54.02502 37.60030
 ## 
 ## attr(,&quot;class&quot;)
 ## [1] &quot;Score&quot;</code></pre>
-<div class="sourceCode" id="cb1908"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1908-1"><a href="oop.html#cb1908-1"></a><span class="fu">class</span>(My_Score2) <span class="co"># My_Score2のクラスを表示</span></span></code></pre></div>
+<div class="sourceCode" id="cb1917"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1917-1"><a href="oop.html#cb1917-1"></a><span class="fu">class</span>(My_Score2) <span class="co"># My_Score2のクラスを表示</span></span></code></pre></div>
 <pre><code>## [1] &quot;Score&quot;</code></pre>
 <p>どれも同じ結果が得られます。</p>
 </div>
@@ -969,18 +984,18 @@ div.csl-indent {
 <p>先ほど作成しましたScoreクラスのオブジェクトは長さ2のリスト構造をしています。これらの要素それぞれの平均値を求める場合は、<code>mean(My_Score1[[1]])</code>と<code>mean(My_Score1[[2]])</code>を実行する必要があります。なぜなら、<code>mean()</code>はベクトルしか計算できないからです。ここではScoreクラスのオブジェクト要素それぞれの平均値を求める関数<code>mean()</code>を作成します。</p>
 <p>しかし、問題があります。それはRに<code>mean()</code>関数が既に存在することです。ここで勝手に上書きするのは良くないでしょう。ここで出てくるのがメソッドです。Scoreクラスのメソッドは「Scoreクラス専用の関数」であり、通常のベクトルならR内蔵の<code>mean()</code>関数を、ScoreクラスのオブジェクトならScoreのメソッドである<code>mean()</code>を実行します。</p>
 <p>メソッドの作り方は<a href="https://www.jaysong.net/RBook/functions.html">自作関数</a>と同じです。相違点としては関数名を<code>関数名.クラス名</code>にすることです。Scoreクラスのメソッドしての<code>mean()</code>関数を定義する場合、関数名を<code>mean.Score</code>とします。</p>
-<div class="sourceCode" id="cb1910"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1910-1"><a href="oop.html#cb1910-1"></a>mean.Score <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb1910-2"><a href="oop.html#cb1910-2"></a>  <span class="fu">print</span>(<span class="fu">mean</span>(x<span class="sc">$</span>Score1))</span>
-<span id="cb1910-3"><a href="oop.html#cb1910-3"></a>  <span class="fu">print</span>(<span class="fu">mean</span>(x<span class="sc">$</span>Score2))</span>
-<span id="cb1910-4"><a href="oop.html#cb1910-4"></a>}</span>
-<span id="cb1910-5"><a href="oop.html#cb1910-5"></a></span>
-<span id="cb1910-6"><a href="oop.html#cb1910-6"></a><span class="fu">mean</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>)) <span class="co"># R内蔵関数のmean()を使う</span></span></code></pre></div>
+<div class="sourceCode" id="cb1919"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1919-1"><a href="oop.html#cb1919-1"></a>mean.Score <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb1919-2"><a href="oop.html#cb1919-2"></a>  <span class="fu">print</span>(<span class="fu">mean</span>(x<span class="sc">$</span>Score1))</span>
+<span id="cb1919-3"><a href="oop.html#cb1919-3"></a>  <span class="fu">print</span>(<span class="fu">mean</span>(x<span class="sc">$</span>Score2))</span>
+<span id="cb1919-4"><a href="oop.html#cb1919-4"></a>}</span>
+<span id="cb1919-5"><a href="oop.html#cb1919-5"></a></span>
+<span id="cb1919-6"><a href="oop.html#cb1919-6"></a><span class="fu">mean</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>)) <span class="co"># R内蔵関数のmean()を使う</span></span></code></pre></div>
 <pre><code>## [1] 6</code></pre>
-<div class="sourceCode" id="cb1912"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1912-1"><a href="oop.html#cb1912-1"></a><span class="fu">mean</span>(My_Score1) <span class="co"># Scoreクラスのメソッドであるmean()を使う</span></span></code></pre></div>
-<pre><code>## [1] 47.33588
-## [1] 42.66362</code></pre>
+<div class="sourceCode" id="cb1921"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1921-1"><a href="oop.html#cb1921-1"></a><span class="fu">mean</span>(My_Score1) <span class="co"># Scoreクラスのメソッドであるmean()を使う</span></span></code></pre></div>
+<pre><code>## [1] 52.83374
+## [1] 47.16818</code></pre>
 <p><code>mean(c(1, 3, 5, 7, 9, 11))</code>は引数がnumeric型ベクトルであるため、既存の<code>mean()</code>関数が使用されます。一方、<code>mean(My_Score1)</code>は引数がScoreクラスであるため、<code>mean.Score()</code>が使用されます。このように<code>mean_Score()</code>のような別途の関数を作る必要なく、既存の関数名が利用できます。実際、<code>methods(mean)</code>を実行すると、Scoreクラスのメソッドとして<code>mean()</code>関数が用意されたことを確認できます。</p>
-<div class="sourceCode" id="cb1914"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1914-1"><a href="oop.html#cb1914-1"></a><span class="fu">methods</span>(mean)</span></code></pre></div>
+<div class="sourceCode" id="cb1923"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1923-1"><a href="oop.html#cb1923-1"></a><span class="fu">methods</span>(mean)</span></code></pre></div>
 <pre><code>## [1] mean.Date        mean.default     mean.difftime    mean.POSIXct    
 ## [5] mean.POSIXlt     mean.quosure*    mean.Score       mean.vctrs_vctr*
 ## see &#39;?methods&#39; for accessing help and source code</code></pre>
@@ -988,51 +1003,51 @@ div.csl-indent {
 <div id="新しい関数を作る" class="section level4" number="28.3.2.2">
 <h4><span class="header-section-number">28.3.2.2</span> 新しい関数を作る</h4>
 <p>もし、新しい関数名を使用し、その関数が様々なクラスに対応するとしましょう。今回はCatというクラスを作ってみましょう。Catクラスの内部は長さ1のリストで、要素の名前は<code>Name</code>とし、ここには長さ1のcharacter型ベクトルが入ります。このCatクラスを作成する関数を<code>Make_Cat()</code>とします。</p>
-<div class="sourceCode" id="cb1916"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1916-1"><a href="oop.html#cb1916-1"></a>Make_Cat <span class="ot">&lt;-</span> <span class="cf">function</span>(name) {</span>
-<span id="cb1916-2"><a href="oop.html#cb1916-2"></a>  </span>
-<span id="cb1916-3"><a href="oop.html#cb1916-3"></a>  <span class="co"># resultリストにxを格納</span></span>
-<span id="cb1916-4"><a href="oop.html#cb1916-4"></a>  result <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Name =</span> name)</span>
-<span id="cb1916-5"><a href="oop.html#cb1916-5"></a>  </span>
-<span id="cb1916-6"><a href="oop.html#cb1916-6"></a>  <span class="fu">structure</span>(result, <span class="at">class =</span> <span class="st">&quot;Cat&quot;</span>) <span class="co"># resultを返す</span></span>
-<span id="cb1916-7"><a href="oop.html#cb1916-7"></a>}</span>
-<span id="cb1916-8"><a href="oop.html#cb1916-8"></a></span>
-<span id="cb1916-9"><a href="oop.html#cb1916-9"></a>My_Cat <span class="ot">&lt;-</span> <span class="fu">Make_Cat</span>(<span class="at">name =</span> <span class="st">&quot;矢内&quot;</span>)</span>
-<span id="cb1916-10"><a href="oop.html#cb1916-10"></a>My_Cat</span></code></pre></div>
+<div class="sourceCode" id="cb1925"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1925-1"><a href="oop.html#cb1925-1"></a>Make_Cat <span class="ot">&lt;-</span> <span class="cf">function</span>(name) {</span>
+<span id="cb1925-2"><a href="oop.html#cb1925-2"></a>  </span>
+<span id="cb1925-3"><a href="oop.html#cb1925-3"></a>  <span class="co"># resultリストにxを格納</span></span>
+<span id="cb1925-4"><a href="oop.html#cb1925-4"></a>  result <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Name =</span> name)</span>
+<span id="cb1925-5"><a href="oop.html#cb1925-5"></a>  </span>
+<span id="cb1925-6"><a href="oop.html#cb1925-6"></a>  <span class="fu">structure</span>(result, <span class="at">class =</span> <span class="st">&quot;Cat&quot;</span>) <span class="co"># resultを返す</span></span>
+<span id="cb1925-7"><a href="oop.html#cb1925-7"></a>}</span>
+<span id="cb1925-8"><a href="oop.html#cb1925-8"></a></span>
+<span id="cb1925-9"><a href="oop.html#cb1925-9"></a>My_Cat <span class="ot">&lt;-</span> <span class="fu">Make_Cat</span>(<span class="at">name =</span> <span class="st">&quot;矢内&quot;</span>)</span>
+<span id="cb1925-10"><a href="oop.html#cb1925-10"></a>My_Cat</span></code></pre></div>
 <pre><code>## $Name
 ## [1] &quot;矢内&quot;
 ## 
 ## attr(,&quot;class&quot;)
 ## [1] &quot;Cat&quot;</code></pre>
-<div class="sourceCode" id="cb1918"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1918-1"><a href="oop.html#cb1918-1"></a><span class="fu">class</span>(My_Cat)</span></code></pre></div>
+<div class="sourceCode" id="cb1927"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1927-1"><a href="oop.html#cb1927-1"></a><span class="fu">class</span>(My_Cat)</span></code></pre></div>
 <pre><code>## [1] &quot;Cat&quot;</code></pre>
 <p>続いて、Catクラスに使う<code>my_func()</code>を作成します。<code>my_func()</code>はそもそも存在しない関数ですので、普通に<code>my_func &lt;- function()</code>で作成可能です。この関数はCatの<code>Name</code>の後ろに<code>": にゃーにゃー"</code>を付けて出力する関数です。実際にやってみましょう。</p>
-<div class="sourceCode" id="cb1920"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1920-1"><a href="oop.html#cb1920-1"></a>my_func <span class="ot">&lt;-</span> <span class="cf">function</span>(name) {</span>
-<span id="cb1920-2"><a href="oop.html#cb1920-2"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(name<span class="sc">$</span>Name, <span class="st">&quot;: にゃーにゃー&quot;</span>))</span>
-<span id="cb1920-3"><a href="oop.html#cb1920-3"></a>}</span>
-<span id="cb1920-4"><a href="oop.html#cb1920-4"></a></span>
-<span id="cb1920-5"><a href="oop.html#cb1920-5"></a><span class="fu">my_func</span>(My_Cat)</span></code></pre></div>
+<div class="sourceCode" id="cb1929"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1929-1"><a href="oop.html#cb1929-1"></a>my_func <span class="ot">&lt;-</span> <span class="cf">function</span>(name) {</span>
+<span id="cb1929-2"><a href="oop.html#cb1929-2"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(name<span class="sc">$</span>Name, <span class="st">&quot;: にゃーにゃー&quot;</span>))</span>
+<span id="cb1929-3"><a href="oop.html#cb1929-3"></a>}</span>
+<span id="cb1929-4"><a href="oop.html#cb1929-4"></a></span>
+<span id="cb1929-5"><a href="oop.html#cb1929-5"></a><span class="fu">my_func</span>(My_Cat)</span></code></pre></div>
 <pre><code>## [1] &quot;矢内: にゃーにゃー&quot;</code></pre>
 <p>しかし、<code>my_func()</code>をCatクラス以外にも使いたい場合はどうすればいいでしょうか。普通に<code>my_func.クラス名()</code>で良いでしょうか。確かにそうですが、その前に一つの手順が必要です。それは、<code>my_func()</code>をジェネリック関数として定義することです。この関数そのものは関数として機能はしませんが、「これから<code>my_func()</code>がいろんなクラスのメソッドとして使われるぞ」と予め決めてくれます。ジェネリック関数を作成しないと<code>関数名.クラス名</code>は定義できません。そこで使うのが<code>UseMethod()</code>です。第一引数はメソッド名、第二引数は任意の引数ですが、通常、<code>x</code>が使われます。また、第二の引数は省略可能で、<code>UseMethod("メソッド名")</code>でも動きます。</p>
-<div class="sourceCode" id="cb1922"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1922-1"><a href="oop.html#cb1922-1"></a>my_func <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb1922-2"><a href="oop.html#cb1922-2"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;my_func&quot;</span>, x)</span>
-<span id="cb1922-3"><a href="oop.html#cb1922-3"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb1931"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1931-1"><a href="oop.html#cb1931-1"></a>my_func <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb1931-2"><a href="oop.html#cb1931-2"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;my_func&quot;</span>, x)</span>
+<span id="cb1931-3"><a href="oop.html#cb1931-3"></a>}</span></code></pre></div>
 <p>これからは<code>my_func.クラス名()</code>の関数を作るだけです。まず、Score型オブジェクトに対してはそれぞれの要素の平均値を出力するとします。</p>
-<div class="sourceCode" id="cb1923"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1923-1"><a href="oop.html#cb1923-1"></a>my_func.Score <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb1923-2"><a href="oop.html#cb1923-2"></a>  <span class="fu">print</span>(<span class="fu">mean</span>(x<span class="sc">$</span>Score1))</span>
-<span id="cb1923-3"><a href="oop.html#cb1923-3"></a>  <span class="fu">print</span>(<span class="fu">mean</span>(x<span class="sc">$</span>Score2))</span>
-<span id="cb1923-4"><a href="oop.html#cb1923-4"></a>}</span>
-<span id="cb1923-5"><a href="oop.html#cb1923-5"></a></span>
-<span id="cb1923-6"><a href="oop.html#cb1923-6"></a>my_func.Cat <span class="ot">&lt;-</span> <span class="cf">function</span>(cat) {</span>
-<span id="cb1923-7"><a href="oop.html#cb1923-7"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(cat<span class="sc">$</span>Name, <span class="st">&quot;: にゃーにゃー&quot;</span>))</span>
-<span id="cb1923-8"><a href="oop.html#cb1923-8"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb1924"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1924-1"><a href="oop.html#cb1924-1"></a><span class="fu">methods</span>(my_func)</span></code></pre></div>
+<div class="sourceCode" id="cb1932"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1932-1"><a href="oop.html#cb1932-1"></a>my_func.Score <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb1932-2"><a href="oop.html#cb1932-2"></a>  <span class="fu">print</span>(<span class="fu">mean</span>(x<span class="sc">$</span>Score1))</span>
+<span id="cb1932-3"><a href="oop.html#cb1932-3"></a>  <span class="fu">print</span>(<span class="fu">mean</span>(x<span class="sc">$</span>Score2))</span>
+<span id="cb1932-4"><a href="oop.html#cb1932-4"></a>}</span>
+<span id="cb1932-5"><a href="oop.html#cb1932-5"></a></span>
+<span id="cb1932-6"><a href="oop.html#cb1932-6"></a>my_func.Cat <span class="ot">&lt;-</span> <span class="cf">function</span>(cat) {</span>
+<span id="cb1932-7"><a href="oop.html#cb1932-7"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(cat<span class="sc">$</span>Name, <span class="st">&quot;: にゃーにゃー&quot;</span>))</span>
+<span id="cb1932-8"><a href="oop.html#cb1932-8"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb1933"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1933-1"><a href="oop.html#cb1933-1"></a><span class="fu">methods</span>(my_func)</span></code></pre></div>
 <pre><code>## [1] my_func.Cat   my_func.Score
 ## see &#39;?methods&#39; for accessing help and source code</code></pre>
 <p><code>my_func()</code>関数はScoreとCatといった2種類のクラスで使われることが確認できます。それでは問題なく作動するかを確認してみましょう。<code>My_Score1</code>と<code>My_Cat</code>を、それぞれ<code>my_func()</code>に渡します。</p>
-<div class="sourceCode" id="cb1926"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1926-1"><a href="oop.html#cb1926-1"></a><span class="fu">my_func</span>(My_Score1)</span></code></pre></div>
-<pre><code>## [1] 47.33588
-## [1] 42.66362</code></pre>
-<div class="sourceCode" id="cb1928"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1928-1"><a href="oop.html#cb1928-1"></a><span class="fu">my_func</span>(My_Cat)</span></code></pre></div>
+<div class="sourceCode" id="cb1935"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1935-1"><a href="oop.html#cb1935-1"></a><span class="fu">my_func</span>(My_Score1)</span></code></pre></div>
+<pre><code>## [1] 52.83374
+## [1] 47.16818</code></pre>
+<div class="sourceCode" id="cb1937"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1937-1"><a href="oop.html#cb1937-1"></a><span class="fu">my_func</span>(My_Cat)</span></code></pre></div>
 <pre><code>## [1] &quot;矢内: にゃーにゃー&quot;</code></pre>
 <p>同じ関数名でも、オブジェクトのクラスによって異なる処理が行われることが分かります。</p>
 </div>
@@ -1041,12 +1056,12 @@ div.csl-indent {
 <h3><span class="header-section-number">28.3.3</span> 検証用関数を作る</h3>
 <p>この作業は必須ではありませんが、今後、自分でパッケージ等を作ることになったら重要になるかも知れません。</p>
 <p>最初の例でもお見せしましたが、Rでは事後的にクラスを変更することができます。強制的にクラスを変更した場合、そのクラスに属するメソッドを使うことができますが、エラーが生じてしまうでしょう。例えば、任意のcharacter型ベクトル<code>My_Cat2</code>を作成し、Catクラスを付与してみましょう。</p>
-<div class="sourceCode" id="cb1930"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1930-1"><a href="oop.html#cb1930-1"></a>My_Cat2 <span class="ot">&lt;-</span> <span class="st">&quot;宋&quot;</span></span>
-<span id="cb1930-2"><a href="oop.html#cb1930-2"></a><span class="fu">class</span>(My_Cat2) <span class="ot">&lt;-</span> <span class="st">&quot;Cat&quot;</span></span>
-<span id="cb1930-3"><a href="oop.html#cb1930-3"></a><span class="fu">class</span>(My_Cat2)</span></code></pre></div>
+<div class="sourceCode" id="cb1939"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1939-1"><a href="oop.html#cb1939-1"></a>My_Cat2 <span class="ot">&lt;-</span> <span class="st">&quot;宋&quot;</span></span>
+<span id="cb1939-2"><a href="oop.html#cb1939-2"></a><span class="fu">class</span>(My_Cat2) <span class="ot">&lt;-</span> <span class="st">&quot;Cat&quot;</span></span>
+<span id="cb1939-3"><a href="oop.html#cb1939-3"></a><span class="fu">class</span>(My_Cat2)</span></code></pre></div>
 <pre><code>## [1] &quot;Cat&quot;</code></pre>
 <p><code>My_Cat2</code>のクラスはCatであるため、<code>my_func.Cat()</code>メソッドが使えます。しかし、<code>my_func.Cat()</code>仕組みを見る限り、うまく作動しないでしょう。</p>
-<div class="sourceCode" id="cb1932"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1932-1"><a href="oop.html#cb1932-1"></a><span class="fu">my_func</span>(My_Cat2)</span></code></pre></div>
+<div class="sourceCode" id="cb1941"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1941-1"><a href="oop.html#cb1941-1"></a><span class="fu">my_func</span>(My_Cat2)</span></code></pre></div>
 <pre><code>## Error: $ operator is invalid for atomic vectors</code></pre>
 <p>間違った動作をするよりは、エラーが出て中断される方が良いですし、これで問題ないかも知れません。しかし、可能であれば、引数として使われたオブジェクトが、Catクラスか否かを厳密にチェックする機能があれば良いでしょう。カプセル化されている場合、クラスの定義時にデータの構造が厳密に定義されているため、このような手続きの必要性はあまりありませんが、カプセル化ができないRのS3クラスでは検証用関数（Validator）が必要です。</p>
 <p>それではCatクラスの特徴をいくつか考えてみましょう。</p>
@@ -1055,29 +1070,29 @@ div.csl-indent {
 <li><code>Name</code>は長さ1のCharacter型ベクトルである。</li>
 </ul>
 <p>以上の条件を全て満たしていればメソッドを実行し、一つでも満たさない場合はメソッドの実行を中止します。それでは検証用関数<code>Validation_Cat()</code>を作ってみましょう。</p>
-<div class="sourceCode" id="cb1934"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1934-1"><a href="oop.html#cb1934-1"></a>Validation_Cat <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb1934-2"><a href="oop.html#cb1934-2"></a>  Message <span class="ot">&lt;-</span> <span class="st">&quot;正しいCatクラスではありません。&quot;</span></span>
-<span id="cb1934-3"><a href="oop.html#cb1934-3"></a>  </span>
-<span id="cb1934-4"><a href="oop.html#cb1934-4"></a>  <span class="cf">if</span> (<span class="fu">length</span>(x) <span class="sc">!=</span> <span class="dv">1</span>) {</span>
-<span id="cb1934-5"><a href="oop.html#cb1934-5"></a>    <span class="fu">stop</span>(Message)</span>
-<span id="cb1934-6"><a href="oop.html#cb1934-6"></a>  } <span class="cf">else</span> <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">names</span>(x))) {</span>
-<span id="cb1934-7"><a href="oop.html#cb1934-7"></a>    <span class="fu">stop</span>(Message)</span>
-<span id="cb1934-8"><a href="oop.html#cb1934-8"></a>  } <span class="cf">else</span> <span class="cf">if</span> (<span class="fu">names</span>(x) <span class="sc">!=</span> <span class="st">&quot;Name&quot;</span>){</span>
-<span id="cb1934-9"><a href="oop.html#cb1934-9"></a>    <span class="fu">stop</span>(Message)</span>
-<span id="cb1934-10"><a href="oop.html#cb1934-10"></a>  } <span class="cf">else</span> <span class="cf">if</span> (<span class="fu">length</span>(x<span class="sc">$</span>Name) <span class="sc">!=</span> <span class="dv">1</span> <span class="sc">|</span> <span class="fu">class</span>(x<span class="sc">$</span>Name) <span class="sc">!=</span> <span class="st">&quot;character&quot;</span>) {</span>
-<span id="cb1934-11"><a href="oop.html#cb1934-11"></a>    <span class="fu">stop</span>(Message)</span>
-<span id="cb1934-12"><a href="oop.html#cb1934-12"></a>  }</span>
-<span id="cb1934-13"><a href="oop.html#cb1934-13"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb1943"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1943-1"><a href="oop.html#cb1943-1"></a>Validation_Cat <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb1943-2"><a href="oop.html#cb1943-2"></a>  Message <span class="ot">&lt;-</span> <span class="st">&quot;正しいCatクラスではありません。&quot;</span></span>
+<span id="cb1943-3"><a href="oop.html#cb1943-3"></a>  </span>
+<span id="cb1943-4"><a href="oop.html#cb1943-4"></a>  <span class="cf">if</span> (<span class="fu">length</span>(x) <span class="sc">!=</span> <span class="dv">1</span>) {</span>
+<span id="cb1943-5"><a href="oop.html#cb1943-5"></a>    <span class="fu">stop</span>(Message)</span>
+<span id="cb1943-6"><a href="oop.html#cb1943-6"></a>  } <span class="cf">else</span> <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">names</span>(x))) {</span>
+<span id="cb1943-7"><a href="oop.html#cb1943-7"></a>    <span class="fu">stop</span>(Message)</span>
+<span id="cb1943-8"><a href="oop.html#cb1943-8"></a>  } <span class="cf">else</span> <span class="cf">if</span> (<span class="fu">names</span>(x) <span class="sc">!=</span> <span class="st">&quot;Name&quot;</span>){</span>
+<span id="cb1943-9"><a href="oop.html#cb1943-9"></a>    <span class="fu">stop</span>(Message)</span>
+<span id="cb1943-10"><a href="oop.html#cb1943-10"></a>  } <span class="cf">else</span> <span class="cf">if</span> (<span class="fu">length</span>(x<span class="sc">$</span>Name) <span class="sc">!=</span> <span class="dv">1</span> <span class="sc">|</span> <span class="fu">class</span>(x<span class="sc">$</span>Name) <span class="sc">!=</span> <span class="st">&quot;character&quot;</span>) {</span>
+<span id="cb1943-11"><a href="oop.html#cb1943-11"></a>    <span class="fu">stop</span>(Message)</span>
+<span id="cb1943-12"><a href="oop.html#cb1943-12"></a>  }</span>
+<span id="cb1943-13"><a href="oop.html#cb1943-13"></a>}</span></code></pre></div>
 <p>この検証用関数を<code>my_func.Cat()</code>の最初に入れておきましょう。</p>
-<div class="sourceCode" id="cb1935"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1935-1"><a href="oop.html#cb1935-1"></a>my_func.Cat <span class="ot">&lt;-</span> <span class="cf">function</span>(cat) {</span>
-<span id="cb1935-2"><a href="oop.html#cb1935-2"></a>  <span class="fu">Validation_Cat</span>(cat)</span>
-<span id="cb1935-3"><a href="oop.html#cb1935-3"></a>  </span>
-<span id="cb1935-4"><a href="oop.html#cb1935-4"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(cat<span class="sc">$</span>Name, <span class="st">&quot;: にゃーにゃー&quot;</span>))</span>
-<span id="cb1935-5"><a href="oop.html#cb1935-5"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb1944"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1944-1"><a href="oop.html#cb1944-1"></a>my_func.Cat <span class="ot">&lt;-</span> <span class="cf">function</span>(cat) {</span>
+<span id="cb1944-2"><a href="oop.html#cb1944-2"></a>  <span class="fu">Validation_Cat</span>(cat)</span>
+<span id="cb1944-3"><a href="oop.html#cb1944-3"></a>  </span>
+<span id="cb1944-4"><a href="oop.html#cb1944-4"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(cat<span class="sc">$</span>Name, <span class="st">&quot;: にゃーにゃー&quot;</span>))</span>
+<span id="cb1944-5"><a href="oop.html#cb1944-5"></a>}</span></code></pre></div>
 <p>それでは<code>My_Cat</code>と<code>My_Cat2</code>に対して<code>my_func()</code>メソッドを実行してみます。</p>
-<div class="sourceCode" id="cb1936"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1936-1"><a href="oop.html#cb1936-1"></a><span class="fu">my_func</span>(My_Cat)</span></code></pre></div>
+<div class="sourceCode" id="cb1945"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1945-1"><a href="oop.html#cb1945-1"></a><span class="fu">my_func</span>(My_Cat)</span></code></pre></div>
 <pre><code>## [1] &quot;矢内: にゃーにゃー&quot;</code></pre>
-<div class="sourceCode" id="cb1938"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1938-1"><a href="oop.html#cb1938-1"></a><span class="fu">my_func</span>(My_Cat2)</span></code></pre></div>
+<div class="sourceCode" id="cb1947"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1947-1"><a href="oop.html#cb1947-1"></a><span class="fu">my_func</span>(My_Cat2)</span></code></pre></div>
 <pre><code>## Error in Validation_Cat(cat): 正しいCatクラスではありません。</code></pre>
 <p>関数を実行する前に与えられたオブジェクトが正しいCatクラスか否かが判断され、パスされた場合のみ、メソッドが実行されることが分かります。もし、あるクラスで使用可能なメソッドが一つだけでしたら、検証用関数はメソッド内に直接書き込んでも良いですが、2つ以上のメソッドを持つ場合は別途の検証用関数を作成しておきましょう。</p>
 <hr />
@@ -1087,18 +1102,18 @@ div.csl-indent {
 <h2><span class="header-section-number">28.4</span> 例題</h2>
 <p>ここでは2つのnumeric型ベクトルとそのベクトル名入力し、相関係数を求める<code>My_Cor()</code>関数を作ってみます。単に相関係数を求めるだけなら<code>cor()</code>や<code>cor.test()</code>があるので、いくつかの機能も追加してみましょう。</p>
 <p>たとえば、「1日当たりゲーム時間」と「身長」といった2つのnumeric型ベクトルをそれぞれ<code>x</code>と<code>y</code>で入力し、<code>x_name</code>と<code>y_name</code>で各ベクトルの名前も指定します。また、入力されたデータを用いて相関係数とその信頼区間を求めます。これらのデータはリスト型として格納されますが、クラスを<code>"My_Cor_Object"</code>とします。以下はその例です。</p>
-<div class="sourceCode" id="cb1940"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1940-1"><a href="oop.html#cb1940-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse)</span>
-<span id="cb1940-2"><a href="oop.html#cb1940-2"></a></span>
-<span id="cb1940-3"><a href="oop.html#cb1940-3"></a><span class="fu">set.seed</span>(<span class="dv">19861008</span>)</span>
-<span id="cb1940-4"><a href="oop.html#cb1940-4"></a>Cor_Obj <span class="ot">&lt;-</span> <span class="fu">My_Cor</span>(<span class="at">x      =</span> <span class="fu">rnorm</span>(<span class="dv">20</span>, <span class="dv">2</span>, <span class="fl">0.5</span>), </span>
-<span id="cb1940-5"><a href="oop.html#cb1940-5"></a>                  <span class="at">y      =</span> <span class="fu">rnorm</span>(<span class="dv">20</span>, <span class="dv">165</span>, <span class="dv">6</span>), </span>
-<span id="cb1940-6"><a href="oop.html#cb1940-6"></a>                  <span class="at">x_name =</span> <span class="st">&quot;1日当たりゲーム時間&quot;</span>, </span>
-<span id="cb1940-7"><a href="oop.html#cb1940-7"></a>                  <span class="at">y_name =</span> <span class="st">&quot;身長&quot;</span>)</span>
-<span id="cb1940-8"><a href="oop.html#cb1940-8"></a></span>
-<span id="cb1940-9"><a href="oop.html#cb1940-9"></a><span class="fu">class</span>(Cor_Obj)</span></code></pre></div>
+<div class="sourceCode" id="cb1949"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1949-1"><a href="oop.html#cb1949-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse)</span>
+<span id="cb1949-2"><a href="oop.html#cb1949-2"></a></span>
+<span id="cb1949-3"><a href="oop.html#cb1949-3"></a><span class="fu">set.seed</span>(<span class="dv">19861008</span>)</span>
+<span id="cb1949-4"><a href="oop.html#cb1949-4"></a>Cor_Obj <span class="ot">&lt;-</span> <span class="fu">My_Cor</span>(<span class="at">x      =</span> <span class="fu">rnorm</span>(<span class="dv">20</span>, <span class="dv">2</span>, <span class="fl">0.5</span>), </span>
+<span id="cb1949-5"><a href="oop.html#cb1949-5"></a>                  <span class="at">y      =</span> <span class="fu">rnorm</span>(<span class="dv">20</span>, <span class="dv">165</span>, <span class="dv">6</span>), </span>
+<span id="cb1949-6"><a href="oop.html#cb1949-6"></a>                  <span class="at">x_name =</span> <span class="st">&quot;1日当たりゲーム時間&quot;</span>, </span>
+<span id="cb1949-7"><a href="oop.html#cb1949-7"></a>                  <span class="at">y_name =</span> <span class="st">&quot;身長&quot;</span>)</span>
+<span id="cb1949-8"><a href="oop.html#cb1949-8"></a></span>
+<span id="cb1949-9"><a href="oop.html#cb1949-9"></a><span class="fu">class</span>(Cor_Obj)</span></code></pre></div>
 <pre><code>## [1] &quot;My_Cor_Object&quot;</code></pre>
 <p>この<code>Cor_Obj</code>の構造を<code>str()</code>で確認してみます。</p>
-<div class="sourceCode" id="cb1942"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1942-1"><a href="oop.html#cb1942-1"></a><span class="fu">str</span>(Cor_Obj)</span></code></pre></div>
+<div class="sourceCode" id="cb1951"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1951-1"><a href="oop.html#cb1951-1"></a><span class="fu">str</span>(Cor_Obj)</span></code></pre></div>
 <pre><code>## List of 4
 ##  $ data    :&#39;data.frame&#39;:    20 obs. of  2 variables:
 ##   ..$ x: num [1:20] 1.96 2.2 1.34 2.29 2.08 ...
@@ -1111,15 +1126,15 @@ div.csl-indent {
 ##  - attr(*, &quot;class&quot;)= chr &quot;My_Cor_Object&quot;</code></pre>
 <p><code>Cor_Obj</code>には元のデータがデータフレームとして格納され（<code>$data</code>）、それぞれの変数名（<code>$var_name</code>）、相関係数（<code>$cor</code>）、相関係数の95%信頼区間（<code>$cor_ci</code>）が<code>Cor_Obj</code>の中に入っています。本質的にはリスト型のデータ構造ですが、クラス名が<code>My_Cor_Object</code>になっているだけです。</p>
 <p>この<code>My_Cor_Object</code>クラスには3つのメソッド（専用関数）が用意されており、<code>print()</code>、<code>summary()</code>、<code>plot()</code>です。<code>print()</code>と<code>summary()</code>は同じ関数で、<code>x</code>と<code>y</code>の平均値、そして相関係数と信頼区間を出力します。<code>plot()</code>は散布図と相関係数を出力します。実際の例を見てみましょう。</p>
-<div class="sourceCode" id="cb1944"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1944-1"><a href="oop.html#cb1944-1"></a><span class="fu">print</span>(Cor_Obj)</span></code></pre></div>
+<div class="sourceCode" id="cb1953"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1953-1"><a href="oop.html#cb1953-1"></a><span class="fu">print</span>(Cor_Obj)</span></code></pre></div>
 <pre><code>## 1日当たりゲーム時間の平均値: 2.085
 ## 身長の平均値: 164.001
 ## 相関係数: 0.277 [-0.188, 0.641]</code></pre>
-<div class="sourceCode" id="cb1946"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1946-1"><a href="oop.html#cb1946-1"></a><span class="fu">summary</span>(Cor_Obj) <span class="co"># summary()はprint()と同じ</span></span></code></pre></div>
+<div class="sourceCode" id="cb1955"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1955-1"><a href="oop.html#cb1955-1"></a><span class="fu">summary</span>(Cor_Obj) <span class="co"># summary()はprint()と同じ</span></span></code></pre></div>
 <pre><code>## 1日当たりゲーム時間の平均値: 2.085
 ## 身長の平均値: 164.001
 ## 相関係数: 0.277 [-0.188, 0.641]</code></pre>
-<div class="sourceCode" id="cb1948"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1948-1"><a href="oop.html#cb1948-1"></a><span class="fu">plot</span>(Cor_Obj)</span></code></pre></div>
+<div class="sourceCode" id="cb1957"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1957-1"><a href="oop.html#cb1957-1"></a><span class="fu">plot</span>(Cor_Obj)</span></code></pre></div>
 <p><img src="oop_files/figure-html/oop-sample-4-1.png" width="2100" style="display: block; margin: auto;" /></p>
 <p>既存の<code>cor.test()</code>で作成される<code>"htest"</code>クラスに比べ、<code>"My_Cor_Object"</code>クラスは各変数の平均値が名前と一緒に表示され、<code>plot()</code>で簡単に散布図が作成できる大変便利なクラスです。このMy_Cor_Objectクラスとそのメソッドの構造を図示したものが図<a href="oop.html#fig:oop-sample-5">28.2</a>です。</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:oop-sample-5"></span>
@@ -1129,30 +1144,30 @@ div.csl-indent {
 </p>
 </div>
 <p>それでは一つずつ作っていきましょう。まずは、<code>"My_Cor_Object"</code>クラスのオブジェクトを作成する<code>My_Cor()</code>関数からです。</p>
-<div class="sourceCode" id="cb1949"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1949-1"><a href="oop.html#cb1949-1"></a>My_Cor <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y, x_name, y_name) {</span>
-<span id="cb1949-2"><a href="oop.html#cb1949-2"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.numeric</span>(x) <span class="sc">|</span> <span class="sc">!</span><span class="fu">is.numeric</span>(y)) {</span>
-<span id="cb1949-3"><a href="oop.html#cb1949-3"></a>        <span class="fu">stop</span>(<span class="st">&quot;xまたはyがnumeric型ではありません。&quot;</span>)</span>
-<span id="cb1949-4"><a href="oop.html#cb1949-4"></a>    }</span>
-<span id="cb1949-5"><a href="oop.html#cb1949-5"></a>    <span class="cf">if</span> (<span class="fu">length</span>(x) <span class="sc">!=</span> <span class="fu">length</span>(y)) {</span>
-<span id="cb1949-6"><a href="oop.html#cb1949-6"></a>        <span class="fu">stop</span>(<span class="st">&quot;xとyは同じ長さでなかればなりません。&quot;</span>)</span>
-<span id="cb1949-7"><a href="oop.html#cb1949-7"></a>    }</span>
-<span id="cb1949-8"><a href="oop.html#cb1949-8"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.character</span>(x_name) <span class="sc">|</span> <span class="sc">!</span><span class="fu">is.character</span>(y_name)) {</span>
-<span id="cb1949-9"><a href="oop.html#cb1949-9"></a>        <span class="fu">stop</span>(<span class="st">&quot;x_nameまたはy_nameがcharacter型ではありません。&quot;</span>)</span>
-<span id="cb1949-10"><a href="oop.html#cb1949-10"></a>    }</span>
-<span id="cb1949-11"><a href="oop.html#cb1949-11"></a>    </span>
-<span id="cb1949-12"><a href="oop.html#cb1949-12"></a>    data     <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)</span>
-<span id="cb1949-13"><a href="oop.html#cb1949-13"></a>    var_name <span class="ot">&lt;-</span> <span class="fu">c</span>(x_name, y_name)</span>
-<span id="cb1949-14"><a href="oop.html#cb1949-14"></a>    cor      <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(x, y)<span class="sc">$</span>estimate</span>
-<span id="cb1949-15"><a href="oop.html#cb1949-15"></a>    cor_ci   <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(x, y)<span class="sc">$</span>conf.int</span>
-<span id="cb1949-16"><a href="oop.html#cb1949-16"></a>    </span>
-<span id="cb1949-17"><a href="oop.html#cb1949-17"></a>    result   <span class="ot">&lt;-</span> <span class="fu">structure</span>(<span class="fu">list</span>(<span class="at">data     =</span> data, </span>
-<span id="cb1949-18"><a href="oop.html#cb1949-18"></a>                               <span class="at">var_name =</span> var_name, </span>
-<span id="cb1949-19"><a href="oop.html#cb1949-19"></a>                               <span class="at">cor      =</span> cor,</span>
-<span id="cb1949-20"><a href="oop.html#cb1949-20"></a>                               <span class="at">cor_ci   =</span> cor_ci),</span>
-<span id="cb1949-21"><a href="oop.html#cb1949-21"></a>                          <span class="at">class =</span> <span class="st">&quot;My_Cor_Object&quot;</span>)</span>
-<span id="cb1949-22"><a href="oop.html#cb1949-22"></a>    </span>
-<span id="cb1949-23"><a href="oop.html#cb1949-23"></a>    result</span>
-<span id="cb1949-24"><a href="oop.html#cb1949-24"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb1958"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1958-1"><a href="oop.html#cb1958-1"></a>My_Cor <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y, x_name, y_name) {</span>
+<span id="cb1958-2"><a href="oop.html#cb1958-2"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.numeric</span>(x) <span class="sc">|</span> <span class="sc">!</span><span class="fu">is.numeric</span>(y)) {</span>
+<span id="cb1958-3"><a href="oop.html#cb1958-3"></a>        <span class="fu">stop</span>(<span class="st">&quot;xまたはyがnumeric型ではありません。&quot;</span>)</span>
+<span id="cb1958-4"><a href="oop.html#cb1958-4"></a>    }</span>
+<span id="cb1958-5"><a href="oop.html#cb1958-5"></a>    <span class="cf">if</span> (<span class="fu">length</span>(x) <span class="sc">!=</span> <span class="fu">length</span>(y)) {</span>
+<span id="cb1958-6"><a href="oop.html#cb1958-6"></a>        <span class="fu">stop</span>(<span class="st">&quot;xとyは同じ長さでなかればなりません。&quot;</span>)</span>
+<span id="cb1958-7"><a href="oop.html#cb1958-7"></a>    }</span>
+<span id="cb1958-8"><a href="oop.html#cb1958-8"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.character</span>(x_name) <span class="sc">|</span> <span class="sc">!</span><span class="fu">is.character</span>(y_name)) {</span>
+<span id="cb1958-9"><a href="oop.html#cb1958-9"></a>        <span class="fu">stop</span>(<span class="st">&quot;x_nameまたはy_nameがcharacter型ではありません。&quot;</span>)</span>
+<span id="cb1958-10"><a href="oop.html#cb1958-10"></a>    }</span>
+<span id="cb1958-11"><a href="oop.html#cb1958-11"></a>    </span>
+<span id="cb1958-12"><a href="oop.html#cb1958-12"></a>    data     <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)</span>
+<span id="cb1958-13"><a href="oop.html#cb1958-13"></a>    var_name <span class="ot">&lt;-</span> <span class="fu">c</span>(x_name, y_name)</span>
+<span id="cb1958-14"><a href="oop.html#cb1958-14"></a>    cor      <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(x, y)<span class="sc">$</span>estimate</span>
+<span id="cb1958-15"><a href="oop.html#cb1958-15"></a>    cor_ci   <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(x, y)<span class="sc">$</span>conf.int</span>
+<span id="cb1958-16"><a href="oop.html#cb1958-16"></a>    </span>
+<span id="cb1958-17"><a href="oop.html#cb1958-17"></a>    result   <span class="ot">&lt;-</span> <span class="fu">structure</span>(<span class="fu">list</span>(<span class="at">data     =</span> data, </span>
+<span id="cb1958-18"><a href="oop.html#cb1958-18"></a>                               <span class="at">var_name =</span> var_name, </span>
+<span id="cb1958-19"><a href="oop.html#cb1958-19"></a>                               <span class="at">cor      =</span> cor,</span>
+<span id="cb1958-20"><a href="oop.html#cb1958-20"></a>                               <span class="at">cor_ci   =</span> cor_ci),</span>
+<span id="cb1958-21"><a href="oop.html#cb1958-21"></a>                          <span class="at">class =</span> <span class="st">&quot;My_Cor_Object&quot;</span>)</span>
+<span id="cb1958-22"><a href="oop.html#cb1958-22"></a>    </span>
+<span id="cb1958-23"><a href="oop.html#cb1958-23"></a>    result</span>
+<span id="cb1958-24"><a href="oop.html#cb1958-24"></a>}</span></code></pre></div>
 <p>最初の部分は入力されたデータがMy_Cor_Objectクラスに適した構造か否かを判断します。これは最初から想定外のMy_Cor_Objectクラスのオブジェクトが作成されることを防ぐことが目的です。むろん、R（S3）の性質上、事後的にクラスを変更することが可能ですから、検証用関数も作っておきます。ここでは以下の条件を検証します。</p>
 <ul>
 <li><code>data</code>という要素が存在し、2列である。</li>
@@ -1160,58 +1175,58 @@ div.csl-indent {
 <li><code>cor</code>という要素が存在し、長さ1のnumeric型ベクトルである。</li>
 <li><code>cor_ci</code>という要素が存在し、長さ2のnumeric型ベクトルである。</li>
 </ul>
-<div class="sourceCode" id="cb1950"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1950-1"><a href="oop.html#cb1950-1"></a>Validation <span class="ot">&lt;-</span> <span class="cf">function</span> (x) {</span>
-<span id="cb1950-2"><a href="oop.html#cb1950-2"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;Validation&quot;</span>, x)</span>
-<span id="cb1950-3"><a href="oop.html#cb1950-3"></a>}</span>
-<span id="cb1950-4"><a href="oop.html#cb1950-4"></a></span>
-<span id="cb1950-5"><a href="oop.html#cb1950-5"></a>Validation.My_Cor_Object <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb1950-6"><a href="oop.html#cb1950-6"></a>  Message <span class="ot">&lt;-</span> <span class="st">&quot;正しいMy_Cor_Objectクラスではございません。&quot;</span></span>
-<span id="cb1950-7"><a href="oop.html#cb1950-7"></a>  </span>
-<span id="cb1950-8"><a href="oop.html#cb1950-8"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(x<span class="sc">$</span>data) <span class="sc">|</span> <span class="fu">ncol</span>(x<span class="sc">$</span>data) <span class="sc">!=</span> <span class="dv">2</span>) {</span>
-<span id="cb1950-9"><a href="oop.html#cb1950-9"></a>    <span class="fu">stop</span>(Message)</span>
-<span id="cb1950-10"><a href="oop.html#cb1950-10"></a>  }</span>
-<span id="cb1950-11"><a href="oop.html#cb1950-11"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(x<span class="sc">$</span>var_name) <span class="sc">|</span> <span class="fu">length</span>(x<span class="sc">$</span>var_name) <span class="sc">!=</span> <span class="dv">2</span> <span class="sc">|</span> <span class="fu">class</span>(x<span class="sc">$</span>var_name) <span class="sc">!=</span> <span class="st">&quot;character&quot;</span>) {</span>
-<span id="cb1950-12"><a href="oop.html#cb1950-12"></a>    <span class="fu">stop</span>(Message)</span>
-<span id="cb1950-13"><a href="oop.html#cb1950-13"></a>  }</span>
-<span id="cb1950-14"><a href="oop.html#cb1950-14"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(x<span class="sc">$</span>cor) <span class="sc">|</span> <span class="fu">length</span>(x<span class="sc">$</span>cor) <span class="sc">!=</span> <span class="dv">1</span> <span class="sc">|</span> <span class="fu">class</span>(x<span class="sc">$</span>cor) <span class="sc">!=</span> <span class="st">&quot;numeric&quot;</span>) {</span>
-<span id="cb1950-15"><a href="oop.html#cb1950-15"></a>    <span class="fu">stop</span>(Message)</span>
-<span id="cb1950-16"><a href="oop.html#cb1950-16"></a>  }</span>
-<span id="cb1950-17"><a href="oop.html#cb1950-17"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(x<span class="sc">$</span>cor_ci) <span class="sc">|</span> <span class="fu">length</span>(x<span class="sc">$</span>cor_ci) <span class="sc">!=</span> <span class="dv">2</span> <span class="sc">|</span> <span class="fu">class</span>(x<span class="sc">$</span>cor_ci) <span class="sc">!=</span> <span class="st">&quot;numeric&quot;</span>) {</span>
-<span id="cb1950-18"><a href="oop.html#cb1950-18"></a>    <span class="fu">stop</span>(Message)</span>
-<span id="cb1950-19"><a href="oop.html#cb1950-19"></a>  }</span>
-<span id="cb1950-20"><a href="oop.html#cb1950-20"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb1959"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1959-1"><a href="oop.html#cb1959-1"></a>Validation <span class="ot">&lt;-</span> <span class="cf">function</span> (x) {</span>
+<span id="cb1959-2"><a href="oop.html#cb1959-2"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;Validation&quot;</span>, x)</span>
+<span id="cb1959-3"><a href="oop.html#cb1959-3"></a>}</span>
+<span id="cb1959-4"><a href="oop.html#cb1959-4"></a></span>
+<span id="cb1959-5"><a href="oop.html#cb1959-5"></a>Validation.My_Cor_Object <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb1959-6"><a href="oop.html#cb1959-6"></a>  Message <span class="ot">&lt;-</span> <span class="st">&quot;正しいMy_Cor_Objectクラスではございません。&quot;</span></span>
+<span id="cb1959-7"><a href="oop.html#cb1959-7"></a>  </span>
+<span id="cb1959-8"><a href="oop.html#cb1959-8"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(x<span class="sc">$</span>data) <span class="sc">|</span> <span class="fu">ncol</span>(x<span class="sc">$</span>data) <span class="sc">!=</span> <span class="dv">2</span>) {</span>
+<span id="cb1959-9"><a href="oop.html#cb1959-9"></a>    <span class="fu">stop</span>(Message)</span>
+<span id="cb1959-10"><a href="oop.html#cb1959-10"></a>  }</span>
+<span id="cb1959-11"><a href="oop.html#cb1959-11"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(x<span class="sc">$</span>var_name) <span class="sc">|</span> <span class="fu">length</span>(x<span class="sc">$</span>var_name) <span class="sc">!=</span> <span class="dv">2</span> <span class="sc">|</span> <span class="fu">class</span>(x<span class="sc">$</span>var_name) <span class="sc">!=</span> <span class="st">&quot;character&quot;</span>) {</span>
+<span id="cb1959-12"><a href="oop.html#cb1959-12"></a>    <span class="fu">stop</span>(Message)</span>
+<span id="cb1959-13"><a href="oop.html#cb1959-13"></a>  }</span>
+<span id="cb1959-14"><a href="oop.html#cb1959-14"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(x<span class="sc">$</span>cor) <span class="sc">|</span> <span class="fu">length</span>(x<span class="sc">$</span>cor) <span class="sc">!=</span> <span class="dv">1</span> <span class="sc">|</span> <span class="fu">class</span>(x<span class="sc">$</span>cor) <span class="sc">!=</span> <span class="st">&quot;numeric&quot;</span>) {</span>
+<span id="cb1959-15"><a href="oop.html#cb1959-15"></a>    <span class="fu">stop</span>(Message)</span>
+<span id="cb1959-16"><a href="oop.html#cb1959-16"></a>  }</span>
+<span id="cb1959-17"><a href="oop.html#cb1959-17"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(x<span class="sc">$</span>cor_ci) <span class="sc">|</span> <span class="fu">length</span>(x<span class="sc">$</span>cor_ci) <span class="sc">!=</span> <span class="dv">2</span> <span class="sc">|</span> <span class="fu">class</span>(x<span class="sc">$</span>cor_ci) <span class="sc">!=</span> <span class="st">&quot;numeric&quot;</span>) {</span>
+<span id="cb1959-18"><a href="oop.html#cb1959-18"></a>    <span class="fu">stop</span>(Message)</span>
+<span id="cb1959-19"><a href="oop.html#cb1959-19"></a>  }</span>
+<span id="cb1959-20"><a href="oop.html#cb1959-20"></a>}</span></code></pre></div>
 <p>ここでは<code>Validation()</code>をジェネリック関数として使用しました。自分が開発するパッケージで複数のクラスを提供する予定でしたら、このようなやり方が良いでしょう。</p>
 <p>検証用関数は細かく書いた方が良いです。以上の<code>Validation()</code>もより細かくことが出来ます。たとえば、<code>data</code>が2列か否かを判定するだけでなく、numeric型であるかなども判定した方が良いでしょう。</p>
 <p>つづいて、My_Cor_Objectクラス用の<code>print()</code>関数（メソッド）を作成します。</p>
-<div class="sourceCode" id="cb1951"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1951-1"><a href="oop.html#cb1951-1"></a>print.My_Cor_Object <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
-<span id="cb1951-2"><a href="oop.html#cb1951-2"></a>    <span class="fu">Valdation</span>(data)</span>
-<span id="cb1951-3"><a href="oop.html#cb1951-3"></a>    </span>
-<span id="cb1951-4"><a href="oop.html#cb1951-4"></a>    <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%sの平均値: %.3f</span><span class="sc">\n</span><span class="st">&quot;</span>, </span>
-<span id="cb1951-5"><a href="oop.html#cb1951-5"></a>                data<span class="sc">$</span>var_name[<span class="dv">1</span>],</span>
-<span id="cb1951-6"><a href="oop.html#cb1951-6"></a>                <span class="fu">mean</span>(data<span class="sc">$</span>data<span class="sc">$</span>x)))</span>
-<span id="cb1951-7"><a href="oop.html#cb1951-7"></a>    <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%sの平均値: %.3f</span><span class="sc">\n</span><span class="st">&quot;</span>, </span>
-<span id="cb1951-8"><a href="oop.html#cb1951-8"></a>                data<span class="sc">$</span>var_name[<span class="dv">2</span>],</span>
-<span id="cb1951-9"><a href="oop.html#cb1951-9"></a>                <span class="fu">mean</span>(data<span class="sc">$</span>data<span class="sc">$</span>y)))</span>
-<span id="cb1951-10"><a href="oop.html#cb1951-10"></a>    <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;相関係数: %.3f [%.3f, %.3f]</span><span class="sc">\n</span><span class="st">&quot;</span>, </span>
-<span id="cb1951-11"><a href="oop.html#cb1951-11"></a>                data<span class="sc">$</span>cor, </span>
-<span id="cb1951-12"><a href="oop.html#cb1951-12"></a>                data<span class="sc">$</span>cor_ci[<span class="dv">1</span>],</span>
-<span id="cb1951-13"><a href="oop.html#cb1951-13"></a>                data<span class="sc">$</span>cor_ci[<span class="dv">2</span>]))</span>
-<span id="cb1951-14"><a href="oop.html#cb1951-14"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb1960"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1960-1"><a href="oop.html#cb1960-1"></a>print.My_Cor_Object <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
+<span id="cb1960-2"><a href="oop.html#cb1960-2"></a>    <span class="fu">Valdation</span>(data)</span>
+<span id="cb1960-3"><a href="oop.html#cb1960-3"></a>    </span>
+<span id="cb1960-4"><a href="oop.html#cb1960-4"></a>    <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%sの平均値: %.3f</span><span class="sc">\n</span><span class="st">&quot;</span>, </span>
+<span id="cb1960-5"><a href="oop.html#cb1960-5"></a>                data<span class="sc">$</span>var_name[<span class="dv">1</span>],</span>
+<span id="cb1960-6"><a href="oop.html#cb1960-6"></a>                <span class="fu">mean</span>(data<span class="sc">$</span>data<span class="sc">$</span>x)))</span>
+<span id="cb1960-7"><a href="oop.html#cb1960-7"></a>    <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%sの平均値: %.3f</span><span class="sc">\n</span><span class="st">&quot;</span>, </span>
+<span id="cb1960-8"><a href="oop.html#cb1960-8"></a>                data<span class="sc">$</span>var_name[<span class="dv">2</span>],</span>
+<span id="cb1960-9"><a href="oop.html#cb1960-9"></a>                <span class="fu">mean</span>(data<span class="sc">$</span>data<span class="sc">$</span>y)))</span>
+<span id="cb1960-10"><a href="oop.html#cb1960-10"></a>    <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;相関係数: %.3f [%.3f, %.3f]</span><span class="sc">\n</span><span class="st">&quot;</span>, </span>
+<span id="cb1960-11"><a href="oop.html#cb1960-11"></a>                data<span class="sc">$</span>cor, </span>
+<span id="cb1960-12"><a href="oop.html#cb1960-12"></a>                data<span class="sc">$</span>cor_ci[<span class="dv">1</span>],</span>
+<span id="cb1960-13"><a href="oop.html#cb1960-13"></a>                data<span class="sc">$</span>cor_ci[<span class="dv">2</span>]))</span>
+<span id="cb1960-14"><a href="oop.html#cb1960-14"></a>}</span></code></pre></div>
 <p>次は、<code>summary()</code>メソッドですが、これは<code>print()</code>と同じ機能をする関数です。この場合、<code>UseMethod("メソッド名")</code>を使うと、指定したメソッドを使うことになります。</p>
-<div class="sourceCode" id="cb1952"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1952-1"><a href="oop.html#cb1952-1"></a>summary.My_Cor_Object <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
-<span id="cb1952-2"><a href="oop.html#cb1952-2"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;print&quot;</span>)</span>
-<span id="cb1952-3"><a href="oop.html#cb1952-3"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb1961"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1961-1"><a href="oop.html#cb1961-1"></a>summary.My_Cor_Object <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
+<span id="cb1961-2"><a href="oop.html#cb1961-2"></a>  <span class="fu">UseMethod</span>(<span class="st">&quot;print&quot;</span>)</span>
+<span id="cb1961-3"><a href="oop.html#cb1961-3"></a>}</span></code></pre></div>
 <p>最後は<code>plot()</code>メソッドです。</p>
-<div class="sourceCode" id="cb1953"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1953-1"><a href="oop.html#cb1953-1"></a>plot.My_Cor_Object <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
-<span id="cb1953-2"><a href="oop.html#cb1953-2"></a>    <span class="fu">Valdation</span>(data)</span>
-<span id="cb1953-3"><a href="oop.html#cb1953-3"></a>    </span>
-<span id="cb1953-4"><a href="oop.html#cb1953-4"></a>    data<span class="sc">$</span>data <span class="sc">%&gt;%</span></span>
-<span id="cb1953-5"><a href="oop.html#cb1953-5"></a>      <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
-<span id="cb1953-6"><a href="oop.html#cb1953-6"></a>      <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb1953-7"><a href="oop.html#cb1953-7"></a>      <span class="fu">labs</span>(<span class="at">x =</span> data<span class="sc">$</span>var_name[<span class="dv">1</span>], <span class="at">y =</span> data<span class="sc">$</span>var_name[<span class="dv">2</span>]) <span class="sc">+</span></span>
-<span id="cb1953-8"><a href="oop.html#cb1953-8"></a>      <span class="fu">ggtitle</span>(<span class="fu">sprintf</span>(<span class="st">&quot;相関係数 = %.3f&quot;</span>, data[[<span class="st">&quot;cor&quot;</span>]])) <span class="sc">+</span></span>
-<span id="cb1953-9"><a href="oop.html#cb1953-9"></a>      <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span>
-<span id="cb1953-10"><a href="oop.html#cb1953-10"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb1962"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1962-1"><a href="oop.html#cb1962-1"></a>plot.My_Cor_Object <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
+<span id="cb1962-2"><a href="oop.html#cb1962-2"></a>    <span class="fu">Valdation</span>(data)</span>
+<span id="cb1962-3"><a href="oop.html#cb1962-3"></a>    </span>
+<span id="cb1962-4"><a href="oop.html#cb1962-4"></a>    data<span class="sc">$</span>data <span class="sc">%&gt;%</span></span>
+<span id="cb1962-5"><a href="oop.html#cb1962-5"></a>      <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb1962-6"><a href="oop.html#cb1962-6"></a>      <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb1962-7"><a href="oop.html#cb1962-7"></a>      <span class="fu">labs</span>(<span class="at">x =</span> data<span class="sc">$</span>var_name[<span class="dv">1</span>], <span class="at">y =</span> data<span class="sc">$</span>var_name[<span class="dv">2</span>]) <span class="sc">+</span></span>
+<span id="cb1962-8"><a href="oop.html#cb1962-8"></a>      <span class="fu">ggtitle</span>(<span class="fu">sprintf</span>(<span class="st">&quot;相関係数 = %.3f&quot;</span>, data[[<span class="st">&quot;cor&quot;</span>]])) <span class="sc">+</span></span>
+<span id="cb1962-9"><a href="oop.html#cb1962-9"></a>      <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span>
+<span id="cb1962-10"><a href="oop.html#cb1962-10"></a>}</span></code></pre></div>
 <p>これで相関係数の計算および可視化が便利になる関数群が完成しました。Rパッケージの開発はこれよりも数倍も複雑ですが、本記事の内容はプログラミングをより効率的に行うための入り口となります。</p>
 
 </div>

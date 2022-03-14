@@ -54,6 +54,14 @@
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.21/datatables.js"></script>
+<link href="libs/dt-core-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.11.3/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.11.3/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-165592410-1"></script>
 <script>
@@ -605,7 +613,12 @@ div.csl-indent {
 <li class="chapter" data-level="22.6" data-path="rmarkdown2.html"><a href="rmarkdown2.html#rmakrdown2-shiny"><i class="fa fa-check"></i><b>22.6</b> Webアプリケーション</a></li>
 <li class="chapter" data-level="22.7" data-path="rmarkdown2.html"><a href="rmarkdown2.html#rmakrdown2-tutorial"><i class="fa fa-check"></i><b>22.7</b> チュートリアル</a></li>
 </ul></li>
-<li class="chapter" data-level="23" data-path="table.html"><a href="table.html"><i class="fa fa-check"></i><b>23</b> 表の作成</a></li>
+<li class="chapter" data-level="23" data-path="table.html"><a href="table.html"><i class="fa fa-check"></i><b>23</b> 表の作成</a>
+<ul>
+<li class="chapter" data-level="23.1" data-path="table.html"><a href="table.html#table-kbl"><i class="fa fa-check"></i><b>23.1</b> {kableExtra}の使い方</a></li>
+<li class="chapter" data-level="23.2" data-path="table.html"><a href="table.html#table-gt"><i class="fa fa-check"></i><b>23.2</b> {gt}の使い方</a></li>
+<li class="chapter" data-level="23.3" data-path="table.html"><a href="table.html#table-dataout"><i class="fa fa-check"></i><b>23.3</b> データの出力</a></li>
+</ul></li>
 <li class="chapter" data-level="24" data-path="visualization5.html"><a href="visualization5.html"><i class="fa fa-check"></i><b>24</b> モデルの可視化</a></li>
 <li class="chapter" data-level="25" data-path="renv.html"><a href="renv.html"><i class="fa fa-check"></i><b>25</b> 分析環境の管理</a></li>
 <li class="part"><span><b>VI 中級者向け</b></span></li>
@@ -725,14 +738,14 @@ div.csl-indent {
 ##   Pref     Score
 ##   &lt;chr&gt;    &lt;dbl&gt;
 ## 1 京都府    3.68
-## 2 埼玉県    3.64
-## 3 神奈川県  3.53
-## 4 千葉県    3.72
-## 5 大阪府    3.77
-## 6 東京都    3.67
+## 2 兵庫県    3.54
+## 3 千葉県    3.72
+## 4 和歌山県  3.97
+## 5 埼玉県    3.64
+## 6 大阪府    3.77
 ## 7 奈良県    3.85
-## 8 兵庫県    3.54
-## 9 和歌山県  3.97</code></pre>
+## 8 東京都    3.67
+## 9 神奈川県  3.53</code></pre>
 <p>この時点で勝手にロケール順になります。実際、表示された<code>Score_df</code>を見ると<code>Pref</code>の下に<code>&lt;chr&gt;</code>と表記されており、<code>Pref</code>はcharacter型であることが分かります。これをこのまま棒グラフに出してみましょう。可視化の方法は第<a href="visualization1.html#visualization1">17</a>章以降で詳細に解説するので、ここでは結果だけに注目してください。</p>
 <div class="sourceCode" id="cb1073"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1073-1"><a href="factor.html#cb1073-1"></a>Score_df <span class="sc">%&gt;%</span></span>
 <span id="cb1073-2"><a href="factor.html#cb1073-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
@@ -785,18 +798,18 @@ div.csl-indent {
 ##   Pref     Score
 ##   &lt;fct&gt;    &lt;dbl&gt;
 ## 1 京都府    3.68
-## 2 埼玉県    3.64
-## 3 神奈川県  3.53
-## 4 千葉県    3.72
-## 5 大阪府    3.77
-## 6 東京都    3.67
+## 2 兵庫県    3.54
+## 3 千葉県    3.72
+## 4 和歌山県  3.97
+## 5 埼玉県    3.64
+## 6 大阪府    3.77
 ## 7 奈良県    3.85
-## 8 兵庫県    3.54
-## 9 和歌山県  3.97</code></pre>
+## 8 東京都    3.67
+## 9 神奈川県  3.53</code></pre>
 <p>表示される順番は<code>Score_df</code>と<code>Score_df_f1</code>も同じですが、<code>Pref</code>のデータ型が<code>&lt;fct&gt;</code>、つまりfactor型であることが分かります。実際、<code>Pref</code>列だけ抽出した場合、factor型として、和歌山県から神奈川県の順になっていることが確認できます。</p>
 <div class="sourceCode" id="cb1079"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1079-1"><a href="factor.html#cb1079-1"></a>Score_df_f1<span class="sc">$</span>Pref</span></code></pre></div>
-<pre><code>## [1] 京都府   埼玉県   神奈川県 千葉県   大阪府   東京都   奈良県   兵庫県  
-## [9] 和歌山県
+<pre><code>## [1] 京都府   兵庫県   千葉県   和歌山県 埼玉県   大阪府   奈良県   東京都  
+## [9] 神奈川県
 ## 9 Levels: 和歌山県 奈良県 大阪府 千葉県 京都府 東京都 埼玉県 ... 神奈川県</code></pre>
 <p>この<code>Score_df_f1</code>データを使って、図<a href="factor.html#fig:factor-intro-4">14.2</a>と全く同じコードを実行した結果が図<a href="factor.html#fig:factor-intro-9">14.4</a>です。</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:factor-intro-9"></span>
@@ -820,14 +833,14 @@ div.csl-indent {
 ##   Pref     Score Kanto
 ##   &lt;fct&gt;    &lt;dbl&gt; &lt;dbl&gt;
 ## 1 京都府    3.68     0
-## 2 埼玉県    3.64     1
-## 3 神奈川県  3.53     1
-## 4 千葉県    3.72     1
-## 5 大阪府    3.77     0
-## 6 東京都    3.67     1
+## 2 兵庫県    3.54     0
+## 3 千葉県    3.72     1
+## 4 和歌山県  3.97     0
+## 5 埼玉県    3.64     1
+## 6 大阪府    3.77     0
 ## 7 奈良県    3.85     0
-## 8 兵庫県    3.54     0
-## 9 和歌山県  3.97     0</code></pre>
+## 8 東京都    3.67     1
+## 9 神奈川県  3.53     1</code></pre>
 <p><code>Kanto</code>変数のデータ型は、<code>&lt;dbl&gt;</code>、つまりnumeric型です。しかし、これは明らかに名目変数ですね。これをこのまま<code>Kanto</code>を横軸にした図を出すと図<a href="factor.html#fig:factor-intro-11">14.5</a>のようになります。</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:factor-intro-11"></span>
 <img src="factor_files/figure-html/factor-intro-11-1.png" alt="Kantoがnumeric型の場合" width="900" />
@@ -844,17 +857,17 @@ div.csl-indent {
 ##   Pref     Score Kanto 
 ##   &lt;fct&gt;    &lt;dbl&gt; &lt;fct&gt; 
 ## 1 京都府    3.68 その他
-## 2 埼玉県    3.64 関東  
-## 3 神奈川県  3.53 関東  
-## 4 千葉県    3.72 関東  
-## 5 大阪府    3.77 その他
-## 6 東京都    3.67 関東  
+## 2 兵庫県    3.54 その他
+## 3 千葉県    3.72 関東  
+## 4 和歌山県  3.97 その他
+## 5 埼玉県    3.64 関東  
+## 6 大阪府    3.77 その他
 ## 7 奈良県    3.85 その他
-## 8 兵庫県    3.54 その他
-## 9 和歌山県  3.97 その他</code></pre>
+## 8 東京都    3.67 関東  
+## 9 神奈川県  3.53 関東</code></pre>
 <p><code>Kanto</code>変数がfactor型に変換されたことが分かります。</p>
 <div class="sourceCode" id="cb1085"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1085-1"><a href="factor.html#cb1085-1"></a>Score_df_f1<span class="sc">$</span>Kanto</span></code></pre></div>
-<pre><code>## [1] その他 関東   関東   関東   その他 関東   その他 その他 その他
+<pre><code>## [1] その他 その他 関東   その他 関東   その他 その他 関東   関東  
 ## Levels: 関東 その他</code></pre>
 <p>また、<code>"関東"</code>、<code>"その他"</code>の順になっていますね。これを図として出力した結果が図<a href="factor.html#fig:factor-intro-14">14.6</a>です。</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:factor-intro-14"></span>
@@ -886,14 +899,14 @@ div.csl-indent {
 ##   Pref     Score Kanto  Pref2   
 ##   &lt;fct&gt;    &lt;dbl&gt; &lt;fct&gt;  &lt;fct&gt;   
 ## 1 京都府    3.68 その他 京都府  
-## 2 埼玉県    3.64 関東   埼玉県  
-## 3 神奈川県  3.53 関東   神奈川県
-## 4 千葉県    3.72 関東   千葉県  
-## 5 大阪府    3.77 その他 大阪府  
-## 6 東京都    3.67 関東   東京都  
+## 2 兵庫県    3.54 その他 兵庫県  
+## 3 千葉県    3.72 関東   千葉県  
+## 4 和歌山県  3.97 その他 和歌山県
+## 5 埼玉県    3.64 関東   埼玉県  
+## 6 大阪府    3.77 その他 大阪府  
 ## 7 奈良県    3.85 その他 奈良県  
-## 8 兵庫県    3.54 その他 兵庫県  
-## 9 和歌山県  3.97 その他 和歌山県</code></pre>
+## 8 東京都    3.67 関東   東京都  
+## 9 神奈川県  3.53 関東   神奈川県</code></pre>
 <p>一見、<code>Pref</code>と<code>Pref2</code>変数は同じように見えますが、水準はどうなっているでしょうか。</p>
 <div class="sourceCode" id="cb1090"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1090-1"><a href="factor.html#cb1090-1"></a><span class="fu">levels</span>(Score_df_f1<span class="sc">$</span>Pref)  <span class="co"># Prefの水準</span></span></code></pre></div>
 <pre><code>## [1] &quot;和歌山県&quot; &quot;奈良県&quot;   &quot;大阪府&quot;   &quot;千葉県&quot;   &quot;京都府&quot;   &quot;東京都&quot;   &quot;埼玉県&quot;  
@@ -946,14 +959,14 @@ div.csl-indent {
 ##   Pref     Score Kanto  Pref2    Pref3    Pref4    Pref5   
 ##   &lt;fct&gt;    &lt;dbl&gt; &lt;fct&gt;  &lt;fct&gt;    &lt;fct&gt;    &lt;fct&gt;    &lt;fct&gt;   
 ## 1 京都府    3.68 その他 京都府   京都府   京都府   Kyoto   
-## 2 埼玉県    3.64 関東   埼玉県   埼玉県   埼玉県   Saitama 
-## 3 神奈川県  3.53 関東   神奈川県 神奈川県 神奈川県 Kanagawa
-## 4 千葉県    3.72 関東   千葉県   千葉県   千葉県   Chiba   
-## 5 大阪府    3.77 その他 大阪府   大阪府   大阪府   Osaka   
-## 6 東京都    3.67 関東   東京都   東京都   東京都   Tokyo   
+## 2 兵庫県    3.54 その他 兵庫県   兵庫県   兵庫県   Hyogo   
+## 3 千葉県    3.72 関東   千葉県   千葉県   千葉県   Chiba   
+## 4 和歌山県  3.97 その他 和歌山県 和歌山県 和歌山県 Wakayama
+## 5 埼玉県    3.64 関東   埼玉県   埼玉県   埼玉県   Saitama 
+## 6 大阪府    3.77 その他 大阪府   大阪府   大阪府   Osaka   
 ## 7 奈良県    3.85 その他 奈良県   奈良県   奈良県   Nara    
-## 8 兵庫県    3.54 その他 兵庫県   兵庫県   兵庫県   Hyogo   
-## 9 和歌山県  3.97 その他 和歌山県 和歌山県 和歌山県 Wakayama</code></pre>
+## 8 東京都    3.67 関東   東京都   東京都   東京都   Tokyo   
+## 9 神奈川県  3.53 関東   神奈川県 神奈川県 神奈川県 Kanagawa</code></pre>
 <p><code>fct_recode()</code>の中に指定する水準の順番は無視されます。つまり、水準の順番はそのまま維持されるため、好きな順番で結構です。また、全ての水準を指定せず、一部のみ変更することも可能です。それでは<code>Pref5</code>の順番が<code>Pref</code>の順番と同じかを確認してみましょう。</p>
 <div class="sourceCode" id="cb1101"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1101-1"><a href="factor.html#cb1101-1"></a><span class="fu">levels</span>(Score_df_f1<span class="sc">$</span>Pref)  <span class="co"># Prefの水準</span></span></code></pre></div>
 <pre><code>## [1] &quot;和歌山県&quot; &quot;奈良県&quot;   &quot;大阪府&quot;   &quot;千葉県&quot;   &quot;京都府&quot;   &quot;東京都&quot;   &quot;埼玉県&quot;  
@@ -981,10 +994,10 @@ div.csl-indent {
 <p>そして、都府県ごとのケース数を計算します。</p>
 <div class="sourceCode" id="cb1108"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1108-1"><a href="factor.html#cb1108-1"></a><span class="fu">table</span>(df2<span class="sc">$</span>Pref)</span></code></pre></div>
 <pre><code>## 
-##   京都府   埼玉県 神奈川県   千葉県   大阪府   東京都   奈良県   兵庫県 
-##       79      118      219      108      175      298       28       85 
-## 和歌山県 
-##       24</code></pre>
+##   京都府   兵庫県   千葉県 和歌山県   埼玉県   大阪府   奈良県   東京都 
+##       79       85      108       24      118      175       28      298 
+## 神奈川県 
+##      219</code></pre>
 <p>ここで<code>Pref</code>をfactor化しますが、水準の順番を店舗数が多い方を先にするにはどうすれば良いでしょうか。<code>fct_infreq()</code>関数は指定された変数の各値の個数を計算し、多い順にfactorの水準を調整します。</p>
 <div class="sourceCode" id="cb1110"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1110-1"><a href="factor.html#cb1110-1"></a>df2 <span class="ot">&lt;-</span> df2 <span class="sc">%&gt;%</span></span>
 <span id="cb1110-2"><a href="factor.html#cb1110-2"></a>  <span class="co"># 多く出現した値順でfactor化する</span></span>
@@ -1234,23 +1247,23 @@ n = 2
 ##   Pref     Score Pref2    Pref3    Pref4   
 ##   &lt;chr&gt;    &lt;dbl&gt; &lt;fct&gt;    &lt;fct&gt;    &lt;fct&gt;   
 ## 1 京都府    3.68 京都府   京都府   京都府  
-## 2 埼玉県    3.64 埼玉県   埼玉県   埼玉県  
-## 3 神奈川県  3.53 神奈川県 神奈川県 神奈川県
-## 4 千葉県    3.72 千葉県   千葉県   千葉県  
-## 5 大阪府    3.77 大阪府   大阪府   大阪府  
-## 6 東京都    3.67 東京都   東京都   東京都  
+## 2 兵庫県    3.54 兵庫県   兵庫県   兵庫県  
+## 3 千葉県    3.72 千葉県   千葉県   千葉県  
+## 4 和歌山県  3.97 和歌山県 和歌山県 和歌山県
+## 5 埼玉県    3.64 埼玉県   埼玉県   埼玉県  
+## 6 大阪府    3.77 大阪府   大阪府   大阪府  
 ## 7 奈良県    3.85 奈良県   奈良県   奈良県  
-## 8 兵庫県    3.54 兵庫県   兵庫県   兵庫県  
-## 9 和歌山県  3.97 和歌山県 和歌山県 和歌山県</code></pre>
+## 8 東京都    3.67 東京都   東京都   東京都  
+## 9 神奈川県  3.53 神奈川県 神奈川県 神奈川県</code></pre>
 <div class="sourceCode" id="cb1125"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1125-1"><a href="factor.html#cb1125-1"></a><span class="fu">levels</span>(Score_df<span class="sc">$</span>Pref2)</span></code></pre></div>
-<pre><code>## [1] &quot;兵庫県&quot;   &quot;埼玉県&quot;   &quot;神奈川県&quot; &quot;京都府&quot;   &quot;奈良県&quot;   &quot;千葉県&quot;   &quot;和歌山県&quot;
-## [8] &quot;東京都&quot;   &quot;大阪府&quot;</code></pre>
+<pre><code>## [1] &quot;京都府&quot;   &quot;千葉県&quot;   &quot;埼玉県&quot;   &quot;奈良県&quot;   &quot;東京都&quot;   &quot;神奈川県&quot; &quot;和歌山県&quot;
+## [8] &quot;兵庫県&quot;   &quot;大阪府&quot;</code></pre>
 <div class="sourceCode" id="cb1127"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1127-1"><a href="factor.html#cb1127-1"></a><span class="fu">levels</span>(Score_df<span class="sc">$</span>Pref3)</span></code></pre></div>
-<pre><code>## [1] &quot;和歌山県&quot; &quot;奈良県&quot;   &quot;京都府&quot;   &quot;大阪府&quot;   &quot;千葉県&quot;   &quot;兵庫県&quot;   &quot;神奈川県&quot;
-## [8] &quot;埼玉県&quot;   &quot;東京都&quot;</code></pre>
+<pre><code>## [1] &quot;神奈川県&quot; &quot;奈良県&quot;   &quot;千葉県&quot;   &quot;京都府&quot;   &quot;大阪府&quot;   &quot;埼玉県&quot;   &quot;兵庫県&quot;  
+## [8] &quot;和歌山県&quot; &quot;東京都&quot;</code></pre>
 <div class="sourceCode" id="cb1129"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1129-1"><a href="factor.html#cb1129-1"></a><span class="fu">levels</span>(Score_df<span class="sc">$</span>Pref4)</span></code></pre></div>
-<pre><code>## [1] &quot;兵庫県&quot;   &quot;神奈川県&quot; &quot;奈良県&quot;   &quot;埼玉県&quot;   &quot;和歌山県&quot; &quot;大阪府&quot;   &quot;京都府&quot;  
-## [8] &quot;千葉県&quot;   &quot;東京都&quot;</code></pre>
+<pre><code>## [1] &quot;奈良県&quot;   &quot;大阪府&quot;   &quot;神奈川県&quot; &quot;和歌山県&quot; &quot;京都府&quot;   &quot;兵庫県&quot;   &quot;埼玉県&quot;  
+## [8] &quot;東京都&quot;   &quot;千葉県&quot;</code></pre>
 <p><code>Pref</code>から<code>Pref4</code>まで同じように見えますが、水準の順番が異なります (<code>Pref</code>はcharacter型だから水準がありません)。</p>
 </div>
 <div id="fct_reorder-別の1変数の値を基準に水準の順番を変更する" class="section level3" number="14.2.8">
@@ -1291,7 +1304,7 @@ n = 2
 <span id="cb1136-3"><a href="factor.html#cb1136-3"></a></span>
 <span id="cb1136-4"><a href="factor.html#cb1136-4"></a><span class="fu">levels</span>(df<span class="sc">$</span>Pref_R2)</span></code></pre></div>
 <pre><code>## [1] &quot;和歌山県&quot; &quot;奈良県&quot;   &quot;千葉県&quot;   &quot;大阪府&quot;   &quot;東京都&quot;   &quot;埼玉県&quot;   &quot;京都府&quot;  
-## [8] &quot;神奈川県&quot; &quot;兵庫県&quot;</code></pre>
+## [8] &quot;兵庫県&quot;   &quot;神奈川県&quot;</code></pre>
 <p>変わったのは<code>mean</code>の代わりに<code>median</code>を使ったこと、そして<code>.desc</code>引数が追加された点です。<code>fct_reorder()</code>には<code>.desc = FALSE</code>がデフォルトとして指定されており、省略した場合は昇順でfactorの水準が決まります。ここで<code>.desc = TRUE</code>を指定すると、降順となります。実際、<code>Score</code>の中央値順になっているかを確認してみましょう。</p>
 <div class="sourceCode" id="cb1138"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1138-1"><a href="factor.html#cb1138-1"></a>df <span class="sc">%&gt;%</span> </span>
 <span id="cb1138-2"><a href="factor.html#cb1138-2"></a>  <span class="fu">group_by</span>(Pref) <span class="sc">%&gt;%</span></span>
@@ -1308,8 +1321,8 @@ n = 2
 ## 5 東京都    3.64
 ## 6 埼玉県    3.61
 ## 7 京都府    3.5 
-## 8 神奈川県  3.5 
-## 9 兵庫県    3.5</code></pre>
+## 8 兵庫県    3.5 
+## 9 神奈川県  3.5</code></pre>
 </div>
 <div id="factor-forcat-reorder2" class="section level3" number="14.2.9">
 <h3><span class="header-section-number">14.2.9</span> <code>fct_reorder2()</code>: 別の2変数の値を基準に水準の順番を変更する</h3>
@@ -1368,7 +1381,7 @@ n = 2
 ## [13] 中国 (本土) 中国 (本土) 中国 (本土) 台湾        台湾        台湾       
 ## [19] 台湾        台湾        香港        香港        香港        香港       
 ## [25] 香港       
-## Levels: 韓国 香港 台湾 中国 (本土) 日本</code></pre>
+## Levels: 中国 (本土) 台湾 日本 韓国 香港</code></pre>
 <p>実際、何も指定せずに<code>Reorder2_df</code>の<code>Country</code>をfactor化すると、韓国、香港、台湾、…の順であり、これは上のグラフと一致します。これをグラフにおける7月1日の新規感染者数の順で並べるためには、<code>Date</code>を昇順にソートし、そして最後の要素 (<code>"2020/07/01"</code>)内で新規感染者数 (<code>NewPat</code>)を降順に並べ替えた場合の順番にする必要があります。実際、<code>Reorder2_df</code>を<code>Date</code>で昇順、<code>NewPat</code>で降順にソートし、最後の5行を抽出した結果が以下のコードです。</p>
 <div class="sourceCode" id="cb1145"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1145-1"><a href="factor.html#cb1145-1"></a>Reorder2_df <span class="sc">%&gt;%</span></span>
 <span id="cb1145-2"><a href="factor.html#cb1145-2"></a>  <span class="fu">arrange</span>(Date, <span class="fu">desc</span>(NewPat)) <span class="sc">%&gt;%</span></span>
@@ -1512,8 +1525,8 @@ n = 2
 <span id="cb1169-2"><a href="factor.html#cb1169-2"></a>  <span class="fu">mutate</span>(<span class="at">Pref =</span> <span class="fu">fct_expand</span>(Pref, <span class="st">&quot;滋賀県&quot;</span>))</span>
 <span id="cb1169-3"><a href="factor.html#cb1169-3"></a></span>
 <span id="cb1169-4"><a href="factor.html#cb1169-4"></a><span class="fu">levels</span>(df5<span class="sc">$</span>Pref)</span></code></pre></div>
-<pre><code>##  [1] &quot;京都府&quot;   &quot;埼玉県&quot;   &quot;神奈川県&quot; &quot;千葉県&quot;   &quot;大阪府&quot;   &quot;東京都&quot;  
-##  [7] &quot;奈良県&quot;   &quot;兵庫県&quot;   &quot;和歌山県&quot; &quot;滋賀県&quot;</code></pre>
+<pre><code>##  [1] &quot;京都府&quot;   &quot;兵庫県&quot;   &quot;千葉県&quot;   &quot;和歌山県&quot; &quot;埼玉県&quot;   &quot;大阪府&quot;  
+##  [7] &quot;奈良県&quot;   &quot;東京都&quot;   &quot;神奈川県&quot; &quot;滋賀県&quot;</code></pre>
 <p><code>"滋賀県"</code>という新しい水準が出来ましたね。ただし、新しく追加された水準は最後の順番になりますので、修正が必要な場合は<code>fct_relevel()</code>などを使って適宜修正してください。</p>
 <p>新しく水準が追加されることによって、何かの変化はあるでしょうか。まずは都府県ごとに<code>Score</code>の平均値とケース数を計算してみましょう。</p>
 <div class="sourceCode" id="cb1171"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1171-1"><a href="factor.html#cb1171-1"></a>df5 <span class="sc">%&gt;%</span></span>
@@ -1525,21 +1538,21 @@ n = 2
 ##   Pref     Score     N
 ##   &lt;fct&gt;    &lt;dbl&gt; &lt;int&gt;
 ## 1 京都府    3.68   414
-## 2 埼玉県    3.64  1000
-## 3 神奈川県  3.53  1000
-## 4 千葉県    3.72  1000
-## 5 大阪府    3.77  1000
-## 6 東京都    3.67  1000
+## 2 兵庫県    3.54   591
+## 3 千葉県    3.72  1000
+## 4 和歌山県  3.97   140
+## 5 埼玉県    3.64  1000
+## 6 大阪府    3.77  1000
 ## 7 奈良県    3.85   147
-## 8 兵庫県    3.54   591
-## 9 和歌山県  3.97   140</code></pre>
+## 8 東京都    3.67  1000
+## 9 神奈川県  3.53  1000</code></pre>
 <p>見た目は全く変わらず、滋賀県の行が新しく出来たわけでもありません。<code>dplyr</code>の<code>group_by()</code>の場合、空水準はグループ化の対象になりません。一方、多くのR内蔵関数はケースとして存在しなくても計算の対象となります。たとえば、ベクトル内のある値が何個格納されているか確認する<code>table()</code>関数の例を見てみましょう。</p>
 <div class="sourceCode" id="cb1173"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1173-1"><a href="factor.html#cb1173-1"></a><span class="fu">table</span>(df5<span class="sc">$</span>Pref)</span></code></pre></div>
 <pre><code>## 
-##   京都府   埼玉県 神奈川県   千葉県   大阪府   東京都   奈良県   兵庫県 
-##      414     1000     1000     1000     1000     1000      147      591 
-## 和歌山県   滋賀県 
-##      140        0</code></pre>
+##   京都府   兵庫県   千葉県 和歌山県   埼玉県   大阪府   奈良県   東京都 
+##      414      591     1000      140     1000     1000      147     1000 
+## 神奈川県   滋賀県 
+##     1000        0</code></pre>
 <p><code>"滋賀県"</code>という列があり、合致するケースが0と表示されます。<code>group_by()</code>でも空の水準まで含めて出力する引数<code>.drop</code>があります。デフォルトは<code>TRUE</code>ですが、これを<code>FALSE</code>に指定してみます。</p>
 <div class="sourceCode" id="cb1175"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1175-1"><a href="factor.html#cb1175-1"></a>df5 <span class="sc">%&gt;%</span></span>
 <span id="cb1175-2"><a href="factor.html#cb1175-2"></a>  <span class="fu">group_by</span>(Pref, <span class="at">.drop =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
@@ -1550,14 +1563,14 @@ n = 2
 ##    Pref      Score     N
 ##    &lt;fct&gt;     &lt;dbl&gt; &lt;int&gt;
 ##  1 京都府     3.68   414
-##  2 埼玉県     3.64  1000
-##  3 神奈川県   3.53  1000
-##  4 千葉県     3.72  1000
-##  5 大阪府     3.77  1000
-##  6 東京都     3.67  1000
+##  2 兵庫県     3.54   591
+##  3 千葉県     3.72  1000
+##  4 和歌山県   3.97   140
+##  5 埼玉県     3.64  1000
+##  6 大阪府     3.77  1000
 ##  7 奈良県     3.85   147
-##  8 兵庫県     3.54   591
-##  9 和歌山県   3.97   140
+##  8 東京都     3.67  1000
+##  9 神奈川県   3.53  1000
 ## 10 滋賀県   NaN        0</code></pre>
 <p>空水準も出力され、<code>Score</code>の平均値は計算不可 (<code>NaN</code>)、ケース数は0という結果が得られました。</p>
 </div>

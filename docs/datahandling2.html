@@ -54,6 +54,14 @@
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.21/datatables.js"></script>
+<link href="libs/dt-core-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.11.3/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.11.3/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-165592410-1"></script>
 <script>
@@ -605,7 +613,12 @@ div.csl-indent {
 <li class="chapter" data-level="22.6" data-path="rmarkdown2.html"><a href="rmarkdown2.html#rmakrdown2-shiny"><i class="fa fa-check"></i><b>22.6</b> Webアプリケーション</a></li>
 <li class="chapter" data-level="22.7" data-path="rmarkdown2.html"><a href="rmarkdown2.html#rmakrdown2-tutorial"><i class="fa fa-check"></i><b>22.7</b> チュートリアル</a></li>
 </ul></li>
-<li class="chapter" data-level="23" data-path="table.html"><a href="table.html"><i class="fa fa-check"></i><b>23</b> 表の作成</a></li>
+<li class="chapter" data-level="23" data-path="table.html"><a href="table.html"><i class="fa fa-check"></i><b>23</b> 表の作成</a>
+<ul>
+<li class="chapter" data-level="23.1" data-path="table.html"><a href="table.html#table-kbl"><i class="fa fa-check"></i><b>23.1</b> {kableExtra}の使い方</a></li>
+<li class="chapter" data-level="23.2" data-path="table.html"><a href="table.html#table-gt"><i class="fa fa-check"></i><b>23.2</b> {gt}の使い方</a></li>
+<li class="chapter" data-level="23.3" data-path="table.html"><a href="table.html#table-dataout"><i class="fa fa-check"></i><b>23.3</b> データの出力</a></li>
+</ul></li>
 <li class="chapter" data-level="24" data-path="visualization5.html"><a href="visualization5.html"><i class="fa fa-check"></i><b>24</b> モデルの可視化</a></li>
 <li class="chapter" data-level="25" data-path="renv.html"><a href="renv.html"><i class="fa fa-check"></i><b>25</b> 分析環境の管理</a></li>
 <li class="part"><span><b>VI 中級者向け</b></span></li>
@@ -866,14 +879,14 @@ div.csl-indent {
 ##   Pref     Farthest                           Distance
 ##   &lt;chr&gt;    &lt;chr&gt;                                 &lt;dbl&gt;
 ## 1 京都府   熱烈らぁめん                             30
-## 2 埼玉県   札幌ラーメン どさん子 小鹿野店          116
-## 3 神奈川県 札幌ラーメン どさん子 中津店             73
-## 4 千葉県   札幌ラーメン どさん子 佐原51号店         59
-## 5 大阪府   河童ラーメン本舗 岸和田店                38
-## 6 東京都   てんがら 青梅新町店                      30
+## 2 兵庫県   濃厚醤油 中華そば いせや 玉津店          43
+## 3 千葉県   札幌ラーメン どさん子 佐原51号店         59
+## 4 和歌山県 中華そば まる乃                          30
+## 5 埼玉県   札幌ラーメン どさん子 小鹿野店          116
+## 6 大阪府   河童ラーメン本舗 岸和田店                38
 ## 7 奈良県   博多長浜らーめん 夢街道 四条大路店       29
-## 8 兵庫県   濃厚醤油 中華そば いせや 玉津店          43
-## 9 和歌山県 中華そば まる乃                          30</code></pre>
+## 8 東京都   てんがら 青梅新町店                      30
+## 9 神奈川県 札幌ラーメン どさん子 中津店             73</code></pre>
 <p>この<code>last()</code>を<code>first()</code>に変えると、最寄りの駅から最も近い店舗情報が表示されます。また、「<code>n</code>番目の情報」が必要な際は<code>nth()</code>関数を使います。<code>nth(Name, 2)</code>に変えることで2番目の店舗名が抽出できます。</p>
 <p><strong><code>n_distinct()</code>: ユニーク値の個数を求める</strong></p>
 <p><code>n_distinct()</code>は何種類の要素が含まれているかを計算する関数であり、<code>length(unique())</code>関数と同じ機能をします。たとえば、以下の<code>myVec1</code>に対して何種類の要素があるかを確認してみましょう。</p>
@@ -928,14 +941,14 @@ div.csl-indent {
 ##   Pref     Over60 Within30
 ##   &lt;chr&gt;    &lt;lgl&gt;  &lt;lgl&gt;   
 ## 1 京都府   FALSE  TRUE    
-## 2 埼玉県   TRUE   FALSE   
-## 3 神奈川県 TRUE   FALSE   
-## 4 千葉県   FALSE  FALSE   
-## 5 大阪府   FALSE  FALSE   
-## 6 東京都   FALSE  TRUE    
+## 2 兵庫県   FALSE  FALSE   
+## 3 千葉県   FALSE  FALSE   
+## 4 和歌山県 FALSE  TRUE    
+## 5 埼玉県   TRUE   FALSE   
+## 6 大阪府   FALSE  FALSE   
 ## 7 奈良県   FALSE  TRUE    
-## 8 兵庫県   FALSE  FALSE   
-## 9 和歌山県 FALSE  TRUE</code></pre>
+## 8 東京都   FALSE  TRUE    
+## 9 神奈川県 TRUE   FALSE</code></pre>
 <p>埼玉県と神奈川県において、最寄りの駅から徒歩60以上の店がありました。また、京都府、東京都、奈良県、和歌山県の場合、全店舗が最寄りの駅から徒歩30分以下ということが分かります。当たり前ですが<code>Over60</code>が<code>TRUE</code>なら<code>Within30</code>は必ず<code>FALSE</code>になりますね。</p>
 <hr />
 </div>
@@ -1149,18 +1162,18 @@ div.csl-indent {
 ## `.groups` argument.</code></pre>
 <pre><code>## # A tibble: 509 × 3
 ## # Groups:   Pref [9]
-##    Pref   Line                         Mean
-##    &lt;chr&gt;  &lt;chr&gt;                       &lt;dbl&gt;
-##  1 京都府 ＪＲ                         4   
-##  2 京都府 ＪＲ京都線                  10   
-##  3 京都府 ＪＲ嵯峨野線                 5   
-##  4 京都府 ＪＲ山陰本線                19   
-##  5 京都府 ＪＲ山陰本線（京都-米子）    9.23
-##  6 京都府 JR山陰本線（京都-米子）      8.67
-##  7 京都府 JR小浜線                    16.5 
-##  8 京都府 ＪＲ小浜線                   9   
-##  9 京都府 ＪＲ東海道本線（米原-神戸） 11.2 
-## 10 京都府 JR東海道本線（米原-神戸）   16.3 
+##    Pref   Line                       Mean
+##    &lt;chr&gt;  &lt;chr&gt;                     &lt;dbl&gt;
+##  1 京都府 ＪＲ                       4   
+##  2 京都府 ＪＲ京都線                10   
+##  3 京都府 JR奈良線                   3.33
+##  4 京都府 ＪＲ奈良線                 8   
+##  5 京都府 JR小浜線                  16.5 
+##  6 京都府 ＪＲ小浜線                 9   
+##  7 京都府 ＪＲ山陰本線              19   
+##  8 京都府 JR山陰本線（京都-米子）    8.67
+##  9 京都府 ＪＲ山陰本線（京都-米子）  9.23
+## 10 京都府 ＪＲ嵯峨野線               5   
 ## # … with 499 more rows</code></pre>
 <p>最初は<code>Pref</code>と<code>Line</code>でグループ化しましたが、<code>summarise()</code>の後、<code>Line</code>がグループ化変数から外されました。つまり、引数が<code>"drop_last"</code>になっていることです。</p>
 <p>それでは、平均値に加えて、第一四分位点と第三四分位点も計算し、<code>Quantile</code>という名で格納してみましょう。</p>
@@ -1173,18 +1186,18 @@ div.csl-indent {
 ## `.groups` argument.</code></pre>
 <pre><code>## # A tibble: 1,018 × 4
 ## # Groups:   Pref, Line [509]
-##    Pref   Line                       Mean Quantile
-##    &lt;chr&gt;  &lt;chr&gt;                     &lt;dbl&gt;    &lt;dbl&gt;
-##  1 京都府 ＪＲ                       4        1.25
-##  2 京都府 ＪＲ                       4        5   
-##  3 京都府 ＪＲ京都線                10       10   
-##  4 京都府 ＪＲ京都線                10       10   
-##  5 京都府 ＪＲ嵯峨野線               5        4.5 
-##  6 京都府 ＪＲ嵯峨野線               5        6   
-##  7 京都府 ＪＲ山陰本線              19       19   
-##  8 京都府 ＪＲ山陰本線              19       19   
-##  9 京都府 ＪＲ山陰本線（京都-米子）  9.23     3   
-## 10 京都府 ＪＲ山陰本線（京都-米子）  9.23    13   
+##    Pref   Line        Mean Quantile
+##    &lt;chr&gt;  &lt;chr&gt;      &lt;dbl&gt;    &lt;dbl&gt;
+##  1 京都府 ＪＲ        4        1.25
+##  2 京都府 ＪＲ        4        5   
+##  3 京都府 ＪＲ京都線 10       10   
+##  4 京都府 ＪＲ京都線 10       10   
+##  5 京都府 JR奈良線    3.33     2   
+##  6 京都府 JR奈良線    3.33     5   
+##  7 京都府 ＪＲ奈良線  8        4   
+##  8 京都府 ＪＲ奈良線  8        9   
+##  9 京都府 JR小浜線   16.5      9.75
+## 10 京都府 JR小浜線   16.5     23.2 
 ## # … with 1,008 more rows</code></pre>
 <p>同じ<code>Pref</code>、<code>Line</code>のケースが2つずつ出来ています。最初に来る数値は第一四分位点、次に来るのが第三四分位点です。そして最初のグループ化変数であった<code>Pref</code>と<code>Line</code>が、<code>summarise()</code>後もグループ化変数として残っていることが分かります。</p>
 <p><code>.groups</code>引数は記述統計量だけを計算する意味ではあまり意識する必要がありません。しかし、得られた記述統計量から何らかの計算をしたり、さらにもう一回記述統計量を求めたりする際、予期せぬ結果が得られる可能性があるため注意する必要があります。出来る限り<code>.groups</code>引数は指定するようにしましょう。</p>
@@ -1243,14 +1256,14 @@ div.csl-indent {
 ##   Pref     Budget_Mean ScoreN_Sum ScoreN_Mean Score_Mean     N
 ##   &lt;chr&gt;          &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt; &lt;int&gt;
 ## 1 京都府         1399.        216       0.522       3.68   414
-## 2 埼玉県         1147.        278       0.278       3.64  1000
-## 3 神奈川県       1239.        587       0.587       3.53  1000
-## 4 千葉県         1124.        259       0.259       3.72  1000
-## 5 大阪府         1203.        516       0.516       3.77  1000
-## 6 東京都         1283.       1165       1.16        3.67  1000
+## 2 兵庫県         1197.        230       0.389       3.54   591
+## 3 千葉県         1124.        259       0.259       3.72  1000
+## 4 和歌山県       1252          83       0.593       3.97   140
+## 5 埼玉県         1147.        278       0.278       3.64  1000
+## 6 大阪府         1203.        516       0.516       3.77  1000
 ## 7 奈良県         1169.         45       0.306       3.85   147
-## 8 兵庫県         1197.        230       0.389       3.54   591
-## 9 和歌山県       1252          83       0.593       3.97   140</code></pre>
+## 8 東京都         1283.       1165       1.16        3.67  1000
+## 9 神奈川県       1239.        587       0.587       3.53  1000</code></pre>
 <p>このように、データ内の変数を用いた計算結果を新しい列として追加する場合は、<code>mutate()</code>が便利です。これを<code>mutate()</code>を使わずに処理する場合、以下のようなコードになりますが、可読性が相対的に低いことが分かります。</p>
 <div class="sourceCode" id="cb1000"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1000-1"><a href="datahandling2.html#cb1000-1"></a>df2<span class="sc">$</span>ScoreN_Mean <span class="ot">&lt;-</span> df2<span class="sc">$</span>ScoreN_Sum <span class="sc">/</span> df2<span class="sc">$</span>N</span>
 <span id="cb1000-2"><a href="datahandling2.html#cb1000-2"></a>df2 <span class="ot">&lt;-</span> df2[, <span class="fu">c</span>(<span class="st">&quot;Pref&quot;</span>, <span class="st">&quot;Budget_Mean&quot;</span>, <span class="st">&quot;Walk_Mean&quot;</span>, </span>
@@ -1267,22 +1280,22 @@ div.csl-indent {
 ##    &lt;chr&gt;    &lt;chr&gt;     &lt;int&gt;
 ##  1 京都府   Cheap        22
 ##  2 京都府   Expensive    28
-##  3 埼玉県   Cheap        37
-##  4 埼玉県   Expensive    45
-##  5 神奈川県 Cheap        66
-##  6 神奈川県 Expensive    54
-##  7 千葉県   Cheap        64
-##  8 千葉県   Expensive    72
-##  9 大阪府   Cheap       104
-## 10 大阪府   Expensive   115
-## 11 東京都   Cheap       206
-## 12 東京都   Expensive   236
+##  3 兵庫県   Cheap        39
+##  4 兵庫県   Expensive    27
+##  5 千葉県   Cheap        64
+##  6 千葉県   Expensive    72
+##  7 和歌山県 Cheap        10
+##  8 和歌山県 Expensive     5
+##  9 埼玉県   Cheap        37
+## 10 埼玉県   Expensive    45
+## 11 大阪府   Cheap       104
+## 12 大阪府   Expensive   115
 ## 13 奈良県   Cheap        11
 ## 14 奈良県   Expensive    10
-## 15 兵庫県   Cheap        39
-## 16 兵庫県   Expensive    27
-## 17 和歌山県 Cheap        10
-## 18 和歌山県 Expensive     5</code></pre>
+## 15 東京都   Cheap       206
+## 16 東京都   Expensive   236
+## 17 神奈川県 Cheap        66
+## 18 神奈川県 Expensive    54</code></pre>
 <p>これは各都府県ごとの予算1000円未満の店と以上の店の店舗数をまとめた表となります。もし、500円未満なら<code>"Cheap"</code>、500円以上~1000円未満なら<code>"Reasonable"</code>、1000円以上なら<code>"Expensive"</code>になる<code>Budget3</code>変数を作るにはどうすればよいでしょうか。第<a href="programming.html#programming">10</a>章で紹介しました<code>if_else()</code>を重ねることも出来ますが、ここでは<code>case_when()</code>関数が便利です。まずは、<code>if_else()</code>を使ったコードは以下の通りです。</p>
 <div class="sourceCode" id="cb1003"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1003-1"><a href="datahandling2.html#cb1003-1"></a><span class="co"># if_else()を使う場合</span></span>
 <span id="cb1003-2"><a href="datahandling2.html#cb1003-2"></a>df <span class="sc">%&gt;%</span> </span>
@@ -1311,24 +1324,24 @@ div.csl-indent {
 ##    &lt;chr&gt;    &lt;fct&gt;      &lt;int&gt;
 ##  1 京都府   Reasonable    22
 ##  2 京都府   Expensive     28
-##  3 埼玉県   Reasonable    37
-##  4 埼玉県   Expensive     45
-##  5 神奈川県 Cheap          1
-##  6 神奈川県 Reasonable    65
-##  7 神奈川県 Expensive     54
-##  8 千葉県   Reasonable    64
-##  9 千葉県   Expensive     72
-## 10 大阪府   Reasonable   104
-## 11 大阪府   Expensive    115
-## 12 東京都   Cheap          1
-## 13 東京都   Reasonable   205
-## 14 東京都   Expensive    236
-## 15 奈良県   Reasonable    11
-## 16 奈良県   Expensive     10
-## 17 兵庫県   Reasonable    39
-## 18 兵庫県   Expensive     27
-## 19 和歌山県 Reasonable    10
-## 20 和歌山県 Expensive      5</code></pre>
+##  3 兵庫県   Reasonable    39
+##  4 兵庫県   Expensive     27
+##  5 千葉県   Reasonable    64
+##  6 千葉県   Expensive     72
+##  7 和歌山県 Reasonable    10
+##  8 和歌山県 Expensive      5
+##  9 埼玉県   Reasonable    37
+## 10 埼玉県   Expensive     45
+## 11 大阪府   Reasonable   104
+## 12 大阪府   Expensive    115
+## 13 奈良県   Reasonable    11
+## 14 奈良県   Expensive     10
+## 15 東京都   Cheap          1
+## 16 東京都   Reasonable   205
+## 17 東京都   Expensive    236
+## 18 神奈川県 Cheap          1
+## 19 神奈川県 Reasonable    65
+## 20 神奈川県 Expensive     54</code></pre>
 <p>書く手間の観点では<code>case_when()</code>は<code>ifelse()</code>と大きく違いはないかも知れませんが、コードが非常に読みやすくなっています。<code>case_when()</code>関数の書き方は以下の通りです。</p>
 <div class="sourceCode" id="cb1006"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1006-1"><a href="datahandling2.html#cb1006-1"></a><span class="co"># case_when()の使い方</span></span>
 <span id="cb1006-2"><a href="datahandling2.html#cb1006-2"></a>データフレーム名 <span class="sc">%&gt;%</span></span>
@@ -1353,24 +1366,24 @@ div.csl-indent {
 ##    &lt;chr&gt;    &lt;fct&gt;      &lt;int&gt;
 ##  1 京都府   Reasonable    22
 ##  2 京都府   Expensive     28
-##  3 埼玉県   Reasonable    37
-##  4 埼玉県   Expensive     45
-##  5 神奈川県 Cheap          1
-##  6 神奈川県 Reasonable    65
-##  7 神奈川県 Expensive     54
-##  8 千葉県   Reasonable    64
-##  9 千葉県   Expensive     72
-## 10 大阪府   Reasonable   104
-## 11 大阪府   Expensive    115
-## 12 東京都   Cheap          1
-## 13 東京都   Reasonable   205
-## 14 東京都   Expensive    236
-## 15 奈良県   Reasonable    11
-## 16 奈良県   Expensive     10
-## 17 兵庫県   Reasonable    39
-## 18 兵庫県   Expensive     27
-## 19 和歌山県 Reasonable    10
-## 20 和歌山県 Expensive      5</code></pre>
+##  3 兵庫県   Reasonable    39
+##  4 兵庫県   Expensive     27
+##  5 千葉県   Reasonable    64
+##  6 千葉県   Expensive     72
+##  7 和歌山県 Reasonable    10
+##  8 和歌山県 Expensive      5
+##  9 埼玉県   Reasonable    37
+## 10 埼玉県   Expensive     45
+## 11 大阪府   Reasonable   104
+## 12 大阪府   Expensive    115
+## 13 奈良県   Reasonable    11
+## 14 奈良県   Expensive     10
+## 15 東京都   Cheap          1
+## 16 東京都   Reasonable   205
+## 17 東京都   Expensive    236
+## 18 神奈川県 Cheap          1
+## 19 神奈川県 Reasonable    65
+## 20 神奈川県 Expensive     54</code></pre>
 <p>ただし、この<code>TRUE</code>には注意が必要です。たとえば、以下のようなコードを考えてみましょう。</p>
 <div class="sourceCode" id="cb1009"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1009-1"><a href="datahandling2.html#cb1009-1"></a>df <span class="sc">%&gt;%</span> </span>
 <span id="cb1009-2"><a href="datahandling2.html#cb1009-2"></a>  <span class="fu">mutate</span>(<span class="at">Budget3 =</span> <span class="fu">case_when</span>(Budget <span class="sc">&lt;</span> <span class="dv">500</span>   <span class="sc">~</span> <span class="st">&quot;Cheap&quot;</span>,</span>
@@ -1387,24 +1400,24 @@ div.csl-indent {
 ##    &lt;chr&gt;    &lt;fct&gt;      &lt;int&gt;
 ##  1 京都府   Reasonable    22
 ##  2 京都府   Expensive    392
-##  3 埼玉県   Reasonable    37
-##  4 埼玉県   Expensive    963
-##  5 神奈川県 Cheap          1
-##  6 神奈川県 Reasonable    65
-##  7 神奈川県 Expensive    934
-##  8 千葉県   Reasonable    64
-##  9 千葉県   Expensive    936
-## 10 大阪府   Reasonable   104
-## 11 大阪府   Expensive    896
-## 12 東京都   Cheap          1
-## 13 東京都   Reasonable   205
-## 14 東京都   Expensive    794
-## 15 奈良県   Reasonable    11
-## 16 奈良県   Expensive    136
-## 17 兵庫県   Reasonable    39
-## 18 兵庫県   Expensive    552
-## 19 和歌山県 Reasonable    10
-## 20 和歌山県 Expensive    130</code></pre>
+##  3 兵庫県   Reasonable    39
+##  4 兵庫県   Expensive    552
+##  5 千葉県   Reasonable    64
+##  6 千葉県   Expensive    936
+##  7 和歌山県 Reasonable    10
+##  8 和歌山県 Expensive    130
+##  9 埼玉県   Reasonable    37
+## 10 埼玉県   Expensive    963
+## 11 大阪府   Reasonable   104
+## 12 大阪府   Expensive    896
+## 13 奈良県   Reasonable    11
+## 14 奈良県   Expensive    136
+## 15 東京都   Cheap          1
+## 16 東京都   Reasonable   205
+## 17 東京都   Expensive    794
+## 18 神奈川県 Cheap          1
+## 19 神奈川県 Reasonable    65
+## 20 神奈川県 Expensive    934</code></pre>
 <p>結果が異なりますね。なぜなら<code>Budget</code>の値が欠損値であっても<code>"Expensive"</code>と判定されるからです。対処方法としましては<code>mutate()</code>の前に<code>filter()</code>を使って<code>Budget3</code>が欠損した行を削除するか、<code>Budget</code>が欠損した場合の値を<code>case_when()</code>内部に指定するかです。以下の例は<code>Budget</code>が欠損した場合の処理内容を加えたものです。</p>
 <div class="sourceCode" id="cb1011"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1011-1"><a href="datahandling2.html#cb1011-1"></a>df <span class="sc">%&gt;%</span> </span>
 <span id="cb1011-2"><a href="datahandling2.html#cb1011-2"></a>  <span class="fu">mutate</span>(<span class="at">Budget3 =</span> <span class="fu">case_when</span>(<span class="fu">is.na</span>(Budget)  <span class="sc">~</span> <span class="cn">NA_character_</span>,</span>
@@ -1422,24 +1435,24 @@ div.csl-indent {
 ##    &lt;chr&gt;    &lt;fct&gt;      &lt;int&gt;
 ##  1 京都府   Reasonable    22
 ##  2 京都府   Expensive     28
-##  3 埼玉県   Reasonable    37
-##  4 埼玉県   Expensive     45
-##  5 神奈川県 Cheap          1
-##  6 神奈川県 Reasonable    65
-##  7 神奈川県 Expensive     54
-##  8 千葉県   Reasonable    64
-##  9 千葉県   Expensive     72
-## 10 大阪府   Reasonable   104
-## 11 大阪府   Expensive    115
-## 12 東京都   Cheap          1
-## 13 東京都   Reasonable   205
-## 14 東京都   Expensive    236
-## 15 奈良県   Reasonable    11
-## 16 奈良県   Expensive     10
-## 17 兵庫県   Reasonable    39
-## 18 兵庫県   Expensive     27
-## 19 和歌山県 Reasonable    10
-## 20 和歌山県 Expensive      5</code></pre>
+##  3 兵庫県   Reasonable    39
+##  4 兵庫県   Expensive     27
+##  5 千葉県   Reasonable    64
+##  6 千葉県   Expensive     72
+##  7 和歌山県 Reasonable    10
+##  8 和歌山県 Expensive      5
+##  9 埼玉県   Reasonable    37
+## 10 埼玉県   Expensive     45
+## 11 大阪府   Reasonable   104
+## 12 大阪府   Expensive    115
+## 13 奈良県   Reasonable    11
+## 14 奈良県   Expensive     10
+## 15 東京都   Cheap          1
+## 16 東京都   Reasonable   205
+## 17 東京都   Expensive    236
+## 18 神奈川県 Cheap          1
+## 19 神奈川県 Reasonable    65
+## 20 神奈川県 Expensive     54</code></pre>
 <p><code>Budget3</code>はcharacter型変数となるので、欠損値のタイプも<code>NA_character_</code>にします。もし、numeric型変数を作成するなら<code>NA_real_</code>を使います。<code>if_else()</code>や<code>case_when()</code>など、{dplyr}が提供する関数は欠損値の型にも厳しいので、<code>NA</code>だけだとエラーが帰ってきます。</p>
 <p>これまでの<code>case_when()</code>関数に似たような機能をする関数として<code>recode()</code>関数があります<a href="reference.html#fn75" class="footnote-ref" id="fnref75"><sup>75</sup></a>。これは変数の値を単純に置換したい場合に便利な関数です。たとえば、都府県名をローマ字に変換するケースを考えてみましょう。</p>
 <div class="sourceCode" id="cb1013"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1013-1"><a href="datahandling2.html#cb1013-1"></a><span class="co"># recode()を使う場合</span></span>
@@ -1459,14 +1472,14 @@ div.csl-indent {
 ##   Pref     Budget_Mean ScoreN_Sum Score_Mean     N Pref2   
 ##   &lt;chr&gt;          &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;   
 ## 1 京都府         1399.        216       3.68   414 Kyoto   
-## 2 埼玉県         1147.        278       3.64  1000 Saitama 
-## 3 神奈川県       1239.        587       3.53  1000 Kanagawa
-## 4 千葉県         1124.        259       3.72  1000 Chiba   
-## 5 大阪府         1203.        516       3.77  1000 Osaka   
-## 6 東京都         1283.       1165       3.67  1000 Tokyo   
+## 2 兵庫県         1197.        230       3.54   591 Hyogo   
+## 3 千葉県         1124.        259       3.72  1000 Chiba   
+## 4 和歌山県       1252          83       3.97   140 Wakayama
+## 5 埼玉県         1147.        278       3.64  1000 Saitama 
+## 6 大阪府         1203.        516       3.77  1000 Osaka   
 ## 7 奈良県         1169.         45       3.85   147 Nara    
-## 8 兵庫県         1197.        230       3.54   591 Hyogo   
-## 9 和歌山県       1252          83       3.97   140 Wakayama</code></pre>
+## 8 東京都         1283.       1165       3.67  1000 Tokyo   
+## 9 神奈川県       1239.        587       3.53  1000 Kanagawa</code></pre>
 <p>使い方は非常に直感的です。</p>
 <div class="sourceCode" id="cb1015"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1015-1"><a href="datahandling2.html#cb1015-1"></a><span class="co"># recode()の使い方</span></span>
 <span id="cb1015-2"><a href="datahandling2.html#cb1015-2"></a>データフレーム名 <span class="sc">%&gt;%</span></span>
@@ -1497,14 +1510,14 @@ div.csl-indent {
 ##   Pref     EastJapan Budget_Mean ScoreN_Sum Score_Mean     N
 ##   &lt;chr&gt;        &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;int&gt;
 ## 1 京都府           0       1399.        216       3.68   414
-## 2 埼玉県           1       1147.        278       3.64  1000
-## 3 神奈川県         1       1239.        587       3.53  1000
-## 4 千葉県           1       1124.        259       3.72  1000
-## 5 大阪府           0       1203.        516       3.77  1000
-## 6 東京都           1       1283.       1165       3.67  1000
+## 2 兵庫県           0       1197.        230       3.54   591
+## 3 千葉県           1       1124.        259       3.72  1000
+## 4 和歌山県         0       1252          83       3.97   140
+## 5 埼玉県           1       1147.        278       3.64  1000
+## 6 大阪府           0       1203.        516       3.77  1000
 ## 7 奈良県           0       1169.         45       3.85   147
-## 8 兵庫県           0       1197.        230       3.54   591
-## 9 和歌山県         0       1252          83       3.97   140</code></pre>
+## 8 東京都           1       1283.       1165       3.67  1000
+## 9 神奈川県         1       1239.        587       3.53  1000</code></pre>
 <p>ただし、関東以外は全て0になるため、以下のように省略することも可能です。</p>
 <div class="sourceCode" id="cb1018"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1018-1"><a href="datahandling2.html#cb1018-1"></a><span class="co"># .default引数を指定する場合</span></span>
 <span id="cb1018-2"><a href="datahandling2.html#cb1018-2"></a>df3 <span class="ot">&lt;-</span> df2 <span class="sc">%&gt;%</span> </span>
@@ -1521,14 +1534,14 @@ div.csl-indent {
 ##   Pref     EastJapan Budget_Mean ScoreN_Sum Score_Mean     N
 ##   &lt;chr&gt;        &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;int&gt;
 ## 1 京都府           0       1399.        216       3.68   414
-## 2 埼玉県           1       1147.        278       3.64  1000
-## 3 神奈川県         1       1239.        587       3.53  1000
-## 4 千葉県           1       1124.        259       3.72  1000
-## 5 大阪府           0       1203.        516       3.77  1000
-## 6 東京都           1       1283.       1165       3.67  1000
+## 2 兵庫県           0       1197.        230       3.54   591
+## 3 千葉県           1       1124.        259       3.72  1000
+## 4 和歌山県         0       1252          83       3.97   140
+## 5 埼玉県           1       1147.        278       3.64  1000
+## 6 大阪府           0       1203.        516       3.77  1000
 ## 7 奈良県           0       1169.         45       3.85   147
-## 8 兵庫県           0       1197.        230       3.54   591
-## 9 和歌山県         0       1252          83       3.97   140</code></pre>
+## 8 東京都           1       1283.       1165       3.67  1000
+## 9 神奈川県         1       1239.        587       3.53  1000</code></pre>
 <p>新しく出来た<code>EastJapan</code>のデータ型はなんでしょうか。</p>
 <div class="sourceCode" id="cb1020"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1020-1"><a href="datahandling2.html#cb1020-1"></a><span class="fu">class</span>(df3<span class="sc">$</span>EastJapan)</span></code></pre></div>
 <pre><code>## [1] &quot;numeric&quot;</code></pre>
@@ -1545,7 +1558,7 @@ div.csl-indent {
 <span id="cb1022-10"><a href="datahandling2.html#cb1022-10"></a>         <span class="at">.after =</span> Pref)</span>
 <span id="cb1022-11"><a href="datahandling2.html#cb1022-11"></a></span>
 <span id="cb1022-12"><a href="datahandling2.html#cb1022-12"></a>df3<span class="sc">$</span>EastJapan</span></code></pre></div>
-<pre><code>## [1] 0 1 1 1 0 1 0 0 0
+<pre><code>## [1] 0 0 1 0 1 0 0 1 1
 ## Levels: 0 1</code></pre>
 <p><code>EastJapan</code>がfactor型になりました。実は、<code>recode</code>は再コーディングと同時にfactor化をしてくれる機能があります。ただし、<code>recode()</code>関数でなく、<code>recode_factor()</code>関数を使います。</p>
 <div class="sourceCode" id="cb1024"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1024-1"><a href="datahandling2.html#cb1024-1"></a><span class="co"># recode_factor()を使う方法</span></span>
@@ -1559,7 +1572,7 @@ div.csl-indent {
 <span id="cb1024-9"><a href="datahandling2.html#cb1024-9"></a>         <span class="at">.after =</span> Pref)</span>
 <span id="cb1024-10"><a href="datahandling2.html#cb1024-10"></a></span>
 <span id="cb1024-11"><a href="datahandling2.html#cb1024-11"></a>df3<span class="sc">$</span>EastJapan</span></code></pre></div>
-<pre><code>## [1] 0 1 1 1 0 1 0 0 0
+<pre><code>## [1] 0 0 1 0 1 0 0 1 1
 ## Levels: 1 0</code></pre>
 <p>ただし、levelの順番は<code>recode_factor()</code>内で定義された順番になることに注意してください。factor型のより詳細な扱いについては第<a href="factor.html#factor">14</a>章で解説します。</p>
 <hr />
@@ -1727,7 +1740,7 @@ div.csl-indent {
 <p>このように変数の順番が異なっても、先に指定したデータの変数順で問題なく結合できました。これまでの作業は{dplyr}パッケージの<code>bind_rows()</code>を使わずに、R内蔵関数の<code>rbind()</code>でも同じやり方でできます。<code>bind_rows()</code>の特徴は、変数名が一致しない場合、つまり今回の例だと<code>rbind_df4</code>が含まれる場合です。<code>rbind_df1</code>から<code>rbind_df3</code>までは順番が違っても<code>X1</code>、<code>X2</code>、<code>X3</code>変数で構成されていました。一方、<code>rbind_dr4</code>には<code>X3</code>がなく、新たに<code>X4</code>という変数があります。これを<code>rbind()</code>関数で結合するとエラーが出力されます。</p>
 <div class="sourceCode" id="cb1049"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1049-1"><a href="datahandling2.html#cb1049-1"></a><span class="co"># rbind()を使う場合</span></span>
 <span id="cb1049-2"><a href="datahandling2.html#cb1049-2"></a><span class="fu">rbind</span>(rbind_df1, rbind_df2, rbind_df3, rbind_df4)</span></code></pre></div>
-<pre><code>## Error in match.names(clabs, names(xi)):  名前が以前の名前と一致しません</code></pre>
+<pre><code>## Error in match.names(clabs, names(xi)): names do not match previous names</code></pre>
 <p>一方、<code>bind_rows()</code>はどうでしょうか。</p>
 <div class="sourceCode" id="cb1051"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1051-1"><a href="datahandling2.html#cb1051-1"></a>Binded_df3 <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(rbind_df1, rbind_df2, rbind_df3, rbind_df4)</span>
 <span id="cb1051-2"><a href="datahandling2.html#cb1051-2"></a>Binded_df3</span></code></pre></div>
@@ -1772,14 +1785,14 @@ div.csl-indent {
 ##   Pref     Budget_Mean ScoreN_Sum Score_Mean     N
 ##   &lt;chr&gt;          &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;int&gt;
 ## 1 京都府         1399.        216       3.68   414
-## 2 埼玉県         1147.        278       3.64  1000
-## 3 神奈川県       1239.        587       3.53  1000
-## 4 千葉県         1124.        259       3.72  1000
-## 5 大阪府         1203.        516       3.77  1000
-## 6 東京都         1283.       1165       3.67  1000
+## 2 兵庫県         1197.        230       3.54   591
+## 3 千葉県         1124.        259       3.72  1000
+## 4 和歌山県       1252          83       3.97   140
+## 5 埼玉県         1147.        278       3.64  1000
+## 6 大阪府         1203.        516       3.77  1000
 ## 7 奈良県         1169.         45       3.85   147
-## 8 兵庫県         1197.        230       3.54   591
-## 9 和歌山県       1252          83       3.97   140</code></pre>
+## 8 東京都         1283.       1165       3.67  1000
+## 9 神奈川県       1239.        587       3.53  1000</code></pre>
 <p>ラーメン屋の店舗ですが、たしかにデータには埼玉、東京、大阪などは1000店舗しか入っておりません。実はもっと多いですが、ぐるなびAPIの仕様上、最大1000店舗しか情報取得が出来ないからです。ここに実際の店舗数が入っている新しいデータセット、<a href="Data/Ramen2.csv">Ramen2.csv</a>があります。これを読み込み、<code>df3</code>という名で格納しましょう。</p>
 <div class="sourceCode" id="cb1055"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1055-1"><a href="datahandling2.html#cb1055-1"></a>df3 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;Data/Ramen2.csv&quot;</span>)</span>
 <span id="cb1055-2"><a href="datahandling2.html#cb1055-2"></a></span>
@@ -2002,14 +2015,14 @@ HRP
 ##   Pref     Budget_Mean ScoreN_Sum Score_Mean     N RamenN
 ##   &lt;chr&gt;          &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;
 ## 1 京都府         1399.        216       3.68   414    415
-## 2 埼玉県         1147.        278       3.64  1000   1106
-## 3 神奈川県       1239.        587       3.53  1000   1254
-## 4 千葉県         1124.        259       3.72  1000   1098
-## 5 大阪府         1203.        516       3.77  1000   1325
-## 6 東京都         1283.       1165       3.67  1000   3220
+## 2 兵庫県         1197.        230       3.54   591    591
+## 3 千葉県         1124.        259       3.72  1000   1098
+## 4 和歌山県       1252          83       3.97   140    140
+## 5 埼玉県         1147.        278       3.64  1000   1106
+## 6 大阪府         1203.        516       3.77  1000   1325
 ## 7 奈良県         1169.         45       3.85   147    147
-## 8 兵庫県         1197.        230       3.54   591    591
-## 9 和歌山県       1252          83       3.97   140    140</code></pre>
+## 8 東京都         1283.       1165       3.67  1000   3220
+## 9 神奈川県       1239.        587       3.53  1000   1254</code></pre>
 <p>共通するキーは9つのみであり、結果として返されたデータの大きさも9 <span class="math inline">\(\times\)</span> 6です。<code>df2</code>に足された<code>df4</code>は2列のデータですが、キー変数である<code>Pref</code>は共通するため、1列のみ足されました。キー変数を両方残す場合は<code>keep = TRUE</code>引数を追加してください。</p>
 <p>一方、<code>full_join()</code>は、すべてのキーに対して結合を行います (図@ref(fig: handling2-merge-col-10))。たとえば、<code>df2</code>には<code>"北海道"</code>というキーがありません。それでも新しく出来上がるデータには北海道の列が追加されます。ただし、道内店舗の平均予算、口コミ数などの情報はないため、欠損値が代入されます。</p>
 
