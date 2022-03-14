@@ -5,17 +5,19 @@ always_allow_html: true
 
 # 可視化[理論] {#visualization1}
 
-```{r visual1-common, include = FALSE}
+```{r visual1-common}
+#| include: FALSE
 source("_common.R")
+pacman::p_load(lattice, ggpubr)
 ```
 
 ## 可視化のためのパッケージ {#visual-packages}
 
 Rによる可視化は様々な方法がありますが、可視化のために使うパッケージとして代表的なものは (1) パッケージを使わない方法、(2) {lattice}パッケージ、(3) {ggplot2}パッケージがあります。ここでは、以下のデータ (表\@ref(tab:visual1-sampledata))を可視化しながら、それぞれの特徴について簡単に解説します。
 
-```{r visual1-setup, echo = FALSE, message = FALSE}
-pacman::p_load(lattice)
-
+```{r visual1-setup}
+#| echo: FALSE
+#| message: FALSE
 Country_df <- read_csv("Data/Countries.csv")
 
 Country_df <- Country_df %>%
@@ -29,7 +31,8 @@ Country_df <- Country_df %>%
   filter(complete.cases(Country_df))
 ```
 
-```{r visual1-sampledata, echo = FALSE}
+```{r visual1-sampledata}
+#| echo: FALSE
 head(Country_df, 10) %>%
     kable(caption = "サンプルデータの最初の10行") %>%
     kable_styling(latex_options = "hold_position",
@@ -44,7 +47,12 @@ Rは統計学、データ分析に特化したプログラミング言語であ�
 
 以下の図\@ref(fig:visual1-baser)はBase Rを使った散布図の例です。
 
-```{r visual1-baser, fig.width = 6, fig.height = 4, cache = TRUE, fig.cap = "Base Rによるグラフ"}
+```{r visual1-baser}
+#| warning: FALSE
+#| fig.width: 6
+#| fig.height: 4
+#| fig.cap: "Base Rによるグラフ"
+#| cache: TRUE
 # Base Rを用いた作図の例
 plot(x = Country_df$PPP, y = Country_df$HDI, pch = 19, 
      col = ifelse(Country_df$OECD == "加盟国", "red", "blue"),
@@ -60,7 +68,12 @@ legend("bottomright", pch = 19,
 
 図\@ref(fig:visual1-baser)を{lattice}を使って作る場合は以下のようなコードになります。
 
-```{r visual1-lattice, warning = FALSE, fig.width = 6, fig.height = 4, cache = TRUE, fig.cap = "{lattice}によるグラフ"}
+```{r visual1-lattice}
+#| warning: FALSE
+#| fig.width: 6
+#| fig.height: 4
+#| fig.cap: "{lattice}によるグラフ"
+#| cache: TRUE
 # latticeを用いた作図の例
 xyplot(HDI ~ PPP, data = Country_df,
        group = OECD, pch = 19, grid = TRUE,
@@ -84,7 +97,12 @@ xyplot(HDI ~ PPP, data = Country_df,
 
 グラフィックの文法は後ほど詳細に解説しますが、{ggplot2}による作図の特徴は「レイヤーを重ねる」ことです。グラフの様々な要素をそれぞれ1つの層 (layer)と捉え、これを重ねられていくことでグラフが出来上がる仕組みです。これはBase Rの書き方に似ています。たとえば、{ggplot2}を使って図\@ref(fig:visual1-baser)を作る場合、以下のようなコードになります。
 
-```{r visual1-ggplot, warning = FALSE, fig.width = 6, fig.height = 4, cache = TRUE, fig.cap = "{ggplot2}によるグラフ"}
+```{r visual1-ggplot}
+#| warning: FALSE
+#| fig.width: 6
+#| fig.height: 4
+#| fig.cap: "{ggplot2}によるグラフ"
+#| cache: TRUE
 # ggplot2を用いた作図の例
 ggplot(data = Country_df) +
   geom_point(aes(x = PPP, y = HDI, color = OECD)) +
@@ -257,7 +275,11 @@ ggplot(data = df) +
 
 これで図が出来上がりました。このように{ggplot2}では図の要素をレイヤーと捉えます。このレイヤーを生成する関数が`ggplot()`、`geom_line()`、`lab()`などであり、これらを`+`演算子を用いて重ねていきます。このイメージを図にすると図\@ref(fig:visual1-ggplot-layer)のように表現できます。
 
-```{r visual1-ggplot-layer, out.width = "85%", fig.cap = "{ggplot2}の図が出来上がるまで (全体像)", echo = FALSE}
+```{r visual1-ggplot-layer}
+#| echo: FALSE
+#| out.width: "85%"
+#| fig.cap: "{ggplot2}の図が出来上がるまで (全体像)"
+#| cache: TRUE
 knitr::include_graphics("Figures/Visualization1/Layer_Example.png")
 ```
 
@@ -277,13 +299,18 @@ knitr::include_graphics("Figures/Visualization1/Layer_Example.png")
 
 {ggplot2}の図は以上の3つ要素を重ねることで出来ます。
 
-```{r visual1-ggplot-structure-1, out.width = "100%", fig.cap = "{ggplot2}の構造の例", echo = FALSE}
+```{r visual1-ggplot-structure-1}
+#| echo: FALSE
+#| out.width: "100%"
+#| fig.cap: "{ggplot2}の構造の例"
+#| cache: TRUE
 knitr::include_graphics("Figures/Visualization1/Structure_Example2.png")
 ```
 
 ただし、この中で座標系は適切だと判断される座標系に設定してくれるため、ユーザーが必ず指定すべきものはデータと幾何オブジェクトのみです。また、幾何オブジェクトはマッピングを含んでおり、これも必ず指定する必要があります。したがって、{ggplot2}で作図するための最小限のコードは以下のようになります。
 
-```{r visual1-ggplot-structure-12, eval = FALSE}
+```{r visual1-ggplot-structure-12}
+#| eval: FALSE
 # ggplot2におけるプロットの基本形
 # データはggplotの第一引数と使う場合が多いため、「data =」は省略可能
 # マッピングは主に幾何オブジェクトの第一引数として使うため、「mapping =」は省略可能
@@ -312,7 +339,8 @@ ggplot(data = データ名) +
 
 しかし、データを指定しただけで図が出来上がるわけではありません。指定したデータを使ってどのような図を作るかも指定する必要があります。この図のタイプが幾何オブジェクト (geometry object)であり、`geom_*()`関数で表記します。たとえば、散布図を作る場合、
 
-```{r visual1-ggplot-geom, eval = FALSE}
+```{r visual1-ggplot-geom}
+#| eval: FALSE
 データ名 %>%
   ggplot() +
   geom_point()
@@ -336,7 +364,9 @@ ggplot(data = データ名) +
 
 それでは、最初にお見せした図\@ref(fig:visual1-ggplot-image-8)のマッピングはどうなるでしょうか。図\@ref(fig:visual1-ggplot-image-8)の幾何オブジェクトは折れ線グラフ (`geom_line()`)と散布図 (`geom_point()`)の2つです。それぞれの幾何オブジェクトのマッピング情報をまとめたのが表\@ref(tab:visual1-mapping-1)です。
 
-```{r visual1-mapping-1, echo = FALSE}
+```{r visual1-mapping-1}
+#| echo: FALSE
+#| cache: TRUE
 data.frame(幾何オブジェクト = c(rep("`geom_line`", 3),
                         rep("`geom_point`", 3)),
                    マッピング要素 = c("X軸", "Y軸", "線の色",
@@ -353,7 +383,9 @@ data.frame(幾何オブジェクト = c(rep("`geom_line`", 3),
 
 先ほどマッピング引数は幾何オブジェクト関数内で指定すると言いましたが、実は`ggplot()`内に入れ、`geom_*()`内では省略することも可能です。幾何オブジェクトが1つのみならどっちでも問題ありません。しかし、幾何オブジェクトが2つ以上の場合は注意が必要です。全ての幾何オブジェクトがマッピングを共有する場合は`ggplot()`の方が書く手間が省きます。たとえば、表\@ref(tab:visual1-mapping-1)を見ると、`geom_line()`と`geom_point()`は`x`、`y`、`color`引数の値が同じですから、`ggplot()`内に`aes()`を入れることも可能です。しかし、幾何オブジェクトがマッピングを共有しない場合は幾何オブジェクト関数内に別途指定する必要があります。あるいは、共有するところだけ、`ggplot()`に書いて、共有しない部分だけ幾何オブジェクトで指定することも可能です。したがって、上の図は以下のコードでも作成することができます。
 
-```{r visual1-mapping-2, eval = FALSE}
+```{r visual1-mapping-2}
+#| eval: FALSE
+#| cache: TRUE
 # geom_line()とgeom_point()はマッピング情報を共有しているため、
 # ggplot()内に指定
 df %>%
@@ -371,7 +403,8 @@ df %>%
 
 たとえば、横軸が「ゲームのプレイ時間」、縦軸が「身長」の散布図を作成しるとします (図\@ref(fig:visual1-mapping-4))。ここで`color`引数を追加しますが、まずは`aes()`の外側に入れます。
 
-```{r visual1-mapping-3, eval = FALSE}
+```{r visual1-mapping-3}
+#| eval: FALSE
 # 例1: 全ての点の色が赤になる
 データ %>%
   ggplot() +
@@ -379,7 +412,14 @@ df %>%
              color = "red")
 ```
 
-```{r visual1-mapping-4, fig.cap = "`color`を`aes()`外側に置いた場合", fig.width = 8, fig.height = 4, echo = FALSE, cache = TRUE}
+```{r visual1-mapping-4}
+#| echo: FALSE
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| fig.cap: "`color`を`aes()`外側に置いた場合"
+#| cache: TRUE
 df2 <- data.frame(X = rep(c("男性","女性"), each = 50),
                   Y = c(runif(50, 160, 180), runif(50, 145, 165)),
                   Z = c(runif(50, 2, 4), runif(50, 1, 3)))
@@ -398,14 +438,22 @@ ggplot(data = df2) +
 
 以上の2点です。`aes()`の内側に`color`を指定する場合 (図\@ref(fig:visual1-mapping-6)) は、以下のように変数名を指定します。たとえば、性別ごとに異なる色を付けるとしたら、
 
-```{r visual1-mapping-5, eval = FALSE}
+```{r visual1-mapping-5}
+#| eval: FALSE
 # 例2: 性別ごとに点の色が変わる
 データ %>%
   ggplot() +
   geom_point(aes(x = ゲームのプレイ時間, y = 身長, color = 性別))
 ```
 
-```{r visual1-mapping-6, fig.cap = "`color`を`aes()`内側に置いた場合", fig.width = 8, fig.height = 4, echo = FALSE}
+```{r visual1-mapping-6}
+#| echo: FALSE
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| fig.cap: "`color`を`aes()`内側に置いた場合"
+#| cache: TRUE
 ggplot(data = df2) +
   geom_point(aes(x = Z, y = Y, color = X), 
              size = 3) +
@@ -422,7 +470,14 @@ ggplot(data = df2) +
 
 座標系のズームイン (zoom-in) やズームアウト (zoom-out) を行う`coord_cartesian()`、横軸と縦軸を交換する`coord_flip()`、横軸と縦軸の比率を固定する`coord_fixed()`がよく使われます。座標系の説明は次章以降で詳しく解説しますが、ここでは座標系のズームインを見てみましょう。以下の図\@ref(fig:visual1-coord-1)は各国のCOVID19の感染者数を時系列で示したものです。これを見るとアメリカ、ブラジル、インドは大変だなーくらいしかわかりません。感染者数が比較的に少ない国のデータは線としては存在しますが、なかなか区別ができません。
 
-```{r visual1-coord-1, echo = FALSE, fig.width = 8, fig.height = 5, message = FALSE, fig.cap = "ズームイン前"}
+```{r visual1-coord-1}
+#| echo: FALSE
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 5
+#| fig.cap: "ズームイン前"
+#| cache: TRUE
 COVID19_df <- read_csv("Data/COVID19_Worldwide.csv", 
                        col_types = c("dccdddddd"))
 Country_df <- read_csv("Data/Countries.csv")
@@ -449,7 +504,14 @@ Coord_Fig1
 
 [^coord1]: 実は図\@ref(fig:visual1-coord-2)1)と図\@ref(fig:visual1-coord-2)2)は似たような色が多く使われているため、褒められそうなグラフではありません。
 
-```{r visual1-coord-2, echo = FALSE, fig.width = 8, fig.height = 5, message = FALSE, fig.cap = "ズームイン後"}
+```{r visual1-coord-2}
+#| echo: FALSE
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 5
+#| fig.cap: "ズームイン後"
+#| cache: TRUE
 Coord_Fig1 +
     coord_cartesian(ylim = c(0, 10))
 ```
@@ -457,52 +519,67 @@ Coord_Fig1 +
 また、同じ棒グラフや散布図、折れ線グラフでも座標系を変えることによって図の見方が劇的に変わることもあります。我々にとって最も馴染みのある座標系はデカルト座標系 (直交座標系)です。このデカルト座標系に切片0、傾き1の直線を引きます。そして同じ図に対して座標系のみを極座標系 (polar coordinates system)に変更します。この2つを比較したのが図\@ref(fig:visual1-coord-4)です。この2つの図は同じデータ、同じ変数、同じ幾何オブジェクトで構成されています。異なるのは座標系ですが、見方が劇的に変わります。
 
 ```{r visual1-coord-3, echo = FALSE}
-Coord_Fig2 <- ggplot(data.frame(x = 1:10, y = 1:10)) +
-    geom_abline(aes(intercept = 0, slope = 1), size = 1) +
-    geom_point(aes(x = x, y = y), shape = 21, fill = "white", size = 5) +
-    scale_x_continuous(breaks = 1:10, labels = 1:10) +
-    scale_y_continuous(breaks = 1:10, labels = 1:10) +
-    theme(text = element_text(size = 12)) +
-    ggtitle("直交座標系 (デカルト座標系)") +
-    coord_fixed(ratio = 1) +
-    theme_bw()
+#| echo: FALSE
+Coord_Fig2 <- tibble(x = 1:10, y = 1:10) %>%
+  mutate(z = factor(1:10)) %>%
+  ggplot() +
+  geom_abline(aes(intercept = 0, slope = 1), size = 1) +
+  geom_point(aes(x = x, y = y, fill = z), shape = 21, 
+             color = "black", size = 5) +
+  guides(fill = "none") +
+  scale_x_continuous(breaks = 1:10, labels = 1:10) +
+  scale_y_continuous(breaks = 1:10, labels = 1:10) +
+  theme_bw() +
+  theme(text = element_text(size = 12))
 
-Coord_Fig3 <- ggplot(data.frame(x = 1:10, y = 1:10)) +
-    geom_abline(aes(intercept = 0, slope = 1), size = 1) +
-    geom_point(aes(x = x, y = y), shape = 21, fill = "white", size = 5) +
-    scale_x_continuous(breaks = 1:10, labels = 1:10) +
-    scale_y_continuous(breaks = 1:10, labels = 1:10) +
-    coord_polar() +
-    theme(text = element_text(size = 12)) +
-    ggtitle("極座標系") +
-    theme_bw()
+Coord_Fig2_1 <- Coord_Fig2 +
+  ggtitle("直交座標系 (デカルト座標系)") +
+  coord_fixed(ratio = 1)
+
+Coord_Fig2_2 <- Coord_Fig2 +
+  ggtitle("極座標系") +
+  coord_polar()
 ```
 
-```{r visual1-coord-4, echo = FALSE, fig.width = 8, fig.height = 5, message = FALSE, fig.cap = "直交座標系と極座標系の比較 (1)", warning = FALSE}
-pacman::p_load(ggpubr)
-ggarrange(Coord_Fig2, Coord_Fig3)
+```{r visual1-coord-4}
+#| echo: FALSE
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 5
+#| fig.cap: "直交座標系と極座標系の比較 (1)"
+ggarrange(Coord_Fig2_1, Coord_Fig2_2)
 ```
 
 こんな座標系を実際に使う機会は多くないかも知れませんが、極座標系は割と身近なところで見ることができます。それは積み上げ棒グラフと円グラフの関係です。図\@ref(fig:visual1-coord-6)はデカルト座標系上の積み上げ棒グラフを極座標系に変換したものです。
 
 ```{r visual1-coord-5}
-Coord_Fig4 <- data.frame(x = c(rep("男性", 4), 
+#| echo: FALSE
+Coord_Fig3 <- data.frame(x = c(rep("男性", 4), 
                                rep("女性", 5), 
                                rep("ニュータイプ", 1))) %>%
     ggplot() +
     geom_bar(aes(x = factor(""), fill = factor(x)), width = 1) +
     labs(fill = "性別", x = "", y = "人数") +
-    ggtitle("直交座標系 (デカルト座標系)") +
     theme_bw() +
     theme(legend.position = "bottom")
 
-Coord_Fig5 <- Coord_Fig4 + 
+Coord_Fig3_1 <- Coord_Fig3 + 
+  ggtitle("直交座標系 (デカルト座標系)")
+
+Coord_Fig3_2 <- Coord_Fig3 +
     ggtitle("極座標系") +
     coord_polar(theta = "y")
 ```
 
-```{r visual1-coord-6, echo = FALSE, fig.width = 8, fig.height = 4.8, message = FALSE, fig.cap = "直交座標系と極座標系の比較 (2)", warning = FALSE}
-ggarrange(Coord_Fig4, Coord_Fig5)
+```{r visual1-coord-6}
+#| echo: FALSE
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 4.8
+#| fig.cap: "直交座標系と極座標系の比較 (2)"
+ggarrange(Coord_Fig3_1, Coord_Fig3_2)
 ```
 
 他にも軸を対数スケールなどに変換する `coord_trans()` 、地図の出力に使われる `coord_map()` や `coord_sf()` などがあり、適宜紹介していきます。
@@ -515,7 +592,8 @@ ggarrange(Coord_Fig4, Coord_Fig5)
 
 これらの`scale_*_*()`関数群は点、線、面が持つ位置情報や性別を変更することではなく、その見せ方を変更するだけです。図\@ref(fig:visual1-mapping-6)の縦軸の目盛りは「150、160、170、180」となっていますが、`scale_y_continuous()`を使うとこの目盛りが変わります。点の位置が変わることはありません。たとえば、以下のコードは`scale_y_continuous()`を使って縦軸の目盛りを5cm刻みに変更するためのコードであり、図\@ref(fig:visual1-scale-2)はその結果です。
 
-```{r visual1-scale-1, eval = FALSE}
+```{r visual1-scale-1}
+#| eval: FALSE
 # scale_y_continuous()の例
 データ %>%
   ggplot() +
@@ -526,7 +604,14 @@ ggarrange(Coord_Fig4, Coord_Fig5)
 
 (ref:scale-caption1) `scale_y_continuous()`を使って縦軸を5cm刻みに変更
 
-```{r visual1-scale-2, fig.cap = "(ref:scale-caption1)", fig.width = 8, fig.height = 4, echo = FALSE}
+```{r visual1-scale-2}
+#| echo: FALSE
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| fig.cap: "(ref:scale-caption1)"
+#| cache: TRUE
 ggplot(data = df2) +
   geom_point(aes(x = Z, y = Y, color = X), 
              size = 3) +
@@ -539,7 +624,8 @@ ggplot(data = df2) +
 
 また、性別ごとの色を変更する際は`scale_color_manual()`を使います（図\@ref(fig:visual1-scale-4)）。
 
-```{r visual1-scale-3, eval = FALSE}
+```{r visual1-scale-3}
+#| eval: FALSE
 # scale_color_manual()の例
 データ %>%
   ggplot() +
@@ -551,7 +637,14 @@ ggplot(data = df2) +
 
 (ref:scale-caption2) さらに`scale_color_manual()`を使って色を指定
 
-```{r visual1-scale-4, fig.cap = "(ref:scale-caption2)", fig.width = 8, fig.height = 4, echo = FALSE}
+```{r visual1-scale-4}
+#| echo: FALSE
+#| message: FALSE
+#| warning: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| fig.cap: "(ref:scale-caption2)"
+#| cache: TRUE
 ggplot(data = df2) +
   geom_point(aes(x = Z, y = Y, color = X), 
              size = 3) +
@@ -571,7 +664,13 @@ ggplot(data = df2) +
 
 たとえば、フリーダムハウスでは毎年、各国を「自由」、「部分的に自由」、「不自由」と格付けをし、結果を公表しています。世界に自由な国、部分的に自由な国、不自由な国が何カ国あるかを大陸ごとに示したいとします。カテゴリごとの個数を示すには棒グラフが効果的であり、図\@ref(fig:visual1-facet-1)のように示すことができます。
 
-```{r visual1-facet-1, echo = FALSE, fig.width = 8, fig.height = 4, message = FALSE, fig.cap = "ファセットを分けないグラフの例"}
+```{r visual1-facet-1}
+#| echo: FALSE
+#| message: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| fig.cap: "ファセットを分けないグラフの例"
+#| cache: TRUE
 Country_df <- read_csv("Data/Countries.csv")
 Country_df <- Country_df %>%
   filter(!is.na(FH_Status)) %>%
@@ -593,7 +692,13 @@ ggplot(Country_df) +
 
 しかし、{ggplot2}のファセットを指定するとそのような手間が省けます。これはデータを大陸ごとの部分集合に分割し、1つのプロット上に小さい複数のプロットを出力します。
 
-```{r visual1-facet-2, echo = FALSE, fig.width = 8, fig.height = 4, message = FALSE, fig.cap = "大陸ごとにファセットを分けたグラフの例"}
+```{r visual1-facet-2}
+#| echo: FALSE
+#| message: FALSE
+#| fig.width: 8
+#| fig.height: 4
+#| fig.cap: "大陸ごとにファセットを分けたグラフの例"
+#| cache: TRUE
 Country_df %>%
   filter(!is.na(FH_Status)) %>%
   ggplot() +
@@ -673,7 +778,10 @@ COVID19_df %>%
 
 しかし、このデータ・インク比に基づく可視化は常に正しいとは言えません。そこでもう一つの例を紹介します。図\@ref(fig:visual1-dataink-3)の左は @Kuznicki_McCutcheon:1979 の論文に掲載された図であり、右はTufteによる改善案です。
 
-```{r visual1-dataink-3, out.width = "85%", fig.cap = "データ・インク比改善の例", echo = FALSE}
+```{r visual1-dataink-3}
+#| echo: FALSE
+#| out.width: "85%"
+#| fig.cap: "データ・インク比改善の例"
 knitr::include_graphics("Figures/Visualization1/Dataink_ratio2.png")
 ```
 
@@ -686,13 +794,17 @@ knitr::include_graphics("Figures/Visualization1/Dataink_ratio2.png")
 
 (ref:dataink-caption1) @Inbar_et_al:2007 から抜粋
 
-```{r visual1-dataink-4, out.width = "65%", fig.cap = "(ref:dataink-caption1)", echo = FALSE}
+```{r visual1-dataink-4}
+#| echo: FALSE
+#| out.width: "65%"
+#| fig.cap: "(ref:dataink-caption1)"
 knitr::include_graphics("Figures/Visualization1/Dataink_ratio3.png")
 ```
 
 皆さんもある程度は結果が予想できたかと思いますが、いずれのグループにおいても、Tufteが推奨する図\@ref(fig:visual1-dataink-4)のDが「美しさ」、「明瞭さ」、「簡潔さ」のすべての点において最下位でした。また、どの図が最も好きかに対しても表\@ref(tab:visual1-dataink-5)のような結果が得られました。
 
-```{r visual1-dataink-5, echo = FALSE}
+```{r visual1-dataink-5}
+#| echo: FALSE
 tibble("Group"   = c(paste("Group", 1:3)),
        "Graph A" = c("24", "29", "14"),
        "Graph B" = c("", "", "3"),
