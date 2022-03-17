@@ -18,6 +18,7 @@ source("_common.R")
 * [エラーバー付き散布図](#visual4-pointrange)
 * [ロリーポップチャート](#visual4-lollipop)
 * [平滑化ライン](#visual4-smooth)
+* [文字列の出力](#visual4-text)
 * [ヒートマップ](#visual4-heatmap)
 * [等高線図](#visual4-contour)
 * [地図](#visual4-map)
@@ -666,6 +667,7 @@ Country_df %>%
 2次元平面上に散布図をプロットし、二変数間の関係を一本の線で要約するのは平滑化ラインです。{ggplot2}では`geom_smooth()`幾何オブジェクトを重ねることで簡単に平滑化ラインをプロットすることができます。まずは、横軸をフリーダムハウス・スコア（`FH_Total`）、縦軸を一人当たり購買力平価GDP（`PPP_per_capita`）にした散布図を出力し、その上に平滑化ラインを追加してみましょう。`geom_smooth()`にもマッピングが必要で、`aes()`の内部に`x`と`y`をマッピングします。今回は`geom_point()`と`geom_smooth()`が同じマッピング情報を共有するため、`ggplot()`内部でマッピングします。
 
 ```{r visual4-smooth1}
+#| warning: FALSE
 #| fig.height: 4
 #| cache: TRUE
 Country_df %>%
@@ -683,6 +685,7 @@ Country_df %>%
 　LOESS平滑化の場合、`span`引数を使って滑らかさを調整することができます。`span`の既定値は0.75ですが、これが小さいほど散布図によりフィットしたラインが引かれ、よりギザギザな線になります。たとえば、`span`を0.25にすると以下のようなグラフが得られます。
 
 ```{r visual4-smooth2}
+#| warning: FALSE
 #| fig.height: 4
 #| cache: TRUE
 Country_df %>%
@@ -698,6 +701,7 @@ Country_df %>%
 　他にも定番の回帰直線を引くこともできます。`method`の実引数を`"lm"`に変えるだけです。
 
 ```{r visual4-smooth3}
+#| warning: FALSE
 #| fig.height: 4
 #| cache: TRUE
 Country_df %>%
@@ -713,6 +717,7 @@ Country_df %>%
 　信頼区間は既定値だと95%信頼区間が表示されますが、`level`引数で調整することができます。たとえば、99.9%信頼区間を表示したい場合、`level = 0.999`を指定します。
 
 ```{r visual4-smooth4}
+#| warning: FALSE
 #| fig.height: 4
 #| cache: TRUE
 Country_df %>%
@@ -728,6 +733,7 @@ Country_df %>%
 　信頼区間を消したい場合は`se = FALSE`を指定します（既定値は`TRUE`）。
 
 ```{r visual4-smooth5}
+#| warning: FALSE
 #| fig.height: 4
 #| cache: TRUE
 Country_df %>%
@@ -743,6 +749,7 @@ Country_df %>%
 　最後にデータのサブセットごとに回帰直線を引く方法について説明します。散布図で色分けを行う場合、`aes()`内で`color`引数を指定しますが、これだけで十分です。今回はこれまでの散布図をOECD加盟有無ごとに色分けし、それぞれ別の回帰直線を重ねてみましょう。回帰直線も色分けしたいので`color`引数で次元を増やす必要があり、これは`geom_point()`と共通であるため、`ggplot()`内でマッピングします。
 
 ```{r visual4-smooth6}
+#| warning: FALSE
 #| fig.height: 4
 #| cache: TRUE
 Country_df %>%
@@ -762,6 +769,7 @@ Country_df %>%
 　あまりいい方法ではないと思いますが、散布図は色（`color`）で分け、回帰直線は線の種類（`linetype`）で分けるならどうすれば良いでしょうか。この場合は`color`は`geom_point()`内部で、`linetype`は`geom_smooth()`でマッピングします。
 
 ```{r visual4-smooth7}
+#| warning: FALSE
 #| fig.height: 4
 #| cache: TRUE
 Country_df %>%
@@ -777,6 +785,91 @@ Country_df %>%
 ```
 
 　{ggplot2}が提供する平滑化ラインにはLOESSと回帰直線以外にも`"glm"`や`"gam"`などがります。詳細はRコンソール上で`?geom_smooth`を入力し、ヘルプを参照してください。
+
+---
+
+## 文字列の出力 {#visual4-text}
+
+`geom_text()`: マッピングされた`x`と`y`の箇所に文字列を付ける
+
+```{r visual4-text-1}
+#| warning: FALSE
+#| fig.height: 5
+#| cache: TRUE
+bar_plot <- Country_df %>%
+  group_by(Continent) %>%
+  summarise(HDI = mean(HDI_2018, na.rm = TRUE)) %>%
+  ggplot() +
+  geom_bar(aes(x = Continent, y = HDI), stat = "identity") +
+  labs(x = "Continent", y = "Mean of\nHuman Development Index (2018)") +
+  theme_minimal(base_size = 12)
+
+bar_plot +
+  geom_text(aes(x = Continent, y = HDI, label = HDI),
+            size = 4)
+```
+
+文字の位置をやや高めにし、平均値の小数点を3桁に丸める。
+
+ただし、`round()`を使う場合、`round(1.1298, 3)`は`r round(1.1298, 3)`と出力される。もし、1.130のように出力したい場合は`round()`の代わりに`sprintf()`を使用する。今回の例の場合、`sprintf("%.3f", 1.1298)`のように書く。
+
+```{r visual4-text-2}
+#| warning: FALSE
+#| fig.height: 5
+#| cache: TRUE
+bar_plot +
+  geom_text(aes(x = Continent, y = HDI + 0.03, label = round(HDI, 3)),
+            size = 4)
+```
+
+`geom_label()`: マッピングされた`x`と`y`の箇所にラベルを付ける
+
+```{r visual4-text-3}
+#| warning: FALSE
+#| fig.height: 5
+#| cache: TRUE
+bar_plot +
+  geom_label(aes(x = Continent, y = HDI, label = round(HDI, 3)),
+             size = 4)
+```
+
+`annotate()`: 任意の箇所に文字列 or ラベルを追加
+
+`"text"`の代わりに`"label"`をすると、ラベル形式になる。
+
+```{r visual4-text-4}
+#| warning: FALSE
+#| fig.height: 4
+#| cache: TRUE
+lm_plot <- Country_df %>%
+    ggplot(aes(x = FH_Total, y = PPP_per_capita)) +
+    geom_point() +
+    geom_smooth(method = "lm", level = 0.999)  +
+    labs(x = "Freedom House Score", y = "PPP per capita (USD)") +
+    scale_y_continuous(breaks = seq(0, 120000, by = 10000),
+                       labels = seq(0, 120000, by = 10000)) +
+    theme_minimal(base_size = 12)
+
+lm_plot +
+  annotate("text", x = 0, y = 110000, label = "注: 青い線は回帰直線を表す。", 
+           hjust = 0, size = 5)
+```
+
+数式: {latex2exp}
+
+LaTeXの数式表記をほぼそのまま使えるが、`\`は`\\`に置換すること。
+
+```{r visual4-text-5}
+#| warning: FALSE
+#| fig.height: 4
+#| cache: TRUE
+pacman::p_load(latex2exp)
+
+lm_plot +
+  annotate("text", x = 0, y = 110000, 
+           label = TeX("$PPP\\_per\\_capita = \\alpha + \\beta \\cdot Freedom\\_House\\_Score + \\epsilon \\ where \\ \\epsilon \\sim Normal(0, \\sigma).$"), 
+           hjust = 0, size = 5)
+```
 
 ---
 
