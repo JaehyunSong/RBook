@@ -98,7 +98,8 @@ country_desc %>%
 
 表の幅 (HTML限定)
 
-```{r table-kbl-7, eval = if(knitr::is_latex_output()) FALSE else TRUE}
+```{r table-kbl-7}
+#| eval = knitr::is_html_output()
 country_desc %>%
     kbl(digits = 3) %>%
     kable_styling(full_width = FALSE)
@@ -200,7 +201,8 @@ country_desc3 %>%
 
 {formattable}パッケージ使用
 
-```{r table-kbl-17, eval = if(knitr::is_latex_output()) FALSE else TRUE}
+```{r table-kbl-17}
+#| eval = knitr::is_html_output()
 country_desc4 <- country_df %>%
     mutate(Population     = Population / 1000000,
            Area           = Area / 10000,
@@ -217,12 +219,14 @@ country_desc4 <- country_df %>%
     filter(Variable != "HDI_2018")
 ```
 
-```{r table-kbl-18, eval = if(knitr::is_latex_output()) FALSE else TRUE}
+```{r table-kbl-18}
+#| eval = knitr::is_html_output()
 country_desc4 %>%
     kbl(digits = 3)
 ```
 
-```{r table-kbl-19, eval = if(knitr::is_latex_output()) FALSE else TRUE}
+```{r table-kbl-19}
+#| eval = knitr::is_html_output()
 pacman::p_load(formattable)
 
 country_desc4$Cor2 <- color_text("blue", "red")(sprintf("%.3f", country_desc4$Cor))
@@ -236,44 +240,51 @@ country_desc4 %>%
 
 ### テーマ
 
-```{r table-kbl-20, eval = if(knitr::is_latex_output()) FALSE else TRUE}
+```{r table-kbl-20}
+#| eval = knitr::is_html_output()
 country_desc %>%
     kbl(digits = 3) %>%
     kable_paper()
 ```
 
-```{r table-kbl-21, eval = if(knitr::is_latex_output()) FALSE else TRUE}
+```{r table-kbl-21}
+#| eval = knitr::is_html_output()
 country_desc %>%
     kbl(digits = 3) %>%
     kable_classic()
 ```
 
-```{r table-kbl-22, eval = if(knitr::is_latex_output()) FALSE else TRUE}
+```{r table-kbl-22}
+#| eval = knitr::is_html_output()
 country_desc %>%
     kbl(digits = 3) %>%
     kable_classic_2()
 ```
 
-```{r table-kbl-23, eval = if(knitr::is_latex_output()) FALSE else TRUE}
+```{r table-kbl-23}
+#| eval = knitr::is_html_output()
 country_desc %>%
     kbl(digits = 3) %>%
     kable_minimal()
 ```
 
-```{r table-kbl-24, eval = if(knitr::is_latex_output()) FALSE else TRUE}
+```{r table-kbl-24}
+#| eval = knitr::is_html_output()
 country_desc %>%
     kbl(digits = 3) %>%
     kable_material()
 ```
 
-```{r table-kbl-25, eval = if(knitr::is_latex_output()) FALSE else TRUE}
+```{r table-kbl-25}
+#| eval = knitr::is_html_output()
 country_desc %>%
     kbl(digits = 3) %>%
     kable_paper(bootstrap_options = "striped",
                 full_width        = FALSE)
 ```
 
-```{r table-kbl-26, eval = if(knitr::is_latex_output()) FALSE else TRUE}
+```{r table-kbl-26}
+#| eval = knitr::is_html_output()
 country_desc %>%
     kbl(digits = 3) %>%
     kable_paper(bootstrap_options = c("striped", "condensed"),
@@ -283,6 +294,36 @@ country_desc %>%
 他にも`"hover"`や`"responsive"`、`"bordered"`あり
 
 テーマを変更せずにスタイルを変更したい場合は`kable_styling()`を使用
+
+### LaTeX形式への出力
+
+RMarkdownの出力形式がHTMLでなく、PDFの場合
+
+* `kable_style()`やテーマ関数 (`kable_*()`)内に`full_width = FALSE`の指定は不要
+* 縦線を無くしたい場合は`kbl()`内に`booktabs = TRUE`を指定
+
+```{r table-kbl-27}
+#| eval = knitr::is_latex_output()
+country_desc %>%
+    kbl(digits = 3, booktabs = TRUE)
+```
+
+表を中央に位置づけたい場合は`kable_style()`内に`position = "center"`を指定
+
+```{r table-kbl-28}
+#| eval = knitr::is_latex_output()
+country_desc %>%
+    kbl(digits = 3, booktabs = TRUE) %>%
+    kable_styling(position = "center")
+```
+
+LaTeX用表のコードが必要な場合、`format = "latex"`を指定
+
+```{r table-kbl-29}
+#| eval: FALSE
+country_desc %>%
+    kbl(format = "latex", digits = 3, booktabs = TRUE)
+```
 
 ## {gt}の使い方 {#table-gt}
 
@@ -313,7 +354,7 @@ country_df
 {DT}パッケージの`datatable()`関数を使用した場合
 
 ```{r table-dataout-2}
-#| eval: FALSE
+#| eval = FALSE
 datatable(country_df)
 ```
 

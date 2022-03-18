@@ -20,7 +20,7 @@ source("_common.R")
 
 　これをウェブブラウザが自動的に「[SONGのHP](https://www.jaysong.net)」と変換し、画面に出力してくれます。これは、書式情報などが必要な箇所にコードを埋め込むことによって実現されます。そして、このMark*up*言語をより単純な文法で再構成したものがMark*down*です。例えば、以上のHTMLはMarkdownでは以下のように書きます。
 
-```markdown
+```md
 [SONGのHP](https://www.jaysong.net)
 ```
 
@@ -74,7 +74,7 @@ knitr::include_graphics("figures/Markdown/SamplePage.png")
 
 **Input:**
 
-```markdown
+```md
 文章1
 文章2
 ```
@@ -88,7 +88,7 @@ knitr::include_graphics("figures/Markdown/SamplePage.png")
 
 **Input:**
 
-```markdown
+```md
 文章1
 
 文章2
@@ -112,7 +112,7 @@ knitr::include_graphics("figures/Markdown/SamplePage.png")
 
 **Input:**
 
-```markdown
+```md
 文章の一部を**太字**にしてみましょう。
 
 *イタリック*もいいですね。
@@ -139,7 +139,7 @@ knitr::include_graphics("figures/Markdown/SamplePage.png")
 
 **Input:**
 
-```markdown
+```md
 - 項目1
   - 項目1-1
   - 項目1-2
@@ -165,7 +165,7 @@ knitr::include_graphics("figures/Markdown/SamplePage.png")
 
 **Input:**
 
-```markdown
+```md
 1. 項目1
    1. 項目1-1
    2. 項目1-2
@@ -191,7 +191,7 @@ knitr::include_graphics("figures/Markdown/SamplePage.png")
 
 **Input:**
 
-```markdown
+```md
 # 見出し1
 ## 見出し2
 ### 見出し3
@@ -214,7 +214,7 @@ knitr::include_graphics("figures/Markdown/SamplePage.png")
 
 **Input:**
 
-```markdown
+```md
 ---
 ```
 
@@ -228,7 +228,7 @@ knitr::include_graphics("figures/Markdown/SamplePage.png")
 
 **Input:**
 
-```markdown
+```md
 |ID   |Name     |Math    |English |Favorite food|
 |:---:|---------|-------:|-------:|-------------|
 |1    |SONG     |15      |10      |Ramen        |
@@ -256,7 +256,7 @@ knitr::include_graphics("figures/Markdown/SamplePage.png")
 
 **Input:**
 
-```markdown
+```md
 ![『私たちのR』ロゴ](HTML/favicon.png)
 ```
 
@@ -270,7 +270,7 @@ knitr::include_graphics("figures/Markdown/SamplePage.png")
 
 **Input:**
 
-```markdown
+```md
 毎日1回は[SONGのホームページ](https://www.jaysong.net)へアクセスしましょう。
 ```
 
@@ -284,7 +284,7 @@ knitr::include_graphics("figures/Markdown/SamplePage.png")
 
 **Input:**
 
-```markdown
+```md
 これは普通の文章です[^foot1]。
 
 [^foot1]: これは普通の脚注です。
@@ -302,7 +302,7 @@ knitr::include_graphics("figures/Markdown/SamplePage.png")
 
 **Input:**
 
-```markdown
+```md
 アインシュタインと言えば、$e = mc^2$でしょう。
 ```
 
@@ -314,7 +314,7 @@ knitr::include_graphics("figures/Markdown/SamplePage.png")
 
 **Input:**
 
-```markdown
+```md
 独立した数式の書き方
 
 $$
@@ -334,7 +334,7 @@ $$
 
 **Input:**
 
-```markdown
+```md
 複数の行にわたる数式の書き方
 
 $$
@@ -362,7 +362,7 @@ $$
 
 **Input:**
 
-```markdown
+```md
 行列の書き方
 
 $$
@@ -393,7 +393,7 @@ $$
 
 **Input:**
 
-```markdown
+```md
 「政治とは何か」についてイーストンは以下のように定義しました。
 
 > [A] political system can be designated as those interactions through which values are authoritatively allocated for a society.
@@ -439,9 +439,10 @@ $$
 
 **Input:**
 
-````markdown
+````md
 "Hello World!"を出力するコード
-`r ''````{r}
+
+```{r, error=TRUE}`r ''`
 print("Hello World!")
 ```
 ````
@@ -449,6 +450,7 @@ print("Hello World!")
 **Output:**
 
 "Hello World!"を出力するコード
+
 ```{r rmarkdown-code-1}
 print("Hello World!")
 ```
@@ -457,8 +459,8 @@ print("Hello World!")
 
 **Input:**
 　
-````markdown
-`r ''````{r}
+````md
+```{r}`r ''`
 # パッケージの読み込み
 pacman::p_load(tidyverse)
 # R内蔵データセットのirisを使った可視化
@@ -493,8 +495,8 @@ iris %>%
 
 　他にも文中にRコードを埋め込むことも可能です。例えば、ベクトル`X <- c(2, 3, 5, 7, 12)`があり、この平均値を文中で示したいとします。むろん、文中に「5.8」と書いても問題はありません。しかし、実は`X`の入力ミスが見つかり、実は`c(2, 3, 5, 7, 11)`になったらどうなるでしょうか。この「5.8」と書いた箇所を見つけて5.6と修正したいといけません。これは非常に面倒な作業であり、ミスも起こりやすいです。文中でRコードを入れるためには`` `r ''``rコード` ``のように入力します。
 
-````markdown
-`r ''````{r}
+````md
+```{r}`r ''`
 X <- c(2, 3, 5, 7, 11)
 ```
 
@@ -527,12 +529,12 @@ X <- c(2, 3, 5, 7, 11)
 
 　ここで1つ問題が生じます。たとえば、以下のようなコードを考えてみてください。
 
-````markdown
-`r ''````{r}
+````md
+```{r}`r ''`
 X <- c(2, 3, 5, 7, 10)
 ```
 
-`r ''````{r, cache = TRUE}
+```{r, cache = TRUE}`r ''`
 mean(X)
 ```
 ````
@@ -541,12 +543,12 @@ mean(X)
 
 　このようにあるチャンクの内容が他のチャンク内容に依存しているケースがあります。この場合、`dependson`オプションを使います。使い方は`dependson = "依存するチャンク名"`です。もし、1番目のチャンク名を`define_X`としたら、`dependson = "define_X"`とオプションを加えます。
 
-````markdown
-`r ''````{r define_X}
+````md
+```{r define_X}`r ''`
 X <- c(2, 3, 5, 7, 10)
 ```
 
-`r ''````{r, cache = TRUE, dependson = "define_X"}
+```{r, cache = TRUE, dependson = "define_X"}`r ''`
 mean(X)
 ```
 ````
@@ -573,8 +575,8 @@ mean(X)
 
 **Input:**
 　
-````markdown
-`r ''````{r, fig.height = 5, fig.width = 7, fig.align = "center", fig.cap = "`iris`データセットの可視化", dpi = 72}
+````md
+```{r, fig.height = 5, fig.width = 7, fig.align = "center", fig.cap = "`iris`データセットの可視化", dpi = 72}`r ''`
 iris %>%
   mutate(Species2 = recode(Species,
                            "setosa"     = "セトナ",
@@ -607,8 +609,8 @@ iris %>%
 
 **Input:**
 
-````markdown
-`r ''````{r, eval = FALSE}
+````md
+```{r, eval = FALSE}`r ''`
 for(i in 1:10){
 print(i*2)
 }
@@ -625,8 +627,8 @@ print(i*2)
 
 **Input:**
 
-````markdown
-`r ''````{r, eval = FALSE, tidy = TRUE}
+````md
+```{r, eval = FALSE, tidy = TRUE}`r ''`
 for(i in 1:10){
 print(i*2)
 }
@@ -649,8 +651,8 @@ print(i*2)
 
 　図\@ref(fig:rmarkdown-chunk-1)の作図チャンクは以下のように書くことも可能です。
 
-````markdown
-`r ''````{r}
+````md
+```{r}`r ''`
 #| fig.height: 5
 #| fig.width: 7
 #| fig.align: "center"
@@ -671,17 +673,15 @@ iris %>%
 
 　もう一つの方法は、全て (あるいは、ほとんど)のチャンクに渡って共通するチャンクオプションの場合、最初に宣言しておくことです。もし、全ての図を中央に揃え (`fig.align = "center"`)、解像度を300dpi (`dpi = 300`)にするなら、後述するYAMLヘッダーに続く最初のチャンクを以下のように書きます。
 
-````markdown
-`r ''````{r, include = FALSE}
+````md
+```{r, include = FALSE}`r ''`
 knitr::opts_chunk$set(fig.align = "center", dpi = 300)
 ```
 ````
 
 　こう書いておくと、そのRMarkdownファイルの全てのチャンクに`fig.align = "center"`と`dpi = 300`オプションが付くようになります。一部のチャンクに`fig.align`や`dpi`のオプションを付ける場合、当該チャンクのオプションが優先されます。
 
-　このようにチャンクオプションが見やすくなるメリットがありますが、現在 (`r format(Sys.Date(), "%Y年%m月%d日")`)のRStudioは、チャンク内部のオプション指定の入力補助に対応していないことに注意してください。
-
-　ただし、通常の書き方だと`if()`文のような条件分岐がチャンクのオプションとして使えますが、`#|`の書き方だと正しく作動しません。
+　このようにチャンクオプションが見やすくなるメリットがありますが、現在 (`r format(Sys.Date(), "%Y年%m月%d日")`)のRStudioは、チャンク内部のオプション指定の入力補助に対応していないことに注意してください。通常の書き方だと`if()`文のような条件分岐がチャンクのオプションとして使えますが、`#|`の書き方だと正しく作動しません。ただし、`#| eval: ...`を`#| eval = ...`にすると作動します。
 
 ---
 
