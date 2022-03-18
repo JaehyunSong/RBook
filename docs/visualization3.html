@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>19. 可視化[応用] | 私たちのR: ベストプラクティスの探究</title>
   <meta name="description" content="R Not for Everyone: An Esoteric Guide." />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
 
   <meta property="og:title" content="19. 可視化[応用] | 私たちのR: ベストプラクティスの探究" />
   <meta property="og:type" content="book" />
-  <meta property="og:url" content="https://jaysong.net/RBook/" />
   <meta property="og:image" content="https://jaysong.net/RBook//HTML/cover.png" />
   <meta property="og:description" content="R Not for Everyone: An Esoteric Guide." />
   <meta name="github-repo" content="JaehyunSong/RBook" />
@@ -32,7 +31,6 @@
   <link rel="shortcut icon" href="HTML/favicon.png" type="image/x-icon" />
 <link rel="prev" href="visualization2.html"/>
 <link rel="next" href="visualization4.html"/>
-<script src="libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -854,7 +852,7 @@ div.csl-indent {
 <div class="sourceCode" id="cb1346"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1346-1"><a href="visualization3.html#cb1346-1"></a>Flip_Fig <span class="sc">+</span></span>
 <span id="cb1346-2"><a href="visualization3.html#cb1346-2"></a>  <span class="fu">coord_flip</span>() <span class="co"># 座標系の回転</span></span></code></pre></div>
 <p><img src="visualization3_files/figure-html/visual3-coord-8-1.png" width="1500" style="display: block; margin: auto;" /></p>
-<p>　非常に簡単な方法で図を回転させることができました。しかし、実はこの<code>coord_flip()</code>関数、最近になって使う場面がどんどん減っています。たとえば、先ほどの<code>geom_bar()</code>幾何オブジェクトの場合、<code>x</code>をPolity IVスコアの平均値で、<code>y</code>を大陸名でマッピングすることが可能です。昔の{ggplot2}は横軸と縦軸にマッピングでいるデータ型が厳格に決まっていましたが、最近になってはますます柔軟となってきました<a href="reference.html#fn86" class="footnote-ref" id="fnref86"><sup>86</sup></a>。<code>coord_flip()</code>を使用する前に、各幾何オブジェクトのヘルプを確認し、<code>coord_flip()</code>を用いた回転が必要か否かを予め調べておくのも良いでしょう。</p>
+<p>　非常に簡単な方法で図を回転させることができました。しかし、実はこの<code>coord_flip()</code>関数、最近になって使う場面がどんどん減っています。たとえば、先ほどの<code>geom_bar()</code>幾何オブジェクトの場合、<code>x</code>をPolity IVスコアの平均値で、<code>y</code>を大陸名でマッピングすることが可能です。昔の{ggplot2}は横軸と縦軸にマッピングでいるデータ型が厳格に決まっていましたが、最近になってはますます柔軟となってきました<a href="#fn86" class="footnote-ref" id="fnref86"><sup>86</sup></a>。<code>coord_flip()</code>を使用する前に、各幾何オブジェクトのヘルプを確認し、<code>coord_flip()</code>を用いた回転が必要か否かを予め調べておくのも良いでしょう。</p>
 </div>
 <div id="座標系のアスペクト比の固定" class="section level3 hasAnchor" number="19.2.4">
 <h3><span class="header-section-number">19.2.4</span> 座標系のアスペクト比の固定<a href="visualization3.html#座標系のアスペクト比の固定" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -1047,7 +1045,7 @@ div.csl-indent {
 <p>　今回は紫（独裁）から黄色（完全な民主主義）の順で色分けがされ、その間のカテゴリーも紫と黄色の間の値をとります。実は順序付き離散変数の場合、色のスケールを調整することはあまりありませんし、これまでの方法に比べてやや複雑です。ここでは色相（Hue）の範囲と強度、明るさを調整する方法について紹介します。</p>
 <p>　まずは、色相について知る必要があります。{ggplot2}において色相の範囲は0から360です。そして、色には強度（intensity）、または彩度という概念があり、0に近いほどグレイへ近づき、色間の区別がしにくくなります。{ggplot2}では彩度のデフォルト値は100であり、我々が普段{ggplot2}で見る図の色です。最後に明るさ（luminance）があり、0から100までの値を取ります。値が大きいほど明るくなり、{ggplot2}のデフォルト値は65です。重要なのは色相のところであり、Hueの具体的な数値がどの色なのかを確認する必要があります。そのためには、{scales}パッケージの<code>hue_pal()</code>と<code>show_col()</code>関数を使用します。</p>
 <p><img src="visualization3_files/figure-html/visual3-scale-color-7-1.png" width="2100" style="display: block; margin: auto;" /></p>
-<p>　左上が0、右下が360の色を意味します。順序変数でマッピングされた色スケールを色相に基づいて調整する際は、<code>scale_color_hue()</code>レイヤーを追加し、色相の範囲、彩度、明るさを指定します。たとえば、0から300までの範囲の色を使用し<a href="reference.html#fn87" class="footnote-ref" id="fnref87"><sup>87</sup></a>、再度と明るさはデフォルトにしたい場合、以下のように書きます。</p>
+<p>　左上が0、右下が360の色を意味します。順序変数でマッピングされた色スケールを色相に基づいて調整する際は、<code>scale_color_hue()</code>レイヤーを追加し、色相の範囲、彩度、明るさを指定します。たとえば、0から300までの範囲の色を使用し<a href="#fn87" class="footnote-ref" id="fnref87"><sup>87</sup></a>、再度と明るさはデフォルトにしたい場合、以下のように書きます。</p>
 <div class="sourceCode" id="cb1370"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1370-1"><a href="visualization3.html#cb1370-1"></a>Scale_Fig3 <span class="sc">+</span></span>
 <span id="cb1370-2"><a href="visualization3.html#cb1370-2"></a>  <span class="fu">scale_color_hue</span>(<span class="at">h =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">360</span>), <span class="at">c =</span> <span class="dv">100</span>, <span class="at">l =</span> <span class="dv">65</span>)</span></code></pre></div>
 <p><img src="visualization3_files/figure-html/visual3-scale-color-8-1.png" width="1800" style="display: block; margin: auto;" /></p>
@@ -1109,11 +1107,11 @@ div.csl-indent {
 <span id="cb1376-8"><a href="visualization3.html#cb1376-8"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code></pre></div>
 <p><img src="visualization3_files/figure-html/visual3-scale-alpha-2-1.png" width="1800" style="display: block; margin: auto;" /></p>
 <p>　これでアジアの国々がプロット上で強調されました。透明度スケールは連続変数（<code>scale_alpha_continuous()</code>）や離散変数（<code>scale_alpha_discrete()</code>）に使うことも可能ですが、透明度を「区別」でなく「強調」の目的で使うならば、<code>scale_alpha_manual()</code>でも十分だと考えられます。</p>
-<p>　一つ注意して頂きたいのは、図をPDFで出力する際、半透明なオブジェクトが見えなかったり、逆に透明度が全く適用されない場合があります。PNGなどのビットマップ画像ならこのような問題は生じませんが、PDFの場合は注意が必要です<a href="reference.html#fn88" class="footnote-ref" id="fnref88"><sup>88</sup></a>。この場合、画像をPNGなどの形式にするか、半透明でなく「グレーと黒」のような組み合わせで作図した方が良いかも知れません。</p>
+<p>　一つ注意して頂きたいのは、図をPDFで出力する際、半透明なオブジェクトが見えなかったり、逆に透明度が全く適用されない場合があります。PNGなどのビットマップ画像ならこのような問題は生じませんが、PDFの場合は注意が必要です<a href="#fn88" class="footnote-ref" id="fnref88"><sup>88</sup></a>。この場合、画像をPNGなどの形式にするか、半透明でなく「グレーと黒」のような組み合わせで作図した方が良いかも知れません。</p>
 </div>
 <div id="sizeスケールの調整" class="section level3 hasAnchor" number="19.3.4">
 <h3><span class="header-section-number">19.3.4</span> <code>size</code>スケールの調整<a href="visualization3.html#sizeスケールの調整" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>　大きさに関するマッピングは幾何オブジェクトの<code>aes()</code>内に<code>size</code>引数を使用します。ここでの大きさというのは点の大きさと線の太さを意味します。<code>geom_point()</code>内の<code>size</code>は点の大きさ、<code>geom_line()</code>や<code>geom_segment()</code>の<code>size</code>は線の太さ、<code>geom_pointrange()</code>では両方を意味します。ただし、実質的に変数の値に応じて線の太さを変えることは強調<a href="reference.html#fn89" class="footnote-ref" id="fnref89"><sup>89</sup></a>を除けばあまり見られません。ここでは点の大きさに焦点を当てて解説します。</p>
+<p>　大きさに関するマッピングは幾何オブジェクトの<code>aes()</code>内に<code>size</code>引数を使用します。ここでの大きさというのは点の大きさと線の太さを意味します。<code>geom_point()</code>内の<code>size</code>は点の大きさ、<code>geom_line()</code>や<code>geom_segment()</code>の<code>size</code>は線の太さ、<code>geom_pointrange()</code>では両方を意味します。ただし、実質的に変数の値に応じて線の太さを変えることは強調<a href="#fn89" class="footnote-ref" id="fnref89"><sup>89</sup></a>を除けばあまり見られません。ここでは点の大きさに焦点を当てて解説します。</p>
 <p>　それでは、横軸はフリーダム・ハウスのスコア（<code>FH_Total</code>）、縦軸は2018年人間開発指数（<code>HDI_2018</code>）として散布図を作成し、一人当たり購買力平価GDP（<code>PPP_per_capita</code>）に応じて点の大きさを指定します。</p>
 <div class="sourceCode" id="cb1377"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1377-1"><a href="visualization3.html#cb1377-1"></a>Country_df <span class="sc">%&gt;%</span></span>
 <span id="cb1377-2"><a href="visualization3.html#cb1377-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
@@ -1505,7 +1503,7 @@ Grid_Fig4
 <span id="cb1410-8"><a href="visualization3.html#cb1410-8"></a>          <span class="co"># 各図にラベルを付ける</span></span>
 <span id="cb1410-9"><a href="visualization3.html#cb1410-9"></a>          <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;(a)&quot;</span>, <span class="cn">NA</span>, <span class="st">&quot;(b)&quot;</span>, <span class="st">&quot;(c)&quot;</span>))</span></code></pre></div>
 <p><img src="visualization3_files/figure-html/visual3-merge-9-1.png" width="2100" style="display: block; margin: auto;" /></p>
-<p>　左上の<code>Grid_Fig3</code>と左下の<code>Grid_Fig1</code>は横軸のラベルを共有しており、左下の<code>Grid_Fig1</code>と右下の<code>Grid_Fig4</code>は縦軸のラベルを共有しています。以下では<code>Grid_Fig3</code>の横軸ラベル、<code>Grid_Fig4</code>の縦軸ラベルを消します。ggplotオブジェクトに<code>theme(axis.title.x = element_blank())</code>を<code>+</code>で繋ぐと横軸のラベルが表示されなくなります。<code>ggarrange()</code>に入れるオブジェクトに直接アクセスし、それぞれの軸ラベルを消してみましょう<a href="reference.html#fn90" class="footnote-ref" id="fnref90"><sup>90</sup></a>。</p>
+<p>　左上の<code>Grid_Fig3</code>と左下の<code>Grid_Fig1</code>は横軸のラベルを共有しており、左下の<code>Grid_Fig1</code>と右下の<code>Grid_Fig4</code>は縦軸のラベルを共有しています。以下では<code>Grid_Fig3</code>の横軸ラベル、<code>Grid_Fig4</code>の縦軸ラベルを消します。ggplotオブジェクトに<code>theme(axis.title.x = element_blank())</code>を<code>+</code>で繋ぐと横軸のラベルが表示されなくなります。<code>ggarrange()</code>に入れるオブジェクトに直接アクセスし、それぞれの軸ラベルを消してみましょう<a href="#fn90" class="footnote-ref" id="fnref90"><sup>90</sup></a>。</p>
 <div class="sourceCode" id="cb1411"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1411-1"><a href="visualization3.html#cb1411-1"></a><span class="fu">ggarrange</span>(Grid_Fig3 <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.title.x =</span> <span class="fu">element_blank</span>()), </span>
 <span id="cb1411-2"><a href="visualization3.html#cb1411-2"></a>          <span class="cn">NULL</span>, </span>
 <span id="cb1411-3"><a href="visualization3.html#cb1411-3"></a>          Grid_Fig1, </span>
@@ -1523,6 +1521,16 @@ Grid_Fig4
 </ul>
 
 </div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="86">
+<li id="fn86"><p>例えば、回帰係数の点推定値と信頼区間を示す係数プロット（キャタピラー・プロット）を作成する際は<code>geom_pointrange()</code>と<code>coord_flip()</code>を組み合わせてきましたが、今の{ggplot2}は<code>geom_pointrange()</code>のみで自由自在に作成できます。<a href="visualization3.html#fnref86" class="footnote-back">↩︎</a></p></li>
+<li id="fn87"><p>厳密には0から360までの全範囲の色を使うわけではありません。なぜなら、Hueは0度から360度、つまり循環する仕組みになっているからです。実際、Hueが[0, 360]の図を見ても、左上の色と右下の色は非常に似ていることが分かります。したがって、0から360を全て使用すると色の区別が難しくなるため、この場合は後半の色は仕様されません。<a href="visualization3.html#fnref87" class="footnote-back">↩︎</a></p></li>
+<li id="fn88"><p>宋が論文を出した際、半透明なオブジェクトが査読者のPCでは出力されなかったことがあり、「お前、一体図の何を見ろと言ってるんだ」と怒られたことがあります。<a href="visualization3.html#fnref88" class="footnote-back">↩︎</a></p></li>
+<li id="fn89"><p>強調したい線を太線にするなど<a href="visualization3.html#fnref89" class="footnote-back">↩︎</a></p></li>
+<li id="fn90"><p>もし、横軸（x）の目盛りも消したい場合は<code>theme()</code>内に<code>axis.ticks.x = element_blank()</code>を、目盛りのラベルまで消したい場合は<code>axis.text.x  = element_blank()</code>を追加してください。横軸（y）の場合は<code>.x</code>の箇所を<code>.y</code>に書き換えてください。<a href="visualization3.html#fnref90" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 

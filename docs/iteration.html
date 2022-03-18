@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>27. 反復処理 | 私たちのR: ベストプラクティスの探究</title>
   <meta name="description" content="R Not for Everyone: An Esoteric Guide." />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
 
   <meta property="og:title" content="27. 反復処理 | 私たちのR: ベストプラクティスの探究" />
   <meta property="og:type" content="book" />
-  <meta property="og:url" content="https://jaysong.net/RBook/" />
   <meta property="og:image" content="https://jaysong.net/RBook//HTML/cover.png" />
   <meta property="og:description" content="R Not for Everyone: An Esoteric Guide." />
   <meta name="github-repo" content="JaehyunSong/RBook" />
@@ -32,7 +31,6 @@
   <link rel="shortcut icon" href="HTML/favicon.png" type="image/x-icon" />
 <link rel="prev" href="datahandling3.html"/>
 <link rel="next" href="oop.html"/>
-<script src="libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -821,7 +819,7 @@ div.csl-indent {
 <div class="sourceCode" id="cb1686"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1686-1"><a href="iteration.html#cb1686-1"></a><span class="fu">map_dbl</span>(num_vec, add_two_divide_three)</span></code></pre></div>
 <pre><code>## [1] 1.666667 1.333333 2.333333 2.000000 3.000000</code></pre>
 <p>ここまでの例だと<code>sapply()</code>と<code>map_dbl()</code>はほぼ同じ関数です。なぜわざわざ{purrr}パッケージを読み込んでまで<code>map_dbl()</code>関数を使う必要があるでしょうか。それは<code>map_dbl()</code>の内部にはラムダ（lambda）式、あるいは無名関数（anonymous function）と呼ばれるものが使用可能だからです。ラムダ式は第<a href="datahandling2.html#handling2-summarise">13.1</a>章でも説明しましたが、もう一回解説します。ラムダ式は使い捨ての関数で、<code>map_dbl()</code>内部での処理が終わるとメモリ上から削除される関数です。使い捨てですので、関数の名前（オブジェクト名）も与えられておりません。</p>
-<p>このラムダ式の作り方ですが、<code>~</code>で始まり、引数の部分には<code>.x</code>が入ります<a href="reference.html#fn101" class="footnote-ref" id="fnref101"><sup>101</sup></a>。したがって、<code>~(.x + 2) / 3</code>は<code>function(x){(x + 2) / 3}</code>の簡略したものとなります。ただし、後者だと無名関数の引数に該当する<code>x</code>を<code>y</code>や<code>j</code>などに書き換えても問題ありませんが、ラムダ式では必ず<code>.x</code>と表記する必要があります。</p>
+<p>このラムダ式の作り方ですが、<code>~</code>で始まり、引数の部分には<code>.x</code>が入ります<a href="#fn101" class="footnote-ref" id="fnref101"><sup>101</sup></a>。したがって、<code>~(.x + 2) / 3</code>は<code>function(x){(x + 2) / 3}</code>の簡略したものとなります。ただし、後者だと無名関数の引数に該当する<code>x</code>を<code>y</code>や<code>j</code>などに書き換えても問題ありませんが、ラムダ式では必ず<code>.x</code>と表記する必要があります。</p>
 <div class="sourceCode" id="cb1688"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1688-1"><a href="iteration.html#cb1688-1"></a><span class="fu">map_dbl</span>(num_vec, <span class="sc">~</span>(.x <span class="sc">+</span> <span class="dv">2</span>) <span class="sc">/</span> <span class="dv">3</span>)</span></code></pre></div>
 <pre><code>## [1] 1.666667 1.333333 2.333333 2.000000 3.000000</code></pre>
 <p>かなり短めなコードで「<code>num_vec</code>の全要素に2を足して3で割る」処理ができました。一方、<code>sapply()</code>や<code>lapply()</code>のような<code>*apply()</code>関数群だとラムダ式を使うことはできません。現在のメモリ上にある関数のみしか使うことができません。</p>
@@ -862,7 +860,7 @@ div.csl-indent {
 <div class="sourceCode" id="cb1705"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1705-1"><a href="iteration.html#cb1705-1"></a><span class="fu">map_dbl</span>(num_list, mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <pre><code>##    List1    List2    List3 
 ## 5.000000 6.571429 4.666667</code></pre>
-<p><code>*apply()</code>も<code>map_*()</code>も、それぞれの要素に対して同じ処理を行うことを得意とする関数です。他の応用としては、各ベクトルからn番目の要素を抽出することもできます。ベクトルからn番目の要素を抽出するには<code>ベクトル名[n]</code>と入力しますが、実はこの<code>[</code>も関数です。関数として使う場合は<code>+</code>と同様、<code>`[`</code>と表記します。<code>num_list</code>内の3つのベクトルから3番目の要素を抽出してみましょう<a href="reference.html#fn102" class="footnote-ref" id="fnref102"><sup>102</sup></a>。</p>
+<p><code>*apply()</code>も<code>map_*()</code>も、それぞれの要素に対して同じ処理を行うことを得意とする関数です。他の応用としては、各ベクトルからn番目の要素を抽出することもできます。ベクトルからn番目の要素を抽出するには<code>ベクトル名[n]</code>と入力しますが、実はこの<code>[</code>も関数です。関数として使う場合は<code>+</code>と同様、<code>`[`</code>と表記します。<code>num_list</code>内の3つのベクトルから3番目の要素を抽出してみましょう<a href="#fn102" class="footnote-ref" id="fnref102"><sup>102</sup></a>。</p>
 <div class="sourceCode" id="cb1707"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1707-1"><a href="iteration.html#cb1707-1"></a><span class="fu">map_dbl</span>(num_list, <span class="st">`</span><span class="at">[</span><span class="st">`</span>, <span class="dv">3</span>)</span></code></pre></div>
 <pre><code>## List1 List2 List3 
 ##     5     6    NA</code></pre>
@@ -898,7 +896,7 @@ div.csl-indent {
 <p>それでは3つ以上の引数について考えてみましょう。たとえば、<code>num_vec</code>の前に<code>"ID"</code>を付けるとします。そして<code>"ID"</code>と<code>num_vec</code>の間に<code>":"</code>を入れたい場合はどうすればい良いでしょう。むろん、賢い解決方法は単純に<code>paste()</code>関数を使うだけです。</p>
 <div class="sourceCode" id="cb1717"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1717-1"><a href="iteration.html#cb1717-1"></a><span class="fu">paste</span>(<span class="st">&quot;ID&quot;</span>, num_vec, <span class="at">sep =</span> <span class="st">&quot;:&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;ID:3&quot; &quot;ID:2&quot; &quot;ID:5&quot; &quot;ID:4&quot; &quot;ID:7&quot;</code></pre>
-<p>この場合、引数は3つです<a href="reference.html#fn103" class="footnote-ref" id="fnref103"><sup>103</sup></a>。この場合の書き方はどうなるでしょうか。<code>map2_*()</code>はデータを2つまでしか指定できません。3つ目以降は関数/ラムダ式の後ろに書くこととなります。ただし、関数/ラムダ式の後ろに指定される引数は長さ1のベクトルでなければなりません。また、ラムダ式内の引数は<code>.x</code>と<code>.y</code>でなく、<code>..1</code>、<code>..2</code>、<code>..3</code>、…となります。</p>
+<p>この場合、引数は3つです<a href="#fn103" class="footnote-ref" id="fnref103"><sup>103</sup></a>。この場合の書き方はどうなるでしょうか。<code>map2_*()</code>はデータを2つまでしか指定できません。3つ目以降は関数/ラムダ式の後ろに書くこととなります。ただし、関数/ラムダ式の後ろに指定される引数は長さ1のベクトルでなければなりません。また、ラムダ式内の引数は<code>.x</code>と<code>.y</code>でなく、<code>..1</code>、<code>..2</code>、<code>..3</code>、…となります。</p>
 <p>今回の例だと<code>map2_chr()</code>内に<code>num_vec</code>がデータ1、<code>"ID"</code>がデータ2です。そして、期待される結果は、「“ID” + <code>sep</code>の実引数 + <code>num_vec</code>の値」となります。したがって、ラムダ式は<code>paste(..2, ..1, sep = ..3)</code>となります。</p>
 <div class="sourceCode" id="cb1719"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1719-1"><a href="iteration.html#cb1719-1"></a><span class="fu">map2_chr</span>(num_vec, <span class="st">&quot;ID&quot;</span>, <span class="sc">~</span><span class="fu">paste</span>(..<span class="dv">2</span>, ..<span class="dv">1</span>, <span class="at">sep =</span> ..<span class="dv">3</span>), <span class="st">&quot;-&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;ID-3&quot; &quot;ID-2&quot; &quot;ID-5&quot; &quot;ID-4&quot; &quot;ID-7&quot;</code></pre>
@@ -1084,13 +1082,13 @@ div.csl-indent {
 ## 3 3 30  6
 ## 4 4 40  8
 ## 5 5 50 10</code></pre>
-<p>データフレームが出力されました。簡単にまとめるとtibbleはデータフレームの中にデータフレームを入れることが出来るデータ構造です。むろん、これまでの通り、データフレームのように使うことも可能です<a href="reference.html#fn104" class="footnote-ref" id="fnref104"><sup>104</sup></a>。これがtibbleの強みでもあり、{purrr}との相性も非常に高いです。たとえば、<code>Data</code>列を<code>map()</code>関数のデータとして渡せば、複数のデータセットに対して同じモデルの推定が出来るようになります。以下ではその例を紹介します。</p>
+<p>データフレームが出力されました。簡単にまとめるとtibbleはデータフレームの中にデータフレームを入れることが出来るデータ構造です。むろん、これまでの通り、データフレームのように使うことも可能です<a href="#fn104" class="footnote-ref" id="fnref104"><sup>104</sup></a>。これがtibbleの強みでもあり、{purrr}との相性も非常に高いです。たとえば、<code>Data</code>列を<code>map()</code>関数のデータとして渡せば、複数のデータセットに対して同じモデルの推定が出来るようになります。以下ではその例を紹介します。</p>
 <hr />
 </div>
 </div>
 <div id="iteration-model1" class="section level2 hasAnchor" number="27.5">
 <h2><span class="header-section-number">27.5</span> モデルの反復推定<a href="iteration.html#iteration-model1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>ここからは<code>map_*()</code>関数群を使って複数のモデルを素早く推定する方法について解説します。サンプルデータは第<a href="visualization2.html#visualization2">18</a>章で使いました各国の政治経済データ（<code>Countries.csv</code>）を使用します。csv形式データ読み込みの際、これまではR内蔵関数である<code>read.csv()</code>と{readr}<a href="reference.html#fn105" class="footnote-ref" id="fnref105"><sup>105</sup></a>の<code>read_csv()</code>を区別せずに使用してきました。しかし、ここからは<code>read_csv()</code>を使用します。2つの使い方はほぼ同じですが、<code>read_csv()</code>は各列のデータ型を自動的に指定してくれるだけではなく、tibble構造として読み込みます。<code>read.csv()</code>を使用する場合、<code>as.tibble(データフレーム名)</code>でデータフレームをtibbleに変換してください。</p>
+<p>ここからは<code>map_*()</code>関数群を使って複数のモデルを素早く推定する方法について解説します。サンプルデータは第<a href="visualization2.html#visualization2">18</a>章で使いました各国の政治経済データ（<code>Countries.csv</code>）を使用します。csv形式データ読み込みの際、これまではR内蔵関数である<code>read.csv()</code>と{readr}<a href="#fn105" class="footnote-ref" id="fnref105"><sup>105</sup></a>の<code>read_csv()</code>を区別せずに使用してきました。しかし、ここからは<code>read_csv()</code>を使用します。2つの使い方はほぼ同じですが、<code>read_csv()</code>は各列のデータ型を自動的に指定してくれるだけではなく、tibble構造として読み込みます。<code>read.csv()</code>を使用する場合、<code>as.tibble(データフレーム名)</code>でデータフレームをtibbleに変換してください。</p>
 <div class="sourceCode" id="cb1759"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1759-1"><a href="iteration.html#cb1759-1"></a>Country_df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;Data/Countries.csv&quot;</span>)</span></code></pre></div>
 <pre><code>## Rows: 186 Columns: 18
 ## ── Column specification ────────────────────────────────────────────────────────
@@ -1448,7 +1446,7 @@ div.csl-indent {
 ## 3 Africa    &lt;tibble [54 × 17]&gt; &lt;htest&gt;     0.761
 ## 4 America   &lt;tibble [36 × 17]&gt; &lt;htest&gt;     0.836
 ## 5 Oceania   &lt;tibble [4 × 17]&gt;  &lt;htest&gt;     0.996</code></pre>
-<p>たった5行のコードで大陸ごとの相関分析が出来ました。これを<code>map_*()</code>を使わずに処理するなら以下のようなコードとなります<a href="reference.html#fn106" class="footnote-ref" id="fnref106"><sup>106</sup></a>。</p>
+<p>たった5行のコードで大陸ごとの相関分析が出来ました。これを<code>map_*()</code>を使わずに処理するなら以下のようなコードとなります<a href="#fn106" class="footnote-ref" id="fnref106"><sup>106</sup></a>。</p>
 <div class="sourceCode" id="cb1798"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1798-1"><a href="iteration.html#cb1798-1"></a>Cor_Test1 <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(<span class="sc">~</span> Polity_Score <span class="sc">+</span> FH_Total, </span>
 <span id="cb1798-2"><a href="iteration.html#cb1798-2"></a>                      <span class="at">data =</span> <span class="fu">subset</span>(Country_df, Country_df<span class="sc">$</span>Continent <span class="sc">==</span> <span class="st">&quot;Asia&quot;</span>))</span>
 <span id="cb1798-3"><a href="iteration.html#cb1798-3"></a>Cor_Test2 <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(<span class="sc">~</span> Polity_Score <span class="sc">+</span> FH_Total, </span>
@@ -2054,7 +2052,7 @@ div.csl-indent {
 <div class="sourceCode" id="cb1876"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1876-1"><a href="iteration.html#cb1876-1"></a><span class="fu">class</span>(Diff_df<span class="sc">$</span>Formula[[<span class="dv">1</span>]])</span></code></pre></div>
 <pre><code>## [1] &quot;formula&quot;</code></pre>
 <p>formula型になっていることが分かります。</p>
-<p>もう一つの方法としては最初からfromula型の変数を入れても良いでしょう。推定するモデルが多くない場合は、こちらの方が簡単かも知れません。たとえば、これまでの作業を直接formula型を格納する形式で行うなら以下のようになります<a href="reference.html#fn107" class="footnote-ref" id="fnref107"><sup>107</sup></a>。</p>
+<p>もう一つの方法としては最初からfromula型の変数を入れても良いでしょう。推定するモデルが多くない場合は、こちらの方が簡単かも知れません。たとえば、これまでの作業を直接formula型を格納する形式で行うなら以下のようになります<a href="#fn107" class="footnote-ref" id="fnref107"><sup>107</sup></a>。</p>
 <div class="sourceCode" id="cb1878"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1878-1"><a href="iteration.html#cb1878-1"></a><span class="co"># 方法1</span></span>
 <span id="cb1878-2"><a href="iteration.html#cb1878-2"></a>Diff_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Group   =</span> <span class="fu">c</span>(<span class="st">&quot;G7&quot;</span>, <span class="st">&quot;G20&quot;</span>, <span class="st">&quot;OECD&quot;</span>),</span>
 <span id="cb1878-3"><a href="iteration.html#cb1878-3"></a>                  <span class="at">Formula =</span> <span class="fu">c</span>(PPP <span class="sc">~</span> G7, </span>
@@ -2141,6 +2139,18 @@ Cattaneo, Matias D., Brigham R. Frandsen, and Rocío Titiunik. 2015. <span>“Ra
 <div id="ref-Imbens_Kalyanaraman:2012" class="csl-entry">
 Imbens, Guido, and Karthik Kalyanaraman. 2012. <span>“Optimal Bandwidth Choice for the Regression Discontinuity Estimator.”</span> <em>The Review of Economic Studies</em> 79: 933–59.
 </div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="101">
+<li id="fn101"><p>引数が2つなら<code>.x</code>と<code>.y</code>を使用します。もし3つ以上なら<code>..1</code>、<code>..2</code>、<code>..3</code>、…と表記します。<a href="iteration.html#fnref101" class="footnote-back">↩︎</a></p></li>
+<li id="fn102"><p>実は今回の例のように要素を抽出する場合、<code>`[`</code>すら要りません。<code>map_dbl(num_list, 3)</code>だけで十分です。<a href="iteration.html#fnref102" class="footnote-back">↩︎</a></p></li>
+<li id="fn103"><p><code>paste()</code>関数は<code>sep =</code>以外はすべて結合の対象となります。引数が4つ以上になることもあります。たとえば、<code>paste("We", "love", "cats!", sep = " ")</code>です。<a href="iteration.html#fnref103" class="footnote-back">↩︎</a></p></li>
+<li id="fn104"><p>ただしtibbleは<code>tibble名[3, 2:4] &lt;- c("A", "B", "C")</code>のような、列をまたがった値の代入は出来ません。これによってtibbleに対応しない関数もまだあります。この場合、<code>as.data.frame()</code>を使って一旦データフレームに変換する必要があります。<a href="iteration.html#fnref104" class="footnote-back">↩︎</a></p></li>
+<li id="fn105"><p>{tidyverse}のコア・パッケージであるため、別途読み込む必要はございません。<a href="iteration.html#fnref105" class="footnote-back">↩︎</a></p></li>
+<li id="fn106"><p><code>cor.test()$estimate</code>で直接相関係数を抽出することも可能ですが、コードの可読性が著しく低下します。またオブジェクトの再利用（例えば、「今度は<em>p</em>値を抽出しよう！」）が出来なくなります。<a href="iteration.html#fnref106" class="footnote-back">↩︎</a></p></li>
+<li id="fn107"><p><code>enframe()</code>関数が登場しましたが、これはベクトル型、またはリスト型オブジェクトをtibble型に変換する関数です。<a href="iteration.html#fnref107" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 

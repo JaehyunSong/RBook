@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>12. データハンドリング [基礎編: 抽出] | 私たちのR: ベストプラクティスの探究</title>
   <meta name="description" content="R Not for Everyone: An Esoteric Guide." />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
 
   <meta property="og:title" content="12. データハンドリング [基礎編: 抽出] | 私たちのR: ベストプラクティスの探究" />
   <meta property="og:type" content="book" />
-  <meta property="og:url" content="https://jaysong.net/RBook/" />
   <meta property="og:image" content="https://jaysong.net/RBook//HTML/cover.png" />
   <meta property="og:description" content="R Not for Everyone: An Esoteric Guide." />
   <meta name="github-repo" content="JaehyunSong/RBook" />
@@ -32,7 +31,6 @@
   <link rel="shortcut icon" href="HTML/favicon.png" type="image/x-icon" />
 <link rel="prev" href="functions.html"/>
 <link rel="next" href="datahandling2.html"/>
-<script src="libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -1276,7 +1274,7 @@ Score
 ## 3     6     6     3
 ## 4     2     0     0
 ## 5     7     2     2</code></pre>
-<p>あらら、<code>ID</code>も同時になくなりましたね<a href="reference.html#fn70" class="footnote-ref" id="fnref70"><sup>70</sup></a>。実はこのような時のために用意された関数があり、それが<code>num_range()</code>です。<code>num_range()</code>の第一引数は<code>starts_with()</code>関数と同じですが、第二引数も必要です。この第二引数にはnumeric型のベクトルが必要です。<code>1:3</code>でも、<code>c(1, 2, 3)</code>でも構いません。たとえば、<code>ID</code>、<code>X1</code>、<code>X2</code>、<code>X3</code>するには以下のように書きます。</p>
+<p>あらら、<code>ID</code>も同時になくなりましたね<a href="#fn70" class="footnote-ref" id="fnref70"><sup>70</sup></a>。実はこのような時のために用意された関数があり、それが<code>num_range()</code>です。<code>num_range()</code>の第一引数は<code>starts_with()</code>関数と同じですが、第二引数も必要です。この第二引数にはnumeric型のベクトルが必要です。<code>1:3</code>でも、<code>c(1, 2, 3)</code>でも構いません。たとえば、<code>ID</code>、<code>X1</code>、<code>X2</code>、<code>X3</code>するには以下のように書きます。</p>
 <div class="sourceCode" id="cb832"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb832-1"><a href="datahandling1.html#cb832-1"></a>myDF1 <span class="sc">%&gt;%</span></span>
 <span id="cb832-2"><a href="datahandling1.html#cb832-2"></a>  <span class="fu">select</span>(ID, <span class="fu">num_range</span>(<span class="st">&quot;X&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>))</span></code></pre></div>
 <pre><code>## # A tibble: 5 × 4
@@ -1461,7 +1459,7 @@ Score
 ## 1 gfeb600 本格上海料理 新錦江 上野御徒町本店    東京都   2000  4.5 
 ## 2 gg9m100 宴会個室×餃子酒場 北京飯店 秋葉原本店 東京都   2000  3.33
 ## 3 gdvk200 中国料理 宝龍                         東京都   1000  2.5</code></pre>
-<p>しかし、以下の<code>slice()</code>関数を使うとパイプ演算子を前後に付けることが可能であり<a href="reference.html#fn71" class="footnote-ref" id="fnref71"><sup>71</sup></a>、コードの可読性も高いです。<code>slice()</code>関数には以下のように抽出したい行の番号を入れるだけです。</p>
+<p>しかし、以下の<code>slice()</code>関数を使うとパイプ演算子を前後に付けることが可能であり<a href="#fn71" class="footnote-ref" id="fnref71"><sup>71</sup></a>、コードの可読性も高いです。<code>slice()</code>関数には以下のように抽出したい行の番号を入れるだけです。</p>
 <div class="sourceCode" id="cb858"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb858-1"><a href="datahandling1.html#cb858-1"></a><span class="co"># select_dfから2, 8, 9行目の行を抽出し、出力する</span></span>
 <span id="cb858-2"><a href="datahandling1.html#cb858-2"></a>select_df <span class="sc">%&gt;%</span> </span>
 <span id="cb858-3"><a href="datahandling1.html#cb858-3"></a>  <span class="fu">slice</span>(<span class="dv">2</span>, <span class="dv">8</span>, <span class="dv">9</span>) <span class="co"># slice(c(2, 8, 9))もOK</span></span></code></pre></div>
@@ -1537,18 +1535,18 @@ Score
 <span id="cb870-2"><a href="datahandling1.html#cb870-2"></a>select_df <span class="sc">%&gt;%</span> </span>
 <span id="cb870-3"><a href="datahandling1.html#cb870-3"></a>  <span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 10 × 5
-##    ID      Name                               Pref   Budget Score
-##    &lt;chr&gt;   &lt;chr&gt;                              &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
-##  1 gc77006 札幌ラーメンみその                 東京都   1000    NA
-##  2 7465145 一蘭 八尾店                        大阪府   1000    NA
-##  3 7431549 風風ラーメン 浦和道場店            埼玉県   1200    NA
-##  4 5506599 ラーメン藤 五条店                  京都府     NA    NA
-##  5 7647161 横浜家系ラーメン 吟家 印西牧の原店 千葉県     NA    NA
-##  6 5895074 丸源ラーメン 枚方店                大阪府     NA    NA
-##  7 6272991 真剣勝負                           千葉県     NA    NA
-##  8 7301674 ラーメン ロケットキッチン          大阪府     NA    NA
-##  9 5816237 来来亭 一乗寺店                    京都府     NA    NA
-## 10 7161211 歴史を刻め 六甲道                  兵庫県     NA    NA</code></pre>
+##    ID      Name                         Pref   Budget Score
+##    &lt;chr&gt;   &lt;chr&gt;                        &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
+##  1 6102312 山神山人                     兵庫県     NA  NA  
+##  2 7219276 彩々 宝塚チボリ店            兵庫県     NA   4.5
+##  3 5898767 麺屋 小鉄                    千葉県     NA  NA  
+##  4 5835975 おおぎやラーメン 児玉店      埼玉県     NA  NA  
+##  5 6718319 らーめん村                   東京都     NA  NA  
+##  6 7178942 麺屋葵                       埼玉県     NA  NA  
+##  7 5507208 博多ラーメン げんこつ 平野店 大阪府     NA   3.5
+##  8 5496226 満福                         千葉県     NA  NA  
+##  9 6393506 小川軒                       東京都    800  NA  
+## 10 7276037 麺や 京水                    東京都    800   4.5</code></pre>
 <p>のように書きます。ブートストラップ法や機械学習における交差検証 (cross-validation)の際に有用な関数ですが、ブートストラップや機械学習のパッケージの多くはサンプル分割の関数を提供しているため、あまり使う機会はないでしょう。また、<code>slice_sample()</code>関数をブートストラップ法のために用いる場合は、ケースを反復抽出する必要があり、<code>replace = TRUE</code>を付けると反復抽出を行います。デフォルト値は<code>FALSE</code>です。</p>
 </div>
 <div id="条件に合致する行を抽出する" class="section level3 hasAnchor" number="12.4.2">
@@ -1742,7 +1740,7 @@ Score
 </div>
 <div id="handling1-arrange" class="section level2 hasAnchor" number="12.5">
 <h2><span class="header-section-number">12.5</span> 行のソート<a href="datahandling1.html#handling1-arrange" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>続いて、行のソートについて解説します。「食べログ」などのレビューサービスを利用する場合、口コミ評価が高い順で見るのが一般的でしょう<a href="reference.html#fn72" class="footnote-ref" id="fnref72"><sup>72</sup></a>。また、サッカーのランキングも多くは1位から下の順位で掲載されるのが一般的です。ここではこのようにある変数の値順に行を並び替える方法について説明します。</p>
+<p>続いて、行のソートについて解説します。「食べログ」などのレビューサービスを利用する場合、口コミ評価が高い順で見るのが一般的でしょう<a href="#fn72" class="footnote-ref" id="fnref72"><sup>72</sup></a>。また、サッカーのランキングも多くは1位から下の順位で掲載されるのが一般的です。ここではこのようにある変数の値順に行を並び替える方法について説明します。</p>
 <p>ソートには{dplyr}パッケージの<code>arrange()</code>関数を使います。引数は変数名のみです。たとえば、奈良県のラーメン屋を検索してみましょう。並び替える順は駅から近い店舗を上位に、遠い店舗を下位に並べます。このような順は<strong>昇順 (ascending)</strong>と呼ばれ、ランキング表などでよく見ます。駅から近い順にソートするので、まず最寄りの駅情報が欠損でないことが必要です。また、ラーメン屋の評価も気になるので口コミが1つ以上付いている店舗に絞りましょう。表示する列は店舗名、最寄りの駅、徒歩距離、口コミ数、点数です。</p>
 <div class="sourceCode" id="cb894"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb894-1"><a href="datahandling1.html#cb894-1"></a>df <span class="sc">%&gt;%</span></span>
 <span id="cb894-2"><a href="datahandling1.html#cb894-2"></a>  <span class="fu">filter</span>(Pref <span class="sc">==</span> <span class="st">&quot;奈良県&quot;</span>, <span class="sc">!</span><span class="fu">is.na</span>(Station), ScoreN <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
@@ -1810,7 +1808,7 @@ Score
 ## 22 彩華ラーメン 桜井店                   大福駅                18      1  3   
 ## 23 天下一品 新大宮店                     新大宮駅               6      1  3   
 ## 24 博多長浜らーめん 夢街道 四条大路店    新大宮駅              29      4  2.88</code></pre>
-<p>よく考えてみれば、「評価が同点の場合、どうなるの?」と疑問を抱く方がいるかも知れません。たとえば、7行目の「河童ラーメン本舗 押熊店」と8行目の「無鉄砲がむしゃら」はどれも評価が4点ですが、「河童ラーメン本舗 押熊店」が先に表示されます。そのこれは簡単です。同点の場合、データセット内で上に位置する行が先に表示されます。これを確認するには<code>which()</code>関数を使います。<code>()</code>内に条件文を指定することで、この条件に合致する要素の位置を返します。もし、条件に合致するものが複数あった場合は全ての位置を返します<a href="reference.html#fn73" class="footnote-ref" id="fnref73"><sup>73</sup></a>。</p>
+<p>よく考えてみれば、「評価が同点の場合、どうなるの?」と疑問を抱く方がいるかも知れません。たとえば、7行目の「河童ラーメン本舗 押熊店」と8行目の「無鉄砲がむしゃら」はどれも評価が4点ですが、「河童ラーメン本舗 押熊店」が先に表示されます。そのこれは簡単です。同点の場合、データセット内で上に位置する行が先に表示されます。これを確認するには<code>which()</code>関数を使います。<code>()</code>内に条件文を指定することで、この条件に合致する要素の位置を返します。もし、条件に合致するものが複数あった場合は全ての位置を返します<a href="#fn73" class="footnote-ref" id="fnref73"><sup>73</sup></a>。</p>
 <div class="sourceCode" id="cb898"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb898-1"><a href="datahandling1.html#cb898-1"></a><span class="fu">which</span>(df<span class="sc">$</span>Name <span class="sc">==</span> <span class="st">&quot;河童ラーメン本舗 押熊店&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] 6021</code></pre>
 <div class="sourceCode" id="cb900"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb900-1"><a href="datahandling1.html#cb900-1"></a><span class="fu">which</span>(df<span class="sc">$</span>Name <span class="sc">==</span> <span class="st">&quot;無鉄砲がむしゃら&quot;</span>)</span></code></pre></div>
@@ -1887,6 +1885,15 @@ Score
 <h2>練習問題<a href="datahandling1.html#handling1-exercise" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 
 </div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="70">
+<li id="fn70"><p>実は<code>select(starts_with("X"), -ends_with("D"), ID)</code>のように順番を変えると<code>ID</code>は最後の列になりますが、とりあえず残ります。なぜなら、<code>select()</code>関数は左側から右側の方へコードを実行するからです。<a href="datahandling1.html#fnref70" class="footnote-back">↩︎</a></p></li>
+<li id="fn71"><p>実は<code>select_df[, c(2, 8, 9)]</code>でも前後にパイプ演算子を使うことは可能ですが、コードが読みにくくなるため、推奨しません。<a href="datahandling1.html#fnref71" class="footnote-back">↩︎</a></p></li>
+<li id="fn72"><p>サービスによってはこの機能が有料になっていたりもしますね。<a href="datahandling1.html#fnref72" class="footnote-back">↩︎</a></p></li>
+<li id="fn73"><p>たとえば、データ内に「ラーメンショップ」という店舗は3店舗あり、この場合、長さ3のベクトルが返されます。<a href="datahandling1.html#fnref73" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 

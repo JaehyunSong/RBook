@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>14. データハンドリング [基礎編: factor型] | 私たちのR: ベストプラクティスの探究</title>
   <meta name="description" content="R Not for Everyone: An Esoteric Guide." />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
 
   <meta property="og:title" content="14. データハンドリング [基礎編: factor型] | 私たちのR: ベストプラクティスの探究" />
   <meta property="og:type" content="book" />
-  <meta property="og:url" content="https://jaysong.net/RBook/" />
   <meta property="og:image" content="https://jaysong.net/RBook//HTML/cover.png" />
   <meta property="og:description" content="R Not for Everyone: An Esoteric Guide." />
   <meta name="github-repo" content="JaehyunSong/RBook" />
@@ -32,7 +31,6 @@
   <link rel="shortcut icon" href="HTML/favicon.png" type="image/x-icon" />
 <link rel="prev" href="datahandling2.html"/>
 <link rel="next" href="tidydata.html"/>
-<script src="libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -1267,14 +1265,14 @@ n = 2
 ## 8 東京都    3.67 東京都   東京都   東京都  
 ## 9 神奈川県  3.53 神奈川県 神奈川県 神奈川県</code></pre>
 <div class="sourceCode" id="cb1125"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1125-1"><a href="factor.html#cb1125-1"></a><span class="fu">levels</span>(Score_df<span class="sc">$</span>Pref2)</span></code></pre></div>
-<pre><code>## [1] &quot;和歌山県&quot; &quot;神奈川県&quot; &quot;東京都&quot;   &quot;埼玉県&quot;   &quot;千葉県&quot;   &quot;大阪府&quot;   &quot;奈良県&quot;  
-## [8] &quot;京都府&quot;   &quot;兵庫県&quot;</code></pre>
-<div class="sourceCode" id="cb1127"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1127-1"><a href="factor.html#cb1127-1"></a><span class="fu">levels</span>(Score_df<span class="sc">$</span>Pref3)</span></code></pre></div>
-<pre><code>## [1] &quot;京都府&quot;   &quot;千葉県&quot;   &quot;埼玉県&quot;   &quot;和歌山県&quot; &quot;東京都&quot;   &quot;兵庫県&quot;   &quot;大阪府&quot;  
+<pre><code>## [1] &quot;埼玉県&quot;   &quot;東京都&quot;   &quot;和歌山県&quot; &quot;大阪府&quot;   &quot;京都府&quot;   &quot;兵庫県&quot;   &quot;千葉県&quot;  
 ## [8] &quot;神奈川県&quot; &quot;奈良県&quot;</code></pre>
+<div class="sourceCode" id="cb1127"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1127-1"><a href="factor.html#cb1127-1"></a><span class="fu">levels</span>(Score_df<span class="sc">$</span>Pref3)</span></code></pre></div>
+<pre><code>## [1] &quot;京都府&quot;   &quot;大阪府&quot;   &quot;東京都&quot;   &quot;埼玉県&quot;   &quot;和歌山県&quot; &quot;神奈川県&quot; &quot;奈良県&quot;  
+## [8] &quot;兵庫県&quot;   &quot;千葉県&quot;</code></pre>
 <div class="sourceCode" id="cb1129"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1129-1"><a href="factor.html#cb1129-1"></a><span class="fu">levels</span>(Score_df<span class="sc">$</span>Pref4)</span></code></pre></div>
-<pre><code>## [1] &quot;兵庫県&quot;   &quot;奈良県&quot;   &quot;東京都&quot;   &quot;千葉県&quot;   &quot;埼玉県&quot;   &quot;神奈川県&quot; &quot;京都府&quot;  
-## [8] &quot;和歌山県&quot; &quot;大阪府&quot;</code></pre>
+<pre><code>## [1] &quot;和歌山県&quot; &quot;埼玉県&quot;   &quot;奈良県&quot;   &quot;兵庫県&quot;   &quot;東京都&quot;   &quot;大阪府&quot;   &quot;千葉県&quot;  
+## [8] &quot;京都府&quot;   &quot;神奈川県&quot;</code></pre>
 <p><code>Pref</code>から<code>Pref4</code>まで同じように見えますが、水準の順番が異なります (<code>Pref</code>はcharacter型だから水準がありません)。</p>
 </div>
 <div id="fct_reorder-別の1変数の値を基準に水準の順番を変更する" class="section level3 hasAnchor" number="14.2.8">
@@ -1338,7 +1336,7 @@ n = 2
 <div id="factor-forcat-reorder2" class="section level3 hasAnchor" number="14.2.9">
 <h3><span class="header-section-number">14.2.9</span> <code>fct_reorder2()</code>: 別の2変数の値を基準に水準の順番を変更する<a href="factor.html#factor-forcat-reorder2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>この関数は別の変数を基準に水準が調整される点では<code>fct_reorder()</code>と類似しています。ただし、よく誤解されるのは「変数Aの値が同じなら変数Bを基準に…」といったものではありません。たとえば、<code>fct_reorder(x, y, mean)</code>の場合、<code>y</code>の平均値 (<code>mean()</code>)の順で<code>x</code>の水準を調整するという意味です。この<code>mean()</code>関数に必要なデータはベクトル1つです。しかし、関数によっては2つの変数が必要な場合があります。</p>
-<p>これは頻繁に直面する問題ではありませんが、この<code>fct_reorder2()</code>関数が活躍するケースを紹介します。以下は6月27日から7月1日までの5日間、5地域におけるCOVID-19新規感染者数を表したデータです<a href="reference.html#fn78" class="footnote-ref" id="fnref78"><sup>78</sup></a>。入力が面倒な方は<a href="Data/COVID19.csv">ここ</a>からダウンロードして読み込んでください。</p>
+<p>これは頻繁に直面する問題ではありませんが、この<code>fct_reorder2()</code>関数が活躍するケースを紹介します。以下は6月27日から7月1日までの5日間、5地域におけるCOVID-19新規感染者数を表したデータです<a href="#fn78" class="footnote-ref" id="fnref78"><sup>78</sup></a>。入力が面倒な方は<a href="Data/COVID19.csv">ここ</a>からダウンロードして読み込んでください。</p>
 <div class="sourceCode" id="cb1140"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1140-1"><a href="factor.html#cb1140-1"></a><span class="co"># 入力が面倒ならデータをダウンロードし、</span></span>
 <span id="cb1140-2"><a href="factor.html#cb1140-2"></a><span class="co"># Reorder2_df &lt;- read_csv(&quot;Data/COVID19.csv&quot;)</span></span>
 <span id="cb1140-3"><a href="factor.html#cb1140-3"></a>Reorder2_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
@@ -1647,7 +1645,7 @@ n = 2
 ##  8     8 &lt;NA&gt;     欠損値  
 ##  9     9 そば     そば    
 ## 10    10 &lt;NA&gt;     欠損値</code></pre>
-<p><code>X1</code>をcharacter型に戻す理由<a href="reference.html#fn79" class="footnote-ref" id="fnref79"><sup>79</sup></a>は、水準にない値が入るとfactor化が解除されるからです。factor型をcharacter型に戻さずに<code>df6$X1</code>の<code>NA</code>を<code>"欠損値"</code>に置換すると、以下のようになります。</p>
+<p><code>X1</code>をcharacter型に戻す理由<a href="#fn79" class="footnote-ref" id="fnref79"><sup>79</sup></a>は、水準にない値が入るとfactor化が解除されるからです。factor型をcharacter型に戻さずに<code>df6$X1</code>の<code>NA</code>を<code>"欠損値"</code>に置換すると、以下のようになります。</p>
 <div class="sourceCode" id="cb1183"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1183-1"><a href="factor.html#cb1183-1"></a><span class="co"># df6のX1がNAなら&quot;欠損&quot;、それ以外なら元のX1の値を返す</span></span>
 <span id="cb1183-2"><a href="factor.html#cb1183-2"></a><span class="fu">ifelse</span>(<span class="fu">is.na</span>(df6<span class="sc">$</span>X1), <span class="st">&quot;欠損値&quot;</span>, df6<span class="sc">$</span>X1)</span></code></pre></div>
 <pre><code>##  [1] &quot;1&quot;      &quot;3&quot;      &quot;2&quot;      &quot;欠損値&quot; &quot;2&quot;      &quot;2&quot;      &quot;1&quot;      &quot;欠損値&quot;
@@ -1691,6 +1689,13 @@ n = 2
 <h2>練習問題<a href="factor.html#factor-excersie" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 
 </div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="78">
+<li id="fn78"><p>データの出典は<a href="https://news.google.com/covid19/map">Google</a>です。<a href="factor.html#fnref78" class="footnote-back">↩︎</a></p></li>
+<li id="fn79"><p>character型でなく、numeric型でも出来ます。<a href="factor.html#fnref79" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 

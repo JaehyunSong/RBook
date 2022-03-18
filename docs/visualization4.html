@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>20. 可視化[発展] | 私たちのR: ベストプラクティスの探究</title>
   <meta name="description" content="R Not for Everyone: An Esoteric Guide." />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
 
   <meta property="og:title" content="20. 可視化[発展] | 私たちのR: ベストプラクティスの探究" />
   <meta property="og:type" content="book" />
-  <meta property="og:url" content="https://jaysong.net/RBook/" />
   <meta property="og:image" content="https://jaysong.net/RBook//HTML/cover.png" />
   <meta property="og:description" content="R Not for Everyone: An Esoteric Guide." />
   <meta name="github-repo" content="JaehyunSong/RBook" />
@@ -32,7 +31,6 @@
   <link rel="shortcut icon" href="HTML/favicon.png" type="image/x-icon" />
 <link rel="prev" href="visualization3.html"/>
 <link rel="next" href="rmarkdown.html"/>
-<script src="libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -847,7 +845,7 @@ div.csl-indent {
 <pre><code>## Picking joint bandwidth of 0.054</code></pre>
 <pre><code>## Warning: Removed 6 rows containing non-finite values (stat_density_ridges).</code></pre>
 <p><img src="visualization4_files/figure-html/visual4-ridge5-1.png" width="2100" style="display: block; margin: auto;" /></p>
-<p>　また、横軸の値に応じて背景の色をグラデーションで表現することも可能です。この場合、<code>geom_density_ridges()</code>幾何オブジェクトでなく、<code>geom_density_ridges_gradient()</code>を使い、<code>fill</code>にもマッピングをする必要があります。横軸（<code>x</code>）の値に応じて色塗りをする場合、<code>fill = stat(x)</code>とします。デフォルトでは横軸の値が高いほど空色、低いほど黒になります。ここでは高いほど黄色、低いほど紫ににするため、色弱にも優しい<code>scale_fill_viridis_c()</code>を使い<a href="reference.html#fn91" class="footnote-ref" id="fnref91"><sup>91</sup></a>、カラーオプションはplasmaにします（<code>option = "c"</code>）。</p>
+<p>　また、横軸の値に応じて背景の色をグラデーションで表現することも可能です。この場合、<code>geom_density_ridges()</code>幾何オブジェクトでなく、<code>geom_density_ridges_gradient()</code>を使い、<code>fill</code>にもマッピングをする必要があります。横軸（<code>x</code>）の値に応じて色塗りをする場合、<code>fill = stat(x)</code>とします。デフォルトでは横軸の値が高いほど空色、低いほど黒になります。ここでは高いほど黄色、低いほど紫ににするため、色弱にも優しい<code>scale_fill_viridis_c()</code>を使い<a href="#fn91" class="footnote-ref" id="fnref91"><sup>91</sup></a>、カラーオプションはplasmaにします（<code>option = "c"</code>）。</p>
 <div class="sourceCode" id="cb1426"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1426-1"><a href="visualization4.html#cb1426-1"></a>Country_df <span class="sc">%&gt;%</span></span>
 <span id="cb1426-2"><a href="visualization4.html#cb1426-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb1426-3"><a href="visualization4.html#cb1426-3"></a>  <span class="fu">geom_density_ridges_gradient</span>(<span class="fu">aes</span>(<span class="at">x =</span> HDI_2018, <span class="at">y =</span> Continent, <span class="at">fill =</span> <span class="fu">stat</span>(x)), </span>
@@ -1904,7 +1902,7 @@ div.csl-indent {
 <div id="visual4-bump" class="section level2 hasAnchor" number="20.13">
 <h2><span class="header-section-number">20.13</span> バンプチャート<a href="visualization4.html#visual4-bump" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>　バンプチャート (bump chart)は順位の変化などを示す時に有効なグラフです。たとえば、G7構成国の新型コロナ感染者数の順位の変化を示すにはどうすれば良いでしょうか。そもそもどのような形式のデータが必要でしょうか。まずは必要なデータ形式を紹介したいと思います。</p>
-<p>　まず、{ggplot2}によるバンプチャートの作成を支援する{ggbump}パッケージをインストールし、読み込みましょう<a href="reference.html#fn92" class="footnote-ref" id="fnref92"><sup>92</sup></a>。</p>
+<p>　まず、{ggplot2}によるバンプチャートの作成を支援する{ggbump}パッケージをインストールし、読み込みましょう<a href="#fn92" class="footnote-ref" id="fnref92"><sup>92</sup></a>。</p>
 <div class="sourceCode" id="cb1538"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1538-1"><a href="visualization4.html#cb1538-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggbump)</span></code></pre></div>
 <p>　ここではG7構成国の100万人当り新型コロナ感染者数の順位がどのように変化したのかを2020年4月から7月まで1ヶ月単位で表したデータが必要です。データは以下のようなコードで作成しますが、<a href="https://github.com/JaehyunSong/RBook">本書のサポートページ</a>からもダウンロード可能です。</p>
 <div class="sourceCode" id="cb1539"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1539-1"><a href="visualization4.html#cb1539-1"></a>Bump_df <span class="ot">&lt;-</span> <span class="fu">left_join</span>(COVID19_df, Country_df, <span class="at">by =</span> <span class="st">&quot;Country&quot;</span>) <span class="sc">%&gt;%</span></span>
@@ -2065,7 +2063,7 @@ div.csl-indent {
 <span id="cb1552-3"><a href="visualization4.html#cb1552-3"></a>                                            <span class="st">&quot;その他&quot;</span>, <span class="st">&quot;棄権&quot;</span>, <span class="st">&quot;DK&quot;</span>)),</span>
 <span id="cb1552-4"><a href="visualization4.html#cb1552-4"></a>         <span class="at">Vote21 =</span> <span class="fu">factor</span>(Vote21, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;政党A&quot;</span>, <span class="st">&quot;政党B&quot;</span>, <span class="st">&quot;政党C&quot;</span>, <span class="st">&quot;政党D&quot;</span>, </span>
 <span id="cb1552-5"><a href="visualization4.html#cb1552-5"></a>                                            <span class="st">&quot;その他&quot;</span>, <span class="st">&quot;棄権&quot;</span>, <span class="st">&quot;DK&quot;</span>)))</span></code></pre></div>
-<p>　それでは沖積図を描いてみましょう。使用する幾何オブジェクトは<code>geom_alluvium()</code>と<code>geom_stratum()</code>です。必ずこの順番でレイヤーを重ねてください。マッピングは<code>y</code>、<code>axis1</code>、<code>axis2</code>に対し、<code>y</code>には当該パターン内のケース数 (<code>Freq</code>)、<code>axis1</code>は2009年の投票先 (<code>Vote20</code>)、<code>axis2</code>は2010年の投票先 (<code>Vote21</code>)を指定します<a href="reference.html#fn93" class="footnote-ref" id="fnref93"><sup>93</sup></a>。これらのマッピングは<code>geom_stratum()</code>と<code>geom_alluvim()</code>共通であるため、<code>ggplot()</code>内でマッピングした方が効率的です。</p>
+<p>　それでは沖積図を描いてみましょう。使用する幾何オブジェクトは<code>geom_alluvium()</code>と<code>geom_stratum()</code>です。必ずこの順番でレイヤーを重ねてください。マッピングは<code>y</code>、<code>axis1</code>、<code>axis2</code>に対し、<code>y</code>には当該パターン内のケース数 (<code>Freq</code>)、<code>axis1</code>は2009年の投票先 (<code>Vote20</code>)、<code>axis2</code>は2010年の投票先 (<code>Vote21</code>)を指定します<a href="#fn93" class="footnote-ref" id="fnref93"><sup>93</sup></a>。これらのマッピングは<code>geom_stratum()</code>と<code>geom_alluvim()</code>共通であるため、<code>ggplot()</code>内でマッピングした方が効率的です。</p>
 <div class="sourceCode" id="cb1553"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1553-1"><a href="visualization4.html#cb1553-1"></a>Vote_2021 <span class="sc">%&gt;%</span></span>
 <span id="cb1553-2"><a href="visualization4.html#cb1553-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> Freq, <span class="at">axis1 =</span> Vote20, <span class="at">axis2 =</span> Vote21)) <span class="sc">+</span></span>
 <span id="cb1553-3"><a href="visualization4.html#cb1553-3"></a>    <span class="fu">geom_alluvium</span>() <span class="sc">+</span></span>
@@ -2122,7 +2120,7 @@ div.csl-indent {
 <span id="cb1559-3"><a href="visualization4.html#cb1559-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb1559-4"><a href="visualization4.html#cb1559-4"></a>  <span class="fu">geom_treemap</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population))</span></code></pre></div>
 <p><img src="visualization4_files/figure-html/visual4-tree2-1.png" width="2100" style="display: block; margin: auto;" /></p>
-<p>　これだけだと各長方形がどの国を指しているのかが分かりませんね。長方形の上に国名（<code>Country</code>）を追加するためには<code>geom_treemap_text()</code>幾何オブジェクトを使用します。マッピングは<code>area</code>と<code>label</code>に対し、それぞれ面積を表す<code>Population</code>と国名を表す<code>Country</code>を指定します。<code>area</code>は<code>geom_treemap()</code>と<code>geom_treemap_text()</code>両方で使われるので<code>ggplot()</code>の内部でマッピングしても問題ありません<a href="reference.html#fn94" class="footnote-ref" id="fnref94"><sup>94</sup></a>。また、<code>aes()</code>の外側に<code>color = "white"</code>で文字を白に指定し、<code>place = "center"</code>で長方形の真ん中にラベルが付くようにします。</p>
+<p>　これだけだと各長方形がどの国を指しているのかが分かりませんね。長方形の上に国名（<code>Country</code>）を追加するためには<code>geom_treemap_text()</code>幾何オブジェクトを使用します。マッピングは<code>area</code>と<code>label</code>に対し、それぞれ面積を表す<code>Population</code>と国名を表す<code>Country</code>を指定します。<code>area</code>は<code>geom_treemap()</code>と<code>geom_treemap_text()</code>両方で使われるので<code>ggplot()</code>の内部でマッピングしても問題ありません<a href="#fn94" class="footnote-ref" id="fnref94"><sup>94</sup></a>。また、<code>aes()</code>の外側に<code>color = "white"</code>で文字を白に指定し、<code>place = "center"</code>で長方形の真ん中にラベルが付くようにします。</p>
 <div class="sourceCode" id="cb1560"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1560-1"><a href="visualization4.html#cb1560-1"></a>Country_df <span class="sc">%&gt;%</span></span>
 <span id="cb1560-2"><a href="visualization4.html#cb1560-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">&quot;Asia&quot;</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb1560-3"><a href="visualization4.html#cb1560-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population)) <span class="sc">+</span></span>
@@ -2270,7 +2268,7 @@ div.csl-indent {
 <span id="cb1575-9"><a href="visualization4.html#cb1575-9"></a>          <span class="at">panel.grid      =</span> <span class="fu">element_blank</span>(),</span>
 <span id="cb1575-10"><a href="visualization4.html#cb1575-10"></a>          <span class="at">axis.text.x     =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
 <p><img src="visualization4_files/figure-html/visual4-mosaic9-1.png" width="2400" style="display: block; margin: auto;" /></p>
-<p>　ただし、一つ問題があります。それは目盛りラベルの位置です。例えば、右側の横軸目盛りラベルの場合、セルの位置とラベルの位置がずれています。これは2つのファセットが同じ目盛りを共有し、左側の方に合わせられたため生じるものです。よく見ると横軸も縦軸も目盛りラベルに位置が同じであることが分かります。これを解消するためには、<code>facet_wrap()</code>の内部に<code>scale = "free"</code>を指定します<a href="reference.html#fn95" class="footnote-ref" id="fnref95"><sup>95</sup></a>。これは各ファセットが独自のスケールを有することを意味します。</p>
+<p>　ただし、一つ問題があります。それは目盛りラベルの位置です。例えば、右側の横軸目盛りラベルの場合、セルの位置とラベルの位置がずれています。これは2つのファセットが同じ目盛りを共有し、左側の方に合わせられたため生じるものです。よく見ると横軸も縦軸も目盛りラベルに位置が同じであることが分かります。これを解消するためには、<code>facet_wrap()</code>の内部に<code>scale = "free"</code>を指定します<a href="#fn95" class="footnote-ref" id="fnref95"><sup>95</sup></a>。これは各ファセットが独自のスケールを有することを意味します。</p>
 <div class="sourceCode" id="cb1576"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1576-1"><a href="visualization4.html#cb1576-1"></a>Mosaic_df <span class="sc">%&gt;%</span></span>
 <span id="cb1576-2"><a href="visualization4.html#cb1576-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb1576-3"><a href="visualization4.html#cb1576-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent), <span class="at">fill =</span> Polity), </span>
@@ -2313,6 +2311,16 @@ Hartigan, J. A., and Beat Kleiner. 1984. <span>“A Mosaic of Television Ratings
 <div id="ref-Heer_Bostock:2010" class="csl-entry">
 Heer, Jeffrey, and Michael Bostock. 2010. <span>“Crowdsourcing Graphical Perception: Using Mechanical Turk to Assess Visualization Design.”</span> <em>Proceedings of the SIGCHI Conference on Human Factors in Computing Systems</em>.
 </div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="91">
+<li id="fn91"><p>最後の<code>_c</code>はマッピングする変数（ここでは<code>HDI_2018</code>）が連続変数（<strong>c</strong>ontinuous）であることを意味します。<a href="visualization4.html#fnref91" class="footnote-back">↩︎</a></p></li>
+<li id="fn92"><p>これから登場する<code>geom_bump()</code>幾何オブジェクトが使えるようになります。{ggbump}を使用せず、{ggplot2}が提供する<code>geom_line()</code>でも代替可能です。<code>geom_line()</code>の場合、直線で順位の変化が表示され、<code>geom_bump()</code>の場合は曲線で表示されます。丸い感じの図を好まない方なら、{ggbump}を読み込まず、<code>geom_bump()</code>を<code>geom_line()</code>に書き換えてください。<a href="visualization4.html#fnref92" class="footnote-back">↩︎</a></p></li>
+<li id="fn93"><p>今回は2期間の変化を示していますが、3期以上の場合、<code>axis3</code>、<code>axis4</code>、…と追加してください。<a href="visualization4.html#fnref93" class="footnote-back">↩︎</a></p></li>
+<li id="fn94"><p>今回の例だと、<code>label</code>も<code>ggplot()</code>内部でマッピング可能です。<a href="visualization4.html#fnref94" class="footnote-back">↩︎</a></p></li>
+<li id="fn95"><p>他にも<strong>縦</strong>軸のみ共有する<code>"free_x"</code>、横軸のみ共有する<code>"free_y"</code>があり、既定値は<code>"fixed"</code>です。<a href="visualization4.html#fnref95" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 

@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>29. モンテカルロシミュレーション | 私たちのR: ベストプラクティスの探究</title>
   <meta name="description" content="R Not for Everyone: An Esoteric Guide." />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
 
   <meta property="og:title" content="29. モンテカルロシミュレーション | 私たちのR: ベストプラクティスの探究" />
   <meta property="og:type" content="book" />
-  <meta property="og:url" content="https://jaysong.net/RBook/" />
   <meta property="og:image" content="https://jaysong.net/RBook//HTML/cover.png" />
   <meta property="og:description" content="R Not for Everyone: An Esoteric Guide." />
   <meta name="github-repo" content="JaehyunSong/RBook" />
@@ -32,7 +31,6 @@
   <link rel="shortcut icon" href="HTML/favicon.png" type="image/x-icon" />
 <link rel="prev" href="oop.html"/>
 <link rel="next" href="scraping.html"/>
-<script src="libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -741,7 +739,7 @@ div.csl-indent {
 <p>　サイコロを3回振るコードを書くなら、値の集合（<code>x</code>）は<code>c(1, 2, 3, 4, 5, 6)</code>、または<code>1:6</code>で、抽出の回数（<code>size</code>）は3となります。また、一回出た目も抽出される可能性があるため、復元抽出を行う必要があります（<code>replace = TRUE</code>）。そして各目が出る確率は1/6ですが、各値が抽出される確率が等しい場合、省略可能です。</p>
 <div class="sourceCode" id="cb1980"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1980-1"><a href="monte.html#cb1980-1"></a><span class="co"># この場合、prob引数は省略可能</span></span>
 <span id="cb1980-2"><a href="monte.html#cb1980-2"></a><span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">3</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">6</span>, <span class="dv">6</span>))</span></code></pre></div>
-<pre><code>## [1] 1 1 5</code></pre>
+<pre><code>## [1] 2 5 2</code></pre>
 <p>　今回はサイコロを1万回振り、それぞれの目が出た回数を棒グラフとして示してみます。無作為に抽出された値であれば、各目が出る回数は等しいはずです。ベクトルに対して<code>table()</code>関数を使うと、各要素が出現した回数が出力され、このオブジェクトを<code>barplot()</code>関数に渡すと棒グラフを作成することができます。</p>
 <div class="sourceCode" id="cb1982"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1982-1"><a href="monte.html#cb1982-1"></a>Dice_vec <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">10</span><span class="sc">^</span><span class="dv">4</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb1982-2"><a href="monte.html#cb1982-2"></a><span class="fu">table</span>(Dice_vec) <span class="sc">%&gt;%</span> <span class="fu">barplot</span>()</span></code></pre></div>
@@ -851,7 +849,7 @@ div.csl-indent {
 </tr>
 </tbody>
 </table>
-<p>　以上の表に掲載されているパラメーター以外にも指定可能なパラメーターがあるため、詳細は各関数のヘルプを参照してください。たとえば、ガンマ分布の場合、<code>rate</code>で、負の二項分布の場合、<code>mu</code>で分布の形状を指定することができます。また、多変量正規分布の乱数を抽出するには{mvtnorm}パッケージの<code>rmvnorm()</code>を使いますが、ここでの<code>mean</code>は数値型ベクトル、<code>sigma</code>は行列構造の分散共分散行列を使います<a href="reference.html#fn111" class="footnote-ref" id="fnref111"><sup>111</sup></a>。</p>
+<p>　以上の表に掲載されているパラメーター以外にも指定可能なパラメーターがあるため、詳細は各関数のヘルプを参照してください。たとえば、ガンマ分布の場合、<code>rate</code>で、負の二項分布の場合、<code>mu</code>で分布の形状を指定することができます。また、多変量正規分布の乱数を抽出するには{mvtnorm}パッケージの<code>rmvnorm()</code>を使いますが、ここでの<code>mean</code>は数値型ベクトル、<code>sigma</code>は行列構造の分散共分散行列を使います<a href="#fn111" class="footnote-ref" id="fnref111"><sup>111</sup></a>。</p>
 </div>
 <div id="シードについて" class="section level3 hasAnchor" number="29.2.3">
 <h3><span class="header-section-number">29.2.3</span> シードについて<a href="monte.html#シードについて" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -1438,6 +1436,12 @@ t検定
 <div id="ref-Efron:1979" class="csl-entry">
 Efron, Bradley. 1979. <span>“Bootstrap Methods: Another Look at the Jackknife.”</span> <em>The Annals of Statistics</em> 7: 1–26.
 </div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="111">
+<li id="fn111"><p><code>sigma</code>は数値型ベクトル（<code>mean</code>の実引数の長さと同じ長さ）で指定することも可能ですが、この場合、共分散は0になります。<a href="monte.html#fnref111" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 

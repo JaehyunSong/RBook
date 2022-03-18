@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>13. データハンドリング [基礎編: 拡張] | 私たちのR: ベストプラクティスの探究</title>
   <meta name="description" content="R Not for Everyone: An Esoteric Guide." />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
 
   <meta property="og:title" content="13. データハンドリング [基礎編: 拡張] | 私たちのR: ベストプラクティスの探究" />
   <meta property="og:type" content="book" />
-  <meta property="og:url" content="https://jaysong.net/RBook/" />
   <meta property="og:image" content="https://jaysong.net/RBook//HTML/cover.png" />
   <meta property="og:description" content="R Not for Everyone: An Esoteric Guide." />
   <meta name="github-repo" content="JaehyunSong/RBook" />
@@ -32,7 +31,6 @@
   <link rel="shortcut icon" href="HTML/favicon.png" type="image/x-icon" />
 <link rel="prev" href="datahandling1.html"/>
 <link rel="next" href="factor.html"/>
-<script src="libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -1041,7 +1039,7 @@ div.csl-indent {
 ## 7 埼玉県         0.278       3.64
 ## 8 兵庫県         0.389       3.54
 ## 9 神奈川県       0.587       3.53</code></pre>
-<p>続いて、一つ便利な関数を紹介します。それはグループのサイズを計算する関数、<code>n()</code>です。この関数を<code>summarise()</code>内に使うと、各グループに属するケース数を出力します<a href="reference.html#fn74" class="footnote-ref" id="fnref74"><sup>74</sup></a>。先ほどのコードを修正し、各グループのサイズを<code>N</code>という名の列として追加してみましょう。そしてソートの順番は<code>N</code>を最優先とし、同じ場合は<code>Score_Mean</code>が高い方を上に出力させます。また、<code>ScoreN_Mean</code>の前に、口コミ数の合計も出してみましょう。</p>
+<p>続いて、一つ便利な関数を紹介します。それはグループのサイズを計算する関数、<code>n()</code>です。この関数を<code>summarise()</code>内に使うと、各グループに属するケース数を出力します<a href="#fn74" class="footnote-ref" id="fnref74"><sup>74</sup></a>。先ほどのコードを修正し、各グループのサイズを<code>N</code>という名の列として追加してみましょう。そしてソートの順番は<code>N</code>を最優先とし、同じ場合は<code>Score_Mean</code>が高い方を上に出力させます。また、<code>ScoreN_Mean</code>の前に、口コミ数の合計も出してみましょう。</p>
 <div class="sourceCode" id="cb975"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb975-1"><a href="datahandling2.html#cb975-1"></a><span class="co"># Prefごとに口コミ数の合計、口コミ数の平均値、評価の平均値、店舗数を求める</span></span>
 <span id="cb975-2"><a href="datahandling2.html#cb975-2"></a><span class="co"># 店舗数-評価の平均値順でソートする</span></span>
 <span id="cb975-3"><a href="datahandling2.html#cb975-3"></a>df <span class="sc">%&gt;%</span></span>
@@ -1465,7 +1463,7 @@ div.csl-indent {
 ## 19 神奈川県 Reasonable    65
 ## 20 神奈川県 Expensive     54</code></pre>
 <p><code>Budget3</code>はcharacter型変数となるので、欠損値のタイプも<code>NA_character_</code>にします。もし、numeric型変数を作成するなら<code>NA_real_</code>を使います。<code>if_else()</code>や<code>case_when()</code>など、{dplyr}が提供する関数は欠損値の型にも厳しいので、<code>NA</code>だけだとエラーが帰ってきます。</p>
-<p>これまでの<code>case_when()</code>関数に似たような機能をする関数として<code>recode()</code>関数があります<a href="reference.html#fn75" class="footnote-ref" id="fnref75"><sup>75</sup></a>。これは変数の値を単純に置換したい場合に便利な関数です。たとえば、都府県名をローマ字に変換するケースを考えてみましょう。</p>
+<p>これまでの<code>case_when()</code>関数に似たような機能をする関数として<code>recode()</code>関数があります<a href="#fn75" class="footnote-ref" id="fnref75"><sup>75</sup></a>。これは変数の値を単純に置換したい場合に便利な関数です。たとえば、都府県名をローマ字に変換するケースを考えてみましょう。</p>
 <div class="sourceCode" id="cb1013"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1013-1"><a href="datahandling2.html#cb1013-1"></a><span class="co"># recode()を使う場合</span></span>
 <span id="cb1013-2"><a href="datahandling2.html#cb1013-2"></a>df2 <span class="sc">%&gt;%</span> </span>
 <span id="cb1013-3"><a href="datahandling2.html#cb1013-3"></a>  <span class="fu">mutate</span>(<span class="at">Pref2 =</span> <span class="fu">recode</span>(Pref,</span>
@@ -2012,7 +2010,7 @@ HRP
 ## 10 群馬県    488
 ## # … with 37 more rows</code></pre>
 <p>これから共通変数名の値をキー (key)と呼びます。今回の例だと<code>Pref</code>が<code>df2</code>と<code>df4</code>のキー変数であり、その値である<code>"東京都"</code>、<code>"北海道"</code>などがキーです。</p>
-<p>まずは、<code>inner_join()</code>の仕組みについて考えます。これは<code>df2</code>と<code>df4</code>に共通するキーを持つケースのみ結合する関数です。<code>df4</code>には<code>"北海道"</code>というキーがありますが、<code>df2</code>にはありません。したがって、キーが<code>"北海道"</code>のケースは結合から除外されます。これをイメージにしたものが図<a href="datahandling2.html#fig:handling2-merge-col-8">13.3</a>です<a href="reference.html#fn76" class="footnote-ref" id="fnref76"><sup>76</sup></a>。それぞれ3 <span class="math inline">\(\times\)</span> 2 (3行2列)のデータですが、キーが一致するケースは2つしかないため、結合後のデータは3 <span class="math inline">\(\times\)</span> 2となります。</p>
+<p>まずは、<code>inner_join()</code>の仕組みについて考えます。これは<code>df2</code>と<code>df4</code>に共通するキーを持つケースのみ結合する関数です。<code>df4</code>には<code>"北海道"</code>というキーがありますが、<code>df2</code>にはありません。したがって、キーが<code>"北海道"</code>のケースは結合から除外されます。これをイメージにしたものが図<a href="datahandling2.html#fig:handling2-merge-col-8">13.3</a>です<a href="#fn76" class="footnote-ref" id="fnref76"><sup>76</sup></a>。それぞれ3 <span class="math inline">\(\times\)</span> 2 (3行2列)のデータですが、キーが一致するケースは2つしかないため、結合後のデータは3 <span class="math inline">\(\times\)</span> 2となります。</p>
 
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:handling2-merge-col-8"></span>
 <img src="figures/Handling2/Merge_Inner.png" alt="inner_join()の仕組み" width="80%" />
@@ -2078,7 +2076,7 @@ HRP
 </p>
 </div>
 <p>これからは<code>df2</code>と<code>df4</code>を結合することになりますが、この2つのtibbleの大きさが異なります。<code>df2</code>は9つの都府県のみであるに対し、<code>df4</code>は47都道府県全てのデータが入っているからです。</p>
-<p>ここまではキー変数が一つである場合についてのみ考えましたが、複数のキー変数が必要な場合もあります。たとえば、市区町村の人口・面積データと市区町村の投票率データを結合するとします。各自治体に与えられている「<a href="https://www.soumu.go.jp/denshijiti/code.html">全国地方公共団体コード</a>」が両データに含まれている場合は、このコードをキー変数として使えば問題ありませんが、市区町村名をキー変数として使わざる得ないケースもあるでしょう。しかし、キー変数が複数ある場合もあります。たとえば、府中市は東京都と広島県にありますし、太子町は大阪府と兵庫県にあります。この場合、市区町村名のみでケースをマッチングすると、重複されてマッチングされる恐れがあります。この場合はキー変数を増やすことで対処できます。たとえば、同じ都道府県なら同じ市区町村は存在しないでしょう<a href="reference.html#fn77" class="footnote-ref" id="fnref77"><sup>77</sup></a>。キー変数を複数指定する方法は簡単です。たとえば、市区町村名変数が<code>Munip</code>、都道府県名変数が<code>Pref</code>なら<code>by = c("Munip", "Pref")</code>と指定するだけです。</p>
+<p>ここまではキー変数が一つである場合についてのみ考えましたが、複数のキー変数が必要な場合もあります。たとえば、市区町村の人口・面積データと市区町村の投票率データを結合するとします。各自治体に与えられている「<a href="https://www.soumu.go.jp/denshijiti/code.html">全国地方公共団体コード</a>」が両データに含まれている場合は、このコードをキー変数として使えば問題ありませんが、市区町村名をキー変数として使わざる得ないケースもあるでしょう。しかし、キー変数が複数ある場合もあります。たとえば、府中市は東京都と広島県にありますし、太子町は大阪府と兵庫県にあります。この場合、市区町村名のみでケースをマッチングすると、重複されてマッチングされる恐れがあります。この場合はキー変数を増やすことで対処できます。たとえば、同じ都道府県なら同じ市区町村は存在しないでしょう<a href="#fn77" class="footnote-ref" id="fnref77"><sup>77</sup></a>。キー変数を複数指定する方法は簡単です。たとえば、市区町村名変数が<code>Munip</code>、都道府県名変数が<code>Pref</code>なら<code>by = c("Munip", "Pref")</code>と指定するだけです。</p>
 <p>最後に、キー変数以外の変数名が重複する場合について考えましょう。これはパネルデータを結合する時によく直面する問題です。同じ回答者に2回の調査を行った場合、回答者のIDでデータを結合することになります。ただし、それぞれのデータにおいて回答者の性別に関する変数が<code>F1</code>という名前の場合、どうなるでしょうか。同じデータの同じ名前の変数が複数あると、非常に扱いにくくなります。実際の結果を見てみましょう。</p>
 <div class="sourceCode" id="cb1066"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1066-1"><a href="datahandling2.html#cb1066-1"></a>Wave1_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">ID =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>),</span>
 <span id="cb1066-2"><a href="datahandling2.html#cb1066-2"></a>                   <span class="at">F1 =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>),</span>
@@ -2121,6 +2119,15 @@ HRP
 <h2>練習問題<a href="datahandling2.html#handling2-exercise" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 
 </div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="74">
+<li id="fn74"><p>今回の例のように記述統計量とケース数を同時に計算する場合は<code>n()</code>を使いますが、ケース数<strong>のみ</strong>を計算する場合は<code>group_by()</code>と<code>summarise()</code>と組み合わせず、<code>count()</code>関数だけ使うことも可能です。グループ化変数（ここでは<code>Pref</code>）を<code>count()</code>の引数として指定すると、<code>Pref</code>の値ごとのケース数が表示されます。<a href="datahandling2.html#fnref74" class="footnote-back">↩︎</a></p></li>
+<li id="fn75"><p><code>recode()</code>関数は他にも{car}パッケージでも提供されています。{car}も広く使われている依存パッケージの一つであるため、<code>dplyr::recode()</code>と明示した方が良いかも知れません。<a href="datahandling2.html#fnref75" class="footnote-back">↩︎</a></p></li>
+<li id="fn76"><p>これらの図は<a href="https://r4ds.had.co.nz">Garrett Grolemund and Hadley Wickham. 2017. <em>R for Data Science: Import, Tidy, Transform, Visualize, and Model Data.</em> O’Reilly.</a>を参考にしました。<a href="datahandling2.html#fnref76" class="footnote-back">↩︎</a></p></li>
+<li id="fn77"><p>行政区も含むなら多くの政令指定都市にある「南区」とか「北区」が重複しますが、ここでは考えないことにしましょう。<a href="datahandling2.html#fnref77" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 
