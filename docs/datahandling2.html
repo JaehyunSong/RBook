@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>13. データハンドリング [基礎編: 拡張] | 私たちのR: ベストプラクティスの探究</title>
   <meta name="description" content="R Not for Everyone: An Esoteric Guide." />
-  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.28 and GitBook 2.6.7" />
 
   <meta property="og:title" content="13. データハンドリング [基礎編: 拡張] | 私たちのR: ベストプラクティスの探究" />
   <meta property="og:type" content="book" />
@@ -55,7 +55,7 @@
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.23/datatables.js"></script>
+<script src="libs/datatables-binding-0.24/datatables.js"></script>
 <link href="libs/dt-core-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="libs/dt-core-1.11.3/css/jquery.dataTables.extra.css" rel="stylesheet" />
 <script src="libs/dt-core-1.11.3/js/jquery.dataTables.min.js"></script>
@@ -1101,7 +1101,8 @@ div.csl-indent {
 ## 18 大阪府   京阪本線                   43         10       3.69
 ## 19 千葉県   新京成電鉄                 43          6       3.6 
 ## 20 京都府   阪急京都本線               43         27       3.5 
-## # … with 503 more rows</code></pre>
+## # … with 503 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <p>ぐるなびに登録されているラーメン屋が最も多い路線は埼玉県内の東武東上線で122店舗があります。東武東上線は東京都と埼玉県をまたがる路線ですので、東武東上線だけならもっと多いかも知れませんね。</p>
 <p>ここで一つ考えたいのは<code>summarise()</code>内の<code>.groups</code>引数です。前回はグループ化に使った変数ごとに1行しか残っていなかったのでグループ化を全て解除しました。しかし、今回は状況がやや異なります。グループ化変数に使った<code>Pref</code>を考えると、まだ<code>Pref == "東京都"</code>であるケースがいくつかあります。やろうとすればまだグループ化出来る状態です。これは<code>Line</code>についても同じです。<code>Line == "東武東上線"</code>の行はここには表示されていないものの、まだデータに残っています。もし、これ以上グループ化しないなら今のように<code>.groups = "drop"</code>が正しいですが、もしもう一回グループ化したい場合はどうすればよいでしょうか。方法は2つ考えられます。</p>
 <ol style="list-style-type: decimal">
@@ -1129,7 +1130,8 @@ div.csl-indent {
 ## 3 神奈川県 小田急小田原線          96         31       3.59
 ## 4 埼玉県   東武伊勢崎線            96         18       3.51
 ## 5 神奈川県 横浜市営ブルーライン    82         77       3.66
-## # … with 518 more rows</code></pre>
+## # … with 518 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li><code>.groups</code>引数を何とかする。</li>
 </ol>
@@ -1152,7 +1154,8 @@ div.csl-indent {
 ## 3 神奈川県 小田急小田原線          96         31       3.59
 ## 4 埼玉県   東武伊勢崎線            96         18       3.51
 ## 5 神奈川県 横浜市営ブルーライン    82         77       3.66
-## # … with 518 more rows</code></pre>
+## # … with 518 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <p><code>.groups</code>引数は<code>"drop"</code>と<code>"keep"</code>以外にも<code>"drop_last"</code>があります。実は<code>summarise()</code>に<code>.groups</code>引数を指定したい場合のデフォルト値は<code>.groups == "drop_last"</code>または<code>"keep"</code>ですが、ここがややこしいです。主なケースにおいてデフォルト値は<code>"drop"</code>となりますとなります。<code>.groups == "drop_last"</code>これは最後のグループ化変数のみ解除する意味です。今回の例だと、2番目のグループ化変数である<code>Line</code>がグループ化変数から外され、<code>Pref</code>のみがグループ化変数として残る仕組みです。</p>
 <p>それではデフォルト値が<code>"keep"</code>になるのはいつでしょうか。それは記述統計量の結果が長さ2以上のベクトルである場合です。平均値を求める<code>mean()</code>、標準偏差を求める<code>sd()</code>などは、結果として長さ1のベクトルを返します。しかし、長さ2以上ののベクトルを返す関数もあります。たとえば、分位数を求める<code>quantile()</code>関数があります。<code>quantile(ベクトル名, 0.25)</code>の場合、第一四分位点のみ返すため、結果は長さ1のベクトルです。しかし、<code>quantile(ベクトル名, c(0.25, 0.5, 0.75))</code>のように第一四分位点から第三四分位点を同時に計算し、長さ3のベクトルが返されるケースもありますし、第二引数を省略すると、最小値・第一四分位点・第二四分位点・第三四分位点・最大値、つまり、長さ5のベクトルが返される場合があります。</p>
 <div class="sourceCode" id="cb984"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb984-1"><a href="datahandling2.html#cb984-1"></a><span class="co"># 第一四分位点のみを求める (長さ1のベクトル)</span></span>
@@ -1184,7 +1187,8 @@ div.csl-indent {
 ##  8 京都府 JR山陰本線（京都-米子）    8.67
 ##  9 京都府 ＪＲ山陰本線（京都-米子）  9.23
 ## 10 京都府 ＪＲ嵯峨野線               5   
-## # … with 499 more rows</code></pre>
+## # … with 499 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <p>最初は<code>Pref</code>と<code>Line</code>でグループ化しましたが、<code>summarise()</code>の後、<code>Line</code>がグループ化変数から外されました。つまり、引数が<code>"drop_last"</code>になっていることです。</p>
 <p>それでは、平均値に加えて、第一四分位点と第三四分位点も計算し、<code>Quantile</code>という名で格納してみましょう。</p>
 <div class="sourceCode" id="cb991"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb991-1"><a href="datahandling2.html#cb991-1"></a>df <span class="sc">%&gt;%</span></span>
@@ -1208,7 +1212,8 @@ div.csl-indent {
 ##  8 京都府 ＪＲ奈良線  8        9   
 ##  9 京都府 JR小浜線   16.5      9.75
 ## 10 京都府 JR小浜線   16.5     23.2 
-## # … with 1,008 more rows</code></pre>
+## # … with 1,008 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <p>同じ<code>Pref</code>、<code>Line</code>のケースが2つずつ出来ています。最初に来る数値は第一四分位点、次に来るのが第三四分位点です。そして最初のグループ化変数であった<code>Pref</code>と<code>Line</code>が、<code>summarise()</code>後もグループ化変数として残っていることが分かります。</p>
 <p><code>.groups</code>引数は記述統計量だけを計算する意味ではあまり意識する必要がありません。しかし、得られた記述統計量から何らかの計算をしたり、さらにもう一回記述統計量を求めたりする際、予期せぬ結果が得られる可能性があるため注意する必要があります。出来る限り<code>.groups</code>引数は指定するようにしましょう。</p>
 <hr />
@@ -1241,7 +1246,8 @@ div.csl-indent {
 ##  8 埼玉県   ラーメン山岡家 上尾店                35     0.583
 ##  9 兵庫県   濃厚醤油 中華そば いせや 大蔵谷店    35     0.583
 ## 10 大阪府   河童ラーメン本舗 松原店              31     0.517
-## # … with 5,365 more rows</code></pre>
+## # … with 5,365 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <p><code>mutate()</code>は3行目に登場しますが、これは<code>Walk</code>を60に割った結果を<code>Walk_Hour</code>としてデータフレームの最後の列として格納することを意味します。もし、最後の列でなく、ある変数の前、または後にしたい場合は、<code>.before</code>または<code>.after</code>引数を追加します。これは<code>select()</code>関数の<code>.before</code>と<code>.after</code>と同じ使い方です。たとえば、新しく出来た<code>Walk_Hour</code>を<code>ID</code>と<code>Name</code>の間に入れたい場合は</p>
 <div class="sourceCode" id="cb997"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb997-1"><a href="datahandling2.html#cb997-1"></a><span class="co"># コードの3行名を修正 (.before使用)</span></span>
 <span id="cb997-2"><a href="datahandling2.html#cb997-2"></a><span class="fu">mutate</span>(<span class="at">Walk_Hour =</span> Walk <span class="sc">/</span> <span class="dv">60</span>,</span>
@@ -1820,7 +1826,8 @@ div.csl-indent {
 ##  8 茨城県 2.92e6  6097.    663    45.0  39.3  15.2  7.15 15.1   6.73  7.73  1.46
 ##  9 栃木県 1.97e6  6408.    595    44.1  40.3  18.9  9.94 12.8   4.9   5.04  1.03
 ## 10 群馬県 1.97e6  6362.    488    48.2  40.6  16.4  9.76 12.4   4.67  7.58  1.87
-## # … with 37 more rows, and 3 more variables: Reiwa &lt;dbl&gt;, NHK &lt;dbl&gt;, HRP &lt;dbl&gt;</code></pre>
+## # … with 37 more rows, and 3 more variables: Reiwa &lt;dbl&gt;, NHK &lt;dbl&gt;, HRP &lt;dbl&gt;
+## # ℹ Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names</code></pre>
 <table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -2009,7 +2016,8 @@ HRP
 ##  8 茨城県    663
 ##  9 栃木県    595
 ## 10 群馬県    488
-## # … with 37 more rows</code></pre>
+## # … with 37 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <p>これから共通変数名の値をキー (key)と呼びます。今回の例だと<code>Pref</code>が<code>df2</code>と<code>df4</code>のキー変数であり、その値である<code>"東京都"</code>、<code>"北海道"</code>などがキーです。</p>
 <p>まずは、<code>inner_join()</code>の仕組みについて考えます。これは<code>df2</code>と<code>df4</code>に共通するキーを持つケースのみ結合する関数です。<code>df4</code>には<code>"北海道"</code>というキーがありますが、<code>df2</code>にはありません。したがって、キーが<code>"北海道"</code>のケースは結合から除外されます。これをイメージにしたものが図<a href="datahandling2.html#fig:handling2-merge-col-8">13.3</a>です<a href="#fn76" class="footnote-ref" id="fnref76"><sup>76</sup></a>。それぞれ3 <span class="math inline">\(\times\)</span> 2 (3行2列)のデータですが、キーが一致するケースは2つしかないため、結合後のデータは3 <span class="math inline">\(\times\)</span> 2となります。</p>
 
@@ -2058,7 +2066,8 @@ HRP
 ##  8 福岡県           NA          NA      NA       NA    985
 ##  9 新潟県           NA          NA      NA       NA    705
 ## 10 静岡県           NA          NA      NA       NA    679
-## # … with 37 more rows</code></pre>
+## # … with 37 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <p><code>df2</code>にはなかった北海道や愛知県などの行ができました。そして、<code>df2</code>にはない情報はすべて欠損値 (<code>NA</code>)となりました。</p>
 <p>続いて、<code>left_join()</code>ですが、これは先に指定したデータに存在するキーのみで結合を行います (図@ref(fig: handling2-merge-col-12))。今回は<code>df2</code>が先に指定されていますが、<code>df2</code>のキーは<code>df4</code>のキーの部分集合であるため、<code>inner_join()</code>と同じ結果が得られます。</p>
 
@@ -2196,7 +2205,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');

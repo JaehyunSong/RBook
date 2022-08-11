@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>20. 可視化[発展] | 私たちのR: ベストプラクティスの探究</title>
   <meta name="description" content="R Not for Everyone: An Esoteric Guide." />
-  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.28 and GitBook 2.6.7" />
 
   <meta property="og:title" content="20. 可視化[発展] | 私たちのR: ベストプラクティスの探究" />
   <meta property="og:type" content="book" />
@@ -55,7 +55,7 @@
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.23/datatables.js"></script>
+<script src="libs/datatables-binding-0.24/datatables.js"></script>
 <link href="libs/dt-core-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="libs/dt-core-1.11.3/css/jquery.dataTables.extra.css" rel="stylesheet" />
 <script src="libs/dt-core-1.11.3/js/jquery.dataTables.min.js"></script>
@@ -1275,7 +1275,8 @@ div.csl-indent {
 ##  8 Australia           オセアニア &quot;3万ドル以上&quot;                    97    0.938
 ##  9 Austria             ヨーロッパ &quot;3万ドル以上&quot;                    93    0.914
 ## 10 Azerbaijan          ヨーロッパ &quot;1万ドル以上\n2万ドル未満&quot;       10    0.754
-## # … with 168 more rows</code></pre>
+## # … with 168 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <p>　次は<code>group_by()</code>と<code>summarise()</code>を使って、各カテゴリーに属するケース数を計算し、<code>N</code>という名の列として追加します。</p>
 <div class="sourceCode" id="cb1480"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1480-1"><a href="visualization4.html#cb1480-1"></a>Heatmap_df1 <span class="ot">&lt;-</span> Heatmap_df <span class="sc">%&gt;%</span></span>
 <span id="cb1480-2"><a href="visualization4.html#cb1480-2"></a>  <span class="fu">group_by</span>(Continent, Income) <span class="sc">%&gt;%</span></span>
@@ -1522,7 +1523,7 @@ div.csl-indent {
 <span id="cb1505-3"><a href="visualization4.html#cb1505-3"></a>    <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
 <span id="cb1505-4"><a href="visualization4.html#cb1505-4"></a>    <span class="fu">theme_void</span>() <span class="co"># 空っぽのテーマ</span></span></code></pre></div>
 <p><img src="visualization4_files/figure-html/visual4-map11-1.png" width="2100" style="display: block; margin: auto;" /></p>
-<p>　ただ、日本地図を出すという場合、多くは都道府県レベルでマッピングが目的でしょう。世界地図のマッピングならこれで問題ありませんが、一国だけなら、その下の自治体の境界線も必要です。したがって、先ほど使用しましたパッケージのより高解像度の地図が含まれている{rnaturalearthhires}をインストールし、読み込みましょう。2022年Jun月10日現在、{rnaturalearthhires}はCRANに登録されておらず、GitHubの<a href="https://github.com/ropensci">ropensciレポジトリー</a>のみで公開されているため、今回は{pacman}の<code>p_load()</code>でなく、<code>p_load_gh()</code>を使用します。</p>
+<p>　ただ、日本地図を出すという場合、多くは都道府県レベルでマッピングが目的でしょう。世界地図のマッピングならこれで問題ありませんが、一国だけなら、その下の自治体の境界線も必要です。したがって、先ほど使用しましたパッケージのより高解像度の地図が含まれている{rnaturalearthhires}をインストールし、読み込みましょう。2022年Aug月11日現在、{rnaturalearthhires}はCRANに登録されておらず、GitHubの<a href="https://github.com/ropensci">ropensciレポジトリー</a>のみで公開されているため、今回は{pacman}の<code>p_load()</code>でなく、<code>p_load_gh()</code>を使用します。</p>
 <div class="sourceCode" id="cb1506"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1506-1"><a href="visualization4.html#cb1506-1"></a>pacman<span class="sc">::</span><span class="fu">p_load_gh</span>(<span class="st">&quot;ropensci/rnaturalearthhires&quot;</span>)</span></code></pre></div>
 <p>　地図データの抽出には<code>ne_states()</code>関数を使用します。第一引数として国家名を指定し、地図データのクラスはsfとします。抽出したデータの使い方は世界地図の時と同じです。</p>
 <div class="sourceCode" id="cb1507"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1507-1"><a href="visualization4.html#cb1507-1"></a>Japan_Map <span class="ot">&lt;-</span> <span class="fu">ne_states</span>(<span class="st">&quot;Japan&quot;</span>, <span class="at">returnclass =</span> <span class="st">&quot;sf&quot;</span>)</span>
@@ -1549,7 +1550,8 @@ div.csl-indent {
 ##  8     8 茨城県   470. 
 ##  9     9 栃木県   302. 
 ## 10    10 群馬県   305. 
-## # … with 37 more rows</code></pre>
+## # … with 37 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <p>　各都道府県の人口密度がついております、左側の<code>Code</code>は何でしょうか。これは各都道府県のISOコードであり、このコードをキー変数としてデータを結合することとなります。各都道府県のコードは<a href="https://nlftp.mlit.go.jp/ksj/gml/codelist/PrefCd.html">国土交通省のホームページ</a>から確認可能です。</p>
 <p>　それではデータを結合してみましょう。<code>ne_states()</code>で読み込んだデータの場合、地域のコードは<code>iso_3166_2</code>という列に格納されています。</p>
 <div class="sourceCode" id="cb1510"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1510-1"><a href="visualization4.html#cb1510-1"></a>Japan_Map<span class="sc">$</span>iso_3166_2</span></code></pre></div>
@@ -1781,7 +1783,8 @@ div.csl-indent {
 ##  8 27108 大阪市 大正区     65141    2627
 ##  9 27109 大阪市 天王寺区   75729    3480
 ## 10 27111 大阪市 浪速区     69766    1409
-## # … with 65 more rows</code></pre>
+## # … with 65 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <p>　各市区町村にもコードが指定されており、<code>Osaka_Student</code>では<code>Code</code>列、<code>Osaka_map</code>では<code>citi_code</code>列となります。<code>Osaka_map</code>の<code>city_code</code>は文字列であるため、こちらを数値型に変換し<code>Code</code>という名の列として追加しておきましょう。続いて、<code>Code</code>列をキー変数とし、2つのデータセットを結合します。</p>
 <div class="sourceCode" id="cb1523"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1523-1"><a href="visualization4.html#cb1523-1"></a>Osaka_map <span class="ot">&lt;-</span> Osaka_map <span class="sc">%&gt;%</span></span>
 <span id="cb1523-2"><a href="visualization4.html#cb1523-2"></a>    <span class="fu">mutate</span>(<span class="at">Code =</span> <span class="fu">as.numeric</span>(city_code))</span>
@@ -2057,7 +2060,8 @@ div.csl-indent {
 ##  8 その他 DK        18
 ##  9 その他 その他    73
 ## 10 その他 政党A    121
-## # … with 37 more rows</code></pre>
+## # … with 37 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <p>　2020年の調査で「わからない」と回答し、2021年の調査でも「わからない」と回答した回答者数は111名、2020年の調査で「わからない」と回答し、2021年の調査では「その他」と回答した回答者数は8名、…といったことが分かりますね。</p>
 <p>　続いて、グラフを作成する前に投票先変数 (<code>Vote20</code>と<code>Vote21</code>)をfactor化します。可視化の際、投票先が出力される順番に決まりはありませんが、政党A、政党B、政党C、…、DKの順が自然かと思います。むろん、こちらは自分から見て分かりやいように順番を決めましょう。ただし、2変数における水準 (level)の順番は一致させた方が良いでしょう。</p>
 <div class="sourceCode" id="cb1555"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1555-1"><a href="visualization4.html#cb1555-1"></a>Vote_2021 <span class="ot">&lt;-</span> Vote_2021 <span class="sc">%&gt;%</span></span>
@@ -2391,7 +2395,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');

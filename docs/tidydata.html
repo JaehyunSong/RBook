@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>15. 整然データ構造 | 私たちのR: ベストプラクティスの探究</title>
   <meta name="description" content="R Not for Everyone: An Esoteric Guide." />
-  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.28 and GitBook 2.6.7" />
 
   <meta property="og:title" content="15. 整然データ構造 | 私たちのR: ベストプラクティスの探究" />
   <meta property="og:type" content="book" />
@@ -55,7 +55,7 @@
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.23/datatables.js"></script>
+<script src="libs/datatables-binding-0.24/datatables.js"></script>
 <link href="libs/dt-core-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="libs/dt-core-1.11.3/css/jquery.dataTables.extra.css" rel="stylesheet" />
 <script src="libs/dt-core-1.11.3/js/jquery.dataTables.min.js"></script>
@@ -1949,7 +1949,8 @@ Stock
 ##  8 &lt;NA&gt;     外国人   13989  7282.
 ##  9 秋田県   総人口 1023119 11638.
 ## 10 &lt;NA&gt;     外国人    2914 11638.
-## # … with 84 more rows</code></pre>
+## # … with 84 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <p>このデータは2015年国勢調査から抜粋したデータであり、各変数の詳細は以下の通りです。</p>
 <table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -2015,7 +2016,8 @@ Stock
 ##  8 &lt;NA&gt;   外国人      13989  7282.
 ##  9 秋田県 総人口    1023119 11638.
 ## 10 &lt;NA&gt;   外国人       2914 11638.
-## # … with 84 more rows</code></pre>
+## # … with 84 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <p>次は、<code>Pref</code>列の欠損値を埋めましょう。ここの欠損値は、当該セルの一つ上のセルの値で埋まりますが、これは<code>fill()</code>関数で簡単に処理できます。欠損値を埋めたい変数名を<code>fill()</code>の引数として渡すだけです。</p>
 <div class="sourceCode" id="cb1213"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1213-1"><a href="tidydata.html#cb1213-1"></a>df3 <span class="ot">&lt;-</span> df3 <span class="sc">%&gt;%</span></span>
 <span id="cb1213-2"><a href="tidydata.html#cb1213-2"></a>  <span class="fu">fill</span>(Pref)</span>
@@ -2034,7 +2036,8 @@ Stock
 ##  8 宮城県 外国人      13989  7282.
 ##  9 秋田県 総人口    1023119 11638.
 ## 10 秋田県 外国人       2914 11638.
-## # … with 84 more rows</code></pre>
+## # … with 84 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <p>そして、いよいよ<code>pivot_wider()</code>関数の出番ですが、基本的に使い方は以下の通りです。</p>
 <div class="sourceCode" id="cb1215"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1215-1"><a href="tidydata.html#cb1215-1"></a><span class="co"># pivot_wider()の使い方</span></span>
 <span id="cb1215-2"><a href="tidydata.html#cb1215-2"></a>データ名 <span class="sc">%&gt;%</span></span>
@@ -2059,7 +2062,8 @@ Stock
 ##  8 茨城県  6097. 2916976  41310
 ##  9 栃木県  6408. 1974255  26494
 ## 10 群馬県  6362. 1973115  37126
-## # … with 37 more rows</code></pre>
+## # … with 37 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <p>また、日本語の変数名が出来てしまったので、それぞれ<code>Total</code>と<code>Foreigner</code>に変更し、<code>relocate()</code>関数を使って<code>Area</code>を最後の列に移動します。</p>
 <div class="sourceCode" id="cb1218"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1218-1"><a href="tidydata.html#cb1218-1"></a>df3_W <span class="ot">&lt;-</span> df3_W <span class="sc">%&gt;%</span></span>
 <span id="cb1218-2"><a href="tidydata.html#cb1218-2"></a>  <span class="fu">rename</span>(<span class="st">&quot;Total&quot;</span>     <span class="ot">=</span> 総人口,</span>
@@ -2080,7 +2084,8 @@ Stock
 ##  8 茨城県 2916976     41310  6097.
 ##  9 栃木県 1974255     26494  6408.
 ## 10 群馬県 1973115     37126  6362.
-## # … with 37 more rows</code></pre>
+## # … with 37 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <p>これで整然データの出来上がりです。</p>
 <p>この<code>pivot_wider()</code>関数は<code>pivot_longer()</code>関数同様、様々な引数を提供しておりますが、主に使う機能は以上です。他には<code>pivot_wider()</code>によって出来た欠損値を埋める引数である<code>values_fill</code>があり、デフォルト値は<code>NULL</code>です。ここに<code>0</code>や<code>"Missing"</code>などの長さ1のベクトルを指定すれば、指定した値で欠損値が埋まります。</p>
 <p><code>pivot_wider()</code>関数の詳細は<code>?pivot_wider</code>もしくは、<a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">レファレンスページ</a>を参照してください。</p>
@@ -2106,7 +2111,8 @@ Stock
 ##  8     8 2020/1/23 木    0人             0人            
 ##  9     9 2020/1/24 金    2人             1人            
 ## 10    10 2020/1/25 土    0人             0人            
-## # … with 162 more rows</code></pre>
+## # … with 162 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <p>このデータは2020年1月16日から2020年7月5日まで、COVID-19 (新型コロナ)の新規感染者数を日本と韓国を対象に収集したものです。データはWikipedia (<a href="https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Japan">日本</a> / <a href="https://en.wikipedia.org/wiki/COVID-19_pandemic_in_South_Korea">韓国</a>)から収集しました。韓国の新規感染者数は最初の4日分が欠損値のように見えますが、最初の感染者が確認されたのが1月20日のため、1月19日までは欠損となっています。</p>
 <table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -2183,7 +2189,8 @@ Confirmed_Korea
 ##  8     4 2020/1/19 日    Korea   &lt;NA&gt;     
 ##  9     5 2020/1/20 月    Japan   0人      
 ## 10     5 2020/1/20 月    Korea   1人      
-## # … with 334 more rows</code></pre>
+## # … with 334 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <p>続いて、新規感染者数を表す<code>Confirmed</code>列から「人」を除去しましょう。人間にとってはなんの問題もありませんが、パソコンにとって<code>1人</code>や<code>5人</code>は文字列に過ぎず、分析ができる状態ではありません。ここで使う関数が<code>parse_number()</code>です。引数として指定した列から数値のみ抽出します。<code>"$1000"</code>や<code>"1, 324, 392"</code>のような数値でありながら、character型として保存されている列から数値のみを取り出す際に使う関数です。使い方は以下の通りです。</p>
 <div class="sourceCode" id="cb1224"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1224-1"><a href="tidydata.html#cb1224-1"></a>データ名 <span class="sc">%&gt;%</span></span>
 <span id="cb1224-2"><a href="tidydata.html#cb1224-2"></a>  <span class="fu">mutate</span>(新しい変数名 <span class="ot">=</span> <span class="fu">parse_number</span>(数値のみ抽出する変数名))</span></code></pre></div>
@@ -2206,7 +2213,8 @@ Confirmed_Korea
 ##  8     4 2020/1/19 日    Korea          NA
 ##  9     5 2020/1/20 月    Japan           0
 ## 10     5 2020/1/20 月    Korea           1
-## # … with 334 more rows</code></pre>
+## # … with 334 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <p>それでは国、曜日ごとの新規感染者数を調べてみます。求める統計量は曜日ごとの新規感染者数の合計、平均、標準偏差です。まず、曜日は月から日の順になるよう、factor型に変換します。そして、国と曜日ごとに記述統計量を計算し、<code>df4_S_Summary1</code>という名で保存します。</p>
 <div class="sourceCode" id="cb1227"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1227-1"><a href="tidydata.html#cb1227-1"></a>df4_S <span class="ot">&lt;-</span> df4_S <span class="sc">%&gt;%</span></span>
 <span id="cb1227-2"><a href="tidydata.html#cb1227-2"></a>  <span class="fu">mutate</span>(<span class="at">Week =</span> <span class="fu">factor</span>(Week, </span>
@@ -2291,7 +2299,8 @@ Confirmed_Korea
 ##  8     4 2020  1     19    日    Korea          NA
 ##  9     5 2020  1     20    月    Japan           0
 ## 10     5 2020  1     20    月    Korea           1
-## # … with 334 more rows</code></pre>
+## # … with 334 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <p>新しく出来た変数は元の変数があった場所になります。ここまで来たら月ごとに新規感染者の記述統計量は計算できます。曜日ごとに行ったコードの<code>Week</code>を<code>Month</code>に変えるだけです。また、<code>Month</code>は数字のみで構成されたcharacter型であるため、このままでも問題なくソートされます。したがって、別途factor化の必要もありません（むろん、してもいいですし、むしろ推奨されます）。</p>
 <div class="sourceCode" id="cb1236"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1236-1"><a href="tidydata.html#cb1236-1"></a>df4_S_Summary2 <span class="ot">&lt;-</span> df4_S <span class="sc">%&gt;%</span></span>
 <span id="cb1236-2"><a href="tidydata.html#cb1236-2"></a>  <span class="fu">group_by</span>(Country, Month) <span class="sc">%&gt;%</span></span>
@@ -2417,7 +2426,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');

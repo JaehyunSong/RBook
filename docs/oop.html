@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>28. オブジェクト指向型プログラミング | 私たちのR: ベストプラクティスの探究</title>
   <meta name="description" content="R Not for Everyone: An Esoteric Guide." />
-  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.28 and GitBook 2.6.7" />
 
   <meta property="og:title" content="28. オブジェクト指向型プログラミング | 私たちのR: ベストプラクティスの探究" />
   <meta property="og:type" content="book" />
@@ -55,7 +55,7 @@
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.23/datatables.js"></script>
+<script src="libs/datatables-binding-0.24/datatables.js"></script>
 <link href="libs/dt-core-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="libs/dt-core-1.11.3/css/jquery.dataTables.extra.css" rel="stylesheet" />
 <script src="libs/dt-core-1.11.3/js/jquery.dataTables.min.js"></script>
@@ -849,7 +849,7 @@ div.csl-indent {
 <div class="sourceCode" id="cb1922"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1922-1"><a href="oop.html#cb1922-1"></a>summary</span></code></pre></div>
 <pre><code>## function (object, ...) 
 ## UseMethod(&quot;summary&quot;)
-## &lt;bytecode: 0x7fdea3b090b0&gt;
+## &lt;bytecode: 0x7f7ea1b70a00&gt;
 ## &lt;environment: namespace:base&gt;</code></pre>
 <p>しかし、多態性を持つ関数の内部を見ることはできません。そもそも<code>summary()</code>関数はクラスごとに異なるコードを持っているため、<code>summary</code>だけでは「どのクラスの<code>summary()</code>か」が分かりません。それでもRには<code>summary()</code>関数が存在し、それをジェネリック関数（generic function）と呼びます。内部には<code>UseMethod("summary")</code>のみが書かれており、これは「この<code>summary()</code>関数は様々なクラスのメソッドとして機能するぞ」と宣言しているだけです。各クラスに対応したメソッドの内部を見るには<code>getS3method("メソッド名", "クラス名")</code>を使います。<code>summary()</code>メソッドは<code>numeric</code>型が別途指定されていないため、<code>"defualt"</code>となります。</p>
 <div class="sourceCode" id="cb1924"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1924-1"><a href="oop.html#cb1924-1"></a><span class="fu">getS3method</span>(<span class="st">&quot;summary&quot;</span>, <span class="st">&quot;default&quot;</span>)</span></code></pre></div>
@@ -904,7 +904,7 @@ div.csl-indent {
 ##     class(value) &lt;- c(&quot;summaryDefault&quot;, &quot;table&quot;)
 ##     value
 ## }
-## &lt;bytecode: 0x7fdf04870878&gt;
+## &lt;bytecode: 0x7f7ea2b85f58&gt;
 ## &lt;environment: namespace:base&gt;</code></pre>
 <p>Rにはメソッドがクラス内部で定義されず、別途の<code>メソッド名.クラス名()</code>といった関数として作成されています。そしてジェネリック関数によって一つの関数の「ように」まとまっています。このように、ジェネリック関数経由でメソッドを呼び出すことをメソッド・ディスパッチ（method dispatch）と呼びます。</p>
 </div>
@@ -949,12 +949,12 @@ div.csl-indent {
 <span id="cb1929-14"><a href="oop.html#cb1929-14"></a></span>
 <span id="cb1929-15"><a href="oop.html#cb1929-15"></a>My_Score1 <span class="co"># My_Score1の内部を見る</span></span></code></pre></div>
 <pre><code>## $Score1
-##  [1] 51.88091 45.32881 44.25926 62.32697 48.82074 37.66121 44.63672 46.24407
-##  [9] 58.18292 55.05719
+##  [1] 64.85446 37.96468 57.18624 55.00809 19.01191 63.43416 52.46090 49.09109
+##  [9] 50.17082 43.25730
 ## 
 ## $Score2
-##  [1] 45.82891 42.32618 48.60200 46.82740 65.08501 51.96246 51.97934 46.96327
-##  [9] 62.61098 52.35431
+##  [1] 57.89691 57.36132 33.77594 44.61125 40.59827 51.55679 46.20792 52.16704
+##  [9] 48.86652 45.96608
 ## 
 ## attr(,&quot;class&quot;)
 ## [1] &quot;Score&quot;</code></pre>
@@ -974,12 +974,12 @@ div.csl-indent {
 <span id="cb1933-11"><a href="oop.html#cb1933-11"></a></span>
 <span id="cb1933-12"><a href="oop.html#cb1933-12"></a>My_Score2 <span class="co"># My_Score2の内部を見る</span></span></code></pre></div>
 <pre><code>## $Score1
-##  [1] 71.11247 45.11412 59.93458 49.16667 49.16244 50.92592 33.21538 46.72975
-##  [9] 33.56572 51.45853
+##  [1] 42.00849 42.53467 56.68308 38.54725 65.58410 52.36251 54.04833 41.49646
+##  [9] 48.51541 57.35966
 ## 
 ## $Score2
-##  [1] 59.13383 49.72136 50.80936 53.02228 46.87515 65.77663 77.86906 46.93512
-##  [9] 50.05643 68.95761
+##  [1] 55.08297 32.18928 39.00418 53.25794 62.12651 47.88704 67.30675 61.39563
+##  [9] 37.99427 55.02071
 ## 
 ## attr(,&quot;class&quot;)
 ## [1] &quot;Score&quot;</code></pre>
@@ -1002,8 +1002,8 @@ div.csl-indent {
 <span id="cb1937-6"><a href="oop.html#cb1937-6"></a><span class="fu">mean</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>)) <span class="co"># R内蔵関数のmean()を使う</span></span></code></pre></div>
 <pre><code>## [1] 6</code></pre>
 <div class="sourceCode" id="cb1939"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1939-1"><a href="oop.html#cb1939-1"></a><span class="fu">mean</span>(My_Score1) <span class="co"># Scoreクラスのメソッドであるmean()を使う</span></span></code></pre></div>
-<pre><code>## [1] 49.43988
-## [1] 51.45399</code></pre>
+<pre><code>## [1] 49.24396
+## [1] 47.9008</code></pre>
 <p><code>mean(c(1, 3, 5, 7, 9, 11))</code>は引数がnumeric型ベクトルであるため、既存の<code>mean()</code>関数が使用されます。一方、<code>mean(My_Score1)</code>は引数がScoreクラスであるため、<code>mean.Score()</code>が使用されます。このように<code>mean_Score()</code>のような別途の関数を作る必要なく、既存の関数名が利用できます。実際、<code>methods(mean)</code>を実行すると、Scoreクラスのメソッドとして<code>mean()</code>関数が用意されたことを確認できます。</p>
 <div class="sourceCode" id="cb1941"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1941-1"><a href="oop.html#cb1941-1"></a><span class="fu">methods</span>(mean)</span></code></pre></div>
 <pre><code>## [1] mean.Date        mean.default     mean.difftime    mean.POSIXct    
@@ -1055,8 +1055,8 @@ div.csl-indent {
 ## see &#39;?methods&#39; for accessing help and source code</code></pre>
 <p><code>my_func()</code>関数はScoreとCatといった2種類のクラスで使われることが確認できます。それでは問題なく作動するかを確認してみましょう。<code>My_Score1</code>と<code>My_Cat</code>を、それぞれ<code>my_func()</code>に渡します。</p>
 <div class="sourceCode" id="cb1953"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1953-1"><a href="oop.html#cb1953-1"></a><span class="fu">my_func</span>(My_Score1)</span></code></pre></div>
-<pre><code>## [1] 49.43988
-## [1] 51.45399</code></pre>
+<pre><code>## [1] 49.24396
+## [1] 47.9008</code></pre>
 <div class="sourceCode" id="cb1955"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1955-1"><a href="oop.html#cb1955-1"></a><span class="fu">my_func</span>(My_Cat)</span></code></pre></div>
 <pre><code>## [1] &quot;矢内: にゃーにゃー&quot;</code></pre>
 <p>同じ関数名でも、オブジェクトのクラスによって異なる処理が行われることが分かります。</p>
@@ -1072,7 +1072,7 @@ div.csl-indent {
 <pre><code>## [1] &quot;Cat&quot;</code></pre>
 <p><code>My_Cat2</code>のクラスはCatであるため、<code>my_func.Cat()</code>メソッドが使えます。しかし、<code>my_func.Cat()</code>仕組みを見る限り、うまく作動しないでしょう。</p>
 <div class="sourceCode" id="cb1959"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb1959-1"><a href="oop.html#cb1959-1"></a><span class="fu">my_func</span>(My_Cat2)</span></code></pre></div>
-<pre><code>## Error: $ operator is invalid for atomic vectors</code></pre>
+<pre><code>## Error in cat$Name: $ operator is invalid for atomic vectors</code></pre>
 <p>間違った動作をするよりは、エラーが出て中断される方が良いですし、これで問題ないかも知れません。しかし、可能であれば、引数として使われたオブジェクトが、Catクラスか否かを厳密にチェックする機能があれば良いでしょう。カプセル化されている場合、クラスの定義時にデータの構造が厳密に定義されているため、このような手続きの必要性はあまりありませんが、カプセル化ができないRのS3クラスでは検証用関数（Validator）が必要です。</p>
 <p>それではCatクラスの特徴をいくつか考えてみましょう。</p>
 <ul>
@@ -1315,7 +1315,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');
