@@ -133,6 +133,7 @@ gtag('js', new Date());
 gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <meta property="og:title" content="私たちのR: ベストプラクティスの探求">
 <meta property="og:description" content="R Not for Everyone: An Esoteric Guide">
@@ -141,8 +142,6 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <meta name="twitter:title" content="私たちのR: ベストプラクティスの探求">
 <meta name="twitter:description" content="R Not for Everyone: An Esoteric Guide">
 <meta name="twitter:image" content="https://www.jaysong.net/RBook/imgs/favicon.png">
-<meta name="twitter:creator" content="@Tintstyle">
-<meta name="twitter:site" content="@Tintstyle">
 <meta name="twitter:card" content="summary">
 </head>
 
@@ -478,6 +477,35 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 
 <section id="RN4Esec-quarto-intro" class="level2" data-number="24.1">
 <h2 data-number="24.1" class="anchored" data-anchor-id="RN4Esec-quarto-intro"><span class="header-section-number">24.1</span> Quartoとは</h2>
+<p>QuartoはR Markdownの上位互換でもなく、R Markdownを代替するものでもない（<a href="https://yihui.org/en/2022/04/quarto-r-markdown/" target="_blank" rel="external">参考</a>）。</p>
+<p>以下のように、QuartoとR Markdownは同じやり方でHTML/PDF/Wordファイルを生成する。</p>
+<ul>
+<li>R Markdwon
+<ul>
+<li><code>.Rmd</code> <span class="math inline">\(\rightarrow\)</span> knitr <span class="math inline">\(\rightarrow\)</span> <code>.md</code> <span class="math inline">\(\rightarrow\)</span> pandoc <span class="math inline">\(\rightarrow\)</span> HTML/PDF/Word…</li>
+</ul></li>
+<li>Quarto
+<ul>
+<li><code>.qmd</code> <span class="math inline">\(\rightarrow\)</span> knitr <span class="math inline">\(\rightarrow\)</span> <code>.md</code> <span class="math inline">\(\rightarrow\)</span> pandoc <span class="math inline">\(\rightarrow\)</span> HTML/PDF/Word…</li>
+</ul></li>
+<li>R Markdownの場合、コードがRに限定されている（むろん、今はpythonなども使用可能）。
+<ul>
+<li>一方、Quartoはマルチリンガル（R、Pyhton、Juliaなど）</li>
+</ul></li>
+<li>R Markdownのエンジンはknitr
+<ul>
+<li>一方、Quartoはknitr、Jupyter、Observableが使用可能であり、今後も追加予定</li>
+</ul></li>
+<li>文書作成のための{rmarkdown}、ホームページ作成のための{blogdown}、スライド作成のための{xaringan}など
+<ul>
+<li>Quartoはこれらを全て一つに統合</li>
+</ul></li>
+<li>QuartoはRStudio以外にもVS Code、Jupyterなどでも使用可能</li>
+<li>つまり、既存のR Markdownを問題なく使っているのであれば、Quartoへの移行は不要
+<ul>
+<li>現在のところ、QuartoはR Markdown生態系を一つに統合したものに近く、文法などもほぼ同じであるため、移行のために新しい事をゼロベースから勉強する必要はほぼない</li>
+</ul></li>
+</ul>
 </section>
 <section id="RN4Esec-quarto-setup" class="level2" data-number="24.2">
 <h2 data-number="24.2" class="anchored" data-anchor-id="RN4Esec-quarto-setup"><span class="header-section-number">24.2</span> セットアップ</h2>
@@ -492,12 +520,15 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="RN4Ecb1"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb1-1"><a href="#RN4Ecb1-1"></a>pacman<span class="sc">::</span><span class="fu">p_install</span>(<span class="st">"quarto"</span>) <span class="co"># または、install.packages("quarto")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>RStudioのバージョン</p>
 </section>
 <section id="RN4Esec-quarto-howtouse" class="level2" data-number="24.3">
 <h2 data-number="24.3" class="anchored" data-anchor-id="RN4Esec-quarto-howtouse"><span class="header-section-number">24.3</span> 簡単な使い方</h2>
 <ul>
-<li>R Markdownと同じ感覚で使用可能</li>
+<li>R Markdownと同じ感覚で使用可能
+<ul>
+<li>File &gt; New File &gt; Quarto Document …</li>
+<li>RStudioが最新版でない場合、アップデートする</li>
+</ul></li>
 <li>Chunk optionを指定する時にはChunk内に<code>#|</code>を使用。
 <ul>
 <li>現時点では<code>{r}</code>内に使うことも可能</li>
@@ -506,7 +537,11 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <ul>
 <li>例) <code>fig.width</code>（RMarkdown）と<code>fig-width</code>（Quarto）など</li>
 </ul></li>
-<li><code>TRUE</code>と<code>FALSE</code>の代わりに<code>true</code>と<code>false</code>を使用</li>
+<li><code>TRUE</code>と<code>FALSE</code>の代わりに<code>true</code>と<code>false</code>を使用（YAMLと同じ書き方）</li>
+<li>Cross Referenceのやり方
+<ul>
+<li>章、図、表の場合、ラベルは<code>sec-</code>、<code>fig-</code>、<code>tbl-</code>で始まる必要がある</li>
+</ul></li>
 </ul>
 <div id="RN4Equarto-navigation-envelope" class="hidden">
 <p><span class="hidden" data-render-id="quarto-int-sidebar-title">私たちのR</span> <span class="hidden" data-render-id="quarto-int-navbar-title">私たちのR</span> <span class="hidden" data-render-id="quarto-int-next"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">表の作成</span></span> <span class="hidden" data-render-id="quarto-int-prev"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">R Markdown [応用]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/index.html">紹介</span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-1">Rの導入</span> <span class="hidden" data-render-id="quarto-int-sidebar:/aboutR.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R?</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/installation.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Rのインストール</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/ide.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">IDEの導入</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/r_customize.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">分析環境のカスタマイズ</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/packages.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Rパッケージ</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-2">Rの基礎</span> <span class="hidden" data-render-id="quarto-int-sidebar:/r_basic.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">基本的な操作</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/io.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">データの入出力</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/datatype.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">データ型</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/datastructure.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">データ構造</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/programming.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Rプログラミングの基礎</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/functions.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">関数の自作</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-3">データハンドリング</span> <span class="hidden" data-render-id="quarto-int-sidebar:/datahandling1.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">データハンドリング [抽出]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/datahandling2.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">データハンドリング [拡張]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/factor.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">データハンドリング [factor型]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/tidydata.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">整然データ構造</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/string.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">文字列の処理</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-4">可視化</span> <span class="hidden" data-render-id="quarto-int-sidebar:/visualization1.html"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">可視化 [理論]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/visualization2.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">可視化 [基礎]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/visualization3.html"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">可視化 [応用]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/visualization4.html"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">可視化 [発展]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/visualization5.html"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">モデルの可視化</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-5">再現可能な研究</span> <span class="hidden" data-render-id="quarto-int-sidebar:/rmarkdown.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">R Markdown [基礎]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/rmarkdown2.html"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">R Markdown [応用]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/quarto.html"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Quarto入門</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/table.html"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">表の作成</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/renv.html"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">分析環境の管理</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-6">中級者向け</span> <span class="hidden" data-render-id="quarto-int-sidebar:/iteration.html"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">反復処理</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/oop.html"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">オブジェクト指向プログラミング</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/monte.html"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">モンテカルロ・シミュレーション</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/scraping.html"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">スクレイピング</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/api.html"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">API</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-7">付録</span> <span class="hidden" data-render-id="quarto-int-sidebar:/tips.html">R Tips</span> <span class="hidden" data-render-id="quarto-int-sidebar:/session.html">本書の執筆環境</span> <span class="hidden" data-render-id="quarto-int-sidebar:/references.html">参考文献</span> <span class="hidden" data-render-id="footer-center">Copyright 2022, Jaehyun Song and Yuki Yanai</span></p>

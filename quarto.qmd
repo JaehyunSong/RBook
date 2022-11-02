@@ -7,6 +7,25 @@ source("_common.R")
 
 ## Quartoとは {#sec-quarto-intro}
 
+QuartoはR Markdownの上位互換でもなく、R Markdownを代替するものでもない（[参考](https://yihui.org/en/2022/04/quarto-r-markdown/)）。
+
+以下のように、QuartoとR Markdownは同じやり方でHTML/PDF/Wordファイルを生成する。
+
+* R Markdwon
+   * `.Rmd` $\rightarrow$ knitr $\rightarrow$ `.md` $\rightarrow$ pandoc $\rightarrow$ HTML/PDF/Word...
+* Quarto
+   * `.qmd` $\rightarrow$ knitr $\rightarrow$ `.md` $\rightarrow$ pandoc $\rightarrow$ HTML/PDF/Word...
+
+* R Markdownの場合、コードがRに限定されている（むろん、今はpythonなども使用可能）。
+   * 一方、Quartoはマルチリンガル（R、Pyhton、Juliaなど）
+* R Markdownのエンジンはknitr
+   * 一方、Quartoはknitr、Jupyter、Observableが使用可能であり、今後も追加予定
+* 文書作成のための{rmarkdown}、ホームページ作成のための{blogdown}、スライド作成のための{xaringan}など
+   * Quartoはこれらを全て一つに統合
+* QuartoはRStudio以外にもVS Code、Jupyterなどでも使用可能
+* つまり、既存のR Markdownを問題なく使っているのであれば、Quartoへの移行は不要
+   * 現在のところ、QuartoはR Markdown生態系を一つに統合したものに近く、文法などもほぼ同じであるため、移行のために新しい事をゼロベースから勉強する必要はほぼない
+
 ## セットアップ {#sec-quarto-setup}
 
 Quartoのインストール
@@ -21,13 +40,15 @@ Quartoのインストール
 pacman::p_install("quarto") # または、install.packages("quarto")
 ```
 
-RStudioのバージョン
-
 ## 簡単な使い方 {#sec-quarto-howtouse}
 
 * R Markdownと同じ感覚で使用可能
+   * File > New File > Quarto Document ...
+   * RStudioが最新版でない場合、アップデートする
 * Chunk optionを指定する時にはChunk内に`#|`を使用。
    * 現時点では`{r}`内に使うことも可能
 * 一部のオプションの仮引数名が異なる。
    * 例) `fig.width`（RMarkdown）と`fig-width`（Quarto）など
-* `TRUE`と`FALSE`の代わりに`true`と`false`を使用
+* `TRUE`と`FALSE`の代わりに`true`と`false`を使用（YAMLと同じ書き方）
+* Cross Referenceのやり方
+   * 章、図、表の場合、ラベルは`sec-`、`fig-`、`tbl-`で始まる必要がある
