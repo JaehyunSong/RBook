@@ -3,7 +3,7 @@ R Not for Everyone: An Esoteric Guide
 
 URL: <https://www.jaysong.net/RBook>
 
-<img src="figures/Cover.png" align="right" width="25%"/>
+<img src="Figs/Cover.png" align="right" width="25%"/>
 
 ## 目次
 
