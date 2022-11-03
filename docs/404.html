@@ -76,8 +76,6 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <meta name="twitter:title" content="私たちのR: ベストプラクティスの探求">
 <meta name="twitter:description" content="R Not for Everyone: An Esoteric Guide">
 <meta name="twitter:image" content="https://www.jaysong.net/RBook/imgs/favicon.png">
-<meta name="twitter:creator" content="@Tintstyle">
-<meta name="twitter:site" content="@Tintstyle">
 <meta name="twitter:card" content="summary">
 </head>
 
@@ -544,6 +542,20 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
   }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp(/https:\/\/www\.jaysong\.net\/RBook\//);
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+    var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+      }
+    }
 });
 </script>
 </div> <!-- /content -->

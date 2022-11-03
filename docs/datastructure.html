@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.2.256">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
-
 <title>私たちのR – 9&nbsp; データ構造</title>
 <style>
 code{white-space: pre-wrap;}
@@ -85,7 +82,6 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
-
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -103,8 +99,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-<script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -122,22 +117,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit"
   }
-}</script>
-<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-CEHS4C056W"></script>
-
-<script type="text/javascript">
+}</script><script async="" src="https://www.googletagmanager.com/gtag/js?id=G-CEHS4C056W"></script><script type="text/javascript">
 
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
-</script>
-
-<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
-<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
-
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
+</script><script src="site_libs/kePrint-0.0.1/kePrint.js"></script><link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 <meta property="og:title" content="私たちのR: ベストプラクティスの探求">
 <meta property="og:description" content="R Not for Everyone: An Esoteric Guide">
 <meta property="og:image" content="https://www.jaysong.net/RBook/imgs/favicon.png">
@@ -145,30 +132,21 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <meta name="twitter:title" content="私たちのR: ベストプラクティスの探求">
 <meta name="twitter:description" content="R Not for Everyone: An Esoteric Guide">
 <meta name="twitter:image" content="https://www.jaysong.net/RBook/imgs/favicon.png">
-<meta name="twitter:creator" content="@Tintstyle">
-<meta name="twitter:site" content="@Tintstyle">
 <meta name="twitter:card" content="summary">
 </head>
-
 <body class="nav-sidebar docked">
 
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">データ構造</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
     </div>
-  </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">
       私たちのR
@@ -177,14 +155,14 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
     <a href="https://github.com/JaehyunSong/RBook/" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
     <a href="" title="Share" id="sidebar-tool-dropdown-0" class="sidebar-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-share"></i></a>
     <ul class="dropdown-menu" aria-labelledby="sidebar-tool-dropdown-0">
-        <li>
-          <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+<li>
+          <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=%7Curl%7C">
             <i class="bi bi-bi-twitter pe-1"></i>
           Twitter
           </a>
         </li>
         <li>
-          <a class="dropdown-item sidebar-tools-main-item" href="https://www.facebook.com/sharer/sharer.php?u=|url|">
+          <a class="dropdown-item sidebar-tools-main-item" href="https://www.facebook.com/sharer/sharer.php?u=%7Curl%7C">
             <i class="bi bi-bi-facebook pe-1"></i>
           Facebook
           </a>
@@ -200,7 +178,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
       </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">紹介</a>
   </div>
@@ -212,8 +190,8 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./aboutR.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R?</span></a>
   </div>
@@ -239,7 +217,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Rの基礎</a>
@@ -247,8 +225,8 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./r_basic.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">基本的な操作</span></a>
   </div>
@@ -279,7 +257,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">データハンドリング</a>
@@ -287,8 +265,8 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./datahandling1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">データハンドリング [抽出]</span></a>
   </div>
@@ -314,7 +292,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">可視化</a>
@@ -322,8 +300,8 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./visualization1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">可視化 [理論]</span></a>
   </div>
@@ -349,7 +327,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">再現可能な研究</a>
@@ -357,8 +335,8 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rmarkdown.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">R Markdown [基礎]</span></a>
   </div>
@@ -384,7 +362,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">中級者向け</a>
@@ -392,8 +370,8 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./iteration.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">反復処理</span></a>
   </div>
@@ -419,7 +397,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true">付録</a>
@@ -427,8 +405,8 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tips.html" class="sidebar-item-text sidebar-link">R Tips</a>
   </div>
@@ -444,51 +422,54 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   </div>
 </li>
       </ul>
-  </li>
+</li>
     </ul>
-    </div>
-</nav>
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="RN4ETOC" role="doc-toc" class="toc-active">
-    <h2 id="RN4Etoc-title" class="anchored">目次</h2>
+</div>
+</nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="RN4ETOC" role="doc-toc" class="toc-active"><h2 id="RN4Etoc-title" class="anchored">目次</h2>
    
   <ul>
-  <li><a href="#RN4Esec-datastructure_intro" id="RN4Etoc-sec-datastructure_intro" class="nav-link active" data-scroll-target="#RN4Esec-datastructure_intro"><span class="toc-section-number">9.1</span>  データ構造とは</a></li>
-  <li><a href="#RN4Esec-datastructure_vector" id="RN4Etoc-sec-datastructure_vector" class="nav-link" data-scroll-target="#RN4Esec-datastructure_vector"><span class="toc-section-number">9.2</span>  ベクトル (vector)</a>
+<li><a href="#RN4Esec-datastructure_intro" id="RN4Etoc-sec-datastructure_intro" class="nav-link active" data-scroll-target="#RN4Esec-datastructure_intro"><span class="toc-section-number">9.1</span>  データ構造とは</a></li>
+  <li>
+<a href="#RN4Esec-datastructure_vector" id="RN4Etoc-sec-datastructure_vector" class="nav-link" data-scroll-target="#RN4Esec-datastructure_vector"><span class="toc-section-number">9.2</span>  ベクトル (vector)</a>
   <ul class="collapse">
-  <li><a href="#RN4Eベクトルの作り方" id="RN4Etoc-ベクトルの作り方" class="nav-link" data-scroll-target="#RN4Eベクトルの作り方"><span class="toc-section-number">9.2.1</span>  ベクトルの作り方</a></li>
-  <li><a href="#RN4Eベクトルの操作" id="RN4Etoc-ベクトルの操作" class="nav-link" data-scroll-target="#RN4Eベクトルの操作"><span class="toc-section-number">9.2.2</span>  ベクトルの操作</a></li>
-  </ul></li>
-  <li><a href="#RN4Esec-datastructure_matrix" id="RN4Etoc-sec-datastructure_matrix" class="nav-link" data-scroll-target="#RN4Esec-datastructure_matrix"><span class="toc-section-number">9.3</span>  行列 (matrix)</a>
-  <ul class="collapse">
-  <li><a href="#RN4E行列の作り方" id="RN4Etoc-行列の作り方" class="nav-link" data-scroll-target="#RN4E行列の作り方"><span class="toc-section-number">9.3.1</span>  行列の作り方</a></li>
-  <li><a href="#RN4E行列の操作" id="RN4Etoc-行列の操作" class="nav-link" data-scroll-target="#RN4E行列の操作"><span class="toc-section-number">9.3.2</span>  行列の操作</a></li>
-  </ul></li>
-  <li><a href="#RN4Esec-datastructure-dataframe" id="RN4Etoc-sec-datastructure-dataframe" class="nav-link" data-scroll-target="#RN4Esec-datastructure-dataframe"><span class="toc-section-number">9.4</span>  データフレーム (data.frame)</a>
-  <ul class="collapse">
-  <li><a href="#RN4Eデータフレームの作成" id="RN4Etoc-データフレームの作成" class="nav-link" data-scroll-target="#RN4Eデータフレームの作成"><span class="toc-section-number">9.4.1</span>  データフレームの作成</a></li>
-  <li><a href="#RN4Eデータフレームの操作" id="RN4Etoc-データフレームの操作" class="nav-link" data-scroll-target="#RN4Eデータフレームの操作"><span class="toc-section-number">9.4.2</span>  データフレームの操作</a></li>
-  <li><a href="#RN4Etibble型" id="RN4Etoc-tibble型" class="nav-link" data-scroll-target="#RN4Etibble型"><span class="toc-section-number">9.4.3</span>  tibble型</a></li>
-  </ul></li>
-  <li><a href="#RN4Esec-datastructure_list" id="RN4Etoc-sec-datastructure_list" class="nav-link" data-scroll-target="#RN4Esec-datastructure_list"><span class="toc-section-number">9.5</span>  リスト (list)</a>
-  <ul class="collapse">
-  <li><a href="#RN4Eリスト型データの作成" id="RN4Etoc-リスト型データの作成" class="nav-link" data-scroll-target="#RN4Eリスト型データの作成"><span class="toc-section-number">9.5.1</span>  リスト型データの作成</a></li>
-  <li><a href="#RN4Eリスト型データの操作" id="RN4Etoc-リスト型データの操作" class="nav-link" data-scroll-target="#RN4Eリスト型データの操作"><span class="toc-section-number">9.5.2</span>  リスト型データの操作</a></li>
-  </ul></li>
-  <li><a href="#RN4Esec-datastructure_array" id="RN4Etoc-sec-datastructure_array" class="nav-link" data-scroll-target="#RN4Esec-datastructure_array"><span class="toc-section-number">9.6</span>  配列 (array)</a>
-  <ul class="collapse">
-  <li><a href="#RN4E配列型データの作成" id="RN4Etoc-配列型データの作成" class="nav-link" data-scroll-target="#RN4E配列型データの作成"><span class="toc-section-number">9.6.1</span>  配列型データの作成</a></li>
-  <li><a href="#RN4E配列型データの操作" id="RN4Etoc-配列型データの操作" class="nav-link" data-scroll-target="#RN4E配列型データの操作"><span class="toc-section-number">9.6.2</span>  配列型データの操作</a></li>
-  </ul></li>
+<li><a href="#RN4E%E3%83%99%E3%82%AF%E3%83%88%E3%83%AB%E3%81%AE%E4%BD%9C%E3%82%8A%E6%96%B9" id="RN4Etoc-ベクトルの作り方" class="nav-link" data-scroll-target="#RN4E%E3%83%99%E3%82%AF%E3%83%88%E3%83%AB%E3%81%AE%E4%BD%9C%E3%82%8A%E6%96%B9"><span class="toc-section-number">9.2.1</span>  ベクトルの作り方</a></li>
+  <li><a href="#RN4E%E3%83%99%E3%82%AF%E3%83%88%E3%83%AB%E3%81%AE%E6%93%8D%E4%BD%9C" id="RN4Etoc-ベクトルの操作" class="nav-link" data-scroll-target="#RN4E%E3%83%99%E3%82%AF%E3%83%88%E3%83%AB%E3%81%AE%E6%93%8D%E4%BD%9C"><span class="toc-section-number">9.2.2</span>  ベクトルの操作</a></li>
   </ul>
-</nav>
+</li>
+  <li>
+<a href="#RN4Esec-datastructure_matrix" id="RN4Etoc-sec-datastructure_matrix" class="nav-link" data-scroll-target="#RN4Esec-datastructure_matrix"><span class="toc-section-number">9.3</span>  行列 (matrix)</a>
+  <ul class="collapse">
+<li><a href="#RN4E%E8%A1%8C%E5%88%97%E3%81%AE%E4%BD%9C%E3%82%8A%E6%96%B9" id="RN4Etoc-行列の作り方" class="nav-link" data-scroll-target="#RN4E%E8%A1%8C%E5%88%97%E3%81%AE%E4%BD%9C%E3%82%8A%E6%96%B9"><span class="toc-section-number">9.3.1</span>  行列の作り方</a></li>
+  <li><a href="#RN4E%E8%A1%8C%E5%88%97%E3%81%AE%E6%93%8D%E4%BD%9C" id="RN4Etoc-行列の操作" class="nav-link" data-scroll-target="#RN4E%E8%A1%8C%E5%88%97%E3%81%AE%E6%93%8D%E4%BD%9C"><span class="toc-section-number">9.3.2</span>  行列の操作</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#RN4Esec-datastructure-dataframe" id="RN4Etoc-sec-datastructure-dataframe" class="nav-link" data-scroll-target="#RN4Esec-datastructure-dataframe"><span class="toc-section-number">9.4</span>  データフレーム (data.frame)</a>
+  <ul class="collapse">
+<li><a href="#RN4E%E3%83%87%E3%83%BC%E3%82%BF%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%81%AE%E4%BD%9C%E6%88%90" id="RN4Etoc-データフレームの作成" class="nav-link" data-scroll-target="#RN4E%E3%83%87%E3%83%BC%E3%82%BF%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%81%AE%E4%BD%9C%E6%88%90"><span class="toc-section-number">9.4.1</span>  データフレームの作成</a></li>
+  <li><a href="#RN4E%E3%83%87%E3%83%BC%E3%82%BF%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%81%AE%E6%93%8D%E4%BD%9C" id="RN4Etoc-データフレームの操作" class="nav-link" data-scroll-target="#RN4E%E3%83%87%E3%83%BC%E3%82%BF%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%81%AE%E6%93%8D%E4%BD%9C"><span class="toc-section-number">9.4.2</span>  データフレームの操作</a></li>
+  <li><a href="#RN4Etibble%E5%9E%8B" id="RN4Etoc-tibble型" class="nav-link" data-scroll-target="#RN4Etibble%E5%9E%8B"><span class="toc-section-number">9.4.3</span>  tibble型</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#RN4Esec-datastructure_list" id="RN4Etoc-sec-datastructure_list" class="nav-link" data-scroll-target="#RN4Esec-datastructure_list"><span class="toc-section-number">9.5</span>  リスト (list)</a>
+  <ul class="collapse">
+<li><a href="#RN4E%E3%83%AA%E3%82%B9%E3%83%88%E5%9E%8B%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E4%BD%9C%E6%88%90" id="RN4Etoc-リスト型データの作成" class="nav-link" data-scroll-target="#RN4E%E3%83%AA%E3%82%B9%E3%83%88%E5%9E%8B%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E4%BD%9C%E6%88%90"><span class="toc-section-number">9.5.1</span>  リスト型データの作成</a></li>
+  <li><a href="#RN4E%E3%83%AA%E3%82%B9%E3%83%88%E5%9E%8B%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E6%93%8D%E4%BD%9C" id="RN4Etoc-リスト型データの操作" class="nav-link" data-scroll-target="#RN4E%E3%83%AA%E3%82%B9%E3%83%88%E5%9E%8B%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E6%93%8D%E4%BD%9C"><span class="toc-section-number">9.5.2</span>  リスト型データの操作</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#RN4Esec-datastructure_array" id="RN4Etoc-sec-datastructure_array" class="nav-link" data-scroll-target="#RN4Esec-datastructure_array"><span class="toc-section-number">9.6</span>  配列 (array)</a>
+  <ul class="collapse">
+<li><a href="#RN4E%E9%85%8D%E5%88%97%E5%9E%8B%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E4%BD%9C%E6%88%90" id="RN4Etoc-配列型データの作成" class="nav-link" data-scroll-target="#RN4E%E9%85%8D%E5%88%97%E5%9E%8B%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E4%BD%9C%E6%88%90"><span class="toc-section-number">9.6.1</span>  配列型データの作成</a></li>
+  <li><a href="#RN4E%E9%85%8D%E5%88%97%E5%9E%8B%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E6%93%8D%E4%BD%9C" id="RN4Etoc-配列型データの操作" class="nav-link" data-scroll-target="#RN4E%E9%85%8D%E5%88%97%E5%9E%8B%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E6%93%8D%E4%BD%9C"><span class="toc-section-number">9.6.2</span>  配列型データの操作</a></li>
+  </ul>
+</li>
+  </ul></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title"><span id="RN4Esec-datastructure" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">データ構造</span></span></h1>
 </div>
 
@@ -502,17 +483,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   </div>
   
 
-</header>
-
-<section id="RN4Esec-datastructure_intro" class="level2" data-number="9.1">
-<h2 data-number="9.1" class="anchored" data-anchor-id="RN4Esec-datastructure_intro"><span class="header-section-number">9.1</span> データ構造とは</h2>
+</header><section id="RN4Esec-datastructure_intro" class="level2" data-number="9.1"><h2 data-number="9.1" class="anchored" data-anchor-id="RN4Esec-datastructure_intro">
+<span class="header-section-number">9.1</span> データ構造とは</h2>
 <p>データ構造 (data structure)とは最小単位であるベクトルを何らかの形で集めたものです。ベクトル自体もデータ構造であり、同じデータ型のベクトルを積み重ねた行列、異なるデータ型の縦ベクトルを横に並べたデータフレームなど、Rでは様々なデータ構造を提供しています。また、R内臓のデータ構造以外にも、パッケージ等で提供される独自のデータ構造もあります。ここではRが基本的に提供している代表的なデータ構造について、その作り方と操作方法について解説します。</p>
-<hr>
-</section>
-<section id="RN4Esec-datastructure_vector" class="level2" data-number="9.2">
-<h2 data-number="9.2" class="anchored" data-anchor-id="RN4Esec-datastructure_vector"><span class="header-section-number">9.2</span> ベクトル (vector)</h2>
-<section id="RN4Eベクトルの作り方" class="level3" data-number="9.2.1">
-<h3 data-number="9.2.1" class="anchored" data-anchor-id="RN4Eベクトルの作り方"><span class="header-section-number">9.2.1</span> ベクトルの作り方</h3>
+<hr></section><section id="RN4Esec-datastructure_vector" class="level2" data-number="9.2"><h2 data-number="9.2" class="anchored" data-anchor-id="RN4Esec-datastructure_vector">
+<span class="header-section-number">9.2</span> ベクトル (vector)</h2>
+<section id="RN4Eベクトルの作り方" class="level3" data-number="9.2.1"><h3 data-number="9.2.1" class="anchored" data-anchor-id="RN4Eベクトルの作り方">
+<span class="header-section-number">9.2.1</span> ベクトルの作り方</h3>
 <p>Rにおいてベクトルとは<strong>同じデータ型が一つ以上格納されているオブジェクト</strong>を意味します。たとえば、以下の<code>myVec1</code>は長さ1のベクトルです。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb1"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb1-1"><a href="#RN4Ecb1-1"></a>myVec1 <span class="ot">&lt;-</span> <span class="st">"R is fun!"</span></span>
@@ -557,11 +534,10 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 </div>
 <p><code>TRUE</code>が1、<code>FALSE</code>が0となり、自動的に<code>numeric</code>型になりました。一般的によく使われるデータ型は<code>logical</code>、<code>numeric</code>、<code>character</code>ですが、優先順位は<code>logical &lt; numeric &lt; character</code>の関係になります。ここで重要なのは優先順位ではなく、異なるデータ型が含まれるベクトルの場合、自動的にデータ型が統一されるということです。ベクトルを作成する際は、全ての要素が同じ型になるようにしましょう。</p>
-</section>
-<section id="RN4Eベクトルの操作" class="level3" data-number="9.2.2">
-<h3 data-number="9.2.2" class="anchored" data-anchor-id="RN4Eベクトルの操作"><span class="header-section-number">9.2.2</span> ベクトルの操作</h3>
+</section><section id="RN4Eベクトルの操作" class="level3" data-number="9.2.2"><h3 data-number="9.2.2" class="anchored" data-anchor-id="RN4Eベクトルの操作">
+<span class="header-section-number">9.2.2</span> ベクトルの操作</h3>
 <p><strong>ベクトルの長さ</strong></p>
-<p>ベクトルの長さはベクトルに含まれている要素の数です。ベクトルの長さは<code>length()</code>関数で調べることができます。それでは前節で作成した4つのベクトルの長さを調べてみましょう。</p>
+<p>ベクトルの長さはベクトルに含まれている要素の数です。ベクトルの長さは<code><a href="https://rdrr.io/r/base/length.html">length()</a></code>関数で調べることができます。それでは前節で作成した4つのベクトルの長さを調べてみましょう。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb13"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb13-1"><a href="#RN4Ecb13-1"></a><span class="fu">length</span>(myVec1) <span class="co"># "R is fun!"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -643,15 +619,13 @@ object length</code></pre>
 </div>
 <p>警告メッセージは表示されますが、計算自体はできます。同じ長さのベクトル同士なら、同じ位置の要素同士の計算になりますが、この場合は、短い方のベクトルを繰り返すことにより、長さを合わせることになります。<code>myVec5</code>の例だと、<code>c(1, 10, 1, 10, 1)</code>のように扱われます。具体的には以下の表のような関係となります。</p>
 <table class="table">
-<thead>
-<tr class="header">
+<thead><tr class="header">
 <th style="text-align: center;"><code>myVec6[1]</code></th>
 <th style="text-align: center;"><code>myVec6[2]</code></th>
 <th style="text-align: center;"><code>myVec6[3]</code></th>
 <th style="text-align: center;"><code>myVec6[4]</code></th>
 <th style="text-align: center;"><code>myVec6[5]</code></th>
-</tr>
-</thead>
+</tr></thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: center;"><code>myVec2[1]</code></td>
@@ -678,15 +652,12 @@ object length</code></pre>
 </table>
 <p>実際は長さが異なるベクトル同士の計算を行うことは滅多にありません。例外としては長さ1のベクトルの計算くらいですね。</p>
 <p>文字列ベクトルの扱い方はより複雑ですので、第<a href="#RN4Esec-string"><span>16</span></a>章で詳細に解説します。</p>
-<hr>
-</section>
-</section>
-<section id="RN4Esec-datastructure_matrix" class="level2" data-number="9.3">
-<h2 data-number="9.3" class="anchored" data-anchor-id="RN4Esec-datastructure_matrix"><span class="header-section-number">9.3</span> 行列 (matrix)</h2>
+<hr></section></section><section id="RN4Esec-datastructure_matrix" class="level2" data-number="9.3"><h2 data-number="9.3" class="anchored" data-anchor-id="RN4Esec-datastructure_matrix">
+<span class="header-section-number">9.3</span> 行列 (matrix)</h2>
 <p>行列は名前とおり、行と列で構成されたデータ構造です。ただし、我々が一般に考える「表」とは異なる点があります。それは行列内部の要素に制約がある点です。具体的に、行列の要素となり得るデータ型はnumeric、complex、NA型のみです。ここではnumeric型のみで構成された行列の作成および操作方法について解説します。</p>
-<section id="RN4E行列の作り方" class="level3" data-number="9.3.1">
-<h3 data-number="9.3.1" class="anchored" data-anchor-id="RN4E行列の作り方"><span class="header-section-number">9.3.1</span> 行列の作り方</h3>
-<p>行列を作成するには<code>matrix()</code>関数を使います。引数として、行列に入る数値と行または列の数は必須です。数値はベクトルであり、行・列の数は整数です。以下のような行列を作るにはいくつかの方法があります。</p>
+<section id="RN4E行列の作り方" class="level3" data-number="9.3.1"><h3 data-number="9.3.1" class="anchored" data-anchor-id="RN4E行列の作り方">
+<span class="header-section-number">9.3.1</span> 行列の作り方</h3>
+<p>行列を作成するには<code><a href="https://rdrr.io/r/base/matrix.html">matrix()</a></code>関数を使います。引数として、行列に入る数値と行または列の数は必須です。数値はベクトルであり、行・列の数は整数です。以下のような行列を作るにはいくつかの方法があります。</p>
 <p><span class="math display">\[
 \left[
 \begin{matrix}
@@ -756,7 +727,7 @@ object length</code></pre>
 \end{matrix}
 \right]
 \]</span></p>
-<p>です。これは<code>matrix(c(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1), nrow = 4)</code>で作成することも可能ですが、<code>diag()</code>関数を使えば簡単に出来ます。サイズが4の単位行列は<code>diag(4)</code>です。</p>
+<p>です。これは<code>matrix(c(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1), nrow = 4)</code>で作成することも可能ですが、<code><a href="https://rdrr.io/r/base/diag.html">diag()</a></code>関数を使えば簡単に出来ます。サイズが4の単位行列は<code>diag(4)</code>です。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb54"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb54-1"><a href="#RN4Ecb54-1"></a>(<span class="fu">diag</span>(<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -767,9 +738,8 @@ object length</code></pre>
 [4,]    0    0    0    1</code></pre>
 </div>
 </div>
-</section>
-<section id="RN4E行列の操作" class="level3" data-number="9.3.2">
-<h3 data-number="9.3.2" class="anchored" data-anchor-id="RN4E行列の操作"><span class="header-section-number">9.3.2</span> 行列の操作</h3>
+</section><section id="RN4E行列の操作" class="level3" data-number="9.3.2"><h3 data-number="9.3.2" class="anchored" data-anchor-id="RN4E行列の操作">
+<span class="header-section-number">9.3.2</span> 行列の操作</h3>
 <p>まず、以下のような行列<code>A</code>を作ってみましょう。</p>
 <p><span class="math display">\[
 A = \left[
@@ -785,14 +755,14 @@ A = \left[
 <span id="RN4Ecb56-2"><a href="#RN4Ecb56-2"></a>            <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>行列のサイズ</strong></p>
-<p>行列の大きさ (行と列の数)を求める際は<code>dim()</code>関数を使います。</p>
+<p>行列の大きさ (行と列の数)を求める際は<code><a href="https://rdrr.io/r/base/dim.html">dim()</a></code>関数を使います。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb57"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb57-1"><a href="#RN4Ecb57-1"></a><span class="fu">dim</span>(A)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3 4</code></pre>
 </div>
 </div>
-<p>結果は長さ2のベクトルですが、1番目の要素が行数、2番目の要素が列数になります。もし、行列の行数のみ確認したい場合は<code>dim(A)[1]</code>、列数なら<code>dim(A)[2]</code>で確認することができます。また、全く同じ機能を持つ関数があり、それが<code>nrow()</code>と<code>ncol()</code>関数です。</p>
+<p>結果は長さ2のベクトルですが、1番目の要素が行数、2番目の要素が列数になります。もし、行列の行数のみ確認したい場合は<code>dim(A)[1]</code>、列数なら<code>dim(A)[2]</code>で確認することができます。また、全く同じ機能を持つ関数があり、それが<code><a href="https://rdrr.io/r/base/nrow.html">nrow()</a></code>と<code><a href="https://rdrr.io/r/base/nrow.html">ncol()</a></code>関数です。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb59"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb59-1"><a href="#RN4Ecb59-1"></a><span class="fu">nrow</span>(A) <span class="co"># 行列の行数を確認: dim(A)[1]と同じ</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -803,7 +773,7 @@ A = \left[
 <pre><code>[1] 4</code></pre>
 </div>
 </div>
-<p><code>dim()</code>および<code>nrow()</code>、<code>ncol()</code>関数は第<a href="#RN4Esec-datastructure-dataframe"><span>9.4</span></a>章で紹介するデータフレームでも使用可能です。</p>
+<p><code><a href="https://rdrr.io/r/base/dim.html">dim()</a></code>および<code><a href="https://rdrr.io/r/base/nrow.html">nrow()</a></code>、<code><a href="https://rdrr.io/r/base/nrow.html">ncol()</a></code>関数は第<a href="#RN4Esec-datastructure-dataframe"><span>9.4</span></a>章で紹介するデータフレームでも使用可能です。</p>
 <p><strong>要素の抽出</strong></p>
 <p>ベクトルと同様、要素の抽出は<code>[]</code>を使います。ただし、行列は横と縦の2次元構成となりますので、行と列のそれぞれの位置を指定する必要があります。たとえば、<code>A</code>の2行目、3列目の要素を抽出するためには、</p>
 <div class="cell">
@@ -987,12 +957,18 @@ D = \left[
 </div>
 <p>2行2列の行列ができました。これらの数字、どうやった計算されたのでしょうか。<code>E</code>の<code>[1, 1]</code>は23であり、<code>[1, 2]</code>は68、<code>[2, 1]</code>は53、<code>[2, 2]</code>は161です。各値は以下のように求まります。</p>
 <ul>
-<li><code>E[1, 1]</code> = (<code>C[1, 1]</code> * <code>D[1, 1]</code>) + (<code>C[1, 2]</code> * <code>D[2, 1]</code>) + (<code>C[1, 3]</code> * <code>D[3, 1]</code>) = 23</li>
-<li><code>E[1, 2]</code> = (<code>C[1, 1]</code> * <code>D[1, 2]</code>) + (<code>C[1, 2]</code> * <code>D[2, 2]</code>) + (<code>C[1, 3]</code> * <code>D[3, 2]</code>) = 68</li>
-<li><code>E[1, 3]</code> = (<code>C[1, 1]</code> * <code>D[1, 3]</code>) + (<code>C[1, 2]</code> * <code>D[2, 3]</code>) + (<code>C[1, 3]</code> * <code>D[3, 3]</code>) = 124</li>
-<li><code>E[2, 1]</code> = (<code>C[2, 1]</code> * <code>D[1, 1]</code>) + (<code>C[2, 2]</code> * <code>D[2, 1]</code>) + (<code>C[2, 3]</code> * <code>D[3, 1]</code>) = 53</li>
-<li><code>E[2, 2]</code> = (<code>C[2, 1]</code> * <code>D[1, 2]</code>) + (<code>C[2, 2]</code> * <code>D[2, 2]</code>) + (<code>C[2, 3]</code> * <code>D[3, 2]</code>) = 161</li>
-<li><code>E[2, 3]</code> = (<code>C[2, 1]</code> * <code>D[1, 3]</code>) + (<code>C[2, 2]</code> * <code>D[2, 3]</code>) + (<code>C[2, 3]</code> * <code>D[3, 3]</code>) = 301</li>
+<li>
+<code>E[1, 1]</code> = (<code>C[1, 1]</code> * <code>D[1, 1]</code>) + (<code>C[1, 2]</code> * <code>D[2, 1]</code>) + (<code>C[1, 3]</code> * <code>D[3, 1]</code>) = 23</li>
+<li>
+<code>E[1, 2]</code> = (<code>C[1, 1]</code> * <code>D[1, 2]</code>) + (<code>C[1, 2]</code> * <code>D[2, 2]</code>) + (<code>C[1, 3]</code> * <code>D[3, 2]</code>) = 68</li>
+<li>
+<code>E[1, 3]</code> = (<code>C[1, 1]</code> * <code>D[1, 3]</code>) + (<code>C[1, 2]</code> * <code>D[2, 3]</code>) + (<code>C[1, 3]</code> * <code>D[3, 3]</code>) = 124</li>
+<li>
+<code>E[2, 1]</code> = (<code>C[2, 1]</code> * <code>D[1, 1]</code>) + (<code>C[2, 2]</code> * <code>D[2, 1]</code>) + (<code>C[2, 3]</code> * <code>D[3, 1]</code>) = 53</li>
+<li>
+<code>E[2, 2]</code> = (<code>C[2, 1]</code> * <code>D[1, 2]</code>) + (<code>C[2, 2]</code> * <code>D[2, 2]</code>) + (<code>C[2, 3]</code> * <code>D[3, 2]</code>) = 161</li>
+<li>
+<code>E[2, 3]</code> = (<code>C[2, 1]</code> * <code>D[1, 3]</code>) + (<code>C[2, 2]</code> * <code>D[2, 3]</code>) + (<code>C[2, 3]</code> * <code>D[3, 3]</code>) = 301</li>
 </ul>
 <p>大きさ<span class="math inline">\(n \times m\)</span>行列<code>C</code>の<code>i</code>行目<code>j</code>列目の要素を<span class="math inline">\(C_{i,j}\)</span>と表記し、大きさ<span class="math inline">\(n \times p\)</span>行列<code>D</code>の<code>i</code>行目<code>j</code>列目の要素を<span class="math inline">\(D_{i,j}\)</span>と表記した場合、以下のような関係が成り立ちます。</p>
 <p>行列<code>E</code>の<code>i</code>行目<code>j</code>列目の要素を<span class="math inline">\(e_{i,j}\)</span>と表記した場合、以下のような関係が成り立ちます。</p>
@@ -1017,7 +993,7 @@ e_{2, 1} &amp; e_{2, 2} &amp; e_{2, 3}
 <p>このように業績同士の積はかなり求めるのが面倒ですが、Rを使えば一瞬で終わります。</p>
 <p><strong>行列式</strong></p>
 <p>行列式 (determinant)は<span class="math inline">\(n \times n\)</span>の正方行列のみに対して定義される値の一つです。主に一次方程式において解が存在するか否かを判断するために用いられる数値ですが<a href="#RN4Efn2" class="footnote-ref" id="RN4Efnref2" role="doc-noteref"><sup>2</sup></a>、その詳しい意味や求め方については線形代数の入門書を参照してください。</p>
-<p>行列<span class="math inline">\(A\)</span>の行列式は一般的に<span class="math inline">\(\text{det}(A)\)</span>、または<span class="math inline">\(|A|\)</span>と表記されます。行列式を求めるRの関数は<code>det()</code>です。それでは適当に正方行列<code>F</code>を作成し、その行列を求めてみましょう。</p>
+<p>行列<span class="math inline">\(A\)</span>の行列式は一般的に<span class="math inline">\(\text{det}(A)\)</span>、または<span class="math inline">\(|A|\)</span>と表記されます。行列式を求めるRの関数は<code><a href="https://rdrr.io/r/base/det.html">det()</a></code>です。それでは適当に正方行列<code>F</code>を作成し、その行列を求めてみましょう。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb103"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb103-1"><a href="#RN4Ecb103-1"></a>(F <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">2</span>, <span class="sc">-</span><span class="dv">6</span>, <span class="dv">4</span>, <span class="dv">7</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">8</span>, <span class="dv">5</span>, <span class="sc">-</span><span class="dv">1</span>), <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">byrow =</span> <span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1073,7 +1049,7 @@ e_{2, 1} &amp; e_{2, 2} &amp; e_{2, 3}
 <p>どれも3行の行列ですが、行列<code>F</code>の階数は3、行列<code>G</code>の階数は2です。<code>G</code>の階数は<code>G</code>の行数より小さいため、連立方程式に一組の解がないことが分かります。</p>
 <p>階数の活用先は様々であり、行列式とは違って、正方行列でなくても計算可能です。</p>
 <p><strong>逆行列</strong></p>
-<p>逆行列とは掛け算すると単位行列となる行列を意味します。行列<span class="math inline">\(A\)</span>の逆行列は一般的に<span class="math inline">\(A^{\prime}\)</span>と表記し、<span class="math inline">\(A \times A^{\prime} = I\)</span>となります。この逆行列の求め方は非常に複雑であり、一定以上の大きさの行列になると手計算で解くのはほぼ不可能です。しかし、Rでは逆行列を計算する<code>solve()</code>関数が内蔵されております。</p>
+<p>逆行列とは掛け算すると単位行列となる行列を意味します。行列<span class="math inline">\(A\)</span>の逆行列は一般的に<span class="math inline">\(A^{\prime}\)</span>と表記し、<span class="math inline">\(A \times A^{\prime} = I\)</span>となります。この逆行列の求め方は非常に複雑であり、一定以上の大きさの行列になると手計算で解くのはほぼ不可能です。しかし、Rでは逆行列を計算する<code><a href="https://rdrr.io/r/base/solve.html">solve()</a></code>関数が内蔵されております。</p>
 <p>以下の行列<span class="math inline">\(A\)</span> (<code>A</code>)の逆行列、<span class="math inline">\(A^{\prime}\)</span> (<code>Ap</code>)を求めてみましょう。そして<span class="math inline">\(A \times A^{\prime}\)</span>が単位行列になるかまで確認してみます。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb115"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb115-1"><a href="#RN4Ecb115-1"></a><span class="co"># 行列Aの作成</span></span>
@@ -1120,7 +1096,7 @@ A^T = \left[
 \end{matrix}
 \right]
 \]</span></p>
-<p>正方行列の場合、対角成分を除き、全ての要素が対角成分を中心に反転していることが分かりますね。このような転置行列の作成には<code>t()</code>関数を使います。それでは行列<code>A</code>とその転置行列<code>At</code>を作ってみましょう。</p>
+<p>正方行列の場合、対角成分を除き、全ての要素が対角成分を中心に反転していることが分かりますね。このような転置行列の作成には<code><a href="https://rdrr.io/r/base/t.html">t()</a></code>関数を使います。それでは行列<code>A</code>とその転置行列<code>At</code>を作ってみましょう。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb121"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb121-1"><a href="#RN4Ecb121-1"></a>A  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>, <span class="at">nrow =</span> <span class="dv">3</span>)</span>
 <span id="RN4Ecb121-2"><a href="#RN4Ecb121-2"></a>A</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1133,56 +1109,51 @@ A^T = \left[
 <div class="sourceCode cell-code" id="RN4Ecb123"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb123-1"><a href="#RN4Ecb123-1"></a>At <span class="ot">&lt;-</span> <span class="fu">t</span>(A)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>ちなみに転置行列は正方行列でなくても作成できます。</p>
-<hr>
-</section>
-</section>
-<section id="RN4Esec-datastructure-dataframe" class="level2" data-number="9.4">
-<h2 data-number="9.4" class="anchored" data-anchor-id="RN4Esec-datastructure-dataframe"><span class="header-section-number">9.4</span> データフレーム (data.frame)</h2>
+<hr></section></section><section id="RN4Esec-datastructure-dataframe" class="level2" data-number="9.4"><h2 data-number="9.4" class="anchored" data-anchor-id="RN4Esec-datastructure-dataframe">
+<span class="header-section-number">9.4</span> データフレーム (data.frame)</h2>
 <p>データフレームはデータ分析の際に最もよく見るデータ構造です。我々が一般的に考える表形式のデータはデータフレームです。行列も見た目は表に近いですが、行列は中身の要素がnumericまたはcomplex型に限定されるに対して<a href="#RN4Efn4" class="footnote-ref" id="RN4Efnref4" role="doc-noteref"><sup>4</sup></a>、データフレームはcharacterやfactor、Dateなど様々なデータ型が許容されます。</p>
-<section id="RN4Eデータフレームの作成" class="level3" data-number="9.4.1">
-<h3 data-number="9.4.1" class="anchored" data-anchor-id="RN4Eデータフレームの作成"><span class="header-section-number">9.4.1</span> データフレームの作成</h3>
-<p>まずは、 <a href="#RN4Etbl-dataframe_example1">表&nbsp;<span>9.1</span></a> のようなデータフレームを作成して見ましょう。データフレームを作成する際は<code>data.frame()</code>関数を使います。</p>
+<section id="RN4Eデータフレームの作成" class="level3" data-number="9.4.1"><h3 data-number="9.4.1" class="anchored" data-anchor-id="RN4Eデータフレームの作成">
+<span class="header-section-number">9.4.1</span> データフレームの作成</h3>
+<p>まずは、 <a href="#RN4Etbl-dataframe_example1">表&nbsp;<span>9.1</span></a> のようなデータフレームを作成して見ましょう。データフレームを作成する際は<code><a href="https://rdrr.io/r/base/data.frame.html">data.frame()</a></code>関数を使います。</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="RN4Etbl-dataframe_example1">
 
-<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;"><caption>表&nbsp;9.1:  myDFの中身 </caption>
- <thead>
-  <tr>
-   <th style="text-align:right;"> ID </th>
+<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>表&nbsp;9.1:  myDFの中身 </caption>
+ <thead><tr>
+<th style="text-align:right;"> ID </th>
    <th style="text-align:left;"> Name </th>
    <th style="text-align:right;"> Math </th>
    <th style="text-align:right;"> Stat </th>
-  </tr>
- </thead>
+  </tr></thead>
 <tbody>
-  <tr>
-   <td style="text-align:right;"> 1 </td>
+<tr>
+<td style="text-align:right;"> 1 </td>
    <td style="text-align:left;"> Yanai </td>
    <td style="text-align:right;"> 50 </td>
    <td style="text-align:right;"> 25 </td>
   </tr>
-  <tr>
-   <td style="text-align:right;"> 2 </td>
+<tr>
+<td style="text-align:right;"> 2 </td>
    <td style="text-align:left;"> Song </td>
    <td style="text-align:right;"> 90 </td>
    <td style="text-align:right;"> 5 </td>
   </tr>
-  <tr>
-   <td style="text-align:right;"> 3 </td>
+<tr>
+<td style="text-align:right;"> 3 </td>
    <td style="text-align:left;"> Shigemura </td>
    <td style="text-align:right;"> 100 </td>
    <td style="text-align:right;"> 100 </td>
   </tr>
-  <tr>
-   <td style="text-align:right;"> 4 </td>
+<tr>
+<td style="text-align:right;"> 4 </td>
    <td style="text-align:left;"> Tani </td>
    <td style="text-align:right;"> 80 </td>
    <td style="text-align:right;"> 85 </td>
   </tr>
 </tbody>
 </table>
-
 </div>
 </div>
 </div>
@@ -1267,11 +1238,10 @@ A^T = \left[
 </div>
 </div>
 <p><code>City</code>列はすべて<code>"Kobe"</code>が入り、<code>Food</code>列は長さが足りない3, 4番目の要素に1, 2番目の要素が代入されます。実際はあまり使わない使い方ですが、ある列の要素が全て同じ場合、このような使い方をすることがあります。</p>
-</section>
-<section id="RN4Eデータフレームの操作" class="level3" data-number="9.4.2">
-<h3 data-number="9.4.2" class="anchored" data-anchor-id="RN4Eデータフレームの操作"><span class="header-section-number">9.4.2</span> データフレームの操作</h3>
+</section><section id="RN4Eデータフレームの操作" class="level3" data-number="9.4.2"><h3 data-number="9.4.2" class="anchored" data-anchor-id="RN4Eデータフレームの操作">
+<span class="header-section-number">9.4.2</span> データフレームの操作</h3>
 <p><strong>データフレームの大きさ</strong></p>
-<p>行列と同様、<code>dim()</code>から行と列の数を、<code>nrow()</code>からは行数を、<code>ncol()</code>から列数を計算することができます。</p>
+<p>行列と同様、<code><a href="https://rdrr.io/r/base/dim.html">dim()</a></code>から行と列の数を、<code><a href="https://rdrr.io/r/base/nrow.html">nrow()</a></code>からは行数を、<code><a href="https://rdrr.io/r/base/nrow.html">ncol()</a></code>から列数を計算することができます。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb134"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb134-1"><a href="#RN4Ecb134-1"></a><span class="fu">dim</span>(myDF4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1322,7 +1292,7 @@ A^T = \left[
 <pre><code>[1] "Yanai"     "Song"      "Shigemura" "Tani"     </code></pre>
 </div>
 </div>
-<p>どれも同じ結果が返されます。後者の方が簡単ですが、一つの列しか抽出できない限界があります。それに比べ、前者は<code>c()</code>を使うことで複数の列を同時に抽出することも可能です。それぞれの場面に応じて使い分けていきましょう。</p>
+<p>どれも同じ結果が返されます。後者の方が簡単ですが、一つの列しか抽出できない限界があります。それに比べ、前者は<code><a href="https://rdrr.io/r/base/c.html">c()</a></code>を使うことで複数の列を同時に抽出することも可能です。それぞれの場面に応じて使い分けていきましょう。</p>
 <p>また、<code>$</code>で列を抽出した場合、抽出されたものはベクトル扱いになるため、<code>[]</code>を使った要素の抽出が可能です。例えば<code>myDF4</code>の<code>Name</code>列の2番目の要素を抽出してみましょう。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb150"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb150-1"><a href="#RN4Ecb150-1"></a>myDF4<span class="sc">$</span>Name[<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1332,13 +1302,11 @@ A^T = \left[
 </div>
 <p>あまり意識する必要はありませんが、抽出後のデータ構造について簡単に説明します。データフレームから一部の要素を抽出した結果物は必ずしもデータフレームにはなりません。</p>
 <table class="table">
-<thead>
-<tr class="header">
+<thead><tr class="header">
 <th></th>
 <th>操作</th>
 <th>返されるデータ型</th>
-</tr>
-</thead>
+</tr></thead>
 <tbody>
 <tr class="odd">
 <td>1</td>
@@ -1393,14 +1361,14 @@ A^T = \left[
 <p>修正した要素が反映されました。</p>
 <p><strong>列の追加・修正</strong></p>
 <p>まずは、データフレームに列を追加する方法について紹介します。方法は</p>
-<div class="sourceCode" id="RN4Ecb156"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="RN4Ecb156-1"><a href="#RN4Ecb156-1" aria-hidden="true" tabindex="-1"></a>データフレーム名<span class="sc">$</span>新しい列名 <span class="ot">&lt;-</span> ベクトル</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="RN4Ecb156"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">データフレーム名</span><span class="op">$</span><span class="va">新しい列名</span> <span class="op">&lt;-</span> <span class="va">ベクトル</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>のように入力するだけです。たとえば、4人を対象に英語試験を行い、それぞれの点数が95点、50点、80点、5点だとします。この英語試験の成績を<code>myDF4</code>の<code>English</code>列として追加してみましょう。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb157"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb157-1"><a href="#RN4Ecb157-1"></a>myDF4<span class="sc">$</span>English <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">95</span>, <span class="dv">50</span>, <span class="dv">80</span>, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>むろん、以下のように予めベクトルを作成してから代入することも可能です。</p>
-<div class="sourceCode" id="RN4Ecb158"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="RN4Ecb158-1"><a href="#RN4Ecb158-1" aria-hidden="true" tabindex="-1"></a>English_Score <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">95</span>, <span class="dv">50</span>, <span class="dv">80</span>, <span class="dv">5</span>)</span>
-<span id="RN4Ecb158-2"><a href="#RN4Ecb158-2" aria-hidden="true" tabindex="-1"></a>myDF4<span class="sc">$</span>English <span class="ot">&lt;-</span> English_Score</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="RN4Ecb158"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">English_Score</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">95</span>, <span class="fl">50</span>, <span class="fl">80</span>, <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="va">myDF4</span><span class="op">$</span><span class="va">English</span> <span class="op">&lt;-</span> <span class="va">English_Score</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>どれも同じ結果になりますが、結果を見てみましょう。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb159"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb159-1"><a href="#RN4Ecb159-1"></a>myDF4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1455,12 +1423,12 @@ A^T = \left[
 </div>
 </div>
 <p>元々はnumeric型であるはずの<code>Stat</code>列がcharacter型になりました。その理由は明白です。ベクトルの要素は全て同じデータ型だからです。そして、numericとcharacter型が混在している場合は、自動的に（優先順位の高い）character型になります。以下の2つのコマンドが同じであることは理解できるでしょう。</p>
-<div class="sourceCode" id="RN4Ecb169"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="RN4Ecb169-1"><a href="#RN4Ecb169-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Case 1</span></span>
-<span id="RN4Ecb169-2"><a href="#RN4Ecb169-2" aria-hidden="true" tabindex="-1"></a>myDF4[<span class="dv">5</span>, ] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="st">"Hakiai"</span>, <span class="dv">50</span>, <span class="dv">50</span>, <span class="st">"Ashiya"</span>, <span class="st">"Jiro"</span>, <span class="dv">50</span>)</span>
-<span id="RN4Ecb169-3"><a href="#RN4Ecb169-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="RN4Ecb169-4"><a href="#RN4Ecb169-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Case 2</span></span>
-<span id="RN4Ecb169-5"><a href="#RN4Ecb169-5" aria-hidden="true" tabindex="-1"></a>Hakiai_Data <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="st">"Hakiai"</span>, <span class="dv">50</span>, <span class="dv">50</span>, <span class="st">"Ashiya"</span>, <span class="st">"Jiro"</span>, <span class="dv">50</span>)</span>
-<span id="RN4Ecb169-6"><a href="#RN4Ecb169-6" aria-hidden="true" tabindex="-1"></a>myDF4[<span class="dv">5</span>, ]  <span class="ot">&lt;-</span> Hakiai_Data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="RN4Ecb169"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Case 1</span></span>
+<span><span class="va">myDF4</span><span class="op">[</span><span class="fl">5</span>, <span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="st">"Hakiai"</span>, <span class="fl">50</span>, <span class="fl">50</span>, <span class="st">"Ashiya"</span>, <span class="st">"Jiro"</span>, <span class="fl">50</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Case 2</span></span>
+<span><span class="va">Hakiai_Data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="st">"Hakiai"</span>, <span class="fl">50</span>, <span class="fl">50</span>, <span class="st">"Ashiya"</span>, <span class="st">"Jiro"</span>, <span class="fl">50</span><span class="op">)</span></span>
+<span><span class="va">myDF4</span><span class="op">[</span><span class="fl">5</span>, <span class="op">]</span>  <span class="op">&lt;-</span> <span class="va">Hakiai_Data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>ここのベクトル<code>Hakiai_Data</code>が強制的にcharacter型になるため、<code>myDF4</code>の5行目の要素は全てcharacter型になります。また、データフレームは縦ベクトルを横に並べたものであるなら、<code>myDF4$Math</code>列にcharacter型の要素が追加されることによって、列も全てcharacter型になってしまいます。したがって、データフレームにcharacter型とnumeric型が混在している状況において新しい行の追加は全ての要素をcharacter型に変えてしまうのです。むろん、データフレームの全要素がnumeric型であれば、このような問題は生じますが、numeric型のみで構成されたデータフレームはなかなかないでしょう。</p>
 <p>5行目を消しても問題は解決しないので、結局は列のデータ型を強制的に変更する必要があります。</p>
 <div class="cell">
@@ -1503,11 +1471,10 @@ A^T = \left[
 </div>
 </div>
 <p>欠損値 (<code>NA</code>)はどのようなデータ型にも対応できる特徴を利用すれば、このような操作も可能ですが、かなり面倒です。そもそも実際の分析において任意の行を追加することは滅多にないはずです。</p>
-</section>
-<section id="RN4Etibble型" class="level3" data-number="9.4.3">
-<h3 data-number="9.4.3" class="anchored" data-anchor-id="RN4Etibble型"><span class="header-section-number">9.4.3</span> tibble型</h3>
+</section><section id="RN4Etibble型" class="level3" data-number="9.4.3"><h3 data-number="9.4.3" class="anchored" data-anchor-id="RN4Etibble型">
+<span class="header-section-number">9.4.3</span> tibble型</h3>
 <p><code>data.frame</code>に似ているデータ型として<code>tibble</code>があります。これはR内蔵のデータ型ではありませんが、Rの必須パッケージとも言えるtidyverse内に含まれているデータ型であり、これからもどんどん普及していくでしょう。<code>tibble</code>と<code>data.frame</code>の違いを説明するために、同じデータをそれぞれのデータ型で読み込んでみましょう。</p>
-<p>とりあえず<code>read.csv()</code>で読み込み、<code>VoteDF1</code>と名付けましょう。</p>
+<p>とりあえず<code><a href="https://rdrr.io/r/utils/read.table.html">read.csv()</a></code>で読み込み、<code>VoteDF1</code>と名付けましょう。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb176"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb176-1"><a href="#RN4Ecb176-1"></a>VoteDF1 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"Data/Vote.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -1601,7 +1568,7 @@ A^T = \left[
 <p>同じデータですが、表示画面がやや異なります。<code>data.frame</code>は全ての列と行が表示されましたが、<code>tibble</code>の場合、「画面に収まる」程度しか表示されません。表示されなかった行や列に関しては最後に表示されています。たとえば、<code>VoteDF2</code>の場合、下段にこのように書かれていますね (画面の大きさによって変わります)。</p>
 <pre><code>## # … with 37 more rows, and 1 more variable: SDP &lt;dbl&gt;</code></pre>
 <p>これは表示されなかった行が37行あり、<code>SDP</code>という変数も表示されていないということです。他の違いとしては、<code>tibble</code>の場合、最初にデータのサイズ (47行11列)が、各変数名の下にデータ型 (<code>&lt;int&gt;</code>、<code>&lt;chr&gt;</code>、<code>&lt;dbl&gt;</code>など)が表示されるという点です。</p>
-<p>本書は<code>tibble</code>と<code>data.frame</code>を区別して解説はしませんが、一部の章・節においては<code>tibble</code>を念頭において解説をします。<code>tibble</code>型の作り方は先ほどのように<code>as_tibble()</code>使う方法もありますが、<code>readr::read_csv()</code>を使う方法もあります<a href="#RN4Efn5" class="footnote-ref" id="RN4Efnref5" role="doc-noteref"><sup>5</sup></a>。<code>read_csv()</code>を使うと各列がどのようなデータ型として読み込まれたかも表示されるので便利です。<code>readr</code>パッケージはtidyverseに含まれているため、普段では以下のような使い方で十分です。</p>
+<p>本書は<code>tibble</code>と<code>data.frame</code>を区別して解説はしませんが、一部の章・節においては<code>tibble</code>を念頭において解説をします。<code>tibble</code>型の作り方は先ほどのように<code>as_tibble()</code>使う方法もありますが、<code><a href="https://readr.tidyverse.org/reference/read_delim.html">readr::read_csv()</a></code>を使う方法もあります<a href="#RN4Efn5" class="footnote-ref" id="RN4Efnref5" role="doc-noteref"><sup>5</sup></a>。<code>read_csv()</code>を使うと各列がどのようなデータ型として読み込まれたかも表示されるので便利です。<code>readr</code>パッケージはtidyverseに含まれているため、普段では以下のような使い方で十分です。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb186"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb186-1"><a href="#RN4Ecb186-1"></a>VoteDF3 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Data/Vote.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -1621,14 +1588,11 @@ dbl (10): ID, Zaisei, Over65, Under30, LDP, DPJ, Komei, Ishin, JCP, SDP
 </div>
 <p><code>tibble</code>と<code>data.frame</code>の最も大きな違いは、<code>data.frame</code>の一つのセルには長さ1のベクトルしか入らない一方、<code>tibble</code>は何でも入るという点です。つまり、<code>tibble</code>なら一つのセルに数字や文字列だけでなく、長さ2以上のベクトル、後述するリスト型、行列、さらには<code>tibble</code>も入れることが出来ます。これについては本書の中盤以降に解説します。</p>
 <p>本書で「データフレーム」と書いた場合、それはtibbleでも適用可能です。ただし、tibbleと明示した場合、データフレームでは適用不可能です。</p>
-<hr>
-</section>
-</section>
-<section id="RN4Esec-datastructure_list" class="level2" data-number="9.5">
-<h2 data-number="9.5" class="anchored" data-anchor-id="RN4Esec-datastructure_list"><span class="header-section-number">9.5</span> リスト (list)</h2>
+<hr></section></section><section id="RN4Esec-datastructure_list" class="level2" data-number="9.5"><h2 data-number="9.5" class="anchored" data-anchor-id="RN4Esec-datastructure_list">
+<span class="header-section-number">9.5</span> リスト (list)</h2>
 <p>リスト型は「様々なデータ構造を集めたもの」です。これは複数のデータフレームが格納されたオブジェクト、複数のベクトルが格納されたオブジェクト、行列とデータフレームが混在したオブジェクトなどを意味します。また、リスト型データはリスト型データを含むことも可能であり、非常に柔軟なデータ構造です。</p>
-<section id="RN4Eリスト型データの作成" class="level3" data-number="9.5.1">
-<h3 data-number="9.5.1" class="anchored" data-anchor-id="RN4Eリスト型データの作成"><span class="header-section-number">9.5.1</span> リスト型データの作成</h3>
+<section id="RN4Eリスト型データの作成" class="level3" data-number="9.5.1"><h3 data-number="9.5.1" class="anchored" data-anchor-id="RN4Eリスト型データの作成">
+<span class="header-section-number">9.5.1</span> リスト型データの作成</h3>
 <p>ここではまず、2つのデータフレームを含むリストを作成してみます。それぞれのデータフレームはFIFA国別サッカーランキングであり<a href="#RN4Efn6" class="footnote-ref" id="RN4Efnref6" role="doc-noteref"><sup>6</sup></a>、本書のサンプルデータの<code>FIFA_Women.csv</code>と<code>FIFA_Men.csv</code>です。まずは、2つのデータを読み込み、<code>Soccer_W</code>と<code>Soccer_M</code>という名のオブジェクトに格納しましょう。また、ここでは単に例を見せるだけなので、全データを利用するのではなく、最初の10行のみを利用します。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb190"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb190-1"><a href="#RN4Ecb190-1"></a>Soccer_W <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"Data/FIFA_Women.csv"</span>)</span>
@@ -1637,7 +1601,7 @@ dbl (10): ID, Zaisei, Over65, Under30, LDP, DPJ, Komei, Ishin, JCP, SDP
 <span id="RN4Ecb190-4"><a href="#RN4Ecb190-4"></a>Soccer_W <span class="ot">&lt;-</span> Soccer_W[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, ]</span>
 <span id="RN4Ecb190-5"><a href="#RN4Ecb190-5"></a>Soccer_M <span class="ot">&lt;-</span> Soccer_M[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>リストの作成には<code>list()</code>関数に入れたいオブジェクト名を指定するだけです。それでは<code>List1</code>という名前で<code>Soccer_W</code>と<code>Soccer_M</code>データフレームを入れてみましょう。格納後は<code>List1</code>のデータ構造を<code>class()</code>で確認します</p>
+<p>リストの作成には<code><a href="https://rdrr.io/r/base/list.html">list()</a></code>関数に入れたいオブジェクト名を指定するだけです。それでは<code>List1</code>という名前で<code>Soccer_W</code>と<code>Soccer_M</code>データフレームを入れてみましょう。格納後は<code>List1</code>のデータ構造を<code><a href="https://rdrr.io/r/base/class.html">class()</a></code>で確認します</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb191"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb191-1"><a href="#RN4Ecb191-1"></a>List1 <span class="ot">&lt;-</span> <span class="fu">list</span>(Soccer_W, Soccer_M)</span>
 <span id="RN4Ecb191-2"><a href="#RN4Ecb191-2"></a><span class="fu">class</span>(List1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1705,10 +1669,9 @@ $Men
 10 10             Armenia  102   1213        1213          UEFA</code></pre>
 </div>
 </div>
-<p>これでどれが女性ランキングか、男性ランキングかが区別しやすくなりました。ここでは2つのデータフレームを入れましたが、様々なデータ構造が混在したリストも可能です。様々なデータ構造が混在したリストを自分で作成する場面はあまりありません。自分で作成した独自クラスを利用するパッケージを開発する際はよく使いますが、ここでは省略します。ただし、様々なデータ構造が含まれたリスト型を見ることはよくあります。たとえば、<code>lm()</code>関数で回帰分析を行った際、その結果はリスト型であり、中にはベクトル、データフレーム、リストなどが混在しています。これについては今後詳細に解説していきたいと思います。</p>
-</section>
-<section id="RN4Eリスト型データの操作" class="level3" data-number="9.5.2">
-<h3 data-number="9.5.2" class="anchored" data-anchor-id="RN4Eリスト型データの操作"><span class="header-section-number">9.5.2</span> リスト型データの操作</h3>
+<p>これでどれが女性ランキングか、男性ランキングかが区別しやすくなりました。ここでは2つのデータフレームを入れましたが、様々なデータ構造が混在したリストも可能です。様々なデータ構造が混在したリストを自分で作成する場面はあまりありません。自分で作成した独自クラスを利用するパッケージを開発する際はよく使いますが、ここでは省略します。ただし、様々なデータ構造が含まれたリスト型を見ることはよくあります。たとえば、<code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>関数で回帰分析を行った際、その結果はリスト型であり、中にはベクトル、データフレーム、リストなどが混在しています。これについては今後詳細に解説していきたいと思います。</p>
+</section><section id="RN4Eリスト型データの操作" class="level3" data-number="9.5.2"><h3 data-number="9.5.2" class="anchored" data-anchor-id="RN4Eリスト型データの操作">
+<span class="header-section-number">9.5.2</span> リスト型データの操作</h3>
 <p>リスト型の中身は何でもあり得るので、なんらかの操作方法があるわけではありません。リスト型の操作というのはリスト内の要素をどのように抽出するかであり、各要素 (データフレーム、行列、ベクトルなど)の操作はこれまで説明してきた方法と同じです。したがって、ここではリストを構成する要素を抽出する方法についてのみ解説します。</p>
 <p><strong>要素の番号を利用する方法</strong></p>
 <p><code>List1</code>は各要素に名前が付いていないため、番号で抽出します。たとえば、あるリストの<code>i</code>番目の要素を抽出するには<code>リスト名[[i]]</code>で抽出します。<code>[]</code>ではなく、<code>[[]]</code>であることに注意してください。それでは<code>List1</code>の1番目の要素を抽出してみましょう。</p>
@@ -1833,23 +1796,19 @@ $Men
 </div>
 </div>
 <p>もちろん、名前を付けた場合であっても、要素の番号を利用した操作も可能です。自分でリスト型を作成する際には各要素に名前を付けた方が分かりやすくて良いでしょう。</p>
-<hr>
-</section>
-</section>
-<section id="RN4Esec-datastructure_array" class="level2" data-number="9.6">
-<h2 data-number="9.6" class="anchored" data-anchor-id="RN4Esec-datastructure_array"><span class="header-section-number">9.6</span> 配列 (array)</h2>
+<hr></section></section><section id="RN4Esec-datastructure_array" class="level2" data-number="9.6"><h2 data-number="9.6" class="anchored" data-anchor-id="RN4Esec-datastructure_array">
+<span class="header-section-number">9.6</span> 配列 (array)</h2>
 <p>配列は行列の拡張版であり、行列は配列の特殊な形です。これまでのRでは行列と配列は区別されてきましたが、R 4.0.0以降、行列は配列の属するデータ構造となりました。</p>
 <p>配列型は簡単にいうと、同じサイズの行列を数枚重ねたものです。 <a href="#RN4Efig-structure_array">図&nbsp;<span>9.1</span></a> は配列型のイメージを表したものです。</p>
 <div id="RN4Efig-structure_array" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="Figs/DataStructure/array.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figure class="figure"><p><img src="Figs/DataStructure/array.png" class="img-fluid figure-img" style="width:75.0%"></p>
 <p></p><figcaption class="figure-caption">図&nbsp;9.1: 配列型データのイメージ</figcaption><p></p>
 </figure>
 </div>
 <p>したがって、配列型は行と列以外にも、層の要素も持つことになります。複数の行列で構成されている点では、リスト型と類似していますが、配列型は<strong>同じサイズ</strong>の<strong>行列</strong>のみで構成されている点が特徴です。</p>
 <p>配列型は普段、扱う機会があまりありませんが、マルコフ連鎖モンテカルロ法 (MCMC)でベイジアン推定を行った後の事後分布データは配列型で格納される場合があります。</p>
-<section id="RN4E配列型データの作成" class="level3" data-number="9.6.1">
-<h3 data-number="9.6.1" class="anchored" data-anchor-id="RN4E配列型データの作成"><span class="header-section-number">9.6.1</span> 配列型データの作成</h3>
+<section id="RN4E配列型データの作成" class="level3" data-number="9.6.1"><h3 data-number="9.6.1" class="anchored" data-anchor-id="RN4E配列型データの作成">
+<span class="header-section-number">9.6.1</span> 配列型データの作成</h3>
 <p>各行列は3行4列とし、4層構造とします。まずは、同じサイズの行列を作成し、それぞれ<code>Mat1</code>、<code>Mat2</code>、<code>Mat3</code>、<code>Mat4</code>と名付けます。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb221"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb221-1"><a href="#RN4Ecb221-1"></a>Mat1 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">12</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>), <span class="at">byrow =</span> <span class="cn">TRUE</span>, <span class="at">nrow =</span> <span class="dv">3</span>)</span>
@@ -1857,38 +1816,38 @@ $Men
 <span id="RN4Ecb221-3"><a href="#RN4Ecb221-3"></a>Mat3 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">12</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>), <span class="at">byrow =</span> <span class="cn">TRUE</span>, <span class="at">nrow =</span> <span class="dv">3</span>)</span>
 <span id="RN4Ecb221-4"><a href="#RN4Ecb221-4"></a>Mat4 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">12</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>), <span class="at">byrow =</span> <span class="cn">TRUE</span>, <span class="at">nrow =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><code>sample()</code>関数は初めてですね。これは与えられたベクトルの要素から無作為に要素を抽出する関数です。<code>sample(1:12, n)</code>なら<code>c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,1 2)</code>から無作為に<code>n</code>個の要素を抽出するという意味です。<code>replace = TRUE</code>を指定すると、反復抽出、つまり、一回抽出された要素であっても抽出される可能性があることを意味します。デフォルトは<code>FALSE</code>ですが、この場合、一旦抽出された要素は二度と抽出されません。それではそれぞれの行列の中身を見てみましょう。</p>
+<p><code><a href="https://rdrr.io/r/base/sample.html">sample()</a></code>関数は初めてですね。これは与えられたベクトルの要素から無作為に要素を抽出する関数です。<code>sample(1:12, n)</code>なら<code>c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,1 2)</code>から無作為に<code>n</code>個の要素を抽出するという意味です。<code>replace = TRUE</code>を指定すると、反復抽出、つまり、一回抽出された要素であっても抽出される可能性があることを意味します。デフォルトは<code>FALSE</code>ですが、この場合、一旦抽出された要素は二度と抽出されません。それではそれぞれの行列の中身を見てみましょう。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb222"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb222-1"><a href="#RN4Ecb222-1"></a>Mat1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3] [,4]
-[1,]    3    8    2    9
-[2,]   12    5    1    4
-[3,]    3    3   10    9</code></pre>
+[1,]    6    6    1   11
+[2,]   10   10    6    5
+[3,]    6    6    7   11</code></pre>
 </div>
 <div class="sourceCode cell-code" id="RN4Ecb224"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb224-1"><a href="#RN4Ecb224-1"></a>Mat2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3] [,4]
-[1,]    9    7   11    9
-[2,]    4    1    8    3
-[3,]    5    2    4    7</code></pre>
+[1,]   12    6    4    4
+[2,]    5    9   11    6
+[3,]    5    3   10    2</code></pre>
 </div>
 <div class="sourceCode cell-code" id="RN4Ecb226"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb226-1"><a href="#RN4Ecb226-1"></a>Mat3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3] [,4]
-[1,]   11    9   11    2
-[2,]   11    4   12    9
-[3,]    9   10    3   12</code></pre>
+[1,]    7    8    9    4
+[2,]    6   10    6    6
+[3,]   11   11    5    2</code></pre>
 </div>
 <div class="sourceCode cell-code" id="RN4Ecb228"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb228-1"><a href="#RN4Ecb228-1"></a>Mat4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3] [,4]
-[1,]    1    5    4    2
-[2,]    4   12   11    3
-[3,]   10    8    1    9</code></pre>
+[1,]   10    8    4   10
+[2,]    4    1    6    8
+[3,]    3   10    4   11</code></pre>
 </div>
 </div>
-<p>配列型データを作成するには<code>array()</code>関数を使います。引数としては行列名を<code>c()</code>で繋ぎ<a href="#RN4Efn8" class="footnote-ref" id="RN4Efnref8" role="doc-noteref"><sup>8</sup></a>、<code>dim =</code>でarrayの大きさを指定するだけです。配列を作成した後はそのデータ構造も確認してみましょう。</p>
+<p>配列型データを作成するには<code><a href="https://rdrr.io/r/base/array.html">array()</a></code>関数を使います。引数としては行列名を<code><a href="https://rdrr.io/r/base/c.html">c()</a></code>で繋ぎ<a href="#RN4Efn8" class="footnote-ref" id="RN4Efnref8" role="doc-noteref"><sup>8</sup></a>、<code>dim =</code>でarrayの大きさを指定するだけです。配列を作成した後はそのデータ構造も確認してみましょう。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb230"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb230-1"><a href="#RN4Ecb230-1"></a>Array1 <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="fu">c</span>(Mat1, Mat2, Mat3, Mat4), <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">4</span>))</span>
 <span id="RN4Ecb230-2"><a href="#RN4Ecb230-2"></a><span class="fu">class</span>(Array1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1903,44 +1862,43 @@ $Men
 <pre><code>, , 1
 
      [,1] [,2] [,3] [,4]
-[1,]    3    8    2    9
-[2,]   12    5    1    4
-[3,]    3    3   10    9
+[1,]    6    6    1   11
+[2,]   10   10    6    5
+[3,]    6    6    7   11
 
 , , 2
 
      [,1] [,2] [,3] [,4]
-[1,]    9    7   11    9
-[2,]    4    1    8    3
-[3,]    5    2    4    7
+[1,]   12    6    4    4
+[2,]    5    9   11    6
+[3,]    5    3   10    2
 
 , , 3
 
      [,1] [,2] [,3] [,4]
-[1,]   11    9   11    2
-[2,]   11    4   12    9
-[3,]    9   10    3   12
+[1,]    7    8    9    4
+[2,]    6   10    6    6
+[3,]   11   11    5    2
 
 , , 4
 
      [,1] [,2] [,3] [,4]
-[1,]    1    5    4    2
-[2,]    4   12   11    3
-[3,]   10    8    1    9</code></pre>
+[1,]   10    8    4   10
+[2,]    4    1    6    8
+[3,]    3   10    4   11</code></pre>
 </div>
 </div>
 <p>このように一つのオブジェクト内に複数の行列が格納されたオブジェクトが生成されます。</p>
-</section>
-<section id="RN4E配列型データの操作" class="level3" data-number="9.6.2">
-<h3 data-number="9.6.2" class="anchored" data-anchor-id="RN4E配列型データの操作"><span class="header-section-number">9.6.2</span> 配列型データの操作</h3>
+</section><section id="RN4E配列型データの操作" class="level3" data-number="9.6.2"><h3 data-number="9.6.2" class="anchored" data-anchor-id="RN4E配列型データの操作">
+<span class="header-section-number">9.6.2</span> 配列型データの操作</h3>
 <p>配列型データの操作は行列型に似ていますが、層というもう一つの次元があるため、<code>行列名[行番号, 列番号]</code>ではなく、<code>配列名[行番号, 列番号, 層番号]</code>を使います。たとえば、<code>Array1</code>の3番目の行列を抽出したい場合、<code>Array1[, , 3]</code>と入力します。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb234"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb234-1"><a href="#RN4Ecb234-1"></a>Array1[, , <span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3] [,4]
-[1,]   11    9   11    2
-[2,]   11    4   12    9
-[3,]    9   10    3   12</code></pre>
+[1,]    7    8    9    4
+[2,]    6   10    6    6
+[3,]   11   11    5    2</code></pre>
 </div>
 </div>
 <p>また、2番目の行列の3行目・1列目の要素を抽出するなら<code>Array1[3, 1, 2]</code>と入力します。</p>
@@ -1955,13 +1913,13 @@ $Men
 <div class="sourceCode cell-code" id="RN4Ecb238"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb238-1"><a href="#RN4Ecb238-1"></a>Array1[<span class="dv">2</span>, , ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3] [,4]
-[1,]   12    4   11    4
-[2,]    5    1    4   12
-[3,]    1    8   12   11
-[4,]    4    3    9    3</code></pre>
+[1,]   10    5    6    4
+[2,]   10    9   10    1
+[3,]    6   11    6    6
+[4,]    5    6    6    8</code></pre>
 </div>
 </div>
-<p>ただ、返された結果は配列型でなく行列型であることに注意しましょう。たとえば、1番目の行列の2行目の要素は12, 5, 1, 4ですが、これは先ほど抽出された行列の1列目に該当します。また、2番目の行列の2行目の要素は4, 1, 8, 3であり、これは先ほどの抽出された行列の2列目となります。全層において特定の一列を抽出しても同じです。これは各層において抽出されたデータが行列でなく、ベクトルだからです。</p>
+<p>ただ、返された結果は配列型でなく行列型であることに注意しましょう。たとえば、1番目の行列の2行目の要素は10, 10, 6, 5ですが、これは先ほど抽出された行列の1列目に該当します。また、2番目の行列の2行目の要素は5, 9, 11, 6であり、これは先ほどの抽出された行列の2列目となります。全層において特定の一列を抽出しても同じです。これは各層において抽出されたデータが行列でなく、ベクトルだからです。</p>
 <p>一方、<strong>複数</strong>の行または列を抽出した場合、結果は配列型です。<code>Array1</code>の各層から1・2行目と1・2列目の要素、つまり大きさが2 <span class="math inline">\(\times\)</span> 2の行列を抽出してみましょう。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb240"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb240-1"><a href="#RN4Ecb240-1"></a>Array1[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1969,26 +1927,26 @@ $Men
 <pre><code>, , 1
 
      [,1] [,2]
-[1,]    3    8
-[2,]   12    5
+[1,]    6    6
+[2,]   10   10
 
 , , 2
 
      [,1] [,2]
-[1,]    9    7
-[2,]    4    1
+[1,]   12    6
+[2,]    5    9
 
 , , 3
 
      [,1] [,2]
-[1,]   11    9
-[2,]   11    4
+[1,]    7    8
+[2,]    6   10
 
 , , 4
 
      [,1] [,2]
-[1,]    1    5
-[2,]    4   12</code></pre>
+[1,]   10    8
+[2,]    4    1</code></pre>
 </div>
 </div>
 <p>このように各層において抽出されたデータが行列だからです。自分の操作から得られた結果がどのようなデータ型・データ構造かを予め知っておくことで分析の効率が上がるでしょう。</p>
@@ -2006,9 +1964,9 @@ $Men
 <div class="sourceCode cell-code" id="RN4Ecb243"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb243-1"><a href="#RN4Ecb243-1"></a>Array2[, , <span class="st">"M4"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3] [,4]
-[1,]    1    5    4    2
-[2,]    4   12   11    3
-[3,]   10    8    1    9</code></pre>
+[1,]   10    8    4   10
+[2,]    4    1    6    8
+[3,]    3   10    4   11</code></pre>
 </div>
 </div>
 <p>むろん、これまでと同様、番号で抽出することも可能です。</p>
@@ -2016,9 +1974,9 @@ $Men
 <div class="sourceCode cell-code" id="RN4Ecb245"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb245-1"><a href="#RN4Ecb245-1"></a>Array2[, , <span class="dv">4</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3] [,4]
-[1,]    1    5    4    2
-[2,]    4   12   11    3
-[3,]   10    8    1    9</code></pre>
+[1,]   10    8    4   10
+[2,]    4    1    6    8
+[3,]    3   10    4   11</code></pre>
 </div>
 </div>
 <div id="RN4Equarto-navigation-envelope" class="hidden">
@@ -2027,24 +1985,17 @@ $Men
 <div id="RN4Equarto-meta-markdown" class="hidden">
 <p><span class="hidden" data-render-id="quarto-metatitle">私たちのR - <span id="RN4Esec-datastructure" class="quarto-section-identifier"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">データ構造</span></span></span> <span class="hidden" data-render-id="quarto-twittercardtitle">私たちのR: ベストプラクティスの探求</span> <span class="hidden" data-render-id="quarto-ogcardtitle">私たちのR: ベストプラクティスの探求</span> <span class="hidden" data-render-id="quarto-metasitename">私たちのR</span></p>
 </div>
-</section>
-</section>
-<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
-<hr>
+</section></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><hr>
 <ol>
 <li id="RN4Efn1"><p>他にも要素ごとの積 (element-wise product)、シューア積 (Schur product)と呼ばれたりします。<a href="#RN4Efnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="RN4Efn2"><p>行列式が0でない場合において一次方程式には一組の解があります。<a href="#RN4Efnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="RN4Efn3"><p>なぜなら2行目が1行目の0.5倍になっているからです。<a href="#RN4Efnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="RN4Efn4"><p><code>NA</code>も可能です。<a href="#RN4Efnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="RN4Efn5"><p><code>tibble</code>型を直接作成するには<code>tibble()</code>関数を使いますが、<code>data.frame()</code>と同じ使い方で問題ありません。他にも<code>tribble()</code>関数を使った方法もありますが、詳細は<code>?tribble</code>で確認してください。<a href="#RN4Efnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="RN4Efn5"><p><code>tibble</code>型を直接作成するには<code>tibble()</code>関数を使いますが、<code><a href="https://rdrr.io/r/base/data.frame.html">data.frame()</a></code>と同じ使い方で問題ありません。他にも<code>tribble()</code>関数を使った方法もありますが、詳細は<code>?tribble</code>で確認してください。<a href="#RN4Efnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="RN4Efn6"><p>厳密には国別ではありません。イギリスの場合、イングランド、スコットランド、北アイルランド、ウェールズがそれぞれ独立したチームとしてFIFAに加盟しています。<a href="#RN4Efnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="RN4Efn7"><p><code>["要素名"]</code>で抽出することも可能ですが、この場合、返される結果はリスト型になります。<a href="#RN4Efnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="RN4Efn8"><p>元々はベクトルを入力しますが、行列を<code>c()</code>で繋ぐと自動的にベクトルに変換されます。<a href="#RN4Efnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section>
-
-</main> <!-- /main -->
-<script id="quarto-html-after-body" type="application/javascript">
+<li id="RN4Efn8"><p>元々はベクトルを入力しますが、行列を<code><a href="https://rdrr.io/r/base/c.html">c()</a></code>で繋ぐと自動的にベクトルに変換されます。<a href="#RN4Efnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -2175,10 +2126,22 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
   }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp(/https:\/\/www\.jaysong\.net\/RBook\//);
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+    var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+      }
+    }
 });
-</script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
       <a href="./datatype.html" class="pagination-link">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">データ型</span></span>
       </a>          
@@ -2190,14 +2153,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<footer class="footer">
-  <div class="nav-footer">
+<footer class="footer"><div class="nav-footer">
       <div class="nav-footer-center">
         <div class="footer-contents">Copyright 2022, Jaehyun Song and Yuki Yanai</div>  
       </div>
   </div>
 </footer>
-
 
 
 </body></html>

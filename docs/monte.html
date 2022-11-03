@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.2.256">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
-
 <title>私たちのR – 29&nbsp; モンテカルロ・シミュレーション</title>
 <style>
 code{white-space: pre-wrap;}
@@ -104,7 +101,6 @@ div.csl-indent {
 }
 </style>
 
-
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -122,8 +118,7 @@ div.csl-indent {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-<script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -141,22 +136,14 @@ div.csl-indent {
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit"
   }
-}</script>
-<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-CEHS4C056W"></script>
-
-<script type="text/javascript">
+}</script><script async="" src="https://www.googletagmanager.com/gtag/js?id=G-CEHS4C056W"></script><script type="text/javascript">
 
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
-</script>
-
-<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
-<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
-
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
+</script><script src="site_libs/kePrint-0.0.1/kePrint.js"></script><link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 <meta property="og:title" content="私たちのR: ベストプラクティスの探求">
 <meta property="og:description" content="R Not for Everyone: An Esoteric Guide">
 <meta property="og:image" content="https://www.jaysong.net/RBook/imgs/favicon.png">
@@ -166,26 +153,19 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <meta name="twitter:image" content="https://www.jaysong.net/RBook/imgs/favicon.png">
 <meta name="twitter:card" content="summary">
 </head>
-
 <body class="nav-sidebar docked">
 
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">モンテカルロ・シミュレーション</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
     </div>
-  </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">
       私たちのR
@@ -194,14 +174,14 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
     <a href="https://github.com/JaehyunSong/RBook/" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
     <a href="" title="Share" id="sidebar-tool-dropdown-0" class="sidebar-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-share"></i></a>
     <ul class="dropdown-menu" aria-labelledby="sidebar-tool-dropdown-0">
-        <li>
-          <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+<li>
+          <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=%7Curl%7C">
             <i class="bi bi-bi-twitter pe-1"></i>
           Twitter
           </a>
         </li>
         <li>
-          <a class="dropdown-item sidebar-tools-main-item" href="https://www.facebook.com/sharer/sharer.php?u=|url|">
+          <a class="dropdown-item sidebar-tools-main-item" href="https://www.facebook.com/sharer/sharer.php?u=%7Curl%7C">
             <i class="bi bi-bi-facebook pe-1"></i>
           Facebook
           </a>
@@ -217,7 +197,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
       </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">紹介</a>
   </div>
@@ -229,8 +209,8 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./aboutR.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R?</span></a>
   </div>
@@ -256,7 +236,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Rの基礎</a>
@@ -264,8 +244,8 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./r_basic.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">基本的な操作</span></a>
   </div>
@@ -296,7 +276,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">データハンドリング</a>
@@ -304,8 +284,8 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./datahandling1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">データハンドリング [抽出]</span></a>
   </div>
@@ -331,7 +311,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">可視化</a>
@@ -339,8 +319,8 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./visualization1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">可視化 [理論]</span></a>
   </div>
@@ -366,7 +346,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">再現可能な研究</a>
@@ -374,8 +354,8 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./rmarkdown.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">R Markdown [基礎]</span></a>
   </div>
@@ -401,7 +381,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">中級者向け</a>
@@ -409,8 +389,8 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./iteration.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">反復処理</span></a>
   </div>
@@ -436,7 +416,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true">付録</a>
@@ -444,8 +424,8 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tips.html" class="sidebar-item-text sidebar-link">R Tips</a>
   </div>
@@ -461,35 +441,30 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   </div>
 </li>
       </ul>
-  </li>
+</li>
     </ul>
-    </div>
-</nav>
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="RN4ETOC" role="doc-toc" class="toc-active">
-    <h2 id="RN4Etoc-title" class="anchored">目次</h2>
+</div>
+</nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="RN4ETOC" role="doc-toc" class="toc-active"><h2 id="RN4Etoc-title" class="anchored">目次</h2>
    
   <ul>
-  <li><a href="#RN4Esec-monte-intro" id="RN4Etoc-sec-monte-intro" class="nav-link active" data-scroll-target="#RN4Esec-monte-intro"><span class="toc-section-number">29.1</span>  モンテカルロシミュレーションとは</a></li>
-  <li><a href="#RN4Esec-monte-rng" id="RN4Etoc-sec-monte-rng" class="nav-link" data-scroll-target="#RN4Esec-monte-rng"><span class="toc-section-number">29.2</span>  乱数生成</a>
+<li><a href="#RN4Esec-monte-intro" id="RN4Etoc-sec-monte-intro" class="nav-link active" data-scroll-target="#RN4Esec-monte-intro"><span class="toc-section-number">29.1</span>  モンテカルロシミュレーションとは</a></li>
+  <li>
+<a href="#RN4Esec-monte-rng" id="RN4Etoc-sec-monte-rng" class="nav-link" data-scroll-target="#RN4Esec-monte-rng"><span class="toc-section-number">29.2</span>  乱数生成</a>
   <ul class="collapse">
-  <li><a href="#RN4Esampleによるサンプリング" id="RN4Etoc-sampleによるサンプリング" class="nav-link" data-scroll-target="#RN4Esampleによるサンプリング"><span class="toc-section-number">29.2.1</span>  <code>sample()</code>によるサンプリング</a></li>
-  <li><a href="#RN4E確率分布からの乱数制制" id="RN4Etoc-確率分布からの乱数制制" class="nav-link" data-scroll-target="#RN4E確率分布からの乱数制制"><span class="toc-section-number">29.2.2</span>  確率分布からの乱数制制</a></li>
-  <li><a href="#RN4Eシードについて" id="RN4Etoc-シードについて" class="nav-link" data-scroll-target="#RN4Eシードについて"><span class="toc-section-number">29.2.3</span>  シードについて</a></li>
-  </ul></li>
+<li><a href="#RN4Esample%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AA%E3%83%B3%E3%82%B0" id="RN4Etoc-sampleによるサンプリング" class="nav-link" data-scroll-target="#RN4Esample%E3%81%AB%E3%82%88%E3%82%8B%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AA%E3%83%B3%E3%82%B0"><span class="toc-section-number">29.2.1</span>  <code>sample()</code>によるサンプリング</a></li>
+  <li><a href="#RN4E%E7%A2%BA%E7%8E%87%E5%88%86%E5%B8%83%E3%81%8B%E3%82%89%E3%81%AE%E4%B9%B1%E6%95%B0%E5%88%B6%E5%88%B6" id="RN4Etoc-確率分布からの乱数制制" class="nav-link" data-scroll-target="#RN4E%E7%A2%BA%E7%8E%87%E5%88%86%E5%B8%83%E3%81%8B%E3%82%89%E3%81%AE%E4%B9%B1%E6%95%B0%E5%88%B6%E5%88%B6"><span class="toc-section-number">29.2.2</span>  確率分布からの乱数制制</a></li>
+  <li><a href="#RN4E%E3%82%B7%E3%83%BC%E3%83%89%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6" id="RN4Etoc-シードについて" class="nav-link" data-scroll-target="#RN4E%E3%82%B7%E3%83%BC%E3%83%89%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6"><span class="toc-section-number">29.2.3</span>  シードについて</a></li>
+  </ul>
+</li>
   <li><a href="#RN4Esec-monte-birthday" id="RN4Etoc-sec-monte-birthday" class="nav-link" data-scroll-target="#RN4Esec-monte-birthday"><span class="toc-section-number">29.3</span>  例1: 誕生日問題</a></li>
   <li><a href="#RN4Esec-monte-montyhall" id="RN4Etoc-sec-monte-montyhall" class="nav-link" data-scroll-target="#RN4Esec-monte-montyhall"><span class="toc-section-number">29.4</span>  例2: モンティ・ホール問題</a></li>
   <li><a href="#RN4Esec-monte-pi" id="RN4Etoc-sec-monte-pi" class="nav-link" data-scroll-target="#RN4Esec-monte-pi"><span class="toc-section-number">29.5</span>  例3: 円周率の計算</a></li>
   <li><a href="#RN4Esec-monte-bootstrap" id="RN4Etoc-sec-monte-bootstrap" class="nav-link" data-scroll-target="#RN4Esec-monte-bootstrap"><span class="toc-section-number">29.6</span>  例4: ブートストラップ法</a></li>
-  </ul>
-</nav>
+  </ul></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title"><span id="RN4Esec-monte" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">モンテカルロ・シミュレーション</span></span></h1>
 </div>
 
@@ -503,10 +478,8 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   </div>
   
 
-</header>
-
-<section id="RN4Esec-monte-intro" class="level2" data-number="29.1">
-<h2 data-number="29.1" class="anchored" data-anchor-id="RN4Esec-monte-intro"><span class="header-section-number">29.1</span> モンテカルロシミュレーションとは</h2>
+</header><section id="RN4Esec-monte-intro" class="level2" data-number="29.1"><h2 data-number="29.1" class="anchored" data-anchor-id="RN4Esec-monte-intro">
+<span class="header-section-number">29.1</span> モンテカルロシミュレーションとは</h2>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="RN4Ecb1"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb1-1"><a href="#RN4Ecb1-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, ggforce)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -514,12 +487,11 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <p>　モンテカルロ法を用いたシミュレーションがモンテカルロ・シミュレーションです。計算があまりにも複雑だったり、実質的に代数で解が得られない解析学上の問題などに強みを持つ手法です。一部、明快な例（共役事前分布が存在するなど）を除き、事後分布の計算が非常に複雑（実質、不可能）だと知られていたベイズ統計学もモンテカルロ法（マルコフ連鎖モンテカルロ法; MCMC）によって、ようやく使えるものになったなど、今になってモンテカルロ法は非常に広く用いられています。</p>
 <p>　モンテカルロ法から得られた結果には常に誤差が存在します。とりわけ、生成された乱数が少ない（= 試行回数が少ない）場合、この誤差は大きくなります。しかし、近年はパソコンの性能が飛躍的に発達しているため、かなり小さな誤差で、つまりより正確な結果が得られるようになりました。</p>
 <p>　以下ではまず、モンテカルロ法を理解するために必須知識である乱数生成について解説します。具体的には乱数生成のアルゴリズムでなく、Rで乱数を生成する方法について紹介します。続いて、モンテカルロ法を用いたシミュレーションの例として誕生日問題、モンティ・ホール問題、円周率の計算、ブートストラップ法を紹介します。</p>
-</section>
-<section id="RN4Esec-monte-rng" class="level2" data-number="29.2">
-<h2 data-number="29.2" class="anchored" data-anchor-id="RN4Esec-monte-rng"><span class="header-section-number">29.2</span> 乱数生成</h2>
-<section id="RN4Esampleによるサンプリング" class="level3" data-number="29.2.1">
-<h3 data-number="29.2.1" class="anchored" data-anchor-id="RN4Esampleによるサンプリング"><span class="header-section-number">29.2.1</span> <code>sample()</code>によるサンプリング</h3>
-<p>　無作為に値を抽出する方法には2つが考えられます。一つは<strong>値の集合から</strong>無作為に値を抽出する方法、もう一つは正規分布などの<strong>確率分布から</strong>値を抽出する方法です。ここではまず<code>sample()</code>関数を用い、値の集合から無作為に値を抽出する方法について説明します。</p>
+</section><section id="RN4Esec-monte-rng" class="level2" data-number="29.2"><h2 data-number="29.2" class="anchored" data-anchor-id="RN4Esec-monte-rng">
+<span class="header-section-number">29.2</span> 乱数生成</h2>
+<section id="RN4Esampleによるサンプリング" class="level3" data-number="29.2.1"><h3 data-number="29.2.1" class="anchored" data-anchor-id="RN4Esampleによるサンプリング">
+<span class="header-section-number">29.2.1</span> <code>sample()</code>によるサンプリング</h3>
+<p>　無作為に値を抽出する方法には2つが考えられます。一つは<strong>値の集合から</strong>無作為に値を抽出する方法、もう一つは正規分布などの<strong>確率分布から</strong>値を抽出する方法です。ここではまず<code><a href="https://rdrr.io/r/base/sample.html">sample()</a></code>関数を用い、値の集合から無作為に値を抽出する方法について説明します。</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="RN4Ecb2"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb2-1"><a href="#RN4Ecb2-1"></a><span class="fu">sample</span>(<span class="at">x =</span> 値の集合ベクトル, <span class="at">size =</span> 抽出の回数, </span>
 <span id="RN4Ecb2-2"><a href="#RN4Ecb2-2"></a>       <span class="at">replace =</span> 復元抽出の有無, <span class="at">prob =</span> 各要素が抽出される確率)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -530,131 +502,164 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="sourceCode cell-code" id="RN4Ecb3"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb3-1"><a href="#RN4Ecb3-1"></a><span class="co"># この場合、prob引数は省略可能</span></span>
 <span id="RN4Ecb3-2"><a href="#RN4Ecb3-2"></a><span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">3</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">6</span>, <span class="dv">6</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 4 6 6</code></pre>
+<pre><code>[1] 2 4 2</code></pre>
 </div>
 </div>
-<p>　今回はサイコロを1万回振り、それぞれの目が出た回数を棒グラフとして示してみます。無作為に抽出された値であれば、各目が出る回数は等しいはずです。ベクトルに対して<code>table()</code>関数を使うと、各要素が出現した回数が出力され、このオブジェクトを<code>barplot()</code>関数に渡すと棒グラフを作成することができます。</p>
+<p>　今回はサイコロを1万回振り、それぞれの目が出た回数を棒グラフとして示してみます。無作為に抽出された値であれば、各目が出る回数は等しいはずです。ベクトルに対して<code><a href="https://rdrr.io/r/base/table.html">table()</a></code>関数を使うと、各要素が出現した回数が出力され、このオブジェクトを<code><a href="https://rdrr.io/r/graphics/barplot.html">barplot()</a></code>関数に渡すと棒グラフを作成することができます。</p>
 <div class="cell" data-layout-align="center" data-hash="monte_cache/html/fig-monte-rng-3_4db404eca6af6e2912e7a684e7ded1ca">
 <div class="sourceCode cell-code" id="RN4Ecb5"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb5-1"><a href="#RN4Ecb5-1"></a>Dice_vec <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">10</span><span class="sc">^</span><span class="dv">4</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
 <span id="RN4Ecb5-2"><a href="#RN4Ecb5-2"></a><span class="fu">table</span>(Dice_vec) <span class="sc">%&gt;%</span> <span class="fu">barplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="RN4Efig-monte-rng-3" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="monte_files/figure-html/fig-monte-rng-3-1.png" class="img-fluid figure-img" width="2100"></p>
+<figure class="figure"><p><img src="monte_files/figure-html/fig-monte-rng-3-1.png" class="img-fluid figure-img" width="2100"></p>
 <p></p><figcaption class="figure-caption">図&nbsp;29.1: 6面体サイコロを1万回投げた場合</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　1から6までの目が出た回数がほぼ同じであることが確認できます。この6つの棒の高さがすべて同じになることはありえませんが（そもそも1万を6で割ったら余りが出ますね）、ほぼ同じ割合であることから、疑似乱数とは言え、シミュレーション用としては十分でしょう。</p>
-</section>
-<section id="RN4E確率分布からの乱数制制" class="level3" data-number="29.2.2">
-<h3 data-number="29.2.2" class="anchored" data-anchor-id="RN4E確率分布からの乱数制制"><span class="header-section-number">29.2.2</span> 確率分布からの乱数制制</h3>
+</section><section id="RN4E確率分布からの乱数制制" class="level3" data-number="29.2.2"><h3 data-number="29.2.2" class="anchored" data-anchor-id="RN4E確率分布からの乱数制制">
+<span class="header-section-number">29.2.2</span> 確率分布からの乱数制制</h3>
 <table class="table">
-<thead>
-<tr class="header">
+<thead><tr class="header">
 <th>関数名</th>
 <th>確率分布</th>
 <th>パラメーター</th>
-</tr>
-</thead>
+</tr></thead>
 <tbody>
 <tr class="odd">
-<td><code>rbeta()</code></td>
+<td><code><a href="https://rdrr.io/r/stats/Beta.html">rbeta()</a></code></td>
 <td>ベータ分布</td>
-<td><code>n</code>, <code>shape1</code>, <code>shape2</code></td>
+<td>
+<code>n</code>, <code>shape1</code>, <code>shape2</code>
+</td>
 </tr>
 <tr class="even">
-<td><code>rbinom()</code></td>
+<td><code><a href="https://rdrr.io/r/stats/Binomial.html">rbinom()</a></code></td>
 <td>二項分布</td>
-<td><code>n</code>, <code>size</code>, <code>prob</code></td>
+<td>
+<code>n</code>, <code>size</code>, <code>prob</code>
+</td>
 </tr>
 <tr class="odd">
-<td><code>rcauchy()</code></td>
+<td><code><a href="https://rdrr.io/r/stats/Cauchy.html">rcauchy()</a></code></td>
 <td>コーシー分布</td>
-<td><code>n</code>, <code>location</code>, <code>scale</code></td>
+<td>
+<code>n</code>, <code>location</code>, <code>scale</code>
+</td>
 </tr>
 <tr class="even">
-<td><code>rchisq()</code></td>
-<td><span class="math inline">\(\chi^2\)</span>分布</td>
-<td><code>n</code>, <code>df</code></td>
+<td><code><a href="https://rdrr.io/r/stats/Chisquare.html">rchisq()</a></code></td>
+<td>
+<span class="math inline">\(\chi^2\)</span>分布</td>
+<td>
+<code>n</code>, <code>df</code>
+</td>
 </tr>
 <tr class="odd">
-<td><code>rexp()</code></td>
+<td><code><a href="https://rdrr.io/r/stats/Exponential.html">rexp()</a></code></td>
 <td>指数分布</td>
-<td><code>n</code>, <code>rate</code></td>
+<td>
+<code>n</code>, <code>rate</code>
+</td>
 </tr>
 <tr class="even">
-<td><code>rf()</code></td>
-<td><span class="math inline">\(F\)</span>分布</td>
-<td><code>n</code>, <code>df1</code>, <code>df2</code></td>
+<td><code><a href="https://rdrr.io/r/stats/Fdist.html">rf()</a></code></td>
+<td>
+<span class="math inline">\(F\)</span>分布</td>
+<td>
+<code>n</code>, <code>df1</code>, <code>df2</code>
+</td>
 </tr>
 <tr class="odd">
-<td><code>rgamma()</code></td>
+<td><code><a href="https://rdrr.io/r/stats/GammaDist.html">rgamma()</a></code></td>
 <td>ガンマ分布</td>
-<td><code>n</code>, <code>shape</code>, <code>scale</code></td>
+<td>
+<code>n</code>, <code>shape</code>, <code>scale</code>
+</td>
 </tr>
 <tr class="even">
-<td><code>rgeom()</code></td>
+<td><code><a href="https://rdrr.io/r/stats/Geometric.html">rgeom()</a></code></td>
 <td>幾何分布</td>
-<td><code>n</code>, <code>prob</code></td>
+<td>
+<code>n</code>, <code>prob</code>
+</td>
 </tr>
 <tr class="odd">
-<td><code>rhyper()</code></td>
+<td><code><a href="https://rdrr.io/r/stats/Hypergeometric.html">rhyper()</a></code></td>
 <td>超幾何分布</td>
-<td><code>nn</code>, <code>m</code>, <code>n</code>, <code>k</code></td>
+<td>
+<code>nn</code>, <code>m</code>, <code>n</code>, <code>k</code>
+</td>
 </tr>
 <tr class="even">
-<td><code>rlnorm()</code></td>
+<td><code><a href="https://rdrr.io/r/stats/Lognormal.html">rlnorm()</a></code></td>
 <td>対数正規分布</td>
-<td><code>n</code>, <code>meanlog</code>, <code>sdlog</code></td>
+<td>
+<code>n</code>, <code>meanlog</code>, <code>sdlog</code>
+</td>
 </tr>
 <tr class="odd">
-<td><code>rmultinom()</code></td>
+<td><code><a href="https://rdrr.io/r/stats/Multinom.html">rmultinom()</a></code></td>
 <td>多項分布</td>
-<td><code>n</code>, <code>size</code>, <code>prob</code></td>
+<td>
+<code>n</code>, <code>size</code>, <code>prob</code>
+</td>
 </tr>
 <tr class="even">
-<td><code>rnbinom()</code></td>
+<td><code><a href="https://rdrr.io/r/stats/NegBinomial.html">rnbinom()</a></code></td>
 <td>負の二項分布</td>
-<td><code>n</code>, <code>size</code>, <code>prob</code></td>
+<td>
+<code>n</code>, <code>size</code>, <code>prob</code>
+</td>
 </tr>
 <tr class="odd">
-<td><code>rnorm()</code></td>
+<td><code><a href="https://rdrr.io/r/stats/Normal.html">rnorm()</a></code></td>
 <td>正規分布</td>
-<td><code>n</code>, <code>mean</code>, <code>sd</code></td>
+<td>
+<code>n</code>, <code>mean</code>, <code>sd</code>
+</td>
 </tr>
 <tr class="even">
-<td><code>rpois()</code></td>
+<td><code><a href="https://rdrr.io/r/stats/Poisson.html">rpois()</a></code></td>
 <td>ポアソン分布</td>
-<td><code>n</code>, <code>lambda</code></td>
+<td>
+<code>n</code>, <code>lambda</code>
+</td>
 </tr>
 <tr class="odd">
-<td><code>rt()</code></td>
+<td><code><a href="https://rdrr.io/r/stats/TDist.html">rt()</a></code></td>
 <td>t分布</td>
-<td><code>n</code>, <code>df</code></td>
+<td>
+<code>n</code>, <code>df</code>
+</td>
 </tr>
 <tr class="even">
-<td><code>runif()</code></td>
+<td><code><a href="https://rdrr.io/r/stats/Uniform.html">runif()</a></code></td>
 <td>一様分布</td>
-<td><code>n</code>, <code>min</code>, <code>max</code></td>
+<td>
+<code>n</code>, <code>min</code>, <code>max</code>
+</td>
 </tr>
 <tr class="odd">
-<td><code>rweibull()</code></td>
+<td><code><a href="https://rdrr.io/r/stats/Weibull.html">rweibull()</a></code></td>
 <td>ワイブル分布</td>
-<td><code>n</code>, <code>shape</code>, <code>scale</code></td>
+<td>
+<code>n</code>, <code>shape</code>, <code>scale</code>
+</td>
 </tr>
 <tr class="even">
-<td><code>mvtnorm::rmvnorm()</code></td>
+<td><code><a href="https://rdrr.io/pkg/mvtnorm/man/Mvnorm.html">mvtnorm::rmvnorm()</a></code></td>
 <td>多変量正規分布</td>
-<td><code>n</code>, <code>mean</code>, <code>sigma</code></td>
+<td>
+<code>n</code>, <code>mean</code>, <code>sigma</code>
+</td>
 </tr>
 </tbody>
 </table>
 <p>　以上の表に掲載されているパラメーター以外にも指定可能なパラメーターがあるため、詳細は各関数のヘルプを参照してください。たとえば、ガンマ分布の場合、<code>rate</code>で、負の二項分布の場合、<code>mu</code>で分布の形状を指定することができます。また、多変量正規分布の乱数を抽出するには{mvtnorm}パッケージの<code>rmvnorm()</code>を使いますが、ここでの<code>mean</code>は数値型ベクトル、<code>sigma</code>は行列構造の分散共分散行列を使います<a href="#RN4Efn1" class="footnote-ref" id="RN4Efnref1" role="doc-noteref"><sup>1</sup></a>。</p>
-</section>
-<section id="RN4Eシードについて" class="level3" data-number="29.2.3">
-<h3 data-number="29.2.3" class="anchored" data-anchor-id="RN4Eシードについて"><span class="header-section-number">29.2.3</span> シードについて</h3>
+</section><section id="RN4Eシードについて" class="level3" data-number="29.2.3"><h3 data-number="29.2.3" class="anchored" data-anchor-id="RN4Eシードについて">
+<span class="header-section-number">29.2.3</span> シードについて</h3>
 <p>　特定の分布から乱数を抽出する場合、当たり前ですが、抽出の度に値が変わります。たとえば、平均0、標準偏差1の正規分布（標準正規分布）から5つの値を抽出し、小数点3桁に丸める作業を3回繰り返しみましょう。</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="RN4Ecb6"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb6-1"><a href="#RN4Ecb6-1"></a><span class="fu">rnorm</span>(<span class="dv">5</span>) <span class="sc">%&gt;%</span> <span class="fu">round</span>(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -699,10 +704,8 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 </div>
 <p>　この結果は先ほどシード指定後、2回目の抽出結果と同じ結果となります。結果を再現するという点では大きな問題はないはずですが、仕様を理解しておくことは重要でしょう。</p>
-</section>
-</section>
-<section id="RN4Esec-monte-birthday" class="level2" data-number="29.3">
-<h2 data-number="29.3" class="anchored" data-anchor-id="RN4Esec-monte-birthday"><span class="header-section-number">29.3</span> 例1: 誕生日問題</h2>
+</section></section><section id="RN4Esec-monte-birthday" class="level2" data-number="29.3"><h2 data-number="29.3" class="anchored" data-anchor-id="RN4Esec-monte-birthday">
+<span class="header-section-number">29.3</span> 例1: 誕生日問題</h2>
 <p>　まず簡単な例として誕生日問題 (birthday problem)をシミュレーションで確認してみましょう。誕生日問題とは「何人いれば、その中に誕生日が同じ2人以上がいる確率が50%を超えるか。」といった問題です。1年を365日で考えると（2月29日生まれの皆さん、すみません…）、366人がいれば確実に (= 100%)同じ誕生日の人が2人以上いることになりますね。100%でなく、50%まで基準を下げるならその半分である183人は必要じゃないかと思うかも知れません。しかし、実はたった23人が集まれば、その中で同じ誕生日の人が2人以上いる確率が50%になります。誕生日のパラドックスとも呼ばれるものですが、これをシミュレーションで確認してたいと思います。</p>
 <p>　学生の数を<code>n_student</code>とし、1から365までの公差1の等差数列から、<code>n_student</code>個の値を<strong>復元</strong>抽出します。</p>
 <div class="cell" data-layout-align="center">
@@ -716,7 +719,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 [20] 281 299  67 342   4 338  88 156 254 192  37</code></pre>
 </div>
 </div>
-<p>　このベクトルの中で重複する要素があるかどうかを確認するには<code>duplicated()</code>関数を使います。ある要素が他の要素と重複するなら<code>TRUE</code>が、なければ<code>FALSE</code>が表示されます。</p>
+<p>　このベクトルの中で重複する要素があるかどうかを確認するには<code><a href="https://rdrr.io/r/base/duplicated.html">duplicated()</a></code>関数を使います。ある要素が他の要素と重複するなら<code>TRUE</code>が、なければ<code>FALSE</code>が表示されます。</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="RN4Ecb22"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb22-1"><a href="#RN4Ecb22-1"></a><span class="fu">duplicated</span>(Birth_vec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -725,7 +728,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 [25] FALSE FALSE FALSE FALSE FALSE FALSE</code></pre>
 </div>
 </div>
-<p>　ただし、一つでも<code>TRUE</code>が含まれていれば、同じ誕生日の人が二人以上はいるということとなるので、更に<code>any()</code>関数を使います。<code>any()</code>内の条件文において、一つでも<code>TRUE</code>があれば返り値は<code>TRUE</code>となり、全て<code>FALSE</code>なら<code>FALSE</code>を返す関数です。</p>
+<p>　ただし、一つでも<code>TRUE</code>が含まれていれば、同じ誕生日の人が二人以上はいるということとなるので、更に<code><a href="https://rdrr.io/r/base/any.html">any()</a></code>関数を使います。<code><a href="https://rdrr.io/r/base/any.html">any()</a></code>内の条件文において、一つでも<code>TRUE</code>があれば返り値は<code>TRUE</code>となり、全て<code>FALSE</code>なら<code>FALSE</code>を返す関数です。</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="RN4Ecb24"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb24-1"><a href="#RN4Ecb24-1"></a><span class="fu">any</span>(<span class="fu">duplicated</span>(Birth_vec))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -872,8 +875,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <span id="RN4Ecb36-7"><a href="#RN4Ecb36-7"></a>    <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="RN4Efig-monte-birthday10" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="monte_files/figure-html/fig-monte-birthday10-1.png" class="img-fluid figure-img" width="2100"></p>
+<figure class="figure"><p><img src="monte_files/figure-html/fig-monte-birthday10-1.png" class="img-fluid figure-img" width="2100"></p>
 <p></p><figcaption class="figure-caption">図&nbsp;29.2: 同じ誕生日の人が2人以上いる割合 (%) (試行回数 = 100)</figcaption><p></p>
 </figure>
 </div>
@@ -883,7 +885,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <p><span class="math display">\[
 p(n) = 1 - \frac{365!}{365^n (365-n)!}
 \]</span></p>
-<p>　!は階乗を意味し、5!は<span class="math inline">\(5 \times 4 \times 3 \times 2 \times 1\)</span>を意味します。Rでは<code>factorial()</code>関数を使います。それでは<span class="math inline">\(p(50)\)</span>はいくらでしょうか。</p>
+<p>　!は階乗を意味し、5!は<span class="math inline">\(5 \times 4 \times 3 \times 2 \times 1\)</span>を意味します。Rでは<code><a href="https://rdrr.io/r/base/Special.html">factorial()</a></code>関数を使います。それでは<span class="math inline">\(p(50)\)</span>はいくらでしょうか。</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="RN4Ecb37"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb37-1"><a href="#RN4Ecb37-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">factorial</span>(<span class="dv">365</span>) <span class="sc">/</span> (<span class="dv">365</span><span class="sc">^</span><span class="dv">50</span> <span class="sc">*</span> <span class="fu">factorial</span>(<span class="dv">365</span> <span class="sc">-</span> <span class="dv">50</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -977,8 +979,7 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <span id="RN4Ecb49-9"><a href="#RN4Ecb49-9"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="RN4Efig-monte-birthday16" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="monte_files/figure-html/fig-monte-birthday16-1.png" class="img-fluid figure-img" width="2100"></p>
+<figure class="figure"><p><img src="monte_files/figure-html/fig-monte-birthday16-1.png" class="img-fluid figure-img" width="2100"></p>
 <p></p><figcaption class="figure-caption">図&nbsp;29.3: 同じ誕生日の人が2人以上いる割合 (%) (試行回数 = 100)</figcaption><p></p>
 </figure>
 </div>
@@ -1008,17 +1009,15 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <span id="RN4Ecb50-20"><a href="#RN4Ecb50-20"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="RN4Efig-monte-birthday17" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="monte_files/figure-html/fig-monte-birthday17-1.png" class="img-fluid figure-img" width="2100"></p>
+<figure class="figure"><p><img src="monte_files/figure-html/fig-monte-birthday17-1.png" class="img-fluid figure-img" width="2100"></p>
 <p></p><figcaption class="figure-caption">図&nbsp;29.4: 同じ誕生日の人が2人以上いる割合 (%) (試行回数 = 100)</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　モンテカルロ・シミュレーションから得られた割合と理論上の確率が非常に近似していることが分かります。</p>
-</section>
-<section id="RN4Esec-monte-montyhall" class="level2" data-number="29.4">
-<h2 data-number="29.4" class="anchored" data-anchor-id="RN4Esec-monte-montyhall"><span class="header-section-number">29.4</span> 例2: モンティ・ホール問題</h2>
+</section><section id="RN4Esec-monte-montyhall" class="level2" data-number="29.4"><h2 data-number="29.4" class="anchored" data-anchor-id="RN4Esec-monte-montyhall">
+<span class="header-section-number">29.4</span> 例2: モンティ・ホール問題</h2>
 <p>　抽出される乱数が必ずしも数値である必要はありません。たとえば、コイン投げの表と裏、ポーカーで配られたカードなど、数値以外の乱数もあり得ます。ここでは「AとB、C」から一つを選ぶ例として、モンティ・ホール問題をモンテカルロ法で解いてみましょう。</p>
 <p>　モンティ・ホール問題はアメリカのテレビ番組「Let’s make a deal」の中のゲームであり、この番組の司会者の名前がモンティ・ホール (Monty Hall)さんです。このゲームのルールは非常にシンプルです。</p>
 <ol type="1">
@@ -1031,20 +1030,24 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <p>　結論から申しますと選択を変えた方が、変えなかった場合より当たる確率が2倍になります。これは条件付き確率とベイズの定理を用いることで数学的に説明できますが、ここではあえてモンテカルロ法で調べてみたいと思います。シミュレーションの具体的な手順は以下の通りです。</p>
 <ol type="1">
 <li>結果を格納する長さ1万の空ベクトルを2つ用意する。 (<code>Switch_Yes</code>と<code>Switch_No</code>)。</li>
-<li><code>i</code>の初期値を1とする。</li>
+<li>
+<code>i</code>の初期値を1とする。</li>
 <li>当たり (車)の位置をA, B, Cの中から無作為に1つ決め、<code>Car_Position</code>に格納する。</li>
 <li>最初の選択肢をA, B, Cの中から無作為に1つ決め、<code>Choice</code>に格納する。</li>
 <li>選択肢を変更した場合の結果を<code>Switch_Yes</code>の<code>i</code>番目の要素としてに格納する。
 <ol type="1">
 <li>当たりの位置と最初の選択肢が同じなら (<code>Switch_Yes == Choice</code>)、結果は外れ (ヤギ)</li>
 <li>当たりの位置と最初の選択肢が同じでないなら (<code>Switch_Yes != Choice</code>)、結果は当たり (車)</li>
-</ol></li>
+</ol>
+</li>
 <li>選択肢を変更しなかった場合の結果を<code>Switch_No</code>の<code>i</code>番目の要素として格納する。
 <ol type="1">
 <li>当たりの位置と最初の選択肢が同じなら (<code>Switch_Yes == Choice</code>)、結果は当たり (車)</li>
 <li>当たりの位置と最初の選択肢が同じでないなら (<code>Switch_Yes != Choice</code>)、結果は外れ (ヤギ)</li>
-</ol></li>
-<li><code>i</code>の値を1増やし、3に戻る。</li>
+</ol>
+</li>
+<li>
+<code>i</code>の値を1増やし、3に戻る。</li>
 <li>3〜7の手順を1万回繰り返す。</li>
 </ol>
 <p>　以上の手順をコードで書くと以下のようになります。</p>
@@ -1075,15 +1078,13 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 </div>
 </div>
 <p>　選択肢を変更し、車を獲得した回数は10000回中、6737であり、約67%です。つまり、選択肢を変えた方が、変えなかった場合に比べ、車が当たる確率が約2倍高いことを意味します。むろん、車よりもヤギが重宝される地域に住んでいるなら、あえて選択肢を変えず、ヤギを狙った方が良いかも知れません。</p>
-</section>
-<section id="RN4Esec-monte-pi" class="level2" data-number="29.5">
-<h2 data-number="29.5" class="anchored" data-anchor-id="RN4Esec-monte-pi"><span class="header-section-number">29.5</span> 例3: 円周率の計算</h2>
+</section><section id="RN4Esec-monte-pi" class="level2" data-number="29.5"><h2 data-number="29.5" class="anchored" data-anchor-id="RN4Esec-monte-pi">
+<span class="header-section-number">29.5</span> 例3: 円周率の計算</h2>
 <p>　今回はもう一つの例として、円周率 (<span class="math inline">\(\pi\)</span>)の計算を紹介したいと思います。<span class="math inline">\(\pi\)</span>は無理数であるため、厳密な計算は出来ませんが、モンテカルロ・シミュレーションである程度近似できます。たとえば、半径1 (<span class="math inline">\(r = 1\)</span>)の円を考えてみましょう。</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="monte_files/figure-html/monte-pi1-1.png" class="img-fluid figure-img" width="2100"></p>
+<figure class="figure"><p><img src="monte_files/figure-html/monte-pi1-1.png" class="img-fluid figure-img" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -1092,8 +1093,7 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="monte_files/figure-html/monte-pi2-1.png" class="img-fluid figure-img" width="2100"></p>
+<figure class="figure"><p><img src="monte_files/figure-html/monte-pi2-1.png" class="img-fluid figure-img" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -1134,8 +1134,7 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <span id="RN4Ecb57-7"><a href="#RN4Ecb57-7"></a>    <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="monte_files/figure-html/monte-pi4-1.png" class="img-fluid figure-img" width="2100"></p>
+<figure class="figure"><p><img src="monte_files/figure-html/monte-pi4-1.png" class="img-fluid figure-img" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -1152,8 +1151,7 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <span id="RN4Ecb58-8"><a href="#RN4Ecb58-8"></a>    <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="monte_files/figure-html/monte-pi5-1.png" class="img-fluid figure-img" width="2100"></p>
+<figure class="figure"><p><img src="monte_files/figure-html/monte-pi5-1.png" class="img-fluid figure-img" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -1177,8 +1175,7 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <span id="RN4Ecb60-10"><a href="#RN4Ecb60-10"></a>    <span class="fu">theme_void</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="monte_files/figure-html/monte-pi7-1.png" class="img-fluid figure-img" width="2100"></p>
+<figure class="figure"><p><img src="monte_files/figure-html/monte-pi7-1.png" class="img-fluid figure-img" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -1207,8 +1204,7 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="monte_files/figure-html/monte-pi10-1.png" class="img-fluid figure-img" width="2100"></p>
+<figure class="figure"><p><img src="monte_files/figure-html/monte-pi10-1.png" class="img-fluid figure-img" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -1228,10 +1224,9 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 </div>
 </div>
 <p>　より実際の円周率に近い値が得られました。</p>
-</section>
-<section id="RN4Esec-monte-bootstrap" class="level2" data-number="29.6">
-<h2 data-number="29.6" class="anchored" data-anchor-id="RN4Esec-monte-bootstrap"><span class="header-section-number">29.6</span> 例4: ブートストラップ法</h2>
-<p>　最後に、様々な分析から得られた統計量の不確実性を計算する方法の一つであるブートストラップ法 (bootstrapping)について説明します。たとえば、平均値の差分の検定 (<em>t</em>検定)差、回帰分析における標準誤差などはRの<code>t.test()</code>、<code>lm()</code>関数を使用すれば瞬時に計算できます。こちらの標準誤差はデータを与えられれば、常に同じ値が得られるもので、何らかの計算式があります。しかし、世の中にはモデルが複雑すぎて、統計量の標準誤差がうまく計算できないケースもあります。そこで登場するのがブートストラップ法を用いると、不確実性の近似値が得られます。ブートストラップ法は <span class="citation" data-cites="Efron:1979">Efron (<a href="references.html#RN4Eref-Efron:1979" role="doc-biblioref">1979</a>)</span> が提案した以来、データ分析において広く使われています。ブートストラップ法については優れた教科書が多くあるので詳細な説明は割愛し、以下ではブートストラップ法の簡単な例を紹介します。</p>
+</section><section id="RN4Esec-monte-bootstrap" class="level2" data-number="29.6"><h2 data-number="29.6" class="anchored" data-anchor-id="RN4Esec-monte-bootstrap">
+<span class="header-section-number">29.6</span> 例4: ブートストラップ法</h2>
+<p>　最後に、様々な分析から得られた統計量の不確実性を計算する方法の一つであるブートストラップ法 (bootstrapping)について説明します。たとえば、平均値の差分の検定 (<em>t</em>検定)差、回帰分析における標準誤差などはRの<code><a href="https://rdrr.io/r/stats/t.test.html">t.test()</a></code>、<code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>関数を使用すれば瞬時に計算できます。こちらの標準誤差はデータを与えられれば、常に同じ値が得られるもので、何らかの計算式があります。しかし、世の中にはモデルが複雑すぎて、統計量の標準誤差がうまく計算できないケースもあります。そこで登場するのがブートストラップ法を用いると、不確実性の近似値が得られます。ブートストラップ法は <span class="citation" data-cites="Efron:1979">Efron (<a href="references.html#RN4Eref-Efron:1979" role="doc-biblioref">1979</a>)</span> が提案した以来、データ分析において広く使われています。ブートストラップ法については優れた教科書が多くあるので詳細な説明は割愛し、以下ではブートストラップ法の簡単な例を紹介します。</p>
 <p>　ブートストラップにおいて重要なのは元のデータセットのサンプルサイズを<span class="math inline">\(n\)</span>とした場合、復元抽出を用いてサンプルサイズ<span class="math inline">\(n\)</span>のデータセットをもう一度構築することです。そしてその平均値を計算します。これらの手順を5000回繰り返せば、5000個の平均値が得られます。この5000個の平均値の平均値は元のデータセットの平均値に近似し、5000個の平均値の標準偏差は元のデータセットの平均値の標準誤差 (標準誤差)に近似できます。これは本当でしょうか。実際にやってみましょう。</p>
 <p>　まずは、長さ100のベクトルを2つ作成します。この2つのベクトルは平均値が0.7、0.9、標準偏差1の正規分布に従うとします。</p>
 <p><span class="math display">\[
@@ -1266,11 +1261,16 @@ mean of x mean of y
 <p>平均値の差分の不確実性 (=標準誤差)は<code>ttest_result$stderr</code>で抽出可能であり、今回は約0.141です。標準誤差の値さえ分かれば、検定統計量も、信頼区間も、<span class="math inline">\(p\)</span>値も計算できるため、重要なのはやはり標準誤差でしょう。以下では試行回数は1万のブートストラップ法で標準誤差の近似値を計算してみます。</p>
 <ol type="1">
 <li>結果を格納する長さ1万の空ベクトル<code>Result_vec</code>を作成する。</li>
-<li><code>i</code>の初期値を1と設定する。</li>
-<li><code>Data1</code>から100個 (= <code>Data1</code>の大きさ)の値を無作為抽出 (<strong>復元抽出</strong>)し、<code>Sample1</code>に格納する。</li>
-<li><code>Data2</code>から100個 (= <code>Data2</code>の大きさ)の値を無作為抽出 (<strong>復元抽出</strong>)し、<code>Sample2</code>に格納する。</li>
-<li><code>Result_vec</code>の<code>i</code>番目の位置に<code>Sample1</code>の平均値と<code>Sample2</code>の平均値の差分を格納する。</li>
-<li><code>i</code>を1増加させる。</li>
+<li>
+<code>i</code>の初期値を1と設定する。</li>
+<li>
+<code>Data1</code>から100個 (= <code>Data1</code>の大きさ)の値を無作為抽出 (<strong>復元抽出</strong>)し、<code>Sample1</code>に格納する。</li>
+<li>
+<code>Data2</code>から100個 (= <code>Data2</code>の大きさ)の値を無作為抽出 (<strong>復元抽出</strong>)し、<code>Sample2</code>に格納する。</li>
+<li>
+<code>Result_vec</code>の<code>i</code>番目の位置に<code>Sample1</code>の平均値と<code>Sample2</code>の平均値の差分を格納する。</li>
+<li>
+<code>i</code>を1増加させる。</li>
 <li>3~6の手順を1万回繰り返す。</li>
 </ol>
 <div class="cell" data-layout-align="center">
@@ -1307,7 +1307,7 @@ mean of x mean of y
 <div class="sourceCode cell-code" id="RN4Ecb76"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb76-1"><a href="#RN4Ecb76-1"></a>boot_se <span class="ot">&lt;-</span> <span class="fu">sd</span>(Result_vec) <span class="co"># ブートストラップ推定量の標準偏差</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　ブートストラップ推定量の標準偏差 (<span class="math inline">\(\mbox{se}^*\)</span>)は約0.14であり、<em>t</em>検定の結果から得られた標準誤差0.141と非常に近い値が得られました。</p>
-<p>　95%信頼区間を計算してみます。百分位数信頼区間 (Percentile CI)は<code>Result_Vec</code>の左側の領域が2.5%、右側の領域が2.5%となる区間ですので、<code>quantile()</code>関数で計算することができます。</p>
+<p>　95%信頼区間を計算してみます。百分位数信頼区間 (Percentile CI)は<code>Result_Vec</code>の左側の領域が2.5%、右側の領域が2.5%となる区間ですので、<code><a href="https://rdrr.io/r/stats/quantile.html">quantile()</a></code>関数で計算することができます。</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="RN4Ecb77"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb77-1"><a href="#RN4Ecb77-1"></a><span class="co"># 95%信頼区間</span></span>
 <span id="RN4Ecb77-2"><a href="#RN4Ecb77-2"></a><span class="fu">quantile</span>(Result_vec, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1335,50 +1335,47 @@ mean of x mean of y
 <div class="cell-output-display">
 
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;">  </th>
+<thead><tr>
+<th style="text-align:left;">  </th>
    <th style="text-align:right;"> t検定 </th>
    <th style="text-align:right;"> ブートストラップ </th>
-  </tr>
- </thead>
+  </tr></thead>
 <tbody>
-  <tr>
-   <td style="text-align:left;"> (1): 平均値の差分 </td>
+<tr>
+<td style="text-align:left;"> (1): 平均値の差分 </td>
    <td style="text-align:right;"> -0.307 </td>
    <td style="text-align:right;"> -0.305 </td>
   </tr>
-  <tr>
-   <td style="text-align:left;"> (2): 標準誤差 </td>
+<tr>
+<td style="text-align:left;"> (2): 標準誤差 </td>
    <td style="text-align:right;"> 0.141 </td>
    <td style="text-align:right;"> 0.14 </td>
   </tr>
-  <tr>
-   <td style="text-align:left;"> (3): 95%信頼区間 </td>
+<tr>
+<td style="text-align:left;"> (3): 95%信頼区間 </td>
    <td style="text-align:right;"> [-0.585, -0.028] </td>
    <td style="text-align:right;">  </td>
   </tr>
-  <tr>
-   <td style="text-align:left;"> (4): 95%信頼区間 (百分位数) </td>
+<tr>
+<td style="text-align:left;"> (4): 95%信頼区間 (百分位数) </td>
    <td style="text-align:right;">  </td>
    <td style="text-align:right;"> [-0.581, -0.03] </td>
   </tr>
-  <tr>
-   <td style="text-align:left;"> (5): 95%信頼区間 (Wald) </td>
+<tr>
+<td style="text-align:left;"> (5): 95%信頼区間 (Wald) </td>
    <td style="text-align:right;">  </td>
    <td style="text-align:right;"> [-0.582, -0.031] </td>
   </tr>
-  <tr>
-   <td style="text-align:left;"> (6): 95%信頼区間 (バイアス修正Wald) </td>
+<tr>
+<td style="text-align:left;"> (6): 95%信頼区間 (バイアス修正Wald) </td>
    <td style="text-align:right;">  </td>
    <td style="text-align:right;"> [-0.58, -0.029] </td>
   </tr>
 </tbody>
 </table>
-
 </div>
 </div>
-<p>　今回の例は<code>t.test()</code>関数を使えば一発で終わる問題ですが、モデルが複雑になれば推定量の不確実性の計算が難しくなるケースがあります。その時に力を発揮するのがブートストラップ方であり、{boot}、{bootstrap}、{simpleboot}など様々なパッケージが利用可能です。</p>
+<p>　今回の例は<code><a href="https://rdrr.io/r/stats/t.test.html">t.test()</a></code>関数を使えば一発で終わる問題ですが、モデルが複雑になれば推定量の不確実性の計算が難しくなるケースがあります。その時に力を発揮するのがブートストラップ方であり、{boot}、{bootstrap}、{simpleboot}など様々なパッケージが利用可能です。</p>
 <div id="RN4Equarto-navigation-envelope" class="hidden">
 <p><span class="hidden" data-render-id="quarto-int-sidebar-title">私たちのR</span> <span class="hidden" data-render-id="quarto-int-navbar-title">私たちのR</span> <span class="hidden" data-render-id="quarto-int-next"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">スクレイピング</span></span> <span class="hidden" data-render-id="quarto-int-prev"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">オブジェクト指向プログラミング</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/index.html">紹介</span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-1">Rの導入</span> <span class="hidden" data-render-id="quarto-int-sidebar:/aboutR.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R?</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/installation.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Rのインストール</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/ide.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">IDEの導入</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/r_customize.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">分析環境のカスタマイズ</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/packages.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Rパッケージ</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-2">Rの基礎</span> <span class="hidden" data-render-id="quarto-int-sidebar:/r_basic.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">基本的な操作</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/io.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">データの入出力</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/datatype.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">データ型</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/datastructure.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">データ構造</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/programming.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Rプログラミングの基礎</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/functions.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">関数の自作</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-3">データハンドリング</span> <span class="hidden" data-render-id="quarto-int-sidebar:/datahandling1.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">データハンドリング [抽出]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/datahandling2.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">データハンドリング [拡張]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/factor.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">データハンドリング [factor型]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/tidydata.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">整然データ構造</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/string.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">文字列の処理</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-4">可視化</span> <span class="hidden" data-render-id="quarto-int-sidebar:/visualization1.html"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">可視化 [理論]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/visualization2.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">可視化 [基礎]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/visualization3.html"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">可視化 [応用]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/visualization4.html"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">可視化 [発展]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/visualization5.html"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">モデルの可視化</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-5">再現可能な研究</span> <span class="hidden" data-render-id="quarto-int-sidebar:/rmarkdown.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">R Markdown [基礎]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/rmarkdown2.html"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">R Markdown [応用]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/quarto.html"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Quarto入門</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/table.html"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">表の作成</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/renv.html"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">分析環境の管理</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-6">中級者向け</span> <span class="hidden" data-render-id="quarto-int-sidebar:/iteration.html"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">反復処理</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/oop.html"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">オブジェクト指向プログラミング</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/monte.html"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">モンテカルロ・シミュレーション</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/scraping.html"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">スクレイピング</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/api.html"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">API</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-7">付録</span> <span class="hidden" data-render-id="quarto-int-sidebar:/tips.html">R Tips</span> <span class="hidden" data-render-id="quarto-int-sidebar:/session.html">本書の執筆環境</span> <span class="hidden" data-render-id="quarto-int-sidebar:/references.html">参考文献</span> <span class="hidden" data-render-id="footer-center">Copyright 2022, Jaehyun Song and Yuki Yanai</span></p>
 </div>
@@ -1390,16 +1387,10 @@ mean of x mean of y
 Efron, Bradley. 1979. <span>“Bootstrap Methods: Another Look at the Jackknife.”</span> <em>The Annals of Statistics</em> 7: 1–26.
 </div>
 </div>
-</section>
-<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
-<hr>
+</section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><hr>
 <ol>
 <li id="RN4Efn1"><p><code>sigma</code>は数値型ベクトル（<code>mean</code>の実引数の長さと同じ長さ）で指定することも可能ですが、この場合、共分散は0になります。<a href="#RN4Efnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section>
-
-</main> <!-- /main -->
-<script id="quarto-html-after-body" type="application/javascript">
+</ol></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -1530,10 +1521,22 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
   }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp(/https:\/\/www\.jaysong\.net\/RBook\//);
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+    var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+      }
+    }
 });
-</script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
       <a href="./oop.html" class="pagination-link">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">オブジェクト指向プログラミング</span></span>
       </a>          
@@ -1545,14 +1548,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<footer class="footer">
-  <div class="nav-footer">
+<footer class="footer"><div class="nav-footer">
       <div class="nav-footer-center">
         <div class="footer-contents">Copyright 2022, Jaehyun Song and Yuki Yanai</div>  
       </div>
   </div>
 </footer>
-
 
 
 </body></html>
