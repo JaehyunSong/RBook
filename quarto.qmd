@@ -7,8 +7,6 @@ source("_common.R")
 
 ## Quartoとは {#sec-quarto-intro}
 
-QuartoはR Markdownの上位互換でもなく、R Markdownを代替するものでもない（[参考](https://yihui.org/en/2022/04/quarto-r-markdown/)）。
-
 以下のように、QuartoとR Markdownは同じやり方でHTML/PDF/Wordファイルを生成する。
 
 * R Markdwon
@@ -22,8 +20,10 @@ QuartoはR Markdownの上位互換でもなく、R Markdownを代替するもの
    * 一方、Quartoはknitr、Jupyter、Observableが使用可能であり、今後も追加予定
 * 文書作成のための{rmarkdown}、ホームページ作成のための{blogdown}、スライド作成のための{xaringan}など
    * Quartoはこれらを全て一つに統合
+   * Quarto Extensionという拡張機能を追加する形式
 * QuartoはRStudio以外にもVS Code、Jupyterなどでも使用可能
-* つまり、既存のR Markdownを問題なく使っているのであれば、Quartoへの移行は不要
+* QuartoはR Markdownの上位互換でもなく、R Markdownを代替するものでもない（[参考](https://yihui.org/en/2022/04/quarto-r-markdown/)）。
+   * つまり、既存のR Markdownを問題なく使っているのであれば、Quartoへの移行は不要
    * 現在のところ、QuartoはR Markdown生態系を一つに統合したものに近く、文法などもほぼ同じであるため、移行のために新しい事をゼロベースから勉強する必要はほぼない
 
 ## セットアップ {#sec-quarto-setup}
@@ -33,7 +33,7 @@ Quartoのインストール
 * <https://quarto.org/docs/get-started/>
    * 自分のOSに合わせてダウンロード&インストール
 
-{quarto}のインストール
+{quarto}のインストール（インストールしておくだけで良い）
 
 ```{r}
 #| eval: false
@@ -42,13 +42,75 @@ pacman::p_install("quarto") # または、install.packages("quarto")
 
 ## 簡単な使い方 {#sec-quarto-howtouse}
 
+### とりあえずRender
+
 * R Markdownと同じ感覚で使用可能
    * File > New File > Quarto Document ...
    * RStudioが最新版でない場合、アップデートする
-* Chunk optionを指定する時にはChunk内に`#|`を使用。
-   * 現時点では`{r}`内に使うことも可能
+
+### チャンクオプションの付け方
+
+現時点においてR Markdownと同じ書き方でも問題ない
+
+````md
+```{r fig-scatter1, fig.height = 5, fig.width = 7, fig.cap = "図の例", cache = TRUE}`r ''`
+iris %>%
+  mutate(Species2 = recode(Species,
+                           "setosa"     = "セトナ",
+                           "versicolor" = "バーシクル",
+                           "virginica"  = "バージニカ")) %>%
+  ggplot() +
+  geom_point(aes(x = Sepal.Length, y = Sepal.Width, color = Species2)) +
+  labs(x = "萼片の長さ (cm)", y = "萼片の幅 (cm)", color = "品種")
+```
+````
+
+Quarto特有の書き方としては、チャンクオプションを`{r}`内に書かず、チャンク内に`#|`で書く方法がある。`#|`とオプションの間には半角スペースを入れること。
+
+````md
+```{r}`r ''`
+#| label: fig-scatter1
+#| fig-cap: "図の例"
+#| fig-height: 5
+#| fig-width: 7
+#| fig-align: "center"
+#| cache: true
+iris %>%
+  mutate(Species2 = recode(Species,
+                           "setosa"     = "セトナ",
+                           "versicolor" = "バーシクル",
+                           "virginica"  = "バージニカ")) %>%
+  ggplot() +
+  geom_point(aes(x = Sepal.Length, y = Sepal.Width, color = Species2)) +
+  labs(x = "萼片の長さ (cm)", y = "萼片の幅 (cm)", color = "品種")
+```
+````
+
+注意すべき点としては
+
 * 一部のオプションの仮引数名が異なる。
    * 例) `fig.width`（RMarkdown）と`fig-width`（Quarto）など
 * `TRUE`と`FALSE`の代わりに`true`と`false`を使用（YAMLと同じ書き方）
-* Cross Referenceのやり方
-   * 章、図、表の場合、ラベルは`sec-`、`fig-`、`tbl-`で始まる必要がある
+* `仮引数 = 実引数`でなく、`仮引数: 実引数`で書く
+
+### 相互参照について
+
+````md
+以下の @fig-scatter1 は萼片の長さと幅を品種ごとに分けて示した散布図である。
+
+```{r}`r ''`
+#| label: fig-scatter1
+#| fig-cap: "萼片の長さと幅の関係（品種別）"
+iris %>%
+  mutate(Species2 = recode(Species,
+                           "setosa"     = "セトナ",
+                           "versicolor" = "バーシクル",
+                           "virginica"  = "バージニカ")) %>%
+  ggplot() +
+  geom_point(aes(x = Sepal.Length, y = Sepal.Width, color = Species2)) +
+  labs(x = "萼片の長さ (cm)", y = "萼片の幅 (cm)", color = "品種")
+```
+````
+
+* 章、図、表の場合、ラベルは`sec-`、`fig-`、`tbl-`で始まる必要がある
+* 相互参照の箇所は`@ラベル名`と書く。念の為に、前後に半角スペースを入れておく。   
