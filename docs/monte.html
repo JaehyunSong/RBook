@@ -502,7 +502,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="sourceCode cell-code" id="RN4Ecb3"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb3-1"><a href="#RN4Ecb3-1"></a><span class="co"># この場合、prob引数は省略可能</span></span>
 <span id="RN4Ecb3-2"><a href="#RN4Ecb3-2"></a><span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">3</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">6</span>, <span class="dv">6</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2 3 6</code></pre>
+<pre><code>[1] 5 5 2</code></pre>
 </div>
 </div>
 <p>　今回はサイコロを1万回振り、それぞれの目が出た回数を棒グラフとして示してみます。無作為に抽出された値であれば、各目が出る回数は等しいはずです。ベクトルに対して<code><a href="https://rdrr.io/r/base/table.html">table()</a></code>関数を使うと、各要素が出現した回数が出力され、このオブジェクトを<code><a href="https://rdrr.io/r/graphics/barplot.html">barplot()</a></code>関数に渡すと棒グラフを作成することができます。</p>
@@ -873,6 +873,10 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <span id="RN4Ecb36-5"><a href="#RN4Ecb36-5"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"学生数"</span>,</span>
 <span id="RN4Ecb36-6"><a href="#RN4Ecb36-6"></a>         <span class="at">y =</span> <span class="st">"同じ誕生日の人が2人以上いる割合 (%)</span><span class="sc">\n</span><span class="st">(試行回数 = 100)"</span>) <span class="sc">+</span></span>
 <span id="RN4Ecb36-7"><a href="#RN4Ecb36-7"></a>    <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+ℹ Please use `linewidth` instead.</code></pre>
+</div>
 <div class="cell-output-display">
 <div id="RN4Efig-monte-birthday10" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="monte_files/figure-html/fig-monte-birthday10-1.png" class="img-fluid figure-img" width="2100"></p>
@@ -887,7 +891,7 @@ p(n) = 1 - \frac{365!}{365^n (365-n)!}
 \]</span></p>
 <p>　!は階乗を意味し、5!は<span class="math inline">\(5 \times 4 \times 3 \times 2 \times 1\)</span>を意味します。Rでは<code><a href="https://rdrr.io/r/base/Special.html">factorial()</a></code>関数を使います。それでは<span class="math inline">\(p(50)\)</span>はいくらでしょうか。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb37"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb37-1"><a href="#RN4Ecb37-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">factorial</span>(<span class="dv">365</span>) <span class="sc">/</span> (<span class="dv">365</span><span class="sc">^</span><span class="dv">50</span> <span class="sc">*</span> <span class="fu">factorial</span>(<span class="dv">365</span> <span class="sc">-</span> <span class="dv">50</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb38"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb38-1"><a href="#RN4Ecb38-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">factorial</span>(<span class="dv">365</span>) <span class="sc">/</span> (<span class="dv">365</span><span class="sc">^</span><span class="dv">50</span> <span class="sc">*</span> <span class="fu">factorial</span>(<span class="dv">365</span> <span class="sc">-</span> <span class="dv">50</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] NaN</code></pre>
 </div>
@@ -898,32 +902,32 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 \]</span></p>
 <p>　<span class="math inline">\(C\)</span>は二項係数を意味し<span class="math inline">\(_nC_k\)</span>は<span class="math inline">\(\frac{n!}{k!(n-k)!}\)</span>です。Rでは<code>choose(n, k)</code>で計算可能です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb39"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb39-1"><a href="#RN4Ecb39-1"></a><span class="dv">1</span> <span class="sc">-</span> ((<span class="fu">factorial</span>(<span class="dv">50</span>) <span class="sc">*</span> <span class="fu">choose</span>(<span class="dv">365</span>, <span class="dv">50</span>)) <span class="sc">/</span> <span class="dv">365</span><span class="sc">^</span><span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb40"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb40-1"><a href="#RN4Ecb40-1"></a><span class="dv">1</span> <span class="sc">-</span> ((<span class="fu">factorial</span>(<span class="dv">50</span>) <span class="sc">*</span> <span class="fu">choose</span>(<span class="dv">365</span>, <span class="dv">50</span>)) <span class="sc">/</span> <span class="dv">365</span><span class="sc">^</span><span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.9703736</code></pre>
 </div>
 </div>
 <p>　結果は0.9703736です。つまり、人が50人いれば同じ誕生日の人が2人以上いる確率は約97%ということです。それでは、以上の式を関数化し、<code>p(22)</code>と<code>p(23)</code>を計算してみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb41"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb41-1"><a href="#RN4Ecb41-1"></a>Birth_Expect <span class="ot">&lt;-</span> <span class="cf">function</span> (n) {</span>
-<span id="RN4Ecb41-2"><a href="#RN4Ecb41-2"></a>    <span class="dv">1</span> <span class="sc">-</span> ((<span class="fu">factorial</span>(n) <span class="sc">*</span> <span class="fu">choose</span>(<span class="dv">365</span>, n)) <span class="sc">/</span> <span class="dv">365</span><span class="sc">^</span>n)</span>
-<span id="RN4Ecb41-3"><a href="#RN4Ecb41-3"></a>}</span>
-<span id="RN4Ecb41-4"><a href="#RN4Ecb41-4"></a></span>
-<span id="RN4Ecb41-5"><a href="#RN4Ecb41-5"></a><span class="fu">Birth_Expect</span>(<span class="dv">22</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb42"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb42-1"><a href="#RN4Ecb42-1"></a>Birth_Expect <span class="ot">&lt;-</span> <span class="cf">function</span> (n) {</span>
+<span id="RN4Ecb42-2"><a href="#RN4Ecb42-2"></a>    <span class="dv">1</span> <span class="sc">-</span> ((<span class="fu">factorial</span>(n) <span class="sc">*</span> <span class="fu">choose</span>(<span class="dv">365</span>, n)) <span class="sc">/</span> <span class="dv">365</span><span class="sc">^</span>n)</span>
+<span id="RN4Ecb42-3"><a href="#RN4Ecb42-3"></a>}</span>
+<span id="RN4Ecb42-4"><a href="#RN4Ecb42-4"></a></span>
+<span id="RN4Ecb42-5"><a href="#RN4Ecb42-5"></a><span class="fu">Birth_Expect</span>(<span class="dv">22</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.4756953</code></pre>
 </div>
-<div class="sourceCode cell-code" id="RN4Ecb43"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb43-1"><a href="#RN4Ecb43-1"></a><span class="fu">Birth_Expect</span>(<span class="dv">23</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb44"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb44-1"><a href="#RN4Ecb44-1"></a><span class="fu">Birth_Expect</span>(<span class="dv">23</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.5072972</code></pre>
 </div>
 </div>
 <p>　確率が50%を超える人数は23人であることが分かります。先ほどのデータフレーム (<code>Prob_df</code>)にこの理論値を<code>Expect</code>という名の列として追加してみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb45"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb45-1"><a href="#RN4Ecb45-1"></a>Prob_df <span class="ot">&lt;-</span> Prob_df <span class="sc">%&gt;%</span></span>
-<span id="RN4Ecb45-2"><a href="#RN4Ecb45-2"></a>    <span class="fu">mutate</span>(<span class="at">Expect =</span> <span class="fu">map_dbl</span>(Students, <span class="sc">~</span><span class="fu">Birth_Expect</span>(.x)))</span>
-<span id="RN4Ecb45-3"><a href="#RN4Ecb45-3"></a></span>
-<span id="RN4Ecb45-4"><a href="#RN4Ecb45-4"></a>Prob_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb46"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb46-1"><a href="#RN4Ecb46-1"></a>Prob_df <span class="ot">&lt;-</span> Prob_df <span class="sc">%&gt;%</span></span>
+<span id="RN4Ecb46-2"><a href="#RN4Ecb46-2"></a>    <span class="fu">mutate</span>(<span class="at">Expect =</span> <span class="fu">map_dbl</span>(Students, <span class="sc">~</span><span class="fu">Birth_Expect</span>(.x)))</span>
+<span id="RN4Ecb46-3"><a href="#RN4Ecb46-3"></a></span>
+<span id="RN4Ecb46-4"><a href="#RN4Ecb46-4"></a>Prob_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 99 × 3
    Students Probs  Expect
@@ -943,12 +947,12 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 </div>
 <p>　これは人間にとっては読みやすい表ですが、可視化まで考えると、tidyなデータといは言えません。したがって、<code>pivot_longer()</code>関数を使用してtidyなデータに整形します。{tidyr}パッケージの使い方は第<a href="#RN4Esec-tidydata"><span>15</span></a>章を参照してください。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb47"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb47-1"><a href="#RN4Ecb47-1"></a>Prob_df2 <span class="ot">&lt;-</span> Prob_df <span class="sc">%&gt;%</span></span>
-<span id="RN4Ecb47-2"><a href="#RN4Ecb47-2"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols      =</span> Probs<span class="sc">:</span>Expect,</span>
-<span id="RN4Ecb47-3"><a href="#RN4Ecb47-3"></a>                 <span class="at">names_to  =</span> <span class="st">"Type"</span>,</span>
-<span id="RN4Ecb47-4"><a href="#RN4Ecb47-4"></a>                 <span class="at">values_to =</span> <span class="st">"Prob"</span>) </span>
-<span id="RN4Ecb47-5"><a href="#RN4Ecb47-5"></a></span>
-<span id="RN4Ecb47-6"><a href="#RN4Ecb47-6"></a>Prob_df2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb48"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb48-1"><a href="#RN4Ecb48-1"></a>Prob_df2 <span class="ot">&lt;-</span> Prob_df <span class="sc">%&gt;%</span></span>
+<span id="RN4Ecb48-2"><a href="#RN4Ecb48-2"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols      =</span> Probs<span class="sc">:</span>Expect,</span>
+<span id="RN4Ecb48-3"><a href="#RN4Ecb48-3"></a>                 <span class="at">names_to  =</span> <span class="st">"Type"</span>,</span>
+<span id="RN4Ecb48-4"><a href="#RN4Ecb48-4"></a>                 <span class="at">values_to =</span> <span class="st">"Prob"</span>) </span>
+<span id="RN4Ecb48-5"><a href="#RN4Ecb48-5"></a></span>
+<span id="RN4Ecb48-6"><a href="#RN4Ecb48-6"></a>Prob_df2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 198 × 3
    Students Type      Prob
@@ -968,15 +972,15 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 </div>
 <p>　こちらのデータを使用し、シミュレーションから得られた結果と理論値を折れ線グラフで出力してみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb49"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb49-1"><a href="#RN4Ecb49-1"></a>Prob_df2 <span class="sc">%&gt;%</span></span>
-<span id="RN4Ecb49-2"><a href="#RN4Ecb49-2"></a>    <span class="fu">mutate</span>(<span class="at">Type =</span> <span class="fu">ifelse</span>(Type <span class="sc">==</span> <span class="st">"Probs"</span>, <span class="st">"シミュレーション"</span>, <span class="st">"理論値"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="RN4Ecb49-3"><a href="#RN4Ecb49-3"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="RN4Ecb49-4"><a href="#RN4Ecb49-4"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Students, <span class="at">y =</span> Prob <span class="sc">*</span> <span class="dv">100</span>, <span class="at">color =</span> Type), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="RN4Ecb49-5"><a href="#RN4Ecb49-5"></a>    <span class="fu">labs</span>(<span class="at">x     =</span> <span class="st">"学生数"</span>,</span>
-<span id="RN4Ecb49-6"><a href="#RN4Ecb49-6"></a>         <span class="at">y     =</span> <span class="st">"同じ誕生日の人が2人以上いる割合 (%)</span><span class="sc">\n</span><span class="st">(試行回数 = 100)"</span>,</span>
-<span id="RN4Ecb49-7"><a href="#RN4Ecb49-7"></a>         <span class="at">color =</span> <span class="st">""</span>) <span class="sc">+</span></span>
-<span id="RN4Ecb49-8"><a href="#RN4Ecb49-8"></a>    <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
-<span id="RN4Ecb49-9"><a href="#RN4Ecb49-9"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb50"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb50-1"><a href="#RN4Ecb50-1"></a>Prob_df2 <span class="sc">%&gt;%</span></span>
+<span id="RN4Ecb50-2"><a href="#RN4Ecb50-2"></a>    <span class="fu">mutate</span>(<span class="at">Type =</span> <span class="fu">ifelse</span>(Type <span class="sc">==</span> <span class="st">"Probs"</span>, <span class="st">"シミュレーション"</span>, <span class="st">"理論値"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="RN4Ecb50-3"><a href="#RN4Ecb50-3"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="RN4Ecb50-4"><a href="#RN4Ecb50-4"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Students, <span class="at">y =</span> Prob <span class="sc">*</span> <span class="dv">100</span>, <span class="at">color =</span> Type), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="RN4Ecb50-5"><a href="#RN4Ecb50-5"></a>    <span class="fu">labs</span>(<span class="at">x     =</span> <span class="st">"学生数"</span>,</span>
+<span id="RN4Ecb50-6"><a href="#RN4Ecb50-6"></a>         <span class="at">y     =</span> <span class="st">"同じ誕生日の人が2人以上いる割合 (%)</span><span class="sc">\n</span><span class="st">(試行回数 = 100)"</span>,</span>
+<span id="RN4Ecb50-7"><a href="#RN4Ecb50-7"></a>         <span class="at">color =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="RN4Ecb50-8"><a href="#RN4Ecb50-8"></a>    <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="RN4Ecb50-9"><a href="#RN4Ecb50-9"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="RN4Efig-monte-birthday16" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="monte_files/figure-html/fig-monte-birthday16-1.png" class="img-fluid figure-img" width="2100"></p>
@@ -987,26 +991,26 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 </div>
 <p>　最後に以上の作業を試行回数10000としてもう一回やってみましょう。</p>
 <div class="cell" data-layout-align="center" data-hash="monte_cache/html/fig-monte-birthday17_c08abf5eba8ef6b2c98dca76cfbf2fc2">
-<div class="sourceCode cell-code" id="RN4Ecb50"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb50-1"><a href="#RN4Ecb50-1"></a><span class="co"># 学生数をStudents列に格納したデータフレーム (tibble)を作成</span></span>
-<span id="RN4Ecb50-2"><a href="#RN4Ecb50-2"></a>Prob_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Students =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">100</span>)</span>
-<span id="RN4Ecb50-3"><a href="#RN4Ecb50-3"></a></span>
-<span id="RN4Ecb50-4"><a href="#RN4Ecb50-4"></a><span class="co"># Students列の値に応じてBirthday_Func()を実行</span></span>
-<span id="RN4Ecb50-5"><a href="#RN4Ecb50-5"></a>Prob_df <span class="ot">&lt;-</span> Prob_df <span class="sc">%&gt;%</span></span>
-<span id="RN4Ecb50-6"><a href="#RN4Ecb50-6"></a>    <span class="fu">mutate</span>(<span class="at">Simul  =</span> <span class="fu">map_dbl</span>(Students, <span class="sc">~</span><span class="fu">Birthday_Func</span>(.x, <span class="dv">10000</span>)),</span>
-<span id="RN4Ecb50-7"><a href="#RN4Ecb50-7"></a>           <span class="at">Expect =</span> <span class="fu">map_dbl</span>(Students, <span class="sc">~</span><span class="fu">Birth_Expect</span>(.x)))</span>
-<span id="RN4Ecb50-8"><a href="#RN4Ecb50-8"></a></span>
-<span id="RN4Ecb50-9"><a href="#RN4Ecb50-9"></a>Prob_df <span class="sc">%&gt;%</span></span>
-<span id="RN4Ecb50-10"><a href="#RN4Ecb50-10"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols      =</span> Simul<span class="sc">:</span>Expect,</span>
-<span id="RN4Ecb50-11"><a href="#RN4Ecb50-11"></a>                 <span class="at">names_to  =</span> <span class="st">"Type"</span>,</span>
-<span id="RN4Ecb50-12"><a href="#RN4Ecb50-12"></a>                 <span class="at">values_to =</span> <span class="st">"Prob"</span>) <span class="sc">%&gt;%</span></span>
-<span id="RN4Ecb50-13"><a href="#RN4Ecb50-13"></a>    <span class="fu">mutate</span>(<span class="at">Type =</span> <span class="fu">ifelse</span>(Type <span class="sc">==</span> <span class="st">"Simul"</span>, <span class="st">"シミュレーション"</span>, <span class="st">"理論値"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="RN4Ecb50-14"><a href="#RN4Ecb50-14"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="RN4Ecb50-15"><a href="#RN4Ecb50-15"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Students, <span class="at">y =</span> Prob <span class="sc">*</span> <span class="dv">100</span>, <span class="at">color =</span> Type), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="RN4Ecb50-16"><a href="#RN4Ecb50-16"></a>    <span class="fu">labs</span>(<span class="at">x     =</span> <span class="st">"学生数"</span>,</span>
-<span id="RN4Ecb50-17"><a href="#RN4Ecb50-17"></a>         <span class="at">y     =</span> <span class="st">"同じ誕生日の人が2人以上いる割合 (%)</span><span class="sc">\n</span><span class="st">(試行回数 = 100)"</span>,</span>
-<span id="RN4Ecb50-18"><a href="#RN4Ecb50-18"></a>         <span class="at">color =</span> <span class="st">""</span>) <span class="sc">+</span></span>
-<span id="RN4Ecb50-19"><a href="#RN4Ecb50-19"></a>    <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
-<span id="RN4Ecb50-20"><a href="#RN4Ecb50-20"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb51"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb51-1"><a href="#RN4Ecb51-1"></a><span class="co"># 学生数をStudents列に格納したデータフレーム (tibble)を作成</span></span>
+<span id="RN4Ecb51-2"><a href="#RN4Ecb51-2"></a>Prob_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Students =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">100</span>)</span>
+<span id="RN4Ecb51-3"><a href="#RN4Ecb51-3"></a></span>
+<span id="RN4Ecb51-4"><a href="#RN4Ecb51-4"></a><span class="co"># Students列の値に応じてBirthday_Func()を実行</span></span>
+<span id="RN4Ecb51-5"><a href="#RN4Ecb51-5"></a>Prob_df <span class="ot">&lt;-</span> Prob_df <span class="sc">%&gt;%</span></span>
+<span id="RN4Ecb51-6"><a href="#RN4Ecb51-6"></a>    <span class="fu">mutate</span>(<span class="at">Simul  =</span> <span class="fu">map_dbl</span>(Students, <span class="sc">~</span><span class="fu">Birthday_Func</span>(.x, <span class="dv">10000</span>)),</span>
+<span id="RN4Ecb51-7"><a href="#RN4Ecb51-7"></a>           <span class="at">Expect =</span> <span class="fu">map_dbl</span>(Students, <span class="sc">~</span><span class="fu">Birth_Expect</span>(.x)))</span>
+<span id="RN4Ecb51-8"><a href="#RN4Ecb51-8"></a></span>
+<span id="RN4Ecb51-9"><a href="#RN4Ecb51-9"></a>Prob_df <span class="sc">%&gt;%</span></span>
+<span id="RN4Ecb51-10"><a href="#RN4Ecb51-10"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols      =</span> Simul<span class="sc">:</span>Expect,</span>
+<span id="RN4Ecb51-11"><a href="#RN4Ecb51-11"></a>                 <span class="at">names_to  =</span> <span class="st">"Type"</span>,</span>
+<span id="RN4Ecb51-12"><a href="#RN4Ecb51-12"></a>                 <span class="at">values_to =</span> <span class="st">"Prob"</span>) <span class="sc">%&gt;%</span></span>
+<span id="RN4Ecb51-13"><a href="#RN4Ecb51-13"></a>    <span class="fu">mutate</span>(<span class="at">Type =</span> <span class="fu">ifelse</span>(Type <span class="sc">==</span> <span class="st">"Simul"</span>, <span class="st">"シミュレーション"</span>, <span class="st">"理論値"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="RN4Ecb51-14"><a href="#RN4Ecb51-14"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="RN4Ecb51-15"><a href="#RN4Ecb51-15"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Students, <span class="at">y =</span> Prob <span class="sc">*</span> <span class="dv">100</span>, <span class="at">color =</span> Type), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="RN4Ecb51-16"><a href="#RN4Ecb51-16"></a>    <span class="fu">labs</span>(<span class="at">x     =</span> <span class="st">"学生数"</span>,</span>
+<span id="RN4Ecb51-17"><a href="#RN4Ecb51-17"></a>         <span class="at">y     =</span> <span class="st">"同じ誕生日の人が2人以上いる割合 (%)</span><span class="sc">\n</span><span class="st">(試行回数 = 100)"</span>,</span>
+<span id="RN4Ecb51-18"><a href="#RN4Ecb51-18"></a>         <span class="at">color =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="RN4Ecb51-19"><a href="#RN4Ecb51-19"></a>    <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="RN4Ecb51-20"><a href="#RN4Ecb51-20"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="RN4Efig-monte-birthday17" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="monte_files/figure-html/fig-monte-birthday17-1.png" class="img-fluid figure-img" width="2100"></p>
@@ -1052,25 +1056,25 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 </ol>
 <p>　以上の手順をコードで書くと以下のようになります。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb51"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb51-1"><a href="#RN4Ecb51-1"></a>Switch_Yes <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">10000</span>)</span>
-<span id="RN4Ecb51-2"><a href="#RN4Ecb51-2"></a>Switch_No  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">10000</span>)</span>
-<span id="RN4Ecb51-3"><a href="#RN4Ecb51-3"></a></span>
-<span id="RN4Ecb51-4"><a href="#RN4Ecb51-4"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
-<span id="RN4Ecb51-5"><a href="#RN4Ecb51-5"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span>) {</span>
-<span id="RN4Ecb51-6"><a href="#RN4Ecb51-6"></a>    Car_Position <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>), <span class="dv">1</span>)</span>
-<span id="RN4Ecb51-7"><a href="#RN4Ecb51-7"></a>    Choice       <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>), <span class="dv">1</span>)</span>
-<span id="RN4Ecb51-8"><a href="#RN4Ecb51-8"></a>    </span>
-<span id="RN4Ecb51-9"><a href="#RN4Ecb51-9"></a>    Switch_Yes[i] <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(Car_Position <span class="sc">==</span> Choice, <span class="st">"Goat"</span>, <span class="st">"Car"</span>)</span>
-<span id="RN4Ecb51-10"><a href="#RN4Ecb51-10"></a>    Switch_No[i]  <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(Car_Position <span class="sc">==</span> Choice, <span class="st">"Car"</span>, <span class="st">"Goat"</span>)</span>
-<span id="RN4Ecb51-11"><a href="#RN4Ecb51-11"></a>}</span>
-<span id="RN4Ecb51-12"><a href="#RN4Ecb51-12"></a></span>
-<span id="RN4Ecb51-13"><a href="#RN4Ecb51-13"></a><span class="fu">table</span>(Switch_Yes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb52"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb52-1"><a href="#RN4Ecb52-1"></a>Switch_Yes <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">10000</span>)</span>
+<span id="RN4Ecb52-2"><a href="#RN4Ecb52-2"></a>Switch_No  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">10000</span>)</span>
+<span id="RN4Ecb52-3"><a href="#RN4Ecb52-3"></a></span>
+<span id="RN4Ecb52-4"><a href="#RN4Ecb52-4"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
+<span id="RN4Ecb52-5"><a href="#RN4Ecb52-5"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span>) {</span>
+<span id="RN4Ecb52-6"><a href="#RN4Ecb52-6"></a>    Car_Position <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>), <span class="dv">1</span>)</span>
+<span id="RN4Ecb52-7"><a href="#RN4Ecb52-7"></a>    Choice       <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>), <span class="dv">1</span>)</span>
+<span id="RN4Ecb52-8"><a href="#RN4Ecb52-8"></a>    </span>
+<span id="RN4Ecb52-9"><a href="#RN4Ecb52-9"></a>    Switch_Yes[i] <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(Car_Position <span class="sc">==</span> Choice, <span class="st">"Goat"</span>, <span class="st">"Car"</span>)</span>
+<span id="RN4Ecb52-10"><a href="#RN4Ecb52-10"></a>    Switch_No[i]  <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(Car_Position <span class="sc">==</span> Choice, <span class="st">"Car"</span>, <span class="st">"Goat"</span>)</span>
+<span id="RN4Ecb52-11"><a href="#RN4Ecb52-11"></a>}</span>
+<span id="RN4Ecb52-12"><a href="#RN4Ecb52-12"></a></span>
+<span id="RN4Ecb52-13"><a href="#RN4Ecb52-13"></a><span class="fu">table</span>(Switch_Yes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Switch_Yes
  Car Goat 
 6737 3263 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="RN4Ecb53"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb53-1"><a href="#RN4Ecb53-1"></a><span class="fu">table</span>(Switch_No)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb54"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb54-1"><a href="#RN4Ecb54-1"></a><span class="fu">table</span>(Switch_No)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Switch_No
  Car Goat 
@@ -1082,6 +1086,10 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <span class="header-section-number">29.5</span> 例3: 円周率の計算</h2>
 <p>　今回はもう一つの例として、円周率 (<span class="math inline">\(\pi\)</span>)の計算を紹介したいと思います。<span class="math inline">\(\pi\)</span>は無理数であるため、厳密な計算は出来ませんが、モンテカルロ・シミュレーションである程度近似できます。たとえば、半径1 (<span class="math inline">\(r = 1\)</span>)の円を考えてみましょう。</p>
 <div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Using the `size` aesthetic in this geom was deprecated in ggplot2 3.4.0.
+ℹ Please use `linewidth` in the `default_aes` field and elsewhere instead.</code></pre>
+</div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure"><p><img src="monte_files/figure-html/monte-pi1-1.png" class="img-fluid figure-img" width="2100"></p>
@@ -1101,11 +1109,11 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <p>　20個点のうち、円の外側にあるのは5個、円の内側は15個です。つまり、75%の点が円内にあることを意味します。点の位置は無作為ですので、もし円の大きさが<span class="math inline">\(\pi\)</span>であれば、点が円内に入る確率は<span class="math inline">\(\frac{\pi}{4}\)</span>です。今回の例だと<span class="math inline">\(\frac{\pi}{4} = 0.75\)</span>であるため、<span class="math inline">\(\pi = 0.75 \times 4 = 3\)</span>となります。実際の円周率は3.141593…なので、そこそこ近似できていますね。</p>
 <p>　それではこれを実際にやってみましょう。今回は20個の点ではなく、100個にしてみましょう。まず、100個の点を無作為に抽出します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb55"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb55-1"><a href="#RN4Ecb55-1"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
-<span id="RN4Ecb55-2"><a href="#RN4Ecb55-2"></a>pi_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">runif</span>(<span class="dv">100</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>),</span>
-<span id="RN4Ecb55-3"><a href="#RN4Ecb55-3"></a>                <span class="at">y =</span> <span class="fu">runif</span>(<span class="dv">100</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>))</span>
-<span id="RN4Ecb55-4"><a href="#RN4Ecb55-4"></a></span>
-<span id="RN4Ecb55-5"><a href="#RN4Ecb55-5"></a>pi_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb57"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb57-1"><a href="#RN4Ecb57-1"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
+<span id="RN4Ecb57-2"><a href="#RN4Ecb57-2"></a>pi_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">runif</span>(<span class="dv">100</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="RN4Ecb57-3"><a href="#RN4Ecb57-3"></a>                <span class="at">y =</span> <span class="fu">runif</span>(<span class="dv">100</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="RN4Ecb57-4"><a href="#RN4Ecb57-4"></a></span>
+<span id="RN4Ecb57-5"><a href="#RN4Ecb57-5"></a>pi_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 100 × 2
          x      y
@@ -1125,13 +1133,13 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 </div>
 <p>　まず、各辺の長さが2の正四角形と<code>pi_df</code>で生成した100個の点をプロットします。四角形を描くときには<code>geom_rect()</code>幾何オブジェクトを使用します。マッピングは四角形の左下の座標 (<code>xmin</code>と<code>ymin</code>)、右上の座標 (<code>xmax</code>と<code>ymax</code>)に行います。今回は原点が (0, 0)の半径1の円に接する四角形ですから、左下の座標は (-1, -1)、右上の座標は (1, 1)となります。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb57"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb57-1"><a href="#RN4Ecb57-1"></a>pi_df <span class="sc">%&gt;%</span></span>
-<span id="RN4Ecb57-2"><a href="#RN4Ecb57-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="RN4Ecb57-3"><a href="#RN4Ecb57-3"></a>    <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">ymin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">xmax =</span> <span class="dv">1</span>, <span class="at">ymax =</span> <span class="dv">1</span>),</span>
-<span id="RN4Ecb57-4"><a href="#RN4Ecb57-4"></a>              <span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="RN4Ecb57-5"><a href="#RN4Ecb57-5"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
-<span id="RN4Ecb57-6"><a href="#RN4Ecb57-6"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="RN4Ecb57-7"><a href="#RN4Ecb57-7"></a>    <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb59"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb59-1"><a href="#RN4Ecb59-1"></a>pi_df <span class="sc">%&gt;%</span></span>
+<span id="RN4Ecb59-2"><a href="#RN4Ecb59-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="RN4Ecb59-3"><a href="#RN4Ecb59-3"></a>    <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">ymin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">xmax =</span> <span class="dv">1</span>, <span class="at">ymax =</span> <span class="dv">1</span>),</span>
+<span id="RN4Ecb59-4"><a href="#RN4Ecb59-4"></a>              <span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="RN4Ecb59-5"><a href="#RN4Ecb59-5"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="RN4Ecb59-6"><a href="#RN4Ecb59-6"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="RN4Ecb59-7"><a href="#RN4Ecb59-7"></a>    <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure"><p><img src="monte_files/figure-html/monte-pi4-1.png" class="img-fluid figure-img" width="2100"></p>
@@ -1141,14 +1149,14 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 </div>
 <p>　ここに円を追加してみましょう。円を描くときには{ggforce}パッケージの<code>geom_circle()</code>幾何オブジェクトを使用します。マッピングは円の原点 (<code>x0</code>と<code>y0</code>)、円の半径 (<code>r</code>)です。原点は (0, 0)で半径は1の円を重ねます。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb58"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb58-1"><a href="#RN4Ecb58-1"></a>pi_df <span class="sc">%&gt;%</span></span>
-<span id="RN4Ecb58-2"><a href="#RN4Ecb58-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="RN4Ecb58-3"><a href="#RN4Ecb58-3"></a>    <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">ymin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">xmax =</span> <span class="dv">1</span>, <span class="at">ymax =</span> <span class="dv">1</span>),</span>
-<span id="RN4Ecb58-4"><a href="#RN4Ecb58-4"></a>              <span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="RN4Ecb58-5"><a href="#RN4Ecb58-5"></a>    <span class="fu">geom_circle</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">r =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="RN4Ecb58-6"><a href="#RN4Ecb58-6"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
-<span id="RN4Ecb58-7"><a href="#RN4Ecb58-7"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="RN4Ecb58-8"><a href="#RN4Ecb58-8"></a>    <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb60"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb60-1"><a href="#RN4Ecb60-1"></a>pi_df <span class="sc">%&gt;%</span></span>
+<span id="RN4Ecb60-2"><a href="#RN4Ecb60-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="RN4Ecb60-3"><a href="#RN4Ecb60-3"></a>    <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">ymin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">xmax =</span> <span class="dv">1</span>, <span class="at">ymax =</span> <span class="dv">1</span>),</span>
+<span id="RN4Ecb60-4"><a href="#RN4Ecb60-4"></a>              <span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="RN4Ecb60-5"><a href="#RN4Ecb60-5"></a>    <span class="fu">geom_circle</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">r =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="RN4Ecb60-6"><a href="#RN4Ecb60-6"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="RN4Ecb60-7"><a href="#RN4Ecb60-7"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="RN4Ecb60-8"><a href="#RN4Ecb60-8"></a>    <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure"><p><img src="monte_files/figure-html/monte-pi5-1.png" class="img-fluid figure-img" width="2100"></p>
@@ -1158,21 +1166,21 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 </div>
 <p>　これだけだと読みづらいので、円の中か外かで点の色分けをしてみましょう。そのためには各点が円内に入っているかどうかを判定した変数<code>in_circle</code>を追加します。点(<span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span>)が、原点が(<span class="math inline">\(x^\prime\)</span>, <span class="math inline">\(y^\prime\)</span>)、かつ半径<span class="math inline">\(r\)</span>の円内に入っている場合、<span class="math inline">\((x - x^\prime)^2 + (y - y^\prime)^2 &lt; r^2\)</span>が成立します。今回は原点が (0, 0)で、半径が1であるため、<span class="math inline">\(x^2 + y^2 &lt; 1\)</span>か否かを判定します。この条件を満たしているかどうかを示す<code>in_circle</code>という変数を追加します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb59"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb59-1"><a href="#RN4Ecb59-1"></a>pi_df <span class="ot">&lt;-</span> pi_df <span class="sc">%&gt;%</span></span>
-<span id="RN4Ecb59-2"><a href="#RN4Ecb59-2"></a>    <span class="fu">mutate</span>(<span class="at">in_circle =</span> <span class="fu">if_else</span>(x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> y<span class="sc">^</span><span class="dv">2</span> <span class="sc">&lt;</span> <span class="dv">1</span><span class="sc">^</span><span class="dv">2</span>, <span class="st">"円内"</span>, <span class="st">"円外"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb61"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb61-1"><a href="#RN4Ecb61-1"></a>pi_df <span class="ot">&lt;-</span> pi_df <span class="sc">%&gt;%</span></span>
+<span id="RN4Ecb61-2"><a href="#RN4Ecb61-2"></a>    <span class="fu">mutate</span>(<span class="at">in_circle =</span> <span class="fu">if_else</span>(x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> y<span class="sc">^</span><span class="dv">2</span> <span class="sc">&lt;</span> <span class="dv">1</span><span class="sc">^</span><span class="dv">2</span>, <span class="st">"円内"</span>, <span class="st">"円外"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　散布図レイヤー (<code>geom_point()</code>)内に<code>color</code>を<code>in_circle</code>変数でマッピングします。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb60"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb60-1"><a href="#RN4Ecb60-1"></a>pi_df <span class="sc">%&gt;%</span></span>
-<span id="RN4Ecb60-2"><a href="#RN4Ecb60-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="RN4Ecb60-3"><a href="#RN4Ecb60-3"></a>    <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">ymin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">xmax =</span> <span class="dv">1</span>, <span class="at">ymax =</span> <span class="dv">1</span>),</span>
-<span id="RN4Ecb60-4"><a href="#RN4Ecb60-4"></a>              <span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="RN4Ecb60-5"><a href="#RN4Ecb60-5"></a>    <span class="co"># 円の内側か外側かで色分け</span></span>
-<span id="RN4Ecb60-6"><a href="#RN4Ecb60-6"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> in_circle), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="RN4Ecb60-7"><a href="#RN4Ecb60-7"></a>    <span class="fu">geom_circle</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">r =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="RN4Ecb60-8"><a href="#RN4Ecb60-8"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"X"</span>, <span class="at">y =</span> <span class="st">"Y"</span>, <span class="at">color =</span> <span class="st">""</span>) <span class="sc">+</span></span>
-<span id="RN4Ecb60-9"><a href="#RN4Ecb60-9"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="RN4Ecb60-10"><a href="#RN4Ecb60-10"></a>    <span class="fu">theme_void</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb62"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb62-1"><a href="#RN4Ecb62-1"></a>pi_df <span class="sc">%&gt;%</span></span>
+<span id="RN4Ecb62-2"><a href="#RN4Ecb62-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="RN4Ecb62-3"><a href="#RN4Ecb62-3"></a>    <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">ymin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">xmax =</span> <span class="dv">1</span>, <span class="at">ymax =</span> <span class="dv">1</span>),</span>
+<span id="RN4Ecb62-4"><a href="#RN4Ecb62-4"></a>              <span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="RN4Ecb62-5"><a href="#RN4Ecb62-5"></a>    <span class="co"># 円の内側か外側かで色分け</span></span>
+<span id="RN4Ecb62-6"><a href="#RN4Ecb62-6"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> in_circle), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="RN4Ecb62-7"><a href="#RN4Ecb62-7"></a>    <span class="fu">geom_circle</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">r =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="RN4Ecb62-8"><a href="#RN4Ecb62-8"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"X"</span>, <span class="at">y =</span> <span class="st">"Y"</span>, <span class="at">color =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="RN4Ecb62-9"><a href="#RN4Ecb62-9"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="RN4Ecb62-10"><a href="#RN4Ecb62-10"></a>    <span class="fu">theme_void</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure"><p><img src="monte_files/figure-html/monte-pi7-1.png" class="img-fluid figure-img" width="2100"></p>
@@ -1182,9 +1190,9 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 </div>
 <p>　実際に円内の点と円外の点の個数を数えてみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb61"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb61-1"><a href="#RN4Ecb61-1"></a>pi_df <span class="sc">%&gt;%</span></span>
-<span id="RN4Ecb61-2"><a href="#RN4Ecb61-2"></a>    <span class="fu">group_by</span>(in_circle) <span class="sc">%&gt;%</span></span>
-<span id="RN4Ecb61-3"><a href="#RN4Ecb61-3"></a>    <span class="fu">summarise</span>(<span class="at">N =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb63"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb63-1"><a href="#RN4Ecb63-1"></a>pi_df <span class="sc">%&gt;%</span></span>
+<span id="RN4Ecb63-2"><a href="#RN4Ecb63-2"></a>    <span class="fu">group_by</span>(in_circle) <span class="sc">%&gt;%</span></span>
+<span id="RN4Ecb63-3"><a href="#RN4Ecb63-3"></a>    <span class="fu">summarise</span>(<span class="at">N =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 2
   in_circle     N
@@ -1195,7 +1203,7 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 </div>
 <p>　円内の点は82個、円外の点は18ですね。つまり、<span class="math inline">\(\frac{\pi}{4} = 0.82\)</span>であり、<span class="math inline">\(\pi = 0.82 \times 4 = 3.28\)</span>です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb63"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb63-1"><a href="#RN4Ecb63-1"></a><span class="dv">82</span> <span class="sc">/</span> <span class="dv">100</span> <span class="sc">*</span> <span class="dv">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb65"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb65-1"><a href="#RN4Ecb65-1"></a><span class="dv">82</span> <span class="sc">/</span> <span class="dv">100</span> <span class="sc">*</span> <span class="dv">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3.28</code></pre>
 </div>
@@ -1218,7 +1226,7 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 </div>
 <p>　円内の点は3919個、円外の点は1081ですね。この結果から円周率を計算してみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb66"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb66-1"><a href="#RN4Ecb66-1"></a><span class="dv">3919</span> <span class="sc">/</span> <span class="dv">5000</span> <span class="sc">*</span> <span class="dv">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb68"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb68-1"><a href="#RN4Ecb68-1"></a><span class="dv">3919</span> <span class="sc">/</span> <span class="dv">5000</span> <span class="sc">*</span> <span class="dv">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3.1352</code></pre>
 </div>
@@ -1237,13 +1245,13 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 \]</span></p>
 <p>　2つの標本の平均値の差分は約0.2です。この差分の不確実性はいくらでしょうか。ここでは主に使われる平均値の差の検定 (<span class="math inline">\(t\)</span>検定)をやってみましょう。回は標準誤差が同じ2つの分布から得られた標本であるため、等分散を仮定する<span class="math inline">\(t\)</span>検定を行います (<code>var.equal = TRUE</code>を追加)。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb68"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb68-1"><a href="#RN4Ecb68-1"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
-<span id="RN4Ecb68-2"><a href="#RN4Ecb68-2"></a>Data1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="fl">0.7</span>, <span class="dv">1</span>)</span>
-<span id="RN4Ecb68-3"><a href="#RN4Ecb68-3"></a>Data2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="fl">0.9</span>, <span class="dv">1</span>)</span>
-<span id="RN4Ecb68-4"><a href="#RN4Ecb68-4"></a></span>
-<span id="RN4Ecb68-5"><a href="#RN4Ecb68-5"></a>ttest_result <span class="ot">&lt;-</span> <span class="fu">t.test</span>(Data1, Data2, <span class="at">var.equal =</span> <span class="cn">TRUE</span>)</span>
-<span id="RN4Ecb68-6"><a href="#RN4Ecb68-6"></a></span>
-<span id="RN4Ecb68-7"><a href="#RN4Ecb68-7"></a>ttest_result</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb70"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb70-1"><a href="#RN4Ecb70-1"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
+<span id="RN4Ecb70-2"><a href="#RN4Ecb70-2"></a>Data1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="fl">0.7</span>, <span class="dv">1</span>)</span>
+<span id="RN4Ecb70-3"><a href="#RN4Ecb70-3"></a>Data2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="fl">0.9</span>, <span class="dv">1</span>)</span>
+<span id="RN4Ecb70-4"><a href="#RN4Ecb70-4"></a></span>
+<span id="RN4Ecb70-5"><a href="#RN4Ecb70-5"></a>ttest_result <span class="ot">&lt;-</span> <span class="fu">t.test</span>(Data1, Data2, <span class="at">var.equal =</span> <span class="cn">TRUE</span>)</span>
+<span id="RN4Ecb70-6"><a href="#RN4Ecb70-6"></a></span>
+<span id="RN4Ecb70-7"><a href="#RN4Ecb70-7"></a>ttest_result</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Two Sample t-test
@@ -1274,43 +1282,43 @@ mean of x mean of y
 <li>3~6の手順を1万回繰り返す。</li>
 </ol>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb70"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb70-1"><a href="#RN4Ecb70-1"></a>n_trials   <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="RN4Ecb70-2"><a href="#RN4Ecb70-2"></a>Result_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_trials)</span>
-<span id="RN4Ecb70-3"><a href="#RN4Ecb70-3"></a></span>
-<span id="RN4Ecb70-4"><a href="#RN4Ecb70-4"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_trials) {</span>
-<span id="RN4Ecb70-5"><a href="#RN4Ecb70-5"></a>    Sample1 <span class="ot">&lt;-</span> <span class="fu">sample</span>(Data1, <span class="dv">100</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="RN4Ecb70-6"><a href="#RN4Ecb70-6"></a>    Sample2 <span class="ot">&lt;-</span> <span class="fu">sample</span>(Data2, <span class="dv">100</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="RN4Ecb70-7"><a href="#RN4Ecb70-7"></a>    </span>
-<span id="RN4Ecb70-8"><a href="#RN4Ecb70-8"></a>    Result_vec[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(Sample1) <span class="sc">-</span> <span class="fu">mean</span>(Sample2)</span>
-<span id="RN4Ecb70-9"><a href="#RN4Ecb70-9"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb72"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb72-1"><a href="#RN4Ecb72-1"></a>n_trials   <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="RN4Ecb72-2"><a href="#RN4Ecb72-2"></a>Result_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_trials)</span>
+<span id="RN4Ecb72-3"><a href="#RN4Ecb72-3"></a></span>
+<span id="RN4Ecb72-4"><a href="#RN4Ecb72-4"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_trials) {</span>
+<span id="RN4Ecb72-5"><a href="#RN4Ecb72-5"></a>    Sample1 <span class="ot">&lt;-</span> <span class="fu">sample</span>(Data1, <span class="dv">100</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="RN4Ecb72-6"><a href="#RN4Ecb72-6"></a>    Sample2 <span class="ot">&lt;-</span> <span class="fu">sample</span>(Data2, <span class="dv">100</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="RN4Ecb72-7"><a href="#RN4Ecb72-7"></a>    </span>
+<span id="RN4Ecb72-8"><a href="#RN4Ecb72-8"></a>    Result_vec[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(Sample1) <span class="sc">-</span> <span class="fu">mean</span>(Sample2)</span>
+<span id="RN4Ecb72-9"><a href="#RN4Ecb72-9"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　<code>Result_vec</code>には平均値の差分が10000個格納されており、これらの値の平均値をブートストラップ推定量 (bootstrap estimate)と呼ぶとします。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb71"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb71-1"><a href="#RN4Ecb71-1"></a><span class="co"># 元のデータの平均値の差分</span></span>
-<span id="RN4Ecb71-2"><a href="#RN4Ecb71-2"></a>delta <span class="ot">&lt;-</span> <span class="fu">mean</span>(Data1) <span class="sc">-</span> <span class="fu">mean</span>(Data2)</span>
-<span id="RN4Ecb71-3"><a href="#RN4Ecb71-3"></a>delta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb73"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb73-1"><a href="#RN4Ecb73-1"></a><span class="co"># 元のデータの平均値の差分</span></span>
+<span id="RN4Ecb73-2"><a href="#RN4Ecb73-2"></a>delta <span class="ot">&lt;-</span> <span class="fu">mean</span>(Data1) <span class="sc">-</span> <span class="fu">mean</span>(Data2)</span>
+<span id="RN4Ecb73-3"><a href="#RN4Ecb73-3"></a>delta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] -0.3066445</code></pre>
 </div>
-<div class="sourceCode cell-code" id="RN4Ecb73"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb73-1"><a href="#RN4Ecb73-1"></a><span class="co"># ブートストラップ推定量 (平均値の差分の平均値)</span></span>
-<span id="RN4Ecb73-2"><a href="#RN4Ecb73-2"></a>boot_delta <span class="ot">&lt;-</span> <span class="fu">mean</span>(Result_vec)</span>
-<span id="RN4Ecb73-3"><a href="#RN4Ecb73-3"></a>boot_delta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb75"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb75-1"><a href="#RN4Ecb75-1"></a><span class="co"># ブートストラップ推定量 (平均値の差分の平均値)</span></span>
+<span id="RN4Ecb75-2"><a href="#RN4Ecb75-2"></a>boot_delta <span class="ot">&lt;-</span> <span class="fu">mean</span>(Result_vec)</span>
+<span id="RN4Ecb75-3"><a href="#RN4Ecb75-3"></a>boot_delta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] -0.3045563</code></pre>
 </div>
-<div class="sourceCode cell-code" id="RN4Ecb75"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb75-1"><a href="#RN4Ecb75-1"></a><span class="co"># ブートストラップ推定量のバイアス</span></span>
-<span id="RN4Ecb75-2"><a href="#RN4Ecb75-2"></a>boot_b <span class="ot">&lt;-</span> delta <span class="sc">-</span> boot_delta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb77"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb77-1"><a href="#RN4Ecb77-1"></a><span class="co"># ブートストラップ推定量のバイアス</span></span>
+<span id="RN4Ecb77-2"><a href="#RN4Ecb77-2"></a>boot_b <span class="ot">&lt;-</span> delta <span class="sc">-</span> boot_delta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　実際の平均値の差分 (<span class="math inline">\(\delta_0\)</span>) は-0.3066445、ブートストラップ推定量 (<span class="math inline">\(\delta^*\)</span>) は -0.3045563であるため、その差は-0.0020881です。これをブートストラップ推定量のバイアス (<span class="math inline">\(b\)</span>) と呼びます。</p>
 <p>　ただし、我々に興味があるのは平均値の差分ではありません。平均値の差分はブートストラップ法を用いなくても普通に計算できるからです。ここで重要なのは平均値の差分の不確実性、つまり標準誤差でしょう。ブートストラップ推定量の標準誤差は<code>Result_vec</code>の標準偏差を計算するだけで十分です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb76"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb76-1"><a href="#RN4Ecb76-1"></a>boot_se <span class="ot">&lt;-</span> <span class="fu">sd</span>(Result_vec) <span class="co"># ブートストラップ推定量の標準偏差</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb78"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb78-1"><a href="#RN4Ecb78-1"></a>boot_se <span class="ot">&lt;-</span> <span class="fu">sd</span>(Result_vec) <span class="co"># ブートストラップ推定量の標準偏差</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　ブートストラップ推定量の標準偏差 (<span class="math inline">\(\mbox{se}^*\)</span>)は約0.14であり、<em>t</em>検定の結果から得られた標準誤差0.141と非常に近い値が得られました。</p>
 <p>　95%信頼区間を計算してみます。百分位数信頼区間 (Percentile CI)は<code>Result_Vec</code>の左側の領域が2.5%、右側の領域が2.5%となる区間ですので、<code><a href="https://rdrr.io/r/stats/quantile.html">quantile()</a></code>関数で計算することができます。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb77"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb77-1"><a href="#RN4Ecb77-1"></a><span class="co"># 95%信頼区間</span></span>
-<span id="RN4Ecb77-2"><a href="#RN4Ecb77-2"></a><span class="fu">quantile</span>(Result_vec, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb79"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb79-1"><a href="#RN4Ecb79-1"></a><span class="co"># 95%信頼区間</span></span>
+<span id="RN4Ecb79-2"><a href="#RN4Ecb79-2"></a><span class="fu">quantile</span>(Result_vec, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       2.5%       97.5% 
 -0.58084484 -0.02999534 </code></pre>
@@ -1318,14 +1326,14 @@ mean of x mean of y
 </div>
 <p>　バイアスを補正しないWald信頼区間は<span class="math inline">\(\delta_0 \pm 1.96 \times \mbox{se}^*\)</span>のように計算します (1.96は標準正規分布の累積密度分布において下側領域が0.975となる点です。)。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb79"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb79-1"><a href="#RN4Ecb79-1"></a>delta <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>)) <span class="sc">*</span> boot_se</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb81"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb81-1"><a href="#RN4Ecb81-1"></a>delta <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>)) <span class="sc">*</span> boot_se</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] -0.58201710 -0.03127185</code></pre>
 </div>
 </div>
 <p>　バイアス修正Wald信頼区間は<span class="math inline">\((\delta_0 - b) \pm 1.96 \times \mbox{se}^*\)</span>です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb81"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb81-1"><a href="#RN4Ecb81-1"></a>(delta <span class="sc">-</span> boot_b) <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>)) <span class="sc">*</span> boot_se</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb83"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb83-1"><a href="#RN4Ecb83-1"></a>(delta <span class="sc">-</span> boot_b) <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>)) <span class="sc">*</span> boot_se</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] -0.57992897 -0.02918372</code></pre>
 </div>

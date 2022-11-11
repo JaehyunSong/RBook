@@ -2090,6 +2090,10 @@ Double-BW  506.0  3         1293        0</code></pre>
 <span id="RN4Ecb196-7"><a href="#RN4Ecb196-7"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> BW, <span class="at">y =</span> LATE), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="RN4Ecb196-8"><a href="#RN4Ecb196-8"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Bandwidth"</span>, <span class="at">y =</span> <span class="st">"Local Average Treatment Effect (%p)"</span>) <span class="sc">+</span></span>
 <span id="RN4Ecb196-9"><a href="#RN4Ecb196-9"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+ℹ Please use `linewidth` instead.</code></pre>
+</div>
 <div class="cell-output-display">
 <div id="RN4Efig-iteration3" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="iteration_files/figure-html/fig-iteration3-1.png" class="img-fluid figure-img" width="2100"></p>
@@ -2102,9 +2106,9 @@ Double-BW  506.0  3         1293        0</code></pre>
 <span class="header-section-number">27.4.4</span> 説明・応答変数を指定したモデル推定</h3>
 <p>続いて、同じデータに対して推定式のみを変えた反復推定をやってみましょう。たとえば、応答変数は固定し、グループ変数のみを変えながらt検定を繰り返すケースを考えてみましょう。たとえば、OECDに加盟しているかどうか（<code>OECD</code>）で購買力平価GDP（<code>PPP</code>）の差があるかを検定してみましょう。使用する関数は<code><a href="https://rdrr.io/r/stats/t.test.html">t.test()</a></code>です。第一引数には<code>応答変数 ~ 説明変数</code>とし、<code>data</code>引数にはデータフレームやtibbleオブジェクトを指定します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb197"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb197-1"><a href="#RN4Ecb197-1"></a>Diff_test <span class="ot">&lt;-</span> <span class="fu">t.test</span>(PPP <span class="sc">~</span> G20, <span class="at">data =</span> Country_df)</span>
-<span id="RN4Ecb197-2"><a href="#RN4Ecb197-2"></a></span>
-<span id="RN4Ecb197-3"><a href="#RN4Ecb197-3"></a>Diff_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb198"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb198-1"><a href="#RN4Ecb198-1"></a>Diff_test <span class="ot">&lt;-</span> <span class="fu">t.test</span>(PPP <span class="sc">~</span> G20, <span class="at">data =</span> Country_df)</span>
+<span id="RN4Ecb198-2"><a href="#RN4Ecb198-2"></a></span>
+<span id="RN4Ecb198-3"><a href="#RN4Ecb198-3"></a>Diff_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Welch Two Sample t-test
@@ -2121,7 +2125,7 @@ mean in group 0 mean in group 1
 </div>
 <p>ここからいくつかの情報が読み取れます。まず、OECD加盟国のPPPは4957943、非加盟国は211287です。その差分は-4746656です。また、t値は-3.4136、p値は0.003です。これらの情報を効率よく抽出するには<code><a href="https://generics.r-lib.org/reference/tidy.html">broom::tidy()</a></code>が便利です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb199"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb199-1"><a href="#RN4Ecb199-1"></a>broom<span class="sc">::</span><span class="fu">tidy</span>(Diff_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb200"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb200-1"><a href="#RN4Ecb200-1"></a>broom<span class="sc">::</span><span class="fu">tidy</span>(Diff_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 10
   estim…¹ estim…² estim…³ stati…⁴ p.value param…⁵ conf.…⁶ conf.…⁷ method alter…⁸
@@ -2134,8 +2138,8 @@ mean in group 0 mean in group 1
 <p>差分、t値、p値、95%信頼区間などが抽出できます。これをOECDだけでなく、G7やG20に対しても同じ検定を繰り返してみましょう。</p>
 <p><code><a href="https://rdrr.io/r/stats/t.test.html">t.test()</a></code>の第一引数だけを変えながら推定をすれば良いでしょう。この第一引数、たとえば<code>PPP ~ G20</code>の方はformula型と呼ばれるRにおけるデータ型の一つです。これはcharacter型でないことに注意してください。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb201"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb201-1"><a href="#RN4Ecb201-1"></a>Formula1 <span class="ot">&lt;-</span> <span class="st">"PPP ~ G20"</span></span>
-<span id="RN4Ecb201-2"><a href="#RN4Ecb201-2"></a><span class="fu">t.test</span>(Formula1, <span class="at">data =</span> Country_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb202"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb202-1"><a href="#RN4Ecb202-1"></a>Formula1 <span class="ot">&lt;-</span> <span class="st">"PPP ~ G20"</span></span>
+<span id="RN4Ecb202-2"><a href="#RN4Ecb202-2"></a><span class="fu">t.test</span>(Formula1, <span class="at">data =</span> Country_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in mean.default(x): argument is not numeric or logical: returning NA</code></pre>
 </div>
@@ -2148,8 +2152,8 @@ mean in group 0 mean in group 1
 </div>
 <p>このようにエラーが出ます。この<code>Formula</code>を<code><a href="https://rdrr.io/r/stats/formula.html">as.formula()</a></code>関数を使ってformula型に変換し、推定をやってみると問題なく推定できることが分かります。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb205"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb205-1"><a href="#RN4Ecb205-1"></a>Formula2 <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(Formula1)</span>
-<span id="RN4Ecb205-2"><a href="#RN4Ecb205-2"></a><span class="fu">t.test</span>(Formula2, <span class="at">data =</span> Country_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb206"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb206-1"><a href="#RN4Ecb206-1"></a>Formula2 <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(Formula1)</span>
+<span id="RN4Ecb206-2"><a href="#RN4Ecb206-2"></a><span class="fu">t.test</span>(Formula2, <span class="at">data =</span> Country_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Welch Two Sample t-test
@@ -2167,9 +2171,9 @@ mean in group 0 mean in group 1
 <p>これから私たちがやるのは<code>"PPP ~ "</code>の次に<code>"G7"</code>、<code>"G20"</code>、<code>"OECD"</code>を<code><a href="https://rdrr.io/r/base/paste.html">paste()</a></code>や<code><a href="https://rdrr.io/r/base/paste.html">paste0()</a></code>関数を結合し、formula型に変換することです。formula型の列さえ生成できれば、あとは<code>map()</code>関数にformulaを渡し、データは<code>Country_df</code>に固定するだけです。</p>
 <p>まずはどの変数を説明変数にするかを<code>Group</code>列として格納した<code>Diff_df</code>を作成します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb207"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb207-1"><a href="#RN4Ecb207-1"></a>Diff_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Group =</span> <span class="fu">c</span>(<span class="st">"G7"</span>, <span class="st">"G20"</span>, <span class="st">"OECD"</span>))</span>
-<span id="RN4Ecb207-2"><a href="#RN4Ecb207-2"></a></span>
-<span id="RN4Ecb207-3"><a href="#RN4Ecb207-3"></a>Diff_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb208"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb208-1"><a href="#RN4Ecb208-1"></a>Diff_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Group =</span> <span class="fu">c</span>(<span class="st">"G7"</span>, <span class="st">"G20"</span>, <span class="st">"OECD"</span>))</span>
+<span id="RN4Ecb208-2"><a href="#RN4Ecb208-2"></a></span>
+<span id="RN4Ecb208-3"><a href="#RN4Ecb208-3"></a>Diff_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 1
   Group
@@ -2181,10 +2185,10 @@ mean in group 0 mean in group 1
 </div>
 <p>続いて、<code>Formula</code>列を作成し、<code>"PPP ~ "</code>の次に<code>Group</code>列の文字列を結合します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb209"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb209-1"><a href="#RN4Ecb209-1"></a>Diff_df <span class="ot">&lt;-</span> Diff_df <span class="sc">%&gt;%</span></span>
-<span id="RN4Ecb209-2"><a href="#RN4Ecb209-2"></a>  <span class="fu">mutate</span>(<span class="at">Formula =</span> <span class="fu">paste0</span>(<span class="st">"PPP ~ "</span>, Group))</span>
-<span id="RN4Ecb209-3"><a href="#RN4Ecb209-3"></a></span>
-<span id="RN4Ecb209-4"><a href="#RN4Ecb209-4"></a>Diff_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb210"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb210-1"><a href="#RN4Ecb210-1"></a>Diff_df <span class="ot">&lt;-</span> Diff_df <span class="sc">%&gt;%</span></span>
+<span id="RN4Ecb210-2"><a href="#RN4Ecb210-2"></a>  <span class="fu">mutate</span>(<span class="at">Formula =</span> <span class="fu">paste0</span>(<span class="st">"PPP ~ "</span>, Group))</span>
+<span id="RN4Ecb210-3"><a href="#RN4Ecb210-3"></a></span>
+<span id="RN4Ecb210-4"><a href="#RN4Ecb210-4"></a>Diff_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
   Group Formula   
@@ -2196,17 +2200,17 @@ mean in group 0 mean in group 1
 </div>
 <p>今の<code>Formula</code>列のデータ型を確認してみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb211"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb211-1"><a href="#RN4Ecb211-1"></a><span class="fu">class</span>(Diff_df<span class="sc">$</span>Formula[[<span class="dv">1</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb212"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb212-1"><a href="#RN4Ecb212-1"></a><span class="fu">class</span>(Diff_df<span class="sc">$</span>Formula[[<span class="dv">1</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "character"</code></pre>
 </div>
 </div>
 <p>character型ですね。続いて、<code>map()</code>関数を使用してFormula列をformula型に変換します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb213"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb213-1"><a href="#RN4Ecb213-1"></a>Diff_df <span class="ot">&lt;-</span> Diff_df <span class="sc">%&gt;%</span></span>
-<span id="RN4Ecb213-2"><a href="#RN4Ecb213-2"></a>  <span class="fu">mutate</span>(<span class="at">Formula =</span> <span class="fu">map</span>(Formula, as.formula))</span>
-<span id="RN4Ecb213-3"><a href="#RN4Ecb213-3"></a></span>
-<span id="RN4Ecb213-4"><a href="#RN4Ecb213-4"></a>Diff_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb214"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb214-1"><a href="#RN4Ecb214-1"></a>Diff_df <span class="ot">&lt;-</span> Diff_df <span class="sc">%&gt;%</span></span>
+<span id="RN4Ecb214-2"><a href="#RN4Ecb214-2"></a>  <span class="fu">mutate</span>(<span class="at">Formula =</span> <span class="fu">map</span>(Formula, as.formula))</span>
+<span id="RN4Ecb214-3"><a href="#RN4Ecb214-3"></a></span>
+<span id="RN4Ecb214-4"><a href="#RN4Ecb214-4"></a>Diff_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
   Group Formula  
@@ -2218,17 +2222,17 @@ mean in group 0 mean in group 1
 </div>
 <p>データ型も確認してみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb215"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb215-1"><a href="#RN4Ecb215-1"></a><span class="fu">class</span>(Diff_df<span class="sc">$</span>Formula[[<span class="dv">1</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb216"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb216-1"><a href="#RN4Ecb216-1"></a><span class="fu">class</span>(Diff_df<span class="sc">$</span>Formula[[<span class="dv">1</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "formula"</code></pre>
 </div>
 </div>
 <p>formula型になっていることが分かります。それではt検定を行います。ここでもラムダ式を使います。式が入る場所には<code>.x</code>を指定し、データは<code>Country_df</code>に固定します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb217"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb217-1"><a href="#RN4Ecb217-1"></a>Diff_df <span class="ot">&lt;-</span> Diff_df <span class="sc">%&gt;%</span></span>
-<span id="RN4Ecb217-2"><a href="#RN4Ecb217-2"></a>  <span class="fu">mutate</span>(<span class="at">Model =</span> <span class="fu">map</span>(Formula, <span class="sc">~</span><span class="fu">t.test</span>(.x, <span class="at">data =</span> Country_df)))</span>
-<span id="RN4Ecb217-3"><a href="#RN4Ecb217-3"></a></span>
-<span id="RN4Ecb217-4"><a href="#RN4Ecb217-4"></a>Diff_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb218"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb218-1"><a href="#RN4Ecb218-1"></a>Diff_df <span class="ot">&lt;-</span> Diff_df <span class="sc">%&gt;%</span></span>
+<span id="RN4Ecb218-2"><a href="#RN4Ecb218-2"></a>  <span class="fu">mutate</span>(<span class="at">Model =</span> <span class="fu">map</span>(Formula, <span class="sc">~</span><span class="fu">t.test</span>(.x, <span class="at">data =</span> Country_df)))</span>
+<span id="RN4Ecb218-3"><a href="#RN4Ecb218-3"></a></span>
+<span id="RN4Ecb218-4"><a href="#RN4Ecb218-4"></a>Diff_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 3
   Group Formula   Model  
@@ -2240,11 +2244,11 @@ mean in group 0 mean in group 1
 </div>
 <p><code><a href="https://generics.r-lib.org/reference/tidy.html">broom::tidy()</a></code>で推定値の要約を抽出し、入れ子構造を解除します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb219"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb219-1"><a href="#RN4Ecb219-1"></a>Diff_df <span class="ot">&lt;-</span> Diff_df <span class="sc">%&gt;%</span></span>
-<span id="RN4Ecb219-2"><a href="#RN4Ecb219-2"></a>  <span class="fu">mutate</span>(<span class="at">Tidy =</span> <span class="fu">map</span>(Model, broom<span class="sc">::</span>tidy)) <span class="sc">%&gt;%</span></span>
-<span id="RN4Ecb219-3"><a href="#RN4Ecb219-3"></a>  <span class="fu">unnest</span>(Tidy)</span>
-<span id="RN4Ecb219-4"><a href="#RN4Ecb219-4"></a></span>
-<span id="RN4Ecb219-5"><a href="#RN4Ecb219-5"></a>Diff_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb220"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb220-1"><a href="#RN4Ecb220-1"></a>Diff_df <span class="ot">&lt;-</span> Diff_df <span class="sc">%&gt;%</span></span>
+<span id="RN4Ecb220-2"><a href="#RN4Ecb220-2"></a>  <span class="fu">mutate</span>(<span class="at">Tidy =</span> <span class="fu">map</span>(Model, broom<span class="sc">::</span>tidy)) <span class="sc">%&gt;%</span></span>
+<span id="RN4Ecb220-3"><a href="#RN4Ecb220-3"></a>  <span class="fu">unnest</span>(Tidy)</span>
+<span id="RN4Ecb220-4"><a href="#RN4Ecb220-4"></a></span>
+<span id="RN4Ecb220-5"><a href="#RN4Ecb220-5"></a>Diff_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 13
   Group Formula   Model    estimate estimate1 estimate2 statis…¹ p.value param…²
@@ -2258,11 +2262,11 @@ mean in group 0 mean in group 1
 </div>
 <p>いくつか使用しない情報もあるので、適宜列を削除します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb221"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb221-1"><a href="#RN4Ecb221-1"></a>Diff_df <span class="ot">&lt;-</span> Diff_df <span class="sc">%&gt;%</span></span>
-<span id="RN4Ecb221-2"><a href="#RN4Ecb221-2"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(Formula, Model, estimate1, estimate2, </span>
-<span id="RN4Ecb221-3"><a href="#RN4Ecb221-3"></a>            p.value, method, alternative))</span>
-<span id="RN4Ecb221-4"><a href="#RN4Ecb221-4"></a></span>
-<span id="RN4Ecb221-5"><a href="#RN4Ecb221-5"></a>Diff_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb222"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb222-1"><a href="#RN4Ecb222-1"></a>Diff_df <span class="ot">&lt;-</span> Diff_df <span class="sc">%&gt;%</span></span>
+<span id="RN4Ecb222-2"><a href="#RN4Ecb222-2"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(Formula, Model, estimate1, estimate2, </span>
+<span id="RN4Ecb222-3"><a href="#RN4Ecb222-3"></a>            p.value, method, alternative))</span>
+<span id="RN4Ecb222-4"><a href="#RN4Ecb222-4"></a></span>
+<span id="RN4Ecb222-5"><a href="#RN4Ecb222-5"></a>Diff_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 6
   Group  estimate statistic parameter   conf.low conf.high
@@ -2274,32 +2278,32 @@ mean in group 0 mean in group 1
 </div>
 <p>以上のコードをパイプ演算子を使用し、簡潔にまとめると以下のようになります。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb223"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb223-1"><a href="#RN4Ecb223-1"></a>Diff_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Group =</span> <span class="fu">c</span>(<span class="st">"G7"</span>, <span class="st">"G20"</span>, <span class="st">"OECD"</span>))</span>
-<span id="RN4Ecb223-2"><a href="#RN4Ecb223-2"></a></span>
-<span id="RN4Ecb223-3"><a href="#RN4Ecb223-3"></a>Diff_df <span class="ot">&lt;-</span> Diff_df <span class="sc">%&gt;%</span></span>
-<span id="RN4Ecb223-4"><a href="#RN4Ecb223-4"></a>  <span class="fu">mutate</span>(<span class="at">Formula =</span> <span class="fu">paste0</span>(<span class="st">"PPP ~ "</span>, Group),</span>
-<span id="RN4Ecb223-5"><a href="#RN4Ecb223-5"></a>         <span class="at">Formula =</span> <span class="fu">map</span>(Formula, as.formula),</span>
-<span id="RN4Ecb223-6"><a href="#RN4Ecb223-6"></a>         <span class="at">Model   =</span> <span class="fu">map</span>(Formula, <span class="sc">~</span><span class="fu">t.test</span>(.x, <span class="at">data =</span> Country_df)),</span>
-<span id="RN4Ecb223-7"><a href="#RN4Ecb223-7"></a>         <span class="at">Tidy    =</span> <span class="fu">map</span>(Model, broom<span class="sc">::</span>tidy)) <span class="sc">%&gt;%</span></span>
-<span id="RN4Ecb223-8"><a href="#RN4Ecb223-8"></a>  <span class="fu">unnest</span>(Tidy) <span class="sc">%&gt;%</span></span>
-<span id="RN4Ecb223-9"><a href="#RN4Ecb223-9"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(Formula, Model, estimate1, estimate2, </span>
-<span id="RN4Ecb223-10"><a href="#RN4Ecb223-10"></a>            p.value, method, alternative))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb224"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb224-1"><a href="#RN4Ecb224-1"></a>Diff_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Group =</span> <span class="fu">c</span>(<span class="st">"G7"</span>, <span class="st">"G20"</span>, <span class="st">"OECD"</span>))</span>
+<span id="RN4Ecb224-2"><a href="#RN4Ecb224-2"></a></span>
+<span id="RN4Ecb224-3"><a href="#RN4Ecb224-3"></a>Diff_df <span class="ot">&lt;-</span> Diff_df <span class="sc">%&gt;%</span></span>
+<span id="RN4Ecb224-4"><a href="#RN4Ecb224-4"></a>  <span class="fu">mutate</span>(<span class="at">Formula =</span> <span class="fu">paste0</span>(<span class="st">"PPP ~ "</span>, Group),</span>
+<span id="RN4Ecb224-5"><a href="#RN4Ecb224-5"></a>         <span class="at">Formula =</span> <span class="fu">map</span>(Formula, as.formula),</span>
+<span id="RN4Ecb224-6"><a href="#RN4Ecb224-6"></a>         <span class="at">Model   =</span> <span class="fu">map</span>(Formula, <span class="sc">~</span><span class="fu">t.test</span>(.x, <span class="at">data =</span> Country_df)),</span>
+<span id="RN4Ecb224-7"><a href="#RN4Ecb224-7"></a>         <span class="at">Tidy    =</span> <span class="fu">map</span>(Model, broom<span class="sc">::</span>tidy)) <span class="sc">%&gt;%</span></span>
+<span id="RN4Ecb224-8"><a href="#RN4Ecb224-8"></a>  <span class="fu">unnest</span>(Tidy) <span class="sc">%&gt;%</span></span>
+<span id="RN4Ecb224-9"><a href="#RN4Ecb224-9"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(Formula, Model, estimate1, estimate2, </span>
+<span id="RN4Ecb224-10"><a href="#RN4Ecb224-10"></a>            p.value, method, alternative))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>推定結果を可視化してみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="RN4Ecb224"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb224-1"><a href="#RN4Ecb224-1"></a>Diff_df <span class="sc">%&gt;%</span></span>
-<span id="RN4Ecb224-2"><a href="#RN4Ecb224-2"></a>  <span class="fu">mutate</span>(<span class="at">Group =</span> <span class="fu">fct_inorder</span>(Group),</span>
-<span id="RN4Ecb224-3"><a href="#RN4Ecb224-3"></a>         <span class="at">Sig   =</span> <span class="fu">if_else</span>(conf.low <span class="sc">*</span> conf.high <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="st">"統計的有意"</span>,</span>
-<span id="RN4Ecb224-4"><a href="#RN4Ecb224-4"></a>                         <span class="st">"統計的非有意"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="RN4Ecb224-5"><a href="#RN4Ecb224-5"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="RN4Ecb224-6"><a href="#RN4Ecb224-6"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="RN4Ecb224-7"><a href="#RN4Ecb224-7"></a>  <span class="fu">geom_pointrange</span>(<span class="fu">aes</span>(<span class="at">x =</span> estimate, <span class="at">xmin =</span> conf.low, <span class="at">xmax =</span> conf.high,</span>
-<span id="RN4Ecb224-8"><a href="#RN4Ecb224-8"></a>                      <span class="at">y =</span> Group, <span class="at">color =</span> Sig), <span class="at">size =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
-<span id="RN4Ecb224-9"><a href="#RN4Ecb224-9"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"統計的有意"</span>   <span class="ot">=</span> <span class="st">"black"</span>,</span>
-<span id="RN4Ecb224-10"><a href="#RN4Ecb224-10"></a>                                <span class="st">"統計的非有意"</span> <span class="ot">=</span> <span class="st">"gray70"</span>)) <span class="sc">+</span></span>
-<span id="RN4Ecb224-11"><a href="#RN4Ecb224-11"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"非加盟国のPPP - 加盟国のPPP"</span>, <span class="at">y =</span> <span class="st">"グループ"</span>, <span class="at">color =</span> <span class="st">""</span>) <span class="sc">+</span></span>
-<span id="RN4Ecb224-12"><a href="#RN4Ecb224-12"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size   =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
-<span id="RN4Ecb224-13"><a href="#RN4Ecb224-13"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="RN4Ecb225"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb225-1"><a href="#RN4Ecb225-1"></a>Diff_df <span class="sc">%&gt;%</span></span>
+<span id="RN4Ecb225-2"><a href="#RN4Ecb225-2"></a>  <span class="fu">mutate</span>(<span class="at">Group =</span> <span class="fu">fct_inorder</span>(Group),</span>
+<span id="RN4Ecb225-3"><a href="#RN4Ecb225-3"></a>         <span class="at">Sig   =</span> <span class="fu">if_else</span>(conf.low <span class="sc">*</span> conf.high <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="st">"統計的有意"</span>,</span>
+<span id="RN4Ecb225-4"><a href="#RN4Ecb225-4"></a>                         <span class="st">"統計的非有意"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="RN4Ecb225-5"><a href="#RN4Ecb225-5"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="RN4Ecb225-6"><a href="#RN4Ecb225-6"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="RN4Ecb225-7"><a href="#RN4Ecb225-7"></a>  <span class="fu">geom_pointrange</span>(<span class="fu">aes</span>(<span class="at">x =</span> estimate, <span class="at">xmin =</span> conf.low, <span class="at">xmax =</span> conf.high,</span>
+<span id="RN4Ecb225-8"><a href="#RN4Ecb225-8"></a>                      <span class="at">y =</span> Group, <span class="at">color =</span> Sig), <span class="at">size =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="RN4Ecb225-9"><a href="#RN4Ecb225-9"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"統計的有意"</span>   <span class="ot">=</span> <span class="st">"black"</span>,</span>
+<span id="RN4Ecb225-10"><a href="#RN4Ecb225-10"></a>                                <span class="st">"統計的非有意"</span> <span class="ot">=</span> <span class="st">"gray70"</span>)) <span class="sc">+</span></span>
+<span id="RN4Ecb225-11"><a href="#RN4Ecb225-11"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"非加盟国のPPP - 加盟国のPPP"</span>, <span class="at">y =</span> <span class="st">"グループ"</span>, <span class="at">color =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="RN4Ecb225-12"><a href="#RN4Ecb225-12"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size   =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="RN4Ecb225-13"><a href="#RN4Ecb225-13"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="RN4Efig-iteration4" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="iteration_files/figure-html/fig-iteration4-1.png" class="img-fluid figure-img" width="2100"></p>
