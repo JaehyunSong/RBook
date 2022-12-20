@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.256">
+<meta name="generator" content="quarto-1.2.280">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>私たちのR – 18&nbsp; 可視化 [基礎]</title>
 <style>
@@ -1879,19 +1879,20 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 </div>
 </div>
-<p>　これだけでもG7国のCOVID-19の状況が比較可能ですが、この図は改善の余地があります。それは凡例の順番です。できれば、一番最新の日付のデータを基準に凡例の順番を揃えることが出来たら、どの線がどの国かが分かりやすくなります。そこで登場するのは第<a href="#RN4Esec-factor"><span>14</span></a>章で紹介しました<code>fct_reorder2</code>関数です。実際にやってみましょう。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-line-6_f5ad3220341958f8144921a69a282ab6">
+<p>　これだけでもG7国のCOVID-19の状況が比較可能ですが、この図は改善の余地があります。それは凡例の順番です。できれば、一番最新の日付のデータを基準に凡例の順番を揃えることが出来たら、どの線がどの国かが分かりやすくなります。そこで登場するのは第<a href="#RN4Esec-factor"><span>14</span></a>章で紹介しました<code>fct_reorder2</code>関数です。実際にやってみましょう。また、線の太さも今より太めにしてみたいと思います。線の太さは<code>linewidth</code>で調整可能であり、既定値は0.5です。0.5より大きい場合はより太い線になります。</p>
+<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-line-6_d0b0cee07e7c9854f6d197096456f184">
 <div class="sourceCode cell-code" id="RN4Ecb69"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb69-1"><a href="#RN4Ecb69-1"></a>COVID19_df <span class="sc">%&gt;%</span></span>
 <span id="RN4Ecb69-2"><a href="#RN4Ecb69-2"></a>  <span class="fu">filter</span>(Country <span class="sc">%in%</span> G7) <span class="sc">%&gt;%</span></span>
 <span id="RN4Ecb69-3"><a href="#RN4Ecb69-3"></a>  <span class="fu">mutate</span>(<span class="at">Country =</span> <span class="fu">fct_reorder2</span>(Country, Date, Confirmed_Total, last2)) <span class="sc">%&gt;%</span></span>
 <span id="RN4Ecb69-4"><a href="#RN4Ecb69-4"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="RN4Ecb69-5"><a href="#RN4Ecb69-5"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Date, <span class="at">y =</span> Confirmed_Total, <span class="at">color =</span> Country)) <span class="sc">+</span></span>
-<span id="RN4Ecb69-6"><a href="#RN4Ecb69-6"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>, <span class="dv">10000</span>, <span class="dv">100000</span>, <span class="dv">1000000</span>),</span>
-<span id="RN4Ecb69-7"><a href="#RN4Ecb69-7"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"10"</span>, <span class="st">"100"</span>, <span class="st">"1000"</span>, <span class="st">"10000"</span>, </span>
-<span id="RN4Ecb69-8"><a href="#RN4Ecb69-8"></a>                                <span class="st">"100000"</span>, <span class="st">"1000000"</span>),</span>
-<span id="RN4Ecb69-9"><a href="#RN4Ecb69-9"></a>                     <span class="at">trans =</span> <span class="st">"log10"</span>) <span class="sc">+</span></span>
-<span id="RN4Ecb69-10"><a href="#RN4Ecb69-10"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"月"</span>, <span class="at">y =</span> <span class="st">"累積感染者数 (人)"</span>, <span class="at">color =</span> <span class="st">"国"</span>) <span class="sc">+</span></span>
-<span id="RN4Ecb69-11"><a href="#RN4Ecb69-11"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="RN4Ecb69-5"><a href="#RN4Ecb69-5"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Date, <span class="at">y =</span> Confirmed_Total, <span class="at">color =</span> Country),</span>
+<span id="RN4Ecb69-6"><a href="#RN4Ecb69-6"></a>            <span class="at">linewidth =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="RN4Ecb69-7"><a href="#RN4Ecb69-7"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>, <span class="dv">10000</span>, <span class="dv">100000</span>, <span class="dv">1000000</span>),</span>
+<span id="RN4Ecb69-8"><a href="#RN4Ecb69-8"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"10"</span>, <span class="st">"100"</span>, <span class="st">"1000"</span>, <span class="st">"10000"</span>, </span>
+<span id="RN4Ecb69-9"><a href="#RN4Ecb69-9"></a>                                <span class="st">"100000"</span>, <span class="st">"1000000"</span>),</span>
+<span id="RN4Ecb69-10"><a href="#RN4Ecb69-10"></a>                     <span class="at">trans =</span> <span class="st">"log10"</span>) <span class="sc">+</span></span>
+<span id="RN4Ecb69-11"><a href="#RN4Ecb69-11"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"月"</span>, <span class="at">y =</span> <span class="st">"累積感染者数 (人)"</span>, <span class="at">color =</span> <span class="st">"国"</span>) <span class="sc">+</span></span>
+<span id="RN4Ecb69-12"><a href="#RN4Ecb69-12"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure"><p><img src="visualization2_files/figure-html/visual2-line-6-1.png" class="img-fluid figure-img" width="2400"></p>

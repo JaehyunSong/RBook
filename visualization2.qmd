@@ -1276,7 +1276,7 @@ COVID19_df %>%
   theme_minimal()
 ```
 
-　これだけでもG7国のCOVID-19の状況が比較可能ですが、この図は改善の余地があります。それは凡例の順番です。できれば、一番最新の日付のデータを基準に凡例の順番を揃えることが出来たら、どの線がどの国かが分かりやすくなります。そこで登場するのは第[-@sec-factor]章で紹介しました`fct_reorder2`関数です。実際にやってみましょう。
+　これだけでもG7国のCOVID-19の状況が比較可能ですが、この図は改善の余地があります。それは凡例の順番です。できれば、一番最新の日付のデータを基準に凡例の順番を揃えることが出来たら、どの線がどの国かが分かりやすくなります。そこで登場するのは第[-@sec-factor]章で紹介しました`fct_reorder2`関数です。実際にやってみましょう。また、線の太さも今より太めにしてみたいと思います。線の太さは`linewidth`で調整可能であり、既定値は0.5です。0.5より大きい場合はより太い線になります。
 
 ```{r visual2-line-6}
 #| fig-width: 8
@@ -1287,7 +1287,8 @@ COVID19_df %>%
   filter(Country %in% G7) %>%
   mutate(Country = fct_reorder2(Country, Date, Confirmed_Total, last2)) %>%
   ggplot() +
-  geom_line(aes(x = Date, y = Confirmed_Total, color = Country)) +
+  geom_line(aes(x = Date, y = Confirmed_Total, color = Country),
+            linewidth = 0.75) +
   scale_y_continuous(breaks = c(10, 100, 1000, 10000, 100000, 1000000),
                      labels = c("10", "100", "1000", "10000", 
                                 "100000", "1000000"),

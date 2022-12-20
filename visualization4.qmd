@@ -332,7 +332,7 @@ Country_df %>%
   theme(legend.position = "bottom")
 ```
 
-密度曲線は基本的にはなめらかな曲線であるため、データが存在しない箇所にも密度が高く見積もられるケースがあります。全体的な分布を俯瞰するには良いですが、情報の損失は避けられません。そこで出てくるのが点付きのリッジプロットです。`HDI_2018`の個々の値を点で出力するには`jittered_points = TRUE`を指定するだけです。これだけで密度曲線の内側に点が若干のズレ付き（jitter）で出力されます。ただし、密度曲線がオーバーラップされるリッジプロットの特徴を考えると、グループごとに点の色分けをする必要があります（同じ色になると、どのグループの点かが分からなくなるので）。この場合、`point_color`に対し、グループ変数（`Continent`）をマッピングします。また、密度曲線の色と合わせるために密度曲線の色塗りも`fill`で指定します。
+　密度曲線は基本的にはなめらかな曲線であるため、データが存在しない箇所にも密度が高く見積もられるケースがあります。全体的な分布を俯瞰するには良いですが、情報の損失は避けられません。そこで出てくるのが点付きのリッジプロットです。`HDI_2018`の個々の値を点で出力するには`jittered_points = TRUE`を指定するだけです。これだけで密度曲線の内側に点が若干のズレ付き（jitter）で出力されます。ただし、密度曲線がオーバーラップされるリッジプロットの特徴を考えると、グループごとに点の色分けをする必要があります（同じ色になると、どのグループの点かが分からなくなるので）。この場合、`point_color`に対し、グループ変数（`Continent`）をマッピングします。また、密度曲線の色と合わせるために密度曲線の色塗りも`fill`で指定します。
 
 ```{r visual4-ridge7}
 #| cache: true
@@ -428,7 +428,7 @@ Pointrange_df <- Country_df %>%
            Conf_lwr = conf.low, Conf_upr = conf.high) 
 ```
 
-この`Pointrange_df`を用いて横軸は大陸（`Continent`）、縦軸には点推定値（`Coef`）と95%信頼区間（`Conf_lwr`と`Conf_upr`）を出力します。ここで使う幾何オブジェクトは`geom_pointrange()`です。横軸`x`と点推定値`y`、95%信頼区間の下限の`ymin`、上限の`ymax`にマッピングします。エラーバー付き散布図を立てに並べたい場合は`y`と`x`、`xmin`、`xmax`にマッピングします。
+　この`Pointrange_df`を用いて横軸は大陸（`Continent`）、縦軸には点推定値（`Coef`）と95%信頼区間（`Conf_lwr`と`Conf_upr`）を出力します。ここで使う幾何オブジェクトは`geom_pointrange()`です。横軸`x`と点推定値`y`、95%信頼区間の下限の`ymin`、上限の`ymax`にマッピングします。エラーバー付き散布図を縦に並べたい場合は`y`と`x`、`xmin`、`xmax`にマッピングします。
 
 ```{r visual4-pointrage5}
 #| cache: true
@@ -437,12 +437,14 @@ Pointrange_df %>%
     geom_hline(yintercept = 0, linetype = 2) +
     geom_pointrange(aes(x = Continent, y = Coef, 
                         ymin = Conf_lwr, ymax = Conf_upr),
-                    size = 0.75) +
+                    size = 0.75, linewidth = 0.75) +
     labs(y = expression(paste(beta[1], " with 95% CI"))) +
     theme_bw(base_size = 12)
 ```
 
-ここでもう一つの次元を追加することもあるでしょう。たとえば、複数のモデルを比較した場合がそうかもしれません。以下の`Pointrange_df2`について考えてみましょう。
+　点の大きさと線の太さはそれぞれ`size`と`linewidth`で調整できます。どれも既定値は0.5です。
+
+　ここでもう一つの次元を追加することもあるでしょう。たとえば、複数のモデルを比較した場合がそうかもしれません。以下の`Pointrange_df2`について考えてみましょう。
 
 ```{r visual4-pointrage6}
 #| echo: false
@@ -483,7 +485,7 @@ Pointrange_df2 <- tibble(
 Pointrange_df2
 ```
 
-このデータは以下の2つのモデルを大陸ごとに推定した$\beta_1$と$\gamma_1$の点推定値と95%信頼区間です。
+　このデータは以下の2つのモデルを大陸ごとに推定した$\beta_1$と$\gamma_1$の点推定値と95%信頼区間です。
 
 $$
 \begin{aligned}
@@ -501,7 +503,8 @@ Pointrange_df2 %>%
     geom_hline(yintercept = 0, linetype = 2) +
     geom_pointrange(aes(x = Continent, y = Coef, 
                         ymin = Conf_lwr, ymax = Conf_upr,
-                        color = Term), size = 0.75) +
+                        color = Term), 
+                    size = 0.75, linewidth = 0.75) +
     labs(y = expression(paste(beta[1], " and ", gamma[1], " with 95% CI")),
          color = "") +
     theme_bw(base_size = 12) +
@@ -518,7 +521,8 @@ Pointrange_df2 %>%
     geom_pointrange(aes(x = Continent, y = Coef, 
                         ymin = Conf_lwr, ymax = Conf_upr,
                         color = Term),
-                    size = 0.75, position = position_dodge(0.5)) +
+                    size = 0.75, linewidth = 0.75,
+                    position = position_dodge(0.5)) +
     labs(y = expression(paste(beta[1], " and ", gamma[1], " with 95% CI")),
          color = "") +
     theme_bw(base_size = 12) +
@@ -537,11 +541,12 @@ Pointrange_df2 %>%
     geom_pointrange(aes(x = Continent, y = Coef, 
                         ymin = Conf_lwr, ymax = Conf_upr,
                         color = Term, alpha = Sig),
-                    size = 0.75, position = position_dodge(0.5)) +
+                    size = 0.75, linewidth = 0.75,
+                    position = position_dodge(0.5)) +
     labs(y = expression(paste(beta[1], " and ", gamma[1], " with 95% CI")),
          color = "") +
     scale_alpha_manual(values = c("Significant" = 1, "Insignificant" = 0.35)) +
-    guides(alpha = FALSE) +
+    guides(alpha = "none") +
     theme_bw(base_size = 12) +
     theme(legend.position = "bottom")
 ```
