@@ -551,6 +551,28 @@ Pointrange_df2 %>%
     theme(legend.position = "bottom")
 ```
 
+　区間を単なる線ではなく、上限と下限に「-」を付ける場合は、`geom_point()`と`geom_errorbar()`を組み合わせます。`geom_errorbar()`は`geom_pointrange()`から点がなくなったものになるため、`y`へのマッピングは不要です。また、上限と下限に着く水平線の幅は`width`で調整します。既定値のままだとかなり広めになるため、適宜調整しましょう。
+
+```{r visual4-pointrage12}
+#| cache: true
+Pointrange_df2 %>%
+    mutate(Sig = if_else(Conf_lwr * Conf_upr > 0, 
+                         "Significant", "Insignificant")) %>%
+    ggplot(aes(x = Continent, color = Term, alpha = Sig)) +
+    geom_hline(yintercept = 0, linetype = 2) +
+    geom_point(aes(y = Coef), 
+               size = 3, position = position_dodge(0.5)) +
+    geom_errorbar(aes(ymin = Conf_lwr, ymax = Conf_upr),
+                  linewidth = 0.75, width = 0.15,
+                  position = position_dodge(0.5)) +
+    labs(y = expression(paste(beta[1], " and ", gamma[1], " with 95% CI")),
+         color = "") +
+    scale_alpha_manual(values = c("Significant" = 1, "Insignificant" = 0.35)) +
+    guides(alpha = "none") +
+    theme_bw(base_size = 12) +
+    theme(legend.position = "bottom")
+```
+
 ---
 
 ## ロリーポップチャート {#sec-visual4-lollipop}
