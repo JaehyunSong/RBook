@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.256">
+<meta name="generator" content="quarto-1.2.313">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>私たちのR – 17&nbsp; 可視化 [理論]</title>
 <style>
@@ -212,7 +212,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./aboutR.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R?</span></a>
+  <a href="./aboutr.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R?</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -501,7 +501,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 
 </header><section id="RN4Esec-visual1-packages" class="level2" data-number="17.1"><h2 data-number="17.1" class="anchored" data-anchor-id="RN4Esec-visual1-packages">
 <span class="header-section-number">17.1</span> 可視化のためのパッケージ</h2>
-<p>Rによる可視化は様々な方法がありますが、可視化のために使うパッケージとして代表的なものは (1) パッケージを使わない方法、(2) {latticeパッケージ、(3) {ggplot2}パッケージがあります。ここでは、以下のデータ ( <a href="#RN4Etbl-visual1-sampledata">表&nbsp;<span>17.1</span></a> )を可視化しながら、それぞれの特徴について簡単に解説します。</p>
+<p>Rによる可視化は様々な方法がありますが、可視化のために使うパッケージとして代表的なものは (1) パッケージを使わない方法、(2) {latticeパッケージ、(3) {ggplot2}パッケージがあります。ここでは、以下のデータ ( <a href="#RN4Etbl-visual1-sampledata">表&nbsp;<span class="quarto-unresolved-ref">tbl-visual1-sampledata</span></a> )を可視化しながら、それぞれの特徴について簡単に解説します。</p>
 <div class="cell">
 
 </div>
@@ -587,7 +587,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <section id="RN4Ebase-r" class="level3" data-number="17.1.1"><h3 data-number="17.1.1" class="anchored" data-anchor-id="RN4Ebase-r">
 <span class="header-section-number">17.1.1</span> Base R</h3>
 <p>Rは統計学、データ分析に特化したプログラミング言語であるため、別途のパッケージなしで作図が可能です。後ほど紹介する{lattice}や{ggplot2}を用いた作図とは違って、Base Rによる作図は、紙にペンでグラフを書くイメージに近いです。キャンバスを用意し、そこにペンで点や線を描く感じです。これはレイヤーという概念を導入した{ggplot2}に近いかも知れませんが、{ggplot2}はレイヤーを変更出来る一方、Base Rは図が気に入らない場合、一からやり直しです。つまり、キャンバスに引いた線や点は消すことができません。また、作成した図はオブジェクトとして保存することが出来ないため、もう一度図示するためには一から書く必要があります。Base Rによる作図は短所だけでなく、メリットもあります。まず、パッケージを必要としないため、Rインストール直後から使える点です。そして、{lattice}や{ggplot2}よりも速いです。他にも人によってはBase Rの方がシンプルでかっこいいという方もいますが、これは好みの問題でしょう。</p>
-<p>以下の <a href="#RN4Efig-visual1-baser1">図&nbsp;<span>17.1</span></a> はBase Rを使った散布図の例です。</p>
+<p>以下の <a href="#RN4Efig-visual1-baser1">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-baser1</span></a> はBase Rを使った散布図の例です。</p>
 <div class="cell" data-fig.hegiht="4">
 <div class="sourceCode cell-code" id="RN4Ecb1"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb1-1"><a href="#RN4Ecb1-1"></a><span class="co"># Base Rを用いた作図の例</span></span>
 <span id="RN4Ecb1-2"><a href="#RN4Ecb1-2"></a><span class="fu">plot</span>(<span class="at">x =</span> Country_df<span class="sc">$</span>PPP, <span class="at">y =</span> Country_df<span class="sc">$</span>HDI, <span class="at">pch =</span> <span class="dv">19</span>, </span>
@@ -607,7 +607,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </section><section id="RN4Elatticeパッケージ" class="level3" data-number="17.1.2"><h3 data-number="17.1.2" class="anchored" data-anchor-id="RN4Elatticeパッケージ">
 <span class="header-section-number">17.1.2</span> {lattice}パッケージ</h3>
 <p>{lattice}は<a href="https://www.isid.ac.in/~deepayan/" target="_blank" rel="external">Deepayan Sarkar</a>によって開発された可視化パッケージです。このパッケージの最大特徴は「1つの関数で可視化が出来る」点です。作図に必要な様々な情報が1つの関数内に全て入ります。むろん、指定しない情報に関しては多くの場合、自動的に処理してくれます。</p>
-<p><a href="#RN4Efig-visual1-lattice1">図&nbsp;<span>17.2</span></a> を{lattice}を使って作る場合は以下のようなコードになります。</p>
+<p><a href="#RN4Efig-visual1-lattice1">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-lattice1</span></a> を{lattice}を使って作る場合は以下のようなコードになります。</p>
 <div class="cell" data-fig.hegiht="4">
 <div class="sourceCode cell-code" id="RN4Ecb2"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb2-1"><a href="#RN4Ecb2-1"></a><span class="co"># latticeを用いた作図の例</span></span>
 <span id="RN4Ecb2-2"><a href="#RN4Ecb2-2"></a><span class="fu">xyplot</span>(HDI <span class="sc">~</span> PPP, <span class="at">data =</span> Country_df,</span>
@@ -631,8 +631,8 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <p>1つの関数で全てを処理するので、関数が非常に長くなり、人間にとって読みやすいコードにはなりにくいのが短所です。しかし、{lattice}はBase Rでは出来ない、プロットのオブジェクトとしての保存ができます。Base Rは出来上がったプロットをオブジェクトとして保存することが出来ず、同じ図をもう一回出力するためには、改めてコードを書く必要があります。しかし、{lattice}はオブジェクトとして保存ができるため、いつでもリサイクルが可能です。他にも、{lattice}は条件付きプロットの作成において非常に強力です。しかし、これらの特徴は今は{ggplot2}も共有しているため、{lattice}独自の長所とは言いにくいです。</p>
 </section><section id="RN4Eggplot2パッケージ" class="level3" data-number="17.1.3"><h3 data-number="17.1.3" class="anchored" data-anchor-id="RN4Eggplot2パッケージ">
 <span class="header-section-number">17.1.3</span> {ggplot2}パッケージ</h3>
-<p>{ggplot2}はHadely Wickhamが大学院生の時に開発した可視化パッケージであり<a href="#RN4Efn1" class="footnote-ref" id="RN4Efnref1" role="doc-noteref"><sup>1</sup></a>、 <span class="citation" data-cites="Wilkinson:2005">Wilkinson (<a href="references.html#RN4Eref-Wilkinson:2005" role="doc-biblioref">2005</a>)</span> の「グラフィックの文法 (<strong>g</strong>rammer of <strong>g</strong>raphics)」の思想をR上で具現化したものです。グラフィックの文法という思想は今は{ggplot2}以外にも<a href="https://plotly.com" target="_blank" rel="external">Plotly</a>や<a href="https://www.tableau.com/" target="_blank" rel="external">Tableau</a>などでも採用されています。</p>
-<p>グラフィックの文法は後ほど詳細に解説しますが、{ggplot2}による作図の特徴は「レイヤーを重ねる」ことです。グラフの様々な要素をそれぞれ1つの層 (layer)と捉え、これを重ねられていくことでグラフが出来上がる仕組みです。これはBase Rの書き方に似ています。たとえば、{ggplot2}を使って <a href="#RN4Efig-visual1-ggplot1">図&nbsp;<span>17.3</span></a> を作る場合、以下のようなコードになります。</p>
+<p>{ggplot2}はHadely Wickhamが大学院生の時に開発した可視化パッケージであり<a href="#RN4Efn1" class="footnote-ref" id="RN4Efnref1" role="doc-noteref"><sup>1</sup></a>、 <span class="citation" data-cites="Wilkinson:2005">Wilkinson (<a href="#RN4Eref-Wilkinson:2005" role="doc-biblioref">2005</a>)</span> の「グラフィックの文法 (<strong>g</strong>rammer of <strong>g</strong>raphics)」の思想をR上で具現化したものです。グラフィックの文法という思想は今は{ggplot2}以外にも<a href="https://plotly.com" target="_blank" rel="external">Plotly</a>や<a href="https://www.tableau.com/" target="_blank" rel="external">Tableau</a>などでも採用されています。</p>
+<p>グラフィックの文法は後ほど詳細に解説しますが、{ggplot2}による作図の特徴は「レイヤーを重ねる」ことです。グラフの様々な要素をそれぞれ1つの層 (layer)と捉え、これを重ねられていくことでグラフが出来上がる仕組みです。これはBase Rの書き方に似ています。たとえば、{ggplot2}を使って <a href="#RN4Efig-visual1-ggplot1">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-ggplot1</span></a> を作る場合、以下のようなコードになります。</p>
 <div class="cell" data-fig.hegiht="4">
 <div class="sourceCode cell-code" id="RN4Ecb3"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb3-1"><a href="#RN4Ecb3-1"></a><span class="co"># ggplot2を用いた作図の例</span></span>
 <span id="RN4Ecb3-2"><a href="#RN4Ecb3-2"></a><span class="fu">ggplot</span>(<span class="at">data =</span> Country_df) <span class="sc">+</span></span>
@@ -653,7 +653,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <span class="header-section-number">17.2</span> グラフィックの文法</h2>
 <section id="RN4Eグラフィックの文法" class="level3" data-number="17.2.1"><h3 data-number="17.2.1" class="anchored" data-anchor-id="RN4Eグラフィックの文法">
 <span class="header-section-number">17.2.1</span> グラフィックの文法</h3>
-<p>本書では特別な事情がない限り、{ggplot2}による可視化のみを扱います。既に{ggplot2}のggが「グラフィックの文法 (<strong>g</strong>rammar of <strong>g</strong>raphics)」だと説明しましたが、この概念は <span class="citation" data-cites="Wilkinson:2005">Wilkinson (<a href="references.html#RN4Eref-Wilkinson:2005" role="doc-biblioref">2005</a>)</span> によって提唱された比較的新しいものであり、{ggplot2}はHadley先生がグラフィックの文法に則った作図のプロセスをRで具現化したものです。</p>
+<p>本書では特別な事情がない限り、{ggplot2}による可視化のみを扱います。既に{ggplot2}のggが「グラフィックの文法 (<strong>g</strong>rammar of <strong>g</strong>raphics)」だと説明しましたが、この概念は <span class="citation" data-cites="Wilkinson:2005">Wilkinson (<a href="#RN4Eref-Wilkinson:2005" role="doc-biblioref">2005</a>)</span> によって提唱された比較的新しいものであり、{ggplot2}はHadley先生がグラフィックの文法に則った作図のプロセスをRで具現化したものです。</p>
 <p>グラフィックスの文法とは、グラフを構造化された方法で記述し、レイヤーを積み重ねることによってグラフを構築するフレームワークです。グラフは様々な要素で構成されています。横軸と縦軸、点、線、グラフ、凡例、図のタイトルなどがあります。横軸や縦軸は線の太さ、目盛りの間隔、数字の大きさなどに分割することも可能です。このように1つのグラフは数十、数百以上の要素の集合です。これら一つ一つの要素をレイヤーとして捉え、それを積み重ねることでグラフを作成します。これが簡単な{ggplot2}による作図のイメージですが、以下でもうちょっと目に見える形でこれを解説していきます。</p>
 </section><section id="RN4Eggplot2のイメージ" class="level3" data-number="17.2.2"><h3 data-number="17.2.2" class="anchored" data-anchor-id="RN4Eggplot2のイメージ">
 <span class="header-section-number">17.2.2</span> ggplot2のイメージ</h3>
@@ -725,7 +725,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 </div>
 </div>
-<p>このデータ<code>df</code>を使って <a href="#RN4Efig-visual1-fig1">図&nbsp;<span>17.4</span></a> のようなグラフを作成します。以下では作図のコードも載っていますが、詳しく理解しなくても結構です。理解しなくてもいいですが、必ずコードには目を通し、説明文との対応を自分で考えてください。</p>
+<p>このデータ<code>df</code>を使って <a href="#RN4Efig-visual1-fig1">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-fig1</span></a> のようなグラフを作成します。以下では作図のコードも載っていますが、詳しく理解しなくても結構です。理解しなくてもいいですが、必ずコードには目を通し、説明文との対応を自分で考えてください。</p>
 <div class="cell" data-fig.hegiht="4">
 <div class="sourceCode cell-code" id="RN4Ecb4"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb4-1"><a href="#RN4Ecb4-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> df) <span class="sc">+</span></span>
 <span id="RN4Ecb4-2"><a href="#RN4Ecb4-2"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> P, <span class="at">color =</span> Company_Type1), </span>
@@ -845,7 +845,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 </div>
 </div>
-<p>これで図が出来上がりました。このように{ggplot2}では図の要素をレイヤーと捉えます。このレイヤーを生成する関数が<code>ggplot()</code>、<code>geom_line()</code>、<code>lab()</code>などであり、これらを<code>+</code>演算子を用いて重ねていきます。このイメージを図にすると <a href="#RN4Efig-visual1-layer_example">図&nbsp;<span>17.11</span></a> のように表現できます。</p>
+<p>これで図が出来上がりました。このように{ggplot2}では図の要素をレイヤーと捉えます。このレイヤーを生成する関数が<code>ggplot()</code>、<code>geom_line()</code>、<code>lab()</code>などであり、これらを<code>+</code>演算子を用いて重ねていきます。このイメージを図にすると <a href="#RN4Efig-visual1-layer_example">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-layer_example</span></a> のように表現できます。</p>
 <div id="RN4Efig-visual1-layer_example" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="Figs/Visualization1/Layer_Example.png" class="img-fluid figure-img" style="width:85.0%"></p>
 <p></p><figcaption class="figure-caption">図&nbsp;17.11: {ggplot2}の図が出来上がるまで (全体像)</figcaption><p></p>
@@ -902,7 +902,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <p>マッピングは幾何オブジェクト関数内で行います。具体的には<code>geom_*()</code>内に<code>mapping = aes(マッピング)</code>で指定します。<code>aes()</code>も関数の一種です。散布図なら<code>geom_point(mapping = aes(x = X軸の変数, y = Y軸の変数))</code>です。ヒストグラムなら横軸のみを指定すればいいので<code>geom_histogram(mapping = aes(x = 変数名))</code>で十分です。マッピングは一般的には<code>geom_*()</code>の第一引数として渡しますが、この場合、<code>mapping =</code>は省略可能です。</p>
 <p>マッピングに必要な変数、つまり<code>aes()</code>に必要な引数は幾何オブジェクトによって異なります。散布図や折れ線グラフならX軸とY軸の情報が必須であるため、2つ必要です (<code>x</code>と<code>y</code>)。ヒストグラムは連続変数の度数分布表を自動的に作成してからグラフが作られるから1つが必要です (<code>x</code>)。また、等高線図の場合、高さの情報も必要なので3つの変数が必要です (<code>x</code>と<code>y</code>、<code>z</code>)。これらの引数は必ず指定する必要があります。</p>
 <p>以上の引数に加え、追加のマッピング情報を入れることも可能です。たとえば、鉄道事業者ごとの平均利用者数を時系列で示した最初の例を考えてみましょう。これは折れ線グラフですので、<code>mapping = aes(x = 年度, y = 利用者数)</code>までは必須です。しかし、この図にはもう一つの情報がありますね。それは事業者のタイプです。事業者のタイプごとに線の色を変えたい場合は、<code>aes()</code>内に<code>color = 事業者のタイプ</code>を、線の種類を変えたい場合は、<code>linetype = 事業者のタイプ</code>のように引数を追加します。こうすると2次元のプロットに3次元の情報 (年度、利用者数、事業者タイプ)を乗せることが可能です。むろん、4次元以上にすることも可能です。たとえば、地域ごとに異なる色を、事業者タイプごとに異なる線のタイプを指定する場合は、<code>mapping = aes(x = 年度, y = 利用者数, color = 地域, linetype = 事業者のタイプ)</code>のように指定します。<code>color</code>や<code>linetype</code>以外にも大きさ (<code>size</code>)、透明度 (<code>alpha</code>)、点のタイプ (<code>shape</code>)、面の色 (<code>fill</code>)などを指定することができます。</p>
-<p>それでは、最初にお見せした <a href="#RN4Efig-visual1-fig1">図&nbsp;<span>17.4</span></a> のマッピングはどうなるでしょうか。 <a href="#RN4Efig-visual1-fig1">図&nbsp;<span>17.4</span></a> の幾何オブジェクトは折れ線グラフ (<code>geom_line()</code>)と散布図 (<code>geom_point()</code>)の2つです。それぞれの幾何オブジェクトのマッピング情報をまとめたのが <a href="#RN4Etbl-visual1-mapping1">表&nbsp;<span>17.3</span></a> です。</p>
+<p>それでは、最初にお見せした <a href="#RN4Efig-visual1-fig1">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-fig1</span></a> のマッピングはどうなるでしょうか。 <a href="#RN4Efig-visual1-fig1">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-fig1</span></a> の幾何オブジェクトは折れ線グラフ (<code>geom_line()</code>)と散布図 (<code>geom_point()</code>)の2つです。それぞれの幾何オブジェクトのマッピング情報をまとめたのが <a href="#RN4Etbl-visual1-mapping1">表&nbsp;<span class="quarto-unresolved-ref">tbl-visual1-mapping1</span></a> です。</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="RN4Etbl-visual1-mapping1">
@@ -957,7 +957,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 </div>
 </div>
-<p>先ほどマッピング引数は幾何オブジェクト関数内で指定すると言いましたが、実は<code>ggplot()</code>内に入れ、<code>geom_*()</code>内では省略することも可能です。幾何オブジェクトが1つのみならどっちでも問題ありません。しかし、幾何オブジェクトが2つ以上の場合は注意が必要です。全ての幾何オブジェクトがマッピングを共有する場合は<code>ggplot()</code>の方が書く手間が省きます。たとえば、 <a href="#RN4Etbl-visual1-mapping1">表&nbsp;<span>17.3</span></a> を見ると、<code>geom_line()</code>と<code>geom_point()</code>は<code>x</code>、<code>y</code>、<code>color</code>引数の値が同じですから、<code>ggplot()</code>内に<code>aes()</code>を入れることも可能です。しかし、幾何オブジェクトがマッピングを共有しない場合は幾何オブジェクト関数内に別途指定する必要があります。あるいは、共有するところだけ、<code>ggplot()</code>に書いて、共有しない部分だけ幾何オブジェクトで指定することも可能です。したがって、上の図は以下のコードでも作成することができます。</p>
+<p>先ほどマッピング引数は幾何オブジェクト関数内で指定すると言いましたが、実は<code>ggplot()</code>内に入れ、<code>geom_*()</code>内では省略することも可能です。幾何オブジェクトが1つのみならどっちでも問題ありません。しかし、幾何オブジェクトが2つ以上の場合は注意が必要です。全ての幾何オブジェクトがマッピングを共有する場合は<code>ggplot()</code>の方が書く手間が省きます。たとえば、 <a href="#RN4Etbl-visual1-mapping1">表&nbsp;<span class="quarto-unresolved-ref">tbl-visual1-mapping1</span></a> を見ると、<code>geom_line()</code>と<code>geom_point()</code>は<code>x</code>、<code>y</code>、<code>color</code>引数の値が同じですから、<code>ggplot()</code>内に<code>aes()</code>を入れることも可能です。しかし、幾何オブジェクトがマッピングを共有しない場合は幾何オブジェクト関数内に別途指定する必要があります。あるいは、共有するところだけ、<code>ggplot()</code>に書いて、共有しない部分だけ幾何オブジェクトで指定することも可能です。したがって、上の図は以下のコードでも作成することができます。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb13"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb13-1"><a href="#RN4Ecb13-1"></a><span class="co"># geom_line()とgeom_point()はマッピング情報を共有しているため、</span></span>
 <span id="RN4Ecb13-2"><a href="#RN4Ecb13-2"></a><span class="co"># ggplot()内に指定</span></span>
@@ -972,7 +972,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </section><section id="RN4Eマッピング-その他" class="level3" data-number="17.3.4"><h3 data-number="17.3.4" class="anchored" data-anchor-id="RN4Eマッピング-その他">
 <span class="header-section-number">17.3.4</span> マッピング: その他</h3>
 <p>以上のことさえ覚えれば、とりあえず図は作れます。最後に、必須要素ではありませんが、幾何オブジェクトに使う引数について説明します。先ほど説明しました<code>color</code>や<code>linetype</code>、<code>size</code>などはマッピングの情報として使うことも可能ですが、<code>aes()</code>の外側に置くことも可能です。しかし、その挙動はかなり異なります。<code>color</code>が<code>aes()</code>の外側にある場合は、幾何オブジェクトの全要素に対して反映されます。</p>
-<p>たとえば、横軸が「ゲームのプレイ時間」、縦軸が「身長」の散布図を作成しるとします ( <a href="#RN4Efig-visual1-mapping2">図&nbsp;<span>17.13</span></a> )。ここで<code>color</code>引数を追加しますが、まずは<code>aes()</code>の外側に入れます。</p>
+<p>たとえば、横軸が「ゲームのプレイ時間」、縦軸が「身長」の散布図を作成しるとします ( <a href="#RN4Efig-visual1-mapping2">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-mapping2</span></a> )。ここで<code>color</code>引数を追加しますが、まずは<code>aes()</code>の外側に入れます。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb14"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb14-1"><a href="#RN4Ecb14-1"></a><span class="co"># 例1: 全ての点の色が赤になる</span></span>
 <span id="RN4Ecb14-2"><a href="#RN4Ecb14-2"></a>データ <span class="sc">%&gt;%</span></span>
@@ -995,7 +995,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <li>
 <code>color</code>の引数は変数名でなく、具体的な色を指定する点</li>
 </ol>
-<p>以上の2点です。<code>aes()</code>の内側に<code>color</code>を指定する場合 ( <a href="#RN4Efig-visual1-mapping3">図&nbsp;<span>17.14</span></a> ) は、以下のように変数名を指定します。たとえば、性別ごとに異なる色を付けるとしたら、</p>
+<p>以上の2点です。<code>aes()</code>の内側に<code>color</code>を指定する場合 ( <a href="#RN4Efig-visual1-mapping3">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-mapping3</span></a> ) は、以下のように変数名を指定します。たとえば、性別ごとに異なる色を付けるとしたら、</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb15"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb15-1"><a href="#RN4Ecb15-1"></a><span class="co"># 例2: 性別ごとに点の色が変わる</span></span>
 <span id="RN4Ecb15-2"><a href="#RN4Ecb15-2"></a>データ <span class="sc">%&gt;%</span></span>
@@ -1015,7 +1015,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </section><section id="RN4E座標系" class="level3" data-number="17.3.5"><h3 data-number="17.3.5" class="anchored" data-anchor-id="RN4E座標系">
 <span class="header-section-number">17.3.5</span> 座標系</h3>
 <p>座標系はデータが点や線、面などで出力される空間を意味し、<code>coord_*()</code>関数群を用いて操作します。</p>
-<p>座標系のズームイン (zoom-in) やズームアウト (zoom-out) を行う<code>coord_cartesian()</code>、横軸と縦軸を交換する<code>coord_flip()</code>、横軸と縦軸の比率を固定する<code>coord_fixed()</code>がよく使われます。座標系の説明は次章以降で詳しく解説しますが、ここでは座標系のズームインを見てみましょう。以下の <a href="#RN4Efig-visual1-coord1">図&nbsp;<span>17.15</span></a> は各国のCOVID19の感染者数を時系列で示したものです。これを見るとアメリカ、ブラジル、インドは大変だなーくらいしかわかりません。感染者数が比較的に少ない国のデータは線としては存在しますが、なかなか区別ができません。</p>
+<p>座標系のズームイン (zoom-in) やズームアウト (zoom-out) を行う<code>coord_cartesian()</code>、横軸と縦軸を交換する<code>coord_flip()</code>、横軸と縦軸の比率を固定する<code>coord_fixed()</code>がよく使われます。座標系の説明は次章以降で詳しく解説しますが、ここでは座標系のズームインを見てみましょう。以下の <a href="#RN4Efig-visual1-coord1">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-coord1</span></a> は各国のCOVID19の感染者数を時系列で示したものです。これを見るとアメリカ、ブラジル、インドは大変だなーくらいしかわかりません。感染者数が比較的に少ない国のデータは線としては存在しますが、なかなか区別ができません。</p>
 <div class="cell" data-fig.hegiht="5">
 <div class="cell-output-display">
 <div id="RN4Efig-visual1-coord1" class="quarto-figure quarto-figure-center anchored">
@@ -1025,7 +1025,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 </div>
 </div>
-<p>ここで座標系をズームインすると、一部の情報は失われますが、ズームインされた箇所はより詳細にグラフを観察できます。ズームインと言っても難しいものではありません。単に、軸の上限、下限を調整するだけです。たとえば、縦軸の上限を10万人に変更したのが <a href="#RN4Efig-visual1-coord2">図&nbsp;<span>17.16</span></a> です。アメリカなど感染者数が10万人を超える国家の時系列情報の一部は失われましたが、日中韓などのデータはより見やすくなったかと思います<a href="#RN4Efn2" class="footnote-ref" id="RN4Efnref2" role="doc-noteref"><sup>2</sup></a>。</p>
+<p>ここで座標系をズームインすると、一部の情報は失われますが、ズームインされた箇所はより詳細にグラフを観察できます。ズームインと言っても難しいものではありません。単に、軸の上限、下限を調整するだけです。たとえば、縦軸の上限を10万人に変更したのが <a href="#RN4Efig-visual1-coord2">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-coord2</span></a> です。アメリカなど感染者数が10万人を超える国家の時系列情報の一部は失われましたが、日中韓などのデータはより見やすくなったかと思います<a href="#RN4Efn2" class="footnote-ref" id="RN4Efnref2" role="doc-noteref"><sup>2</sup></a>。</p>
 <div class="cell" data-fig.hegiht="5">
 <div class="cell-output-display">
 <div id="RN4Efig-visual1-coord2" class="quarto-figure quarto-figure-center anchored">
@@ -1035,7 +1035,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 </div>
 </div>
-<p>また、同じ棒グラフや散布図、折れ線グラフでも座標系を変えることによって図の見方が劇的に変わることもあります。我々にとって最も馴染みのある座標系はデカルト座標系 (直交座標系)です。このデカルト座標系に切片0、傾き1の直線を引きます。そして同じ図に対して座標系のみを極座標系 (polar coordinates system)に変更します。この2つを比較したのが <a href="#RN4Efig-visual1-coord3">図&nbsp;<span>17.17</span></a> です。この2つの図は同じデータ、同じ変数、同じ幾何オブジェクトで構成されています。異なるのは座標系ですが、見方が劇的に変わります。</p>
+<p>また、同じ棒グラフや散布図、折れ線グラフでも座標系を変えることによって図の見方が劇的に変わることもあります。我々にとって最も馴染みのある座標系はデカルト座標系 (直交座標系)です。このデカルト座標系に切片0、傾き1の直線を引きます。そして同じ図に対して座標系のみを極座標系 (polar coordinates system)に変更します。この2つを比較したのが <a href="#RN4Efig-visual1-coord3">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-coord3</span></a> です。この2つの図は同じデータ、同じ変数、同じ幾何オブジェクトで構成されています。異なるのは座標系ですが、見方が劇的に変わります。</p>
 <div class="cell">
 
 </div>
@@ -1048,7 +1048,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 </div>
 </div>
-<p>こんな座標系を実際に使う機会は多くないかも知れませんが、極座標系は割と身近なところで見ることができます。それは積み上げ棒グラフと円グラフの関係です。 <a href="#RN4Efig-visual1-coord4">図&nbsp;<span>17.18</span></a> はデカルト座標系上の積み上げ棒グラフを極座標系に変換したものです。</p>
+<p>こんな座標系を実際に使う機会は多くないかも知れませんが、極座標系は割と身近なところで見ることができます。それは積み上げ棒グラフと円グラフの関係です。 <a href="#RN4Efig-visual1-coord4">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-coord4</span></a> はデカルト座標系上の積み上げ棒グラフを極座標系に変換したものです。</p>
 <div class="cell">
 
 </div>
@@ -1065,8 +1065,8 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </section><section id="RN4Eスケール" class="level3" data-number="17.3.6"><h3 data-number="17.3.6" class="anchored" data-anchor-id="RN4Eスケール">
 <span class="header-section-number">17.3.6</span> スケール</h3>
 <p>既に説明しました通り、{ggplot2}は様々な幾何オブジェクトがあり、これによってグラフ上におけるデータの示し方が変わります。例えば、散布図だとデータは点として表現され、折れ線グラフだと線、棒グラフやヒストグラムだと面で表現されます。これらの点、線、面などが持つ情報がスケール (scale)です。点だと縦軸上の位置、横軸上の位置が必ず含まれ、他にも点の形、点の大きさ、点の色、枠線の色、透明度などの情報を含むことが可能です。線も線が折れるポイントの横軸・縦軸上の位置、線の太さ、線の色などがあります。</p>
-<p>この形、色、大きさ、太さなどを調整するためには<code>scale_*_*()</code>関数群を使います。例えば、 <a href="#RN4Efig-visual1-mapping3">図&nbsp;<span>17.14</span></a> の場合、点は横軸上の位置、縦軸上の位置、色の3つのスケールを持っています。横軸と縦軸は連続変数 (時間と身長)、色は名目変数 (性別)です。ここで横軸のスケールを調整するためには<code>scale_x_continuous()</code>レイヤーを追加します。縦軸も同様に<code>scale_y_continuous()</code>を使います。ここの<code>x</code>と<code>y</code>はスケール、<code>continuous</code>は連続変数であることを意味します。それでは、色を調整するためにはどうすれば良いでしょうか。それは<code>scale_color_manual()</code>です。<code>color</code>は色を、<code>manual</code>は手動調整を意味しますが、主に性別や都道府県のような名目変数のスケール調整に使います。</p>
-<p>これらの<code>scale_*_*()</code>関数群は点、線、面が持つ位置情報や性別を変更することではなく、その見せ方を変更するだけです。 <a href="#RN4Efig-visual1-mapping3">図&nbsp;<span>17.14</span></a> の縦軸の目盛りは「150、160、170、180」となっていますが、<code>scale_y_continuous()</code>を使うとこの目盛りが変わります。点の位置が変わることはありません。たとえば、以下のコードは<code>scale_y_continuous()</code>を使って縦軸の目盛りを5cm刻みに変更するためのコードであり、 <a href="#RN4Efig-visual1-scale1">図&nbsp;<span>17.19</span></a> はその結果です。</p>
+<p>この形、色、大きさ、太さなどを調整するためには<code>scale_*_*()</code>関数群を使います。例えば、 <a href="#RN4Efig-visual1-mapping3">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-mapping3</span></a> の場合、点は横軸上の位置、縦軸上の位置、色の3つのスケールを持っています。横軸と縦軸は連続変数 (時間と身長)、色は名目変数 (性別)です。ここで横軸のスケールを調整するためには<code>scale_x_continuous()</code>レイヤーを追加します。縦軸も同様に<code>scale_y_continuous()</code>を使います。ここの<code>x</code>と<code>y</code>はスケール、<code>continuous</code>は連続変数であることを意味します。それでは、色を調整するためにはどうすれば良いでしょうか。それは<code>scale_color_manual()</code>です。<code>color</code>は色を、<code>manual</code>は手動調整を意味しますが、主に性別や都道府県のような名目変数のスケール調整に使います。</p>
+<p>これらの<code>scale_*_*()</code>関数群は点、線、面が持つ位置情報や性別を変更することではなく、その見せ方を変更するだけです。 <a href="#RN4Efig-visual1-mapping3">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-mapping3</span></a> の縦軸の目盛りは「150、160、170、180」となっていますが、<code>scale_y_continuous()</code>を使うとこの目盛りが変わります。点の位置が変わることはありません。たとえば、以下のコードは<code>scale_y_continuous()</code>を使って縦軸の目盛りを5cm刻みに変更するためのコードであり、 <a href="#RN4Efig-visual1-scale1">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-scale1</span></a> はその結果です。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb16"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb16-1"><a href="#RN4Ecb16-1"></a><span class="co"># scale_y_continuous()の例</span></span>
 <span id="RN4Ecb16-2"><a href="#RN4Ecb16-2"></a>データ <span class="sc">%&gt;%</span></span>
@@ -1084,7 +1084,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 </div>
 </div>
-<p>また、性別ごとの色を変更する際は<code>scale_color_manual()</code>を使います（ <a href="#RN4Efig-visual1-scale2">図&nbsp;<span>17.20</span></a> ）。</p>
+<p>また、性別ごとの色を変更する際は<code>scale_color_manual()</code>を使います（ <a href="#RN4Efig-visual1-scale2">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-scale2</span></a> ）。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="RN4Ecb17"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="RN4Ecb17-1"><a href="#RN4Ecb17-1"></a><span class="co"># scale_color_manual()の例</span></span>
 <span id="RN4Ecb17-2"><a href="#RN4Ecb17-2"></a>データ <span class="sc">%&gt;%</span></span>
@@ -1107,7 +1107,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </section><section id="RN4Eファセット" class="level3" data-number="17.3.7"><h3 data-number="17.3.7" class="anchored" data-anchor-id="RN4Eファセット">
 <span class="header-section-number">17.3.7</span> ファセット</h3>
 <p>ファセット (facet)は日本語では「面」、「切子面」などで訳されますが、誤解を招く可能性があるため、本書ではそのままファセットと訳します。ファセットとはデータの部分集合 (subset)を対象にしたグラフを意味します。</p>
-<p>たとえば、フリーダムハウスでは毎年、各国を「自由」、「部分的に自由」、「不自由」と格付けをし、結果を公表しています。世界に自由な国、部分的に自由な国、不自由な国が何カ国あるかを大陸ごとに示したいとします。カテゴリごとの個数を示すには棒グラフが効果的であり、 <a href="#RN4Efig-visual1-facet1">図&nbsp;<span>17.21</span></a> のように示すことができます。</p>
+<p>たとえば、フリーダムハウスでは毎年、各国を「自由」、「部分的に自由」、「不自由」と格付けをし、結果を公表しています。世界に自由な国、部分的に自由な国、不自由な国が何カ国あるかを大陸ごとに示したいとします。カテゴリごとの個数を示すには棒グラフが効果的であり、 <a href="#RN4Efig-visual1-facet1">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-facet1</span></a> のように示すことができます。</p>
 <div class="cell" data-fig.hegiht="4">
 <div class="cell-output-display">
 <div id="RN4Efig-visual1-facet1" class="quarto-figure quarto-figure-center anchored">
@@ -1118,7 +1118,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 </div>
 <p>このグラフを見ると各大陸に自由な国がどれほどあるかが分かりますが、人によっては読みにくいかも知れません。できれば大陸ごとに分けたグラフの方が見やすいでしょう。そのためにはデータを特定の大陸に絞って、そのデータを用いた棒グラフを作り、最終的には出来上がったグラフたちを結合する必要があります。</p>
-<p>しかし、{ggplot2}のファセットを指定するとそのような手間が省けます。これはデータを大陸ごとの部分集合に分割し、1つのプロット上に小さい複数のプロットを出力します（ <a href="#RN4Efig-visual1-facet2">図&nbsp;<span>17.22</span></a> ）。</p>
+<p>しかし、{ggplot2}のファセットを指定するとそのような手間が省けます。これはデータを大陸ごとの部分集合に分割し、1つのプロット上に小さい複数のプロットを出力します（ <a href="#RN4Efig-visual1-facet2">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-facet2</span></a> ）。</p>
 <div class="cell" data-fig.hegiht="4">
 <div class="cell-output-display">
 <div id="RN4Efig-visual1-facet2" class="quarto-figure quarto-figure-center anchored">
@@ -1144,7 +1144,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </ul>
 <section id="RN4Eデータインク比" class="level3" data-number="17.4.1"><h3 data-number="17.4.1" class="anchored" data-anchor-id="RN4Eデータインク比">
 <span class="header-section-number">17.4.1</span> データ・インク比</h3>
-<p>可視化が本格的に注目を浴びるようになったのはEdward R. Tufteの1983年著作、<em>The Visual Display of Quantitative Information</em>からですが、この本のメッセージは単純で、「<em>データ・インク比 (Data-ink ratio) を最大化せよ</em>」の一言に要約できます。データ・インク比は以下のように定義されます <span class="citation" data-cites="Tufte:2001">(<a href="references.html#RN4Eref-Tufte:2001" role="doc-biblioref">Tufte 2001</a>)</span>。</p>
+<p>可視化が本格的に注目を浴びるようになったのはEdward R. Tufteの1983年著作、<em>The Visual Display of Quantitative Information</em>からですが、この本のメッセージは単純で、「<em>データ・インク比 (Data-ink ratio) を最大化せよ</em>」の一言に要約できます。データ・インク比は以下のように定義されます <span class="citation" data-cites="Tufte:2001">(<a href="#RN4Eref-Tufte:2001" role="doc-biblioref">Tufte 2001</a>)</span>。</p>
 <p><span class="math display">\[\begin{align}
 \text{Data-ink ratio} = &amp; \frac{\text{data-ink}}{\text{total ink used to print the graphic}} \\
 = &amp; \text{proportion of a graphic's ink devoted to the} \\
@@ -1153,7 +1153,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   &amp; \text{without loss of data-information.}
 \end{align}\]</span></p>
 <p>データ・インク比は「データ・インク」を「グラフの出力に使用されたインクの総量」で割ったものです。<strong>データ・インク</strong>とはデータの情報を含むインクの量を意味します。これを言い換えると、グラフにおいて情報損失なしに除去できるグラフの要素が占める割合を1から引いたものです。</p>
-<p>ここで1つの例を紹介します。たとえば、G20加盟国におけるCOVID19の累積感染者数を時系列で示すとします。そこで最近、インドにおいて感染者数が急増していることを示したいとします。まず、 <a href="#RN4Efig-visual1-ratio1">図&nbsp;<span>17.23</span></a> から見ましょう。</p>
+<p>ここで1つの例を紹介します。たとえば、G20加盟国におけるCOVID19の累積感染者数を時系列で示すとします。そこで最近、インドにおいて感染者数が急増していることを示したいとします。まず、 <a href="#RN4Efig-visual1-ratio1">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-ratio1</span></a> から見ましょう。</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="RN4Efig-visual1-ratio1" class="quarto-figure quarto-figure-center anchored">
@@ -1163,7 +1163,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 </div>
 </div>
-<p>そもそもどの線がインドを表しているのかが分かりにくいです。カテゴリが増えると使える色に制約が生じてしまうからです。実際、図からフランス、ドイツ、インド、インドネシアを区別するのは非常に難しいでしょう。現実に色分けが出来る天才的な色覚を持つ読者ならこちらの方が情報も豊富であり、いいかも知れません。しかし、インドにおける感染者数の急増を示すには無駄な情報が多すぎます。そこでインドを除く国の色をグレーにまとめたものが <a href="#RN4Efig-visual1-ratio2">図&nbsp;<span>17.24</span></a> です。</p>
+<p>そもそもどの線がインドを表しているのかが分かりにくいです。カテゴリが増えると使える色に制約が生じてしまうからです。実際、図からフランス、ドイツ、インド、インドネシアを区別するのは非常に難しいでしょう。現実に色分けが出来る天才的な色覚を持つ読者ならこちらの方が情報も豊富であり、いいかも知れません。しかし、インドにおける感染者数の急増を示すには無駄な情報が多すぎます。そこでインドを除く国の色をグレーにまとめたものが <a href="#RN4Efig-visual1-ratio2">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-ratio2</span></a> です。</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="RN4Efig-visual1-ratio2" class="quarto-figure quarto-figure-center anchored">
@@ -1174,31 +1174,31 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 </div>
 <p>こちらの方は多くの情報が失われています。アメリカや日本、韓国がどの線に該当するかが分かりません。しかし、図で示したいメッセージとは無関係でしょう。ここからもう一歩踏み込んで、「ならばインド以外の線を消せばいいじゃん」と思う方もいるかも知れません。しかし、インドの線のみ残している場合、比較対象がなくなるため、急増していることを示しにくくなります。この場合、示したい情報の損失が生じるため、インド以外の国の線はデータ・インクに含まれます。</p>
-<p>しかし、このデータ・インク比に基づく可視化は常に正しいとは言えません。そこでもう一つの例を紹介します。 <a href="#RN4Efig-visual1-ratio3">図&nbsp;<span>17.25</span></a> の左は <span class="citation" data-cites="Kuznicki_McCutcheon:1979">Kuznicki and McCutcheon (<a href="references.html#RN4Eref-Kuznicki_McCutcheon:1979" role="doc-biblioref">1979</a>)</span> の論文に掲載された図であり、右はTufteによる改善案です。</p>
+<p>しかし、このデータ・インク比に基づく可視化は常に正しいとは言えません。そこでもう一つの例を紹介します。 <a href="#RN4Efig-visual1-ratio3">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-ratio3</span></a> の左は <span class="citation" data-cites="Kuznicki_McCutcheon:1979">Kuznicki and McCutcheon (<a href="#RN4Eref-Kuznicki_McCutcheon:1979" role="doc-biblioref">1979</a>)</span> の論文に掲載された図であり、右はTufteによる改善案です。</p>
 <div id="RN4Efig-visual1-ratio3" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="Figs/Visualization1/Dataink_ratio2.png" class="img-fluid figure-img" style="width:75.0%"></p>
 <p></p><figcaption class="figure-caption">図&nbsp;17.25: データ・インク比改善の例</figcaption><p></p>
 </figure>
 </div>
-<p>確かに棒グラフは面を使用しており、高さを示すには線のみで十分かも知れません。また、エラー・バーも線の位置を若干ずらすことによって表現できます。それでは、読者の皆さんから見て、どのグラフが見やすいと思いますか。これについて興味深い研究結果があります。<span class="citation" data-cites="Inbar_et_al:2007">Inbar, Tractinsky, and Meyer (<a href="references.html#RN4Eref-Inbar_et_al:2007" role="doc-biblioref">2007</a>)</span> は87人の学部生を対象に3つのグループに分けました。そして、学生たちは <a href="#RN4Efig-visual1-ratio4">図&nbsp;<span>17.26</span></a> を「美しさ」、「明瞭さ」、「簡潔さ」の3つの面で評価し、最後にどの図が最も好きかを尋ねました。</p>
+<p>確かに棒グラフは面を使用しており、高さを示すには線のみで十分かも知れません。また、エラー・バーも線の位置を若干ずらすことによって表現できます。それでは、読者の皆さんから見て、どのグラフが見やすいと思いますか。これについて興味深い研究結果があります。<span class="citation" data-cites="Inbar_et_al:2007">Inbar, Tractinsky, and Meyer (<a href="#RN4Eref-Inbar_et_al:2007" role="doc-biblioref">2007</a>)</span> は87人の学部生を対象に3つのグループに分けました。そして、学生たちは <a href="#RN4Efig-visual1-ratio4">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-ratio4</span></a> を「美しさ」、「明瞭さ」、「簡潔さ」の3つの面で評価し、最後にどの図が最も好きかを尋ねました。</p>
 <ul>
 <li>
-<strong>グループ1:</strong> <a href="#RN4Efig-visual1-ratio4">図&nbsp;<span>17.26</span></a> のAとDを評価</li>
+<strong>グループ1:</strong> <a href="#RN4Efig-visual1-ratio4">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-ratio4</span></a> のAとDを評価</li>
 <li>
-<strong>グループ2:</strong> <a href="#RN4Efig-visual1-ratio4">図&nbsp;<span>17.26</span></a> のAとDを評価。
+<strong>グループ2:</strong> <a href="#RN4Efig-visual1-ratio4">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-ratio4</span></a> のAとDを評価。
 <ul>
-<li>ただし、事前にTufteスタイル ( <a href="#RN4Efig-visual1-ratio4">図&nbsp;<span>17.26</span></a> のD)の読み方について学習させる。</li>
+<li>ただし、事前にTufteスタイル ( <a href="#RN4Efig-visual1-ratio4">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-ratio4</span></a> のD)の読み方について学習させる。</li>
 </ul>
 </li>
 <li>
-<strong>グループ3:</strong> <a href="#RN4Efig-visual1-ratio4">図&nbsp;<span>17.26</span></a> のA、B、C、Dを評価</li>
+<strong>グループ3:</strong> <a href="#RN4Efig-visual1-ratio4">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-ratio4</span></a> のA、B、C、Dを評価</li>
 </ul>
 <div id="RN4Efig-visual1-ratio4" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="Figs/Visualization1/Dataink_ratio3.png" class="img-fluid figure-img" style="width:75.0%"></p>
-<p></p><figcaption class="figure-caption">図&nbsp;17.26: <span class="citation" data-cites="Inbar_et_al:2007">Inbar, Tractinsky, and Meyer (<a href="references.html#RN4Eref-Inbar_et_al:2007" role="doc-biblioref">2007</a>)</span> から抜粋</figcaption><p></p>
+<p></p><figcaption class="figure-caption">図&nbsp;17.26: <span class="citation" data-cites="Inbar_et_al:2007">Inbar, Tractinsky, and Meyer (<a href="#RN4Eref-Inbar_et_al:2007" role="doc-biblioref">2007</a>)</span> から抜粋</figcaption><p></p>
 </figure>
 </div>
-<p>皆さんもある程度は結果が予想できたかと思いますが、いずれのグループにおいても、Tufteが推奨する <a href="#RN4Efig-visual1-ratio4">図&nbsp;<span>17.26</span></a> のDが「美しさ」、「明瞭さ」、「簡潔さ」のすべての点において最下位でした。また、どの図が最も好きかに対しても <a href="#RN4Etbl-visual1-ratio5">表&nbsp;<span>17.4</span></a> のような結果が得られました。</p>
+<p>皆さんもある程度は結果が予想できたかと思いますが、いずれのグループにおいても、Tufteが推奨する <a href="#RN4Efig-visual1-ratio4">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-ratio4</span></a> のDが「美しさ」、「明瞭さ」、「簡潔さ」のすべての点において最下位でした。また、どの図が最も好きかに対しても <a href="#RN4Etbl-visual1-ratio5">表&nbsp;<span class="quarto-unresolved-ref">tbl-visual1-ratio5</span></a> のような結果が得られました。</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="RN4Etbl-visual1-ratio5">
@@ -1239,28 +1239,28 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 </div>
 </div>
-<p><a href="#RN4Efig-visual1-ratio4">図&nbsp;<span>17.26</span></a> のDはデータ・インク比の観点から見れば最も優れた図ですが、それが分かりやすさを意味するわけではありません。今は、人々の認知の観点からも図を評価するようになり、近年の可視化の教科書ではこれらに関しても詳しく触れているものが多いです。<span class="citation" data-cites="Tufte:2001">Tufte (<a href="references.html#RN4Eref-Tufte:2001" role="doc-biblioref">2001</a>)</span> の本は可視化を勉強する人にとって必読の書かも知れませんが、これだけでは十分ではなく、近年の教科書も合わせて読むことをおすすめします。</p>
+<p><a href="#RN4Efig-visual1-ratio4">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-ratio4</span></a> のDはデータ・インク比の観点から見れば最も優れた図ですが、それが分かりやすさを意味するわけではありません。今は、人々の認知の観点からも図を評価するようになり、近年の可視化の教科書ではこれらに関しても詳しく触れているものが多いです。<span class="citation" data-cites="Tufte:2001">Tufte (<a href="#RN4Eref-Tufte:2001" role="doc-biblioref">2001</a>)</span> の本は可視化を勉強する人にとって必読の書かも知れませんが、これだけでは十分ではなく、近年の教科書も合わせて読むことをおすすめします。</p>
 </section><section id="RN4E次元プロット" class="level3" data-number="17.4.2"><h3 data-number="17.4.2" class="anchored" data-anchor-id="RN4E次元プロット">
 <span class="header-section-number">17.4.2</span> 3次元プロット</h3>
-<p>これまで見てきた全ての図は縦軸と横軸しか持たない2次元プロットです。しかし、実際の生活において3次元プロットを見にすることは珍しくないでしょう。3次元プロットの場合、縦軸と横軸以外に、高さ (深さ)といったもう一つの軸が含まれます。しかし、多くの場合、このもう一つの軸はグラフにおいて不要な場合が多いです。たとえば、 <a href="#RN4Efig-visual1-3dplot1">図&nbsp;<span>17.27</span></a> をを見てみましょう<a href="#RN4Efn3" class="footnote-ref" id="RN4Efnref3" role="doc-noteref"><sup>3</sup></a>。これはCOVID19による定額給付金の給付済み金額を時系列で並べたものです。</p>
+<p>これまで見てきた全ての図は縦軸と横軸しか持たない2次元プロットです。しかし、実際の生活において3次元プロットを見にすることは珍しくないでしょう。3次元プロットの場合、縦軸と横軸以外に、高さ (深さ)といったもう一つの軸が含まれます。しかし、多くの場合、このもう一つの軸はグラフにおいて不要な場合が多いです。たとえば、 <a href="#RN4Efig-visual1-3dplot1">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-3dplot1</span></a> をを見てみましょう<a href="#RN4Efn3" class="footnote-ref" id="RN4Efnref3" role="doc-noteref"><sup>3</sup></a>。これはCOVID19による定額給付金の給付済み金額を時系列で並べたものです。</p>
 <div id="RN4Efig-visual1-3dplot1" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="Figs/Visualization1/garbage_graph.png" class="img-fluid figure-img" style="width:75.0%"></p>
 <p></p><figcaption class="figure-caption">図&nbsp;17.27: 3次元プロットの例 (1)</figcaption><p></p>
 </figure>
 </div>
-<p>この図の目的は筆者にとってはよく分かりませんが、少なくとも給付金が順調（？）に配られているということですかね。その傾向を見るにはこの図は大きな問題はありません。しかし、細かい数値を見ようとすると誤解が生じる可能性があります。たとえば、7月22日の給付済み額は12.12兆円です。しかし、 <a href="#RN4Efig-visual1-3dplot2">図&nbsp;<span>17.28</span></a> を見ると、7月22日の棒は12兆円に達しておりません。なぜでしょうか。</p>
-<p>これは棒と壁（？）との間隔が理由です。 <a href="#RN4Efig-visual1-3dplot2">図&nbsp;<span>17.28</span></a> の右下にある青い円を見ればお分かりかと思いますが、棒が浮いています。この棒を壁（？）側に密着すると12の線を超えると考えられますが、このままだと12兆円に達していないのに12兆円超えてると、何かの入力ミスじゃないかと考えさせるかも知れません。</p>
+<p>この図の目的は筆者にとってはよく分かりませんが、少なくとも給付金が順調（？）に配られているということですかね。その傾向を見るにはこの図は大きな問題はありません。しかし、細かい数値を見ようとすると誤解が生じる可能性があります。たとえば、7月22日の給付済み額は12.12兆円です。しかし、 <a href="#RN4Efig-visual1-3dplot2">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-3dplot2</span></a> を見ると、7月22日の棒は12兆円に達しておりません。なぜでしょうか。</p>
+<p>これは棒と壁（？）との間隔が理由です。 <a href="#RN4Efig-visual1-3dplot2">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-3dplot2</span></a> の右下にある青い円を見ればお分かりかと思いますが、棒が浮いています。この棒を壁（？）側に密着すると12の線を超えると考えられますが、このままだと12兆円に達していないのに12兆円超えてると、何かの入力ミスじゃないかと考えさせるかも知れません。</p>
 <div id="RN4Efig-visual1-3dplot2" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="Figs/Visualization1/garbage_graph2.png" class="img-fluid figure-img" style="width:75.0%"></p>
 <p></p><figcaption class="figure-caption">図&nbsp;17.28: 3次元プロットの例 (2)</figcaption><p></p>
 </figure>
 </div>
-<p>この図において3D要素の必要性は0と言えます。2次元の棒グラフ ( <a href="#RN4Efig-visual1-3dplot3">図&nbsp;<span>17.29</span></a> )、または折れ線グラフ ( <a href="#RN4Efig-visual1-3dplot4">図&nbsp;<span>17.30</span></a> )の方がデータ・インク比の観点からも、分かりやすさからも優れていると言えるでしょう。</p>
+<p>この図において3D要素の必要性は0と言えます。2次元の棒グラフ ( <a href="#RN4Efig-visual1-3dplot3">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-3dplot3</span></a> )、または折れ線グラフ ( <a href="#RN4Efig-visual1-3dplot4">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-3dplot4</span></a> )の方がデータ・インク比の観点からも、分かりやすさからも優れていると言えるでしょう。</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="RN4Efig-visual1-3dplot3" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="visualization1_files/figure-html/fig-visual1-3dplot3-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">図&nbsp;17.29: <a href="#RN4Efig-visual1-3dplot1">図&nbsp;<span>17.27</span></a> を2次元プロットに再構成した例 (棒グラフ)</figcaption><p></p>
+<p></p><figcaption class="figure-caption">図&nbsp;17.29: <a href="#RN4Efig-visual1-3dplot1">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-3dplot1</span></a> を2次元プロットに再構成した例 (棒グラフ)</figcaption><p></p>
 </figure>
 </div>
 </div>
@@ -1269,30 +1269,30 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div id="RN4Efig-visual1-3dplot4" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="visualization1_files/figure-html/fig-visual1-3dplot4-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">図&nbsp;17.30: <a href="#RN4Efig-visual1-3dplot1">図&nbsp;<span>17.27</span></a> を2次元プロットに再構成した例 (折れ線グラフ)</figcaption><p></p>
+<p></p><figcaption class="figure-caption">図&nbsp;17.30: <a href="#RN4Efig-visual1-3dplot1">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-3dplot1</span></a> を2次元プロットに再構成した例 (折れ線グラフ)</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
-<p>ただ、総務省の図はまだマシかも知れません。世の中には誤解を招かすために作成された3次元プロットもあります。以下の <a href="#RN4Efig-visual1-3dplot5">図&nbsp;<span>17.31</span></a> は早稲田アカデミーが作成した早慶高の合格者数を年度ごとに示した図です。2001年は754人で2012年は1494人です。比較対象がないので本当に12年連続全国No.1かどうかは判断できませんが、2倍近く増加したことは分かります。ただし、棒グラフの高さを見ると、2倍どころか3倍程度に見えます。他にも一時期、合格者が減少した時期 (2002、2003年)があるにもかかわらず、あまり目立ちません。これには2つの原因があります。それは(1)多分、ベースラインが0人ではない、(2) 遠近法により遠いものは小さく見えることです。</p>
+<p>ただ、総務省の図はまだマシかも知れません。世の中には誤解を招かすために作成された3次元プロットもあります。以下の <a href="#RN4Efig-visual1-3dplot5">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-3dplot5</span></a> は早稲田アカデミーが作成した早慶高の合格者数を年度ごとに示した図です。2001年は754人で2012年は1494人です。比較対象がないので本当に12年連続全国No.1かどうかは判断できませんが、2倍近く増加したことは分かります。ただし、棒グラフの高さを見ると、2倍どころか3倍程度に見えます。他にも一時期、合格者が減少した時期 (2002、2003年)があるにもかかわらず、あまり目立ちません。これには2つの原因があります。それは(1)多分、ベースラインが0人ではない、(2) 遠近法により遠いものは小さく見えることです。</p>
 <div id="RN4Efig-visual1-3dplot5" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="Figs/Visualization1/garbage_graph3.jpg" class="img-fluid figure-img" style="width:75.0%"></p>
 <p></p><figcaption class="figure-caption">図&nbsp;17.31: 3次元プロットの例 (3)</figcaption><p></p>
 </figure>
 </div>
-<p>これを2次元棒グラフに直してものが <a href="#RN4Efig-visual1-3dplot6">図&nbsp;<span>17.32</span></a> です。こちらの方が合格者をより客観的に確認することができるでしょう。</p>
+<p>これを2次元棒グラフに直してものが <a href="#RN4Efig-visual1-3dplot6">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-3dplot6</span></a> です。こちらの方が合格者をより客観的に確認することができるでしょう。</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="RN4Efig-visual1-3dplot6" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure"><p><img src="visualization1_files/figure-html/fig-visual1-3dplot6-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">図&nbsp;17.32: <a href="#RN4Efig-visual1-3dplot5">図&nbsp;<span>17.31</span></a> を2次元プロットに再構成した例</figcaption><p></p>
+<p></p><figcaption class="figure-caption">図&nbsp;17.32: <a href="#RN4Efig-visual1-3dplot5">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-3dplot5</span></a> を2次元プロットに再構成した例</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 <p>むろん、3次元プロットそのものが悪いわけではありません。むしろ、3次元の方が解釈しやすい、見やすいケースもあるでしょう。それには共通点があり、深さというもう一つの軸も何らかの情報があるという点です。一方、ここでお見せしました2つの例の場合、深さは何の情報も持ちません。つまり、データ・インク比の観点から見れば望ましくない図です。</p>
 <div id="RN4Equarto-navigation-envelope" class="hidden">
-<p><span class="hidden" data-render-id="quarto-int-sidebar-title">私たちのR</span> <span class="hidden" data-render-id="quarto-int-navbar-title">私たちのR</span> <span class="hidden" data-render-id="quarto-int-next"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">可視化 [基礎]</span></span> <span class="hidden" data-render-id="quarto-int-prev"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">文字列の処理</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/index.html">紹介</span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-1">Rの導入</span> <span class="hidden" data-render-id="quarto-int-sidebar:/aboutR.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R?</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/installation.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Rのインストール</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/ide.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">IDEの導入</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/r_customize.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">分析環境のカスタマイズ</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/packages.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Rパッケージ</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-2">Rの基礎</span> <span class="hidden" data-render-id="quarto-int-sidebar:/r_basic.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">基本的な操作</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/io.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">データの入出力</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/datatype.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">データ型</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/datastructure.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">データ構造</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/programming.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Rプログラミングの基礎</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/functions.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">関数の自作</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-3">データハンドリング</span> <span class="hidden" data-render-id="quarto-int-sidebar:/datahandling1.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">データハンドリング [抽出]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/datahandling2.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">データハンドリング [拡張]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/factor.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">データハンドリング [factor型]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/tidydata.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">整然データ構造</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/string.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">文字列の処理</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-4">可視化</span> <span class="hidden" data-render-id="quarto-int-sidebar:/visualization1.html"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">可視化 [理論]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/visualization2.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">可視化 [基礎]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/visualization3.html"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">可視化 [応用]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/visualization4.html"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">可視化 [発展]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/visualization5.html"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">モデルの可視化</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-5">再現可能な研究</span> <span class="hidden" data-render-id="quarto-int-sidebar:/rmarkdown.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">R Markdown [基礎]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/rmarkdown2.html"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">R Markdown [応用]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/quarto.html"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Quarto入門</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/table.html"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">表の作成</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/renv.html"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">分析環境の管理</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-6">中級者向け</span> <span class="hidden" data-render-id="quarto-int-sidebar:/iteration.html"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">反復処理</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/oop.html"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">オブジェクト指向プログラミング</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/monte.html"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">モンテカルロ・シミュレーション</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/scraping.html"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">スクレイピング</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/api.html"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">API</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-7">付録</span> <span class="hidden" data-render-id="quarto-int-sidebar:/tips.html">R Tips</span> <span class="hidden" data-render-id="quarto-int-sidebar:/session.html">本書の執筆環境</span> <span class="hidden" data-render-id="quarto-int-sidebar:/references.html">参考文献</span> <span class="hidden" data-render-id="footer-center">Copyright 2022, Jaehyun Song and Yuki Yanai</span></p>
+<p><span class="hidden" data-render-id="quarto-int-sidebar-title">私たちのR</span> <span class="hidden" data-render-id="quarto-int-navbar-title">私たちのR</span> <span class="hidden" data-render-id="quarto-int-next"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">可視化 [基礎]</span></span> <span class="hidden" data-render-id="quarto-int-prev"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">文字列の処理</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/index.html">紹介</span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-1">Rの導入</span> <span class="hidden" data-render-id="quarto-int-sidebar:/aboutr.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R?</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/installation.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Rのインストール</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/ide.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">IDEの導入</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/r_customize.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">分析環境のカスタマイズ</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/packages.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Rパッケージ</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-2">Rの基礎</span> <span class="hidden" data-render-id="quarto-int-sidebar:/r_basic.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">基本的な操作</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/io.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">データの入出力</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/datatype.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">データ型</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/datastructure.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">データ構造</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/programming.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Rプログラミングの基礎</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/functions.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">関数の自作</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-3">データハンドリング</span> <span class="hidden" data-render-id="quarto-int-sidebar:/datahandling1.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">データハンドリング [抽出]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/datahandling2.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">データハンドリング [拡張]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/factor.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">データハンドリング [factor型]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/tidydata.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">整然データ構造</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/string.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">文字列の処理</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-4">可視化</span> <span class="hidden" data-render-id="quarto-int-sidebar:/visualization1.html"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">可視化 [理論]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/visualization2.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">可視化 [基礎]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/visualization3.html"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">可視化 [応用]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/visualization4.html"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">可視化 [発展]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/visualization5.html"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">モデルの可視化</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-5">再現可能な研究</span> <span class="hidden" data-render-id="quarto-int-sidebar:/rmarkdown.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">R Markdown [基礎]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/rmarkdown2.html"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">R Markdown [応用]</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/quarto.html"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Quarto入門</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/table.html"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">表の作成</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/renv.html"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">分析環境の管理</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-6">中級者向け</span> <span class="hidden" data-render-id="quarto-int-sidebar:/iteration.html"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">反復処理</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/oop.html"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">オブジェクト指向プログラミング</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/monte.html"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">モンテカルロ・シミュレーション</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/scraping.html"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">スクレイピング</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/api.html"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">API</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-7">付録</span> <span class="hidden" data-render-id="quarto-int-sidebar:/tips.html">R Tips</span> <span class="hidden" data-render-id="quarto-int-sidebar:/session.html">本書の執筆環境</span> <span class="hidden" data-render-id="quarto-int-sidebar:/references.html">参考文献</span> <span class="hidden" data-render-id="footer-center">Copyright 2022, Jaehyun Song and Yuki Yanai</span></p>
 </div>
 <div id="RN4Equarto-meta-markdown" class="hidden">
 <p><span class="hidden" data-render-id="quarto-metatitle">私たちのR - <span id="RN4Esec-visualization1" class="quarto-section-identifier"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">可視化 [理論]</span></span></span> <span class="hidden" data-render-id="quarto-twittercardtitle">私たちのR: ベストプラクティスの探求</span> <span class="hidden" data-render-id="quarto-ogcardtitle">私たちのR: ベストプラクティスの探求</span> <span class="hidden" data-render-id="quarto-metasitename">私たちのR</span></p>
@@ -1314,7 +1314,7 @@ Wilkinson, Leland. 2005. <em>The Grammar of Graphics</em>. Springer.
 </section></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><hr>
 <ol>
 <li id="RN4Efn1"><p>厳密に言えば、大学院生の時代に開発したパッケージは{ggplot2}ではなく、<code>ggplot</code>です。このパッケージもグラフィックの文法の思想に基づいた可視化パッケージではありますが、今の{ggplot2}とは別物に近いパッケージです。このパッケージは2008年10月、バージョン0.4.2を以ってCRANから削除されました。<a href="#RN4Efnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="RN4Efn2"><p>実は <a href="#RN4Efig-visual1-coord1">図&nbsp;<span>17.15</span></a> と <a href="#RN4Efig-visual1-coord2">図&nbsp;<span>17.16</span></a> は似たような色が多く使われているため、褒められそうなグラフではありません。<a href="#RN4Efnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="RN4Efn2"><p>実は <a href="#RN4Efig-visual1-coord1">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-coord1</span></a> と <a href="#RN4Efig-visual1-coord2">図&nbsp;<span class="quarto-unresolved-ref">fig-visual1-coord2</span></a> は似たような色が多く使われているため、褒められそうなグラフではありません。<a href="#RN4Efnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="RN4Efn3"><p><a href="https://kyufukin.soumu.go.jp/ja-JP/transition/" target="_blank" rel="external">総務省の定額給付金特設ホームページ</a>から取得（アクセス：2020年7月28日）<a href="#RN4Efnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
