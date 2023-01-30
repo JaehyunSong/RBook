@@ -49,7 +49,7 @@ Rは統計学、データ分析に特化したプログラミング言語であ�
 #| label: fig-visual1-baser1
 #| fig-cap: "Base Rによるグラフ"
 #| fig-width: 6
-#| fig-hegiht: 4
+#| fig-height: 4
 # Base Rを用いた作図の例
 plot(x = Country_df$PPP, y = Country_df$HDI, pch = 19, 
      col = ifelse(Country_df$OECD == "加盟国", "red", "blue"),
@@ -69,7 +69,7 @@ legend("bottomright", pch = 19,
 #| label: fig-visual1-lattice1
 #| fig-cap: "{lattice}によるグラフ"
 #| fig-width: 6
-#| fig-hegiht: 4
+#| fig-height: 4
 # latticeを用いた作図の例
 xyplot(HDI ~ PPP, data = Country_df,
        group = OECD, pch = 19, grid = TRUE,
@@ -97,7 +97,7 @@ xyplot(HDI ~ PPP, data = Country_df,
 #| label: fig-visual1-ggplot1
 #| fig-cap: "{ggplot2}によるグラフ"
 #| fig-width: 6
-#| fig-hegiht: 4
+#| fig-height: 4
 #| warning: false
 # ggplot2を用いた作図の例
 ggplot(data = Country_df) +
@@ -146,7 +146,9 @@ df <- read_csv("Data/Stations.csv") %>%
 
 df %>%
   head(10) %>%
-  kable()
+  kable() %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = FALSE)
 ```
 
 このデータ`df`を使って @fig-visual1-fig1 のようなグラフを作成します。以下では作図のコードも載っていますが、詳しく理解しなくても結構です。理解しなくてもいいですが、必ずコードには目を通し、説明文との対応を自分で考えてください。
@@ -155,11 +157,11 @@ df %>%
 #| label: fig-visual1-fig1
 #| fig-cap: "鉄道駅の事業者区分による平均利用者数の推移"
 #| fig-width: 8
-#| fig-hegiht: 4
+#| fig-height: 3
 #| warning: false
 ggplot(data = df) +
   geom_line(aes(x = Year, y = P, color = Company_Type1), 
-            size = 1) +
+            linewidth = 1) +
   geom_point(aes(x = Year, y = P, color = Company_Type1), 
              size = 3, shape = 21, fill = "white") +
   labs(x = "年度", y = "平均利用者数 (人/日)", color = "事業者区分") +
@@ -173,7 +175,7 @@ ggplot(data = df) +
 #| label: fig-visual1-layer1
 #| fig-cap: "第1層: キャンバスを用意し、使用するデータはdf"
 #| fig-width: 8
-#| fig-hegiht: 4
+#| fig-height: 3
 #| warning: false
 ggplot(data = df)
 ```
@@ -184,11 +186,11 @@ ggplot(data = df)
 #| label: fig-visual1-layer2
 #| fig-cap: "第2層: X軸はYear、Y軸はPにし、Company_type1ごとに色分けした折れ線グラフを作成し、線の太さは1とする。"
 #| fig-width: 8
-#| fig-hegiht: 4
+#| fig-height: 3
 #| warning: false
 ggplot(data = df) +
   geom_line(aes(x = Year, y = P, color = Company_Type1), 
-            size = 1)
+            linewidth = 1)
 ```
 
 3. 続いて、折れ線グラフに散布図を載せます。これは線が引かれていない折れ線グラフと同じです。したがって、横軸、縦軸、色分けの情報は同じです。しかし、点と線が重なると点がよく見えないこともあるので、点の大きさを3にし、形は枠線付きの点にします。点の中身は白塗りをします。つまり、`Company_Type1`によって変わるのは、点の枠線です。
@@ -197,11 +199,11 @@ ggplot(data = df) +
 #| label: fig-visual1-layer3
 #| fig-cap: "第3層: X軸はYear、Y軸はPにし、Company_type1ごとに色分けした散布図を作成する。点の大きさは3、点のタイプは21 (外線付き)、点の中身の色は白よする。"
 #| fig-width: 8
-#| fig-hegiht: 4
+#| fig-height: 3
 #| warning: false
 ggplot(data = df) +
   geom_line(aes(x = Year, y = P, color = Company_Type1), 
-            size = 1) +
+            linewidth = 1) +
   geom_point(aes(x = Year, y = P, color = Company_Type1), 
              size = 3, shape = 21, fill = "white")
 ```
@@ -212,11 +214,11 @@ ggplot(data = df) +
 #| label: fig-visual1-layer4
 #| fig-cap: "第4層: X軸、Y軸のラベルをそれぞれ「年度」、「平均利用者数 (人/日)」に凡例のcolorのラベルは「事業者区分」にする"
 #| fig-width: 8
-#| fig-hegiht: 4
+#| fig-height: 3
 #| warning: false
 ggplot(data = df) +
   geom_line(aes(x = Year, y = P, color = Company_Type1), 
-            size = 1) +
+            linewidth = 1) +
   geom_point(aes(x = Year, y = P, color = Company_Type1), 
              size = 3, shape = 21, fill = "white") +
   labs(x = "年度", y = "平均利用者数 (人/日)", color = "事業者区分")
@@ -228,11 +230,11 @@ ggplot(data = df) +
 #| label: fig-visual1-layer5
 #| fig-cap: "第5層: 連続変数で構成されたX軸を調整する目盛りは2011, 2012, ..., 2017とし、ラベルも2011, 2012, ..., 2017に"
 #| fig-width: 8
-#| fig-hegiht: 4
+#| fig-height: 4
 #| warning: false
 ggplot(data = df) +
   geom_line(aes(x = Year, y = P, color = Company_Type1), 
-            size = 1) +
+            linewidth = 1) +
   geom_point(aes(x = Year, y = P, color = Company_Type1), 
              size = 3, shape = 21, fill = "white") +
   labs(x = "年度", y = "平均利用者数 (人/日)", color = "事業者区分") +
@@ -245,13 +247,30 @@ ggplot(data = df) +
 #| label: fig-visual1-layer6
 #| fig-cap: "第6層: テーマをminimalに指定し、フォントサイズは12に変更"
 #| fig-width: 8
-#| fig-hegiht: 4
+#| fig-height: 3
 #| warning: false
 ggplot(data = df) +
   geom_line(aes(x = Year, y = P, color = Company_Type1), 
-            size = 1) +
+            linewidth = 1) +
   geom_point(aes(x = Year, y = P, color = Company_Type1), 
              size = 3, shape = 21, fill = "white") +
+  labs(x = "年度", y = "平均利用者数 (人/日)", color = "事業者区分") +
+  scale_x_continuous(breaks = 2011:2017, labels = 2011:2017) +
+  theme_minimal(base_size = 12)
+```
+
+7. これで図は完成ですが、コードを少し修正します。現在、折れ線グラフ（`geom_line()`）と散布図（`geom_point()`）は`aes()`関数内において、同じ情報を共有しています。この場合、それぞれのレイヤーではなく、`ggplot()`内で定義しておくと、コードをより短くすることができます。また、作図に使うデータ（ここでは`df`）は`ggplot()`関数の第1引数であるので、パイプ演算子を使っても良いでしょう。
+
+```{r}
+#| label: fig-visual1-layer7
+#| fig-cap: "コードの修正"
+#| fig-width: 8
+#| fig-height: 3
+#| warning: false
+df %>%
+  ggplot(aes(x = Year, y = P, color = Company_Type1)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 3, shape = 21, fill = "white") +
   labs(x = "年度", y = "平均利用者数 (人/日)", color = "事業者区分") +
   scale_x_continuous(breaks = 2011:2017, labels = 2011:2017) +
   theme_minimal(base_size = 12)
@@ -386,7 +405,7 @@ df %>%
 #| label: fig-visual1-mapping2
 #| fig-cap: "`color`を`aes()`外側に置いた場合"
 #| fig-width: 8
-#| fig-hegiht: 4
+#| fig-height: 4
 #| warning: false
 #| echo: false
 df2 <- data.frame(X = rep(c("男性","女性"), each = 50),
@@ -419,7 +438,7 @@ ggplot(data = df2) +
 #| label: fig-visual1-mapping3
 #| fig-cap: "`color`を`aes()`内側に置いた場合"
 #| fig-width: 8
-#| fig-hegiht: 4
+#| fig-height: 4
 #| warning: false
 #| echo: false
 ggplot(data = df2) +
@@ -442,7 +461,7 @@ ggplot(data = df2) +
 #| label: fig-visual1-coord1
 #| fig-cap: "ズームイン前"
 #| fig-width: 8
-#| fig-hegiht: 5
+#| fig-height: 5
 #| warning: false
 #| message: false
 #| echo: false
@@ -476,7 +495,7 @@ Coord_Fig1
 #| label: fig-visual1-coord2
 #| fig-cap: "ズームイン後"
 #| fig-width: 8
-#| fig-hegiht: 5
+#| fig-height: 5
 #| warning: false
 #| echo: false
 Coord_Fig1 +
@@ -512,7 +531,7 @@ Coord_Fig3 <- ggplot(data.frame(x = 1:10, y = 1:10)) +
 #| label: fig-visual1-coord3
 #| fig-cap: "直交座標系と極座標系の比較 (1)"
 #| fig-width: 8
-#| fig-hegiht: 5
+#| fig-height: 5
 #| echo: false
 #| warning: false
 ggarrange(Coord_Fig2, Coord_Fig3)
@@ -541,7 +560,7 @@ Coord_Fig5 <- Coord_Fig4 +
 #| label: fig-visual1-coord4
 #| fig-cap: "直交座標系と極座標系の比較 (2)"
 #| fig-width: 8
-#| fig-hegiht: 4.8
+#| fig-height: 4.8
 #| echo: false
 #| warning: false
 ggarrange(Coord_Fig4, Coord_Fig5)
@@ -571,7 +590,7 @@ ggarrange(Coord_Fig4, Coord_Fig5)
 #| label: fig-visual1-scale1
 #| fig-cap: "縦軸を5cm刻みに変更"
 #| fig-width: 8
-#| fig-hegiht: 4
+#| fig-height: 4
 #| echo: false
 #| warning: false
 ggplot(data = df2) +
@@ -601,7 +620,7 @@ ggplot(data = df2) +
 #| label: fig-visual1-scale2
 #| fig-cap: "更に性別の色を変bんこうする"
 #| fig-width: 8
-#| fig-hegiht: 4
+#| fig-height: 4
 #| echo: false
 #| warning: false
 ggplot(data = df2) +
@@ -627,7 +646,7 @@ ggplot(data = df2) +
 #| label: fig-visual1-facet1
 #| fig-cap: "ファセットを分けないグラフの例"
 #| fig-width: 10
-#| fig-hegiht: 4
+#| fig-height: 4
 #| echo: false
 #| warning: false
 #| message: false
@@ -656,7 +675,7 @@ ggplot(Country_df) +
 #| label: fig-visual1-facet2
 #| fig-cap: "大陸ごとにファセットを分けたグラフの例"
 #| fig-width: 10
-#| fig-hegiht: 4
+#| fig-height: 4
 #| echo: false
 #| warning: false
 #| message: false
