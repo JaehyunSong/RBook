@@ -28,6 +28,9 @@ source("_common.R")
 
 ## セットアップ {#sec-quarto-setup}
 
+1. Quartoのインストール
+2. RStudioのアップデート
+
 Quartoのインストール
 
 * <https://quarto.org/docs/get-started/>
@@ -42,14 +45,13 @@ pacman::p_install("quarto") # または、install.packages("quarto")
 
 ## 簡単な使い方 {#sec-quarto-howtouse}
 
-### とりあえずRender
+　Quartoは基本的にR Markdownと同じ感覚で使える。たとえば、R Markdownで新しい文書を作成する際はRStudioのFile > New File > **R Markdown...**を選択するが、QuartoはFile > New File > **Quarto Document...**を選択する[^newfile]くらいの違いだ。ただし、作成したファイルを文書に変換するときにはR Markdownだと「Knit」ボタンをクリックしたが、QuartoはKnit以外にもJupyterやObservableなども使用可能であるため、代わりに「Render」ボタンをクリック[^render-button]しよう。
 
-* R Markdownと同じ感覚で使用可能
-   * File > New File > Quarto Document ...
-   * RStudioが最新版でない場合、アップデートする
-   * R Markdownの「Knit」はQuartoだと「Render」
-      * Quartoの場合、Knit以外にもJupyterなどのエンジンも使用可能であるため、名称がRender
-      * Knitボタンと同じ位置であり、ショートカットキーは同じく「Cmd + Shift + K (macOS)」、または「Ctrl + Shift + K (Windows)」
+[^newfile]: もし、「Quarto Document...」が表示されない場合はRStudioが古いバージョンである可能性が高いため、予め最新バージョンにアップデートしておこう。
+
+[^render-button]: Knitボタンと同じ位置であり、ショートカットキーも同じく「Cmd + Shift + K (macOS)」、または「Ctrl + Shift + K (Windows)」である。
+
+　以下ではR MarkdownとQuartoの書き方の違いについて解説する。すべてを列挙することはできないため、よく使う機能の相違点のみを紹介する。より詳しく知りたい場合はQuartoの[公式ホームページ](https://quarto.org/docs/guide/)を参照すること。
 
 ### チャンクオプションの付け方
 
@@ -123,6 +125,8 @@ iris %>%
 
 ### コールアウト
 
+::::{.columns}
+:::{.column width=49%}
 **Input:**
 
 ```md
@@ -131,32 +135,13 @@ iris %>%
 
 末永くよろしくね!
 :::
-
-:::{.callout-warning}
-## Rはみんなの友達!
-
-末永くよろしくね!
-:::
-
-:::{.callout-important}
-## Rはみんなの友達!
-
-末永くよろしくね!
-:::
-
-:::{.callout-tip}
-## Rはみんなの友達!
-
-末永くよろしくね!
-:::
-
-:::{.callout-caution}
-## Rはみんなの友達!
-
-末永くよろしくね!
-:::
 ```
+:::
 
+:::{.column width=2%}
+:::
+
+:::{.column width=49%}
 **Output:**
 
 :::{.callout-note}
@@ -164,31 +149,121 @@ iris %>%
 
 末永くよろしくね!
 :::
+:::
+::::
+
+::::{.columns}
+:::{.column width=49%}
+**Input:**
+
+```md
+:::{.callout-warning}
+## Rはみんなの友達!
+
+末永くよろしくね!
+:::
+```
+:::
+
+:::{.column width=2%}
+:::
+
+:::{.column width=49%}
+**Output:**
 
 :::{.callout-warning}
 ## Rはみんなの友達!
 
 末永くよろしくね!
 :::
+:::
+::::
+
+::::{.columns}
+:::{.column width=49%}
+**Input:**
+
+```md
+:::{.callout-important}
+## Rはみんなの友達!
+
+末永くよろしくね!
+:::
+```
+:::
+
+:::{.column width=2%}
+:::
+
+:::{.column width=49%}
+**Output:**
 
 :::{.callout-important}
 ## Rはみんなの友達!
 
 末永くよろしくね!
 :::
+:::
+::::
+
+::::{.columns}
+:::{.column width=49%}
+**Input:**
+
+```md
+:::{.callout-tip}
+## Rはみんなの友達!
+
+末永くよろしくね!
+:::
+```
+:::
+
+:::{.column width=2%}
+:::
+
+:::{.column width=49%}
+**Output:**
 
 :::{.callout-tip}
 ## Rはみんなの友達!
 
 末永くよろしくね!
 :::
+:::
+::::
+
+::::{.columns}
+:::{.column width=49%}
+**Input:**
+
+```md
+:::{.callout-caution}
+## Rはみんなの友達!
+
+末永くよろしくね!
+:::
+```
+:::
+
+:::{.column width=2%}
+:::
+
+:::{.column width=49%}
+**Output:**
 
 :::{.callout-caution}
 ## Rはみんなの友達!
 
 末永くよろしくね!
 :::
+:::
+::::
 
+　`.callout-*`の後に`collapse="true"`を付けるとコールアウトの本文を隠すことができる（見出しをクリックすると本文が表示される）。
+
+::::{.columns}
+:::{.column width=49%}
 **Input:**
 
 ```md
@@ -198,7 +273,12 @@ iris %>%
 末永くよろしくね!
 :::
 ```
+:::
 
+:::{.column width=2%}
+:::
+
+:::{.column width=49%}
 **Output:**
 
 :::{.callout-note collapse="true"}
@@ -206,10 +286,118 @@ iris %>%
 
 末永くよろしくね!
 :::
+:::
+::::
+
+　また、`.callout-*`の後に`icon="false"`を付けると見出しの左にあるアイコンを消すことができる。
+
+::::{.columns}
+:::{.column width=49%}
+**Input:**
+
+```md
+:::{.callout-warning icon="false"}
+## Rはみんなの友達!（クリック）
+
+末永くよろしくね!
+:::
+```
+:::
+
+:::{.column width=2%}
+:::
+
+:::{.column width=49%}
+**Output:**
+
+:::{.callout-warning icon="false"}
+## Rはみんなの友達!
+
+末永くよろしくね!
+:::
+:::
+::::
 
 ### 段組み
 
 段組みについて
+
+**Input:**
+
+````md
+::::{.columns}
+:::{.column width=49%}
+**コード:**
+
+```{r}`r ''`
+#| eval: false
+x <- c(1, 2, 3, 1, 2)
+y <- c("A", "A", "A", "B", "B")
+
+paste0(x, y)
+```
+:::
+
+:::{.column width=2%}
+:::
+
+:::{.column width=49%}
+**結果:**
+
+```{r}`r ''`
+#| echo: false
+x <- c(1, 2, 3, 1, 2)
+y <- c("A", "A", "A", "B", "B")
+
+paste0(x, y)
+```
+:::
+::::
+````
+
+**Output:**
+
+::::{.columns}
+:::{.column width=49%}
+**コード**
+
+```{r}
+#| eval: false
+x <- c(1, 2, 3, 1, 2)
+y <- c("A", "A", "A", "B", "B")
+
+paste0(x, y)
+```
+:::
+
+:::{.column width=2%}
+:::
+
+:::{.column width=49%}
+**結果**
+
+```{r}
+#| echo: false
+x <- c(1, 2, 3, 1, 2)
+y <- c("A", "A", "A", "B", "B")
+
+paste0(x, y)
+```
+:::
+::::
+
+### パネル
+
+:::{.panel-tabset}
+## タブ1
+
+タブ1
+
+## タブ2
+
+タブ2
+
+:::
 
 ### 図表について
 
