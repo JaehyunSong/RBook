@@ -859,33 +859,342 @@ Rはみんなの友達!
 </section>
 <section id="パネル" class="level3" data-number="24.3.5">
 <h3 data-number="24.3.5" class="anchored" data-anchor-id="パネル"><span class="header-section-number">24.3.5</span> パネル</h3>
+<p>　パネルは段組みのように複数の内容を同じ行に出力する機能であるが、段組みは左右に並べる一方、パネルが異なるページへ出力する。たとえば、データセットの作成と、そのデータを使った作図のコードを示す場合、2つのチャンクを横に並べるには幅が狭いかも知れない。この場合、使えるのがパネル機能だ。使い方は段組みより簡単で、<code>:::{.panel-tabset}</code>と<code>:::</code>間に入力された内容がパネル内容になる。各パネルのタイトルは<code>##</code>見出しで指定でき、これが各パネルの区切りにもなる。</p>
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode md code-with-copy"><code class="sourceCode markdown"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>:::{.panel-tabset}</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">## データ</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">City =</span> <span class="fu">c</span>(<span class="st">"東京"</span>, <span class="st">"北京"</span>, <span class="st">"ソウル"</span>),</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Pop  =</span> <span class="fu">c</span>(<span class="dv">1396</span>, <span class="dv">2154</span>, <span class="dv">978</span>))</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>my_data</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## プロット</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 8</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 4</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">%&gt;%</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">City =</span> <span class="fu">fct_inorder</span>(City)) <span class="sc">%&gt;%</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> City, <span class="at">y =</span> Pop)) <span class="sc">+</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> <span class="co"># geom_bar(stat = "identity") もOK</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"都市"</span>, <span class="at">y =</span> <span class="st">"人口（万人）"</span>) <span class="sc">+</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
 <div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">タブ1</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">タブ2</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">データ</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">プロット</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<p>タブ1</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb17-2"><a href="#cb17-2"></a></span>
+<span id="cb17-3"><a href="#cb17-3"></a>my_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">City =</span> <span class="fu">c</span>(<span class="st">"東京"</span>, <span class="st">"北京"</span>, <span class="st">"ソウル"</span>),</span>
+<span id="cb17-4"><a href="#cb17-4"></a>                  <span class="at">Pop  =</span> <span class="fu">c</span>(<span class="dv">1396</span>, <span class="dv">2154</span>, <span class="dv">978</span>))</span>
+<span id="cb17-5"><a href="#cb17-5"></a></span>
+<span id="cb17-6"><a href="#cb17-6"></a>my_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  City     Pop
+  &lt;chr&gt;  &lt;dbl&gt;
+1 東京    1396
+2 北京    2154
+3 ソウル   978</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<p>タブ2</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>my_data <span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">mutate</span>(<span class="at">City =</span> <span class="fu">fct_inorder</span>(City)) <span class="sc">%&gt;%</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> City, <span class="at">y =</span> Pop)) <span class="sc">+</span></span>
+<span id="cb19-4"><a href="#cb19-4"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> <span class="co"># geom_bar(stat = "identity") もOK</span></span>
+<span id="cb19-5"><a href="#cb19-5"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"都市"</span>, <span class="at">y =</span> <span class="st">"人口（万人）"</span>) <span class="sc">+</span></span>
+<span id="cb19-6"><a href="#cb19-6"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="quarto_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="2400"></p>
+</figure>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 </section>
 <section id="図表について" class="level3" data-number="24.3.6">
 <h3 data-number="24.3.6" class="anchored" data-anchor-id="図表について"><span class="header-section-number">24.3.6</span> 図表について</h3>
+<p>　R Markdown/Quarto関係なく多くの図は{ggplot2}、{lattice}、Base Rなどで作成され、表は{knitr} + {kableExtra}、{gt}などで作成される。しかし、通常のMarkdown文法で表を作ったり、図を挿入したりするケースも多いだろう。QuartoはMarkdown文法の作成/挿入された図表のカスタマイズもより柔軟だ。</p>
+<p>　たとえば、図の大きさは<code>![]()</code>の後ろに<code>{}</code>を付け、<code>width</code>や<code>height</code>引数を指定することで修正できる。たとえば、図の幅を100ピクセルにする場合は<code>width=100px</code>で良い。サイズの指定方法はピクセル（<code>px</code>; 省略可）以外にも画面の幅に対する割合（例：<code>50%</code>）、インチ（例：<code>4in</code>）もできる。</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">サイズ調整前</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">サイズ調整後</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode md code-with-copy"><code class="sourceCode markdown"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="al">![『私たちのR』ロゴ](http://www.jaysong.net/RBook/Figs/favicon.png)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="http://www.jaysong.net/RBook/Figs/favicon.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">『私たちのR』ロゴ</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode md code-with-copy"><code class="sourceCode markdown"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="al">![『私たちのR』ロゴ](http://www.jaysong.net/RBook/Figs/favicon.png)</span>{width=100px}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="http://www.jaysong.net/RBook/Figs/favicon.png" class="img-fluid figure-img" width="100"></p>
+<p></p><figcaption class="figure-caption">『私たちのR』ロゴ</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>　他にも、<code>![Alt Text](Image Path)</code>で挿入される図の場合、R Markdownでは大きさの調整や中央揃えが面倒だ。しかし、Quartoの場合、後ろに<code>{}</code>を入れることでいくつかの修正ができる。</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">左揃え</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">中央揃え</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-3" role="tab" aria-controls="tabset-3-3" aria-selected="false">右揃え</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode md code-with-copy"><code class="sourceCode markdown"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="al">![『私たちのR』ロゴ（左揃え）](http://www.jaysong.net/RBook/Figs/favicon.png)</span>{fig-align="left"}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="http://www.jaysong.net/RBook/Figs/favicon.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">『私たちのR』ロゴ（左揃え）</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode md code-with-copy"><code class="sourceCode markdown"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="al">![『私たちのR』ロゴ（中央揃え）](http://www.jaysong.net/RBook/Figs/favicon.png)</span>{fig-align="center"}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="http://www.jaysong.net/RBook/Figs/favicon.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">『私たちのR』ロゴ（中央揃え）</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div id="tabset-3-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-3-tab">
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode md code-with-copy"><code class="sourceCode markdown"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="al">![『私たちのR』ロゴ（右揃え）](http://www.jaysong.net/RBook/Figs/favicon.png)</span>{fig-align="right"}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<div class="quarto-figure quarto-figure-right">
+<figure class="figure">
+<p><img src="http://www.jaysong.net/RBook/Figs/favicon.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">『私たちのR』ロゴ（右揃え）</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>　他にも複数のグラフを並べることもR Markdownに比べ、簡単にできる。横に並べるなら段組みでもよいが、<code>:::{layout-ncol}</code>がより楽だ。<code>ncol</code>の代わりに<code>nrow</code>も指定できる。以下のコードは図を3列配置する例だ。</p>
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode md code-with-copy"><code class="sourceCode markdown"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>:::{layout-ncol=3}</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="al">![左の猫](http://www.jaysong.net/RBook/Figs/favicon.png)</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="al">![中央の猫](http://www.jaysong.net/RBook/Figs/favicon.png)</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="al">![右の猫](http://www.jaysong.net/RBook/Figs/favicon.png)</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="http://www.jaysong.net/RBook/Figs/favicon.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">左の猫</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="http://www.jaysong.net/RBook/Figs/favicon.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">中央の猫</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="http://www.jaysong.net/RBook/Figs/favicon.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">右の猫</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>　図の相互参照とためのラベルは<code>![]()</code>の後ろの<code>{}</code>内に<code>#fig-</code>で指定できる。並べた図にラベルを付けることもできる。</p>
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode md code-with-copy"><code class="sourceCode markdown"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>複数の図の相互参照: @fig-three-cats</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>個別の図の相互参照: @fig-cat1</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>:::{#fig-three-cats layout-ncol=3}</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="al">![左の猫](http://www.jaysong.net/RBook/Figs/favicon.png)</span>{#fig-cat1}</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="al">![中央の猫](http://www.jaysong.net/RBook/Figs/favicon.png)</span>{#fig-cat2}</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="al">![右の猫](http://www.jaysong.net/RBook/Figs/favicon.png)</span>{#fig-cat3}</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>3匹の猫</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
 <ul>
-<li>大きさの調整</li>
-<li>キャプション</li>
+<li>複数の図の相互参照: <a href="#fig-three-cats">図&nbsp;<span>24.2</span></a></li>
+<li>個別の図の相互参照: <a href="#fig-cat1">図&nbsp;<span>24.2 (a)</span></a></li>
 </ul>
+<div id="fig-three-cats" class="quarto-layout-panel">
+<figure class="figure">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 33.3%;justify-content: center;">
+<div id="fig-cat1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="http://www.jaysong.net/RBook/Figs/favicon.png" class="img-fluid figure-img" data-ref-parent="fig-three-cats"></p>
+<p></p><figcaption class="figure-caption">(a) 左の猫</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 33.3%;justify-content: center;">
+<div id="fig-cat2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="http://www.jaysong.net/RBook/Figs/favicon.png" class="img-fluid figure-img" data-ref-parent="fig-three-cats"></p>
+<p></p><figcaption class="figure-caption">(b) 中央の猫</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 33.3%;justify-content: center;">
+<div id="fig-cat3" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="http://www.jaysong.net/RBook/Figs/favicon.png" class="img-fluid figure-img" data-ref-parent="fig-three-cats"></p>
+<p></p><figcaption class="figure-caption">(c) 右の猫</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p></p><figcaption class="figure-caption">図&nbsp;24.2: 3匹の猫</figcaption><p></p>
+</figure>
+</div>
+<p>　<code>:::{layout-ncol}</code>を使えば、複数の表を並べることもできる。相互参照についても同じだが、ラベル名は<code>#fig-</code>の代わりに<code>#tbl-</code>を使う必要がある。</p>
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode md code-with-copy"><code class="sourceCode markdown"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>　@tbl-two-tables は、東アジアとヨーロッパ主要都市の人口、面積、人口密度の一覧である。ただし、 @tbl-east-asia の東京は23区でなく、東京都全域であることに注意されたい。</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>::: {#tbl-two-tables layout-ncol=2}</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>| Name    | Pop.  | Area   | Density |</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>|:--------|------:|-------:|--------:|</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>| Tokyo   | 1,403 |  2,194 |  6,397  |</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>| Beijing | 2,170 | 16,410 |  1,323  |</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>| Seoul   |   949 |    605 | 15,688  |</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>: East Asia {#tbl-east-asia}</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>| Name   | Pop.  | Area  | Density |</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>|:-------|------:|------:|--------:|</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>| London | 943   | 1,569 |  5,354  |</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>| Berlin | 367   |   892 |  4,114  |</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>| Paris  | 215   |   105 | 20,382  |</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>: Europe {#tbl-europe}</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>首都の人口（万人）、面積（km<span class="kw">&lt;sup&gt;</span>2<span class="kw">&lt;/sup&gt;</span>）、人口密度（人/km<span class="kw">&lt;sup&gt;</span>2<span class="kw">&lt;/sup&gt;</span>）</span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<p>　<a href="#tbl-two-tables">表&nbsp;<span>24.1</span></a> は、東アジアとヨーロッパ主要都市の人口、面積、人口密度の一覧である。ただし、 <a href="#tbl-east-asia">表&nbsp;<span>24.1 (a)</span></a> の東京は23区でなく、東京都全域であることに注意されたい。</p>
+<div id="tbl-two-tables" class="tbl-parent quarto-layout-panel anchored">
+<div class="panel-caption table-caption">
+<p>表&nbsp;24.1: 首都の人口（万人）、面積（km<sup>2</sup>）、人口密度（人/km<sup>2</sup>）</p>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div id="tbl-east-asia" class="quarto-layout-cell quarto-layout-cell-subref anchored" data-ref-parent="tbl-two-tables" style="flex-basis: 50.0%;justify-content: center;">
+<table class="table">
+<caption>(a) East Asia</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Name</th>
+<th style="text-align: right;">Pop.</th>
+<th style="text-align: right;">Area</th>
+<th style="text-align: right;">Density</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Tokyo</td>
+<td style="text-align: right;">1,403</td>
+<td style="text-align: right;">2,194</td>
+<td style="text-align: right;">6,397</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Beijing</td>
+<td style="text-align: right;">2,170</td>
+<td style="text-align: right;">16,410</td>
+<td style="text-align: right;">1,323</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Seoul</td>
+<td style="text-align: right;">949</td>
+<td style="text-align: right;">605</td>
+<td style="text-align: right;">15,688</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="tbl-europe" class="quarto-layout-cell quarto-layout-cell-subref anchored" data-ref-parent="tbl-two-tables" style="flex-basis: 50.0%;justify-content: center;">
+<table class="table">
+<caption>(b) Europe</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Name</th>
+<th style="text-align: right;">Pop.</th>
+<th style="text-align: right;">Area</th>
+<th style="text-align: right;">Density</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">London</td>
+<td style="text-align: right;">943</td>
+<td style="text-align: right;">1,569</td>
+<td style="text-align: right;">5,354</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Berlin</td>
+<td style="text-align: right;">367</td>
+<td style="text-align: right;">892</td>
+<td style="text-align: right;">4,114</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Paris</td>
+<td style="text-align: right;">215</td>
+<td style="text-align: right;">105</td>
+<td style="text-align: right;">20,382</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>　また、この機能はチャンクで生成された図についても使用かのうだ。チャンクオプションに<code>#| layout-ncol: 2</code>を追加すると、2つの図が横に並ぶことになる。詳しくは<a href="https://quarto.org/docs/authoring/figures.html#computations">Quarto公式レファレンス</a>を参照すること。</p>
 </section>
 <section id="ハイパーリンクのターゲット" class="level3" data-number="24.3.7">
 <h3 data-number="24.3.7" class="anchored" data-anchor-id="ハイパーリンクのターゲット"><span class="header-section-number">24.3.7</span> ハイパーリンクのターゲット</h3>
 <p>　Markdownのハイパーリンクは以下のように書く。</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode md code-with-copy"><code class="sourceCode markdown"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">ここ</span><span class="co">](https://www.jaysong.net)</span>をクリックすると宋のホームページへ移動します。</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode md code-with-copy"><code class="sourceCode markdown"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">ここ</span><span class="co">](https://www.jaysong.net)</span>をクリックすると宋のホームページへ移動します。</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>　「ここ」の文字をクリックすると宋のホームページへ飛ばされるコードである、R Markdownも、Quartoもデフォルトではそのウィンドウ/タブを使うことになる<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>。これを新しいウィンドウ/タブで開かせるためにはやむを得ずHTMLタグを使う必要がある。</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">"https://www.jaysong.net"</span> <span class="er">target</span><span class="ot">=</span><span class="st">"_blank"</span><span class="kw">&gt;</span>ここ<span class="kw">&lt;/a&gt;</span>をクリックすると宋のホームページへ移動します。</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">"https://www.jaysong.net"</span> <span class="er">target</span><span class="ot">=</span><span class="st">"_blank"</span><span class="kw">&gt;</span>ここ<span class="kw">&lt;/a&gt;</span>をクリックすると宋のホームページへ移動します。</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>　しかし、Quartoだと通常のMarkdown記法を使うことができる。<code>[]()</code>の後ろに<code>{target="_blank"}</code>を付けるだけだ。実は書く手間としては若干軽減された程度であるが、地味に嬉しい機能だ。</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode md code-with-copy"><code class="sourceCode markdown"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">ここ</span><span class="co">](https://www.jaysong.net)</span>{target="_blank"}をクリックすると宋のホームページへ移動します。</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode md code-with-copy"><code class="sourceCode markdown"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">ここ</span><span class="co">](https://www.jaysong.net)</span>{target="_blank"}をクリックすると宋のホームページへ移動します。</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </section>
 <section id="quartoを知り尽くす" class="level2" data-number="24.4">

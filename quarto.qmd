@@ -412,21 +412,251 @@ paste0(x, y)
 
 ### パネル
 
+　パネルは段組みのように複数の内容を同じ行に出力する機能であるが、段組みは左右に並べる一方、パネルが異なるページへ出力する。たとえば、データセットの作成と、そのデータを使った作図のコードを示す場合、2つのチャンクを横に並べるには幅が狭いかも知れない。この場合、使えるのがパネル機能だ。使い方は段組みより簡単で、`:::{.panel-tabset}`と`:::`間に入力された内容がパネル内容になる。各パネルのタイトルは`##`見出しで指定でき、これが各パネルの区切りにもなる。
+
+**Input:**
+
+````md
 :::{.panel-tabset}
-## タブ1
+## データ
 
-タブ1
+```{r}`r ''`
+library(tidyverse)
 
-## タブ2
+my_data <- tibble(City = c("東京", "北京", "ソウル"),
+                  Pop  = c(1396, 2154, 978))
 
-タブ2
+my_data
+```
+
+## プロット
+
+```{r}`r ''`
+#| fig-width: 8
+#| fig-height: 4
+my_data %>%
+  mutate(City = fct_inorder(City)) %>%
+  ggplot(aes(x = City, y = Pop)) +
+  geom_col() + # geom_bar(stat = "identity") もOK
+  labs(x = "都市", y = "人口（万人）") +
+  theme_bw(base_size = 14)
+```
+
+:::
+````
+
+**Output:**
+
+:::{.panel-tabset}
+## データ
+
+```{r}
+library(tidyverse)
+
+my_data <- tibble(City = c("東京", "北京", "ソウル"),
+                  Pop  = c(1396, 2154, 978))
+
+my_data
+```
+
+## プロット
+
+```{r}
+#| fig-width: 8
+#| fig-height: 4
+my_data %>%
+  mutate(City = fct_inorder(City)) %>%
+  ggplot(aes(x = City, y = Pop)) +
+  geom_col() + # geom_bar(stat = "identity") もOK
+  labs(x = "都市", y = "人口（万人）") +
+  theme_bw(base_size = 14)
+```
 
 :::
 
 ### 図表について
 
-* 大きさの調整
-* キャプション
+　R Markdown/Quarto関係なく多くの図は{ggplot2}、{lattice}、Base Rなどで作成され、表は{knitr} + {kableExtra}、{gt}などで作成される。しかし、通常のMarkdown文法で表を作ったり、図を挿入したりするケースも多いだろう。QuartoはMarkdown文法の作成/挿入された図表のカスタマイズもより柔軟だ。
+
+　たとえば、図の大きさは`![]()`の後ろに`{}`を付け、`width`や`height`引数を指定することで修正できる。たとえば、図の幅を100ピクセルにする場合は`width=100px`で良い。サイズの指定方法はピクセル（`px`; 省略可）以外にも画面の幅に対する割合（例：`50%`）、インチ（例：`4in`）もできる。
+
+:::{.panel-tabset}
+## サイズ調整前
+
+**Input:**
+
+```md
+![『私たちのR』ロゴ](http://www.jaysong.net/RBook/Figs/favicon.png)
+```
+
+**Output:**
+
+![『私たちのR』ロゴ](http://www.jaysong.net/RBook/Figs/favicon.png)
+
+## サイズ調整後
+
+**Input:**
+
+```md
+![『私たちのR』ロゴ](http://www.jaysong.net/RBook/Figs/favicon.png){width=100px}
+```
+
+**Output:**
+
+![『私たちのR』ロゴ](http://www.jaysong.net/RBook/Figs/favicon.png){width=100px}
+:::
+
+　他にも、`![Alt Text](Image Path)`で挿入される図の場合、R Markdownでは大きさの調整や中央揃えが面倒だ。しかし、Quartoの場合、後ろに`{}`を入れることでいくつかの修正ができる。
+
+:::{.panel-tabset}
+## 左揃え
+
+**Input:**
+
+```md
+![『私たちのR』ロゴ（左揃え）](http://www.jaysong.net/RBook/Figs/favicon.png){fig-align="left"}
+```
+
+**Output:**
+
+![『私たちのR』ロゴ（左揃え）](http://www.jaysong.net/RBook/Figs/favicon.png){fig-align="left"}
+
+## 中央揃え
+
+**Input:**
+
+```md
+![『私たちのR』ロゴ（中央揃え）](http://www.jaysong.net/RBook/Figs/favicon.png){fig-align="center"}
+```
+
+**Output:**
+
+![『私たちのR』ロゴ（中央揃え）](http://www.jaysong.net/RBook/Figs/favicon.png){fig-align="center"}
+
+## 右揃え
+
+**Input:**
+
+```md
+![『私たちのR』ロゴ（右揃え）](http://www.jaysong.net/RBook/Figs/favicon.png){fig-align="right"}
+```
+
+**Output:**
+
+![『私たちのR』ロゴ（右揃え）](http://www.jaysong.net/RBook/Figs/favicon.png){fig-align="right"}
+:::
+
+　他にも複数のグラフを並べることもR Markdownに比べ、簡単にできる。横に並べるなら段組みでもよいが、`:::{layout-ncol}`がより楽だ。`ncol`の代わりに`nrow`も指定できる。以下のコードは図を3列配置する例だ。
+
+**Input:**
+
+```md
+:::{layout-ncol=3}
+![左の猫](http://www.jaysong.net/RBook/Figs/favicon.png)
+
+![中央の猫](http://www.jaysong.net/RBook/Figs/favicon.png)
+
+![右の猫](http://www.jaysong.net/RBook/Figs/favicon.png)
+:::
+```
+
+**Output:**
+
+:::{layout-ncol=3}
+![左の猫](http://www.jaysong.net/RBook/Figs/favicon.png)
+
+![中央の猫](http://www.jaysong.net/RBook/Figs/favicon.png)
+
+![右の猫](http://www.jaysong.net/RBook/Figs/favicon.png)
+:::
+
+　図の相互参照とためのラベルは`![]()`の後ろの`{}`内に`#fig-`で指定できる。並べた図にラベルを付けることもできる。
+
+**Input:**
+
+```md
+* 複数の図の相互参照: @fig-three-cats
+* 個別の図の相互参照: @fig-cat1
+
+:::{#fig-three-cats layout-ncol=3}
+![左の猫](http://www.jaysong.net/RBook/Figs/favicon.png){#fig-cat1}
+
+![中央の猫](http://www.jaysong.net/RBook/Figs/favicon.png){#fig-cat2}
+
+![右の猫](http://www.jaysong.net/RBook/Figs/favicon.png){#fig-cat3}
+
+3匹の猫
+:::
+```
+
+**Output:**
+
+* 複数の図の相互参照: @fig-three-cats
+* 個別の図の相互参照: @fig-cat1
+
+:::{#fig-three-cats layout-ncol=3}
+![左の猫](http://www.jaysong.net/RBook/Figs/favicon.png){#fig-cat1}
+
+![中央の猫](http://www.jaysong.net/RBook/Figs/favicon.png){#fig-cat2}
+
+![右の猫](http://www.jaysong.net/RBook/Figs/favicon.png){#fig-cat3}
+
+3匹の猫
+:::
+
+　`:::{layout-ncol}`を使えば、複数の表を並べることもできる。相互参照についても同じだが、ラベル名は`#fig-`の代わりに`#tbl-`を使う必要がある。
+
+**Input:**
+
+```md
+　@tbl-two-tables は、東アジアとヨーロッパ主要都市の人口、面積、人口密度の一覧である。ただし、 @tbl-east-asia の東京は23区でなく、東京都全域であることに注意されたい。
+
+::: {#tbl-two-tables layout-ncol=2}
+| Name    | Pop.  | Area   | Density |
+|:--------|------:|-------:|--------:|
+| Tokyo   | 1,403 |  2,194 |  6,397  |
+| Beijing | 2,170 | 16,410 |  1,323  |
+| Seoul   |   949 |    605 | 15,688  |
+
+: East Asia {#tbl-east-asia}
+
+| Name   | Pop.  | Area  | Density |
+|:-------|------:|------:|--------:|
+| London | 943   | 1,569 |  5,354  |
+| Berlin | 367   |   892 |  4,114  |
+| Paris  | 215   |   105 | 20,382  |
+
+: Europe {#tbl-europe}
+
+首都の人口（万人）、面積（km<sup>2</sup>）、人口密度（人/km<sup>2</sup>）
+:::
+```
+
+**Output:**
+
+　@tbl-two-tables は、東アジアとヨーロッパ主要都市の人口、面積、人口密度の一覧である。ただし、 @tbl-east-asia の東京は23区でなく、東京都全域であることに注意されたい。
+
+::: {#tbl-two-tables layout-ncol=2}
+| Name    | Pop.  | Area   | Density |
+|:--------|------:|-------:|--------:|
+| Tokyo   | 1,403 |  2,194 |  6,397  |
+| Beijing | 2,170 | 16,410 |  1,323  |
+| Seoul   |   949 |    605 | 15,688  |
+
+: East Asia {#tbl-east-asia}
+
+| Name   | Pop.  | Area  | Density |
+|:-------|------:|------:|--------:|
+| London | 943   | 1,569 |  5,354  |
+| Berlin | 367   |   892 |  4,114  |
+| Paris  | 215   |   105 | 20,382  |
+
+: Europe {#tbl-europe}
+
+首都の人口（万人）、面積（km<sup>2</sup>）、人口密度（人/km<sup>2</sup>）
+:::
+
+　また、この機能はチャンクで生成された図についても使用かのうだ。チャンクオプションに`#| layout-ncol: 2`を追加すると、2つの図が横に並ぶことになる。詳しくは[Quarto公式レファレンス](https://quarto.org/docs/authoring/figures.html#computations)を参照すること。
 
 ### ハイパーリンクのターゲット
 
