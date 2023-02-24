@@ -28,20 +28,7 @@ source("_common.R")
 
 ## セットアップ {#sec-quarto-setup}
 
-1. Quartoのインストール
-2. RStudioのアップデート
-
-Quartoのインストール
-
-* <https://quarto.org/docs/get-started/>
-   * 自分のOSに合わせてダウンロード&インストール
-
-{quarto}のインストール（インストールしておくだけで良い）
-
-```{r}
-#| eval: false
-pacman::p_install("quarto") # または、install.packages("quarto")
-```
+　Quartoを使う前に以下の3つの項目を確認する必要がある。1つ目はQuarto CLIのインストールだ。Quarto CLIは[公式ホームページ](https://quarto.org/docs/get-started/)からダウンロードできる（<https://quarto.org/docs/get-started/>）。macOS、Linux、Windows版が提供されているため、自分のOSに合わせてダウンロードし、インストールしておこう。2つ目はRStudioを最新バージョンにアップデートすることだ。RStudioで本格的にQuartoが使えるようになったのはRStudio 2022.07からである。基本的に現時点での最新版をインストールしておけば問題ないだろう。2つ目はRパッケージ{quarto}のインストールだ。こちらはインストールするだけで十分で、別途読み込む必要がない。
 
 ## 簡単な使い方 {#sec-quarto-howtouse}
 
@@ -462,6 +449,7 @@ my_data
 ## プロット
 
 ```{r}
+#| label: fig-barplot
 #| fig-width: 8
 #| fig-height: 4
 my_data %>%
@@ -656,7 +644,56 @@ my_data %>%
 首都の人口（万人）、面積（km<sup>2</sup>）、人口密度（人/km<sup>2</sup>）
 :::
 
-　また、この機能はチャンクで生成された図についても使用かのうだ。チャンクオプションに`#| layout-ncol: 2`を追加すると、2つの図が横に並ぶことになる。詳しくは[Quarto公式レファレンス](https://quarto.org/docs/authoring/figures.html#computations)を参照すること。
+　また、この機能はチャンクで生成された図についても使用可能だ。チャンクオプションに`#| layout-ncol: 2`を追加すると、2つの図が横に並ぶことになる。ただし、相互参照の際、個別の図のラベルはこちら側では指定できず、自動生成される。たとえば、プロット群のラベルが`fig-two-plots`なら1つ目の図のラベルは`fig-two-plots-1`、2つ目は`fig-two-plots-2`となる。
+
+**Input:**
+
+````md
+
+　@fig-two-plots は2つの散布図であり、 @fig-two-plots-1 は速度と停止距離との関係、 @fig-two-plots-2 は気温と気圧の関係を示す。
+
+```{r}`r ''`
+#| label: fig-two-plots
+#| echo: false
+#| layout-ncol: 2
+#| fig-cap: "散布図の例"
+#| fig-subcap: 
+#|   - "速度と停止距離"
+#|   - "気温と気圧"
+cars %>%
+  ggplot(aes(x = speed, y = dist)) +
+  geom_point() +
+  labs(x = "Speed (mph)", y = "Stopping distance (ft)")
+
+pressure %>%
+  ggplot(aes(x = temperature, y = pressure)) +
+  geom_point() +
+  labs(x = "Temperature (Celsious)", y = "Pressure (mm)")
+```
+````
+
+**Output:**
+
+　@fig-two-plots は2つの散布図であり、 @fig-two-plots-1 は速度と停止距離との関係、 @fig-two-plots-2 は気温と気圧の関係を示す。
+
+```{r}
+#| label: fig-two-plots
+#| echo: false
+#| layout-ncol: 2
+#| fig-cap: "散布図の例"
+#| fig-subcap: 
+#|   - "速度と停止距離"
+#|   - "気温と気圧"
+cars %>%
+  ggplot(aes(x = speed, y = dist)) +
+  geom_point() +
+  labs(x = "Speed (mph)", y = "Stopping distance (ft)")
+
+pressure %>%
+  ggplot(aes(x = temperature, y = pressure)) +
+  geom_point() +
+  labs(x = "Temperature (Celsious)", y = "Pressure (mm)")
+```
 
 ### ハイパーリンクのターゲット
 
