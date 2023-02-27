@@ -12,17 +12,54 @@ source("_common.R")
 
 ## Quartoとは {#sec-quarto-intro}
 
-　Quartoは[Pandoc](https://pandoc.org/)ベースのオープンソース科学/技術出版システムである。簡単にいうと、R MarkdownのようにRコードと結果、文章を一つの文書として（HTML/PDF/Microsoft Word等）まとめてくれるものだ。目的が同じである以上、R Markdownを問題なく使いこなしているのであれば、Quartoの学習はさほど難しくないし、そもそもQuartoに乗り換える必要もあまりない。ただし、筆者（宋）は今後、QuartoがR Markdownに代わる主流になると考えているため、本章ではQuartoを簡単に紹介したい。
+　Quartoは[Pandoc](https://pandoc.org/)ベースのオープンソース科学/技術出版システムである。簡単にいうと、R MarkdownのようにRコードと結果、文章を一つの文書として（HTML/PDF/Microsoft Word等）まとめてくれるものだ。目的が同じである以上、R Markdownを問題なく使いこなしているのであれば、Quartoの学習はさほど難しくないし、そもそもQuartoに乗り換える必要もあまりない。ただし、筆者（宋）は今後、QuartoがR Markdownに代わる主流になると考えているため（そうでないと考えている方も大勢にいる）、本章ではQuartoを簡単に紹介したい。
 
 　むろん、別の名前が付いてある以上、Quarto = R Markdownではない。文法などの違いは本章の中盤以降に説明するとして、まず両者の技術的な面での違いを紹介する。
 
-　一点目は使用可能なエンジンだ。たとえば、R Markdownは`.Rmd`をknitrエンジンを経由し、コードとその結果物が含まれた`.md`ファイルを生成する。ここで生成された`.md`ファイルはPandocを経由してHTML、PDF、Microsoft Wordファイルに変換される。Quartoも基本的に同じである。ただい、knitrエンジン以外にもPython、Juliaで多用されるJupyterやJavaScripベースのObservableもエンジンとして使用可能という特徴がある。使用可能なエンジンが多いということはRコード以外にもPyhton、Julia、Observable JSのコードも使えるといったメリットがある。また、使用可能なエンジンは今後のアップデートで追加される可能性もある。
+　一点目は使用可能なエンジンだ。たとえば、R Markdownは`.Rmd`をknitrエンジンを経由し、コードとその結果物が含まれた`.md`ファイルを生成する。ここで生成された`.md`ファイルはPandocを経由してHTML、PDF、Microsoft Wordファイルに変換される（ @fig-rmd ）。Quartoも基本的に同じである。ただい、knitrエンジン以外にもPython、Juliaで多用されるJupyterやJavaScripベースのObservableもエンジンとして使用可能という特徴がある（ @fig-qmd ）。使用可能なエンジンが多いということはRコード以外にもPyhton、Julia、Observable JSのコードも使えるといったメリットがある。また、使用可能なエンジンは今後のアップデートで追加される可能性もある。ちなみにQuartoには[Mermaid](https://mermaid.js.org/)、[GraphViz](https://graphviz.org/)が実装されており、以下のようなダイアグラム作成も別途の設定なしで簡単にできる。
+
+:::{#fig-rmd-qud layout-ncol=1}
+```{mermaid}
+%%| label: fig-rmd
+%%| fig-cap: R Markdownの場合
+flowchart LR
+  A[.Rmd] --> B[knitr]
+  B --> C[.md]
+  C --> D{Pandoc}
+  D --> E(HTML)
+  D --> F(PDF)
+  D --> G(Microsoft Word)
+  D --> H(Etc.)
+```
+
+```{mermaid}
+%%| label: fig-qmd
+%%| fig-cap: Quartoの場合
+%%| fig-align: center
+flowchart LR
+  A[.qmd] --> B[knitr]
+  A --> C[Jupyter]
+  A --> D[Observable JS]
+  A --> E[Etc]
+  B --> F[.md]
+  C --> F
+  D --> F
+  E --> F
+  F --> G{Pandoc}
+  G --> H(HTML)
+  G --> I(PDF)
+  G --> J(Microsoft Word)
+  G --> K(Etc.)
+```
+
+R Markdown/Quartoから文書が生成されるまで
+:::
 
 　二点目は様々なフォーマットが統合されている点だ。R Markdownだと文書を作成する場合は{rmarkdown}パッケージ、ホームページを作成するなら{blogdown}パッケージ、スライドを作成するなら{xaringan}等のパッケージを使うことになる。しかし、Quartoはプラスアルファのパッケージを使わず、Quarto単体で様々なフォーマットが作成できる。ここまで聞くとR Markdownの方がより拡張性に優れているように見えるが、QuartoもまたQuarto Extensionを通じて様々な拡張機能が導入できる[^quarto-ext]。また、[Lua](https://www.lua.org/)言語の知識があれば、自分で拡張機能を作成することができる。
 
 [^quarto-ext]: 現時点（2023年2月27日）において拡張機能の追加はCLIを使ってQuartoプロジェクトフォルダーに追加する方法のみとなっているので、楽とまでは言えないが...
 
-　三点目はIDEだ。R Markdownの場合、ほぼRStudio一度であったが、QuartoだとVisual Studio CodeやJupyter、NeoVim、Emacs、SublimeTextも使用可能であり、RStudioとほぼ変わらない使用経験を提供する（ @fig-ides ）。
+　三点目はIDEだ。R Markdownの場合、ほぼRStudio一度（他のIDEでももちろん出来る）であったが、QuartoだとVisual Studio CodeやJupyter、NeoVim、Emacs、SublimeTextも使用可能であり、RStudioとほぼ変わらない使用経験を提供する（ @fig-ides ）。
 
 :::{#fig-ides layout="[[56,-2,42], [41,-2,57]]"}
 ![RStudio](https://quarto.org/docs/get-started/hello/images/rstudio-hello.png){.lightbox group="ide" height=200px}
@@ -731,6 +768,7 @@ pressure %>%
 
 ## Quartoを知り尽くす
 
-* Quarto公式HP：<https://quarto.org/docs/guide/>
+　Quartoは発展途中であり、以上の内容は1ヶ月後は古い資料になっているのかも知れない。本記事もなるべく最新情報をフォローしていく予定だが、Quartoの詳細を含め、最新情報は以下のページを参照されたい。
 
+* Quarto公式HP：<https://quarto.org/docs/guide/>
 * rstudio::conf 2022 Workshopの資料：<https://rstudio-conf-2022.github.io/get-started-quarto/>

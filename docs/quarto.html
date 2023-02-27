@@ -135,6 +135,9 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </script>
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 <meta property="og:title" content="私たちのR: ベストプラクティスの探求">
@@ -487,11 +490,72 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 
 <section id="sec-quarto-intro" class="level2" data-number="24.1">
 <h2 data-number="24.1" class="anchored" data-anchor-id="sec-quarto-intro"><span class="header-section-number">24.1</span> Quartoとは</h2>
-<p>　Quartoは<a href="https://pandoc.org/">Pandoc</a>ベースのオープンソース科学/技術出版システムである。簡単にいうと、R MarkdownのようにRコードと結果、文章を一つの文書として（HTML/PDF/Microsoft Word等）まとめてくれるものだ。目的が同じである以上、R Markdownを問題なく使いこなしているのであれば、Quartoの学習はさほど難しくないし、そもそもQuartoに乗り換える必要もあまりない。ただし、筆者（宋）は今後、QuartoがR Markdownに代わる主流になると考えているため、本章ではQuartoを簡単に紹介したい。</p>
+<p>　Quartoは<a href="https://pandoc.org/">Pandoc</a>ベースのオープンソース科学/技術出版システムである。簡単にいうと、R MarkdownのようにRコードと結果、文章を一つの文書として（HTML/PDF/Microsoft Word等）まとめてくれるものだ。目的が同じである以上、R Markdownを問題なく使いこなしているのであれば、Quartoの学習はさほど難しくないし、そもそもQuartoに乗り換える必要もあまりない。ただし、筆者（宋）は今後、QuartoがR Markdownに代わる主流になると考えているため（そうでないと考えている方も大勢にいる）、本章ではQuartoを簡単に紹介したい。</p>
 <p>　むろん、別の名前が付いてある以上、Quarto = R Markdownではない。文法などの違いは本章の中盤以降に説明するとして、まず両者の技術的な面での違いを紹介する。</p>
-<p>　一点目は使用可能なエンジンだ。たとえば、R Markdownは<code>.Rmd</code>をknitrエンジンを経由し、コードとその結果物が含まれた<code>.md</code>ファイルを生成する。ここで生成された<code>.md</code>ファイルはPandocを経由してHTML、PDF、Microsoft Wordファイルに変換される。Quartoも基本的に同じである。ただい、knitrエンジン以外にもPython、Juliaで多用されるJupyterやJavaScripベースのObservableもエンジンとして使用可能という特徴がある。使用可能なエンジンが多いということはRコード以外にもPyhton、Julia、Observable JSのコードも使えるといったメリットがある。また、使用可能なエンジンは今後のアップデートで追加される可能性もある。</p>
+<p>　一点目は使用可能なエンジンだ。たとえば、R Markdownは<code>.Rmd</code>をknitrエンジンを経由し、コードとその結果物が含まれた<code>.md</code>ファイルを生成する。ここで生成された<code>.md</code>ファイルはPandocを経由してHTML、PDF、Microsoft Wordファイルに変換される（ <a href="#fig-rmd">図&nbsp;<span>24.1 (a)</span></a> ）。Quartoも基本的に同じである。ただい、knitrエンジン以外にもPython、Juliaで多用されるJupyterやJavaScripベースのObservableもエンジンとして使用可能という特徴がある（ <a href="#fig-qmd">図&nbsp;<span>24.1 (b)</span></a> ）。使用可能なエンジンが多いということはRコード以外にもPyhton、Julia、Observable JSのコードも使えるといったメリットがある。また、使用可能なエンジンは今後のアップデートで追加される可能性もある。ちなみにQuartoには<a href="https://mermaid.js.org/">Mermaid</a>、<a href="https://graphviz.org/">GraphViz</a>が実装されており、以下のようなダイアグラム作成も別途の設定なしで簡単にできる。</p>
+<div id="fig-rmd-qud" class="quarto-layout-panel">
+<figure class="figure">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
+<div class="cell-output-display">
+<div id="fig-rmd" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p>
+</p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-1">flowchart LR
+  A[.Rmd] --&gt; B[knitr]
+  B --&gt; C[.md]
+  C --&gt; D{Pandoc}
+  D --&gt; E(HTML)
+  D --&gt; F(PDF)
+  D --&gt; G(Microsoft Word)
+  D --&gt; H(Etc.)
+</pre>
+<div id="mermaid-tooltip-1" class="mermaidTooltip">
+
+</div>
+<p></p>
+<p></p><figcaption class="figure-caption">(a) R Markdownの場合</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
+<div class="cell-output-display">
+<div id="fig-qmd" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p>
+</p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-2">flowchart LR
+  A[.qmd] --&gt; B[knitr]
+  A --&gt; C[Jupyter]
+  A --&gt; D[Observable JS]
+  A --&gt; E[Etc]
+  B --&gt; F[.md]
+  C --&gt; F
+  D --&gt; F
+  E --&gt; F
+  F --&gt; G{Pandoc}
+  G --&gt; H(HTML)
+  G --&gt; I(PDF)
+  G --&gt; J(Microsoft Word)
+  G --&gt; K(Etc.)
+</pre>
+<div id="mermaid-tooltip-2" class="mermaidTooltip">
+
+</div>
+<p></p>
+<p></p><figcaption class="figure-caption">(b) Quartoの場合</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p></p><figcaption class="figure-caption">図&nbsp;24.1: R Markdown/Quartoから文書が生成されるまで</figcaption><p></p>
+</figure>
+</div>
 <p>　二点目は様々なフォーマットが統合されている点だ。R Markdownだと文書を作成する場合は{rmarkdown}パッケージ、ホームページを作成するなら{blogdown}パッケージ、スライドを作成するなら{xaringan}等のパッケージを使うことになる。しかし、Quartoはプラスアルファのパッケージを使わず、Quarto単体で様々なフォーマットが作成できる。ここまで聞くとR Markdownの方がより拡張性に優れているように見えるが、QuartoもまたQuarto Extensionを通じて様々な拡張機能が導入できる<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>。また、<a href="https://www.lua.org/">Lua</a>言語の知識があれば、自分で拡張機能を作成することができる。</p>
-<p>　三点目はIDEだ。R Markdownの場合、ほぼRStudio一度であったが、QuartoだとVisual Studio CodeやJupyter、NeoVim、Emacs、SublimeTextも使用可能であり、RStudioとほぼ変わらない使用経験を提供する（ <a href="#fig-ides">図&nbsp;<span>24.1</span></a> ）。</p>
+<p>　三点目はIDEだ。R Markdownの場合、ほぼRStudio一度（他のIDEでももちろん出来る）であったが、QuartoだとVisual Studio CodeやJupyter、NeoVim、Emacs、SublimeTextも使用可能であり、RStudioとほぼ変わらない使用経験を提供する（ <a href="#fig-ides">図&nbsp;<span>24.2</span></a> ）。</p>
 <div id="fig-ides" class="quarto-layout-panel">
 <figure class="figure">
 <div class="quarto-layout-row quarto-layout-valign-top">
@@ -528,7 +592,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </figure>
 </div>
 </div>
-<p></p><figcaption class="figure-caption">図&nbsp;24.1: 各種IDE（出典はQuarto公式ホームページ）</figcaption><p></p>
+<p></p><figcaption class="figure-caption">図&nbsp;24.2: 各種IDE（出典はQuarto公式ホームページ）</figcaption><p></p>
 </figure>
 </div>
 <p>　しかし、QuartoはR Markdownの上位互換でもなく、R Markdownを代替するものでもないことには注意されたい（<a href="https://yihui.org/en/2022/04/quarto-r-markdown/">参考</a>）。つまり、既存のR Markdownを問題なく使っているのであれば、Quartoへの移行は不要だろう。現在のところ、QuartoはR Markdown生態系を一つに統合したものに近く、文法などもほぼ同じであるため、移行のために新しい事をゼロベースから勉強する必要はほぼない。</p>
@@ -593,13 +657,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"萼片の長さ (cm)"</span>, <span class="at">y =</span> <span class="st">"萼片の幅 (cm)"</span>, <span class="at">color =</span> <span class="st">"品種"</span>)</span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Output:</strong></p>
-<p>　以下の <a href="#fig-scatter1">図&nbsp;<span>24.2</span></a> は萼片の長さと幅を品種ごとに分けて示した散布図である。</p>
+<p>　以下の <a href="#fig-scatter1">図&nbsp;<span>24.3</span></a> は萼片の長さと幅を品種ごとに分けて示した散布図である。</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div id="fig-scatter1" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="quarto_files/figure-html/fig-scatter1-1.png" class="img-fluid figure-img" width="2100"></p>
-<p></p><figcaption class="figure-caption">図&nbsp;24.2: 萼片の長さと幅の関係（品種別）</figcaption><p></p>
+<p></p><figcaption class="figure-caption">図&nbsp;24.3: 萼片の長さと幅の関係（品種別）</figcaption><p></p>
 </figure>
 </div>
 </div>
@@ -924,7 +988,7 @@ Rはみんなの友達!
 <div id="fig-barplot" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="quarto_files/figure-html/fig-barplot-1.png" class="img-fluid figure-img" width="2400"></p>
-<p></p><figcaption class="figure-caption">図&nbsp;24.3: <strong>?(caption)</strong></figcaption><p></p>
+<p></p><figcaption class="figure-caption">図&nbsp;24.4: <strong>?(caption)</strong></figcaption><p></p>
 </figure>
 </div>
 </div>
@@ -1057,8 +1121,8 @@ Rはみんなの友達!
 <span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Output:</strong></p>
 <ul>
-<li>複数の図の相互参照: <a href="#fig-three-cats">図&nbsp;<span>24.4</span></a></li>
-<li>個別の図の相互参照: <a href="#fig-cat1">図&nbsp;<span>24.4 (a)</span></a></li>
+<li>複数の図の相互参照: <a href="#fig-three-cats">図&nbsp;<span>24.5</span></a></li>
+<li>個別の図の相互参照: <a href="#fig-cat1">図&nbsp;<span>24.5 (a)</span></a></li>
 </ul>
 <div id="fig-three-cats" class="quarto-layout-panel">
 <figure class="figure">
@@ -1088,7 +1152,7 @@ Rはみんなの友達!
 </div>
 </div>
 </div>
-<p></p><figcaption class="figure-caption">図&nbsp;24.4: 3匹の猫</figcaption><p></p>
+<p></p><figcaption class="figure-caption">図&nbsp;24.5: 3匹の猫</figcaption><p></p>
 </figure>
 </div>
 <p>　<code>:::{layout-ncol}</code>を使えば、複数の表を並べることもできる。相互参照についても同じだが、ラベル名は<code>#fig-</code>の代わりに<code>#tbl-</code>を使う必要がある。</p>
@@ -1213,7 +1277,7 @@ Rはみんなの友達!
 <span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Temperature (Celsious)"</span>, <span class="at">y =</span> <span class="st">"Pressure (mm)"</span>)</span>
 <span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Output:</strong></p>
-<p>　<a href="#fig-two-plots">図&nbsp;<span>24.5</span></a> は2つの散布図であり、 <a href="#fig-two-plots-1">図&nbsp;<span>24.5 (a)</span></a> は速度と停止距離との関係、 <a href="#fig-two-plots-2">図&nbsp;<span>24.5 (b)</span></a> は気温と気圧の関係を示す。</p>
+<p>　<a href="#fig-two-plots">図&nbsp;<span>24.6</span></a> は2つの散布図であり、 <a href="#fig-two-plots-1">図&nbsp;<span>24.6 (a)</span></a> は速度と停止距離との関係、 <a href="#fig-two-plots-2">図&nbsp;<span>24.6 (b)</span></a> は気温と気圧の関係を示す。</p>
 <div id="fig-two-plots" class="cell quarto-layout-panel">
 <figure class="figure">
 <div class="quarto-layout-row quarto-layout-valign-top">
@@ -1234,7 +1298,7 @@ Rはみんなの友達!
 </div>
 </div>
 </div>
-<p></p><figcaption class="figure-caption">図&nbsp;24.5: 散布図の例</figcaption><p></p>
+<p></p><figcaption class="figure-caption">図&nbsp;24.6: 散布図の例</figcaption><p></p>
 </figure>
 </div>
 </section>
@@ -1250,9 +1314,10 @@ Rはみんなの友達!
 </section>
 <section id="quartoを知り尽くす" class="level2" data-number="24.4">
 <h2 data-number="24.4" class="anchored" data-anchor-id="quartoを知り尽くす"><span class="header-section-number">24.4</span> Quartoを知り尽くす</h2>
+<p>　Quartoは発展途中であり、以上の内容は1ヶ月後は古い資料になっているのかも知れない。本記事もなるべく最新情報をフォローしていく予定だが、Quartoの詳細を含め、最新情報は以下のページを参照されたい。</p>
 <ul>
-<li><p>Quarto公式HP：<a href="https://quarto.org/docs/guide/" class="uri">https://quarto.org/docs/guide/</a></p></li>
-<li><p>rstudio::conf 2022 Workshopの資料：<a href="https://rstudio-conf-2022.github.io/get-started-quarto/" class="uri">https://rstudio-conf-2022.github.io/get-started-quarto/</a></p></li>
+<li>Quarto公式HP：<a href="https://quarto.org/docs/guide/" class="uri">https://quarto.org/docs/guide/</a></li>
+<li>rstudio::conf 2022 Workshopの資料：<a href="https://rstudio-conf-2022.github.io/get-started-quarto/" class="uri">https://rstudio-conf-2022.github.io/get-started-quarto/</a></li>
 </ul>
 
 
@@ -1435,7 +1500,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       <div class="nav-footer-center">Copyright 2023, Jaehyun Song and Yuki Yanai</div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"loop":true,"selector":".lightbox","openEffect":"zoom","closeEffect":"zoom","descPosition":"bottom"});</script>
+<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","openEffect":"zoom","selector":".lightbox","closeEffect":"zoom","loop":true});</script>
 
 
 
