@@ -1,23 +1,26 @@
 # 表の作成 {#sec-table}
 
-```{r}
+```{r table-common}
 #| include: false
-knitr::opts_chunk$set(dev = "ragg_png", attr.source='.numberLines')
+source("_common.R")
 ```
 
 ```{r table-setup}
-#| message: FALSE
-#| warning: FALSE
+#| message: false
+#| warning: false
 pacman::p_load(tidyverse, kableExtra, gt, DT)
 
 country_df <- read_csv("Data/Countries.csv")
 ```
 
-HTML出力のみならどっちでも問題ないが、{gt}が使いやすい。
+　記述統計や推定結果を示す場合は図表が用いられることが多い。図に関しては{ggplot2}が最もポピュラーなパッケージである（Base Rもまた根強い人気を誇る）。一方、表の場合、現時点において2つの選択肢がある。一つはこれまで長らく使われてきた{knitr}パッケージの`kable()`と{kabelExtra}パッケージの組み合わせ、もう一つがRStudioチームで開発し、近年注目を集めている{gt}パッケージだ。
 
-ただし、{gt}は開発途上であり、PDF出力との相性が現在 (`r Sys.Date()`)、優れているとはいい難いので、PDF出力まで考えているのであれば{knitr}の`kable()` + {kableExtra}を推奨
+　{gt}は**G**rammar of **T**ablesの略であり、**G**rammar of **G**raphicsの具現化した{ggplot2}の影響を受けたものである。つまり、一つの表を独立した要素に分解し、それぞれのレイヤーを重ねていくイメージだ。{ggplot2}の**考え方**（$\neq$使い方）に慣れている読者なら{gt}にもすぐ慣れるだろう。ただし、{gt}は開発途上であり、PDF出力との相性が現在 (`r format(Sys.Date(), "%Y年%m月%d日")`; {gt} `r packageVersion("gt")`)、優れているとはいい難い。表をPDF形式に出力したいのであれば{knitr}の`kable()` + {kableExtra}を推奨する。
 
-LaTeX出力とHTML出力の見た目が異なるため、調整が必要
+　ここでは{knitr} + {kableExtra}と{gt}パッケージ両方について簡単に解説する。また、どのパッケージもHTML出力とLaTeX出力両方に対応しているが、ここではHTML出力のみ紹介する。ただし、LaTeX出力に関しては引数の追加などで簡単にできるため、詳細は各パッケージの公式ページやヴィネット等を参考されたい。
+
+* [{knitr} + {kableExtra}のヴィネット](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html)
+* [{gt}の公式ホームページ](https://gt.rstudio.com/)
 
 ## {kableExtra}の使い方 {#sec-table-kbl}
 
@@ -280,7 +283,7 @@ country_desc %>%
 ```
 
 ```{r table-kbl-26}
-#| eval = knitr::is_html_output()
+#| eval: knitr::is_html_output()
 country_desc %>%
     kbl(digits = 3) %>%
     kable_paper(bootstrap_options = c("striped", "condensed"),
@@ -299,7 +302,7 @@ RMarkdownの出力形式がHTMLでなく、PDFの場合
 * 縦線を無くしたい場合は`kbl()`内に`booktabs = TRUE`を指定
 
 ```{r table-kbl-27}
-#| eval = knitr::is_latex_output()
+#| eval: !expr "knitr::is_latex_output()"
 country_desc %>%
     kbl(digits = 3, booktabs = TRUE)
 ```
@@ -307,7 +310,7 @@ country_desc %>%
 表を中央に位置づけたい場合は`kable_style()`内に`position = "center"`を指定
 
 ```{r table-kbl-28}
-#| eval = knitr::is_latex_output()
+#| eval: !expr "knitr::is_latex_output()"
 country_desc %>%
     kbl(digits = 3, booktabs = TRUE) %>%
     kable_styling(position = "center")
@@ -316,27 +319,47 @@ country_desc %>%
 LaTeX用表のコードが必要な場合、`format = "latex"`を指定
 
 ```{r table-kbl-29}
-#| eval: FALSE
+#| eval: false
 country_desc %>%
     kbl(format = "latex", digits = 3, booktabs = TRUE)
 ```
 
 ## {gt}の使い方 {#sec-table-gt}
 
-そのまま`country_desc`を使用
+　{gt}では、表がタイトル、列ラベル、ホディ―などの要素で構成されている考え（ @fig-gt-structure ）、それぞれの要素を追加したり、修正する形で表を作成する。
 
-表の出力
+![{gt}テーブルの構成要素](https://gt.rstudio.com/reference/figures/gt_parts_of_a_table.svg){#fig-gt-structure}
+
+　まず、これまで使ってきた`country_desc`を使ってHTML形式の表を出力してみよう。使用する関数は`gt()`であり、data.frameまたはtibbleオブジェクト名が第1引数である。
 
 ```{r table-gt-1}
-gt(country_desc)
+country_desc %>%
+    gt()
 ```
 
-小数点桁数の調整
+　これだけでも十分に綺麗な表が出来上がった。それではこちらの表を少しずつ修正してみよう。まず、Mean列からMax列だが、これを小数点3桁で丸めてみよう。これらの数字は @fig-gt-structure のTable Bodyに該当する。このTable Bodyのフォーマットに関わる調整は`fmt_*()`関数を使用する。`Mean`列から`Max`列までの**数値**に関する調整は`fmt_number()`関数を使用する。`gt()`で作成された表オブジェクトをそのまま`fmt_number()`に渡し、`columns`引数で何列に当該内容を適用するかを指定する。たとえば、Mean列からMax列までは2〜5列目に相当するので`columns = 2:5`、または`columns = c(2, 3, 4, 5)`で良い。続いて、小数点の桁数を指定する`decimals`に3を指定してみよう。
 
 ```{r table-gt-2}
 country_desc %>%
     gt() %>%
     fmt_number(columns = 2:5, decimals = 3)
+```
+
+　`columns`は列の番号じゃなく、列名そのままでも指定できる。
+
+```{r table-gt-3}
+country_desc %>%
+    gt() %>%
+    fmt_number(columns = c("Mean", "SD", "Min", "Max"), decimals = 3)
+```
+
+　また、HTMLのCSSによって異なるが、{gt}で作成された表の幅がページの幅に強制的に調整される場合がある。本書は[Quarto](quarto.qmd)で執筆されているが、まさにそのケースである。この場合は、`as_raw_html()`を使えば良い。一つ注意すべき点は`as_raw_html()`は必ず最後のレイヤーにする必要がある。`as_raw_html()`の後ろにレイヤーが足される場合はエラーが発生する。
+
+```{r table-gt-4}
+country_desc %>%
+    gt() %>%
+    fmt_number(columns = 2:5, decimals = 3) %>%
+    as_raw_html()
 ```
 
 ## データの出力 {#sec-table-dataout}
@@ -350,14 +373,14 @@ country_df
 {DT}パッケージの`datatable()`関数を使用した場合
 
 ```{r table-dataout-2}
-#| eval = FALSE
+#| eval: false
 datatable(country_df)
 ```
 
 `r if (knitr::is_latex_output()) '<!--'` 
 
 ```{r table-dataout-3}
-#| echo: FALSE
+#| echo: false
 datatable(country_df)
 ```
 
@@ -365,10 +388,6 @@ datatable(country_df)
 
 `r if (knitr::is_html_output()) '<!--'` 
 
-```{r table-dataout-4}
-#| echo: FALSE
-#| out.width: "100%"
-knitr::include_graphics("Figs/Table/DT.png")
-```
+![](Figs/Table/DT.png)
 
 `r if (knitr::is_html_output()) '-->'`
