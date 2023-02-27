@@ -104,6 +104,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -133,7 +136,6 @@ gtag('js', new Date());
 gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </script>
 
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <meta property="og:title" content="私たちのR: ベストプラクティスの探求">
 <meta property="og:description" content="R Not for Everyone: An Esoteric Guide">
@@ -485,36 +487,51 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 
 <section id="sec-quarto-intro" class="level2" data-number="24.1">
 <h2 data-number="24.1" class="anchored" data-anchor-id="sec-quarto-intro"><span class="header-section-number">24.1</span> Quartoとは</h2>
-<p>以下のように、QuartoとR Markdownは同じやり方でHTML/PDF/Wordファイルを生成する。</p>
-<ul>
-<li>R Markdown
-<ul>
-<li><code>.Rmd</code> <span class="math inline">\(\rightarrow\)</span> knitr <span class="math inline">\(\rightarrow\)</span> <code>.md</code> <span class="math inline">\(\rightarrow\)</span> pandoc <span class="math inline">\(\rightarrow\)</span> HTML/PDF/Word…</li>
-</ul></li>
-<li>Quarto
-<ul>
-<li><code>.qmd</code> <span class="math inline">\(\rightarrow\)</span> (knitr / Jupyter / Observable) <span class="math inline">\(\rightarrow\)</span> <code>.md</code> <span class="math inline">\(\rightarrow\)</span> pandoc <span class="math inline">\(\rightarrow\)</span> HTML/PDF/Word…</li>
-</ul></li>
-<li>R Markdownの場合、コードがRに限定されている（むろん、今はpythonなども使用可能）。
-<ul>
-<li>一方、Quartoはマルチリンガル（R、Pyhton、Juliaなど）</li>
-</ul></li>
-<li>R Markdownのエンジンはknitr
-<ul>
-<li>一方、Quartoはknitr、Jupyter、Observableが使用可能であり、今後も追加予定</li>
-</ul></li>
-<li>文書作成のための{rmarkdown}、ホームページ作成のための{blogdown}、スライド作成のための{xaringan}など
-<ul>
-<li>Quartoはこれらを全て一つに統合</li>
-<li>Quarto Extensionという拡張機能を追加する形式</li>
-</ul></li>
-<li>QuartoはRStudio以外にもVS Code、Jupyterなどでも使用可能</li>
-<li>QuartoはR Markdownの上位互換でもなく、R Markdownを代替するものでもない（<a href="https://yihui.org/en/2022/04/quarto-r-markdown/">参考</a>）。
-<ul>
-<li>つまり、既存のR Markdownを問題なく使っているのであれば、Quartoへの移行は不要</li>
-<li>現在のところ、QuartoはR Markdown生態系を一つに統合したものに近く、文法などもほぼ同じであるため、移行のために新しい事をゼロベースから勉強する必要はほぼない</li>
-</ul></li>
-</ul>
+<p>　Quartoは<a href="https://pandoc.org/">Pandoc</a>ベースのオープンソース科学/技術出版システムである。簡単にいうと、R MarkdownのようにRコードと結果、文章を一つの文書として（HTML/PDF/Microsoft Word等）まとめてくれるものだ。目的が同じである以上、R Markdownを問題なく使いこなしているのであれば、Quartoの学習はさほど難しくないし、そもそもQuartoに乗り換える必要もあまりない。ただし、筆者（宋）は今後、QuartoがR Markdownに代わる主流になると考えているため、本章ではQuartoを簡単に紹介したい。</p>
+<p>　むろん、別の名前が付いてある以上、Quarto = R Markdownではない。文法などの違いは本章の中盤以降に説明するとして、まず両者の技術的な面での違いを紹介する。</p>
+<p>　一点目は使用可能なエンジンだ。たとえば、R Markdownは<code>.Rmd</code>をknitrエンジンを経由し、コードとその結果物が含まれた<code>.md</code>ファイルを生成する。ここで生成された<code>.md</code>ファイルはPandocを経由してHTML、PDF、Microsoft Wordファイルに変換される。Quartoも基本的に同じである。ただい、knitrエンジン以外にもPython、Juliaで多用されるJupyterやJavaScripベースのObservableもエンジンとして使用可能という特徴がある。使用可能なエンジンが多いということはRコード以外にもPyhton、Julia、Observable JSのコードも使えるといったメリットがある。また、使用可能なエンジンは今後のアップデートで追加される可能性もある。</p>
+<p>　二点目は様々なフォーマットが統合されている点だ。R Markdownだと文書を作成する場合は{rmarkdown}パッケージ、ホームページを作成するなら{blogdown}パッケージ、スライドを作成するなら{xaringan}等のパッケージを使うことになる。しかし、Quartoはプラスアルファのパッケージを使わず、Quarto単体で様々なフォーマットが作成できる。ここまで聞くとR Markdownの方がより拡張性に優れているように見えるが、QuartoもまたQuarto Extensionを通じて様々な拡張機能が導入できる<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>。また、<a href="https://www.lua.org/">Lua</a>言語の知識があれば、自分で拡張機能を作成することができる。</p>
+<p>　三点目はIDEだ。R Markdownの場合、ほぼRStudio一度であったが、QuartoだとVisual Studio CodeやJupyter、NeoVim、Emacs、SublimeTextも使用可能であり、RStudioとほぼ変わらない使用経験を提供する（ <a href="#fig-ides">図&nbsp;<span>24.1</span></a> ）。</p>
+<div id="fig-ides" class="quarto-layout-panel">
+<figure class="figure">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-figure quarto-figure-center" style="flex-basis: 56.0%;justify-content: center;">
+<figure class="figure">
+<p><a href="https://quarto.org/docs/get-started/hello/images/rstudio-hello.png" class="lightbox" title="RStudio" data-gallery="ide"><img src="https://quarto.org/docs/get-started/hello/images/rstudio-hello.png" class="img-fluid figure-img"></a></p>
+<p></p><figcaption class="figure-caption">RStudio</figcaption><p></p>
+</figure>
+</div>
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 2.0%;justify-content: center;">
+<p>&nbsp;</p>
+</div>
+<div class="quarto-figure quarto-figure-center" style="flex-basis: 42.0%;justify-content: center;">
+<figure class="figure">
+<p><a href="https://quarto.org/docs/tools/images/vscode-render.png" class="lightbox" title="VS Code" data-gallery="ide"><img src="https://quarto.org/docs/tools/images/vscode-render.png" class="img-fluid figure-img"></a></p>
+<p></p><figcaption class="figure-caption">VS Code</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-figure quarto-figure-center" style="flex-basis: 41.0%;justify-content: center;">
+<figure class="figure">
+<p><a href="https://quarto.org/docs/get-started/hello/images/jupyter-quarto-preview.png" class="lightbox" title="Jupyter" data-gallery="ide"><img src="https://quarto.org/docs/get-started/hello/images/jupyter-quarto-preview.png" class="img-fluid figure-img"></a></p>
+<p></p><figcaption class="figure-caption">Jupyter</figcaption><p></p>
+</figure>
+</div>
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 2.0%;justify-content: center;">
+<p>&nbsp;</p>
+</div>
+<div class="quarto-figure quarto-figure-center" style="flex-basis: 57.0%;justify-content: center;">
+<figure class="figure">
+<p><a href="https://quarto.org/docs/get-started/hello/images/neovim-overview.png" class="lightbox" title="NeoVim" data-gallery="ide"><img src="https://quarto.org/docs/get-started/hello/images/neovim-overview.png" class="img-fluid figure-img"></a></p>
+<p></p><figcaption class="figure-caption">NeoVim</figcaption><p></p>
+</figure>
+</div>
+</div>
+<p></p><figcaption class="figure-caption">図&nbsp;24.1: 各種IDE（出典はQuarto公式ホームページ）</figcaption><p></p>
+</figure>
+</div>
+<p>　しかし、QuartoはR Markdownの上位互換でもなく、R Markdownを代替するものでもないことには注意されたい（<a href="https://yihui.org/en/2022/04/quarto-r-markdown/">参考</a>）。つまり、既存のR Markdownを問題なく使っているのであれば、Quartoへの移行は不要だろう。現在のところ、QuartoはR Markdown生態系を一つに統合したものに近く、文法などもほぼ同じであるため、移行のために新しい事をゼロベースから勉強する必要はほぼない。</p>
 </section>
 <section id="sec-quarto-setup" class="level2" data-number="24.2">
 <h2 data-number="24.2" class="anchored" data-anchor-id="sec-quarto-setup"><span class="header-section-number">24.2</span> セットアップ</h2>
@@ -522,11 +539,11 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </section>
 <section id="sec-quarto-howtouse" class="level2" data-number="24.3">
 <h2 data-number="24.3" class="anchored" data-anchor-id="sec-quarto-howtouse"><span class="header-section-number">24.3</span> 簡単な使い方</h2>
-<p>　Quartoは基本的にR Markdownと同じ感覚で使える。たとえば、R Markdownで新しい文書を作成する際はRStudioのFile &gt; New File &gt; <strong>R Markdown…</strong>を選択するが、QuartoはFile &gt; New File &gt; <strong>Quarto Document…</strong>を選択する<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>くらいの違いだ。ただし、作成したファイルを文書に変換するときにはR Markdownだと「Knit」ボタンをクリックしたが、QuartoはKnit以外にもJupyterやObservableなども使用可能であるため、代わりに「Render」ボタンをクリック<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>しよう。</p>
+<p>　Quartoは基本的にR Markdownと同じ感覚で使える。たとえば、R Markdownで新しい文書を作成する際はRStudioのFile &gt; New File &gt; <strong>R Markdown…</strong>を選択するが、QuartoはFile &gt; New File &gt; <strong>Quarto Document…</strong>を選択する<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>くらいの違いだ。ただし、作成したファイルを文書に変換するときにはR Markdownだと「Knit」ボタンをクリックしたが、QuartoはKnit以外にもJupyterやObservableなども使用可能であるため、代わりに「Render」ボタンをクリック<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>しよう。</p>
 <p>　以下ではR MarkdownとQuartoの書き方の違いについて解説する。すべてを列挙することはできないため、よく使う機能の相違点のみを紹介する。より詳しく知りたい場合はQuartoの<a href="https://quarto.org/docs/guide/">公式ホームページ</a>を参照すること。</p>
 <section id="チャンクオプションの付け方" class="level3" data-number="24.3.1">
 <h3 data-number="24.3.1" class="anchored" data-anchor-id="チャンクオプションの付け方"><span class="header-section-number">24.3.1</span> チャンクオプションの付け方</h3>
-<p>　現時点においてR Markdownと同じ書き方でも問題ない。つまり、<code>```{r}</code>の<code>r</code>の後ろにチャンクのラベル、オプションを付けても問題なく作動する。</p>
+<p>　<strong>現時点</strong>においてR Markdownと同じ書き方でも問題ない。つまり、<code>```{r}</code>の<code>r</code>の後ろにチャンクのラベル、オプションを付けても問題なく作動する。</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode md code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r fig-scatter1, fig.height = 5, fig.width = 7, fig.cap = "図の例", cache = TRUE}</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Species2 =</span> <span class="fu">recode</span>(Species,</span>
@@ -576,20 +593,20 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"萼片の長さ (cm)"</span>, <span class="at">y =</span> <span class="st">"萼片の幅 (cm)"</span>, <span class="at">color =</span> <span class="st">"品種"</span>)</span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Output:</strong></p>
-<p>　以下の <a href="#fig-scatter1">図&nbsp;<span>24.1</span></a> は萼片の長さと幅を品種ごとに分けて示した散布図である。</p>
+<p>　以下の <a href="#fig-scatter1">図&nbsp;<span>24.2</span></a> は萼片の長さと幅を品種ごとに分けて示した散布図である。</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div id="fig-scatter1" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="quarto_files/figure-html/fig-scatter1-1.png" class="img-fluid figure-img" width="2100"></p>
-<p></p><figcaption class="figure-caption">図&nbsp;24.1: 萼片の長さと幅の関係（品種別）</figcaption><p></p>
+<p></p><figcaption class="figure-caption">図&nbsp;24.2: 萼片の長さと幅の関係（品種別）</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　図だけでなく、表や章でも同じやり方で相互参照ができる。ただし、一点注意が必要である。相互参照に使うチャンクのラベルに制約があることだ。R Markdownではチャンクラベルの制限がなかったものの、Quartoの場合ラベルは<code>sec-</code>（章・節など）、<code>fig-</code>（図）、<code>tbl-</code>（表）で始まる必要がある。図表はチャンクラベルで指定できるが、章や節などの見出しの場合、以下のようにラベルを指定する。この書き方はチャンク以外の図表にラベルを付ける時も同様だ（後述）。</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode md code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Rの素晴らしさについて {#sec-aboutR}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>　また、Quartoの既定値のままだと「Figure X」と出力される。これを「図 X」の形式にしたい場合はYAMLヘッダーに<code>lang: ja</code>を追加するか、<code>language:</code>で別途指定する必要がある<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>。</p>
+<p>　また、Quartoの既定値のままだと「Figure X」と出力される。これを「図 X」の形式にしたい場合はYAMLヘッダーに<code>lang: ja</code>を追加するか、<code>language:</code>で別途指定する必要がある<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>。</p>
 </section>
 <section id="コールアウト" class="level3" data-number="24.3.3">
 <h3 data-number="24.3.3" class="anchored" data-anchor-id="コールアウト"><span class="header-section-number">24.3.3</span> コールアウト</h3>
@@ -907,7 +924,7 @@ Rはみんなの友達!
 <div id="fig-barplot" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="quarto_files/figure-html/fig-barplot-1.png" class="img-fluid figure-img" width="2400"></p>
-<p></p><figcaption class="figure-caption">図&nbsp;24.2: <strong>?(caption)</strong></figcaption><p></p>
+<p></p><figcaption class="figure-caption">図&nbsp;24.3: <strong>?(caption)</strong></figcaption><p></p>
 </figure>
 </div>
 </div>
@@ -1040,8 +1057,8 @@ Rはみんなの友達!
 <span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Output:</strong></p>
 <ul>
-<li>複数の図の相互参照: <a href="#fig-three-cats">図&nbsp;<span>24.3</span></a></li>
-<li>個別の図の相互参照: <a href="#fig-cat1">図&nbsp;<span>24.3 (a)</span></a></li>
+<li>複数の図の相互参照: <a href="#fig-three-cats">図&nbsp;<span>24.4</span></a></li>
+<li>個別の図の相互参照: <a href="#fig-cat1">図&nbsp;<span>24.4 (a)</span></a></li>
 </ul>
 <div id="fig-three-cats" class="quarto-layout-panel">
 <figure class="figure">
@@ -1071,7 +1088,7 @@ Rはみんなの友達!
 </div>
 </div>
 </div>
-<p></p><figcaption class="figure-caption">図&nbsp;24.3: 3匹の猫</figcaption><p></p>
+<p></p><figcaption class="figure-caption">図&nbsp;24.4: 3匹の猫</figcaption><p></p>
 </figure>
 </div>
 <p>　<code>:::{layout-ncol}</code>を使えば、複数の表を並べることもできる。相互参照についても同じだが、ラベル名は<code>#fig-</code>の代わりに<code>#tbl-</code>を使う必要がある。</p>
@@ -1196,7 +1213,7 @@ Rはみんなの友達!
 <span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Temperature (Celsious)"</span>, <span class="at">y =</span> <span class="st">"Pressure (mm)"</span>)</span>
 <span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Output:</strong></p>
-<p>　<a href="#fig-two-plots">図&nbsp;<span>24.4</span></a> は2つの散布図であり、 <a href="#fig-two-plots-1">図&nbsp;<span>24.4 (a)</span></a> は速度と停止距離との関係、 <a href="#fig-two-plots-2">図&nbsp;<span>24.4 (b)</span></a> は気温と気圧の関係を示す。</p>
+<p>　<a href="#fig-two-plots">図&nbsp;<span>24.5</span></a> は2つの散布図であり、 <a href="#fig-two-plots-1">図&nbsp;<span>24.5 (a)</span></a> は速度と停止距離との関係、 <a href="#fig-two-plots-2">図&nbsp;<span>24.5 (b)</span></a> は気温と気圧の関係を示す。</p>
 <div id="fig-two-plots" class="cell quarto-layout-panel">
 <figure class="figure">
 <div class="quarto-layout-row quarto-layout-valign-top">
@@ -1217,7 +1234,7 @@ Rはみんなの友達!
 </div>
 </div>
 </div>
-<p></p><figcaption class="figure-caption">図&nbsp;24.4: 散布図の例</figcaption><p></p>
+<p></p><figcaption class="figure-caption">図&nbsp;24.5: 散布図の例</figcaption><p></p>
 </figure>
 </div>
 </section>
@@ -1225,7 +1242,7 @@ Rはみんなの友達!
 <h3 data-number="24.3.7" class="anchored" data-anchor-id="ハイパーリンクのターゲット"><span class="header-section-number">24.3.7</span> ハイパーリンクのターゲット</h3>
 <p>　Markdownのハイパーリンクは以下のように書く。</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode md code-with-copy"><code class="sourceCode markdown"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">ここ</span><span class="co">](https://www.jaysong.net)</span>をクリックすると宋のホームページへ移動します。</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>　「ここ」の文字をクリックすると宋のホームページへ飛ばされるコードである、R Markdownも、Quartoもデフォルトではそのウィンドウ/タブを使うことになる<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>。これを新しいウィンドウ/タブで開かせるためにはやむを得ずHTMLタグを使う必要がある。</p>
+<p>　「ここ」の文字をクリックすると宋のホームページへ飛ばされるコードである、R Markdownも、Quartoもデフォルトではそのウィンドウ/タブを使うことになる<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>。これを新しいウィンドウ/タブで開かせるためにはやむを得ずHTMLタグを使う必要がある。</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">"https://www.jaysong.net"</span> <span class="er">target</span><span class="ot">=</span><span class="st">"_blank"</span><span class="kw">&gt;</span>ここ<span class="kw">&lt;/a&gt;</span>をクリックすると宋のホームページへ移動します。</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>　しかし、Quartoだと通常のMarkdown記法を使うことができる。<code>[]()</code>の後ろに<code>{target="_blank"}</code>を付けるだけだ。実は書く手間としては若干軽減された程度であるが、地味に嬉しい機能だ。</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode md code-with-copy"><code class="sourceCode markdown"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">ここ</span><span class="co">](https://www.jaysong.net)</span>{target="_blank"}をクリックすると宋のホームページへ移動します。</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1243,10 +1260,11 @@ Rはみんなの友達!
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>もし、「Quarto Document…」が表示されない場合はRStudioが古いバージョンである可能性が高いため、予め最新バージョンにアップデートしておこう。<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Knitボタンと同じ位置であり、ショートカットキーも同じく「Cmd + Shift + K (macOS)」、または「Ctrl + Shift + K (Windows)」である。<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>一つややこしいのが見出しの相互参照である。英語のままだと「Section 1」のように出力されるが、<code>lang:ja</code>で日本語化すると「セクション 1」のように表示される。これを「第1章」にしたい場合は、<code>第[-@sec-aboutR]章</code>のように書く必要がある。<code>[-@ラベル名]</code>にすると「Section」、「セクション」、「Figure」、「図」などを出力せず番号のみが出力される。<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>むろん、QuartoだとYAMLヘッダーに<code>link-external-newwindow: true</code>追加することで<strong>外部</strong>ページは新しいウィンドウ/タブで開くように設定できる。<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>現時点（2023年2月27日）において拡張機能の追加はCLIを使ってQuartoプロジェクトフォルダーに追加する方法のみとなっているので、楽とまでは言えないが…<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>もし、「Quarto Document…」が表示されない場合はRStudioが古いバージョンである可能性が高いため、予め最新バージョンにアップデートしておこう。<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Knitボタンと同じ位置であり、ショートカットキーも同じく「Cmd + Shift + K (macOS)」、または「Ctrl + Shift + K (Windows)」である。<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>一つややこしいのが見出しの相互参照である。英語のままだと「Section 1」のように出力されるが、<code>lang:ja</code>で日本語化すると「セクション 1」のように表示される。これを「第1章」にしたい場合は、<code>第[-@sec-aboutR]章</code>のように書く必要がある。<code>[-@ラベル名]</code>にすると「Section」、「セクション」、「Figure」、「図」などを出力せず番号のみが出力される。<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>むろん、QuartoだとYAMLヘッダーに<code>link-external-newwindow: true</code>追加することで<strong>外部</strong>ページは新しいウィンドウ/タブで開くように設定できる。<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -1417,6 +1435,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       <div class="nav-footer-center">Copyright 2023, Jaehyun Song and Yuki Yanai</div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"loop":true,"selector":".lightbox","openEffect":"zoom","closeEffect":"zoom","descPosition":"bottom"});</script>
 
 
 

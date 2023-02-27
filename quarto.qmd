@@ -1,3 +1,8 @@
+---
+filters:
+   - lightbox
+---
+
 # Quarto入門 {#sec-quarto}
 
 ```{r}
@@ -7,24 +12,31 @@ source("_common.R")
 
 ## Quartoとは {#sec-quarto-intro}
 
-以下のように、QuartoとR Markdownは同じやり方でHTML/PDF/Wordファイルを生成する。
+　Quartoは[Pandoc](https://pandoc.org/)ベースのオープンソース科学/技術出版システムである。簡単にいうと、R MarkdownのようにRコードと結果、文章を一つの文書として（HTML/PDF/Microsoft Word等）まとめてくれるものだ。目的が同じである以上、R Markdownを問題なく使いこなしているのであれば、Quartoの学習はさほど難しくないし、そもそもQuartoに乗り換える必要もあまりない。ただし、筆者（宋）は今後、QuartoがR Markdownに代わる主流になると考えているため、本章ではQuartoを簡単に紹介したい。
 
-* R Markdown
-   * `.Rmd` $\rightarrow$ knitr $\rightarrow$ `.md` $\rightarrow$ pandoc $\rightarrow$ HTML/PDF/Word...
-* Quarto
-   * `.qmd` $\rightarrow$ (knitr / Jupyter / Observable) $\rightarrow$ `.md` $\rightarrow$ pandoc $\rightarrow$ HTML/PDF/Word...
+　むろん、別の名前が付いてある以上、Quarto = R Markdownではない。文法などの違いは本章の中盤以降に説明するとして、まず両者の技術的な面での違いを紹介する。
 
-* R Markdownの場合、コードがRに限定されている（むろん、今はpythonなども使用可能）。
-   * 一方、Quartoはマルチリンガル（R、Pyhton、Juliaなど）
-* R Markdownのエンジンはknitr
-   * 一方、Quartoはknitr、Jupyter、Observableが使用可能であり、今後も追加予定
-* 文書作成のための{rmarkdown}、ホームページ作成のための{blogdown}、スライド作成のための{xaringan}など
-   * Quartoはこれらを全て一つに統合
-   * Quarto Extensionという拡張機能を追加する形式
-* QuartoはRStudio以外にもVS Code、Jupyterなどでも使用可能
-* QuartoはR Markdownの上位互換でもなく、R Markdownを代替するものでもない（[参考](https://yihui.org/en/2022/04/quarto-r-markdown/)）。
-   * つまり、既存のR Markdownを問題なく使っているのであれば、Quartoへの移行は不要
-   * 現在のところ、QuartoはR Markdown生態系を一つに統合したものに近く、文法などもほぼ同じであるため、移行のために新しい事をゼロベースから勉強する必要はほぼない
+　一点目は使用可能なエンジンだ。たとえば、R Markdownは`.Rmd`をknitrエンジンを経由し、コードとその結果物が含まれた`.md`ファイルを生成する。ここで生成された`.md`ファイルはPandocを経由してHTML、PDF、Microsoft Wordファイルに変換される。Quartoも基本的に同じである。ただい、knitrエンジン以外にもPython、Juliaで多用されるJupyterやJavaScripベースのObservableもエンジンとして使用可能という特徴がある。使用可能なエンジンが多いということはRコード以外にもPyhton、Julia、Observable JSのコードも使えるといったメリットがある。また、使用可能なエンジンは今後のアップデートで追加される可能性もある。
+
+　二点目は様々なフォーマットが統合されている点だ。R Markdownだと文書を作成する場合は{rmarkdown}パッケージ、ホームページを作成するなら{blogdown}パッケージ、スライドを作成するなら{xaringan}等のパッケージを使うことになる。しかし、Quartoはプラスアルファのパッケージを使わず、Quarto単体で様々なフォーマットが作成できる。ここまで聞くとR Markdownの方がより拡張性に優れているように見えるが、QuartoもまたQuarto Extensionを通じて様々な拡張機能が導入できる[^quarto-ext]。また、[Lua](https://www.lua.org/)言語の知識があれば、自分で拡張機能を作成することができる。
+
+[^quarto-ext]: 現時点（2023年2月27日）において拡張機能の追加はCLIを使ってQuartoプロジェクトフォルダーに追加する方法のみとなっているので、楽とまでは言えないが...
+
+　三点目はIDEだ。R Markdownの場合、ほぼRStudio一度であったが、QuartoだとVisual Studio CodeやJupyter、NeoVim、Emacs、SublimeTextも使用可能であり、RStudioとほぼ変わらない使用経験を提供する（ @fig-ides ）。
+
+:::{#fig-ides layout="[[56,-2,42], [41,-2,57]]"}
+![RStudio](https://quarto.org/docs/get-started/hello/images/rstudio-hello.png){.lightbox group="ide" height=200px}
+
+![VS Code](https://quarto.org/docs/tools/images/vscode-render.png){.lightbox group="ide" height=200px}
+
+![Jupyter](https://quarto.org/docs/get-started/hello/images/jupyter-quarto-preview.png){.lightbox group="ide" height=200px}
+
+![NeoVim](https://quarto.org/docs/get-started/hello/images/neovim-overview.png){.lightbox group="ide" height=200px}
+
+各種IDE（出典はQuarto公式ホームページ）
+:::
+
+　しかし、QuartoはR Markdownの上位互換でもなく、R Markdownを代替するものでもないことには注意されたい（[参考](https://yihui.org/en/2022/04/quarto-r-markdown/)）。つまり、既存のR Markdownを問題なく使っているのであれば、Quartoへの移行は不要だろう。現在のところ、QuartoはR Markdown生態系を一つに統合したものに近く、文法などもほぼ同じであるため、移行のために新しい事をゼロベースから勉強する必要はほぼない。
 
 ## セットアップ {#sec-quarto-setup}
 
@@ -42,7 +54,7 @@ source("_common.R")
 
 ### チャンクオプションの付け方
 
-　現時点においてR Markdownと同じ書き方でも問題ない。つまり、```` ```{r} ````の`r`の後ろにチャンクのラベル、オプションを付けても問題なく作動する。
+　**現時点**においてR Markdownと同じ書き方でも問題ない。つまり、```` ```{r} ````の`r`の後ろにチャンクのラベル、オプションを付けても問題なく作動する。
 
 ````md
 ```{r fig-scatter1, fig.height = 5, fig.width = 7, fig.cap = "図の例", cache = TRUE}`r ''`
