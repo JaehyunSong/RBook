@@ -24,6 +24,7 @@ pacman::p_load(tidyverse, kableExtra, gt, gtExtras, DT)
 #| message: false
 df1 <- read_csv("Data/countries_desc1.csv")
 df2 <- read_csv("Data/countries_desc2.csv")
+df3 <- read_csv("Data/countries_desc3.csv")
 ```
 
 :::{.panel-tabset}
@@ -37,6 +38,12 @@ df1
 
 ```{r table-dataset-3}
 df2
+```
+
+## `df3`の中身
+
+```{r table-dataset-4}
+df3
 ```
 :::
 
@@ -382,6 +389,76 @@ df2 %>%
 ```
 
 ### セルの色分け
+
+　続いて、セルに色塗りする方法を紹介する。
+
+```{r}
+df3 %>%
+  gt() %>%
+  fmt_number(columns = Population:FH, decimals = 3) %>%
+  as_raw_html()
+```
+
+```{r}
+df3 %>%
+  gt() %>%
+  fmt_number(columns = Population:FH, decimals = 3) %>%
+  gt_highlight_rows(rows = 3) %>%
+  as_raw_html()
+```
+
+```{r}
+df3 %>%
+  gt() %>%
+  fmt_number(columns = Population:FH, decimals = 3) %>%
+  gt_highlight_rows(rows = (HDI >= 0.75), font_weight = "normal") %>%
+  as_raw_html()
+```
+
+```{r}
+df3 %>%
+  gt() %>%
+  fmt_number(columns = Population:FH, decimals = 3) %>%
+  gt_highlight_cols(columns = Polity:FH,
+                    fill    = "#ACB3CC") %>%
+  as_raw_html()
+```
+
+```{r}
+df3 %>%
+  gt() %>%
+  fmt_number(columns = Population:FH, decimals = 3) %>%
+  gt_color_rows(Population) %>%
+  as_raw_html()
+```
+
+```{r}
+df3 %>%
+  gt() %>%
+  fmt_number(columns = Population:FH, decimals = 3) %>%
+  gt_color_rows(Population, domain = c(10, 110)) %>%
+  as_raw_html()
+```
+
+```{r}
+#| warning: false
+df3 %>%
+  gt() %>%
+  fmt_number(columns = Population:FH, decimals = 3) %>%
+  gt_color_rows(Population:FH,
+                palette = "RColorBrewer::YlOrRd") %>%
+  as_raw_html()
+```
+
+```{r}
+#| warning: false
+df3 %>%
+  gt() %>%
+  fmt_number(columns = Population:FH, decimals = 3) %>%
+  gt_color_rows(Population:FH,
+                palette = "ggsci::blue_material") %>%
+  as_raw_html()
+```
 
 ## データの出力 {#sec-table-dataout}
 
