@@ -326,6 +326,25 @@ df1 %>%
                "Min" = "最小値", "Max" = "最大値", "Obs" = "有効ケース数")
 ```
 
+　もう一つ見たいこところは、各セル内のテキストの揃えだ。たとえば、文字型列のVariableは左揃え、数値型列であるその他の列は右揃えになっている。これはこのままで問題ない。しかし、どうしても特定の列を中央揃えしたい時もあるだろう。その場合、`cols_align()`レイヤーで修正することができる。たとえば、Variable列の値を中央揃えに変えてみよう。引数は`align`で`"left"`、`"center"`、`"right"`のいずれかを、`columns`には適用したい列の番号、または列名を指定する。
+
+```{r}
+df1 %>%
+  gt() %>%
+  fmt_number(columns = 2:5, decimals = 3) %>%
+  cols_align(align = "center", columns = 1) # columns = Variable でもOK
+```
+
+　また、各列のラベル（@fig-gt-structure のcolumn labels）の位置も表のボディー（@fig-gt-structure のtable body）に連動する。もし、列ラベルのみ中央揃えにしたい場合は`tab_style()`レイヤーを使用する。
+
+```{r}
+df1 %>%
+  gt() %>%
+  fmt_number(columns = 2:5, decimals = 3) %>%
+  tab_style(style     = cell_text(align = "center"), # どうする?: 中央揃え
+            locations = cells_column_labels())       # どこを?: 列レベルだけ
+```
+
 　また、HTMLのCSSによって異なるが、{gt}で作成された表の幅がページの幅に強制的に調整される場合がある。本書は[Quarto](quarto.qmd)で執筆されているが、まさにそのケースである。この場合は、`as_raw_html()`を使えば良い。一つ注意すべき点は`as_raw_html()`は必ず最後のレイヤーにする必要がある。`as_raw_html()`の後ろにレイヤーが足される場合はエラーが発生する。
 
 ```{r table-gt-5}
@@ -335,7 +354,41 @@ df1 %>%
     as_raw_html()
 ```
 
+　この`as_raw_html()`は必要に応じて入れる。R Markdown/Quartoを使わない場合はそもそも不要だ（RStudioのViewerペインでは問題なく表示される）。もし、R Markdown/Quartoで{gt}を使用し、表の幅が気に入らない場合のみ使うことにしよう。
+
 ### タイトル・フットノート
+
+```{r}
+df1 %>%
+  gt() %>%
+  fmt_number(columns = 2:5, decimals = 3) %>%
+  tab_header(title = "タイトル", subtitle = "サブタイトル") %>%
+  tab_footnote(footnote = "注: ここにはフットノートが入る") %>%
+  tab_source_note(source_note = "出典: 『私たちのR』") %>%
+  as_raw_html()
+```
+
+```{r}
+df1 %>%
+  gt() %>%
+  fmt_number(columns = 2:5, decimals = 3) %>%
+  tab_header(title = "タイトル", subtitle = "サブタイトル") %>%
+  tab_footnote(footnote = "注1: ここにはフットノート1が入る") %>%
+  tab_footnote(footnote = "注2: ここにはフットノート2が入る") %>%
+  tab_source_note(source_note = "出典: 『私たちのR』") %>%
+  as_raw_html()
+```
+
+```{r}
+df1 %>%
+  gt() %>%
+  fmt_number(columns = 2:5, decimals = 3) %>%
+  tab_header(title = "タイトル", subtitle = "サブタイトル") %>%
+  tab_footnote(footnote = "注1: ここにはフットノート1が入る") %>%
+  tab_footnote(footnote = "注2: ここにはフットノート2が入る") %>%
+  tab_source_note(source_note = md("出典: 『[私たちのR](https://www.jaysong.net/RBook/)』")) %>%
+  as_raw_html()
+```
 
 ### グループ化
 
@@ -351,13 +404,15 @@ df1 %>%
 
 ```{r table-gt-7}
 df2 %>%
-    gt()
+    gt() %>%
+    as_raw_html()
 ```
 
 ```{r table-gt-8}
 df2 %>%
     group_by(Continent) %>%
-    gt()
+    gt() %>%
+    as_raw_html()
 ```
 
 ```{r table-gt-9}
@@ -458,6 +513,35 @@ df3 %>%
   gt_color_rows(Population:FH,
                 palette = "ggsci::blue_material") %>%
   as_raw_html()
+```
+
+### 表の出力
+
+　{gt}で作成した表は様々なフォーマットで出力することができる。現在（`r format(Sys.Date(), "%Y年%m月%d日")`; {gt} `r packageVersion("gt")`）、Microsoft Word（`.docx`）、$\LaTeX$（`.tex`）、ハイパーテキスト（`.html`）、リッチテキスト（`.rtf`）、画像（`.png`）形式で出力可能だ。ここでは簡単な例を紹介する。
+
+　まず、{gt}を使って表を作成し、オブジェクトとして作業環境内に格納する。ここでは`gt_table`と名付けた。この場合、`as_raw_html()`は不要だ。
+
+```{r}
+gt_table <- df1 %>%
+  gt() %>%
+  fmt_number(columns = 2:5, decimals = 3) %>%
+  tab_header(title = "タイトル", subtitle = "サブタイトル") %>%
+  tab_footnote(footnote = "注1: ここにはフットノート1が入る") %>%
+  tab_footnote(footnote = "注2: ここにはフットノート2が入る") %>%
+  tab_source_note(source_note = md("出典: 『[私たちのR](https://www.jaysong.net/RBook/)』"))
+
+gt_table
+```
+
+　この`gt_table`を保存する関数は`gtsave()`である。第1引数は先ほど作成した表のオブジェクト名、第2引数は出力するファイル名である。このファイル名の拡張子によって保存されるファイルのフォーマットが変わる。結果をここで見せることは難しいが、難しい作業ではないので各自やってみよう。
+
+```{r}
+#| eval: false
+gtsave(gt_table, "my_table.docx") # Microsoft Word
+gtsave(gt_table, "my_table.tex")  # LaTeX
+gtsave(gt_table, "my_table.html") # HTML
+gtsave(gt_table, "my_table.rtf")  # リッチテキスト
+gtsave(gt_table, "my_table.png")  # 画像（PNG）
 ```
 
 ## データの出力 {#sec-table-dataout}
