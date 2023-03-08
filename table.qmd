@@ -5,23 +5,24 @@
 source("_common.R")
 ```
 
-```{r table-setup}
-#| message: false
-#| warning: false
-pacman::p_load(tidyverse, kableExtra, gt, gtExtras, DT)
-```
+　記述統計や推定結果を示す場合は図表が用いられることが多い。図に関しては{ggplot2}が最もポピュラーなパッケージである（Base Rもまた根強い人気を誇る）。一方、表の場合、現時点において2つの選択肢がある。一つはこれまで長らく使われてきた{knitr}パッケージの`kable()`と{kabelExtra}パッケージの組み合わせ、もう一つが近年注目を集めている{gt}パッケージだ。
 
-　記述統計や推定結果を示す場合は図表が用いられることが多い。図に関しては{ggplot2}が最もポピュラーなパッケージである（Base Rもまた根強い人気を誇る）。一方、表の場合、現時点において2つの選択肢がある。一つはこれまで長らく使われてきた{knitr}パッケージの`kable()`と{kabelExtra}パッケージの組み合わせ、もう一つがRStudioチームで開発し、近年注目を集めている{gt}パッケージだ。
+　{gt}は**G**rammar of **T**ablesの略であり、**G**rammar of **G**raphicsの具現化した{ggplot2}の影響を受けたものである。つまり、一つの表を独立した要素に分解し、それぞれのレイヤーを重ねていくイメージだ。{ggplot2}の**考え方**（$\neq$使い方）に慣れている読者なら{gt}にもすぐ慣れるだろう。ただし、{gt}は開発途上であり、PDF出力との相性が現在 (`r format(Sys.Date(), "%Y年%m月%d日")`; {gt} `r packageVersion("gt")`)、優れているとはいい難い。表をPDF形式に出力したいのであれば{knitr}の`kable()` + {kableExtra}を推奨する。また、{gt}単体での機能は`kable()` + {kableExtra}より貧弱ではあったものの、現在は{gtExtras}の登場により、ほぼ同じことが行えるようになった。
 
-　{gt}は**G**rammar of **T**ablesの略であり、**G**rammar of **G**raphicsの具現化した{ggplot2}の影響を受けたものである。つまり、一つの表を独立した要素に分解し、それぞれのレイヤーを重ねていくイメージだ。{ggplot2}の**考え方**（$\neq$使い方）に慣れている読者なら{gt}にもすぐ慣れるだろう。ただし、{gt}は開発途上であり、PDF出力との相性が現在 (`r format(Sys.Date(), "%Y年%m月%d日")`; {gt} `r packageVersion("gt")`)、優れているとはいい難い。表をPDF形式に出力したいのであれば{knitr}の`kable()` + {kableExtra}を推奨する。
+　ここではRStudio社が開発をサポートしている{gt}パッケージについて簡単に解説する[^kableextra]。また、どのパッケージもHTML出力とLaTeX出力両方に対応しているが、ここではHTML出力のみ紹介する。ただし、LaTeX出力に関しては引数の追加などで簡単にできるため、詳細は各パッケージの公式ページやヴィネット等を参考されたい。
 
-　ここでは{knitr} + {kableExtra}と{gt}パッケージ両方について簡単に解説する。また、どのパッケージもHTML出力とLaTeX出力両方に対応しているが、ここではHTML出力のみ紹介する。ただし、LaTeX出力に関しては引数の追加などで簡単にできるため、詳細は各パッケージの公式ページやヴィネット等を参考されたい。
+[^kableextra]: `kable()` + {kableExtra}の使い方については、[インターネット上のヴィネット](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html)を参考されたい。
 
-* [{knitr} + {kableExtra}のヴィネット](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html)
 * [{gt}の公式ホームページ](https://gt.rstudio.com/)
 
-```{r table-dataset-1}
+　それではまず、実習に使用するパッケージとデータを読み込でおこう。
+
+```{r}
+#| label: table-setup
 #| message: false
+#| warning: false
+pacman::p_load(tidyverse, gt, gtExtras, DT)
+
 df1 <- read_csv("Data/countries_desc1.csv")
 df2 <- read_csv("Data/countries_desc2.csv")
 df3 <- read_csv("Data/countries_desc3.csv")
@@ -30,258 +31,22 @@ df3 <- read_csv("Data/countries_desc3.csv")
 :::{.panel-tabset}
 ## `df1`の中身
 
-```{r table-dataset-2}
+```{r table-dataset-1}
 df1
 ```
 
 ## `df2`の中身
 
-```{r table-dataset-3}
+```{r table-dataset-2}
 df2
 ```
 
 ## `df3`の中身
 
-```{r table-dataset-4}
+```{r table-dataset-3}
 df3
 ```
 :::
-
-## {kableExtra}の使い方 {#sec-table-kbl}
-
-### 表の出力
-
-```{r table-kbl-5}
-df1 %>%
-    kbl()
-```
-
-小数点桁数の調整
-
-```{r table-kbl-6}
-df1 %>%
-    kbl(digits = 3)
-```
-
-表の幅 (HTML限定)
-
-```{r table-kbl-7}
-df1 %>%
-    kbl(digits = 3) %>%
-    kable_styling(full_width = FALSE)
-```
-
-### 列の操作
-
-列名の修正
-
-全ての列を指定する必要がある
-
-```{r table-kbl-8}
-df1 %>%
-    kbl(col.names = c("変数", "平均値", "標準偏差", 
-                      "最小値", "最大値", "観察数"),
-        digits = 3)
-```
-
-列の揃え
-
-全ての列を指定する必要がある
-
-```{r table-kbl-9}
-# 不要だが、あえてVariable列を中央揃えにする
-df1 %>%
-    kbl(align = c("crrrrr"),
-        digits = 3)
-```
-
-### タイトル、フットノート
-
-```{r table-kbl-10}
-df1 %>%
-    kbl(caption = "記述統計表", digits = 3)
-```
-
-```{r table-kbl-11}
-df1 %>%
-    kbl(caption = "記述統計表", digits = 3) %>%
-    footnote(general       = "『私たちのR』のサンプルデータ",
-             general_title = "出典:")
-```
-
-```{r table-kbl-12}
-df12 <- df1
-
-names(df12)[4:5] <- paste0(names(df12)[4:5],
-                                    footnote_marker_number(1))
-names(df12)[6] <- paste0(names(df12)[6],
-                                  footnote_marker_number(2))
-
-df12 %>%
-    kbl(caption = "記述統計表", escape = FALSE, digits = 3) %>%
-    footnote(general = "出典: 『私たちのR』のサンプルデータ",
-             number  = c("欠損値を除く", "欠損していないケース数"))
-```
-
-### グループ化
-
-列のグループ化
-
-グループ化しない列のラベルは`""`でなく、`" "`にする。
-
-```{r table-kbl-13}
-df1 %>%
-    kbl(digits = 3) %>%
-    add_header_above(c(" " = 3, "Range" = 2, " " = 1))
-```
-
-行のグループ化
-
-```{r table-kbl-14}
-df1 %>%
-    kbl(digits = 3) %>%
-    pack_rows("Demographic factors", 1, 2) %>%
-    pack_rows("Economic factors", 3, 5) %>%
-    pack_rows("Political factors", 6, 7)
-```
-
-```{r table-kbl-15}
-df13 <- df1 %>%
-    mutate(Factor  = c(rep("Demographic", 2),
-                       rep("Economic", 3),
-                       rep("Political", 2)),
-           .before = Variable)
-
-df13 %>%
-    kbl(digits = 3)
-```
-
-```{r table-kbl-16}
-df13 %>%
-    kbl(digits = 3) %>%
-    collapse_rows(columns = 1, valign = "top")
-```
-
-### セルの色分け（HTML限定）
-
-{formattable}パッケージ使用
-
-```{r table-kbl-17}
-#| eval: false
-df14 <- country_df %>%
-    mutate(Population     = Population / 1000000,
-           Area           = Area / 10000,
-           GDP_per_capita = GDP_per_capita / 10000,
-           PPP_per_capita = PPP_per_capita / 10000) %>%
-    select(HDI_2018, 
-           Population, Area, GDP = GDP_per_capita, PPP = PPP_per_capita, 
-           Polity = Polity_Score, FreedomHouse = FH_Total) %>%
-    drop_na() %>%
-    cor() %>%
-    as.data.frame() %>%
-    rownames_to_column("Variable") %>%
-    select(Variable, Cor = HDI_2018) %>%
-    filter(Variable != "HDI_2018")
-```
-
-```{r table-kbl-18}
-#| eval: false
-df14 %>%
-    kbl(digits = 3)
-```
-
-```{r table-kbl-19}
-#| eval: false
-pacman::p_load(formattable)
-
-df14$Cor2 <- color_text("blue", "red")(sprintf("%.3f", df14$Cor))
-df14$Cor3 <- color_tile("white", "mistyrose")(sprintf("%.3f", df14$Cor))
-
-df14 %>%
-    kbl(col.names = c("変数", "数字のみ", "文字色", "色塗り"),
-        digits = 3, escape = FALSE) %>%
-    add_header_above(c(" " = 1, "人間開発指数との相関係数" = 3))
-```
-
-### テーマ
-
-```{r table-kbl-20}
-df1 %>%
-    kbl(digits = 3) %>%
-    kable_paper()
-```
-
-```{r table-kbl-21}
-df1 %>%
-    kbl(digits = 3) %>%
-    kable_classic()
-```
-
-```{r table-kbl-22}
-df1 %>%
-    kbl(digits = 3) %>%
-    kable_classic_2()
-```
-
-```{r table-kbl-23}
-df1 %>%
-    kbl(digits = 3) %>%
-    kable_minimal()
-```
-
-```{r table-kbl-24}
-df1 %>%
-    kbl(digits = 3) %>%
-    kable_material()
-```
-
-```{r table-kbl-25}
-df1 %>%
-    kbl(digits = 3) %>%
-    kable_paper(bootstrap_options = "striped",
-                full_width        = FALSE)
-```
-
-```{r table-kbl-26}
-df1 %>%
-    kbl(digits = 3) %>%
-    kable_paper(bootstrap_options = c("striped", "condensed"),
-                full_width        = FALSE)
-```
-
-他にも`"hover"`や`"responsive"`、`"bordered"`あり
-
-テーマを変更せずにスタイルを変更したい場合は`kable_styling()`を使用
-
-### LaTeX形式への出力
-
-RMarkdownの出力形式がHTMLでなく、PDFの場合
-
-* `kable_style()`やテーマ関数 (`kable_*()`)内に`full_width = FALSE`の指定は不要
-* 縦線を無くしたい場合は`kbl()`内に`booktabs = TRUE`を指定
-
-```{r table-kbl-27}
-#| eval: !expr "knitr::is_latex_output()"
-df1 %>%
-    kbl(digits = 3, booktabs = TRUE)
-```
-
-表を中央に位置づけたい場合は`kable_style()`内に`position = "center"`を指定
-
-```{r table-kbl-28}
-#| eval: !expr "knitr::is_latex_output()"
-df1 %>%
-    kbl(digits = 3, booktabs = TRUE) %>%
-    kable_styling(position = "center")
-```
-
-LaTeX用表のコードが必要な場合、`format = "latex"`を指定
-
-```{r table-kbl-29}
-#| eval: false
-df1 %>%
-    kbl(format = "latex", digits = 3, booktabs = TRUE)
-```
 
 ## {gt}の使い方 {#sec-table-gt}
 
@@ -294,7 +59,7 @@ df1 %>%
 　まず、これまで使ってきた`df1`を使ってHTML形式の表を出力してみよう。使用する関数は`gt()`であり、data.frameまたはtibbleオブジェクト名が第1引数である。
 
 ```{r table-gt-1}
-df1 %>%
+df1 |>
     gt()
 ```
 
@@ -303,25 +68,25 @@ df1 %>%
 　これだけでも十分に綺麗な表が出来上がった。それではこちらの表を少しずつ修正してみよう。まず、Mean列からMax列だが、これを小数点3桁で丸めてみよう。これらの数字は @fig-gt-structure のTable Bodyに該当する。このTable Bodyのフォーマットに関わる調整は`fmt_*()`関数を使用する。`Mean`列から`Max`列までの**数値**に関する調整は`fmt_number()`関数を使用する。`gt()`で作成された表オブジェクトをそのまま`fmt_number()`に渡し、`columns`引数で何列に当該内容を適用するかを指定する。たとえば、Mean列からMax列までは2〜5列目に相当するので`columns = 2:5`、または`columns = c(2, 3, 4, 5)`で良い。続いて、小数点の桁数を指定する`decimals`に3を指定してみよう。
 
 ```{r table-gt-2}
-df1 %>%
-    gt() %>%
+df1 |>
+    gt() |>
     fmt_number(columns = 2:5, decimals = 3)
 ```
 
 　`columns`は列の番号じゃなく、列名そのままでも指定できる。
 
 ```{r table-gt-3}
-df1 %>%
-    gt() %>%
+df1 |>
+    gt() |>
     fmt_number(columns = c("Mean", "SD", "Min", "Max"), decimals = 3)
 ```
 
 　列名の変更は`cols_lable()`レイヤーで行う。`()`内には`"元の列名" = "新しい列名"`のように記述する。`kbl()`は全ての列に対して列名を指定しないといけなかったが（つまり、変更したくない列も一応、指定が必要）、{gt}だと変更したい列のみ指定しても良いといったメリットがある。
 
 ```{r table-gt-4}
-df1 %>%
-    gt() %>%
-    fmt_number(columns = 2:5, decimals = 3) %>%
+df1 |>
+    gt() |>
+    fmt_number(columns = 2:5, decimals = 3) |>
     cols_label("Variable" = "変数", "Mean" = "平均値", "SD" = "標準偏差",
                "Min" = "最小値", "Max" = "最大値", "Obs" = "有効ケース数")
 ```
@@ -329,18 +94,18 @@ df1 %>%
 　もう一つ見たいこところは、各セル内のテキストの揃えだ。たとえば、文字型列のVariableは左揃え、数値型列であるその他の列は右揃えになっている。これはこのままで問題ない。しかし、どうしても特定の列を中央揃えしたい時もあるだろう。その場合、`cols_align()`レイヤーで修正することができる。たとえば、Variable列の値を中央揃えに変えてみよう。引数は`align`で`"left"`、`"center"`、`"right"`のいずれかを、`columns`には適用したい列の番号、または列名を指定する。
 
 ```{r}
-df1 %>%
-  gt() %>%
-  fmt_number(columns = 2:5, decimals = 3) %>%
+df1 |>
+  gt() |>
+  fmt_number(columns = 2:5, decimals = 3) |>
   cols_align(align = "center", columns = 1) # columns = Variable でもOK
 ```
 
 　また、各列のラベル（@fig-gt-structure のcolumn labels）の位置も表のボディー（@fig-gt-structure のtable body）に連動する。もし、列ラベルのみ中央揃えにしたい場合は`tab_style()`レイヤーを使用する。
 
 ```{r}
-df1 %>%
-  gt() %>%
-  fmt_number(columns = 2:5, decimals = 3) %>%
+df1 |>
+  gt() |>
+  fmt_number(columns = 2:5, decimals = 3) |>
   tab_style(style     = cell_text(align = "center"), # どうする?: 中央揃え
             locations = cells_column_labels())       # どこを?: 列レベルだけ
 ```
@@ -348,9 +113,9 @@ df1 %>%
 　また、HTMLのCSSによって異なるが、{gt}で作成された表の幅がページの幅に強制的に調整される場合がある。本書は[Quarto](quarto.qmd)で執筆されているが、まさにそのケースである。この場合は、`as_raw_html()`を使えば良い。一つ注意すべき点は`as_raw_html()`は必ず最後のレイヤーにする必要がある。`as_raw_html()`の後ろにレイヤーが足される場合はエラーが発生する。
 
 ```{r table-gt-5}
-df1 %>%
-    gt() %>%
-    fmt_number(columns = 2:5, decimals = 3) %>%
+df1 |>
+    gt() |>
+    fmt_number(columns = 2:5, decimals = 3) |>
     as_raw_html()
 ```
 
@@ -359,34 +124,34 @@ df1 %>%
 ### タイトル・フットノート
 
 ```{r}
-df1 %>%
-  gt() %>%
-  fmt_number(columns = 2:5, decimals = 3) %>%
-  tab_header(title = "タイトル", subtitle = "サブタイトル") %>%
-  tab_footnote(footnote = "注: ここにはフットノートが入る") %>%
-  tab_source_note(source_note = "出典: 『私たちのR』") %>%
+df1 |>
+  gt() |>
+  fmt_number(columns = 2:5, decimals = 3) |>
+  tab_header(title = "タイトル", subtitle = "サブタイトル") |>
+  tab_footnote(footnote = "注: ここにはフットノートが入る") |>
+  tab_source_note(source_note = "出典: 『私たちのR』") |>
   as_raw_html()
 ```
 
 ```{r}
-df1 %>%
-  gt() %>%
-  fmt_number(columns = 2:5, decimals = 3) %>%
-  tab_header(title = "タイトル", subtitle = "サブタイトル") %>%
-  tab_footnote(footnote = "注1: ここにはフットノート1が入る") %>%
-  tab_footnote(footnote = "注2: ここにはフットノート2が入る") %>%
-  tab_source_note(source_note = "出典: 『私たちのR』") %>%
+df1 |>
+  gt() |>
+  fmt_number(columns = 2:5, decimals = 3) |>
+  tab_header(title = "タイトル", subtitle = "サブタイトル") |>
+  tab_footnote(footnote = "注1: ここにはフットノート1が入る") |>
+  tab_footnote(footnote = "注2: ここにはフットノート2が入る") |>
+  tab_source_note(source_note = "出典: 『私たちのR』") |>
   as_raw_html()
 ```
 
 ```{r}
-df1 %>%
-  gt() %>%
-  fmt_number(columns = 2:5, decimals = 3) %>%
-  tab_header(title = "タイトル", subtitle = "サブタイトル") %>%
-  tab_footnote(footnote = "注1: ここにはフットノート1が入る") %>%
-  tab_footnote(footnote = "注2: ここにはフットノート2が入る") %>%
-  tab_source_note(source_note = md("出典: 『[私たちのR](https://www.jaysong.net/RBook/)』")) %>%
+df1 |>
+  gt() |>
+  fmt_number(columns = 2:5, decimals = 3) |>
+  tab_header(title = "タイトル", subtitle = "サブタイトル") |>
+  tab_footnote(footnote = "注1: ここにはフットノート1が入る") |>
+  tab_footnote(footnote = "注2: ここにはフットノート2が入る") |>
+  tab_source_note(source_note = md("出典: 『[私たちのR](https://www.jaysong.net/RBook/)』")) |>
   as_raw_html()
 ```
 
@@ -395,51 +160,51 @@ df1 %>%
 　列をグループ化するためには`tab_spanner()`関数を使う。`columns`引数にはグループ化する列の位置、もしくは名前を、`label`にはグループ名を指定すれば良い。
 
 ```{r table-gt-6}
-df1 %>%
-    gt() %>%
-    tab_spanner(columns = 4:5, label = "Range") %>%
-    fmt_number(columns = 2:5, decimals = 3) %>%
+df1 |>
+    gt() |>
+    tab_spanner(columns = 4:5, label = "Range") |>
+    fmt_number(columns = 2:5, decimals = 3) |>
     as_raw_html()
 ```
 
 ```{r table-gt-7}
-df2 %>%
-    gt() %>%
+df2 |>
+    gt() |>
     as_raw_html()
 ```
 
 ```{r table-gt-8}
-df2 %>%
-    group_by(Continent) %>%
-    gt() %>%
+df2 |>
+    group_by(Continent) |>
+    gt() |>
     as_raw_html()
 ```
 
 ```{r table-gt-9}
 #| error: true
-df2 %>%
-    group_by(Continent) %>%
-    gt() %>%
-    tab_spanner(columns = 4:5, label = "Range") %>%
-    fmt_number(columns = 2:5, decimals = 3) %>%
+df2 |>
+    group_by(Continent) |>
+    gt() |>
+    tab_spanner(columns = 4:5, label = "Range") |>
+    fmt_number(columns = 2:5, decimals = 3) |>
     as_raw_html()
 ```
 
 ```{r table-gt-10}
-df2 %>%
-    group_by(Continent) %>%
-    gt() %>%
-    tab_spanner(columns = 5:6, label = "Range") %>%
-    fmt_number(columns = 3:6, decimals = 3) %>%
+df2 |>
+    group_by(Continent) |>
+    gt() |>
+    tab_spanner(columns = 5:6, label = "Range") |>
+    fmt_number(columns = 3:6, decimals = 3) |>
     as_raw_html()
 ```
 
 ```{r table-gt-11}
-df2 %>%
-    group_by(Continent) %>%
-    gt(rowname_col = "Variable") %>%
-    tab_spanner(columns = 5:6, label = "Range") %>%
-    fmt_number(columns = 3:6, decimals = 3) %>%
+df2 |>
+    group_by(Continent) |>
+    gt(rowname_col = "Variable") |>
+    tab_spanner(columns = 5:6, label = "Range") |>
+    fmt_number(columns = 3:6, decimals = 3) |>
     as_raw_html()
 ```
 
@@ -448,70 +213,70 @@ df2 %>%
 　続いて、セルに色塗りする方法を紹介する。
 
 ```{r}
-df3 %>%
-  gt() %>%
-  fmt_number(columns = Population:FH, decimals = 3) %>%
+df3 |>
+  gt() |>
+  fmt_number(columns = Population:FH, decimals = 3) |>
   as_raw_html()
 ```
 
 ```{r}
-df3 %>%
-  gt() %>%
-  fmt_number(columns = Population:FH, decimals = 3) %>%
-  gt_highlight_rows(rows = 3) %>%
+df3 |>
+  gt() |>
+  fmt_number(columns = Population:FH, decimals = 3) |>
+  gt_highlight_rows(rows = 3) |>
   as_raw_html()
 ```
 
 ```{r}
-df3 %>%
-  gt() %>%
-  fmt_number(columns = Population:FH, decimals = 3) %>%
-  gt_highlight_rows(rows = (HDI >= 0.75), font_weight = "normal") %>%
+df3 |>
+  gt() |>
+  fmt_number(columns = Population:FH, decimals = 3) |>
+  gt_highlight_rows(rows = (HDI >= 0.75), font_weight = "normal") |>
   as_raw_html()
 ```
 
 ```{r}
-df3 %>%
-  gt() %>%
-  fmt_number(columns = Population:FH, decimals = 3) %>%
+df3 |>
+  gt() |>
+  fmt_number(columns = Population:FH, decimals = 3) |>
   gt_highlight_cols(columns = Polity:FH,
-                    fill    = "#ACB3CC") %>%
+                    fill    = "#ACB3CC") |>
   as_raw_html()
 ```
 
 ```{r}
-df3 %>%
-  gt() %>%
-  fmt_number(columns = Population:FH, decimals = 3) %>%
-  gt_color_rows(Population) %>%
+df3 |>
+  gt() |>
+  fmt_number(columns = Population:FH, decimals = 3) |>
+  gt_color_rows(Population) |>
   as_raw_html()
 ```
 
 ```{r}
-df3 %>%
-  gt() %>%
-  fmt_number(columns = Population:FH, decimals = 3) %>%
-  gt_color_rows(Population, domain = c(10, 110)) %>%
-  as_raw_html()
-```
-
-```{r}
-#| warning: false
-df3 %>%
-  gt() %>%
-  fmt_number(columns = Population:FH, decimals = 3) %>%
-  gt_color_rows(Population:FH,
-                palette = "RColorBrewer::YlOrRd") %>%
+df3 |>
+  gt() |>
+  fmt_number(columns = Population:FH, decimals = 3) |>
+  gt_color_rows(Population, domain = c(10, 110)) |>
   as_raw_html()
 ```
 
 ```{r}
 #| warning: false
-df3 %>%
-  gt() %>%
-  fmt_number(columns = Population:FH, decimals = 3) %>%
+df3 |>
+  gt() |>
+  fmt_number(columns = Population:FH, decimals = 3) |>
   gt_color_rows(Population:FH,
-                palette = "ggsci::blue_material") %>%
+                palette = "RColorBrewer::YlOrRd") |>
+  as_raw_html()
+```
+
+```{r}
+#| warning: false
+df3 |>
+  gt() |>
+  fmt_number(columns = Population:FH, decimals = 3) |>
+  gt_color_rows(Population:FH,
+                palette = "ggsci::blue_material") |>
   as_raw_html()
 ```
 
@@ -522,12 +287,12 @@ df3 %>%
 　まず、{gt}を使って表を作成し、オブジェクトとして作業環境内に格納する。ここでは`gt_table`と名付けた。この場合、`as_raw_html()`は不要だ。
 
 ```{r}
-gt_table <- df1 %>%
-  gt() %>%
-  fmt_number(columns = 2:5, decimals = 3) %>%
-  tab_header(title = "タイトル", subtitle = "サブタイトル") %>%
-  tab_footnote(footnote = "注1: ここにはフットノート1が入る") %>%
-  tab_footnote(footnote = "注2: ここにはフットノート2が入る") %>%
+gt_table <- df1 |>
+  gt() |>
+  fmt_number(columns = 2:5, decimals = 3) |>
+  tab_header(title = "タイトル", subtitle = "サブタイトル") |>
+  tab_footnote(footnote = "注1: ここにはフットノート1が入る") |>
+  tab_footnote(footnote = "注2: ここにはフットノート2が入る") |>
   tab_source_note(source_note = md("出典: 『[私たちのR](https://www.jaysong.net/RBook/)』"))
 
 gt_table
@@ -546,20 +311,55 @@ gtsave(gt_table, "my_table.png")  # 画像（PNG）
 
 ## データの出力 {#sec-table-dataout}
 
-通常の出力の場合
+　PDF、Microsoft Word形式の文書を作成する場合、生データ（raw data）を掲載することはめったにないだろう。数十行のデータなら掲載することもあるが[^lijphart]、規模の大きいデータセットの場合、資源（紙）の無駄遣いとなる。しかし、HTMLフォーマットの文書なら話は別だ。ファイルの容量は大きくなるものの、生データを全て掲載することもできる。
 
-```{r table-dataout-1}
-#| eval: false
+[^lijphart]: どうでも良い話だが、Arend Lijphartの*Pattern of Democracy*の場合（邦訳：『民主主義対民主主義』）、データセットがMicrosoft Word形式で公開されている...。
+
+　そこまで大きいデータセットではないが、たとえば`df2`をR Markdown / QuartoのHTML文書に掲載するとしよう。この場合、まず考えられるのは普通に`df2`を出力することだ。ただし、`df2`のクラスによって出力結果がややことなる。たとえば、`df2`は`read_csv()`関数で読み込んだデータであるため、data.frameでなく、tibbleである。実際にクラスを確認してみよう。「クラス（class）」の概念については第[-@sec-oop]章を参照されたい。
+
+```{r}
+#| label: table-df-print-1
+class(df2)
+```
+
+　data.frameクラスを継承しているが、クラスに`"tbl"`や`"tbl_df"`も含まれており、これは`df2`がtibble形式であることを意味する。これをこのまま出力してみよう。
+
+```{r}
+#| label: table-df-print-2
 df2
 ```
 
-{DT}パッケージの`datatable()`関数を使用した場合
+　tibble形式のデータは通常、最初の10行のみ出力される。また、小数点も2〜3桁目で丸められる。もう一つの特徴としては横に長い表の場合（つまり、列が多い場合）、一部の列は省略される（省略された列の簡単な情報は表示される）。このようにtibbleクラスのデータは読みやすく出力される長所があるものの、**全て**のデータが出力されないケースもある。
 
-```{r table-dataout-2}
+　一方、`read_csv()`でなく、`read.csv()`で読み込んだ表形式データのクラスはdata.frameだ。`df2`を`as.data.frame()`関数を使ってdata.frameクラスに変更してみよう。クラスを変更した`df2`は`df4`と名付ける。
+
+```{r}
+#| label: table-df-print-3
+df4 <- as.data.frame(df2)
+
+class(df4)
+```
+
+　それでは`df4`を出力してみよう。
+
+```{r}
+#| label: table-df-print-4
+df4
+```
+
+　今回は**全て**の行と列が出力された。そもそも生データを掲載するのが目的であれば、tibbleクラスよりも、data.frameクラスが目的に合致する。しかし、読みにくいという深刻な問題がある。また、世論調査データのように数千行、変数も数十列以上あるデータセットを出力するとあまりにも長い画面になってしまう。
+
+　ここで便利なのが{DT}パッケージの`datatable()`関数だ。全ての行と列を読みやすい形式で出力してくれる。
+
+```{r}
+#| label: table-df-print-5
 datatable(df2)
 ```
 
-```{r table-dataout-3}
+　このように情報が損失されることなく、非常に読みやすい表になった。これで十分かも知れないが、小数点を丸めたい人もいるかも知れないので、その方法を紹介する。具体的には`dataframe()`で作成した表を`formatRound()`関数に渡すだけだ。`formatRound()`関数の引数は`columns`と`digits`があり、それぞれ適用する列と小数点を桁数を指定すればよい。
+
+```{r}
+#| label: table-df-print-6
 datatable(df2) |>
     formatRound(columns = 3:6, digits = 3)
 ```
