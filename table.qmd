@@ -6,6 +6,13 @@
 source("_common.R")
 ```
 
+```{css}
+#| echo: false
+table.gt_table {
+  width: initial;
+}
+```
+
 　記述統計や推定結果を示す場合は図表が用いられることが多い。図に関しては{ggplot2}が最もポピュラーなパッケージである（Base Rもまた根強い人気を誇る）。一方、表の場合、現時点において2つの選択肢がある[^ft]。一つはこれまで長らく使われてきた{knitr}パッケージの`kable()`と{kabelExtra}パッケージの組み合わせ、もう一つが近年注目を集めている{gt}パッケージだ。
 
 [^ft]: 他にも{[flextable](https://davidgohel.github.io/flextable/index.html)} + {ftExtra}という有力な選択肢もある。
@@ -64,6 +71,7 @@ df3
 
 ```{r}
 #| label: table-intro-1
+#| class-source: gt_table_full
 df1 |>
     gt()
 ```
@@ -120,7 +128,7 @@ df1 |>
             locations = cells_column_labels())       # どこを?: 列レベルだけ
 ```
 
-　また、HTMLのCSSによって異なるが、{gt}で作成された表の幅がページの幅に強制的に調整される場合がある。本書は[Quarto](quarto.qmd)で執筆されているが、まさにそのケースである。この場合は、`as_raw_html()`を使えば良い。一つ注意すべき点は`as_raw_html()`は必ず最後のレイヤーにする必要がある。`as_raw_html()`の後ろにレイヤーが足される場合はエラーが発生する。
+　また、HTMLのCSSによって異なるが、{gt}で作成された表の幅がページの幅に強制的に調整される場合がある。本書は[Quarto](quarto.qmd)で執筆されているが、まさにそのケースである）。この場合は、`as_raw_html()`を使えば良い。一つ注意すべき点は`as_raw_html()`は必ず最後のレイヤーにする必要がある。`as_raw_html()`の後ろにレイヤーが足される場合はエラーが発生する。
 
 ```{r}
 #| label: table-column-6
@@ -130,7 +138,7 @@ df1 |>
     as_raw_html()
 ```
 
-　この`as_raw_html()`は必要に応じて入れる。R Markdown/Quartoを使わない場合はそもそも不要だ（RStudioのViewerペインでは問題なく表示される）。もし、R Markdown/Quartoで{gt}を使用し、表の幅が気に入らない場合のみ使うことにしよう。
+　この`as_raw_html()`は必要に応じて入れる。R Markdown/Quartoを使わない場合はそもそも不要だ（RStudioのViewerペインでは問題なく表示される）。もし、R Markdown/Quartoで{gt}を使用し、表の幅が気に入らない場合のみ使うことにしよう。ちなみに本書は`as_raw_html()`を省略しても表の幅がページ幅に強制調整されないように設定されている。
 
 ## タイトル・フットノート {#sec-gt-title}
 
@@ -143,8 +151,7 @@ df1 |>
   fmt_number(columns = 2:5, decimals = 3) |>
   tab_header(title = "タイトル", subtitle = "サブタイトル") |>
   tab_footnote(footnote = "注: ここにはフットノートが入る") |>
-  tab_source_note(source_note = "出典: 『私たちのR』") |>
-  as_raw_html()
+  tab_source_note(source_note = "出典: 『私たちのR』")
 ```
 
 　ちなみに、`tab_footnote()`や`tab_source_note()`は複数回使用することで複数行にすることができる。
@@ -157,8 +164,7 @@ df1 |>
   tab_header(title = "タイトル", subtitle = "サブタイトル") |>
   tab_footnote(footnote = "注1: ここにはフットノート1が入る") |>
   tab_footnote(footnote = "注2: ここにはフットノート2が入る") |>
-  tab_source_note(source_note = "出典: 『私たちのR』") |>
-  as_raw_html()
+  tab_source_note(source_note = "出典: 『私たちのR』")
 ```
 
 　また、タイトルやフットノートに限定された機能ではないが、テキストはMarkdownやHTML文法で書くこともできる。たとえば、上記のコードの『私たちのR』にリンクを貼る場合、Markdown文法だと`"『[私たちのR](https://www.jaysong.net/RBook/)』"`となるが、このままではうまくいかない。
@@ -171,8 +177,7 @@ df1 |>
   tab_header(title = "タイトル", subtitle = "サブタイトル") |>
   tab_footnote(footnote = "注1: ここにはフットノート1が入る") |>
   tab_footnote(footnote = "注2: ここにはフットノート2が入る") |>
-  tab_source_note(source_note = "出典: 『[私たちのR](https://www.jaysong.net/RBook/)』") |>
-  as_raw_html()
+  tab_source_note(source_note = "出典: 『[私たちのR](https://www.jaysong.net/RBook/)』")
 ```
 
 　Markdown文法を使う場合は、文字列を`md()`関数内で指定することでMarkdown文として解釈されるようになる。
@@ -185,8 +190,7 @@ df1 |>
   tab_header(title = "タイトル", subtitle = "サブタイトル") |>
   tab_footnote(footnote = "注1: ここにはフットノート1が入る") |>
   tab_footnote(footnote = "注2: ここにはフットノート2が入る") |>
-  tab_source_note(source_note = md("出典: 『[私たちのR](https://www.jaysong.net/RBook/)』")) |>
-  as_raw_html()
+  tab_source_note(source_note = md("出典: 『[私たちのR](https://www.jaysong.net/RBook/)』"))
 ```
 
 ## グループ化 {#sec-gt-group}
@@ -198,8 +202,7 @@ df1 |>
 df1 |>
     gt() |>
     tab_spanner(columns = 4:5, label = "Range") |>
-    fmt_number(columns = 2:5, decimals = 3) |>
-    as_raw_html()
+    fmt_number(columns = 2:5, decimals = 3)
 ```
 
 　続いて、行をグループ化する方法について紹介する。まず、`df2`の中身を確認してみよう。
@@ -207,8 +210,7 @@ df1 |>
 ```{r}
 #| label: table-group-2
 df2 |>
-    gt() |>
-    as_raw_html()
+    gt()
 ```
 
 　各大陸**ごと**の人口、面積などの情報が含まれている表であるが、これらを大陸単位で行をグループ化してみよう。方法は簡単だ。{dplyr}のように`gt()`関数に渡す前に、`group_by()`でデータをグループ化すれば良い。今回は`Continent`列の値に基づいてグループ化するため、`group_by(Continent)`とする。
@@ -217,8 +219,7 @@ df2 |>
 #| label: table-group-3
 df2 |>
     group_by(Continent) |>
-    gt() |>
-    as_raw_html()
+    gt()
 ```
 
 　このようにグループ化することができる。引き続き`Mean`列から`Max`列までの値を小数点3桁目で丸めてみよう。`Mean`と`Max`列の位置は2、5列目であるかのように**見える**。とりあえずやってみよう。
@@ -229,8 +230,7 @@ df2 |>
 df2 |>
     group_by(Continent) |>
     gt() |>
-    fmt_number(columns = 2:5, decimals = 3) |>
-    as_raw_html()
+    fmt_number(columns = 2:5, decimals = 3)
 ```
 
 　このようにエラーが表示される。なぜだろう。それはグルーピングに使用された変数も1つの列としてカウントされるからだ。つまり、グルーピングに使用された`Continent`列は列としては見えないものの、1列目として存在する。したがって、目に見える列番号に1を足す必要がある。それではグルーピングあと、`Mean`列から`Max`列までは小数点3桁目で丸め、`Min`列と`Max`列はRangeという名でグルーピングしてみよう。
@@ -241,8 +241,7 @@ df2 |>
     group_by(Continent) |>
     gt() |>
     tab_spanner(columns = 5:6, label = "Range") |>
-    fmt_number(columns = 3:6, decimals = 3) |>
-    as_raw_html()
+    fmt_number(columns = 3:6, decimals = 3)
 ```
 
 　ややこしい話であるが、列を**番号**でなく、**列名**で指定すると、このような混乱を避けることができる。列の指定方法は好みの問題でもあるので、好きなやり方を使おう。
@@ -253,8 +252,7 @@ df2 |>
     group_by(Continent) |>
     gt() |>
     tab_spanner(columns = Min:Max, label = "Range") |>
-    fmt_number(columns = Mean:Max, decimals = 3) |>
-    as_raw_html()
+    fmt_number(columns = Mean:Max, decimals = 3)
 ```
 
 　最後に、グルーピングとは関係ないものの、行の名前を指定する方法について説明する。それは`gt()`で表を作成する際、行の名前にしたい列名を`rowname_col`で指定すれば良い。たとえば、`Variable`列を行の名前にしてみよう。
@@ -265,8 +263,7 @@ df2 |>
     group_by(Continent) |>
     gt(rowname_col = "Variable") |>
     tab_spanner(columns = 5:6, label = "Range") |>
-    fmt_number(columns = 3:6, decimals = 3) |>
-    as_raw_html()
+    fmt_number(columns = 3:6, decimals = 3)
 ```
 
 　表としては同じ表であるが、`Variable`列の右側に垂直線が出力される。ちなみにこれによって、列番号がずれることはないので安心しよう。
@@ -283,8 +280,7 @@ df3_tbl <- df3 |>
   gt() |>
   fmt_number(columns = Population:FH, decimals = 3)
 
-df3_tbl |>
-  as_raw_html()
+df3_tbl
 ```
 
 　まずは、特定の**行**を色塗りする方法を紹介する。使用する関数は{gtExtras}の`gt_highlight_rows()`関数である。必須引数は`rows`であり、ここにハイライトしたい行の位置を指定する。たとえば、3行目をハイライトしたい場合は`rows = 3`とする。
@@ -292,8 +288,7 @@ df3_tbl |>
 ```{r}
 #| label: table-highlight-2
 df3_tbl |>
-  gt_highlight_rows(rows = 3) |>
-  as_raw_html()
+  gt_highlight_rows(rows = 3)
 ```
 
 　ハイライトの色と文字の太さはそれぞれ`fill`（既定値は`"#80BCD8"`）と`font_weight`（既定値は`"bold"`）引数で指摘できる。`font_weight`は`"normal"`、`"bold"`、`"lighter"`、`"bolder"`のように指定することも、1以上1000以下の数値で指定することもできる。
@@ -301,8 +296,7 @@ df3_tbl |>
 ```{r}
 #| label: table-highlight-3
 df3_tbl |>
-  gt_highlight_rows(rows = 3, fill = "gray80", font_weight = "normal") |>
-  as_raw_html()
+  gt_highlight_rows(rows = 3, fill = "gray80", font_weight = "normal")
 ```
 
 　また、`rows`引数は行の番号でなく、条件式を使うこともできる。たとえば、`HDI`列の値が0.75以上の行をハイライトしたい場合は`rows = (HID >= 0.75)`のように指定する。`()`はなくても良いが、可読性が落ちるので入れておこう。
@@ -310,8 +304,7 @@ df3_tbl |>
 ```{r}
 #| label: table-highlight-4
 df3_tbl |>
-  gt_highlight_rows(rows = (HDI >= 0.75)) |>
-  as_raw_html()
+  gt_highlight_rows(rows = (HDI >= 0.75))
 ```
 
 　続いて列のハイライト方法を紹介する。使用する関数は`gt_hightlight_cols()`であり、これは以上にて紹介した`gt_highlight_rows()`と使い方は同じである。ただし、列を指定する引数が`rows`でなく、`columns`であることに注意すること。また、`columns`実引数として条件式は使用できない。以下は`df3_tbl`の`Polity`列から`FH`列までを`"#ACB3CC"`色にハイライトした例である。
@@ -320,8 +313,7 @@ df3_tbl |>
 #| label: table-highlight-5
 df3_tbl |>
   gt_highlight_cols(columns = Polity:FH,
-                    fill    = "#ACB3CC") |>
-  as_raw_html()
+                    fill    = "#ACB3CC")
 ```
 
 ### セルの色分け
@@ -331,8 +323,7 @@ df3_tbl |>
 ```{r}
 #| label: table-color-1
 df3_tbl |>
-  gt_highlight_rows(rows = 3, columns = 6) |>
-  as_raw_html()
+  gt_highlight_rows(rows = 3, columns = 6)
 ```
 
 　セルの値に応じて色分けをする場合は`gt_color_rows()`関数を使う。たとえば、`Population`列（2列目）の値に応じて色分けをするなら、`columns = Population`、または`columns = 2`を指定する。
@@ -340,8 +331,7 @@ df3_tbl |>
 ```{r}
 #| label: table-color-2
 df3_tbl |>
-  gt_color_rows(columns = Population) |>
-  as_raw_html()
+  gt_color_rows(columns = Population)
 ```
 
 　謎の警告メッセージが表示された。これは`Population`が取りうる値の範囲が必要であることを意味する。これが省略されても表の作成には問題はないが、できれば`domain`引数に、`c(最小値, 最大値)`の実引数を指定しよう。指定しない場合は既定値は`Population`列の最小値と最大値が指定される。たとえば、`Population`が（理論上）取りうる値が10から110までであれば、`domain = c(0, 110)`のように指定する。この`domain`はなくても一応表は作れるので、以降は省略する。
@@ -349,8 +339,7 @@ df3_tbl |>
 ```{r}
 #| label: table-color-3
 df3_tbl |>
-  gt_color_rows(Population, domain = c(10, 110)) |>
-  as_raw_html()
+  gt_color_rows(Population, domain = c(10, 110))
 ```
 
 　ちなみに、色についても説明する。デフォルトの色は赤系であり、数値が高いほど赤くなる。この色は`palette`で指定することができる。既定値は{ggsci}パッケージが提供する`red_material`というパレットだ（{ggsci}パッケージは{gtExtras}パッケージと一緒にインストールされる）。特定のパッケージが提供するパレットであれば`"パッケージ名::パレット名"`と指定する。たとえば、`Population`列から`FH`列まで色分けをし、{ggsci}の`blue_material`パレットを使う場合は`palette = "ggsci::blue_material"`のように指定する必要がある。
@@ -360,8 +349,7 @@ df3_tbl |>
 #| warning: false
 df3_tbl |>
   gt_color_rows(Population:FH,
-                palette = "ggsci::blue_material") |>
-  as_raw_html()
+                palette = "ggsci::blue_material")
 ```
 
 　{ggsci}は他にも様々なパレットを提供しているが、詳細は[公式レファレンス](https://cran.r-project.org/web/packages/ggsci/vignettes/ggsci.html)を参照されたい。また、{ggsci}以外のパッケージが提供するパレットも使える。定番の{RColorBrewer}パッケージも様々なパレットを提供しており、以下の例は`YlOrRd`パレットを使った例だ。
@@ -371,8 +359,7 @@ df3_tbl |>
 #| warning: false
 df3_tbl |>
   gt_color_rows(Population:FH,
-                palette = "RColorBrewer::YlOrRd") |>
-  as_raw_html()
+                palette = "RColorBrewer::YlOrRd")
 ```
 
 　{RColorBrewer}が提供するパレットの例はコンソール上で`RColorBrewer::display.brewer.all()`と打つと出力される（ @fig-table-color-6 ）。
@@ -389,7 +376,7 @@ RColorBrewer::display.brewer.all()
 
 　{gt}で作成した表は様々なフォーマットで出力することができる。現在（`r format(Sys.Date(), "%Y年%m月%d日")`; {gt} `r packageVersion("gt")`）、Microsoft Word（`.docx`）、$\LaTeX$（`.tex`）、ハイパーテキスト（`.html`）、リッチテキスト（`.rtf`）、画像（`.png`）形式で出力可能だ。ここでは簡単な例を紹介する。
 
-　まず、{gt}を使って表を作成し、オブジェクトとして作業環境内に格納する。ここでは`gt_table`と名付けた。この場合、`as_raw_html()`は不要だ。
+　まず、{gt}を使って表を作成し、オブジェクトとして作業環境内に格納する。ここでは`gt_table`と名付けた。
 
 ```{r}
 #| label: table-export-1
@@ -438,20 +425,20 @@ df2
 
 　tibble形式のデータは通常、最初の10行のみ出力される。また、小数点も2〜3桁目で丸められる。もう一つの特徴としては横に長い表の場合（つまり、列が多い場合）、一部の列は省略される（省略された列の簡単な情報は表示される）。このようにtibbleクラスのデータは読みやすく出力される長所があるものの、**全て**のデータが出力されないケースもある。
 
-　一方、`read_csv()`でなく、`read.csv()`で読み込んだ表形式データのクラスはdata.frameだ。`df2`を`as.data.frame()`関数を使ってdata.frameクラスに変更してみよう。クラスを変更した`df2`は`df4`と名付ける。
+　一方、`read_csv()`でなく、`read.csv()`で読み込んだ表形式データのクラスはdata.frameだ。`df2`を`as.data.frame()`関数を使ってdata.frameクラスに変更してみよう。クラスを変更した`df2`は`df4_df`と名付ける。
 
 ```{r}
 #| label: table-df-print-3
-df4 <- as.data.frame(df2)
+df4_df <- as.data.frame(df2)
 
-class(df4)
+class(df4_df)
 ```
 
-　それでは`df4`を出力してみよう。
+　それでは`df4_df`を出力してみよう。
 
 ```{r}
 #| label: table-df-print-4
-df4
+df4_df
 ```
 
 　今回は**全て**の行と列が出力された。そもそも生データを掲載するのが目的であれば、tibbleクラスよりも、data.frameクラスが目的に合致する。しかし、読みにくいという深刻な問題がある。また、世論調査データのように数千行、変数も数十列以上あるデータセットを出力するとあまりにも長い画面になってしまう。
@@ -470,3 +457,94 @@ datatable(df2)
 datatable(df2) |>
     formatRound(columns = 3:6, digits = 3)
 ```
+
+## 画像・プロットの追加
+
+* <https://jthomasmock.github.io/gtExtras/articles/plotting-with-gtExtras.html#graphs-vs-tables>
+* `add_text_img()`
+* `gt_img_rows()`
+
+## テーマ
+
+　{gtExtras}パッケージは8種類のテーマを提供する（バージョン`r packageVersion("gtExtras")`現在）。テーマは`gt_theme_*()`関数によって指定することができる。たとえば、以下の`df1_tbl`にそれぞれのテーマを適用してみよう。
+
+```{r}
+#| label: table-theme-1
+df1_tbl <- df1 |>
+  gt() |>
+  tab_spanner(columns = 4:5, label = "Range") |>
+  fmt_number(columns = 2:5, decimals = 3) |>
+  tab_style(style     = cell_text(align = "center"),
+            locations = cells_column_labels())
+
+df1_tbl
+```
+
+　使い方は簡単で、{gt}で作成した表オブジェクトを`gt_theme_*()`関数に渡すだけだ。以下は{gtExtras}が提供する8種類のテーマを`df1_tbl`に適用した例である。
+
+:::{.panel-tabset}
+## 538
+
+```{r}
+#| label: table-theme-2
+df1_tbl |>
+  gt_theme_538()
+```
+
+## espn
+
+```{r}
+#| label: table-theme-3
+df1_tbl |>
+  gt_theme_espn()
+```
+
+## nytimes
+
+```{r}
+#| label: table-theme-4
+df1_tbl |>
+  gt_theme_nytimes()
+```
+
+## guardian
+
+```{r}
+#| label: table-theme-5
+df1_tbl |>
+  gt_theme_guardian()
+```
+
+## dot_matrix
+
+```{r}
+#| label: table-theme-6
+df1_tbl |>
+  gt_theme_dot_matrix()
+```
+
+## dark
+
+```{r}
+#| label: table-theme-7
+df1_tbl |>
+  gt_theme_dark()
+```
+
+## excel
+
+```{r}
+#| label: table-theme-8
+df1_tbl |>
+  gt_theme_excel()
+```
+
+## pff
+
+```{r}
+#| label: table-theme-9
+df1_tbl |>
+  gt_theme_pff()
+```
+:::
+
