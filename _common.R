@@ -1,4 +1,4 @@
-pacman::p_load(tidyverse, knitr, kableExtra)
+pacman::p_load(tidyverse, knitr, kableExtra, gt)
 knitr::opts_chunk$set(dev         = "ragg_png",
                       fig.align   = "center",
                       dpi         = 300,

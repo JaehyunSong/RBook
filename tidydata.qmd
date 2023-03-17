@@ -5,6 +5,15 @@
 source("_common.R")
 ```
 
+```{css}
+#| echo: false
+table.gt_table {
+  width: initial;
+  margin-left: auto;
+  margin-right: auto;
+}
+```
+
 本章ではグラフの作成に適した形へデータを整形することについて学習します。ただし、これはグラフに限られた話ではありません。作図に適したデータは分析にも適します。
 
 ## 整然データ (tidy data)とは {#sec-tidydata-intro}
@@ -22,12 +31,8 @@ source("_common.R")
 #| tbl-cap: "Messy Dataの例 (1)"
 tibble(Name      = c("Hadley", "Song", "Yanai"),
        Control   = c(90, 80, 100),
-       Treatment = c(90, 25, 95)) %>%
-    kable(booktabs = TRUE) %>%
-    kable_styling(bootstrap_options = c("striped", "hover", "condensed",
-                                        "responsive"),
-                  full_width = FALSE) %>%
-    row_spec(0, align = "c")
+       Treatment = c(90, 25, 95)) |> 
+  gt()
 ```
 
 また、以上の表は転置も可能であり、以下のように表現することが可能です ( @tbl-tidydata_messy_data2 )。
@@ -37,21 +42,16 @@ tibble(Name      = c("Hadley", "Song", "Yanai"),
 #| echo: false
 #| message: false
 #| tbl-cap: "Messy Dataの例 (2)"
-
 tibble(Treat     = c("Control", "Treatment"),
        Hadely    = c(90, 90),
        Song      = c(80, 25),
-       Yanai     = c(100, 95)) %>%
-    kable(booktabs = TRUE) %>%
-    kable_styling(bootstrap_options = c("striped", "hover", "condensed",
-                                        "responsive"),
-                  full_width = FALSE) %>%
-    row_spec(0, align = "c")
+       Yanai     = c(100, 95)) |> 
+  gt()
 ```
 
 2つのデータが持つ情報は全く同じです。これは「同じ意味を持つが、異なる構造を持つ」とも言えます。このような多様性が生じる理由は行と列のあり方が各値を説明するに十分ではないからです。異なるデータ構造として表現される余地があるということです。
 
-たとえば、 @tbl-tidydata_tidydata の場合、各列は以下のような3つの情報があります。
+たとえば、 @tbl-tidydata_messy_data1 の場合、各列は以下のような3つの情報があります。
 
 1. `Name`: 被験者名
 2. `Control`: **投薬前**の**数学成績**
@@ -73,12 +73,8 @@ tibble(Treat     = c("Control", "Treatment"),
 
 tibble(Name       = rep(c("Hadley", "Song", "Yanai"), each = 2),
        Treat      = rep(c("Control", "Treatment"), 3),
-       Math_Score = c(90, 90, 80, 25, 100, 95)) %>%
-    kable() %>%
-    kable_styling(bootstrap_options = c("striped", "hover", "condensed",
-                                        "responsive"),
-                  full_width = FALSE) %>%
-    row_spec(0, align = "c")
+       Math_Score = c(90, 90, 80, 25, 100, 95)) |> 
+  gt()
 ```
 
 表が長くなりましたが、これなら一つの列に2つ以上の情報が含まれることはありません。この場合、 @tbl-tidydata_messy_data1 と @tbl-tidydata_messy_data2 のように、行と列を転置することができるでしょうか。
@@ -90,18 +86,16 @@ tibble(Name       = rep(c("Hadley", "Song", "Yanai"), each = 2),
 #| tbl-cap: "整然データを転置した場合"
 
 tibble(Name       = c("Treat", "Math_Score"),
-       Hadely1    = c("Control",   90),
-       Hadely2    = c("Treatment", 90),
+       Hadley1    = c("Control",   90),
+       Hadley2    = c("Treatment", 90),
        Song1      = c("Control",   80),
        Song2      = c("Treatment", 25),
        Yanai1     = c("Control",  100),
-       Yanai2     = c("Treatment", 95),) %>% 
-    kable(col.names = c("Name", "Hadley", "Hadley",
-                        "Song", "Song", "Yanai", "Yanai")) %>%
-    kable_styling(bootstrap_options = c("striped", "hover", "condensed",
-                                        "responsive"),
-                  full_width = FALSE) %>%
-    row_spec(0, align = "c")
+       Yanai2     = c("Treatment", 95),)  |> 
+  gt() |>
+  cols_label("Hadley1" = "Hadley", "Hadley2" = "Hadley",
+             "Song1" = "Song", "Song2" = "Song",
+             "Yanai1" = "Yanai", "Yanai2" = "Yanai")
 ```
 
 その結果が @tbl-tidydata_transdata ですが、いかがでしょうか。まず、列名が重複している時点でアウトですし、人間が見ても非常に分かりにくい表になりました。また、一つの列に異なるデータ (この場合、character型とnumeirc型)が混在しています。パソコンから見てはわけのわからないデータになったわけです。
@@ -125,7 +119,7 @@ tibble(Name       = c("Treat", "Math_Score"),
 
 これらの情報がそれぞれデータの変数になるわけですが、整然データは一つの列が一つの変数を表します。それではまず、 @tbl-tidydata_messy_data1 ( @fig-tidydata_example1 の左)から考えてみましょう。この図には3つの情報が全て含まれています。しかし、数学成績は2列に渡って格納されており、「1列1変数」の条件を満たしておりません。一方、 @tbl-tidydata_messy_data1 ( @fig-tidydata_example1 の右)は投薬前後を表す`Treat`変数を作成し、その値に応じた数学成績が格納されており、「1列1変数」の条件を満たしています。
 
-![1つの列は、1つの変数を表す](Figs/Tidydata/TidyData1.png){#fig-tidydata_example1 width="50%" fig-align="center"}
+![1つの列は、1つの変数を表す](Figs/Tidydata/TidyData1.png){#fig-tidydata_example1 width="75%" fig-align="center"}
 
 「1列1変数」は整然データの最も基本となる条件であり、整然データ作成の出発点とも言えます。
 
@@ -133,7 +127,7 @@ tibble(Name       = c("Treat", "Math_Score"),
 
 @fig-tidydata_example2 の左は一行当たり、いくつの観察が含まれているでしょうか。それを確認するためには、このデータが何を観察しているかを考える必要があります。このデータは投薬**前後**の数学成績を観察し、量的に測定したものです。つまり、同じ人に対して2回観察を行ったことになります。したがって、投薬前の数学成績と投薬後の数学成績は別の観察であり、 @fig-tidydata_example2 の左は3行の表ですが、実は6回分の観察が含まれていることになります。1行に2つの観察が載っていることですね。
 
-![1つの行は、1つの観測を表す](Figs/Tidydata/TidyData2.png){#fig-tidydata_example2 width="50%" fig-align="center"}
+![1つの行は、1つの観測を表す](Figs/Tidydata/TidyData2.png){#fig-tidydata_example2 width="75%" fig-align="center"}
 
 一方、 @fig-tidydata_example2 の右は6行のデータであり、観察回数とデータの行数が一致しています。つまり、1行に1観察となります。
 
@@ -161,11 +155,8 @@ df2 <- df1 %>%
                names_to  = "Type",
                values_to = "Value")
 
-kable(df1, booktabs = TRUE) %>%
-  kable_styling(bootstrap_options = c("striped"))
-
-kable(df2, booktabs = TRUE) %>%
-  kable_styling(bootstrap_options = c("striped"))
+gt(df1)
+gt(df2)
 ```
 
 3人に投薬前後に数学成績と最高血圧を測定した場合の観察回数は何回でしょう。3人 $\times$ 2時点 $\times$ 2指標の測定だから12回の測定でしょうか。ならば、 @tbl-tidydata_blood の右が整然データでしょう。しかし、この場合、1列1変数という条件が満たされなくなります。`Value`列には数学成績と血圧が混在しており、2つの変数になります。ならば、どれも整然データではないということでしょうか。実は整然データは @tbl-tidydata_blood の左です。なぜなら、「1観察=1値」ではないからです。データにおける観察とは観察単位ごとに測定された**値の集合**です。観察対象とは人や自治体、企業、国などだけでなく、時間も含まれます。たとえば、人の特徴 (性別、身長、所得、政治関心など)を測定しもの、ある日の特徴 (気温、株価など)を測定したもの全てが観察です。むろん、人 $\times$ 時間のような組み合わせが観察単位ともなり得ます。この一つ一つの観察単位から得られた値の集合が観察です。 @tbl-tidydata_blood の分析単位は「人 $\times$ 時間」です。成績や最高血圧は分析単位が持つ特徴や性質であって、分析単位ではありません。
@@ -199,11 +190,8 @@ df2 <- df1 %>%
   separate(Date, into = c("Year", "Month", "Date"), 
            sep = "/", convert = TRUE)
 
-kable(df1, booktabs = TRUE) %>%
-  kable_styling(bootstrap_options = c("striped"))
-
-kable(df2, booktabs = TRUE) %>%
-  kable_styling(bootstrap_options = c("striped"))
+gt(df1)
+gt(df2)
 ```
 
 @tbl-tidydata_date_table の左側の表はどうでしょうか。5日間の株価を記録した架空のデータですが、たしかに`Date`列には日付が1つずつ、`Stock`には株価の値が1つずつ格納されています。しかし、解釈によっては「`Date`に年、月、日といった3つの値が含まれているぞ」と見ることもできます。この解釈に基づく場合、 @tbl-tidydata_date_table の右側の表が整然データとなり、左側は雑然データとなります。このケースは第一条件であった「一列一変数」とも関係します。なぜなら、`Date`という列が年・月・日といった3変数で構成されているとも解釈できるからです。
@@ -415,15 +403,13 @@ df3
 #| message: false
 #| echo: false
 #| tbl-cap: "df3の詳細"
-data.frame(変数名 = c("`都道府県`", "`区分`", "`人口`", "`面積`"),
-              説明 = c("都道府県名",
-                     "総人口/外国人人口の区分",
-                     "人口 (人)",
-                     "面積 (km$^2$)")) %>%
-  kable() %>%
-    kable_styling(bootstrap_options = c("striped"),
-                  full_width = FALSE) %>%
-  row_spec(0, align = "c")
+tibble(変数名 = c("`都道府県`", "`区分`", "`人口`", "`面積`"),
+       説明 = c("都道府県名",
+              "総人口/外国人人口の区分",
+              "人口 (人)",
+              "面積 (km$^2$)")) |> 
+  gt() |> 
+  fmt_markdown(columns = 1)
 ```
 
 まずは変数名が日本語になっているので、`rename()`関数を使ってそれぞれ`Pref`、`Type`、`Population`、`Area`に変更します。
@@ -488,6 +474,7 @@ df3_W
 [実習用データ](Data/COVID19_JK.csv)を読み込んでみましょう。
 
 ```{r}
+#| message: false
 df4 <- read_csv("Data/COVID19_JK.csv")
 
 df4
@@ -500,13 +487,10 @@ df4
 #| messsage: false
 data.frame(変数名 = c("`ID`", "`Date`", "`Week`", 
                    "`Confirmed_Japan`", "`Confirmed_Korea`"),
-              説明 = c("ケースID", "年月日", "曜日", 
-                     "新規感染者数 (日本)", "新規感染者数 (韓国)")) %>%
-  kable() %>%
-    kable_styling(bootstrap_options = c("striped", "hover", "condensed",
-                                        "responsive"),
-                  full_width = FALSE) %>%
-  row_spec(0, align = "c")
+           説明 = c("ケースID", "年月日", "曜日", 
+                  "新規感染者数 (日本)", "新規感染者数 (韓国)")) |> 
+  gt() |> 
+  fmt_markdown(columns = 1)
 ```
 
 このデータの場合、観察単位は「国 $\times$ 日」です。しかし、`df4`は1行に日本と韓国の情報が格納されており「1行1観察」の条件を満たしておりません。したがって、`pivot_longer()`を使ってLong型へ変換し、新しいデータの名前を`df4_L`と名付けます。
