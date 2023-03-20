@@ -458,7 +458,8 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   <li><a href="#分析環境と再生可能な研究" id="toc-分析環境と再生可能な研究" class="nav-link active" data-scroll-target="#分析環境と再生可能な研究"><span class="toc-section-number">26.1</span>  分析環境と再生可能な研究</a></li>
   <li><a href="#分析環境の保存" id="toc-分析環境の保存" class="nav-link" data-scroll-target="#分析環境の保存"><span class="toc-section-number">26.2</span>  分析環境の保存</a></li>
   <li><a href="#分析環境の再生" id="toc-分析環境の再生" class="nav-link" data-scroll-target="#分析環境の再生"><span class="toc-section-number">26.3</span>  分析環境の再生</a></li>
-  <li><a href="#より詳しく知るために" id="toc-より詳しく知るために" class="nav-link" data-scroll-target="#より詳しく知るために"><span class="toc-section-number">26.4</span>  より詳しく知るために</a></li>
+  <li><a href="#分析環境の更新" id="toc-分析環境の更新" class="nav-link" data-scroll-target="#分析環境の更新"><span class="toc-section-number">26.4</span>  分析環境の更新</a></li>
+  <li><a href="#より詳しく知るために" id="toc-より詳しく知るために" class="nav-link" data-scroll-target="#より詳しく知るために"><span class="toc-section-number">26.5</span>  より詳しく知るために</a></li>
   </ul>
 </nav>
     </div>
@@ -485,47 +486,212 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <p>　分析結果を再生する際に最も重要なのは<strong>データ</strong>と<strong>コード</strong>だろう。この2つがあれば、多くの場合、分析結果を再生することができる<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>。しかし、データとコード以外にも再生に欠かせない要素があり、それが<strong>パッケージ</strong>だ。現在において、R内臓の関数のみで構成されたファイルは極めて稀であり、外部のパッケージを用いることが多い。しかし、パッケージは時間の流れにつれ、徐々に改善されていく。この改善の段階において、既存の関数がなくなったり、関数名が変わったり、推定のアルゴリズムが変わったりするケースもある。この場合、データとコードだけでは再生ところか、エラーが発生してしまうかも知れない。したがって、分析を再生するためには分析時の環境そのものも同じにすることが望ましい。本章では{renv}による分析環境の管理/共有について紹介する。</p>
 <section id="分析環境と再生可能な研究" class="level2" data-number="26.1">
 <h2 data-number="26.1" class="anchored" data-anchor-id="分析環境と再生可能な研究"><span class="header-section-number">26.1</span> 分析環境と再生可能な研究</h2>
-<p>{renv}: <strong>r</strong>eproducible <strong>env</strong>ironments</p>
-<ul>
-<li>例1: 古いパッケージではできなかったものが、今はできるようになっている
-<ul>
-<li>{ggplot2}の<code>geom_pointrange()</code>の場合、昔は点と垂直線のみが引けた（マッピングは<code>x</code>、<code>y</code>、<code>ymin</code>、<code>ymax</code>のみ可能）。</li>
-<li>点と水平線の描きたい場合は、<code>coord_flip()</code>で座標系を回転する必要があった。</li>
-<li>今の{ggplot2}だと、<code>xmin</code>と<code>xmax</code>にもマッピングができるため、<code>coord_flip()</code>不要</li>
-<li>多分いないと思うが、現在の仕様でコードを古い{ggplot2}で走らせるとエラーが出る。</li>
-</ul></li>
-<li>例2: 昔はできたものの、今はできない
-<ul>
-<li>華麗に復活した{dplyr}の<code>rowwise()</code>は、無くなりかけていた関数</li>
-<li>{tidyr}の<code>gather()</code>と<code>spread()</code>は近い将来、無くなる</li>
-</ul></li>
-<li>例3: 仕様が変わり、関数名、仮引数名、実引数の使用可能なクラスが異なる場合
-<ul>
-<li>開発途上のパッケージだとあり得る。</li>
-</ul></li>
-</ul>
-<p>{revn}のインストール</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(renv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>　{renv}は<strong>r</strong>eproducible <strong>env</strong>ironments（再生可能な分析環境）の略で、現時点での分析環境を保存し、再生してくれるパッケージだ。なぜ分析環境の再生可能性が重要だろうか。いくつかの例を紹介しよう。</p>
+<p>　たとえば、古いパッケージではできなかったものが、今はできるようになっている可能性がある。たとえば、{ggplot2}の<code>geom_pointrange()</code>は点（点推定値）と線（区間）を表現する幾何オブジェクトであるが、昔は点と<strong>垂直</strong>線のみが引けた。つまり、マッピングは常に<code>x</code>、<code>y</code>、<code>ymin</code>、<code>ymax</code>に対して行う必要があった。この区間を垂直線でなく、<strong>水平</strong>線にしたい場合は、<code>coord_flip()</code>で座標系を90度回転する必要があった。しかし、今の{ggplot2}は、<code>xmin</code>と<code>xmax</code>にもマッピングができるため、<code>coord_flip()</code>が不要となる。むろん、昔の書き方もまだ使えるのでこのケースは分析の再現という観点からはあまり問題にならないだろう。</p>
+<p>　問題は昔はできたものの、今はできなくなっているケースだ。たとえば、{dplyr}の<code>rowwise()</code>関数は、現在は華麗に復活したものの、実は無くなる予定の関数だった。また、{tidyr}の<code>gather()</code>と<code>spread()</code>関数は昔のコードではよく見るが、近い将来、無くなる予定である（現在は<code>pivot_longer()</code>と<code>pivot_wider()</code>が使われている）。</p>
+<p>　また、関数そのものは残っていても、仕様が変わることによって仮引数名、実引数の使用可能なクラスが異なる場合もある。これは開発途上のパッケージでよく見る現象だ。たとえば、筆者（宋）が愛用するパッケージの{marginaleffects}では推定したモデルの予測値を計算する<code>predictions()</code>関数と、限界効果を計算する<code>slopes()</code>関数が用意されている。どの関数も戻り値はデータフレーム型だ。しかし、<code>predictions()</code>で計算された予測値は<code>predicted</code>という名の列として表示され、<code>slopes()</code>で計算された限界効果の点推定値は<code>dydx</code>という名の列<strong>だった</strong>。現在は、どの関数を使っても予測値・限界効果の点推定値は<code>estimate</code>という名で統一されている。単に、計算結果をデータフレームとして出力するだけなら問題ないが、計算結果を使用して作図を行う場合は話が変わってくる。昔のコードでは<code>predicted</code>・<code>dydx</code>列でマッピングした図が、現在はエラーを出してしまうのだ。</p>
+<p>　Rとその生態系は毎日のように更新され、改善されていく。これはRのメリットでもあるが、デメリットでもあり、昔のコード（legacy code）がもはや動かない可能性もある。また、近年、学術の界隈でも再現可能性、再生可能性が重要視されている。したがって、今すぐに{renv}をインストールしておこう。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(renv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="分析環境の保存" class="level2" data-number="26.2">
 <h2 data-number="26.2" class="anchored" data-anchor-id="分析環境の保存"><span class="header-section-number">26.2</span> 分析環境の保存</h2>
-<p>プロジェクトの使用を強く推奨 (第<a href="r_basic.html#sec-rbasic-project"><span>6.2</span></a>章を参照)</p>
-<p>分析を始める前: コンソールに</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">init</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>分析が終わった後: コンソールに</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">snapshot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>　{renv}を使った分析環境の保存/再現はプロジェクト機能の使用を前提としている。プロジェクト機能を使わない場合でも{renv}は使用可能だが、相性が良くない。{renv}の使用と関係なく、プロジェクトは非常に便利な機能なので常に使用するように心がけよう。 プロジェクト機能の詳細は第<a href="r_basic.html#sec-rbasic-project"><span>6.2</span></a>章を参照を参照されたい。</p>
+<p>　プロジェクトを開いた状態（RStudioの右上に「Project: (none)」と表示されたらプロジェクト未使用中）で、現在の分析環境を保存する方法から紹介する。以下は架空の例であるが、<code>renv_test</code>という名のプロジェクトに<code>my_script.R</code>というファイルが存在し、ファイルの中身は以下の通りであるとする。</p>
+<div class="cell" data-layout-align="center">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>my_script.R</strong></pre>
+</div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggdag)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<p>　単に{ggdag}を読み込むだけのスクリプトファイルである。この{ggdag}のバージョンを確認してみよう。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">packageVersion</span>(<span class="st">"ggdag"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "0.2.7"</code></pre>
+</div>
+</div>
+<p>　現在の{ggdag}のバージョンは0.2.7である。実は{ggdag}0.2.7はやや古いバージョンである。現時点での分析環境を保存するためには<code>init()</code>関数を使う。{renv}の関数群は使う機会が滅多にないので、コンソール上で<code>renv::init()</code>と入力しよう。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>renv<span class="sc">::</span><span class="fu">init</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code>* Discovering package dependencies ... Done!
+* Linking packages into the project library ... [60/60] Done!
+The following package(s) will be updated in the lockfile:
+
+# CRAN ===============================
+- MASS            [* -&gt; 7.3-58.3]
+- Matrix          [* -&gt; 1.5-3]
+- R6              [* -&gt; 2.5.1]
+- RColorBrewer    [* -&gt; 1.1-3]
+- Rcpp            [* -&gt; 1.0.10]
+- RcppArmadillo   [* -&gt; 0.12.0.1.0]
+- RcppEigen       [* -&gt; 0.3.3.9.3]
+- V8              [* -&gt; 4.2.2]
+- boot            [* -&gt; 1.3-28.1]
+- cli             [* -&gt; 3.6.0]
+- colorspace      [* -&gt; 2.1-0]
+- cpp11           [* -&gt; 0.4.3]
+- curl            [* -&gt; 5.0.0]
+- dagitty         [* -&gt; 0.3-1]
+- digest          [* -&gt; 0.6.31]
+- dplyr           [* -&gt; 1.1.0]
+- fansi           [* -&gt; 1.0.4]
+- farver          [* -&gt; 2.1.1]
+- forcats         [* -&gt; 1.0.0]
+- generics        [* -&gt; 0.1.3]
+- ggdag           [* -&gt; 0.2.7]
+- ggforce         [* -&gt; 0.4.1]
+- ggplot2         [* -&gt; 3.4.1]
+- ggraph          [* -&gt; 2.1.0]
+- ggrepel         [* -&gt; 0.9.3]
+- glue            [* -&gt; 1.6.2]
+- graphlayouts    [* -&gt; 0.8.4]
+- gridExtra       [* -&gt; 2.3]
+- gtable          [* -&gt; 0.3.1]
+- igraph          [* -&gt; 1.4.1]
+- isoband         [* -&gt; 0.2.7]
+- jsonlite        [* -&gt; 1.8.4]
+- labeling        [* -&gt; 0.4.2]
+- lattice         [* -&gt; 0.20-45]
+- lifecycle       [* -&gt; 1.0.3]
+- magrittr        [* -&gt; 2.0.3]
+- mgcv            [* -&gt; 1.8-42]
+- munsell         [* -&gt; 0.5.0]
+- nlme            [* -&gt; 3.1-162]
+- pacman          [* -&gt; 0.5.1]
+- pillar          [* -&gt; 1.8.1]
+- pkgconfig       [* -&gt; 2.0.3]
+- polyclip        [* -&gt; 1.10-4]
+- purrr           [* -&gt; 1.0.1]
+- remotes         [* -&gt; 2.4.2]
+- renv            [* -&gt; 0.17.1]
+- rlang           [* -&gt; 1.1.0]
+- scales          [* -&gt; 1.2.1]
+- stringi         [* -&gt; 1.7.12]
+- stringr         [* -&gt; 1.5.0]
+- systemfonts     [* -&gt; 1.0.4]
+- tibble          [* -&gt; 3.2.0]
+- tidygraph       [* -&gt; 1.2.3]
+- tidyr           [* -&gt; 1.3.0]
+- tidyselect      [* -&gt; 1.2.0]
+- tweenr          [* -&gt; 2.0.2]
+- utf8            [* -&gt; 1.2.3]
+- vctrs           [* -&gt; 0.6.0]
+- viridis         [* -&gt; 0.6.2]
+- viridisLite     [* -&gt; 0.4.1]
+- withr           [* -&gt; 2.5.0]
+
+The version of R recorded in the lockfile will be updated:
+- R               [* -&gt; 4.2.2]
+
+* Lockfile written to '~/r_projects/renv_test/renv.lock'.
+
+Restarting R session...
+
+* Project '~/r_projects/renv_test' loaded. [renv 0.17.1]</code></pre>
+</div>
+</div>
+<p>　{ggdag}だけでなく、{ggdag}が依存するパッケージの現時点でのバージョンが固定される。実際、{ggdag}の行を見るとバージョンが0.2.7になっている。この<code>renv_test</code>プロジェクトがどのパッケージを使用するかは{renv}パッケージが自動的に判断してくれる。具体的にはプロジェクトフォルダー内に存在する全ての<code>.R</code>、<code>.Rmd</code>、<code>.qmd</code>ファイルをスキャンし、読み込まれているパッケージを抽出する仕組みである<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>。これらのパッケージ情報はプロジェクトフォルダーに別途保存される。<code>dir()</code>関数を使用し、プロジェクトフォルダーの内部を覗いてみよう。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">dir</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code>"my_script.R"   "renv"  "renv_test.Rproj"   "renv.lock"</code></pre>
+</div>
+</div>
+<p>　普通にあら<code>renv_test.Rproj</code>と<code>my_script.R</code>のみ存在するはずだが、<code>renv.lock</code>ファイルと<code>renv</code>という名のフォルダーが生成されている。この<code>renv.lock</code>にはパッケージのバージョンおよび依存関係の情報が書かれている（開いてみると分かる）。また、<code>renv</code>フォルダーにはそのパッケージがまるごと入っている。</p>
 </section>
 <section id="分析環境の再生" class="level2" data-number="26.3">
 <h2 data-number="26.3" class="anchored" data-anchor-id="分析環境の再生"><span class="header-section-number">26.3</span> 分析環境の再生</h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">restore</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>　<code>init()</code>で固定された分析環境情報を再生するためにはどうすればいいだろう。それを解説する前に、<strong>プロジェクトを立ち上げていない状態</strong>で{ggdag}をアップデートしてみよう。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">install.packages</span>(<span class="st">"ggdag"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>　続いて、{ggdag}のバージョンを確認してみる。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">packageVersion</span>(<span class="st">"ggdag"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "0.2.8"</code></pre>
+</div>
+</div>
+<p>　{ggdag}のバージョンが0.2.8になっている。ここで、RStudioを終了し、先ほど作成した<code>renv_test</code>プロジェクトをもう一度開いてみよう。最初にRのバージョン情報などのメッセージが表示されるが、ここに普段見ることのない1行が追加されている。</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code>* Project '~/r_projects/renv_test' loaded. [renv 0.17.1]</code></pre>
+</div>
+</div>
+<p>　これは現在、{renv}で保存された分析環境が再生されていることを意味する。実際、0.2.8にアップデートしたはずの{ggdag}のバージョンを確認してみよう。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">packageVersion</span>(<span class="st">"ggdag"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "0.2.7"</code></pre>
+</div>
+</div>
+<p>　最初に保存した0.2.7のままになっている。むろん、{renv}を使わない別のプロジェクトを開けば{ggdag}は0.2.8になっている。RStudio + プロジェクト機能を使う場合、プロジェクトフォルダ―に<code>renv.lock</code>ファイルが存在すると、その情報を読み込んで分析環境を再現してくれる。RStudioさまさまだ。宗教的信念によりRStudioを使わない場合は、コンソールで直接<code>renv::restore()</code>と入力すれば分析環境が再生される。</p>
 </section>
-<section id="より詳しく知るために" class="level2" data-number="26.4">
-<h2 data-number="26.4" class="anchored" data-anchor-id="より詳しく知るために"><span class="header-section-number">26.4</span> より詳しく知るために</h2>
+<section id="分析環境の更新" class="level2" data-number="26.4">
+<h2 data-number="26.4" class="anchored" data-anchor-id="分析環境の更新"><span class="header-section-number">26.4</span> 分析環境の更新</h2>
+<p>　{renv}を使用するプロジェクトでの作業中、パッケージの追加（<code>install.packages()</code>）、更新（<code>install.packages()</code>、<code>update.packages()</code>）、削除（<code>remove.packages()</code>）を行った場合、<code>renv.lock</code>ファイルと<code>renv</code>フォルダーの中身もそれに応じて更新する必要がある。これはコンソール上で<code>renv::snapshot()</code>を打つだけで良い。</p>
+<p>　たとえば、先ほど分析環境を保存した際、{gtable}のバージョンは<code>0.3.1</code>であった。これも若干古いバージョンであるため、<code>install.packages()</code>を使って最新バージョンに更新してみよう。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">install.packages</span>(<span class="st">"gtable"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code>Retrieving 'https://cran.ism.ac.jp/bin/macosx/contrib/4.2/gtable_0.3.2.tgz' ...
+    OK [downloaded 211.1 Kb in 0.15 seconds]
+Installing gtable [0.3.2] ...
+    OK [installed binary in 0.4 seconds]
+Moving gtable [0.3.2] into the cache ...
+    OK [moved to cache in 3.2 milliseconds]
+* Installed 1 package in 1.7 seconds.</code></pre>
+</div>
+</div>
+<p>　{gtable}のバージョンを確認してみると、0.3.2に更新されていることが分かる。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">packageVersion</span>(<span class="st">"gtable"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "0.3.2"</code></pre>
+</div>
+</div>
+<p>　これを保存された分析環境に保存してみよう。分析環境を更新するか否かを尋ねてくるが、<code>y</code>を入力すると更新される。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>renv<span class="sc">::</span><span class="fu">snapshot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code>The following package(s) will be updated in the lockfile:
+
+# CRAN ===============================
+- gtable   [0.3.1 -&gt; 0.3.2]
+
+Do you want to proceed? [y/N]: y
+* Lockfile written to '~/r_projects/renv_test/renv.lock'.</code></pre>
+</div>
+</div>
+<p>　現在のプロジェクトを終了し、もう一度<code>renv_test</code>プロジェクトを開いて見ると、{gtable}のバージョンが0.3.2になっていることが確認できよう。</p>
+</section>
+<section id="より詳しく知るために" class="level2" data-number="26.5">
+<h2 data-number="26.5" class="anchored" data-anchor-id="より詳しく知るために"><span class="header-section-number">26.5</span> より詳しく知るために</h2>
 <p>　{renv}の詳細は{renv}<a href="https://rstudio.github.io/renv/articles/renv.html">開発者のページ</a>を参照されたい。</p>
 <ul>
 <li><a href="https://rstudio.github.io/renv/articles/renv.html" class="uri">https://rstudio.github.io/renv/articles/renv.html</a></li>
 </ul>
-<p>{pacman}との相性は大丈夫だろうか。また、GitHubから導入したパッケージの場合は?</p>
 
 
 </section>
@@ -533,6 +699,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <hr>
 <ol>
 <li id="fn1"><p>ただし、乱数を発生させる場合はシード（seed）を固定する必要がある。多くの場合はコード内にシード固定の関数が（<code>sed.seed()</code>）含まれている。乱数発生の関数が含まれているにも関わらず、シード固定の関数がコード内に含まれていない場合、100%再生することはできないものの<strong>ほぼ</strong>同じ結果が再生できる。<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>パッケージの読み込みは通常の<code>library()</code>、<code>require()</code>関数以外にも、{pacman}の<code>p_load()</code>にも対応する。<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

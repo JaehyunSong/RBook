@@ -12,51 +12,248 @@ source("_common.R")
 
 ## 分析環境と再生可能な研究
 
-{renv}: **r**eproducible **env**ironments
+　{renv}は**r**eproducible **env**ironments（再生可能な分析環境）の略で、現時点での分析環境を保存し、再生してくれるパッケージだ。なぜ分析環境の再生可能性が重要だろうか。いくつかの例を紹介しよう。
 
-* 例1: 古いパッケージではできなかったものが、今はできるようになっている
-   * {ggplot2}の`geom_pointrange()`の場合、昔は点と垂直線のみが引けた（マッピングは`x`、`y`、`ymin`、`ymax`のみ可能）。
-   * 点と水平線の描きたい場合は、`coord_flip()`で座標系を回転する必要があった。
-   * 今の{ggplot2}だと、`xmin`と`xmax`にもマッピングができるため、`coord_flip()`不要
-   * 多分いないと思うが、現在の仕様でコードを古い{ggplot2}で走らせるとエラーが出る。
-* 例2: 昔はできたものの、今はできない
-   * 華麗に復活した{dplyr}の`rowwise()`は、無くなりかけていた関数
-   * {tidyr}の`gather()`と`spread()`は近い将来、無くなる
-* 例3: 仕様が変わり、関数名、仮引数名、実引数の使用可能なクラスが異なる場合
-   * 開発途上のパッケージだとあり得る。
+　たとえば、古いパッケージではできなかったものが、今はできるようになっている可能性がある。たとえば、{ggplot2}の`geom_pointrange()`は点（点推定値）と線（区間）を表現する幾何オブジェクトであるが、昔は点と**垂直**線のみが引けた。つまり、マッピングは常に`x`、`y`、`ymin`、`ymax`に対して行う必要があった。この区間を垂直線でなく、**水平**線にしたい場合は、`coord_flip()`で座標系を90度回転する必要があった。しかし、今の{ggplot2}は、`xmin`と`xmax`にもマッピングができるため、`coord_flip()`が不要となる。むろん、昔の書き方もまだ使えるのでこのケースは分析の再現という観点からはあまり問題にならないだろう。
 
-{revn}のインストール
+　問題は昔はできたものの、今はできなくなっているケースだ。たとえば、{dplyr}の`rowwise()`関数は、現在は華麗に復活したものの、実は無くなる予定の関数だった。また、{tidyr}の`gather()`と`spread()`関数は昔のコードではよく見るが、近い将来、無くなる予定である（現在は`pivot_longer()`と`pivot_wider()`が使われている）。
 
-```r
+　また、関数そのものは残っていても、仕様が変わることによって仮引数名、実引数の使用可能なクラスが異なる場合もある。これは開発途上のパッケージでよく見る現象だ。たとえば、筆者（宋）が愛用するパッケージの{marginaleffects}では推定したモデルの予測値を計算する`predictions()`関数と、限界効果を計算する`slopes()`関数が用意されている。どの関数も戻り値はデータフレーム型だ。しかし、`predictions()`で計算された予測値は`predicted`という名の列として表示され、`slopes()`で計算された限界効果の点推定値は`dydx`という名の列**だった**。現在は、どの関数を使っても予測値・限界効果の点推定値は`estimate`という名で統一されている。単に、計算結果をデータフレームとして出力するだけなら問題ないが、計算結果を使用して作図を行う場合は話が変わってくる。昔のコードでは`predicted`・`dydx`列でマッピングした図が、現在はエラーを出してしまうのだ。
+
+　Rとその生態系は毎日のように更新され、改善されていく。これはRのメリットでもあるが、デメリットでもあり、昔のコード（legacy code）がもはや動かない可能性もある。また、近年、学術の界隈でも再現可能性、再生可能性が重要視されている。したがって、今すぐに{renv}をインストールしておこう。
+
+```{r}
+#| eval: false
 pacman::p_load(renv)
 ```
 
 ## 分析環境の保存
 
-プロジェクトの使用を強く推奨 (第[-@sec-rbasic-project]章を参照)
+　{renv}を使った分析環境の保存/再現はプロジェクト機能の使用を前提としている。プロジェクト機能を使わない場合でも{renv}は使用可能だが、相性が良くない。{renv}の使用と関係なく、プロジェクトは非常に便利な機能なので常に使用するように心がけよう。 プロジェクト機能の詳細は第[-@sec-rbasic-project]章を参照を参照されたい。
 
-分析を始める前: コンソールに
+　プロジェクトを開いた状態（RStudioの右上に「Project: (none)」と表示されたらプロジェクト未使用中）で、現在の分析環境を保存する方法から紹介する。以下は架空の例であるが、`renv_test`という名のプロジェクトに`my_script.R`というファイルが存在し、ファイルの中身は以下の通りであるとする。
 
-```r
+```{r}
+#| filename: "my_script.R"
+#| eval: false
+pacman::p_load(ggdag)
+```
+
+　単に{ggdag}を読み込むだけのスクリプトファイルである。この{ggdag}のバージョンを確認してみよう。
+
+```{r}
+#| eval: false
+packageVersion("ggdag")
+```
+
+```{r}
+#| echo: false
+print("0.2.7")
+```
+
+　現在の{ggdag}のバージョンは0.2.7である。実は{ggdag}0.2.7はやや古いバージョンである。現時点での分析環境を保存するためには`init()`関数を使う。{renv}の関数群は使う機会が滅多にないので、コンソール上で`renv::init()`と入力しよう。
+
+```{r}
+#| eval: false
 renv::init()
 ```
 
-分析が終わった後: コンソールに
+```{r}
+#| echo: false
+init_msg <- "* Discovering package dependencies ... Done!
+* Linking packages into the project library ... [60/60] Done!
+The following package(s) will be updated in the lockfile:
 
-```r
-renv::snapshot()
+# CRAN ===============================
+- MASS            [* -> 7.3-58.3]
+- Matrix          [* -> 1.5-3]
+- R6              [* -> 2.5.1]
+- RColorBrewer    [* -> 1.1-3]
+- Rcpp            [* -> 1.0.10]
+- RcppArmadillo   [* -> 0.12.0.1.0]
+- RcppEigen       [* -> 0.3.3.9.3]
+- V8              [* -> 4.2.2]
+- boot            [* -> 1.3-28.1]
+- cli             [* -> 3.6.0]
+- colorspace      [* -> 2.1-0]
+- cpp11           [* -> 0.4.3]
+- curl            [* -> 5.0.0]
+- dagitty         [* -> 0.3-1]
+- digest          [* -> 0.6.31]
+- dplyr           [* -> 1.1.0]
+- fansi           [* -> 1.0.4]
+- farver          [* -> 2.1.1]
+- forcats         [* -> 1.0.0]
+- generics        [* -> 0.1.3]
+- ggdag           [* -> 0.2.7]
+- ggforce         [* -> 0.4.1]
+- ggplot2         [* -> 3.4.1]
+- ggraph          [* -> 2.1.0]
+- ggrepel         [* -> 0.9.3]
+- glue            [* -> 1.6.2]
+- graphlayouts    [* -> 0.8.4]
+- gridExtra       [* -> 2.3]
+- gtable          [* -> 0.3.1]
+- igraph          [* -> 1.4.1]
+- isoband         [* -> 0.2.7]
+- jsonlite        [* -> 1.8.4]
+- labeling        [* -> 0.4.2]
+- lattice         [* -> 0.20-45]
+- lifecycle       [* -> 1.0.3]
+- magrittr        [* -> 2.0.3]
+- mgcv            [* -> 1.8-42]
+- munsell         [* -> 0.5.0]
+- nlme            [* -> 3.1-162]
+- pacman          [* -> 0.5.1]
+- pillar          [* -> 1.8.1]
+- pkgconfig       [* -> 2.0.3]
+- polyclip        [* -> 1.10-4]
+- purrr           [* -> 1.0.1]
+- remotes         [* -> 2.4.2]
+- renv            [* -> 0.17.1]
+- rlang           [* -> 1.1.0]
+- scales          [* -> 1.2.1]
+- stringi         [* -> 1.7.12]
+- stringr         [* -> 1.5.0]
+- systemfonts     [* -> 1.0.4]
+- tibble          [* -> 3.2.0]
+- tidygraph       [* -> 1.2.3]
+- tidyr           [* -> 1.3.0]
+- tidyselect      [* -> 1.2.0]
+- tweenr          [* -> 2.0.2]
+- utf8            [* -> 1.2.3]
+- vctrs           [* -> 0.6.0]
+- viridis         [* -> 0.6.2]
+- viridisLite     [* -> 0.4.1]
+- withr           [* -> 2.5.0]
+
+The version of R recorded in the lockfile will be updated:
+- R               [* -> 4.2.2]
+
+* Lockfile written to '~/r_projects/renv_test/renv.lock'.
+
+Restarting R session...
+
+* Project '~/r_projects/renv_test' loaded. [renv 0.17.1]
+"
+
+cat(init_msg)
 ```
+
+　{ggdag}だけでなく、{ggdag}が依存するパッケージの現時点でのバージョンが固定される。実際、{ggdag}の行を見るとバージョンが0.2.7になっている。この`renv_test`プロジェクトがどのパッケージを使用するかは{renv}パッケージが自動的に判断してくれる。具体的にはプロジェクトフォルダー内に存在する全ての`.R`、`.Rmd`、`.qmd`ファイルをスキャンし、読み込まれているパッケージを抽出する仕組みである[^pacman]。これらのパッケージ情報はプロジェクトフォルダーに別途保存される。`dir()`関数を使用し、プロジェクトフォルダーの内部を覗いてみよう。
+
+[^pacman]: パッケージの読み込みは通常の`library()`、`require()`関数以外にも、{pacman}の`p_load()`にも対応する。
+
+```{r}
+#| eval: false
+dir()
+```
+
+```{r}
+#| echo: false
+cat('"my_script.R"\t"renv"\t"renv_test.Rproj"\t"renv.lock"')
+```
+
+　普通にあら`renv_test.Rproj`と`my_script.R`のみ存在するはずだが、`renv.lock`ファイルと`renv`という名のフォルダーが生成されている。この`renv.lock`にはパッケージのバージョンおよび依存関係の情報が書かれている（開いてみると分かる）。また、`renv`フォルダーにはそのパッケージがまるごと入っている。
 
 ## 分析環境の再生
 
-```r
-renv::restore()
+　`init()`で固定された分析環境情報を再生するためにはどうすればいいだろう。それを解説する前に、**プロジェクトを立ち上げていない状態**で{ggdag}をアップデートしてみよう。
+
+```{r}
+#| eval: false
+install.packages("ggdag")
 ```
+
+　続いて、{ggdag}のバージョンを確認してみる。
+
+```{r}
+#| eval: false
+packageVersion("ggdag")
+```
+
+```{r}
+#| echo: false
+print("0.2.8")
+```
+
+　{ggdag}のバージョンが0.2.8になっている。ここで、RStudioを終了し、先ほど作成した`renv_test`プロジェクトをもう一度開いてみよう。最初にRのバージョン情報などのメッセージが表示されるが、ここに普段見ることのない1行が追加されている。
+
+```{r}
+#| echo: false
+cat("* Project '~/r_projects/renv_test' loaded. [renv 0.17.1]")
+```
+
+　これは現在、{renv}で保存された分析環境が再生されていることを意味する。実際、0.2.8にアップデートしたはずの{ggdag}のバージョンを確認してみよう。
+
+```{r}
+#| eval: false
+packageVersion("ggdag")
+```
+
+```{r}
+#| echo: false
+print("0.2.7")
+```
+
+　最初に保存した0.2.7のままになっている。むろん、{renv}を使わない別のプロジェクトを開けば{ggdag}は0.2.8になっている。RStudio + プロジェクト機能を使う場合、プロジェクトフォルダ―に`renv.lock`ファイルが存在すると、その情報を読み込んで分析環境を再現してくれる。RStudioさまさまだ。宗教的信念によりRStudioを使わない場合は、コンソールで直接`renv::restore()`と入力すれば分析環境が再生される。
+
+## 分析環境の更新
+
+　{renv}を使用するプロジェクトでの作業中、パッケージの追加（`install.packages()`）、更新（`install.packages()`、`update.packages()`）、削除（`remove.packages()`）を行った場合、`renv.lock`ファイルと`renv`フォルダーの中身もそれに応じて更新する必要がある。これはコンソール上で`renv::snapshot()`を打つだけで良い。
+
+　たとえば、先ほど分析環境を保存した際、{gtable}のバージョンは`0.3.1`であった。これも若干古いバージョンであるため、`install.packages()`を使って最新バージョンに更新してみよう。
+
+```{r}
+#| eval: false
+install.packages("gtable")
+```
+
+```{r}
+#| echo: false
+cat("Retrieving 'https://cran.ism.ac.jp/bin/macosx/contrib/4.2/gtable_0.3.2.tgz' ...
+	OK [downloaded 211.1 Kb in 0.15 seconds]
+Installing gtable [0.3.2] ...
+	OK [installed binary in 0.4 seconds]
+Moving gtable [0.3.2] into the cache ...
+	OK [moved to cache in 3.2 milliseconds]
+* Installed 1 package in 1.7 seconds.")
+```
+
+　{gtable}のバージョンを確認してみると、0.3.2に更新されていることが分かる。
+
+```{r}
+#| eval: false
+packageVersion("gtable")
+```
+
+```{r}
+#| echo: false
+print("0.3.2")
+```
+
+　これを保存された分析環境に保存してみよう。分析環境を更新するか否かを尋ねてくるが、`y`を入力すると更新される。
+
+```{r}
+#| eval: false
+renv::snapshot()
+```
+
+```{r}
+#| echo: false
+cat("The following package(s) will be updated in the lockfile:
+
+# CRAN ===============================
+- gtable   [0.3.1 -> 0.3.2]
+
+Do you want to proceed? [y/N]: y
+* Lockfile written to '~/r_projects/renv_test/renv.lock'.")
+```
+
+　現在のプロジェクトを終了し、もう一度`renv_test`プロジェクトを開いて見ると、{gtable}のバージョンが0.3.2になっていることが確認できよう。
 
 ## より詳しく知るために
 
 　{renv}の詳細は{renv}[開発者のページ](https://rstudio.github.io/renv/articles/renv.html)を参照されたい。
 
 * <https://rstudio.github.io/renv/articles/renv.html>
-
-{pacman}との相性は大丈夫だろうか。また、GitHubから導入したパッケージの場合は?
