@@ -483,21 +483,21 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 
 </header>
 
-<p>　分析結果を再生する際に最も重要なのは<strong>データ</strong>と<strong>コード</strong>だろう。この2つがあれば、多くの場合、分析結果を再生することができる<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>。しかし、データとコード以外にも再生に欠かせない要素があり、それが<strong>パッケージ</strong>だ。現在において、R内臓の関数のみで構成されたファイルは極めて稀であり、外部のパッケージを用いることが多い。しかし、パッケージは時間の流れにつれ、徐々に改善されていく。この改善の段階において、既存の関数がなくなったり、関数名が変わったり、推定のアルゴリズムが変わったりするケースもある。この場合、データとコードだけでは再生ところか、エラーが発生してしまうかも知れない。したがって、分析を再生するためには分析時の環境そのものも同じにすることが望ましい。本章では{renv}による分析環境の管理/共有について紹介する。</p>
+<p>　分析結果を再生する際に最も重要なのは<strong>データ</strong>と<strong>コード</strong>だろう。この2つがあれば、多くの場合、分析結果を再生することができる<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>。しかし、データとコード以外にも再生に欠かせない要素があり、それが<strong>パッケージ</strong>だ。現在において、R内臓の関数のみで構成されたコードは極めて稀であり、外部のパッケージを用いることが多い。今のR界隈において{tidyverse}パッケージ群が必須になっているが、分野によっては他にも必須パッケージがあろう。しかし、これらのパッケージは時間の流れにつれ、徐々に改善されていく。この改善の段階において、既存の関数がなくなったり、関数名が変わったり、推定のアルゴリズムが変わったりするケースもある。この場合、データとコードだけでは再生ところか、エラーが発生してしまうかも知れない。したがって、分析を再生するためには分析時の環境そのものも同じにすることが望ましい。本章では{renv}による分析環境の管理/共有について紹介する。</p>
 <section id="分析環境と再生可能な研究" class="level2" data-number="26.1">
 <h2 data-number="26.1" class="anchored" data-anchor-id="分析環境と再生可能な研究"><span class="header-section-number">26.1</span> 分析環境と再生可能な研究</h2>
 <p>　{renv}は<strong>r</strong>eproducible <strong>env</strong>ironments（再生可能な分析環境）の略で、現時点での分析環境を保存し、再生してくれるパッケージだ。なぜ分析環境の再生可能性が重要だろうか。いくつかの例を紹介しよう。</p>
 <p>　たとえば、古いパッケージではできなかったものが、今はできるようになっている可能性がある。たとえば、{ggplot2}の<code>geom_pointrange()</code>は点（点推定値）と線（区間）を表現する幾何オブジェクトであるが、昔は点と<strong>垂直</strong>線のみが引けた。つまり、マッピングは常に<code>x</code>、<code>y</code>、<code>ymin</code>、<code>ymax</code>に対して行う必要があった。この区間を垂直線でなく、<strong>水平</strong>線にしたい場合は、<code>coord_flip()</code>で座標系を90度回転する必要があった。しかし、今の{ggplot2}は、<code>xmin</code>と<code>xmax</code>にもマッピングができるため、<code>coord_flip()</code>が不要となる。むろん、昔の書き方もまだ使えるのでこのケースは分析の再現という観点からはあまり問題にならないだろう。</p>
 <p>　問題は昔はできたものの、今はできなくなっているケースだ。たとえば、{dplyr}の<code>rowwise()</code>関数は、現在は華麗に復活したものの、実は無くなる予定の関数だった。また、{tidyr}の<code>gather()</code>と<code>spread()</code>関数は昔のコードではよく見るが、近い将来、無くなる予定である（現在は<code>pivot_longer()</code>と<code>pivot_wider()</code>が使われている）。</p>
-<p>　また、関数そのものは残っていても、仕様が変わることによって仮引数名、実引数の使用可能なクラスが異なる場合もある。これは開発途上のパッケージでよく見る現象だ。たとえば、筆者（宋）が愛用するパッケージの{marginaleffects}では推定したモデルの予測値を計算する<code>predictions()</code>関数と、限界効果を計算する<code>slopes()</code>関数が用意されている。どの関数も戻り値はデータフレーム型だ。しかし、<code>predictions()</code>で計算された予測値は<code>predicted</code>という名の列として表示され、<code>slopes()</code>で計算された限界効果の点推定値は<code>dydx</code>という名の列<strong>だった</strong>。現在は、どの関数を使っても予測値・限界効果の点推定値は<code>estimate</code>という名で統一されている。単に、計算結果をデータフレームとして出力するだけなら問題ないが、計算結果を使用して作図を行う場合は話が変わってくる。昔のコードでは<code>predicted</code>・<code>dydx</code>列でマッピングした図が、現在はエラーを出してしまうのだ。</p>
-<p>　Rとその生態系は毎日のように更新され、改善されていく。これはRのメリットでもあるが、デメリットでもあり、昔のコード（legacy code）がもはや動かない可能性もある。また、近年、学術の界隈でも再現可能性、再生可能性が重要視されている。したがって、今すぐに{renv}をインストールしておこう。</p>
+<p>　また、関数そのものは残っていても、仕様が変わることによって仮引数名、実引数の使用可能なクラスが異なる場合もある。これは開発途上のパッケージでよく見る現象だ。たとえば、筆者（宋）が愛用するパッケージの{marginaleffects}では推定したモデルの予測値を計算する<code>predictions()</code>関数と、限界効果を計算する<code>slopes()</code>関数が用意されている。どの関数も戻り値のクラスはデータフレーム型だ。しかし、<code>predictions()</code>で計算された予測値は<code>predicted</code>という名の列として表示され、<code>slopes()</code>で計算された限界効果の点推定値は<code>dydx</code>という名の列<strong>だった</strong>。現在は、どの関数を使っても予測値・限界効果の点推定値は<code>estimate</code>という名で統一されている。単に、計算結果をデータフレームとして出力するだけなら問題ないが（見た目は変わるものの、エラーは吐かない）、計算結果を使用して作図を行う場合は話が変わってくる。昔のコードでは<code>predicted</code>・<code>dydx</code>列でマッピングした図が、現在はエラーを出してしまうのだ。</p>
+<p>　Rとその生態系は毎日のように更新され、改善されていく。これはRのメリットでもあるが、デメリットでもあり、昔のコード（legacy code）がもはや動かない可能性もある。また、近年、学術の界隈でも再現可能性、再生可能性が重要視されている。今すぐに{renv}をインストールしておく理由としては十分すぎる。</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(renv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="分析環境の保存" class="level2" data-number="26.2">
 <h2 data-number="26.2" class="anchored" data-anchor-id="分析環境の保存"><span class="header-section-number">26.2</span> 分析環境の保存</h2>
-<p>　{renv}を使った分析環境の保存/再現はプロジェクト機能の使用を前提としている。プロジェクト機能を使わない場合でも{renv}は使用可能だが、相性が良くない。{renv}の使用と関係なく、プロジェクトは非常に便利な機能なので常に使用するように心がけよう。 プロジェクト機能の詳細は第<a href="r_basic.html#sec-rbasic-project"><span>6.2</span></a>章を参照を参照されたい。</p>
+<p>　{renv}を使った分析環境の保存/再現はプロジェクト機能の使用を前提としている。プロジェクト機能を使わない場合でも{renv}は使用可能だが、相性が良くない。{renv}の使用と関係なく、プロジェクトは非常に便利な機能なので常に使用するように心がけよう。プロジェクト機能の詳細は第<a href="r_basic.html#sec-rbasic-project"><span>6.2</span></a>章を参照を参照されたい。</p>
 <p>　プロジェクトを開いた状態（RStudioの右上に「Project: (none)」と表示されたらプロジェクト未使用中）で、現在の分析環境を保存する方法から紹介する。以下は架空の例であるが、<code>renv_test</code>という名のプロジェクトに<code>my_script.R</code>というファイルが存在し、ファイルの中身は以下の通りであるとする。</p>
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
@@ -608,7 +608,7 @@ Restarting R session...
 <pre><code>"my_script.R"   "renv"  "renv_test.Rproj"   "renv.lock"</code></pre>
 </div>
 </div>
-<p>　普通にあら<code>renv_test.Rproj</code>と<code>my_script.R</code>のみ存在するはずだが、<code>renv.lock</code>ファイルと<code>renv</code>という名のフォルダーが生成されている。この<code>renv.lock</code>にはパッケージのバージョンおよび依存関係の情報が書かれている（開いてみると分かる）。また、<code>renv</code>フォルダーにはそのパッケージがまるごと入っている。</p>
+<p>　普通なら<code>renv_test.Rproj</code>と<code>my_script.R</code>のみ存在するはずだが、<code>renv.lock</code>ファイルと<code>renv</code>という名のフォルダーが生成されている。この<code>renv.lock</code>にはパッケージのバージョンおよび依存関係の情報が書かれている（開いてみると分かる）。また、<code>renv</code>フォルダーにはそのパッケージがまるごと入っている。</p>
 </section>
 <section id="分析環境の再生" class="level2" data-number="26.3">
 <h2 data-number="26.3" class="anchored" data-anchor-id="分析環境の再生"><span class="header-section-number">26.3</span> 分析環境の再生</h2>
@@ -660,7 +660,7 @@ Moving gtable [0.3.2] into the cache ...
 * Installed 1 package in 1.7 seconds.</code></pre>
 </div>
 </div>
-<p>　{gtable}のバージョンを確認してみると、0.3.2に更新されていることが分かる。</p>
+<p>　これで更新は終わりだ。{renv}で再生された分析環境を使用する場合、パッケージのインストール/更新の画面も普段とやや異なるが、気にする必要はない。とにかく{gtable}のバージョンを確認してみると、0.3.2に更新されていることが分かる。</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">packageVersion</span>(<span class="st">"gtable"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
