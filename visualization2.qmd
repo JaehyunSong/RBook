@@ -59,15 +59,15 @@ data.frame(Var  = names(Country_df),
                     "",
                     rep("2020年基準; Freedom Houseから", 3),
                     "F:完全な自由; PF:一部自由; NF:不自由", 
-                    "")) %>%
+                    "")) |>
     kable(caption   = "国家別民主主義および政治的自由データの詳細",
           col.names = c("変数名", "説明", "備考"), 
           booktabs  = TRUE, 
-          align     = "lll") %>%
+          align     = "lll") |>
     kable_styling(bootstrap_options = "striped",
                   full_width        = FALSE,
-                  latex_options     = "hold_position") %>%
-    row_spec(0, align = "c") %>%
+                  latex_options     = "hold_position") |>
+    row_spec(0, align = "c") |>
     column_spec(1, monospace = TRUE)
 ```
 
@@ -82,15 +82,15 @@ data.frame(Var = names(COVID19_df),
                     "COVID-19 新規死亡者数（人）", 
                     "COVID-19 累積死亡者数（人）",
                     "COVID-19 新規検査数（人）", 
-                    "COVID-19 累積検査数（人）")) %>%
+                    "COVID-19 累積検査数（人）")) |>
   kable(caption = "COVID-19データの詳細",
         col.names = c("変数名", "説明"), 
         booktabs  = TRUE, 
-        align     = "ll") %>%
+        align     = "ll") |>
   kable_styling(bootstrap_options = "striped",
                 full_width        = FALSE,
-                latex_options     = "hold_position") %>%
-  row_spec(0, align = "c") %>%
+                latex_options     = "hold_position") |>
+  row_spec(0, align = "c") |>
   column_spec(1, monospace = TRUE)
 ```
 
@@ -117,7 +117,7 @@ table(Country_df$Continent)
 #| fig-width: 8
 #| fig-height: 4
 #| cahce: true
-Country_df %>%
+Country_df |>
   ggplot() +
   geom_bar(aes(x = Continent)) +
   labs(x = "大陸", y = "ケース数")
@@ -130,8 +130,8 @@ Country_df %>%
 　次は記述統計量のグラフを出してみます。たとえば、大陸ごとに民主主義の指標の1つであるPolity Scoreの平均値を図示するとします。まずは、{dplyr}を使って、大陸ごとにPolity Score (`Polity_Score`)の平均値を計算し、`Bar_df1`という名で保存します。
 
 ```{r visual2-barplot-3}
-Bar_df1 <- Country_df %>%
-  group_by(Continent) %>%
+Bar_df1 <- Country_df |>
+  group_by(Continent) |>
   summarise(Democracy = mean(Polity_Score, na.rm = TRUE),
             .groups   = "drop")
 
@@ -144,7 +144,7 @@ Bar_df1
 #| fig-width: 8
 #| fig-height: 4
 #| cahce: true
-Bar_df1 %>%
+Bar_df1 |>
   ggplot() +
   geom_bar(aes(x = Continent, y = Democracy), stat = "identity") +
   labs(x = "大陸", y = "Polity IV スコアの平均値") +
@@ -157,14 +157,14 @@ Bar_df1 %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cahce: true
-Bar_df1 %>%
+Bar_df1 |>
   mutate(Continent = recode(Continent,
                             "Africa"   = "アフリカ",
                             "America"  = "アメリカ",
                             "Asia"     = "アジア",
                             "Europe"   = "ヨーロッパ",
                             .default   = "オセアニア"),
-         Continent = fct_inorder(Continent)) %>%
+         Continent = fct_inorder(Continent)) |>
   ggplot() +
   geom_bar(aes(x = Continent, y = Democracy), stat = "identity") +
   labs(x = "大陸", y = "Polity IV スコアの平均値") +
@@ -176,8 +176,8 @@ Bar_df1 %>%
 　記述統計量のグラフを見るとマッピング要素は2つであり、これは図が2つの次元、つまり大陸とPolity IVスコアの平均値で構成されていることを意味します。記述統計量のグラフはマッピング要素は1つですが、ケース数という次元が自動的に計算されるため2次元です。ここにもう一つの次元を追加してみましょう。たとえば、大陸ごとのPolity IVスコアの平均値を出しますが、これを更にOECD加盟有無で分けてみましょう。そのためには、まず大陸とOECD加盟有無でグループを分けてPolity IVスコアの平均値を計算する必要があります。
 
 ```{r visual2-barplot-6}
-Bar_df2 <- Country_df %>%
-  group_by(Continent, OECD) %>%
+Bar_df2 <- Country_df |>
+  group_by(Continent, OECD) |>
   summarise(Democracy = mean(Polity_Score, na.rm = TRUE),
             .groups   = "drop")
 
@@ -187,7 +187,7 @@ Bar_df2
 　続いて、`Continent`と`OECD`列を日本語に直します。また、順番を指定するためにfactor化しましょう。
 
 ```{r visual2-barplot-7}
-Bar_df2 <- Bar_df2 %>%
+Bar_df2 <- Bar_df2 |>
   mutate(Continent = recode(Continent,
                             "Africa"   = "アフリカ",
                             "America"  = "アメリカ",
@@ -206,7 +206,7 @@ Bar_df2
 　これで作図の準備ができました。それではこの新しい次元である`OECD`をどのように表現すれば良いでしょうか。`Continent`は横軸の位置で表現され、`Democracy`は縦軸の位置として表現されているため、`x`と`y`以外の要素を考えてみましょう。棒グラフの場合、もう一つの軸が追加されるとしたらそれは、棒の色です。棒の色は`fill`で指定できます。`color`でないことに注意してください。`color`も指定可能ですが、これは棒の色ではなく、棒を囲む線の色であり、通常は「なし」となっています。それでは`fill`を`aes()`内に書き加えます。
 
 ```{r visual2-barplot-8}
-Bar_df2 %>%
+Bar_df2 |>
   ggplot() +
   geom_bar(aes(x = Continent, y = Democracy, fill = OECD), 
            stat = "identity") +
@@ -217,7 +217,7 @@ Bar_df2 %>%
 　なんか思ったものと違うものが出てきました。たとえば、アメリカ大陸の場合、Polity IVスコアの平均値が約15ですが、明らかにおかしいです。なぜならPolity IVスコアの最大値は10だからです。これは2つの棒が積み上げられているからです。アメリカ大陸においてOECD加盟国の平均値は8.6、非加盟国のそれは6.55であり、足したら15.15になります。これをずらすためには`position`を設定する必要があります。しかし、`position`というのは`Bar_df2`の何かと変数の値を表すわけではないため、`aes()`の外側に入れます。そして、その値ですが、ここでは`"dodge"`を指定します。これは棒の位置が重ならないように調整することを意味します。この`position`のデフォルト値は`"stack"`であり、言葉通り「積み上げ」です。
 
 ```{r visual2-barplot-9}
-Bar_df2 %>%
+Bar_df2 |>
   ggplot() +
   geom_bar(aes(x = Continent, y = Democracy, fill = OECD), 
            stat = "identity", position = "dodge") +
@@ -230,10 +230,10 @@ Bar_df2 %>%
 　たとえば、大陸ごとにOECD加盟/非加盟国を計算してみましょう。
 
 ```{r visual2-barplot-10}
-Bar_df3 <- Country_df %>%
-  group_by(Continent, OECD) %>%
+Bar_df3 <- Country_df |>
+  group_by(Continent, OECD) |>
   summarise(N = n(),
-            .groups   = "drop") %>%
+            .groups   = "drop") |>
   mutate(Continent = recode(Continent,
                             "Africa"   = "アフリカ",
                             "America"  = "アメリカ",
@@ -252,7 +252,7 @@ Bar_df3
 　これを可視化したのが以下の図です。
 
 ```{r visual2-barplot-11}
-Bar_df3 %>%
+Bar_df3 |>
   ggplot() +
   geom_bar(aes(x = Continent, y = N, fill = OECD), 
            stat = "identity") +
@@ -272,7 +272,7 @@ Bar_df3 %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>% 
+Country_df |> 
   ggplot() +
   geom_histogram(aes(x = GDP)) +
   labs(x = "国内総生産 (100万米ドル)", y = "度数") +
@@ -287,7 +287,7 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>% 
+Country_df |> 
   ggplot() +
   geom_histogram(aes(x = GDP)) +
   labs(x = "国内総生産 (兆米ドル)", y = "度数") +
@@ -305,7 +305,7 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>% 
+Country_df |> 
   ggplot() +
   geom_histogram(aes(x = GDP)) +
   geom_vline(xintercept = 1000000, color = "red") +
@@ -324,8 +324,8 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>% 
-  filter(GDP < 1000000) %>%
+Country_df |> 
+  filter(GDP < 1000000) |>
   ggplot() +
   geom_histogram(aes(x = GDP)) +
   labs(x = "国内総生産 (兆米ドル)", y = "度数") +
@@ -342,7 +342,7 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>% 
+Country_df |> 
   ggplot() +
   geom_histogram(aes(x = GDP)) +
   labs(x = "国内総生産 (兆米ドル)", y = "度数") +
@@ -362,7 +362,7 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>% 
+Country_df |> 
   ggplot() +
   geom_histogram(aes(x = GDP)) +
   labs(x = "国内総生産 (兆米ドル)", y = "度数") +
@@ -378,7 +378,7 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>% 
+Country_df |> 
   ggplot() +
   geom_histogram(aes(x = GDP)) +
   labs(x = "国内総生産 (兆米ドル)", y = "度数") +
@@ -399,7 +399,7 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>%
+Country_df |>
   ggplot() +
   geom_histogram(aes(x = HDI_2018)) +
   labs(x = "人間開発指数 (2018)", y = "ケース数") +
@@ -416,8 +416,8 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>%
-  filter(!is.na(HDI_2018)) %>%
+Country_df |>
+  filter(!is.na(HDI_2018)) |>
   ggplot() +
   geom_histogram(aes(x = HDI_2018), color = "white") +
   labs(x = "人間開発指数 (2018)", y = "ケース数") +
@@ -444,8 +444,8 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>%
-  filter(!is.na(HDI_2018)) %>%
+Country_df |>
+  filter(!is.na(HDI_2018)) |>
   ggplot() +
   geom_histogram(aes(x = HDI_2018), color = "white", bins = 10) +
   labs(x = "人間開発指数 (2018)", y = "ケース数") +
@@ -464,8 +464,8 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>%
-  filter(!is.na(HDI_2018)) %>%
+Country_df |>
+  filter(!is.na(HDI_2018)) |>
   ggplot() +
   geom_histogram(aes(x = HDI_2018), color = "white", binwidth = 0.1) +
   labs(x = "人間開発指数 (2018)", y = "ケース数") +
@@ -480,19 +480,19 @@ Country_df %>%
 #| echo: false
 #| message: false
 #| warning: false
-Country_df %>%
-  filter(!is.na(HDI_2018)) %>%
-    mutate(Class = cut(HDI_2018, seq(0.35, 1.05, 0.1))) %>%
-    group_by(Class) %>%
-    summarise(N = n()) %>%
-    separate(col = Class, into = c("Start", "End"), sep = ",") %>%
+Country_df |>
+  filter(!is.na(HDI_2018)) |>
+    mutate(Class = cut(HDI_2018, seq(0.35, 1.05, 0.1))) |>
+    group_by(Class) |>
+    summarise(N = n()) |>
+    separate(col = Class, into = c("Start", "End"), sep = ",") |>
     mutate(Start = parse_number(Start),
-           End   = parse_number(End)) %>%
+           End   = parse_number(End)) |>
   kable(col.names = c("から", "まで", "度数"),
         booktabs  = TRUE,
-        align     = c("rrr")) %>%
+        align     = c("rrr")) |>
   kable_styling(full_width    = FALSE,
-                latex_options = "hold_position") %>%
+                latex_options = "hold_position") |>
   row_spec(0, align = "c")
 ```
 
@@ -504,8 +504,8 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>%
-  filter(!is.na(HDI_2018)) %>%
+Country_df |>
+  filter(!is.na(HDI_2018)) |>
   ggplot() +
   geom_histogram(aes(x = HDI_2018), color = "white", 
                  binwidth = 0.1, boundary = 0) +
@@ -528,8 +528,8 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>%
-  filter(!is.na(HDI_2018)) %>%
+Country_df |>
+  filter(!is.na(HDI_2018)) |>
   ggplot(aes(x = HDI_2018, y = ..density..)) +
   geom_histogram(color = "white", binwidth = 0.05, boundary = 0) +
   geom_density(size = 1) +
@@ -547,8 +547,8 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>%
-  filter(!is.na(HDI_2018)) %>%
+Country_df |>
+  filter(!is.na(HDI_2018)) |>
   # 全幾何オブジェクトにおいてxを共有するため、ここでマッピング指定
   ggplot(aes(x = HDI_2018)) +
   geom_histogram(color = "white", binwidth = 0.05, boundary = 0) +
@@ -567,8 +567,8 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>%
-  filter(!is.na(HDI_2018)) %>%
+Country_df |>
+  filter(!is.na(HDI_2018)) |>
   ggplot(aes(x = HDI_2018, y = ..density..)) +
   geom_histogram(color = "white", binwidth = 0.05, boundary = 0) +
   geom_density(size = 1) +
@@ -590,9 +590,9 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>%
-  mutate(OECD2 = ifelse(OECD == 1, "加盟国", "非加盟国")) %>%
-  filter(!is.na(HDI_2018)) %>%
+Country_df |>
+  mutate(OECD2 = ifelse(OECD == 1, "加盟国", "非加盟国")) |>
+  filter(!is.na(HDI_2018)) |>
   ggplot() +
   geom_histogram(aes(x = HDI_2018, fill = OECD2), 
                  color = "white", binwidth = 0.05, boundary = 0) +
@@ -611,9 +611,9 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>%
-  mutate(OECD2 = ifelse(OECD == 1, "OECD加盟国", "OECD非加盟国")) %>%
-  filter(!is.na(HDI_2018)) %>%
+Country_df |>
+  mutate(OECD2 = ifelse(OECD == 1, "OECD加盟国", "OECD非加盟国")) |>
+  filter(!is.na(HDI_2018)) |>
   ggplot() +
   geom_histogram(aes(x = HDI_2018, fill = OECD2), 
                  color = "white", alpha = 0.5, position = "identity",
@@ -632,9 +632,9 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>%
-  mutate(OECD2 = ifelse(OECD == 1, "OECD加盟国", "OECD非加盟国")) %>%
-  filter(!is.na(HDI_2018)) %>%
+Country_df |>
+  mutate(OECD2 = ifelse(OECD == 1, "OECD加盟国", "OECD非加盟国")) |>
+  filter(!is.na(HDI_2018)) |>
   # xはHDI_2018、yは密度 (..density..)とする
   ggplot(aes(x = HDI_2018, y = ..density..)) +
   geom_histogram(aes(fill = OECD2), 
@@ -661,9 +661,9 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>%
-  mutate(OECD2 = ifelse(OECD == 1, "OECD加盟国", "OECD非加盟国")) %>%
-  filter(!is.na(HDI_2018)) %>%
+Country_df |>
+  mutate(OECD2 = ifelse(OECD == 1, "OECD加盟国", "OECD非加盟国")) |>
+  filter(!is.na(HDI_2018)) |>
   ggplot() +
   geom_histogram(aes(x = HDI_2018), 
                  color = "white",
@@ -683,8 +683,8 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>%
-  filter(!is.na(HDI_2018)) %>%
+Country_df |>
+  filter(!is.na(HDI_2018)) |>
   ggplot() +
   geom_histogram(aes(x = HDI_2018), 
                  color = "white",
@@ -706,8 +706,8 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>%
-  filter(!is.na(HDI_2018)) %>%
+Country_df |>
+  filter(!is.na(HDI_2018)) |>
   ggplot() +
   geom_boxplot(aes(y = HDI_2018)) +
   labs(y = "人間開発指数 (2018)")
@@ -720,8 +720,8 @@ Country_df %>%
 #| fig-height: 6
 #| cache: true
 #| echo: false
-Country_df %>%
-  filter(!is.na(HDI_2018)) %>%
+Country_df |>
+  filter(!is.na(HDI_2018)) |>
   ggplot() +
   geom_boxplot(aes(y = HDI_2018)) +
   geom_text(aes(x = 0.4, y = median(HDI_2018), 
@@ -757,8 +757,8 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>%
-  filter(!is.na(HDI_2018)) %>%
+Country_df |>
+  filter(!is.na(HDI_2018)) |>
   ggplot() +
   geom_boxplot(aes(y = HDI_2018)) +
   labs(y = "人間開発指数 (2018)") +
@@ -773,8 +773,8 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>%
-  filter(!is.na(HDI_2018)) %>%
+Country_df |>
+  filter(!is.na(HDI_2018)) |>
   ggplot() +
   geom_boxplot(aes(x = Continent, y = HDI_2018)) +
   labs(x = "大陸", y = "人間開発指数 (2018)") +
@@ -789,8 +789,8 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>%
-  filter(!is.na(HDI_2018)) %>%
+Country_df |>
+  filter(!is.na(HDI_2018)) |>
   ggplot() +
   geom_boxplot(aes(x = Continent, y = HDI_2018, fill = Continent),
                show.legend = FALSE) +
@@ -810,8 +810,8 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>%
-  filter(!is.na(HDI_2018)) %>%
+Country_df |>
+  filter(!is.na(HDI_2018)) |>
   # 全幾何オブジェクトにおいてxとyは共有されるため、ここで指定
   ggplot(aes(x = Continent, y = HDI_2018)) +
   geom_point(aes(color = Continent), alpha = 0.5,
@@ -830,8 +830,8 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>%
-  filter(!is.na(HDI_2018)) %>%
+Country_df |>
+  filter(!is.na(HDI_2018)) |>
   ggplot(aes(x = Continent, y = HDI_2018)) +
   geom_jitter(aes(color = Continent),
               show.legend = FALSE) +
@@ -847,13 +847,13 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>%
+Country_df |>
   mutate(Continent2 = factor(Continent,
                              levels = c("Africa", "America", "Asia",
                                         "Europe", "Oceania"),
                              labels = c("アフリカ", "アメリカ", "アジア",
-                                        "ヨーロッパ", "オセアニア"))) %>%
-  filter(!is.na(HDI_2018)) %>%
+                                        "ヨーロッパ", "オセアニア"))) |>
+  filter(!is.na(HDI_2018)) |>
   ggplot(aes(x = Continent2, y = HDI_2018)) +
   geom_jitter(aes(color = Continent2),
               width = 0.15, height = 0,
@@ -872,7 +872,7 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>%
+Country_df |>
   mutate(Continent2 = factor(Continent,
                              levels = c("Africa", "America", "Asia",
                                         "Europe", "Oceania"),
@@ -883,8 +883,8 @@ Country_df %>%
          # Developed変数のfactor化
          Developed  = factor(Developed, levels = c(1, 0),
                              labels = c("先進国", "その他"),
-                             ordered = TRUE)) %>%
-  filter(!is.na(HDI_2018)) %>%
+                             ordered = TRUE)) |>
+  filter(!is.na(HDI_2018)) |>
   ggplot(aes(x = Continent2, y = HDI_2018)) +
   geom_jitter(aes(color = Continent2), alpha = 0.5,
               width = 0.15, height = 0,
@@ -912,7 +912,7 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>%
+Country_df |>
   mutate(Continent2 = factor(Continent,
                              levels = c("Africa", "America", "Asia",
                                         "Europe", "Oceania"),
@@ -921,8 +921,8 @@ Country_df %>%
          Developed  = ifelse(G7 + G20 + OECD >= 1, 1, 0),
          Developed  = factor(Developed, levels = c(1, 0),
                              labels = c("先進国", "その他"),
-                             ordered = TRUE)) %>%
-  filter(!is.na(HDI_2018)) %>%
+                             ordered = TRUE)) |>
+  filter(!is.na(HDI_2018)) |>
   ggplot(aes(x = Continent2, y = HDI_2018)) +
   # jitterでdodgeを使うためにはposition_jitterdodgeを使う
   geom_jitter(aes(color = Developed), alpha = 0.5,
@@ -945,12 +945,12 @@ Country_df %>%
 
 ```{r visual2-box-11}
 #| cache: true
-Democracy_df <- Country_df %>% 
-  select(Country, Continent, Polity_Score, FH_Total) %>%
-  filter(!is.na(Polity_Score), !is.na(FH_Total)) %>%
+Democracy_df <- Country_df |> 
+  select(Country, Continent, Polity_Score, FH_Total) |>
+  filter(!is.na(Polity_Score), !is.na(FH_Total)) |>
   pivot_longer(cols      = contains("_"),
                names_to  = "Type",
-               values_to = "Value") %>%
+               values_to = "Value") |>
   mutate(Type = recode(Type,
                        "FH_Total"     = "Freedom House",
                        "Polity_Score" = "Polity IV"))
@@ -964,7 +964,7 @@ Democracy_df
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Democracy_df %>%
+Democracy_df |>
   ggplot() +
   geom_boxplot(aes(x = Continent, y = Value, fill = Type)) +
   labs(x = "大陸", y = "民主主義の程度", fill = "指標") +
@@ -980,19 +980,19 @@ Democracy_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Democracy_df <- Country_df %>% 
-  select(Country, Continent, Polity_Score, FH_Total) %>%
+Democracy_df <- Country_df |> 
+  select(Country, Continent, Polity_Score, FH_Total) |>
   # FH_Totalのすケース調整
-  mutate(FH_Total = (FH_Total - 50) / 5) %>%
-  filter(!is.na(Polity_Score), !is.na(FH_Total)) %>%
+  mutate(FH_Total = (FH_Total - 50) / 5) |>
+  filter(!is.na(Polity_Score), !is.na(FH_Total)) |>
   pivot_longer(cols      = contains("_"),
                names_to  = "Type",
-               values_to = "Value") %>%
+               values_to = "Value") |>
   mutate(Type2 = recode(Type,
                         "FH_Total"     = "Freedom House",
                         "Polity_Score" = "Polity IV"))
 
-Democracy_df %>%
+Democracy_df |>
   ggplot() +
   geom_boxplot(aes(x = Continent, y = Value, fill = Type2)) +
   labs(x = "大陸", y = "民主主義の程度", fill = "指標") +
@@ -1010,7 +1010,7 @@ Democracy_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Country_df %>%
+Country_df |>
   ggplot() +
   geom_point(aes(x = PPP_per_capita, y = HDI_2018)) +
   labs(x = "一人当たり購買力平価GDP (USD)", y = "人間開発指数") +
@@ -1027,8 +1027,8 @@ Country_df %>%
 
 ```{r visual2-scatter-2}
 #| cache: true
-Country_df %>% 
-  filter(is.na(PPP_per_capita) | is.na(HDI_2018)) %>% 
+Country_df |> 
+  filter(is.na(PPP_per_capita) | is.na(HDI_2018)) |> 
   select(Country, PPP_per_capita, HDI_2018)
 ```
 
@@ -1041,7 +1041,7 @@ Country_df %>%
 #| fig-height: 4
 #| cache: true
 #| warning: false
-Country_df %>%
+Country_df |>
   ggplot() +
   geom_point(aes(x = PPP_per_capita, y = HDI_2018)) +
   labs(x = "一人当たり購買力平価GDP (USD)", y = "人間開発指数") +
@@ -1060,8 +1060,8 @@ Country_df %>%
 #| fig-height: 4
 #| cache: true
 #| warning: false
-Country_df %>%
-  mutate(Area2 = Area / 1000000) %>%
+Country_df |>
+  mutate(Area2 = Area / 1000000) |>
   ggplot() +
   geom_point(aes(x = PPP_per_capita, y = HDI_2018, size = Area2),
              alpha = 0.5) +
@@ -1081,8 +1081,8 @@ Country_df %>%
 #| fig-height: 4
 #| cache: true
 #| warning: false
-Country_df %>%
-  mutate(Area2 = Area / 1000000) %>%
+Country_df |>
+  mutate(Area2 = Area / 1000000) |>
   ggplot() +
   geom_point(aes(x = PPP_per_capita, y = HDI_2018, 
                  size = Area, color = OECD)) +
@@ -1098,10 +1098,10 @@ Country_df %>%
 #| fig-height: 4
 #| cache: true
 #| warning: false
-Country_df %>%
+Country_df |>
   mutate(Area2 = Area / 1000000,
          OECD2 = factor(OECD, levels = 0:1, 
-                      labels = c("非加盟国", "加盟国"))) %>%
+                      labels = c("非加盟国", "加盟国"))) |>
   ggplot() +
   geom_point(aes(x = PPP_per_capita, y = HDI_2018, 
                  size = Area2, color = OECD2)) +
@@ -1130,7 +1130,7 @@ Country_df %>%
 #| fig-height: 4
 #| cache: true
 #| warning: false
-Country_df %>%
+Country_df |>
   mutate(Area2    = Area / 1000000,
          Country2 = case_when(Country == "Japan"       ~ "Japan",
                               Country == "South Korea" ~ "South Korea",
@@ -1140,7 +1140,7 @@ Country_df %>%
                            levels = c("Japan", "South Korea", "China",
                                       "Other"),
                            labels = c("Japan", "South Korea", "China",
-                                      "Other"))) %>%
+                                      "Other"))) |>
   ggplot() +
   geom_point(aes(x = PPP_per_capita, y = HDI_2018, 
                  size = Area2, color = Country2)) +
@@ -1170,8 +1170,8 @@ gghighlight(条件式, label_params = list(引数1, 引数2, ...))
 #| fig-height: 4
 #| cache: true
 #| warning: false
-Country_df %>%
-  mutate(Area2 = Area / 1000000) %>%
+Country_df |>
+  mutate(Area2 = Area / 1000000) |>
   ggplot() +
   geom_point(aes(x = PPP_per_capita, y = HDI_2018, 
                  size = Area2, color = Country)) +
@@ -1191,7 +1191,7 @@ Country_df %>%
 　必要なマッピング要素は線の傾きが変化しうるポイントの横軸上の位置（`x`）と縦軸上の位置（`y`）です。ここではCOVID-19の新規感染者数データを使用します。まず、`Date`変数が文字型になっているため、これをDate型に変換します。文字型の場合、順序関係がないからです。基本的に折れ線グラフの横軸になり得るデータ型はnumeric、順序付きfactor、Date、complex型だと考えていただいても結構です。
 
 ```{r visual2-line-1}
-COVID19_df <- COVID19_df %>%
+COVID19_df <- COVID19_df |>
   mutate(Date = as.Date(Date))
 ```
 
@@ -1201,7 +1201,7 @@ COVID19_df <- COVID19_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-COVID19_df %>%
+COVID19_df |>
   ggplot() +
   geom_line(aes(x = Date, y = Confirmed_Total)) +
   scale_y_continuous(breaks = c(10, 100, 1000, 10000, 100000, 1000000),
@@ -1223,7 +1223,7 @@ COVID19_df %>%
 #| fig-height: 4
 #| cache: true
 #| warning: false
-COVID19_df %>%
+COVID19_df |>
   ggplot() +
   geom_line(aes(x = Date, y = Confirmed_Total, group = Country)) +
   scale_y_continuous(breaks = c(10, 100, 1000, 10000, 100000, 1000000),
@@ -1241,7 +1241,7 @@ COVID19_df %>%
 #| fig-height: 4
 #| cache: true
 #| warning: false
-COVID19_df %>%
+COVID19_df |>
   ggplot() +
   geom_line(aes(x = Date, y = Confirmed_Total, color = Country)) +
   scale_y_continuous(breaks = c(10, 100, 1000, 10000, 100000, 1000000),
@@ -1264,8 +1264,8 @@ COVID19_df %>%
 G7 <- c("Cananda", "France", "Germany", "Italy", "Japan", 
         "United Kingdom", "United States")
 
-COVID19_df %>%
-  filter(Country %in% G7) %>%
+COVID19_df |>
+  filter(Country %in% G7) |>
   ggplot() +
   geom_line(aes(x = Date, y = Confirmed_Total, color = Country)) +
   scale_y_continuous(breaks = c(10, 100, 1000, 10000, 100000, 1000000),
@@ -1283,9 +1283,9 @@ COVID19_df %>%
 #| fig-height: 4
 #| cache: true
 #| warning: false
-COVID19_df %>%
-  filter(Country %in% G7) %>%
-  mutate(Country = fct_reorder2(Country, Date, Confirmed_Total, last2)) %>%
+COVID19_df |>
+  filter(Country %in% G7) |>
+  mutate(Country = fct_reorder2(Country, Date, Confirmed_Total, last2)) |>
   ggplot() +
   geom_line(aes(x = Date, y = Confirmed_Total, color = Country),
             linewidth = 0.75) +
@@ -1309,7 +1309,7 @@ COVID19_df %>%
 #| cache: true
 #| warning: false
 #| message: false
-COVID19_df %>%
+COVID19_df |>
   ggplot() +
   geom_line(aes(x = Date, y = Confirmed_Total, color = Country)) +
   gghighlight(Country %in% c("Japan", "China", "South Korea",
@@ -1418,7 +1418,7 @@ ggsave(filename = "ファイル名",
 
 ```{r visual2-save-ggsave-2}
 #| eval: false
-BarPlot1 <- Country_df %>%
+BarPlot1 <- Country_df |>
   ggplot() +
   geom_bar(aes(x = Continent)) +
   labs(x = "大陸", y = "ケース数") +
@@ -1452,7 +1452,7 @@ dev.off()
 #| eval: false
 # 方法1
 quartz(type = "pdf", file = "Figs/BarPlot1.pdf", width = 5, height = 5)
-Country_df %>%
+Country_df |>
   ggplot() +
   geom_bar(aes(x = Continent)) +
   labs(x = "大陸", y = "ケース数") +

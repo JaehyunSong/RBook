@@ -38,7 +38,7 @@ COVID19_df <- read_csv("Data/COVID19_Worldwide.csv", guess_max = 10000)
 #| fig-width: 5
 #| fig-height: 4
 #| cache: true
-Country_df %>%
+Country_df |>
     ggplot() +
     geom_point(aes(x = FH_Total, y = GDP_per_capita)) +
     labs(x = "フリーダムハウススコア",y = "一人あたりGDP (USD)", 
@@ -53,7 +53,7 @@ Country_df %>%
 #| fig-width: 5
 #| fig-height: 4
 #| cache: true
-Country_df %>%
+Country_df |>
     ggplot() +
     geom_point(aes(x = FH_Total, y = GDP_per_capita, color = Continent)) +
     labs(x = "フリーダムハウススコア",y = "一人あたりGDP (USD)", 
@@ -70,7 +70,7 @@ Country_df %>%
 #| fig-width: 5
 #| fig-height: 4
 #| cache: true
-Country_df %>%
+Country_df |>
     ggplot() +
     geom_point(aes(x = FH_Total, y = GDP_per_capita, color = Continent)) +
     labs(x = "フリーダムハウススコア",y = "一人あたりGDP (USD)", color = "大陸",
@@ -88,7 +88,7 @@ Country_df %>%
 #| fig-width: 5
 #| fig-height: 4
 #| cache: true
-Country_df %>%
+Country_df |>
     ggplot() +
     geom_point(aes(x = FH_Total, y = GDP_per_capita, color = Continent)) +
     labs(x = "フリーダムハウススコア",y = "一人あたりGDP (USD)", color = "大陸",
@@ -116,9 +116,9 @@ Country_df %>%
 #| fig-width: 8
 #| fig-height: 4
 #| cache: true
-Fig1 <- COVID19_df %>%
-  mutate(Date = as.Date(Date)) %>%
-  filter(Country %in% c("Japan", "South Korea", "China", "United States")) %>%
+Fig1 <- COVID19_df |>
+  mutate(Date = as.Date(Date)) |>
+  filter(Country %in% c("Japan", "South Korea", "China", "United States")) |>
   ggplot() +
   geom_line(aes(x = Date, y = Confirmed_Total, color = Country)) +
   labs(x = "月", y = "累積感染者数 (人)") +
@@ -146,7 +146,7 @@ Fig1 +
 #| fig-height: 4
 #| cache: true
 Fig2 <- tibble(Class = paste0(LETTERS[1:5], "組"),
-       Score = c(78, 80, 85, 77, 70)) %>%
+       Score = c(78, 80, 85, 77, 70)) |>
   ggplot() +
   geom_bar(aes(x = Class, y = Score), stat = "identity") +
   labs(x = "クラス", y = "数学成績の平均 (点)") +
@@ -208,10 +208,10 @@ ggplotオブジェクト +
 #| fig-width: 5
 #| fig-height: 4
 #| cache: true
-Flip_Fig <- Country_df %>%
-  group_by(Continent) %>%
+Flip_Fig <- Country_df |>
+  group_by(Continent) |>
   summarise(Democracy = mean(Polity_Score, na.rm = TRUE),
-            .groups   = "drop") %>%
+            .groups   = "drop") |>
   ggplot() +
   geom_bar(aes(x = Continent, y = Democracy), stat = "identity") +
   labs(x = "大陸", y = "Polity IV スコアの平均値") +
@@ -296,7 +296,7 @@ ggplot() +
 #| fig-width: 5
 #| fig-height: 4
 #| cache: true
-Scale_Fig1 <- Country_df %>%
+Scale_Fig1 <- Country_df |>
     ggplot() +
     geom_point(aes(x = FH_Total, y = GDP_per_capita)) +
     labs(x = "フリーダムハウススコア",y = "一人あたりGDP (USD)") +
@@ -383,8 +383,8 @@ Flip_Fig +
 #| fig-width: 5
 #| fig-height: 4
 #| cache: true
-Scale_df1 <- Country_df %>%
-  group_by(Polity_Type) %>%
+Scale_df1 <- Country_df |>
+  group_by(Polity_Type) |>
   summarise(N       = n(),
             .groups = "drop")
 
@@ -394,7 +394,7 @@ Scale_df1
 　続きまして、`Polity_Type`列をfactor型にします。最もスコアの低い独裁（Autocracy）から最もスコアの高い完全な民主主義（Full Democracy）の順番のfactorにします。
 
 ```{r visual3-scale-discrete-3}
-Scale_df1 <- Scale_df1 %>%
+Scale_df1 <- Scale_df1 |>
   mutate(Polity_Type = factor(Polity_Type, ordered = TRUE,
                               levels  = c("Autocracy",
                                           "Closed Anocracy",
@@ -412,19 +412,19 @@ Scale_df1$Polity_Type
 #| fig-width: 5
 #| fig-height: 4
 #| cache: true
-Scale_df1 %>% 
+Scale_df1 |> 
   ggplot() +
   geom_bar(aes(x = Polity_Type, y = N), stat = "identity")
 ```
 
-　Polityプロジェクトの対象外があり、この場合は欠損値（`NA`）になります。そして、問題はこの欠損値も表示されることです。むろん、欠損値のカテゴリも出力したいケースもありますが、もし欠損値カテゴリの棒を消すにはどうすれば良いでしょうか。1つ目の方法は`Scale_df1 %>% drop_na()`で欠損値を含む行を除去してから作図する方法です。2つ目の方法は`scale_x_discrete()`で`na.translate = FALSE`を指定する方法です。ここでは横軸の目盛りラベルも日本語に変更し、欠損値のカテゴリを除外してみましょう。また、地味に便利な機能として、軸ラベルも`scale_*_*()`で指定可能です。第1引数として長さ1の文字ベクトルを指定すると、自動的に軸ラベルが修正され、`labs()`が不要となります。
+　Polityプロジェクトの対象外があり、この場合は欠損値（`NA`）になります。そして、問題はこの欠損値も表示されることです。むろん、欠損値のカテゴリも出力したいケースもありますが、もし欠損値カテゴリの棒を消すにはどうすれば良いでしょうか。1つ目の方法は`Scale_df1 |> drop_na()`で欠損値を含む行を除去してから作図する方法です。2つ目の方法は`scale_x_discrete()`で`na.translate = FALSE`を指定する方法です。ここでは横軸の目盛りラベルも日本語に変更し、欠損値のカテゴリを除外してみましょう。また、地味に便利な機能として、軸ラベルも`scale_*_*()`で指定可能です。第1引数として長さ1の文字ベクトルを指定すると、自動的に軸ラベルが修正され、`labs()`が不要となります。
 
 ```{r visual3-scale-discrete-5}
 #| warning: false
 #| fig-width: 5
 #| fig-height: 4
 #| cache: true
-Scale_df1 %>% 
+Scale_df1 |> 
   ggplot() +
   geom_bar(aes(x = Polity_Type, y = N), stat = "identity") +
   scale_x_discrete("Polity IV スコア", # 第1引数で軸ラベルも指定可能
@@ -453,7 +453,7 @@ Scale_df1 %>%
 #| fig-width: 6
 #| fig-height: 4
 #| cache: true
-Scale_Fig2 <- Country_df %>%
+Scale_Fig2 <- Country_df |>
     ggplot() +
     geom_point(aes(x = GDP_per_capita, y = HDI_2018, color = Polity_Score)) +
     labs(x = "一人あたりGDP (USD)",y = "人間開発指数", color = "Polity IVスコア") +
@@ -518,14 +518,14 @@ Scale_Fig2 +
 #| fig-width: 6
 #| fig-height: 4
 #| cache: true
-Scale_Fig3 <- Country_df %>%
+Scale_Fig3 <- Country_df |>
   mutate(Polity_Type = factor(Polity_Type, ordered = TRUE,
                               levels  = c("Autocracy",
                                           "Closed Anocracy",
                                           "Open Anocracy",
                                           "Democracy",
-                                          "Full Democracy"))) %>%
-  drop_na(Polity_Type) %>%
+                                          "Full Democracy"))) |>
+  drop_na(Polity_Type) |>
   ggplot() +
   geom_point(aes(x = GDP_per_capita, y = HDI_2018, color = Polity_Type)) +
   labs(x = "一人あたりGDP (USD)",y = "人間開発指数", color = "Polity IVタイプ") +
@@ -544,7 +544,7 @@ Scale_Fig3
 pacman::p_load(scales)
 # Hueは0から360まで、彩度は100、明るさ65、範囲内の36色を出力
 # タイルは6列、ラベルなし、ボーダーの太さは１
-hue_pal(h = c(0, 360), c = 100, l = 65)(36) %>%
+hue_pal(h = c(0, 360), c = 100, l = 65)(36) |>
   show_col(ncol = 6, label = FALSE, borders = 1)
 ```
 
@@ -632,8 +632,8 @@ Scale_Fig3 +
 #| fig-width: 6
 #| fig-height: 4
 #| cache: true
-Country_df %>%
-  mutate(Asia = if_else(Continent == "Asia", "Asia", "Other")) %>%
+Country_df |>
+  mutate(Asia = if_else(Continent == "Asia", "Asia", "Other")) |>
   ggplot() +
   geom_point(aes(x = GDP_per_capita, y = HDI_2018, alpha = Asia), size = 2) +
   labs(x = "一人あたりGDP (USD)",y = "人間開発指数", alpha = "大陸") +
@@ -648,8 +648,8 @@ Country_df %>%
 #| fig-width: 6
 #| fig-height: 4
 #| cache: true
-Country_df %>%
-  mutate(Asia = if_else(Continent == "Asia", "Asia", "Other")) %>%
+Country_df |>
+  mutate(Asia = if_else(Continent == "Asia", "Asia", "Other")) |>
   ggplot() +
   geom_point(aes(x = GDP_per_capita, y = HDI_2018, alpha = Asia), size = 2) +
   labs(x = "一人あたりGDP (USD)",y = "人間開発指数", alpha = "大陸") +
@@ -677,7 +677,7 @@ Country_df %>%
 #| fig-width: 6
 #| fig-height: 4
 #| cache: true
-Country_df %>%
+Country_df |>
     ggplot() +
     geom_point(aes(x = FH_Total, y = HDI_2018, size = PPP_per_capita)) +
     labs(x = "フリーダムハウススコア",y = "2018年人間開発指数", 
@@ -695,7 +695,7 @@ Country_df %>%
 #| fig-width: 6
 #| fig-height: 4
 #| cache: true
-Country_df %>%
+Country_df |>
     ggplot() +
     geom_point(aes(x = FH_Total, y = HDI_2018, size = PPP_per_capita),
                alpha = 0.5) + # 透明度の指定
@@ -712,7 +712,7 @@ Country_df %>%
 #| fig-width: 6
 #| fig-height: 4
 #| cache: true
-Country_df %>%
+Country_df |>
     ggplot() +
     geom_point(aes(x = FH_Total, y = HDI_2018, size = PPP_per_capita),
                alpha = 0.5) +
@@ -733,7 +733,7 @@ Country_df %>%
 #| fig-width: 6
 #| fig-height: 4
 #| cache: true
-Country_df %>%
+Country_df |>
     ggplot() +
     geom_point(aes(x = FH_Total, y = HDI_2018, size = PPP_per_capita),
                alpha = 0.5) +
@@ -757,8 +757,8 @@ Country_df %>%
 #| fig-width: 6
 #| fig-height: 4
 #| cache: true
-Country_df %>%
-    mutate(G20 = if_else(G20 == 1, "加盟国", "非加盟国")) %>%
+Country_df |>
+    mutate(G20 = if_else(G20 == 1, "加盟国", "非加盟国")) |>
     ggplot() +
     geom_point(aes(x = FH_Total, y = HDI_2018, shape = G20),
                size = 2) +
@@ -775,8 +775,8 @@ Country_df %>%
 #| fig-width: 6
 #| fig-height: 4
 #| cache: true
-Country_df %>%
-    mutate(G20 = if_else(G20 == 1, "加盟国", "非加盟国")) %>%
+Country_df |>
+    mutate(G20 = if_else(G20 == 1, "加盟国", "非加盟国")) |>
     ggplot() +
     geom_point(aes(x = FH_Total, y = HDI_2018, shape = G20),
                size = 2) +
@@ -795,7 +795,7 @@ Country_df %>%
 #| fig-width: 6
 #| fig-height: 1.5
 #| cache: true
-data.frame(p = c(0:25)) %>%
+data.frame(p = c(0:25)) |>
   ggplot() +
   geom_point(aes(x = p %% 16, y = p %/% 16, shape = p), 
              size = 5, fill = "red") +
@@ -823,8 +823,8 @@ shape.df <- tibble(
   x = rnorm(100, 0, 2),
   y = 1 + if_else(x >= 0, 0.3, 2) * x + rnorm(100, 0, 1))
 
-Shape.Fig1 <- shape.df %>%
-  mutate(type = if_else(x >= 1, "A", "B")) %>%
+Shape.Fig1 <- shape.df |>
+  mutate(type = if_else(x >= 1, "A", "B")) |>
   ggplot() +
   geom_point(aes(x = x, y = y, shape = type), size = 2) +
   guides(shape = "none") +
@@ -832,8 +832,8 @@ Shape.Fig1 <- shape.df %>%
   theme_minimal() +
   theme(axis.text = element_blank())
 
-Shape.Fig2 <- shape.df %>%
-  mutate(type = sample(c("A", "B"), 100, replace = TRUE)) %>%
+Shape.Fig2 <- shape.df |>
+  mutate(type = sample(c("A", "B"), 100, replace = TRUE)) |>
   ggplot() +
   geom_point(aes(x = x, y = y, shape = type), size = 2) +
   guides(shape = "none") +
@@ -852,8 +852,8 @@ ggarrange(Shape.Fig1, Shape.Fig2,labels = c("(A)", "(B)"))
 #| fig-width: 3
 #| fig-height: 3
 #| cache: true
-expand.grid(x = 1:10, y = 1:10) %>%
-  mutate(z = sample(c(rep("R", 5), rep("B", 95)))) %>%
+expand.grid(x = 1:10, y = 1:10) |>
+  mutate(z = sample(c(rep("R", 5), rep("B", 95)))) |>
   ggplot() +
   geom_point(aes(x = x, y = y, shape = z), size = 3) +
   labs(x = "", y = "") +
@@ -871,8 +871,8 @@ expand.grid(x = 1:10, y = 1:10) %>%
 #| fig-width: 3
 #| fig-height: 3
 #| cache: true
-expand.grid(x = 1:10, y = 1:10) %>%
-  mutate(z = sample(c(rep("R", 5), rep("B", 95)))) %>%
+expand.grid(x = 1:10, y = 1:10) |>
+  mutate(z = sample(c(rep("R", 5), rep("B", 95)))) |>
   ggplot() +
   geom_point(aes(x = x, y = y, color = z), size = 3) +
   scale_color_manual(values = c("R" = "red", "B" = "black")) +
@@ -892,10 +892,10 @@ expand.grid(x = 1:10, y = 1:10) %>%
 #| fig-width: 8
 #| fig-height: 5
 #| cache: true
-left_join(COVID19_df, Country_df, by = "Country") %>% 
+left_join(COVID19_df, Country_df, by = "Country") |> 
   mutate(Date                 = as.Date(Date),
-         Confirmed_per_capita = Confirmed_Day / Population * 10000) %>%
-  filter(Country %in% c("Japan", "China", "Taiwan", "South Korea")) %>%
+         Confirmed_per_capita = Confirmed_Day / Population * 10000) |>
+  filter(Country %in% c("Japan", "China", "Taiwan", "South Korea")) |>
   ggplot() +
   geom_line(aes(x = Date, y = Confirmed_per_capita, linetype = Country)) +
   labs(x = "月", y = "1万人当たり新規感染者数",linetype = "国") +
@@ -910,11 +910,11 @@ left_join(COVID19_df, Country_df, by = "Country") %>%
 #| fig-width: 8
 #| fig-height: 5
 #| cache: true
-left_join(COVID19_df, Country_df, by = "Country") %>% 
+left_join(COVID19_df, Country_df, by = "Country") |> 
   mutate(Date                 = as.Date(Date),
          Confirmed_per_capita = Confirmed_Day / Population * 10000,
-         Japan                = if_else(Country == "Japan", "日本", "その他")) %>%
-  filter(Country %in% c("Japan", "China", "Taiwan", "South Korea")) %>%
+         Japan                = if_else(Country == "Japan", "日本", "その他")) |>
+  filter(Country %in% c("Japan", "China", "Taiwan", "South Korea")) |>
   ggplot() +
   geom_line(aes(x = Date, y = Confirmed_per_capita, 
                 group = Country, linetype = Japan)) +
@@ -930,11 +930,11 @@ left_join(COVID19_df, Country_df, by = "Country") %>%
 #| fig-width: 8
 #| fig-height: 5
 #| cache: true
-left_join(COVID19_df, Country_df, by = "Country") %>% 
+left_join(COVID19_df, Country_df, by = "Country") |> 
   mutate(Date                 = as.Date(Date),
          Confirmed_per_capita = Confirmed_Day / Population * 10000,
-         Japan                = if_else(Country == "Japan", "日本", "その他")) %>%
-  filter(Country %in% c("Japan", "China", "Taiwan", "South Korea")) %>%
+         Japan                = if_else(Country == "Japan", "日本", "その他")) |>
+  filter(Country %in% c("Japan", "China", "Taiwan", "South Korea")) |>
   ggplot() +
   geom_line(aes(x = Date, y = Confirmed_per_capita, 
                 group = Country, linetype = Japan)) +
@@ -951,12 +951,12 @@ left_join(COVID19_df, Country_df, by = "Country") %>%
 #| fig-width: 8
 #| fig-height: 5
 #| cache: true
-left_join(COVID19_df, Country_df, by = "Country") %>% 
+left_join(COVID19_df, Country_df, by = "Country") |> 
   mutate(Date                 = as.Date(Date),
          Confirmed_per_capita = Confirmed_Day / Population * 10000,
          Japan                = if_else(Country == "Japan", "日本", "その他"),
-         Japan                = factor(Japan, levels = c("日本", "その他"))) %>%
-  filter(Country %in% c("Japan", "China", "Taiwan", "South Korea")) %>%
+         Japan                = factor(Japan, levels = c("日本", "その他"))) |>
+  filter(Country %in% c("Japan", "China", "Taiwan", "South Korea")) |>
   ggplot() +
   geom_line(aes(x = Date, y = Confirmed_per_capita, 
                 group = Country, linetype = Japan)) +
@@ -980,7 +980,7 @@ left_join(COVID19_df, Country_df, by = "Country") %>%
 #| fig-width: 8
 #| fig-height: 8
 #| cache: true
-Theme_Fig <- Country_df %>%
+Theme_Fig <- Country_df |>
   ggplot() +
   geom_point(aes(x = Polity_Score, y = PPP_per_capita)) +
   labs(x = "Polity IV Score", y = "PPP per capita (USD)")
@@ -1009,20 +1009,20 @@ ggpubr::ggarrange(Theme_Fig + theme_gray() + facet_wrap(~ "theme_gray()"),
 #| fig-width: 5
 #| fig-height: 5
 #| cache: true
-Theme_Fig <- Country_df %>%
+Theme_Fig <- Country_df |>
   # Freedom HouseのStatus、Continentでグループ化
-  group_by(FH_Status, Continent) %>%
+  group_by(FH_Status, Continent) |>
   # 欠損値のある行を除き、PPP_per_capitaの平均値を計算
   summarise(PPP     = mean(PPP_per_capita, na.rm = TRUE),
-            .groups = "drop") %>%
+            .groups = "drop") |>
   # 欠損値の行を除去
-  drop_na() %>%
+  drop_na() |>
   # Freedom HouseのStatusを再ラベリングし、factor化
   mutate(FH_Status = case_when(FH_Status == "F"  ~ "Free",
                                FH_Status == "PF" ~ "Partially Free",
                                FH_Status == "NF" ~ "Not Free"),
          FH_Status = factor(FH_Status, levels = c("Free", "Partially Free",
-                                                  "Not Free"))) %>%
+                                                  "Not Free"))) |>
   ggplot() +
   geom_bar(aes(x = FH_Status, y = PPP, fill = Continent),
            stat = "identity", position = position_dodge(width = 1)) +
@@ -1157,8 +1157,8 @@ Theme_Fig +
 #| fig-width: 5
 #| fig-height: 5
 #| cache: true
-Theme_Fig2 <- Country_df %>%
-  mutate(OECD = if_else(OECD == 1, "OECD", "non-OECE")) %>%
+Theme_Fig2 <- Country_df |>
+  mutate(OECD = if_else(OECD == 1, "OECD", "non-OECE")) |>
   ggplot(aes(x = FH_Total, y = GDP_per_capita)) +
   geom_point(aes(color = OECD)) +
   stat_ellipse(aes(fill = OECD), geom = "polygon", level = 0.95, alpha = 0.2) +
@@ -1258,7 +1258,7 @@ Theme_Fig +
 #| cache: true
 # Grid_Fig1: 散布図
 # X軸: フリーダムハウス・スコア / Y軸: 一人あたり購買力平価GDP（対数）
-Grid_Fig1 <- Country_df %>%
+Grid_Fig1 <- Country_df |>
   ggplot() +
   geom_point(aes(x = FH_Total, y = PPP_per_capita)) +
   scale_y_log10() +
@@ -1268,7 +1268,7 @@ Grid_Fig1 <- Country_df %>%
 
 # Grid_Fig2: 散布図
 # X軸: フリーダムハウス・スコア / Y軸: 2018年人間開発指数
-Grid_Fig2 <- Country_df %>%
+Grid_Fig2 <- Country_df |>
   ggplot() +
   geom_point(aes(x = FH_Total, y = HDI_2018)) +
   labs(x = "フリーダムハウススコア", 
@@ -1277,7 +1277,7 @@ Grid_Fig2 <- Country_df %>%
 
 # Grid_Fig4: ヒストグラム
 # X軸: フリーダムハウス・スコア
-Grid_Fig3 <- Country_df %>%
+Grid_Fig3 <- Country_df |>
   ggplot() +
   geom_histogram(aes(x = FH_Total), color = "white",
                  binwidth = 5, boundary = 0) +
@@ -1287,7 +1287,7 @@ Grid_Fig3 <- Country_df %>%
 # Grid_Fig4: ヒストグラム
 # Y軸: 一人あたり購買力平価GDP（対数）
 # 時計回りで90度回転したヒストグラムを作成するために、yにマッピング
-Grid_Fig4 <- Country_df %>%
+Grid_Fig4 <- Country_df |>
   ggplot() +
   geom_histogram(aes(y = PPP_per_capita), color = "white",
                  boundary = 0, bins = 15) +
@@ -1342,21 +1342,21 @@ ggarrange(Grid_Fig1, Grid_Fig2, nrow = 1, ncol = 2, align = "hv")
 ```{r visual3-merge-6}
 #| echo: false
 merge_tbl1 <- tibble(X1 = c("Grid_Fig3", "Grid_Fig1"), 
-                     X2 = c("", "Grid_Fig4")) %>%
+                     X2 = c("", "Grid_Fig4")) |>
   kable(col.names = NULL, 
-        align     = "cc") %>%
+        align     = "cc") |>
   kable_styling(bootstrap_options = "bordered",
                 full_width        = FALSE,
-                latex_options     = "hold_position") %>%
+                latex_options     = "hold_position") |>
   column_spec(column       = 1, 
               border_left  = TRUE,
-              monospace    = TRUE) %>%
+              monospace    = TRUE) |>
   column_spec(column       = 2, 
               border_right = TRUE,
               monospace    = TRUE)
   
 if (knitr::is_latex_output()) {
-  merge_tbl1 %>%
+  merge_tbl1 |>
     row_spec(0, monospace = TRUE)
 } else {
   merge_tbl1
@@ -1368,21 +1368,21 @@ if (knitr::is_latex_output()) {
 ```{r visual3-merge-7}
 #| echo: false
 merge_tbl2 <- tibble(X1 = c("Grid_Fig3", "Grid_Fig4"), 
-                     X2 = c("Grid_Fig1", "")) %>%
+                     X2 = c("Grid_Fig1", "")) |>
   kable(col.names = NULL, 
-        align     = "cc") %>%
+        align     = "cc") |>
   kable_styling(bootstrap_options = "bordered",
                 full_width        = FALSE,
-                latex_options     = "hold_position") %>%
+                latex_options     = "hold_position") |>
   column_spec(column       = 1, 
               border_left  = TRUE,
-              monospace    = TRUE) %>%
+              monospace    = TRUE) |>
   column_spec(column       = 2, 
               border_right = TRUE,
               monospace    = TRUE)
 
 if (knitr::is_latex_output()) {
-  merge_tbl2 %>%
+  merge_tbl2 |>
     row_spec(0, monospace = TRUE)
 } else {
   merge_tbl2

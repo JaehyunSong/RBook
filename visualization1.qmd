@@ -16,14 +16,14 @@ Rによる可視化は様々な方法がありますが、可視化のために�
 #| echo: false
 #| message: false
 Country_df <- read_csv("Data/Countries.csv")
-Country_df <- Country_df %>%
+Country_df <- Country_df |>
   mutate(PPP_per_capita = round(PPP_per_capita),
          OECD = factor(OECD, levels = 0:1, 
-                       labels = c("非加盟国", "加盟国"))) %>%
+                       labels = c("非加盟国", "加盟国"))) |>
   select(Country, 
          PPP = PPP_per_capita,
          HDI = HDI_2018,
-         OECD) %>%
+         OECD) |>
   filter(complete.cases(Country_df))
 ```
 
@@ -31,9 +31,9 @@ Country_df <- Country_df %>%
 #| label: tbl-visual1-sampledata
 #| tbl-cap: "サンプルデータの中身 (最初の10行のみ表示)"
 #| echo: false
-Country_df %>%
-  head(10) %>%
-  kable() %>%
+Country_df |>
+  head(10) |>
+  kable() |>
   kable_styling(bootstrap_options = "striped",
                 full_width = FALSE)
 ```
@@ -129,25 +129,25 @@ ggplot(data = Country_df) +
 #| echo: false
 #| message: false
 #| tbl-cap: "サンプルデータの中身 (最初の10行のみ表示)"
-df <- read_csv("Data/Stations.csv") %>%
+df <- read_csv("Data/Stations.csv") |>
     select(Company_Type1:Company_Type2,
-           starts_with("P2")) %>%
+           starts_with("P2")) |>
     pivot_longer(cols = P2011:P2017,
                  names_to = "Year",
-                 values_to = "P") %>%
+                 values_to = "P") |>
     mutate(Year = parse_number(Year),
            Company_Type1 = factor(Company_Type1, levels = 0:3,
                                   labels = c("その他", "JR", 
-                                             "大手私鉄", "準大手私鉄"))) %>%
-    group_by(Year, Company_Type1) %>%
+                                             "大手私鉄", "準大手私鉄"))) |>
+    group_by(Year, Company_Type1) |>
     summarise(P = mean(P, na.rm = TRUE),
-              .groups = "drop") %>%
+              .groups = "drop") |>
     mutate(P             = round(P),
            Company_Type1 = fct_reorder2(Company_Type1, Year, P, last2))
 
-df %>%
-  head(10) %>%
-  kable() %>%
+df |>
+  head(10) |>
+  kable() |>
   kable_styling(bootstrap_options = "striped",
                 full_width = FALSE)
 ```
@@ -268,7 +268,7 @@ ggplot(data = df) +
 #| fig-width: 8
 #| fig-height: 3
 #| warning: false
-df %>%
+df |>
   ggplot(aes(x = Year, y = P, color = Company_Type1)) +
   geom_line(linewidth = 1) +
   geom_point(size = 3, shape = 21, fill = "white") +
@@ -311,12 +311,12 @@ ggplot(data = データ名) +
   幾何オブジェクト関数(mapping = aes(マッピング))
 
 # パイプを使う場合
-データ名 %>%
+データ名 |>
   ggplot() +
   幾何オブジェクト関数(mapping = aes(マッピング))
 ```
 
-注意すべき点は{ggplot2}においてレイヤーを重ねる際は`%>%`でなく、`+`を使う点です。パイプ演算子は左側の結果を右に渡す意味を持ちますが、{ggplot2}はデータを渡すよりも、**レイヤーを足していく**イメージですから、`+`を使います。
+注意すべき点は{ggplot2}においてレイヤーを重ねる際は`|>`でなく、`+`を使う点です。パイプ演算子は左側の結果を右に渡す意味を持ちますが、{ggplot2}はデータを渡すよりも、**レイヤーを足していく**イメージですから、`+`を使います。
 
 以下は{ggplot2}の必須要素であるデータと幾何オブジェクト、マッピングなどについて解説し、続いて図は見栄を調整するための関数群を紹介します。
 
@@ -324,7 +324,7 @@ ggplot(data = データ名) +
 
 作図のためにはデータはなくてはなりません。データはdata.frmae型、またはtibble型であり、一般的には`ggplot()`関数の第一引数として指定します。例えば、`ggplot(data = データ名)`のように書いてもいいですし、`data =`は省略して、`ggplot(データ名)`でも構いません。
 
-データを指定するもう一つの方法はパイプ演算子を使うことです。この場合、`データ名 %>% ggplot()`のように書きます。書く手間はほぼ同じですが、`dplyr`や`tidyr`などでデータを加工し、それをオブジェクトとして保存せずにすぐ作図に使う場合は便利です。
+データを指定するもう一つの方法はパイプ演算子を使うことです。この場合、`データ名 |> ggplot()`のように書きます。書く手間はほぼ同じですが、`dplyr`や`tidyr`などでデータを加工し、それをオブジェクトとして保存せずにすぐ作図に使う場合は便利です。
 
 実際、使う機会は少ないですが、1つのグラフに複数のデータを使う場合もあります。{ggplot2}は複数のデータにも対応していますが、とりあえずメインとなるデータを`ggplot()`に指定し、追加的に必要なデータは今度説明する幾何オブジェクト関数内で指定します。この方法については適宜必要に応じて説明します。
 
@@ -334,12 +334,12 @@ ggplot(data = データ名) +
 
 ```{r}
 #| eval: false
-データ名 %>%
+データ名 |>
   ggplot() +
   geom_point()
 ```
 
-のように指定します。以上のコードは「あるデータを使って (`データ名 %>%`)、キャンバスを用意し (`ggplot() +`)、散布図を作成する (`geom_point()`)。」と読むことが出来ます。
+のように指定します。以上のコードは「あるデータを使って (`データ名 |>`)、キャンバスを用意し (`ggplot() +`)、散布図を作成する (`geom_point()`)。」と読むことが出来ます。
 
 また、この幾何オブジェクトは重ねることも可能です。よく見る例としては、散布図の上に回帰曲線 (`geom_smooth()`)や折れ線グラフ (`geom_line()`)を重ねたものであり、これらの幾何オブジェクトは`+`で繋ぐことが可能です。
 
@@ -367,8 +367,8 @@ data.frame(幾何オブジェクト = c("geom_line", "", "",
                    マッピング要素 = c("X軸", "Y軸", "線の色",
                                "X軸", "Y軸", "枠線の色"),
                    変数 = rep(c("Year", "P", "Company_Type1"), 2),
-                   引数 = rep(c("x", "y", "color"), 2)) %>%
-  kable(escape = TRUE) %>%
+                   引数 = rep(c("x", "y", "color"), 2)) |>
+  kable(escape = TRUE) |>
   kable_styling() 
 ```
 
@@ -378,7 +378,7 @@ data.frame(幾何オブジェクト = c("geom_line", "", "",
 #| eval: false
 # geom_line()とgeom_point()はマッピング情報を共有しているため、
 # ggplot()内に指定
-df %>%
+df |>
   ggplot(aes(x = Year, y = P, color = Company_Type1)) +
   geom_line(size = 1) +
   geom_point(size = 3, shape = 21, fill = "white") +
@@ -396,7 +396,7 @@ df %>%
 ```{r}
 #| eval: false
 # 例1: 全ての点の色が赤になる
-データ %>%
+データ |>
   ggplot() +
   geom_point(aes(x = ゲームのプレイ時間, y = 身長),
              color = "red")
@@ -430,7 +430,7 @@ ggplot(data = df2) +
 ```{r}
 #| eval: false
 # 例2: 性別ごとに点の色が変わる
-データ %>%
+データ |>
   ggplot() +
   geom_point(aes(x = ゲームのプレイ時間, y = 身長, color = 性別))
 ```
@@ -471,13 +471,13 @@ COVID19_df <- read_csv("Data/COVID19_Worldwide.csv",
 Country_df <- read_csv("Data/Countries.csv")
 COVID19_df <- left_join(COVID19_df, Country_df, by = "Country")
 
-COVID19_df <- COVID19_df %>%
-  filter(G20 == 1) %>%
-  mutate(Date = as.Date(Date)) %>%
+COVID19_df <- COVID19_df |>
+  filter(G20 == 1) |>
+  mutate(Date = as.Date(Date)) |>
   select(Country, Date, Confirmed_Total)
 
-Coord_Fig1 <- COVID19_df %>%
-  mutate(Confirmed = Confirmed_Total / 10000) %>%
+Coord_Fig1 <- COVID19_df |>
+  mutate(Confirmed = Confirmed_Total / 10000) |>
   ggplot() +
   geom_line(aes(x = Date, y = Confirmed, color = Country), 
             size = 1) +
@@ -544,7 +544,7 @@ ggarrange(Coord_Fig2, Coord_Fig3)
 #| echo: false
 Coord_Fig4 <- data.frame(x = c(rep("男性", 4), 
                                rep("女性", 5), 
-                               rep("ニュータイプ", 1))) %>%
+                               rep("ニュータイプ", 1))) |>
     ggplot() +
     geom_bar(aes(x = factor(""), fill = factor(x)), width = 1) +
     labs(fill = "性別", x = "", y = "人数") +
@@ -580,7 +580,7 @@ ggarrange(Coord_Fig4, Coord_Fig5)
 ```{r}
 #| eval: false
 # scale_y_continuous()の例
-データ %>%
+データ |>
   ggplot() +
   geom_point(aes(x = ゲームのプレイ時間, y = 身長, color = 性別)) +
   scale_y_continuous(breaks = c(145, 150, 155, 160, 165, 170, 175, 180),
@@ -609,7 +609,7 @@ ggplot(data = df2) +
 ```{r}
 #| eval: false
 # scale_color_manual()の例
-データ %>%
+データ |>
   ggplot() +
   geom_point(aes(x = ゲームのプレイ時間, y = 身長, color = 性別)) +
   scale_y_continuous(breaks = c(145, 150, 155, 160, 165, 170, 175, 180),
@@ -652,8 +652,8 @@ ggplot(data = df2) +
 #| warning: false
 #| message: false
 Country_df <- read_csv("Data/Countries.csv")
-Country_df <- Country_df %>%
-  filter(!is.na(FH_Status)) %>%
+Country_df <- Country_df |>
+  filter(!is.na(FH_Status)) |>
   mutate(FH_Status = factor(FH_Status, levels = c("F", "PF", "NF"),
                             labels = c("自由", "部分的に\n自由", "不自由")),
          Continent = factor(Continent, 
@@ -680,8 +680,8 @@ ggplot(Country_df) +
 #| echo: false
 #| warning: false
 #| message: false
-Country_df %>%
-  filter(!is.na(FH_Status)) %>%
+Country_df |>
+  filter(!is.na(FH_Status)) |>
   ggplot() +
   geom_bar(aes(x = FH_Status)) +
   facet_wrap(~Continent, nrow = 1) +
@@ -741,10 +741,10 @@ Coord_Fig1
 #| fig-height: 5
 #| echo: false
 #| message: false
-COVID19_df %>%
+COVID19_df |>
   mutate(Country   = fct_shift(factor(Country), 8),
          Confirmed = Confirmed_Total / 10000,
-         Color     = ifelse(Country == "India", "インド", "その他")) %>%
+         Color     = ifelse(Country == "India", "インド", "その他")) |>
   ggplot() +
   geom_line(aes(x = Date, y = Confirmed, 
                 group = Country, color = Color), size = 1) +
@@ -781,10 +781,10 @@ data.frame(`グループ` = c(paste0("グループ", 1:3)),
            `グラフA` = c(24, 29, 14),
            `グラフB` = c(NA, NA, 3),
            `グラフC` = c(NA, NA, 12),
-           `グラフD` = c(3, 2, 0)) %>%
-  kable() %>%
+           `グラフD` = c(3, 2, 0)) |>
+  kable() |>
   kable_styling(bootstrap_options = "striped",
-                full_width = FALSE) %>%
+                full_width = FALSE) |>
   row_spec(0, align = "c")
 ```
 
@@ -813,9 +813,9 @@ data.frame(`グループ` = c(paste0("グループ", 1:3)),
 c("6/5"  =  3.85, "6/10" = 4.91, "6/12" =  5.96, "6/17" = 6.94, 
   "6/19" =  7.73, "6/24" = 8.56, "6/26" =  9.12, "7/1"  = 9.73, 
   "7/3"  = 10.34, "7/8"  = 10.87, "7/10" = 11.19, "7/15" = 11.58, 
-  "7/17" = 11.85, "7/22" = 12.12) %>%
-  enframe(name = "Date", value = "Value") %>%
-  mutate(Date = fct_inorder(Date)) %>%
+  "7/17" = 11.85, "7/22" = 12.12) |>
+  enframe(name = "Date", value = "Value") |>
+  mutate(Date = fct_inorder(Date)) |>
   ggplot() +
   geom_bar(aes(x = Date, y = Value), stat = "identity") +
   labs(x = "日付", y = "給付済み金額 (兆円)") +
@@ -832,11 +832,11 @@ temp <- c("2020/6/5"  =  3.85, "2020/6/10" = 4.91,
   "2020/6/26" =  9.12, "2020/7/1"  = 9.73, 
   "2020/7/3"  = 10.34, "2020/7/8"  = 10.87, 
   "2020/7/10" = 11.19, "2020/7/15" = 11.58, 
-  "2020/7/17" = 11.85, "2020/7/22" = 12.12) %>%
-  enframe(name = "Date", value = "Value") %>%
+  "2020/7/17" = 11.85, "2020/7/22" = 12.12) |>
+  enframe(name = "Date", value = "Value") |>
   mutate(Date = as.Date(Date))
 
-temp %>%
+temp |>
   ggplot() +
   geom_line(aes(x = Date, y = Value), size = 1) +
   geom_point(aes(x = Date, y = Value), 
@@ -860,7 +860,7 @@ temp %>%
 #| echo: false
 data.frame(Year  = 2001:2012,
            Value = c(754, 697, 674, 846, 914, 980, 1191,
-                     1144, 1253, 1349, 1359, 1494)) %>%
+                     1144, 1253, 1349, 1359, 1494)) |>
   ggplot() +
   geom_bar(aes(x = Year, y = Value), stat = "identity") +
   labs(x = "年度", y = "早慶高 (2次) 合格者数 (人)") +

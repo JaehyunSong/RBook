@@ -150,7 +150,7 @@ df1 <- tibble(
   Blood = c(110, 115, 95, 110, 100, 95)
 )
 
-df2 <- df1 %>%
+df2 <- df1 |>
   pivot_longer(cols      = c(Math, Blood),
                names_to  = "Type",
                values_to = "Value")
@@ -186,7 +186,7 @@ df1 <- tibble(
   Stock = c(100, 105, 110, 85, 90)
 )
 
-df2 <- df1 %>%
+df2 <- df1 |>
   separate(Date, into = c("Year", "Month", "Date"), 
            sep = "/", convert = TRUE)
 
@@ -242,7 +242,7 @@ df1
 
 ```{r}
 #| echo: false
-df1 %>%
+df1 |>
   pivot_longer(cols      = c(Control, Treatment),
                names_to  = "Treat",
                values_to = "Math_Score")
@@ -257,7 +257,7 @@ Wide型データをLong型へ変換する関数が`pivot_longer()`であり、�
 ```{r}
 #| eval: false
 # pivot_longer()の使い方
-データ名 %>%
+データ名 |>
   pivot_longer(cols      = c(まとめる変数1, まとめる変数2, ...),
                names_to  = "キー変数名",
                values_to = "値変数名")
@@ -268,7 +268,7 @@ Wide型データをLong型へ変換する関数が`pivot_longer()`であり、�
 `names_to`と`values_to`引数はそれぞれキー変数名と値変数名を指定する引数で、ここは必ず`"`で囲んでください。この`df1`をLong型へ変換し、`df1_L`と名付けるコードが以下のコードです。
 
 ```{r}
-df1_L <- df1 %>%
+df1_L <- df1 |>
   pivot_longer(Control:Treatment,
                names_to  = "Treat",
                values_to = "Math_Score")
@@ -294,7 +294,7 @@ df2
 まず、これをこれまでのやり方でLong型へ変形し、`df2_L`と名付けます。
 
 ```{r}
-df2_L <- df2 %>%
+df2_L <- df2 |>
   pivot_longer(starts_with("Day"),
                names_to  = "Days",
                values_to = "Weight")
@@ -315,8 +315,8 @@ df2_L
 # 1. WeightがNAのケースを除去
 # 2. Days変数の値から"Day"を除去
 # 3. Days変数をnumeric型へ変換
-df2_L %>%
-  filter(!is.na(Weight)) %>%           # 1
+df2_L |>
+  filter(!is.na(Weight)) |>              # 1
   mutate(Days = str_remove(Days, "Day"), # 2
          Days = as.numeric(Days))        # 3
 ```
@@ -325,7 +325,7 @@ df2_L %>%
 
 ```{r}
 # Weight変数がNAのケースを除去する
-df2 %>%
+df2 |>
   pivot_longer(starts_with("Day"),
                names_to       = "Days",
                values_to      = "Weight",
@@ -338,7 +338,7 @@ df2 %>%
 # 1. Day変数の値から"Day"を除去する
 # 2. Day変数をinteger型に変換
 # 3. Weight変数がNAのケースを除去する
-df2 %>%
+df2 |>
   pivot_longer(starts_with("Day"),
                names_to        = "Days",
                names_prefix    = "Day",                   # 1
@@ -364,22 +364,22 @@ df2 %>%
 #| layout-ncol: 2
 
 df1 <- read_csv("Data/Population2015.csv")
-df1 <- df1 %>% 
-  slice(1:8) %>%
+df1 <- df1 |> 
+  slice(1:8) |>
   mutate(都道府県 = ifelse(is.na(都道府県), "", 都道府県))
   
 
-df2 <- df1 %>%
-  mutate(都道府県 = ifelse(都道府県 == "", NA, 都道府県)) %>%
-  fill(都道府県) %>%
+df2 <- df1 |>
+  mutate(都道府県 = ifelse(都道府県 == "", NA, 都道府県)) |>
+  fill(都道府県) |>
   pivot_wider(names_from = 区分,
-              values_from = 人口) %>%
+              values_from = 人口) |>
   relocate(面積, .after = 外国人)
 
-kable(df1, booktabs = TRUE) %>%
+kable(df1, booktabs = TRUE) |>
   kable_styling(bootstrap_options = c("striped"))
 
-kable(df2, booktabs = TRUE) %>%
+kable(df2, booktabs = TRUE) |>
   kable_styling(bootstrap_options = c("striped"))
 ```
 
@@ -415,7 +415,7 @@ tibble(変数名 = c("`都道府県`", "`区分`", "`人口`", "`面積`"),
 まずは変数名が日本語になっているので、`rename()`関数を使ってそれぞれ`Pref`、`Type`、`Population`、`Area`に変更します。
 
 ```{r}
-df3 <- df3 %>%
+df3 <- df3 |>
   rename("Pref" = 都道府県, "Type" = 区分, "Population" = 人口, "Area" = 面積)
 
 df3
@@ -424,7 +424,7 @@ df3
 次は、`Pref`列の欠損値を埋めましょう。ここの欠損値は、当該セルの一つ上のセルの値で埋まりますが、これは`fill()`関数で簡単に処理できます。欠損値を埋めたい変数名を`fill()`の引数として渡すだけです。
 
 ```{r}
-df3 <- df3 %>%
+df3 <- df3 |>
   fill(Pref)
 
 df3
@@ -435,7 +435,7 @@ df3
 ```{r}
 #| eval: false
 # pivot_wider()の使い方
-データ名 %>%
+データ名 |>
   pivot_wider(names_from  = キー変数名,
               values_from = 値変数名)
 ```
@@ -443,7 +443,7 @@ df3
 まず、キー変数名は列として展開する変数名であり、ここでは`Type`になります。そして、値変数名は展開される値の変数であり、ここでは`Population`になります。つまり、「`Population`を`Type`ごとに分けて別の列にする」ことになります。また、`values_from`引数は長さ2以上のベクトルを指定することで、複数の値変数を指定することも可能です。たとえば、`df3`に`Income`という平均所得を表す列があり、これらも総人口と外国人それぞれ異なる値を持っているとしたら、`values_from = c(Population, Income)`のように複数の値変数を指定することが出来ます。今回は値変数が1つのみですが、早速やってみましょう。
 
 ```{r}
-df3_W <- df3 %>%
+df3_W <- df3 |>
   pivot_wider(names_from  = Type,
               values_from = Population)
 
@@ -453,9 +453,9 @@ df3_W
 また、日本語の変数名が出来てしまったので、それぞれ`Total`と`Foreigner`に変更し、`relocate()`関数を使って`Area`を最後の列に移動します。
 
 ```{r}
-df3_W <- df3_W %>%
+df3_W <- df3_W |>
   rename("Total"     = 総人口,
-         "Foreigner" = 外国人) %>%
+         "Foreigner" = 外国人) |>
   relocate(Area, .after = last_col())
 
 df3_W
@@ -496,7 +496,7 @@ data.frame(変数名 = c("`ID`", "`Date`", "`Week`",
 このデータの場合、観察単位は「国 $\times$ 日」です。しかし、`df4`は1行に日本と韓国の情報が格納されており「1行1観察」の条件を満たしておりません。したがって、`pivot_longer()`を使ってLong型へ変換し、新しいデータの名前を`df4_L`と名付けます。
 
 ```{r}
-df4_L <- df4 %>%
+df4_L <- df4 |>
   pivot_longer(cols         = starts_with("Confirmed"), 
                names_to     = "Country",
                names_prefix = "Confirmed_",
@@ -509,7 +509,7 @@ df4_L
 
 ```{r}
 #| eval: false
-データ名 %>%
+データ名 |>
   mutate(新しい変数名 = parse_number(数値のみ抽出する変数名))
 ```
 
@@ -518,7 +518,7 @@ df4_L
 ここでは`Confimed`から数値のみ取り出し、`Confrimed`列に上書きし、それを`df4_S`と名付けます。
 
 ```{r}
-df4_S <- df4_L %>%
+df4_S <- df4_L |>
   mutate(Confirmed = parse_number(Confirmed))
 
 df4_S
@@ -527,12 +527,12 @@ df4_S
 それでは国、曜日ごとの新規感染者数を調べてみます。求める統計量は曜日ごとの新規感染者数の合計、平均、標準偏差です。まず、曜日は月から日の順になるよう、factor型に変換します。そして、国と曜日ごとに記述統計量を計算し、`df4_S_Summary1`という名で保存します。
 
 ```{r}
-df4_S <- df4_S %>%
+df4_S <- df4_S |>
   mutate(Week = factor(Week, 
                        levels = c("月", "火", "水", "木", "金", "土", "日")))
 
-df4_S_Summary1 <- df4_S %>%
-  group_by(Country, Week) %>%
+df4_S_Summary1 <- df4_S |>
+  group_by(Country, Week) |>
   summarise(Sum     = sum(Confirmed,  na.rm = TRUE),
             Mean    = mean(Confirmed, na.rm = TRUE),
             SD      = sd(Confirmed,   na.rm = TRUE),
@@ -544,7 +544,7 @@ df4_S_Summary1
 `df4_S_Summary1`はこの状態で整然データですが、もし人間が読むための表を作るなら、韓国と日本を別の列に分けた方が良いかも知れません。`pivot_wider()`を使って、日本と韓国のの新規感染者数を2列に展開します。
 
 ```{r}
-df4_S_Summary1 %>%
+df4_S_Summary1 |>
   pivot_wider(names_from  = Country,
               values_from = Sum:SD)
 ```
@@ -552,9 +552,9 @@ df4_S_Summary1 %>%
 これで人間にとって読みやすい表が出来ました。今は「日本の合計」、「韓国の合計」、「日本の平均」、...の順番ですが、これを日本と韓国それぞれまとめる場合は、`relocate()`を使います。
 
 ```{r}
-df4_S_Summary1 %>%
+df4_S_Summary1 |>
   pivot_wider(names_from  = Country,
-              values_from = Sum:SD) %>%
+              values_from = Sum:SD) |>
   relocate(Week, ends_with("Japan"), ends_with("Korea"))
 ```
 
@@ -565,7 +565,7 @@ df4_S_Summary1 %>%
 ```{r}
 #| eval: false
 # separate()の使い方
-データ名 %>%
+データ名 |>
   separate(cols = 分割する変数名,
            into = 分割後の変数名,
            sep  = "分割する基準")
@@ -574,7 +574,7 @@ df4_S_Summary1 %>%
 `cols`には`Date`を指定し、`into`は新しく出来る列名を指定します。今回は`Date`が3列に分割されるので、長さ3のcharacter型ベクトルを指定します。ここでは`Year`、`Month`、`Day`としましょう。最後の`sep`引数は分割する基準となる文字を指定します。`df4`の`Date`は`"2020/06/29"`のように年月日が`"/"`で分けられているため、`"/"`を指定します。実際にやってみましょう。
 
 ```{r}
-df4_S <- df4_S %>%
+df4_S <- df4_S |>
   separate(col = Date, into = c("Year", "Month", "Day"), sep = "/")
 
 df4_S
@@ -583,8 +583,8 @@ df4_S
 新しく出来た変数は元の変数があった場所になります。ここまで来たら月ごとに新規感染者の記述統計量は計算できます。曜日ごとに行ったコードの`Week`を`Month`に変えるだけです。また、`Month`は数字のみで構成されたcharacter型であるため、このままでも問題なくソートされます。したがって、別途factor化の必要もありません（むろん、してもいいですし、むしろ推奨されます）。
 
 ```{r}
-df4_S_Summary2 <- df4_S %>%
-  group_by(Country, Month) %>%
+df4_S_Summary2 <- df4_S |>
+  group_by(Country, Month) |>
   summarise(Sum     = sum(Confirmed,  na.rm = TRUE),
             Mean    = mean(Confirmed, na.rm = TRUE),
             SD      = sd(Confirmed,   na.rm = TRUE),
@@ -594,9 +594,9 @@ df4_S_Summary2
 ```
 
 ```{r}
-df4_S_Summary2 %>%
+df4_S_Summary2 |>
   pivot_wider(names_from  = Country,
-              values_from = Sum:SD) %>%
+              values_from = Sum:SD) |>
   relocate(Month, ends_with("Japan"), ends_with("Korea"))
 ```
 

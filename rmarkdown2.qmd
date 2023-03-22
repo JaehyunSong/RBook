@@ -1,38 +1,48 @@
 # R Markdown [応用] {#sec-rmarkdown2}
 
-```{r rmarkdown2-common}
-#| include: false
-source("_common.R")
-```
-
-R Markdownでできることを紹介。使い方は説明しない
+　第[-@sec-rmarkdown]章ではR Markdownで**文書**を作成する方法について解説した。しかし、R Markdownの可能性はここで留まらない。R Markdownを使えば、HTML、PDF、Microsoft Wordなどのフォーマットの文書が作成可能であることは説明済みだが、これは言い換えると、HTML、PDF、Microsoft Wordで表現可能なものはすべてR Markdownでも作成可能であることを意味する。本章ではR Markdownでできることを紹介する。ただし、詳しく説明しようとすると一つ一つの項目が独立した章にならざるを得ないため、ここでは使い方は説明しない。詳細は各パッケージのヴィネット、レファレンスなどを参照されたい。
 
 ## スライド作成 {#rmakrdown2-slide}
 
-{xaringan}
+　R Markdownを使えば、スライドを作成することもできる。代表的なパッケージは{xaringan}がある。R Markdown界隈の中心人物の一人である[Yihui Xie](https://yihui.org/)氏が開発したパッケージだ。出力フォーマットはHTMLがデフォルトであるため、インタラクティブなスライドが作成できる。また、それをPDFに印刷することもできるためインターネットが使えない状況でもPDFリーダーさえあれば、どこでもプレゼンテーションができる。
+
+* 公式解説ページ：<https://bookdown.org/yihui/rmarkdown/xaringan.html>
 
 ## 書籍 {#rmakrdown2-book}
 
-{bookdown}
+　あなたが今見ている『私たちのR』はウェブ書籍であるが、このようなウェブ書籍もR Markdownで作れる。{bookdown}パッケージを使えば、簡単にウェブ書籍が作成でき、HTMLフォーマットだけでなく、PDF、ePubフォーマットでも出力できる。現在、Rに関連するほとんどのウェブ書籍は{bookdown}か第[-@sec-quarto]章で紹介するQuartoで作成されたものだ[^rn4e]。
+
+[^rn4e]: 今の『私たちのR』はQuartoで作成されたものだが、2022年中旬までは{bookdown}が使われていた。
+
+* 公式解説ページ：<https://bookdown.org/yihui/bookdown/>
 
 ## ホームページ {#rmakrdown2-homepage}
 
-{distill}、{blogdown}
+　R Markdownのデフォルト出力フォーマットはHTMLであり、我々が見る多くのウェブサイトもまた、HTMLフォーマットだ。つまり、R Markdownを使えば、HTML文法を知らなくてもMarkdown記法だけでホームページも簡単に作成できる。単に文書と図表のみを掲載するホームページならWordpressやWixなどのCMS（content management system）が便利かも知れないが、Rのコードを埋め込むことまで考えれば、R Markdownの方が便利だろう。R Markdownでのホームページ作成をサポートする代表なパッケージとしては{distill}と{blogdown}がある。前者の方が軽量かつ簡単であるが、機能に限界がある。後者はhugoというウェブサイトフレームワークをベースとしているため、拡張機能やテーマなどが豊富である一方、{distill}よりはやや難しい（それでも自分でゼロベースでウェブサイトを作るよりは遥かに簡単かつ効率的だ）。また、ホームページ内の各ページは同じR Markdown文法で作成されるので、移行作業もさほど難しくないだろう。
+
+* {distill}の公式解説ページ：<https://rstudio.github.io/distill/website.html>
+* {blogdown}の公式解説ページ：<https://bookdown.org/yihui/blogdown/>
 
 ## 履歴書 {#rmakrdown2-cv}
 
-{vitae}
+　R Markdownを使えば履歴書も作れる。日本で使われる表形式の履歴書フォーマットは対応していないが、欧米スタイル（？）の履歴書（curriculum vitae; *CV*）は{vitae}パッケージで作成できる。デフォルトでもいくつかのテンプレが用意されているが、自分で新しいテンプレを作ることも可能だ。
+
+* 公式解説ページ：<https://pkg.mitchelloharawild.com/vitae/index.html>
 
 ## パッケージ開発 {#rmakrdown2-package}
 
-{fusen}
+　Rでパッケージを作るのは[自作関数](functions.qmd)以上に面倒だ。今はパッケージ開発をサポートしてくれる様々なパッケージが公開されているため、昔に比べるとだいぶ楽になった。それでも、ちゃんとした（？）パッケージを使うことになると、{devtools}、{usethis}、{roxygen2}、{testthat}、{pkgdown}といった様々なパッケージを駆使する必要がある。これらのパッケージの使い方はかなり膨大であり、詳細は[別の書籍](https://r-pkgs.org/)に譲りたいが、簡単なパッケージを使うだけなら{fusen}のみでも十分だ。{fusen}のいいところは1枚のR Markdownファイルでパッケージ開発ができる点だ。たとえば「description」というラベルのチャンクではパッケージの情報が、「function-関数名」というラベルのチャンクには自作関数、「examples-関数名」には当該関数の例題コード、「tests-関数名」には当該関数の検証用コードが入る。そしてこの`.Rmd`ファイルをビルド（build）するだけで、パッケージが出来上がる[^prcalc]。各関数のマニュアルも自動的に作成され、パッケージ専用のホームページまで作成してくれる。まだ開発途上のパッケージであるが、今後、{devtools}、{usethis}、{roxygen2}、{testthat}、{pkgdown}を使わなくてもそれなりの規模のパッケージが作成できるようになるかも知れない。
 
-簡単なものなら{fusen}で十分だが、ちゃんとした (?) ものを作るなら {devtools} + {usethis} + {roxygen2} + {testthat} + {pkgdown}を使おう
+[^prcalc]: たとえば、筆者（宋）が公開した{PRcalc}パッケージは{fusen}を使用し、[1枚のR Markdownファイル](https://github.com/JaehyunSong/PRcalc/blob/master/dev/flat_full.Rmd)で作成したものである。
 
-## Webアプリケーション {#rmakrdown2-shiny}
-
-{shiny}
+* 公式解説ページ：<https://thinkr-open.github.io/fusen/>
 
 ## チュートリアル {#rmakrdown2-tutorial}
 
-{learnr}
+　インタラクティブなRチュートリアルもR Markdownで作れる。ウェブページ上でコードを入力すると、その結果が表示される。チュートリアルだからクイズを入れることもできる。また、{gradethis}パッケージとの組み合わせで結果の採点までできる。百聞は一見に如かず、興味のある方は[公式ホームページのサンプル](https://rstudio.github.io/learnr/articles/examples.html)を覗いてみよう。{learnr}が提供する機能の多くはチャンクオプションをいじるだけなので、簡単に導入することができる。作成したチュートリアルは一つのパッケージとして配布することも、ウェブサイトとして公開することもできる。
+
+* 公式解説ページ：<https://rstudio.github.io/learnr/>
+
+## R Markdown生態系の複雑化?
+
+　これまで見てきたように様々なパッケージを使うことで、R Markdownの可能性は無限大となる。これを言い換えれば、これらの内容を学習するためには別途のパッケージの使い方を知る必要があることを意味する。これらの問題を解決するために近年注目を集めているものがあり、それが第[-@sec-quarto]章で紹介するQuartoだ。使い方は第[-@sec-rmarkdown]章で紹介したR Markdownと90%以上同じであるが、R以外の言語（Python、Julia、Observable等）が使える点以外にも、ホームページ、書籍、スライドといった様々なフォーマットを一つのパッケージでまとめた優れものである。興味のある読者は第[-@sec-rmarkdown]章の内容を熟知した上、第[-@sec-quarto]章も読んでいただきたい。

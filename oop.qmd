@@ -67,7 +67,8 @@ summary(Vector1)
 
 　たとえば、1から5までの自然数の数列を
 
-```{r oop-about1}
+```{r}
+#| label: oop-about-1
 my_vec1 <- c(1, 2, 3, 4, 5)  # my_vec1 <- 1:5 でも同じ
 ```
 
@@ -75,7 +76,8 @@ my_vec1 <- c(1, 2, 3, 4, 5)  # my_vec1 <- 1:5 でも同じ
 
 　ここで、次のように `my_vec1`の要素を2倍にする操作を考えてみましょう。
 
-```{r oop-about2}
+```{r}
+#| label: oop-about-2
 my_vec1 * 2
 ```
 
@@ -85,7 +87,8 @@ my_vec1 * 2
 
 　**クラス (class)** とはオブジェクトを特徴づける属性のことです。既に何度か `class()` 関数を使ってデータ型やデータ構造を確認しましたが、`class()`関数でオブジェクトのクラスを確認することができます。先ほど、`my_vec1`も`*`も`2`もオブジェクトであると説明しました。これらがすべてオブジェクトであるということは、何らかのクラス属性を持っているというこです。また、`class()`関数そのものもオブジェクトなので、何らかのクラスを持ちます。確認してみましょう。
 
-```{r oop-about3}
+```{r}
+#| label: oop-about-3
 class(my_vec1)
 class(`*`)
 class(2)
@@ -102,7 +105,8 @@ class(class)
 
 　各クラス専用の関数をメソッド（method）と呼びます。たとえば、`summary()`関数を考えてみましょう。`lm()`関数を用いた回帰分析から得られたオブジェクトのクラスは`lm`であり、`c()`で作られた数値型ベクトルのクラスは`numeric`です。しかし、同じ`summary()`関数ですが、引数のクラスが`lm`か`numeric`かによって異なる動きを見せます。その例を見ましょう。
 
-```{r oop-about4}
+```{r}
+#| label: oop-about-4
 X <- c(1, 3, 5, 7, 9, 11)
 Y <- c(1, 2, 3, 7, 11, 13)
 lm_class <- lm(Y ~ X)
@@ -114,7 +118,8 @@ summary(lm_class)
 
 　このように同じ関数でもクラスによって異なる動作をすることを多態性 (polymorphism)と呼びます。しかし、実はRにおいてこれらの関数は別途作られた関数です。つまり、`summary()`という関数がクラスごとに定義されていることを意味します。`summary()`関数がどのクラスで使用可能かを確認するためには`methods()`関数を使います。
 
-```{r oop-about5}
+```{r}
+#| label: oop-about-5
 methods("summary")
 ```
 
@@ -122,13 +127,15 @@ methods("summary")
 
 [^methods]: 逆に特定のクラスで使用可能なメソッドを確認するときは`methods(class = "クラス名")`を入力します。
 
-```{r oop-about6}
+```{r}
+#| label: oop-about-6
 summary
 ```
 
 　しかし、多態性を持つ関数の内部を見ることはできません。そもそも`summary()`関数はクラスごとに異なるコードを持っているため、`summary`だけでは「どのクラスの`summary()`か」が分かりません。それでもRには`summary()`関数が存在し、それをジェネリック関数（generic function）と呼びます。内部には`UseMethod("summary")`のみが書かれており、これは「この`summary()`関数は様々なクラスのメソッドとして機能するぞ」と宣言しているだけです。各クラスに対応したメソッドの内部を見るには`getS3method("メソッド名", "クラス名")`を使います。`summary()`メソッドは`numeric`型が別途指定されていないため、`"defualt"`となります。
 
-```{r oop-about7}
+```{r}
+#| label: oop-about-7
 getS3method("summary", "default")
 ```
 
@@ -138,7 +145,8 @@ getS3method("summary", "default")
 
 　クラスの継承 (inheritance)は一つのオブジェクトが2つ以上のクラスを持つ場合、子クラスが親クラスの特徴を継承することを意味します。たとえば、データフレームの拡張版とも言えるtibbleの場合、複数のクラスを持っています。
 
-```{r oop-about8}
+```{r}
+#| label: oop-about-8
 my_tibble <- tibble(X = 1:5, Y = 1:5)
 class(my_tibble)
 ```
@@ -153,7 +161,8 @@ class(my_tibble)
 
 　クラスを変えるのは簡単です。`class(オブジェクト) <- "新しいクラス名"`だけです。つまり、関数から何かの結果を返す直前にクラスを変更すれば良いです。
 
-```{r oop-r1}
+```{r}
+#| label: oop-r-1
 #| eval: false
 # 方法1
 関数名 <- function(...) {
@@ -168,7 +177,8 @@ class(my_tibble)
 
 　たとえば、入力された2つのベクトル（`x`と`y`）をリスト構造とし、クラス名をScoreにするにはどうすれば良いでしょうか。
 
-```{r oop-r2}
+```{r}
+#| label: oop-r-2
 Make_Score1 <- function(x, y) {
   
   # resultリストにxとyを格納
@@ -189,7 +199,8 @@ class(My_Score1) # My_Score1のクラスを表示
 
 　もう一つの方法は`structure()`関数を使う方法です。`sturcture()`の第1引数に返すオブジェクト名を指定し、`class = "クラス名"`引数でクラスを指定します。
 
-```{r oop-r3}
+```{r}
+#| label: oop-r-3
 Make_Score2 <- function(x, y) {
   
   # resultリストにxとyを格納
@@ -217,7 +228,8 @@ class(My_Score2) # My_Score2のクラスを表示
 
 　メソッドの作り方は[自作関数](https://www.jaysong.net/RBook/functions.html)と同じです。相違点としては関数名を`関数名.クラス名`にすることです。Scoreクラスのメソッドしての`mean()`関数を定義する場合、関数名を`mean.Score`とします。
 
-```{r oop-r4}
+```{r}
+#| label: oop-r-4
 mean.Score <- function(x) {
   print(mean(x$Score1))
   print(mean(x$Score2))
@@ -229,7 +241,8 @@ mean(My_Score1) # Scoreクラスのメソッドであるmean()を使う
 
 　`mean(c(1, 3, 5, 7, 9, 11))`は引数がnumeric型ベクトルであるため、既存の`mean()`関数が使用されます。一方、`mean(My_Score1)`は引数がScoreクラスであるため、`mean.Score()`が使用されます。このように`mean_Score()`のような別途の関数を作る必要なく、既存の関数名が利用できます。実際、`methods(mean)`を実行すると、Scoreクラスのメソッドとして`mean()`関数が用意されたことを確認できます。
 
-```{r oop-r5}
+```{r}
+#| label: oop-r-5
 methods(mean)
 ```
 
@@ -237,7 +250,8 @@ methods(mean)
 
 　もし、新しい関数名を使用し、その関数が様々なクラスに対応するとしましょう。今回はCatというクラスを作ってみましょう。Catクラスの内部は長さ1のリストで、要素の名前は`Name`とし、ここには長さ1のcharacter型ベクトルが入ります。このCatクラスを作成する関数を`Make_Cat()`とします。
 
-```{r oop-r6}
+```{r}
+#| label: oop-r-6
 Make_Cat <- function(name) {
   
   # resultリストにxを格納
@@ -253,7 +267,8 @@ class(My_Cat)
 
 　続いて、Catクラスに使う`my_func()`を作成します。`my_func()`はそもそも存在しない関数ですので、普通に`my_func <- function()`で作成可能です。この関数はCatの`Name`の後ろに`": にゃーにゃー"`を付けて出力する関数です。実際にやってみましょう。
 
-```{r oop-r7}
+```{r}
+#| label: oop-r-7
 my_func <- function(name) {
   print(paste0(name$Name, ": にゃーにゃー"))
 }
@@ -263,7 +278,8 @@ my_func(My_Cat)
 
 　しかし、`my_func()`をCatクラス以外にも使いたい場合はどうすればいいでしょうか。普通に`my_func.クラス名()`で良いでしょうか。確かにそうですが、その前に一つの手順が必要です。それは、`my_func()`をジェネリック関数として定義することです。この関数そのものは関数として機能はしませんが、「これから`my_func()`がいろんなクラスのメソッドとして使われるぞ」と予め決めてくれます。ジェネリック関数を作成しないと`関数名.クラス名`は定義できません。そこで使うのが`UseMethod()`です。第一引数はメソッド名、第二引数は任意の引数ですが、通常、`x`が使われます。また、第二の引数は省略可能で、`UseMethod("メソッド名")`でも動きます。
 
-```{r oop-r8}
+```{r}
+#| label: oop-r-8
 my_func <- function(x) {
   UseMethod("my_func", x)
 }
@@ -271,7 +287,8 @@ my_func <- function(x) {
 
 　これからは`my_func.クラス名()`の関数を作るだけです。まず、Score型オブジェクトに対してはそれぞれの要素の平均値を出力するとします。
 
-```{r oop-r9}
+```{r}
+#| label: oop-r-9
 my_func.Score <- function(x) {
   print(mean(x$Score1))
   print(mean(x$Score2))
@@ -282,13 +299,15 @@ my_func.Cat <- function(cat) {
 }
 ```
 
-```{r oop-r10}
+```{r}
+#| label: oop-r-10
 methods(my_func)
 ```
 
 　`my_func()`関数はScoreとCatといった2種類のクラスで使われることが確認できます。それでは問題なく作動するかを確認してみましょう。`My_Score1`と`My_Cat`を、それぞれ`my_func()`に渡します。
 
-```{r oop-r11}
+```{r}
+#| label: oop-r-11
 my_func(My_Score1)
 my_func(My_Cat)
 ```
@@ -301,7 +320,8 @@ my_func(My_Cat)
 
 　最初の例でもお見せしましたが、Rでは事後的にクラスを変更することができます。強制的にクラスを変更した場合、そのクラスに属するメソッドを使うことができますが、エラーが生じてしまうでしょう。例えば、任意のcharacter型ベクトル`My_Cat2`を作成し、Catクラスを付与してみましょう。
 
-```{r oop-r12}
+```{r}
+#| label: oop-r-12
 My_Cat2 <- "宋"
 class(My_Cat2) <- "Cat"
 class(My_Cat2)
@@ -309,7 +329,8 @@ class(My_Cat2)
 
 　`My_Cat2`のクラスはCatであるため、`my_func.Cat()`メソッドが使えます。しかし、`my_func.Cat()`仕組みを見る限り、うまく作動しないでしょう。
 
-```{r oop-r13}
+```{r}
+#| label: oop-r-13
 #| error: true
 my_func(My_Cat2)
 ```
@@ -323,7 +344,8 @@ my_func(My_Cat2)
 
 　以上の条件を全て満たしていればメソッドを実行し、一つでも満たさない場合はメソッドの実行を中止します。それでは検証用関数`Validation_Cat()`を作ってみましょう。
 
-```{r oop-r14}
+```{r}
+#| label: oop-r-14
 Validation_Cat <- function(x) {
   Message <- "正しいCatクラスではありません。"
   
@@ -341,7 +363,8 @@ Validation_Cat <- function(x) {
 
 　この検証用関数を`my_func.Cat()`の最初に入れておきましょう。
 
-```{r oop-r15}
+```{r}
+#| label: oop-r-15
 my_func.Cat <- function(cat) {
   Validation_Cat(cat)
   
@@ -351,7 +374,8 @@ my_func.Cat <- function(cat) {
 
 　それでは`My_Cat`と`My_Cat2`に対して`my_func()`メソッドを実行してみます。
 
-```{r oop-r16}
+```{r}
+#| label: oop-r-16
 #| error: true
 my_func(My_Cat)
 my_func(My_Cat2)
@@ -363,7 +387,8 @@ my_func(My_Cat2)
 
 　ここでは2つのnumeric型ベクトルとそのベクトル名入力し、相関係数を求める`My_Cor()`関数を作ってみます。単に相関係数を求めるだけなら`cor()`や`cor.test()`があるので、いくつかの機能も追加してみましょう。
 
-```{r oop-example1}
+```{r}
+#| label: oop-example-1
 #| echo: false
 My_Cor <- function(x, y, x_name, y_name) {
     if (!is.numeric(x) | !is.numeric(y)) {
@@ -415,12 +440,12 @@ plot.My_Cor_Object <- function(data) {
     
     Validation(data)
     
-    data$data %>%
+    data$data |>
       ggplot(aes(x = x, y = y)) +
       geom_point() +
       labs(x = data$var_name[1], y = data$var_name[2]) +
       ggtitle(sprintf("相関係数 = %.3f", data$cor)) +
-      theme_minimal(base_family = "HiraKakuProN-W3")
+      theme_minimal()
 }
 
 print.My_Cor_Object <- function(data) {
@@ -446,7 +471,8 @@ summary.My_Cor_Object <- function(data) {
 
 　たとえば、「1日当たりゲーム時間」と「身長」といった2つのnumeric型ベクトルをそれぞれ`x`と`y`で入力し、`x_name`と`y_name`で各ベクトルの名前も指定します。また、入力されたデータを用いて相関係数とその信頼区間を求めます。これらのデータはリスト型として格納されますが、クラスを`"My_Cor_Object"`とします。以下はその例です。
 
-```{r oop-example2}
+```{r}
+#| label: oop-example-2
 Cor_Obj <- My_Cor(x      = rnorm(20, 2, 0.5), 
                   y      = rnorm(20, 165, 6), 
                   x_name = "1日当たりゲーム時間", 
@@ -457,7 +483,8 @@ class(Cor_Obj)
 
 　この`Cor_Obj`の構造を`str()`で確認してみます。
 
-```{r oop-example3}
+```{r}
+#| label: oop-example-3
 str(Cor_Obj)
 ```
 
@@ -465,7 +492,8 @@ str(Cor_Obj)
 
 　この`My_Cor_Object`クラスには3つのメソッド（専用関数）が用意されており、`print()`、`summary()`、`plot()`です。`print()`と`summary()`は同じ関数で、`x`と`y`の平均値、そして相関係数と信頼区間を出力します。`plot()`は散布図と相関係数を出力します。実際の例を見てみましょう。
 
-```{r oop-example4}
+```{r}
+#| label: oop-example-4
 print(Cor_Obj)
 summary(Cor_Obj) # summary()はprint()と同じ
 plot(Cor_Obj)
@@ -477,7 +505,8 @@ plot(Cor_Obj)
 
 　それでは一つずつ作っていきましょう。まずは、`"My_Cor_Object"`クラスのオブジェクトを作成する`My_Cor()`関数からです。
 
-```{r oop-example5}
+```{r}
+#| label: oop-example-5
 #| eval: false
 My_Cor <- function(x, y, x_name, y_name) {
     if (!is.numeric(x) | !is.numeric(y)) {
@@ -512,7 +541,8 @@ My_Cor <- function(x, y, x_name, y_name) {
 * `cor`という要素が存在し、長さ1のnumeric型ベクトルである。
 * `cor_ci`という要素が存在し、長さ2のnumeric型ベクトルである。
 
-```{r oop-example6}
+```{r}
+#| label: oop-example-6
 #| eval: false
 Validation <- function (x) {
   UseMethod("Validation", x)
@@ -542,7 +572,8 @@ Validation.My_Cor_Object <- function(x) {
 
 　つづいて、My_Cor_Objectクラス用の`print()`関数（メソッド）を作成します。
 
-```{r oop-example7}
+```{r}
+#| label: oop-example-7
 #| eval: false
 print.My_Cor_Object <- function(data) {
     Valdation(data)
@@ -562,7 +593,8 @@ print.My_Cor_Object <- function(data) {
 
 　次は、`summary()`メソッドですが、これは`print()`と同じ機能をする関数です。この場合、`UseMethod("メソッド名")`を使うと、指定したメソッドを使うことになります。
 
-```{r oop-example8}
+```{r}
+#| label: oop-example-8
 #| eval: false
 summary.My_Cor_Object <- function(data) {
   UseMethod("print")
@@ -571,17 +603,18 @@ summary.My_Cor_Object <- function(data) {
 
 　最後は`plot()`メソッドです。
 
-```{r oop-example9}
+```{r}
+#| label: oop-example-9
 #| eval: false
 plot.My_Cor_Object <- function(data) {
     Valdation(data)
     
-    data$data %>%
+    data$data |>
       ggplot(aes(x = x, y = y)) +
       geom_point() +
       labs(x = data$var_name[1], y = data$var_name[2]) +
       ggtitle(sprintf("相関係数 = %.3f", data[["cor"]])) +
-      theme_minimal(base_family = "HiraKakuProN-W3")
+      theme_minimal()
 }
 ```
 
