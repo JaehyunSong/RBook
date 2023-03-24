@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.335">
+<meta name="generator" content="quarto-1.2.475">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -70,6 +70,7 @@ gtag('js', new Date());
 gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <meta property="og:title" content="私たちのR: ベストプラクティスの探求">
 <meta property="og:description" content="R Not for Everyone: An Esoteric Guide">
@@ -388,7 +389,18 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">目次</h2>
+   
+  <ul>
+  <li><a href="#ファイル名" id="toc-ファイル名" class="nav-link active" data-scroll-target="#ファイル名">ファイル名</a>
+  <ul class="collapse">
+  <li><a href="#ファイル名拡張子" id="toc-ファイル名拡張子" class="nav-link" data-scroll-target="#ファイル名拡張子">ファイル名拡張子</a></li>
+  <li><a href="#ファイル名の付け方" id="toc-ファイル名の付け方" class="nav-link" data-scroll-target="#ファイル名の付け方">ファイル名の付け方</a></li>
+  </ul></li>
+  <li><a href="#ファイルシステムとパス" id="toc-ファイルシステムとパス" class="nav-link" data-scroll-target="#ファイルシステムとパス">ファイルシステムとパス</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -410,8 +422,108 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 
 </header>
 
+<p>　Rを使い始める前に、コンピュータについて最低限知っておいてほしい基礎知識について説明する。</p>
+<section id="ファイル名" class="level2">
+<h2 class="anchored" data-anchor-id="ファイル名">ファイル名</h2>
+<p>　まず、コンピュータ上のファイル名について説明する。</p>
+<section id="ファイル名拡張子" class="level3">
+<h3 class="anchored" data-anchor-id="ファイル名拡張子">ファイル名拡張子</h3>
+<p>　コンピュータの中には、様々な種類のファイルが含まれている。例えば、多くの人は Microsoft Word や Microsoft Excel のファイルを作ったことがあるだろう。Word や Excel で作ったファイルは、基本的にはそれぞれ専用のソフトウェア（アプリ）で開く必要がある。Word で作ったファイルをExcel で開くことや、Excel で作ったファイルを Wordで開くことなどはできない。</p>
+<p>　ユーザが特に意識しなくても、Word で作ったファイルを [ダブル] クリックすれば Word が起動してそのファイルを開くし、Excel で作ったファイルを [ダブル] クリックすれば Excel が起動して開きたいファイルが開かれる。仮に、Word のファイルとExcelファイルのファイル名が同じ <code>kadai01</code> だとしても、パソコンは正しいアプリを選んでくれる。パソコンがファイルを区別し、正しいアプリを起動してくれるのはなぜだろうか。</p>
+<p>　実は、各アプリで作ったファイル名は、自分で名前を付けた部分（上の例では kadai01）の後に続きがある。 Word で作ったファイルには自動的に “.docx” が付けられ、Excel の場合には “.xlsx” が同様に付けられている。 したがって、自分では両方のファイルにまったく同じ <code>kadai01</code> という名前を付けたつもりでも、実際には、<code>kadai01.docx</code> と <code>kadai01.xlsx</code> という別のファイル名が付いている。 この仕組みにより、パソコンは正しいアプリを選択することができる。ファイル名の末尾に <code>.docx</code> があるファイルがクリックされれば Word を、<code>.xlsx</code> があるファイルが選択されれば Excel を開くのである。</p>
+<p>　ファイル名の末尾にあってファイルの種類を区別する部分のことを<strong>ファイル名拡張子 (filename extension)</strong> と呼ぶ。上の例からわかるとおり、ファイル名拡張子はファイルの種類を区別する重要情報である。プログラミングをしないパソコンユーザにとっては、ファイルの種類の違いを気にせずにパソコンを使えたほうが便利なので、パソコン購入時の初期設定ではファイル名拡張子が非表示になっている場合がある。しかし、プログラミングをする場合（つまり、この本を読んでいるあなた）は、ファイル名拡張子が見えないと困る。</p>
+<p>　例えば、Rは様々な形式で保存されたデータファイルを扱うことができるが、種類に応じてデータを読み込む方法（読み込みに使う関数）が異なる。ファイル名拡張子でファイルの種類を区別し、どの方法を使うかを決めるので、拡張子が表示されていないと不便である（MacのFinderやWindows のエクスプローラーで「ファイルの種類」を確認できるので、絶対無理というわけではないが、面倒くさい）。よく使うデータファイルのファイル名拡張子として、次のものがある。</p>
+<ul>
+<li>.csv</li>
+<li>.tsv</li>
+<li>.txt</li>
+<li>.dat</li>
+<li>.dta</li>
+<li>.RData</li>
+<li>.Rds</li>
+</ul>
+<p>　後の章で説明するが、この他にも種類がある。ファイルの種類がわからないと、様々な方法を試行錯誤することになってしまい、効率が悪い。ファイル名拡張子があればファイルの種類がわかるので、正しい方法を選んで作業を進めることができる。</p>
+<p>　よって、Rユーザ（あるいはその他のプログラミングをする者）にとって、ファイル名拡張子の表示は必須である。自分のパソコンでファイル名拡張子が表示されていないなら、ファイル名拡張子を表示する設定に変えよう。macOS では、Finder の 環境設定 (Preferences) で、詳細設定 (Advanced) タブを開き、「すべてのファイル名拡張子を表示する (Show all filename extensions)」にチェックマークを付ける。 Windows では、エクスプローラー (Explorer) （<strong>注意：インターネットエクスプローラーではない。画面下部のタスクバーに表示されている、黄色のフォルダのアイコン</strong>）を開き、上部の [表示]タブをクリックする。すると、「ファイル名拡張子」という項目があるので、チェックマークを付ける。チェックマークを付けたら、Word ファイルに <code>.docx</code> （または <code>.doc</code>）、Excelファイルに <code>.xlsx</code> （または <code>.xls</code>）、PDFファイルに <code>.pdf</code> などが付いていることを確認しよう。</p>
+</section>
+<section id="ファイル名の付け方" class="level3">
+<h3 class="anchored" data-anchor-id="ファイル名の付け方">ファイル名の付け方</h3>
+<p>　ファイル名は、ファイルの中身がわかるように付けるのが基本である。例えば、日記を書いて保存するなら、<code>diary_20200701.txt</code>, <code>diary_20200702.txt</code> のように名前を付ければ、特定の日付の日記であることがすぐにわかる。</p>
+<p>　また、他人にファイルを渡す必要があるときは、相手の立場になってファイル名を付けるのが望ましい。例えば、比較政治学 (Comparative Politics) の授業のレポートをWord で書く場合を考えよう。レポートを書いている本人にとっては、<code>cp_report.docx</code> というファイル名で中身がわかるので問題ないだろう。しかし、これをメールに添付して担当教員に提出する場合はどうだろうか。受講生が100人いて、全員がこの名前でレポートを提出してきたら、担当教員の元には同じ名前のファイルが100個届く。これでは、担当教員は困ってしまう。つまり、<code>cp_report.docx</code> というファイル名は、受け取る相手のことを考えていない、思いやりのないファイル名である。代わりに、学籍番号（例：123456789）を使い、<code>cp_report_123456789.docx</code> のようにすると、ファイル名の重複がないので、受け取る相手（私たちのことだが）は喜ぶだろう。自分が1つのファイル名を変えるのは大した手間ではないのに対し、相手が全員分のファイル名を変えるの大変な手間だということを理解しよう。</p>
+<p>　加えて、ファイル名の付け方には形式的なルールがある。ファイル名は、英数字と特定の記号（<code>_</code> [「アンダースコア」、「アンスコ」、「アンダーバー」などと読む] と <code>-</code> [ハイフン]）のみで付けるべきだ。 ファイル名に日本語（または韓国語、中国語などのマルチバイト文字）を使うのは愚かなのでやめよう。日本語のファイル名でも問題ない場合が多いのは確かだが、問題がある場合もあるので使用を回避するのが賢い。日本語のファイル名だと、次のような問題が起こりうる。</p>
+<ul>
+<li>日本語（マルチバイト文字）を扱えないプログラムが停止する。</li>
+<li>さらに悪いと、日本語（マルチバイト文字）を扱えないプログラムが想定外の動作をする。</li>
+<li>文字コードの違いにより、ファイル名が文字化けする
+<ul>
+<li>例えば、日本語のファイル名がついたファイルを Windows で圧縮 (zip) して macOS で展開すると、日本語部分が謎の暗号になるので、どのファイルを開いていいのかわからず、超絶面倒くさい。本当にやめてほしい。お願いだからやめてください。</li>
+</ul></li>
+</ul>
+<p>　日本語のなかでも特に凶悪なのが「全角スペース」である。そもそも、スペースは存在に気付きにくい。万が一末尾にスペースがあると、スペースがない場合との区別が難しい。日本語（マルチバイト文字）を扱えないプログラムでは、半角スペースなら問題ないが、全角でスペースだと問題が起きることがある。しかし、目視で半角スペースと全角スペースの区別をするのは非常に困難である。よって、スペースは使うべきではないし、<strong>全角スペースは絶対に使ってはいけない</strong>。</p>
+<p>　また、ファイル名の最初の1文字はアルファベットにすることが望ましい。ファイルを並べ替えるときに、数字だとややわかりにくいところがある。例えば、1.txt, 12.txt, 110.txt という3つのファイルをファイル名で並べ替えると、1.txt, 110.txt, 12.txt という順番になる。多くの場合、これはユーザが期待する順番ではない。中身がわかるようにという大原則にしたがえば、アルファベットから始まるファイル名が自然に選ばれるだろう。</p>
+<p>　ファイル名の付け方をまとめると、次のようになる。</p>
+<ul>
+<li>ファイル名は、英数字 (A-Z, a-z, 0-9) と<code>_</code>, <code>-</code> のみで付ける。
+<ul>
+<li>ただし、ハイフンがあると動かないプログラムもあるので、できればハイフンも避ける。</li>
+</ul></li>
+<li>ファイル名の1文字目はアルファベットにする（数字を1文字目にすることを避ける）。</li>
+<li><code>.</code>（ドット; ピリオド）は使わない（ファイル名拡張子との混同を避けるため）。</li>
+<li>ファイル名にスペースを使わない。全角スペースはもちろん、半角スペースも避けるべき。 -　例えば、<code>my diary.txt</code> というファイル名の代わりに、<code>my_diary.txt</code> または <code>myDiary.txt</code>、<code>MyDiary.txt</code> などのファイル名を使う。
+<ul>
+<li>ちなみに、<code>my_diary.txt</code> のように単語をアンスコで繋ぐ書き方をスネークケース (snake case) [<code>_</code> が地を這うヘビである]、<code>myDiary.txt</code> のように単語の1文字目を大文字にして前の単語と区別する書き方をキャメルケース (camel case) [大文字部分がラクダのコブである] と呼ぶ。</li>
+</ul></li>
+</ul>
+<p>　ただし、次のような例外もある。</p>
+<ul>
+<li>隠しファイル（Windows 以外では通常は非表示のファイル）の1文字目は <code>.</code> である。
+<ul>
+<li>Rユーザが作る隠しファイルとして、<code>.Rprofile</code> と <code>.Renviron</code> がある。</li>
+</ul></li>
+<li>自分で作るファイル以外には、<code>_</code> や <code>#</code> などの記号からファイル名が始まるものもある。</li>
+</ul>
+<p>　次の節で説明するフォルダ（ディレクトリ）の名前を付ける際も、基本的にはファイル名と同じルールに従うことが望ましい。</p>
+</section>
+</section>
+<section id="ファイルシステムとパス" class="level2">
+<h2 class="anchored" data-anchor-id="ファイルシステムとパス">ファイルシステムとパス</h2>
+<p>　次に、ファイルシステムについて解説する。私たちが使用しているコンピュータには、数千〜数万（あるいはそれ以上）のファイルが含まれている。これらのファイルは基本的には1つのドライブ (ハードディスクドライブ [Hard Disk Drive; HDD] またはソリッドステートドライブ [Solid State Drive; SSD]） に保存されているが、ドライブの中にあるファイルはグループ化・階層化されて保存されている。</p>
+<p>　<a href="#fig-rbasic-filesystem">図&nbsp;<span>1</span></a> はファイルシステムの例を示している。矢印の左側には、ドライブ内にあるファイル（の一部）が示されている。通常、これらのファイルは矢印の右側に示されているように、階層化されている。</p>
+<div id="fig-rbasic-filesystem" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Figs/Filesystem/Filesystem1.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<p></p><figcaption class="figure-caption">図&nbsp;1: ファイルシステムの例</figcaption><p></p>
+</figure>
+</div>
+<p>　<a href="#fig-rbasic-filesystem">図&nbsp;<span>1</span></a> の左側にある <code>Diary_YYYYMMDD.txt</code> がYYYY年MM月DD日の日記を保存したテキストファイルだとしよう<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>。 3年間毎日日記を書くと、それだけでファイル数は1000個以上になる。また、<code>Analysis_blahblah.R</code> はRスクリプトである<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>。Rスクリプトファイルも複数ある。さらに、上の図には表示されていないが、自分で作ったファイル以外に、OSやソフトウェア（アプリ）を構成するファイルもドライブ内に保存されているだろう。これらのファイルが整理されずに1つの場所にまとめて置いてあるとしよう（上の図の左側の状態）。そうすると、特定のファイルを開いたり、それぞれのファイルがどのような目的で存在するのかを把握したりするのに少なからぬ労を要する。</p>
+<p>　単に面倒なだけならいい（私たちは面倒なことが大嫌いなので良くないと考える）が、ファイルの置き場が1つだけだと解決できない問題がある。それは、ファイル名の重複が許されないということだ。世の中には、特定の目的のために使われる「お決まりのファイル名」というものがある。例えば、GitHubにレポジトリを追加するときは、そのレポジトリについて説明する <code>README.md</code> というファイルを作ることになっている。しかし、名前が同じだとファイルが区別できないので、同じ場所にまったく同じ名前のファイルを2つ置くことはできない。したがって、ドライブ内にファイル置き場が1つしかないとなると、1つのパソコンで作れる README.md は1つだけということになってしまい、困ってしまう。</p>
+<p>　そこで、多くのOSではファイルをグループ化して管理するという方法が採用されている。このグループのことを「<strong>フォルダ (folder)</strong>」または「<strong>ディレクトリ (directory)</strong>」と呼ぶ<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>。</p>
+<p>　上の図の右側は、ファイルをフォルダに分けた様子を表している。 日記のテキストファイルに注目すると、まず、“Diary” という名前のフォルダがあり、Diary フォルダの中に年ごとのフォルダ “2018”, “2019”, “2020” というフォルダがある。それぞれの年のフォルダの中には、“January”, “February”, <span class="math inline">\(\dots\)</span>, “December” という月ごとのフォルダがある。そして、それぞれの月のフォルダの中に、日付がファイル名になったテキストファイルd_01.txt, d_02.txt, <span class="math inline">\(\dots\)</span> が保存されている。この例からわかるように、フォルダの中にフォルダを作り、そのフォルダの中にフォルダを作り <span class="math inline">\(\cdots\)</span> ということができるので、フォルダを入れ子にした階層構造を利用してファイルを管理することができる。</p>
+<p>　ファイルを階層化して管理する場合、フォルダの構造と場所を把握することが必要になる。そのために使われるのが<strong>パス (path)</strong> である。パスは、コンピュータ内の住所のようなものだと考えればよい。例えば、“Diary” フォルダ内の “2018” フォルダ内の “January” フォルダ内の “d_01.txt” というファイルのパスは、<code>Diary/2018/January/d_01.txt</code> である。この例からわかるように、パスにはフォルダ名やファイル名がそのまま使われる。そして、フォルダの「中」であることは、<code>/</code> （スラッシュ）記号によって表される。例えば、<code>Diary/</code> の部分が、Diary フォルダの中であることを示す。ただし、Windows では <code>/</code> の代わりに <code>\</code>（バックスラッシュ）または <code>￥</code>（円記号; 日本語環境の場合）が使われる<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>。 <code>Diary/2018/January/d_01.txt</code> と <code>Diary/2018/February/d_01.txt</code> は、ファイル名だけを見れば同じ <code>d_01.txt</code> だが、パスが異なるので異なるファイルとして認識され、1つのドライブ内に共存することができる。</p>
+<p>　しかし、上に書いたパスは、“Diary” フォルダがどこにあるかを指定していないので完全ではない。パソコンがファイルの場所を正しく把握するには、“Diary” フォルダの置き場所がどこかという情報も必要である。</p>
+<p>　パソコン内でパスの起点になる場所は、OSによって異なる。Linux やmacOSでは、パスの起点となる最上位フォルダは <code>/</code> であり、多くのWindows機では <code>C:\</code> （Cドライブと呼ばれる）である<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>。また、多くのOSでは、ドライブ内に「ホーム (HOME)」と呼ばれる特別なフォルダがあらかじめ用意されており、通常はホームフォルダの中に自分で作ったファイルを保存する。ただし、ホームフォルダの名前は “HOME” ではないので注意が必要である。例えば、macOSではユーザ名がホームフォルダの名前である。例えば、ユーザ名が yukiなら <code>/Users/yuki/</code> が、ユーザ名が jaehyunsong なら <code>/Users/jaehyunsong/</code> がホームフォルダのパスである。パスの先頭に <code>/</code> がついており、最上位フォルダの中の “Users” フォルダの中にユーザ名でホームフォルダが作られれている。</p>
+<p>　ホームフォルダの中に <code>Diary</code> フォルダがあるとすると、2018年1月1日の日記までのパスは、 <code>/Users/jaehyunsong/Diary/2018/January/d_01.txt</code> である。このように、ドライブ内の起点から書いた完全なパスを <strong>絶対パス (absolute path)</strong> または <strong>フルパス (full path)</strong> と呼ぶ。絶対パスを使えば、コンピュータ内の特定のファイルを一意に示すことができる。 絶対パスにホームディレクトリが含まれている場合には、ホームディレクトリまでのパスを省略して <code>${HOME}/</code> または <code>~/</code> と書くことができる。よって、上の絶対パスは、<code>~/Diary/2018/January/d_01.txt</code> と書くことができる。この書き方を使えば、パスを書き換えることなく共同研究者とファイルを共有することが可能になる（もちろん、ホームフォルダ以下の構造を揃える必要がある）。</p>
+<p>　自分が作業・操作の対象としているフォルダは、<strong>作業フォルダ</strong> (working directory; current directory) と呼ばれる<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>。絶対パスの代わりに、作業フォルダから見た<strong>相対パス (relative path)</strong>を使うこともできる。例えば、現在の作業フォルダが <code>~/Diary/2018/</code> だとすると、2018年1月1日の日記への相対パスは、<code>Januaray/d_01.txt</code> と書ける。 作業フォルダを指定していることを明示したい場合（プログラムを実行する場合にはこれが必要なことがある）には、 <code>./Januaray/d_01.txt</code> と書く。つまり、<code>./</code> が作業フォルダを示す。 また、作業フォルダよりも階層が1つ上のフォルダ（親 [parent] フォルダと呼ぶ）には、<code>../</code> でアクセスでききる。例えば、、現在の作業フォルダが <code>~/Diary/2018/</code> だとすると、<code>../</code> は <code>~/Diary/</code> なので、 20<strong>20</strong>年1月1日の日記への相対パスは　<code>../2020/Januaray/d_01.txt</code> と書くことができる。</p>
+<p>　相対パスの利点は、</p>
+<ol type="1">
+<li>絶対パスより短い</li>
+<li>同じ構造を再利用できる</li>
+</ol>
+<p>ということである。1は自明だろう。2は、例えば日記の一覧を作るためのプログラムを書き、それを「年」を表すフォルダに保存すれば、1つひとつの日記に毎年同じ相対パスでアクセスできる（ただし、2月29日は除く）ので、毎年同じプログラムを利用できて便利である。絶対パスを使うと、「年」の部分を毎年書き換えなければいけない。</p>
+<p>　絶対パスと相対パスは、目的に応じて使い分けることが必要である。</p>
 
 
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>ファイル名拡張子が “.txt” のファイルを「テキストファイル」と呼ぶ。<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>ファイル名拡張子が “.R” または “.r” のファイルを「Rスクリプト」と呼ぶ。<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>本書では、フォルダとディレクトリを同義語として扱う。<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>これ以降、原則としてパスの表記には <code>/</code> を使うので、Windowsユーザはご注意を。<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>かつては、AドライブとBドライブがフロッビーディスクに使われていた。その名残でCドライブが使われている。<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Rでは、<code>getwd()</code> で現在の作業フォルダを確認できる。また、<code>setwd()</code> で作業フォルダを変更できる。例えば、<code>setwd("~/Diary")</code> とすれば、ホームフォルダ内の Diary フォルダを作業フォルダに指定できる。しかし、これらの関数は基本的には使わない。この後説明するとおり、RStudio のプロジェクト機能の使用を推奨する。<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

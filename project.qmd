@@ -5,3 +5,76 @@
 #| include: false
 source("_common.R")
 ```
+
+## 「プロジェクト」のすゝめ {#sec-project-intro}
+
+　Rを使ったプログラミングやデータ分析を進めていくと、自分が書いたRスクリプトや作成した図表だけでなく、
+Rが自動的に生成するファイルもどんどん溜まる。そう遠くない将来、ドライブ内のファイル数が数万に達しても不思議ではない。効率よくプログラミングを行うために、ファイルの管理方法を明確にしておいたほうが良い。そのためには、フォルダの階層化を利用してファイルを管理することが必要である。
+
+　しかし、フォルダによる階層化を導入すればファイルの管理が楽になるかというと、必ずしもそうとは限らない。かえって不便になる部分もある。前の節で見たとおり、フォルダを階層化すると、絶対パスが長く（複雑に）なる。ファイルを階層化によって整理したとしても、ファイルを利用するたびに長い絶対パスの入力が必要なら、ファイル管理の効率が上がったとは言えないだろう。
+
+　Rを使う場合にファイル管理の効率化を助けてくれるのが、RStudio の「プロジェクト」機能である。
+
+## プロジェクトの作り方 {#sec-project-create}
+
+　Rの既定（デフォルト）の作業フォルダはホームフォルダある。分析に使うデータが、ホームフォルダの中の `Documents` フォルダの中の `R` フォルダの中の `Analysis1` フォルダ内の `Data` フォルダにある `data.csv` だとしたら、このファイルにアクセスするためには、`"Documents/R/Analysis1/Data/data.csv"`と入力する必要がある[^rbasic-quote-path-R] $^,$ [^rabasic-filepath-R]。新たに作った図を "histogram.pdf" という名前でホームフォルダの中の `Documents` フォルダの中の `R` フォルダの中の `Analysis1` フォルダ内の `Figures` というフォルダに保存するためには、`"Documents/R/Analysis1/Figures/historam.pdf"`と入力する必要がある。どちらもかなり面倒で、効率が悪い。
+
+[^rbasic-quote-path-R]: Rでパスを指定するときは、パスを引用符で囲む。引用符は、`""` でも `''` でも良い。
+
+[^rabasic-filepath-R]: `file.path()` を使って、`file.path("Documents", "R", "Analysis", "Data", "data.csv")` と書くこともできる。この書き方の利点は、`/`, `\`, `￥` を環境に応じて使い分けてくれることである。
+
+　しかし、作業フォルダが、`~/Documents/R/Analysis1/` だとすれば、相対パスにより、`"Data/data.csv"` や`"Figures/historam.pdf"` だけで済む。よって、作業フォルダを明示的に指定すればいいわけだが、作業フォルダを毎回指定するのも面倒だ。
+
+　そこで利用できるのが、RStudio のプロジェクト機能である。
+プロジェクトとは、特定のフォルダを作業フォルダに設定し、すべての作業をそのフォルダと下位フォルダのみに限定してくれる機能である[^rbasic-proj-abs]。プロジェクト機能さえ使えば、ユーザが意識しなくても、ユーザが書いたコード、保存したデータ、作成した図などが作業フォルダ内に集約され、管理が楽になる。
+
+[^rbasic-proj-abs]: 何らかの事情により、作業ディレクトリ以外のフォルダにアクセスすることが必要なときは、絶対パスを使えば良い。
+
+　では、ここからプロジェクトの作り方を説明しよう。
+
+1. まずはRStudio を起動する。
+
+2. RStudio が起動したら、"File" から "New Project" を選択する。
+
+![FileからNew Project...](Figs/Project/Create1.png){#fig-project-create-1 width=500px fig-align="center"}
+
+3. 下の画面が表示されたら、 "New Directory" を選択する。ただし、既存のフォルダを利用したい場合は、
+"Existing Directory" を選ぶ。
+
+![New Directoryを選択](Figs/Project/Create2.png){#fig-project-create-2 width=500px fig-align="center"}
+
+4. 下の画面が表示されたら、"New Project" を選択する。
+  - 前の手順で "Existing Directory" を選択した場合、この画面は表示されない。
+
+![New Projectを選択](Figs/Project/Create3.png){#fig-project-create-3 width=500px fig-align="center"}
+
+5. 下の画面が表示されたら、"Directory name:" にプロジェクト名を入力する。これがフォルダ名になるので、**半角英数字のみ**の 名前を付ける。ここでは第4章のコードということで、"Ch04" にした。統計学の授業用プロジェクトなら "statistics"、計量政治学の授業なら "quant_methods_ps" などの名前を付ければ良いだろう。英語が嫌なら "tokeigaku" のようにすれば良い。また、"Create project as subdirectory of: " では、プロジェクトのフォルダをどのフォルダの中に設置するかを指定する。 
+"Browse..." をクリックし、親フォルダを選ぶ。ここでは `~/Dropbox/RStudy` にプロジェクトのフォルダを入れることにする。ここまでできたら、"Create Project" をクリックする。
+
+- 手順3で "Existing Directory" を選んだ場合、プロジェクトのフォルダとして使う既存フォルダを選択する画面が表示される。
+
+![プロジェクト名と保存場所の指定](Figs/Project/Create4.png){#fig-project-create-4 width=500px fig-align="center"}
+
+6. 以上の手順でプロジェクトができる。RStudio 右上に、プロジェクト名が表示されているはずだ。
+また、Console に `getwd()` と入力すると、プロジェクトまでの絶対パスが表示される。
+
+　念のため、Finder（Macの場合）やエクスプローラー （Windows の場合）で、指定した場所にプロジェクトのフォルダ（上の例では `Ch04`）が生成されていることを確認しよう。
+プロジェクトフォルダを開いてみると、`Ch04.Rproj` というファイルが生成されていることがわかる（ @fig-project-create-5 ）。
+
+![プロジェクトの確認](Figs/Project/Create5.png){#fig-project-create-5 width=700px fig-align="center"}
+
+## プロジェクトの開き方 {#sec-project-open}
+
+　`Ch04` プロジェクトを開くには、この`Ch04.Rproj` ファイルをダブルクリックすれば良い。RStudio が起動していない場合でも、指定のプロジェクトを開いた状態でRStudio が起ち上がる。
+
+## プロジェクトの確認 {#sec-project-check}
+
+　RStudio 右上の表示が "Project: (None)" となっているとき（ @fig-check-1 ）は、プロジェクトが開かれていないことを意味する。一方、プロジェクトが開かれている場合は当該箇所にプロジェクト名が表示される（ @fig-check-2 ）。**RStudio を使う場合には、必ず右上の表示を見て、プロジェクトが開かれていることを確認しよう。**プロジェクトが開かれていない場合には、既存のプロジェクトを開くか、新たばプロジェクトを作ろう。むろん、簡単な計算や電卓用途、計算・分析結果を残す必要がない場合は無理してプロジェクト機能を使う必要はない。
+
+:::{#fig-check layout-ncol=2}
+![プロジェクトが開かれていない状態](Figs/Project/Check1.png){#fig-check-1 width=45%}
+
+![Homework_01プロジェクト使用中](Figs/Project/Check2.png){#fig-check-2 width=45%}
+
+比較
+:::

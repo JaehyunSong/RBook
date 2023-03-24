@@ -70,6 +70,7 @@ gtag('js', new Date());
 gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <meta property="og:title" content="私たちのR: ベストプラクティスの探求">
 <meta property="og:description" content="R Not for Everyone: An Esoteric Guide">
@@ -388,7 +389,16 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">目次</h2>
+   
+  <ul>
+  <li><a href="#sec-project-intro" id="toc-sec-project-intro" class="nav-link active" data-scroll-target="#sec-project-intro"><span class="toc-section-number">6.1</span>  「プロジェクト」のすゝめ</a></li>
+  <li><a href="#sec-project-create" id="toc-sec-project-create" class="nav-link" data-scroll-target="#sec-project-create"><span class="toc-section-number">6.2</span>  プロジェクトの作り方</a></li>
+  <li><a href="#sec-project-open" id="toc-sec-project-open" class="nav-link" data-scroll-target="#sec-project-open"><span class="toc-section-number">6.3</span>  プロジェクトの開き方</a></li>
+  <li><a href="#sec-project-check" id="toc-sec-project-check" class="nav-link" data-scroll-target="#sec-project-check"><span class="toc-section-number">6.4</span>  プロジェクトの確認</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -410,8 +420,113 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 
 </header>
 
+<section id="sec-project-intro" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="sec-project-intro"><span class="header-section-number">6.1</span> 「プロジェクト」のすゝめ</h2>
+<p>　Rを使ったプログラミングやデータ分析を進めていくと、自分が書いたRスクリプトや作成した図表だけでなく、 Rが自動的に生成するファイルもどんどん溜まる。そう遠くない将来、ドライブ内のファイル数が数万に達しても不思議ではない。効率よくプログラミングを行うために、ファイルの管理方法を明確にしておいたほうが良い。そのためには、フォルダの階層化を利用してファイルを管理することが必要である。</p>
+<p>　しかし、フォルダによる階層化を導入すればファイルの管理が楽になるかというと、必ずしもそうとは限らない。かえって不便になる部分もある。前の節で見たとおり、フォルダを階層化すると、絶対パスが長く（複雑に）なる。ファイルを階層化によって整理したとしても、ファイルを利用するたびに長い絶対パスの入力が必要なら、ファイル管理の効率が上がったとは言えないだろう。</p>
+<p>　Rを使う場合にファイル管理の効率化を助けてくれるのが、RStudio の「プロジェクト」機能である。</p>
+</section>
+<section id="sec-project-create" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="sec-project-create"><span class="header-section-number">6.2</span> プロジェクトの作り方</h2>
+<p>　Rの既定（デフォルト）の作業フォルダはホームフォルダある。分析に使うデータが、ホームフォルダの中の <code>Documents</code> フォルダの中の <code>R</code> フォルダの中の <code>Analysis1</code> フォルダ内の <code>Data</code> フォルダにある <code>data.csv</code> だとしたら、このファイルにアクセスするためには、<code>"Documents/R/Analysis1/Data/data.csv"</code>と入力する必要がある<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> <span class="math inline">\(^,\)</span> <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>。新たに作った図を “histogram.pdf” という名前でホームフォルダの中の <code>Documents</code> フォルダの中の <code>R</code> フォルダの中の <code>Analysis1</code> フォルダ内の <code>Figures</code> というフォルダに保存するためには、<code>"Documents/R/Analysis1/Figures/historam.pdf"</code>と入力する必要がある。どちらもかなり面倒で、効率が悪い。</p>
+<p>　しかし、作業フォルダが、<code>~/Documents/R/Analysis1/</code> だとすれば、相対パスにより、<code>"Data/data.csv"</code> や<code>"Figures/historam.pdf"</code> だけで済む。よって、作業フォルダを明示的に指定すればいいわけだが、作業フォルダを毎回指定するのも面倒だ。</p>
+<p>　そこで利用できるのが、RStudio のプロジェクト機能である。 プロジェクトとは、特定のフォルダを作業フォルダに設定し、すべての作業をそのフォルダと下位フォルダのみに限定してくれる機能である<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>。プロジェクト機能さえ使えば、ユーザが意識しなくても、ユーザが書いたコード、保存したデータ、作成した図などが作業フォルダ内に集約され、管理が楽になる。</p>
+<p>　では、ここからプロジェクトの作り方を説明しよう。</p>
+<ol type="1">
+<li><p>まずはRStudio を起動する。</p></li>
+<li><p>RStudio が起動したら、“File” から “New Project” を選択する。</p></li>
+</ol>
+<div id="fig-project-create-1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Figs/Project/Create1.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption class="figure-caption">図&nbsp;6.1: FileからNew Project…</figcaption><p></p>
+</figure>
+</div>
+<ol start="3" type="1">
+<li>下の画面が表示されたら、 “New Directory” を選択する。ただし、既存のフォルダを利用したい場合は、 “Existing Directory” を選ぶ。</li>
+</ol>
+<div id="fig-project-create-2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Figs/Project/Create2.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption class="figure-caption">図&nbsp;6.2: New Directoryを選択</figcaption><p></p>
+</figure>
+</div>
+<ol start="4" type="1">
+<li>下の画面が表示されたら、“New Project” を選択する。</li>
+</ol>
+<ul>
+<li>前の手順で “Existing Directory” を選択した場合、この画面は表示されない。</li>
+</ul>
+<div id="fig-project-create-3" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Figs/Project/Create3.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption class="figure-caption">図&nbsp;6.3: New Projectを選択</figcaption><p></p>
+</figure>
+</div>
+<ol start="5" type="1">
+<li>下の画面が表示されたら、“Directory name:” にプロジェクト名を入力する。これがフォルダ名になるので、<strong>半角英数字のみ</strong>の 名前を付ける。ここでは第4章のコードということで、“Ch04” にした。統計学の授業用プロジェクトなら “statistics”、計量政治学の授業なら “quant_methods_ps” などの名前を付ければ良いだろう。英語が嫌なら “tokeigaku” のようにすれば良い。また、“Create project as subdirectory of:” では、プロジェクトのフォルダをどのフォルダの中に設置するかを指定する。 “Browse…” をクリックし、親フォルダを選ぶ。ここでは <code>~/Dropbox/RStudy</code> にプロジェクトのフォルダを入れることにする。ここまでできたら、“Create Project” をクリックする。</li>
+</ol>
+<ul>
+<li>手順3で “Existing Directory” を選んだ場合、プロジェクトのフォルダとして使う既存フォルダを選択する画面が表示される。</li>
+</ul>
+<div id="fig-project-create-4" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Figs/Project/Create4.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption class="figure-caption">図&nbsp;6.4: プロジェクト名と保存場所の指定</figcaption><p></p>
+</figure>
+</div>
+<ol start="6" type="1">
+<li>以上の手順でプロジェクトができる。RStudio 右上に、プロジェクト名が表示されているはずだ。 また、Console に <code>getwd()</code> と入力すると、プロジェクトまでの絶対パスが表示される。</li>
+</ol>
+<p>　念のため、Finder（Macの場合）やエクスプローラー （Windows の場合）で、指定した場所にプロジェクトのフォルダ（上の例では <code>Ch04</code>）が生成されていることを確認しよう。 プロジェクトフォルダを開いてみると、<code>Ch04.Rproj</code> というファイルが生成されていることがわかる（ <a href="#fig-project-create-5">図&nbsp;<span>6.5</span></a> ）。</p>
+<div id="fig-project-create-5" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Figs/Project/Create5.png" class="img-fluid figure-img" width="700"></p>
+<p></p><figcaption class="figure-caption">図&nbsp;6.5: プロジェクトの確認</figcaption><p></p>
+</figure>
+</div>
+</section>
+<section id="sec-project-open" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="sec-project-open"><span class="header-section-number">6.3</span> プロジェクトの開き方</h2>
+<p>　<code>Ch04</code> プロジェクトを開くには、この<code>Ch04.Rproj</code> ファイルをダブルクリックすれば良い。RStudio が起動していない場合でも、指定のプロジェクトを開いた状態でRStudio が起ち上がる。</p>
+</section>
+<section id="sec-project-check" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="sec-project-check"><span class="header-section-number">6.4</span> プロジェクトの確認</h2>
+<p>　RStudio 右上の表示が “Project: (None)” となっているとき（ <a href="#fig-check-1">図&nbsp;<span>6.6 (a)</span></a> ）は、プロジェクトが開かれていないことを意味する。一方、プロジェクトが開かれている場合は当該箇所にプロジェクト名が表示される（ <a href="#fig-check-2">図&nbsp;<span>6.6 (b)</span></a> ）。<strong>RStudio を使う場合には、必ず右上の表示を見て、プロジェクトが開かれていることを確認しよう。</strong>プロジェクトが開かれていない場合には、既存のプロジェクトを開くか、新たばプロジェクトを作ろう。むろん、簡単な計算や電卓用途、計算・分析結果を残す必要がない場合は無理してプロジェクト機能を使う必要はない。</p>
+<div id="fig-check" class="quarto-layout-panel">
+<figure class="figure">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-check-1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Figs/Project/Check1.png" class="img-fluid figure-img" data-ref-parent="fig-check"></p>
+<p></p><figcaption class="figure-caption">(a) プロジェクトが開かれていない状態</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-check-2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Figs/Project/Check2.png" class="img-fluid figure-img" data-ref-parent="fig-check"></p>
+<p></p><figcaption class="figure-caption">(b) Homework_01プロジェクト使用中</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p></p><figcaption class="figure-caption">図&nbsp;6.6: 比較</figcaption><p></p>
+</figure>
+</div>
 
 
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Rでパスを指定するときは、パスを引用符で囲む。引用符は、<code>""</code> でも <code>''</code> でも良い。<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><code>file.path()</code> を使って、<code>file.path("Documents", "R", "Analysis", "Data", "data.csv")</code> と書くこともできる。この書き方の利点は、<code>/</code>, <code>\</code>, <code>￥</code> を環境に応じて使い分けてくれることである。<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>何らかの事情により、作業ディレクトリ以外のフォルダにアクセスすることが必要なときは、絶対パスを使えば良い。<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
