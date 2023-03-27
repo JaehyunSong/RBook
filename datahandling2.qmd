@@ -3,6 +3,7 @@
 ```{r}
 #| include: false
 source("_common.R")
+pacman::p_load(tidyverse, gt, gtExtras)
 ```
 
 前章ではデータの一部 (subset)を抽出する方法について説明しましたが、本章はデータを拡張する、あるいは全く別のデータが得られるような処理について解説します。後者は主に元のデータを要約し (記述統計量)、その結果を出力する方法で、前者はデータ内の変数に基づき、指定された計算を行った結果を新しい列として追加する方法です。今回も[前章と同じデータ](Data/Ramen.csv)を使用します。
@@ -29,14 +30,14 @@ df <- read_csv("Data/Ramen.csv")
 ```{r}
 #| eval: false
 # summarise()関数の使い方
-データフレーム名 %>%
+データフレーム名 |>
   summarise(新しい変数名 = 関数名(計算の対象となる変数名))
 ```
 
 もし、`Score`変数の平均値を計算し、その結果を`Mean`という列にしたい場合は以下のようなコードになります。
 
 ```{r}
-df %>%
+df |>
   summarise(Mean = mean(Score))
 ```
 
@@ -48,14 +49,14 @@ df %>%
 ここでは2番目の方法を使います。
 
 ```{r}
-df %>%
+df |>
   summarise(Mean = mean(Score, na.rm = TRUE))
 ```
 
 `df`の`Score`変数の平均値は`r round(mean(df$Score), 2)`であることが分かります。また、`summarise()`関数は複数の記述統計量を同時に計算することも可能です。以下は`Score`変数の平均値、中央値、標準偏差、最小値、最大値、第一四分位点、第三四分位点を計算し、`Score.Desc`という名のデータフレームに格納するコードです。
 
 ```{r}
-Score.Desc <- df %>%
+Score.Desc <- df |>
   summarize(Mean   =     mean(Score,       na.rm = TRUE),  # 平均値
             Median =   median(Score,       na.rm = TRUE),  # 中央値
             SD     =       sd(Score,       na.rm = TRUE),  # 標準偏差
@@ -72,7 +73,7 @@ Score.Desc
 むろん、複数の変数に対して記述統計量を計算することも可能です。たとえば、平均予算 (`Budget`)、口コミ数 (`ScoreN`)、口コミ評価 (`Score`)の平均値を求めるとしたら、
 
 ```{r}
-df %>%
+df |>
   summarize(Budget_Mean = mean(Budget, na.rm = TRUE), # 平均予算の平均値
             SocreN_Mean = mean(ScoreN, na.rm = TRUE), # 口コミ数の平均値
             Score_Mean  = mean(Score,  na.rm = TRUE)) # 評価の平均値
@@ -85,14 +86,14 @@ df %>%
 ```{r}
 #| eval: false
 # across()の使い方
-データフレーム名 %>%
+データフレーム名 |>
   summarise(across(変数名のベクトル, 記述統計を計算する関数名, 関数の引数))
 ```
 
 *変数名のベクトル*は長さ1以上のベクトルです。たとえば、`Budget`、`ScoreN`、`Score`の場合`c(Budget, ScoreN, Score)`になります。これは`df`内で隣接する変数ですから`Budget:Score`の書き方も使えます。また、`where()`や`any_of()`、`starts_with()`のような関数を使って変数を指定することも可能です。*関数名*は`mean`や`sd`などの関数名です。ここは`関数名()`でななく、`関数名`であることに注意してください。*引数*は前の関数に必要な引数です。引数を必要としない関数なら省略可能ですが、`na.rm = TRUE`などの引数が必要な場合は指定する必要があります。それでは`Budget`、`ScoreN`、`Score`の平均値を計算してみましょう。
 
 ```{r}
-df %>%
+df |>
   summarize(across(Budget:Score, mean, na.rm = TRUE))
 ```
 
@@ -101,7 +102,7 @@ df %>%
 次は、ある変数に対して複数の記述統計量を計算したい場合について考えます。`Budget`、`ScoreN`、`Score`変数の第一四分位点と第三四分位点を`across()`を使わずに計算すると家のような7行のコードになります。
 
 ```{r}
-df %>%
+df |>
   summarize(Budget_Q1 = quantile(Budget, 0.25, na.rm = TRUE),
             Budget_Q3 = quantile(Budget, 0.75, na.rm = TRUE),
             ScoreN_Q1 = quantile(ScoreN, 0.25, na.rm = TRUE),
@@ -115,14 +116,14 @@ df %>%
 ```{r}
 #| eval: false
 # ラムダ式を用いたacross()の使い方
-データフレーム名 %>%
+データフレーム名 |>
   summarise(across(変数名のベクトル, .fns = list(結果の変数名 = ラムダ式)))
 ```
 
 先ほどの書き方と似ていますが、関数を複数書く必要があるため、今回は関数名をlist型にまとめ、`.fns`引数に指定します。そして、*結果の変数名*は結果として出力されるデータフレームの列名を指定する引数です。たとえば、`Mean`にすると結果は`元の変数名1_Mean`、`元の変数名2_Mean`...のように出力されます。そして、ラムダ式が実際の関数が入る箇所です。とりあえず今回はコードを走らせ、結果から確認してみましょう。
 
 ```{r}
-df %>%
+df |>
   summarize(across(Budget:Score, 
                    .fns = list(Q1 = ~quantile(.x, 0.25, na.rm = TRUE),
                                Q3 = ~quantile(.x, 0.75, na.rm = TRUE))))
@@ -164,7 +165,7 @@ FuncQ3 <- function(x) {
 
 ```{r}
 # やっておくと、summarise()文は簡潔になる
-df %>%
+df |>
   summarize(across(Budget:Score, list(Q1 = FuncQ1, Q3 = FuncQ3)))
 ```
 
@@ -179,14 +180,14 @@ df %>%
 四分位範囲は第三四分位点から第一四分位点を引いた値であり、Rの内蔵関数である`IQR()`を使えば便利です。この関数は`mean`や`sd()`関数と同じ使い方となります。
 
 ```{r}
-df %>%
-  filter(!is.na(Walk)) %>% # 予め欠損したケースを除くと、後でna.rm = TRUEが不要
-  group_by(Pref) %>%
+df |>
+  filter(!is.na(Walk)) |> # 予め欠損したケースを除くと、後でna.rm = TRUEが不要
+  group_by(Pref) |>
   summarise(Mean    = mean(Walk),
             SD      = sd(Walk),
             IQR     = IQR(Walk),
             N       = n(),
-            .groups = "drop") %>%
+            .groups = "drop") |>
   arrange(Mean)
 ```
 
@@ -197,10 +198,10 @@ df %>%
 それでは各都道府県ごとに「最も駅から遠いラーメン屋」の店舗名と最寄りの駅からの徒歩距離を出力したいとします。まずは、徒歩距離のデータが欠損しているケースを除去し、データを徒歩距離順でソートします。これは`filter()`と`arrange()`関数を使えば簡単です。続いて、`group_by()`を使って都府県単位でデータをグループ化します。最後に`summarise()`関数内に`last()`関数を使います。データは駅から近い順に鳴っているため、各都府県内の最後の行は駅から最も遠い店舗になるからです。
 
 ```{r}
-df %>%
-  filter(!is.na(Walk)) %>%
-  arrange(Walk) %>%
-  group_by(Pref) %>%
+df |>
+  filter(!is.na(Walk)) |>
+  arrange(Walk) |>
+  group_by(Pref) |>
   summarise(Farthest  = last(Name),
             Distance  = last(Walk))
 ```
@@ -232,11 +233,11 @@ n_distinct(myVec1)
 この関数を`summarise()`に使うことで、都府県ごとに駅の個数が分かります。あるいは「東京都内の選挙区に、これまでの衆院選において何人の候補者が存在したか」も分かります。ここでは`df`内の都府県ごとに駅の個数を計算してみましょう。最後の駅数が多い順でソートします。
 
 ```{r}
-df %>%
-  filter(!is.na(Station)) %>% # 最寄りの駅が欠損しているケースを除去
-  group_by(Pref) %>%
+df |>
+  filter(!is.na(Station)) |> # 最寄りの駅が欠損しているケースを除去
+  group_by(Pref) |>
   summarise(N_Station = n_distinct(Station),
-            .groups   = "drop") %>%
+            .groups   = "drop") |>
   arrange(desc(N_Station))
 ```
 
@@ -258,8 +259,8 @@ all(myVec2 %% 2 != 0) # myVec2を2で割った場合、全ての余りが0では
 それでは実際に`df`に対して`any()`と`all()`関数を使ってみましょう。一つ目は「ある都府県に最寄りの駅から徒歩60分以上の店舗が**一つでも**あるか」であり、二つ目は「ある都府県の店舗は**全て**最寄りの駅から徒歩30分以下か」です。それぞれの結果を`Over60`と`Within30`という列で出力してみましょう。
 
 ```{r}
-df %>%
-  group_by(Pref) %>%
+df |>
+  group_by(Pref) |>
   summarise(Over60   = any(Walk >= 60, na.rm = TRUE),
             Within30 = all(Walk <= 30, na.rm = TRUE),
             .groups  = "drop")
@@ -275,7 +276,7 @@ df %>%
 
 ```{r}
 # これまでのやり方
-df %>%
+df |>
   summarise(Mean = mean(Score, na.rm = TRUE))
 
 # 普通にこれでええんちゃう?
@@ -302,10 +303,10 @@ mean(df$Score[df$Pref == "和歌山県"], na.rm = TRUE)
 
 ```{r}
 # ScoreNとScoreの平均値をPrefごとに求める
-df %>%
-  group_by(Pref) %>%
+df |>
+  group_by(Pref) |>
   summarise(ScoreN_Mean = mean(ScoreN, na.rm = TRUE),
-            Score_Mean  = mean(Score,  na.rm = TRUE)) %>%
+            Score_Mean  = mean(Score,  na.rm = TRUE)) |>
   arrange(desc(Score_Mean))
 ```
 
@@ -321,11 +322,11 @@ df %>%
 
 ```{r}
 # ScoreNとScoreの平均値をPrefごとに求める
-df %>%
-  group_by(Pref) %>%
+df |>
+  group_by(Pref) |>
   summarise(ScoreN_Mean = mean(ScoreN, na.rm = TRUE),
             Score_Mean  = mean(Score,  na.rm = TRUE),
-            .groups     = "drop") %>%
+            .groups     = "drop") |>
   arrange(desc(Score_Mean))
 ```
 
@@ -336,13 +337,13 @@ df %>%
 ```{r}
 # Prefごとに口コミ数の合計、口コミ数の平均値、評価の平均値、店舗数を求める
 # 店舗数-評価の平均値順でソートする
-df %>%
-  group_by(Pref) %>%
+df |>
+  group_by(Pref) |>
   summarise(ScoreN_Sum  = sum(ScoreN,  na.rm = TRUE),
             ScoreN_Mean = mean(ScoreN, na.rm = TRUE),
             Score_Mean  = mean(Score,  na.rm = TRUE),
             N           = n(),
-            .groups     = "drop") %>%
+            .groups     = "drop") |>
   arrange(desc(N), desc(Score_Mean))
 ```
 
@@ -354,14 +355,14 @@ df %>%
 
 ```{r}
 # ScoreNとScoreの平均値をPrefごとに求める
-df %>%
-  filter(!is.na(Line)) %>% # Lineが欠損していないケースのみ残す
-  group_by(Pref, Line) %>% # PrefとLineでグループ化
+df |>
+  filter(!is.na(Line)) |> # Lineが欠損していないケースのみ残す
+  group_by(Pref, Line) |> # PrefとLineでグループ化
   summarise(N           = n(),
             ScoreN_Sum  = sum(ScoreN,  na.rm = TRUE),
             Score_Mean  = mean(Score,  na.rm = TRUE),
-            .groups     = "drop") %>%
-  arrange(desc(N), desc(Score_Mean)) %>%
+            .groups     = "drop") |>
+  arrange(desc(N), desc(Score_Mean)) |>
   print(n = 20)
 ```
 
@@ -373,15 +374,15 @@ df %>%
     * 結果を見ると`## # Groups:   Pref, Line [523]`で、ちゃんとグループ化されていることが分かります。
 
 ```{r}
-df %>%
-  filter(!is.na(Line)) %>% 
-  group_by(Pref, Line) %>% 
+df |>
+  filter(!is.na(Line)) |> 
+  group_by(Pref, Line) |> 
   summarise(N           = n(),
             ScoreN_Sum  = sum(ScoreN,  na.rm = TRUE),
             Score_Mean  = mean(Score,  na.rm = TRUE),
-            .groups     = "drop") %>%
-  arrange(desc(N), desc(Score_Mean)) %>%
-  group_by(Pref, Line) %>% # group_by()、もう一度
+            .groups     = "drop") |>
+  arrange(desc(N), desc(Score_Mean)) |>
+  group_by(Pref, Line) |> # group_by()、もう一度
   print(n = 5)
 ```
 
@@ -390,14 +391,14 @@ df %>%
 推奨される方法は2番です。具体的には`.groups = "keep"`を指定するだけであり、こっちの方が無駄なコードを省けることができます。
 
 ```{r}
-df %>%
-  filter(!is.na(Line)) %>% 
-  group_by(Pref, Line) %>% 
+df |>
+  filter(!is.na(Line)) |> 
+  group_by(Pref, Line) |> 
   summarise(N           = n(),
             ScoreN_Sum  = sum(ScoreN,  na.rm = TRUE),
             Score_Mean  = mean(Score,  na.rm = TRUE),
-            .groups     = "keep") %>%
-  arrange(desc(N), desc(Score_Mean)) %>%
+            .groups     = "keep") |>
+  arrange(desc(N), desc(Score_Mean)) |>
   print(n = 5)
 ```
 
@@ -416,9 +417,9 @@ quantile(df$Walk, na.rm = TRUE)
 `.groups`のデフォルト値が`"keep"`になるのは、このように長さ2以上のベクトルが返されるケースです。たとえば、都府県と最寄りの駅の路線でグループ化し、店舗までの徒歩距離の平均値を求めるとします。デフォルト値の変化を見るために、ここではあえて`.groups`引数を省略しました。
 
 ```{r}
-df %>%
-  filter(!is.na(Walk)) %>%
-  group_by(Pref, Line) %>%
+df |>
+  filter(!is.na(Walk)) |>
+  group_by(Pref, Line) |>
   summarise(Mean = mean(Walk))
 ```
 
@@ -427,9 +428,9 @@ df %>%
 それでは、平均値に加えて、第一四分位点と第三四分位点も計算し、`Quantile`という名で格納してみましょう。
 
 ```{r}
-df %>%
-  filter(!is.na(Walk)) %>%
-  group_by(Pref, Line) %>%
+df |>
+  filter(!is.na(Walk)) |>
+  group_by(Pref, Line) |>
   summarise(Mean     = mean(Walk),
             Quantile = quantile(Walk, c(0.25, 0.75)))
 ```
@@ -447,17 +448,17 @@ df %>%
 ```{r}
 #| eval: false
 # mutate()関数の使い方
-データフレーム名 %>%
+データフレーム名 |>
   mutate(新しい変数名 = 処理内容)
 ```
 
 これは何らかの処理を行い、その結果を新しい変数としてデータフレームに追加することを意味します。新しく出来た変数は、基本的に最後の列になります。ここでは分単位である`Walk`を時間単位に変換した`Walk_Hour`変数を作成するとします。処理内容は`Walk / 60`です。最後に、都府県名、店舗名、徒歩距離 (分)、徒歩距離 (時間)のみを残し、遠い順にソートします。
 
 ```{r}
-df %>%
-  filter(!is.na(Walk)) %>%
-  mutate(Walk_Hour = Walk / 60) %>%
-  select(Pref, Name, Walk, Walk_Hour) %>%
+df |>
+  filter(!is.na(Walk)) |>
+  mutate(Walk_Hour = Walk / 60) |>
+  select(Pref, Name, Walk, Walk_Hour) |>
   arrange(desc(Walk_Hour))
 ```
 
@@ -479,8 +480,8 @@ mutate(Walk_Hour = Walk / 60,
 むろん、変数間同士の計算も可能です。たとえば、以下のような`df2`があり、1店舗当たりの平均口コミ数を計算し、`ScoreN_Mean`という変数名で`ScoreN_Sum`の後に格納うするとします。この場合、`ScoreN_Sum`変数を`N`で割るだけです。
 
 ```{r}
-df2 <- df %>%
-  group_by(Pref) %>%
+df2 <- df |>
+  group_by(Pref) |>
   summarise(Budget_Mean = mean(Budget, na.rm = TRUE),
             ScoreN_Sum  = sum(ScoreN, na.rm = TRUE),
             Score_Mean  = mean(Score, na.rm = TRUE),
@@ -489,7 +490,7 @@ df2 <- df %>%
 ```
 
 ```{r}
-df2 %>%
+df2 |>
   mutate(ScoreN_Mean = ScoreN_Sum / N,
          .after      = ScoreN_Sum)
 ```
@@ -506,10 +507,10 @@ df2 <- df2[, c("Pref", "Budget_Mean", "Walk_Mean",
 むろんですが、計算には`+`や`/`のような演算子だけでなく、関数を使うことも可能です。たとえば、`Budget`が1000円未満なら`"Cheap"`、1000円以上なら`"Expensive"`と示す変数`Budget2`を作成する場合は`ifelse()`関数が使えます。
 
 ```{r}
-df %>% 
-  mutate(Budget2 = ifelse(Budget < 1000, "Cheap", "Expensive")) %>%
-  filter(!is.na(Budget2)) %>% # Budget2が欠損した店舗を除外
-  group_by(Pref, Budget2) %>% # PrefとBudget2でグループ化
+df |> 
+  mutate(Budget2 = ifelse(Budget < 1000, "Cheap", "Expensive")) |>
+  filter(!is.na(Budget2)) |> # Budget2が欠損した店舗を除外
+  group_by(Pref, Budget2) |> # PrefとBudget2でグループ化
   summarise(N = n(),          # 店舗数を表示
             .groups = "drop")
 ```
@@ -519,12 +520,12 @@ df %>%
 ```{r}
 #| eval: false
 # ifelse()を使う場合
-df %>% 
+df |> 
   mutate(Budget3 = ifelse(Budget < 500, "Cheap", 
                           ifelse(Budget >= 500 & Budget < 1000, "Reasonable",
-                                 "Expensive"))) %>%
-  filter(!is.na(Budget3)) %>%
-  group_by(Pref, Budget3) %>%
+                                 "Expensive"))) |>
+  filter(!is.na(Budget3)) |>
+  group_by(Pref, Budget3) |>
   summarise(N = n(),         
             .groups = "drop")
 ```
@@ -534,15 +535,15 @@ df %>%
 ```{r}
 #| eval: false
 # case_when()を使う場合
-df %>% 
+df |> 
   mutate(Budget3 = case_when(Budget < 500                  ~ "Cheap",
                              Budget >= 500 & Budget < 1000 ~ "Reasonable",
                              Budget >= 1000                ~ "Expensive"),
          # 新しく出来た変数をfactor型にその場で変換することも可能
          Budget3 = factor(Budget3, 
-                          levels = c("Cheap", "Reasonable", "Expensive"))) %>%
-  filter(!is.na(Budget3)) %>%
-  group_by(Pref, Budget3) %>%
+                          levels = c("Cheap", "Reasonable", "Expensive"))) |>
+  filter(!is.na(Budget3)) |>
+  group_by(Pref, Budget3) |>
   summarise(N = n(),         
             .groups = "drop")
 ```
@@ -552,7 +553,7 @@ df %>%
 ```{r}
 #| eval: false
 # case_when()の使い方
-データフレーム名 %>%
+データフレーム名 |>
   mutate(新変数名 = case_when(条件1 ~ 条件1を満たす場合の結果値, 
                              条件2 ~ 条件2を満たす場合の結果値, 
                              条件3 ~ 条件3を満たす場合の結果値, 
@@ -565,7 +566,7 @@ df %>%
 
 ```{r}
 # recode()を使う場合
-df2 %>% 
+df2 |> 
   mutate(Pref2 = recode(Pref,
                         "東京都"   = "Tokyo",
                         "神奈川県" = "Kanagawa",
@@ -584,7 +585,7 @@ df2 %>%
 ```{r}
 #| eval: false
 # recode()の使い方
-データフレーム名 %>%
+データフレーム名 |>
   mutate(新変数名 = recode(元の変数名,
                             元の値1 =  新しい値1, 
                             元の値2 =  新しい値2, 
@@ -601,7 +602,7 @@ df2 %>%
 
 ```{r}
 # 都府県を関東か否かでまとめる
-df2 %>% 
+df2 |> 
   mutate(EastJapan = recode(Pref,
                             "東京都"   = 1,
                             "神奈川県" = 1,
@@ -620,7 +621,7 @@ df2 %>%
 
 ```{r}
 # .default引数を指定する場合
-df3 <- df2 %>% 
+df3 <- df2 |> 
   mutate(EastJapan = recode(Pref,
                             "東京都"   = 1,
                             "神奈川県" = 1,
@@ -642,7 +643,7 @@ class(df3$EastJapan)
 
 ```{r}
 # EastJapan変数をfactor型にする
-df3 <- df2 %>% 
+df3 <- df2 |> 
   mutate(EastJapan = recode(Pref,
                             "東京都"   = 1,
                             "神奈川県" = 1,
@@ -659,7 +660,7 @@ df3$EastJapan
 
 ```{r}
 # recode_factor()を使う方法
-df3 <- df2 %>% 
+df3 <- df2 |> 
   mutate(EastJapan = recode_factor(Pref,
                                    "東京都"   = 1,
                                    "神奈川県" = 1,
@@ -697,7 +698,7 @@ myDF1
 ここで`X1`と`X2`と`X3`の平均値を計算し、`X_Mean`という名の変数にする場合、以下のような書き方が普通でしょう。
 
 ```{r}
-myDF1 %>%
+myDF1 |>
   mutate(X_Mean = mean(c(X1, X2, X3)))
 ```
 
@@ -706,7 +707,7 @@ myDF1 %>%
 実は`dplyr`は行単位の計算が苦手です。実際、データフレームというのは既に説明したとおり、縦ベクトルを横に並べたものです。列をまたがる場合、データ型が異なる場合も多いため、そもそも使う場面も多くありません。したがって、以下のような書き方が必要でした。
 
 ```{r}
-myDF1 %>%
+myDF1 |>
   mutate(X_Mean = (X1 + X2 + X3) / 3)
 ```
 
@@ -715,16 +716,16 @@ myDF1 %>%
 ここで`mean()`関数を使う場合には全ての演算を、一行一行に分けて行う必要があります。ある一行のみに限定する場合、`mean(c(X1, X2, X3))`の`X1`などは長さ1のベクトルになるため、`(X1 + X2 + X3) / 3`と同じことになります。この「一行単位で処理を行う」ことを指定する関数が`rowwise()`関数です。これは行単位の作業を行う前に指定するだけです。
 
 ```{r}
-myDF1 %>%
-  rowwise() %>%
+myDF1 |>
+  rowwise() |>
   mutate(X_Mean = mean(c(X1, X2, X3)))
 ```
 
 これで問題なく行単位の処理ができるようになりました。今回は変数が3つのみだったので、これで問題ありませんが、変数が多くなると`:`や`starts_with()`、`num_range()`などを使って変数を選択したくなります。この場合は計算する関数内に`c_across()`を入れます。ここでは`X1`列から`X3D`列までの平均値を求めてみましょう。
 
 ```{r}
-myDF1 %>%
-  rowwise() %>%
+myDF1 |>
+  rowwise() |>
   mutate(X_Mean = mean(X1:X3D))
 ```
 
@@ -814,8 +815,8 @@ Binded_df3
 まずは、本章で作成した`df2`をもう一回作ってみます。
 
 ```{r}
-df2 <- df %>%
-  group_by(Pref) %>%
+df2 <- df |>
+  group_by(Pref) |>
   summarise(Budget_Mean = mean(Budget, na.rm = TRUE),
             ScoreN_Sum  = sum(ScoreN, na.rm = TRUE),
             Score_Mean  = mean(Score, na.rm = TRUE),
@@ -836,34 +837,28 @@ df3
 ```{r}
 #| label: tbl-handling2_dataset
 #| echo: false
-#| message: false
 #| tbl-cap: "`Ramen2.csv`の詳細"
-library(knitr)
-library(kableExtra)
-
-data.frame(変数名 = c("`Pref`", "`Pop`", "`Area`", "`RamenN`", "`Turnout`", 
-                   "`LDP`", "`CDP`", "`DPFP`", "`Komei`", "`JIP`", 
-                   "`JCP`", "`SDP`", "`Reiwa`", "`NHK`", "`HRP`"),
-              説明 = c("都道府県名",
-                     "日本人人口 (2015年国勢調査)",
-                     "面積 (2015年国勢調査)",
-                     "ぐるなびに登録されたラーメン屋の店舗数",
-                     "2019年参院選: 投票率 (比例)",
-                     "2019年参院選: 自民党の得票率 (比例)",
-                     "2019年参院選: 立憲民主党の得票率 (比例)",
-                     "2019年参院選: 国民民主党の得票率 (比例)",
-                     "2019年参院選: 公明党の得票率 (比例)",
-                     "2019年参院選: 日本維新の会の得票率 (比例)",
-                     "2019年参院選: 日本共産党の得票率 (比例)",
-                     "2019年参院選: 社会民主党の得票率 (比例)",
-                     "2019年参院選: れいわ新選組の得票率 (比例)",
-                     "2019年参院選: NHKから国民を守る党の得票率 (比例)",
-                     "2019年参院選: 幸福実現党の得票率 (比例)")) %>%
-  kable() %>%
-    kable_styling(bootstrap_options = c("striped", "hover", "condensed",
-                                        "responsive"),
-                  full_width = FALSE) %>%
-  row_spec(0, align = "c")
+tibble(Var = c("`Pref`", "`Pop`", "`Area`", "`RamenN`", "`Turnout`", 
+               "`LDP`", "`CDP`", "`DPFP`", "`Komei`", "`JIP`", 
+               "`JCP`", "`SDP`", "`Reiwa`", "`NHK`", "`HRP`"),
+       Desc = c("都道府県名",
+                "日本人人口 (2015年国勢調査)",
+                "面積 (2015年国勢調査)",
+                "ぐるなびに登録されたラーメン屋の店舗数",
+                "2019年参院選: 投票率 (比例)",
+                "2019年参院選: 自民党の得票率 (比例)",
+                "2019年参院選: 立憲民主党の得票率 (比例)",
+                "2019年参院選: 国民民主党の得票率 (比例)",
+                "2019年参院選: 公明党の得票率 (比例)",
+                "2019年参院選: 日本維新の会の得票率 (比例)",
+                "2019年参院選: 日本共産党の得票率 (比例)",
+                "2019年参院選: 社会民主党の得票率 (比例)",
+                "2019年参院選: れいわ新選組の得票率 (比例)",
+                "2019年参院選: NHKから国民を守る党の得票率 (比例)",
+                "2019年参院選: 幸福実現党の得票率 (比例)")) |>
+  gt() |> 
+  cols_label("Var" = "変数名", "Desc" = "説明") |> 
+  fmt_markdown(columns = 1)
 ```
 
 本データは都道府県ごとの人口、面積、ぐるなびに登録されたラーメン屋の店舗数、2019年参議院議員通常選挙の結果が格納されています。人口と面積は2015年国勢調査、ぐるなびの情報は2020年6月時点での情報です。
@@ -871,12 +866,13 @@ data.frame(変数名 = c("`Pref`", "`Pop`", "`Area`", "`RamenN`", "`Turnout`",
 `df2`にデータ上の店舗数ではなく、実際の店舗数を新しい列として追加したい場合はどうすれば良いでしょうか。簡単な方法としては`df3`から情報を取得し、それを自分で入れる方法です。
 
 ```{r}
-df3 %>%
-  # df2のPrefベクトルの要素と一致するものに絞る
-  filter(Pref %in% df2$Pref) %>%
-  # 都道府県名とラーメン屋の店舗数のみ抽出
-  select(Pref, RamenN)
+df3 |>
+  filter(Pref %in% df2$Pref) |> # <1>
+  select(Pref, RamenN)          # <2>
 ```
+
+1. df2のPrefベクトルの要素と一致するものに絞る
+2. 都道府県名とラーメン屋の店舗数のみ抽出
 
 そして、この情報を`df2$RamenN <- c(415, 1106, 1254, ...)`のように追加すればいいですね。
 
@@ -906,7 +902,7 @@ df3 %>%
 それでは、`df3`から都道府県名とラーメン屋の店舗数だけ抽出し、`df4`として格納しておきます。
 
 ```{r}
-df4 <- df3 %>%
+df4 <- df3 |>
   select(Pref, RamenN)
 
 df4
@@ -935,7 +931,7 @@ inner_join(df2, df4, by = "Pref")
 それでは実際、結果を確認してみましょう。今回は結合後、`RamenN`が大きい順で出力します。
 
 ```{r}
-full_join(df2, df4, by = "Pref") %>%
+full_join(df2, df4, by = "Pref") |>
   arrange(desc(RamenN)) # ぐるなびに登録された店舗の多い都道府県から出力
 ```
 

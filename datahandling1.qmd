@@ -3,15 +3,15 @@
 ```{r}
 #| include: false
 #| message: false
-knitr::opts_chunk$set(dev = "ragg_png", attr.source='.numberLines')
-pacman::p_load(tidyverse, knitr, kableExtra)
+source("_common.R")
+pacman::p_load(tidyverse, gt, gtExtras)
 ```
 
 　ここでは比較的綺麗に整形されているデータフレームを扱う方法について考えます。ここでいう「比較的綺麗なデータ」とは、すぐに分析に使えるレベルのデータを意味します。したがって、ここではデータ内の値を変更するような作業は行いません。基本的に分析しやすくなるように列の順番を替えたり、特定の列や行のみを抽出したり、データの順番を並び替える作業に注目します。
 
 　本章では以下の3つの内容を中心に解説します。
 
-1. パイプ演算子 (`%>%`)に慣れる
+1. パイプ演算子 (`|>`)に慣れる
 2. 特定の行と列の抽出
 3. データのソート
 
@@ -32,15 +32,15 @@ library(tidyverse)
 
 　Tidyverseの思想に基づいた「tidyverse流のコーディング」は現在のRそのものと言っても過言ではありません。ただし、tidyverseじゃないと出来ないデータハンドリング、可視化などはありません。tidyverseはデータサイエンスの思想に近いものであり、「異なる思想を持っているからこのような分析はできない」といったものはありません。tidyverseという概念が提唱される前にもRは存在し、tidyverse無き世界で今と同じことをやってきました。ただし、tidyverse流で書かれたRコードは可読性が優れ、コードを書く手間も短くなります。tidyverseの考え方がRのける「標準語」として定着しつつあるのは否めない事実であり、学習する誘引としては十分すぎるでしょう。
 
-## パイプ演算子 (`%>%`) {#sec-handling1-pipe}
+## パイプ演算子 (`|>`) {#sec-handling1-pipe}
 
 :::{.callout-note}
-## 新しいパイプ演算子`|>`
+## 旧パイプ演算子`%>%`
 
-　以下で紹介するパイプ演算子`%>%`は{magrittr}パッケージが提供する演算子であり、R内臓のパイプ演算子はありませんでした。しかし、R 4.1から内蔵パイプ演算子`|>`が使えるようになっています。使い方はほぼ違いはありませんが（位置指定子（placeholder）の使い方の違いはあります）、将来、以下の内容は`|>`に書き換える予定です。
+　R4.1が公開されるまでのパイプ演算子は以下で紹介する`|>`でなく、{magrittr}パッケージが提供する`%>%`であった。現時点においてインターネット上の記事、書籍での主流は`%>%`であるが、最近の流れはR内蔵（native）パイプ演算子の`|>`である。しかし、使い方はほぼ同じであるため、`|>`の箇所を`%>%`に置換しても問題ない。ただし、位置指定子（placeholder）の記号が`|>`では`_`、`%>%`では`.`であることには注意されたい。
 :::
 
-　{dplyr}パッケージを利用する前にパイプ演算子について説明します。パイプ演算子は{dplyr}に含まれている演算子ではなく、{magrittr}という別のパッケージから提供される演算子ですが、{tidyverse}パッケージを読み込むと自動的に読み込まれます。パイプ演算子は`x %>% y()`のような書き方となりますが、これは「`x`を`y()`の第一引数として渡す」ことを意味します。`x`の部分はベクトルやデータフレームのようなオブジェクトでも、関数でも構いません。なぜなら、関数から得られた結果もまたベクトルやデータフレームといったものになるからです。つまり、`x() %>% y()`という使い方も可能です。そして、パイプは無限に繋ぐこともできます。「データ`df`を関数`x()`で処理をし、その結果をまた関数`y()`で処理する」ことは、パイプを使うと`df %>% x() %>% y()`のような書き方となります。
+　{dplyr}パッケージを利用する前にパイプ演算子について説明します。パイプ演算子は{dplyr}に含まれている演算子ではなく、{magrittr}という別のパッケージから提供される演算子ですが、{tidyverse}パッケージを読み込むと自動的に読み込まれます。パイプ演算子は`x |> y()`のような書き方となりますが、これは「`x`を`y()`の第一引数として渡す」ことを意味します。`x`の部分はベクトルやデータフレームのようなオブジェクトでも、関数でも構いません。なぜなら、関数から得られた結果もまたベクトルやデータフレームといったものになるからです。つまり、`x() |> y()`という使い方も可能です。そして、パイプは無限に繋ぐこともできます。「データ`df`を関数`x()`で処理をし、その結果をまた関数`y()`で処理する」ことは、パイプを使うと`df |> x() |> y()`のような書き方となります。
 
 　たとえば、「`paste(3, "+", 5, "=", 8)`を実行し、その結果を`rep()`関数を使って3回複製し、それを`print()`を使って出力する」コードを考えてみましょう。方法としては2つ考えられます。まずは、それぞれの処理を別途のオブジェクトに格納する方法です。そして二つ目は関数の中に関数を使う方法です。
 
@@ -56,11 +56,11 @@ print(rep(paste(3, "+", 5, "=", 8), 3))
 
 　どれも結果は同じです。コードを書く手間を考えれば、後者の方が楽かも知れませんが、可読性があまりよくありません。一方、前者は可読性は良いものの、コードも長くなり、オブジェクトを2つも作ってしまうのでメモリの無駄遣いになります。
 
-　コードの可読性と書く手間、両方を満足する書き方がパイプ演算子`%>%`です。まずは、例から見ましょう。
+　コードの可読性と書く手間、両方を満足する書き方がパイプ演算子`|>`です。まずは、例から見ましょう。
 
 ```{r}
-# %>%を使う
-paste(3, "+", 5, "=", 8) %>% rep(3) %>% print()
+# パイプを使う場合
+paste(3, "+", 5, "=", 8) |> rep(3) |> print()
 ```
 
 　まず、結果は先ほどと同じです。それではコードの説明をしましょう。まずは、`paste(3, "+", 5, "=", 8)`を実行します。そしてその結果をそのまま`rep()`関数の第一引数として渡されます。つまり、`rep(paste(3, "+", 5, "=", 8), 3)`になるわけです。ここでは`rep(3)`と書きましたが、第一引数が渡されたため、`3`は第二引数扱いになります (パイプ演算子前のオブジェクトを第二、三引数として渡す方法は適宜説明します。)。そして、これをまた`print()`関数に渡します。結果としては`print(rep(paste(3, "+", 5, "=", 8), 3))`となります。
@@ -70,8 +70,8 @@ paste(3, "+", 5, "=", 8) %>% rep(3) %>% print()
 ```{r}
 #| eval: false
 # 改行 (+字下げ)したらもっと読みやすくなる
-paste(3, "+", 5, "=", 8) %>% 
-    rep(3) %>% 
+paste(3, "+", 5, "=", 8) |> 
+    rep(3) |> 
     print()
 ```
 
@@ -107,7 +107,6 @@ df
 ```{r}
 #| label: tbl-handling1_dataset
 #| echo: false
-#| message: false
 #| tbl-cap: "`Ramen.csv`の詳細"
 data.frame(変数名 = c("`ID`", "`Name`", 
                    "`Pref`", "`Zipcode`", "`Latitude`", "`Longitude`",
@@ -126,12 +125,9 @@ data.frame(変数名 = c("`ID`", "`Name`",
                      "最寄りの駅からの距離 (車; 分)",
                      "平均予算 (円)",
                      "口コミの数",
-                     "口コミ評価の平均値")) %>%
-  kable() %>%
-    kable_styling(bootstrap_options = c("striped", "hover", "condensed",
-                                        "responsive"),
-                  full_width = FALSE) %>%
-  row_spec(0, align = "c")
+                     "口コミ評価の平均値")) |>
+  gt() |> 
+  fmt_markdown(columns = 1)
 ```
 
 　それではここからは`df`を用いた{dplyr}の様々な機能を紹介していきます。
@@ -146,7 +142,7 @@ df[, c("ID", "Name", "Pref", "Score")]
 
 # dplyr::select()を使う方法
 # select(df, ID, Name, Pref, Score)でもOK
-df %>%
+df |>
   select(ID, Name, Pref, Score)
 ```
 
@@ -157,7 +153,7 @@ df %>%
 　また、`select()`関数を使って列の順番を変えることもできます。たとえば、`ID`、`Pref`、`Name`、`Score`の順で列を残すなら、この順番で引数を書くだけです。
 
 ```{r}
-df %>%
+df |>
   select(ID, Pref, Name)
 ```
 
@@ -166,7 +162,7 @@ df %>%
 　また、特定の列を残す際、変数名を変更することも可能です。今回も`ID`、`Name`、`Pref`、`Score`のみを残しますが、`Pref`列は`Prefecture`に変えてみましょう。
 
 ```{r}
-df %>%
+df |>
   select(ID, Name, Prefecture = Pref, Score)
 ```
 
@@ -192,7 +188,7 @@ df
 
 ```{r}
 # dfのPrefectureをPrefに、DistanceをWalkに変更し、上書きする
-df <- df %>%
+df <- df |>
   rename(Pref = Prefecture, Walk = Distance)
 ```
 
@@ -203,7 +199,7 @@ df <- df %>%
 　逆に、一部の変数をデータフレームから除去したい場合もあるでしょう。たとえば、緯度 (`Latitude`)と経度 (`Longitude`)はラーメン屋の情報としては不要かもしれません。この2つの変数を除外するためにはどうすれば良いでしょうか。まず考えられるのは、この2つの変数を除いた変数を指定・抽出する方法です。
 
 ```{r}
-df %>%
+df |>
   select(ID, Name, Pref, Zipcode, 
          Line, Station, Walk, Bus, Car, Budget, ScoreN, Score)
 ```
@@ -211,7 +207,7 @@ df %>%
 　かなり長いコードになりましたね。しかし、もっと簡単な方法があります。それは`-`を使う方法です。
 
 ```{r}
-df %>%
+df |>
   select(-Latitude, -Longitude) # select(-c(Latitude, Longitude))
 ```
 
@@ -223,7 +219,7 @@ df %>%
 
 ```{r}
 #| eval: false
-df %>%
+df |>
   select(ID, Name, Pref, Zipcode, 
          Line, Station, Walk, Bus, Car, Budget, ScoreN, Score)
 ```
@@ -238,7 +234,7 @@ names(df)
 
 ```{r}
 #| eval: false
-df %>%
+df |>
   select(ID:Zipcode, Line:Score)
 ```
 
@@ -249,21 +245,21 @@ df %>%
 　ある列の位置を替えたいとします。たとえば、`Score`と`ScoreN`をそれぞれ1列目、2列目にしたい場合、どうすれば良いでしょうか。これまで勉強したことを考えると、以下のようなコードで問題ないでしょう。
 
 ```{r}
-df %>%
+df |>
   select(Score, ScoreN, ID:Budget)
 ```
 
 　しかし、{dplyr}には`relocate()`というより便利な専用関数を提供しています。`relocate()`には変数名を指定するだけですが、ここで指定した変数がデータフレームの最初列の方に移動します。
 
 ```{r}
-df %>%
+df |>
   relocate(Score, ScoreN)
 ```
 
 　`relocate()`を使うと`ID:Budget`が省略可能となり、より短いコードになります。もう一つの例は、最初に持ってくるのではなく、「ある変数の前」または「ある変数の後」に移動させるケースです。これも`relocate()`で可能ですが、もう一つの引数が必要です。`Pref`と`Zipcdoe`の順番を変えるなら、まずは以下のような方法が考えられます。
 
 ```{r}
-df %>%
+df |>
   select(ID:Name, Zipcode, Pref, Latitude:Score)
 ```
 
@@ -271,7 +267,7 @@ df %>%
 ことを意味します。
 
 ```{r}
-df %>%
+df |>
   relocate(Pref, .after = Zipcode)
 ```
 
@@ -281,7 +277,7 @@ df %>%
 
 ```{r}
 #| eval: false
-df %>%
+df |>
   relocate(Zipcode, .before = Pref)
 ```
 
@@ -295,15 +291,15 @@ df %>%
 
 ```{r}
 # ID、Nameに続いて、Scoreで始まる変数名を抽出
-df %>%
+df |>
   select(ID, Name, starts_with("Score"))
 
 # eで終わる変数名を除去
-df %>%
+df |>
   select(-ends_with("e")) # !ends_with("e")も可能
 
 # reを含む変数名を抽出するが、ScoreNは除去する
-df %>%
+df |>
   select(contains("re"), -ScoreN)
 ```
 
@@ -330,14 +326,14 @@ myDF1
 　この`myDF1`から`ID`、`Y1`、`Y2`、`Y3`を抽出するにはどうすれば良いでしょうか。これらの変数は隣接していないため、`:`も使えませんが、`starts_with()`を使えば簡単です。
 
 ```{r}
-myDF1 %>%
+myDF1 |>
   select(ID, starts_with("Y"))
 ```
 
 　それでは、`ID`、`X1`、`X2`、`X3`はどうでしょうか。`starts_with("X")`だと、`X1c`なども選択されてしまいますね。ここで`-ends_with()`の出番です。つまり、「まずは`starts_with("X")`で`X`で始まる変数を選択し、続いて、`D`で終わるものを除外すればいいじゃん？」です。それでは、やってみましょうか。
 
 ```{r}
-myDF1 %>%
+myDF1 |>
   select(ID, starts_with("X"), -ends_with("D"))
 ```
 
@@ -346,7 +342,7 @@ myDF1 %>%
 [^numrange]: 実は`select(starts_with("X"), -ends_with("D"), ID)`のように順番を変えると`ID`は最後の列になりますが、とりあえず残ります。なぜなら、`select()`関数は左側から右側の方へコードを実行するからです。
 
 ```{r}
-myDF1 %>%
+myDF1 |>
   select(ID, num_range("X", 1:3))
 ```
 
@@ -363,7 +359,7 @@ Name_Vec <- c("X1", "X2", "X3")
 ```{r}
 myDF1[, c("ID", Name_Vec)]
 
-myDF1 %>%
+myDF1 |>
   select(ID, all_of(Name_Vec))
 ```
 
@@ -376,7 +372,7 @@ myDF1 %>%
 #| error: true
 Name_Vec <- c("X1", "X2", "X3", "X4", "X5")
 
-myDF1 %>%
+myDF1 |>
   select(all_of(Name_Vec))
 ```
 
@@ -388,7 +384,7 @@ myDF1 %>%
 　このようにエラーが出てしまします。つまり、`all_of()`の場合、引数の要素全てがデータフレームに存在する必要があります。もし、ないものは無視して、合致する列だけ取り出したいはどうすれば良いでしょうか。そこで登場するのが`any_of()`です。
 
 ```{r}
-myDF1 %>%
+myDF1 |>
   select(any_of(Name_Vec))
 ```
 
@@ -400,7 +396,7 @@ myDF1 %>%
 
 ```{r}
 # IDと最後の列のみを抽出
-df %>%
+df |>
   select(ID, last_col(0))
 ```
 
@@ -408,7 +404,7 @@ df %>%
 
 ```{r}
 # IDと最後から2列目を抽出
-df %>%
+df |>
   select(ID, last_col(1))
 ```
 
@@ -420,7 +416,7 @@ df %>%
 
 ```{r}
 # numeric型の列を抽出する
-df %>%
+df |>
   select(where(is.numeric))
 ```
 
@@ -428,7 +424,7 @@ df %>%
 
 ```{r}
 # character型でない列を抽出する
-df %>%
+df |>
   select(!where(is.character))
 ```
 
@@ -436,7 +432,7 @@ df %>%
 
 ```{r}
 # IDと、Lで始まるnumeric型の列を抽出する
-df %>%
+df |>
   select(ID, starts_with("L") & where(is.numeric))
 ```
 
@@ -447,7 +443,7 @@ df %>%
 　他にも特定の行を抽出する場合があります。たとえば、「`df`の最初の5行」や「`df`の8行目のケース」といった場合です。この操作には{dplyr}の`slice_*()`関数群が便利です。それではそれぞれの関数の使い方について紹介していきます。その前に、実習用データとして`df`から一部の列のみを抽出した`selelct.df`を作成します。
 
 ```{r}
-select.df <- df %>% 
+select.df <- df |> 
   select(ID, Name, Pref, Budget, Score)
 ```
 
@@ -466,7 +462,7 @@ select.df[c(2, 8, 9),]
 
 ```{r}
 # select.dfから2, 8, 9行目の行を抽出し、出力する
-select.df %>% 
+select.df |> 
   slice(2, 8, 9) # slice(c(2, 8, 9))もOK
 ```
 
@@ -476,7 +472,7 @@ select.df %>%
 
 ```{r}
 # select.dfから最初の3行抽出し、出力する
-select.df %>% 
+select.df |> 
   slice_head(n = 3)
 ```
 
@@ -486,7 +482,7 @@ select.df %>%
 
 ```{r}
 # select.dfから最後の7行を抽出し、出力する
-select.df %>% 
+select.df |> 
   slice_tail(n = 7)
 ```
 
@@ -498,7 +494,7 @@ select.df %>%
 
 ```{r}
 # select.dfからScoreの値が高い順で5行を抽出し、出力する
-select.df %>% 
+select.df |> 
   slice_max(Budget, n = 4)
 ```
 
@@ -508,14 +504,14 @@ select.df %>%
 
 ```{r}
 # select.dfからScoreの値が低い順で3行を抽出し、出力する
-select.df %>% 
+select.df |> 
   slice_min(Score, n = 3)
 ```
 
 　ただし、`n = 3`と指定したはずなのに、4行が抽出されました。これは同点のケースがあるからです。実際、`select.df`には`Score`が1のケースが4つあります。もし、同点の存在により`n`に収まらない場合、`slice_max()`、`slice_min()`関数は`n`を超える行を出力します。これを強制的に`n`行に合わせるためには`with_ties = FALSE`引数を付けます。この場合、データで格納されている順で`n`個のみ出力されます。
 
 ```{r}
-select.df %>% 
+select.df |> 
   slice_min(Score, n = 3, with_ties = FALSE)
 ```
 
@@ -525,7 +521,7 @@ select.df %>%
 
 ```{r}
 # select.dfから無作為に5行を抽出し、出力する
-select.df %>% 
+select.df |> 
   slice_sample(n = 10)
 ```
 
@@ -541,12 +537,12 @@ select.df %>%
 filter(データフレーム名, 条件1, 条件2, ...)
 ```
 
-　むろん、第一引数がデータですから、`%>%`を使うことも可能です。
+　むろん、第一引数がデータですから、`|>`を使うことも可能です。
 
 ```{r}
 #| eval: false
 # dplyr::filter()の使い方 (パイプを使う方法)
-データフレーム名 %>%
+データフレーム名 |>
   filter(条件1, 条件2, ...)
 ```
 
@@ -554,19 +550,19 @@ filter(データフレーム名, 条件1, 条件2, ...)
 
 ```{r}
 # dfからPrefが"京都府"であるケースのみ残し、df2という名で保存
-df2 <- df %>%
+df2 <- df |>
   filter(Pref == "京都府")
 
 # df2からName, Station, Score列を抽出
-df2 %>%
+df2 |>
   select(Name, Station, Score)
 ```
 
 　これは`df`から`Pref == "京都府"`のケースのみ残したものを`df2`として格納し、それをまた`select()`関数を使って列を抽出するコードです。これでも問題ありませんが、これだとパイプ演算子の便利さが分かりません。パイプ演算子は複数使うことが可能です。
 
 ```{r}
-df %>%
-  filter(Pref == "京都府") %>%
+df |>
+  filter(Pref == "京都府") |>
   select(Name, Station, Score)
 ```
 
@@ -575,16 +571,16 @@ df %>%
 　今回は`==`を使って**合致する**ものに絞りましたが、`!=`を使って**合致しない**ものに絞ることも可能です。または、比較演算子 (`<`、`>`、`>=`、`<=`など)を使うことも可能です。それでは、組み込み数 (`ScoreN`)が*0ではない*ケースを取り出し、`Name`、`Station`、`ScoreN`、`Score`列を出力させてみましょう。
 
 ```{r}
-df %>%
-  filter(ScoreN != 0) %>%
+df |>
+  filter(ScoreN != 0) |>
   select(Name, Station, starts_with("Score"))
 ```
 
 　これで口コミ数が1以上の店舗のみに絞ることができました。ただし、店によっては口コミはあっても、評価 (`Score`)が付いていないところもあります。たとえば、「刀削麺・火鍋・西安料理 XI'AN（シーアン） 後楽園店」の場合、口コミはありますが、評価はありません。したがって、今回は評価が付いている店舗に絞ってみましょう。
 
 ```{r}
-df %>%
-  filter(Score != NA) %>%
+df |>
+  filter(Score != NA) |>
   select(Name, Station, starts_with("Score"))
 ```
 
@@ -593,8 +589,8 @@ df %>%
 　察しの良い読者さんは気づいているかと思いますが、第[-@sec-type-na]章で説明した通り、`NA`か否かを判定する際は`==`や`!=`は使えません。`is.na()`を使います。`filter(is.na(Score))`なら「`Score`が`NA`**である**ケースに絞る」ことを意味しますが、今回は「`Score`が`NA`**でない**ケースに絞る」ことが目的ですので、`is.na()`の前に`!`を付けます。
 
 ```{r}
-df %>%
-  filter(!is.na(Score)) %>%
+df |>
+  filter(!is.na(Score)) |>
   select(Name, Station, starts_with("Score"))
 ```
 
@@ -603,40 +599,40 @@ df %>%
 　続いて、複数の条件を持つケースを考えてみましょう。例えば、「京都府内の店舗で、口コミ評価が3.5以上の店舗」を出力したい場合、以下のようなコードとなります。
 
 ```{r}
-df %>%
-  filter(Pref == "京都府", Score >= 3.5) %>%
+df |>
+  filter(Pref == "京都府", Score >= 3.5) |>
   select(Name, Station, ScoreN, Score)
 ```
 
 　条件を`filter()`内に追加するだけです。今回は`!is.na(Score)`は不要です。なぜなら、`Score >= 3.5`という条件で既に欠損値は対象外になるからです。条件文が複数ある場合、ANDかORかを指定する必要があります。つまり、条件文AとBがある場合、「AとB両方満たすものを出力する」か「AとBどちらかを満たすものを出力するか」を指定する必要があります。今の結果ってANDでしたよね。`filter()`関数は、別途の指定がない場合、全てAND扱いになります。RのAND演算子は`&`ですので、以上のコードは以下のコードと同じです。
 
 ```{r}
-df %>%
-  filter(Pref == "京都府" & Score >= 3.5) %>%
+df |>
+  filter(Pref == "京都府" & Score >= 3.5) |>
   select(Name, Station, ScoreN, Score)
 ```
 
 　AND演算子 (`&`)が使えるということはOR演算子 (`|`)も使えることを意味します。たとえば、`Station`が`"高田馬場駅"`か`"三田駅"`の条件を指定したい場合、
 
 ```{r}
-df %>% 
-  filter(Station == "高田馬場駅" | Station == "三田駅") %>%
+df |> 
+  filter(Station == "高田馬場駅" | Station == "三田駅") |>
   select(Name, Station, ScoreN, Score)
 ```
 
 のように書きます（ちなみに高田馬場の「やまぐち」は本当に美味しいです）。むろん、複数の変数を用いたORも可能です。たとえば、「`Pref`が`"京都府"`か`Score`が3以上」のような条件も可能ですが (`Pref == "京都府" | Score >= 3`)、実際、このような例はあまりありません。よく使うのは「変数`X`が`a`か`b`か`c`か」のような例です。ただし、この場合は`|`を使わないもっと簡単な方法があります。それは第[-@sec-programming_condition]章で紹介した`%in%`演算子です。以下のコードは上のコードと同じものです。
 
 ```{r}
-df %>% 
-  filter(Station %in% c("高田馬場駅", "三田駅")) %>%
+df |> 
+  filter(Station %in% c("高田馬場駅", "三田駅")) |>
   select(Name, Station, ScoreN, Score)
 ```
 
 　結局、`|`が使われるケースがかなり限定されます。あるとすれば、「変数`X`が`a`以下か、`b`以上か」のようなケースですね。ただし、`&`と`|`を同時に使うケースは考えられます。たとえば、大阪駅と京都駅周辺のうまいラーメン屋を調べるとします。問題は美味しさの基準ですが、3.5点以上としましょう。ただし、京都府民はラーメンに非常に厳しく、3点以上なら美味しいと仮定します。この場合、「(`Station`が`"大阪駅"`かつ`Score >= 3.5`)、または(`Station`が`"京都駅"`かつ`Score >= 3`)」のような条件が必要になります。`()`は「`()`の中から判定せよ」という、普通の算数での使い方と同じです。それでは、実際に検索してみましょう。
 
 ```{r}
-df %>%
-  filter((Station == "大阪駅" & Score >= 3.5) | (Station == "京都駅" & Score >= 3)) %>%
+df |>
+  filter((Station == "大阪駅" & Score >= 3.5) | (Station == "京都駅" & Score >= 3)) |>
   select(Name, Station, Walk, ScoreN, Score)
 ```
 
@@ -651,10 +647,10 @@ df %>%
 　ソートには{dplyr}パッケージの`arrange()`関数を使います。引数は変数名のみです。たとえば、奈良県のラーメン屋を検索してみましょう。並び替える順は駅から近い店舗を上位に、遠い店舗を下位に並べます。このような順は**昇順 (ascending)**と呼ばれ、ランキング表などでよく見ます。駅から近い順にソートするので、まず最寄りの駅情報が欠損でないことが必要です。また、ラーメン屋の評価も気になるので口コミが1つ以上付いている店舗に絞りましょう。表示する列は店舗名、最寄りの駅、徒歩距離、口コミ数、点数です。
 
 ```{r}
-df %>%
-  filter(Pref == "奈良県", !is.na(Station), ScoreN > 0) %>%
-  select(Name, Station, Walk, ScoreN, Score) %>%
-  arrange(Walk) %>%
+df |>
+  filter(Pref == "奈良県", !is.na(Station), ScoreN > 0) |>
+  select(Name, Station, Walk, ScoreN, Score) |>
+  arrange(Walk) |>
   print(n = Inf)
 ```
 
@@ -663,10 +659,10 @@ df %>%
 　続いて、駅からの距離ではなく、評価が高い順にしてみましょう。評価が高いほど上に来るので、今回は昇順でなく、**降順 (descending)**でソートする必要があります。`arrange()`関数は基本的に、指定された変数を基準に昇順でソートします。降順にするためには`desc()`関数を更に用います。たとえば、`arrange(desc(変数名))`のようにです。それでは実際にやってみましょう。上のコードの4行目を`arange(Walk)`から`arrange(desc(Score))`にちょっと修正するだけです。
 
 ```{r}
-df %>%
-  filter(Pref == "奈良県", !is.na(Station), ScoreN > 0) %>%
-  select(Name, Station, Walk, ScoreN, Score) %>%
-  arrange(desc(Score)) %>%
+df |>
+  filter(Pref == "奈良県", !is.na(Station), ScoreN > 0) |>
+  select(Name, Station, Walk, ScoreN, Score) |>
+  arrange(desc(Score)) |>
   print(n = Inf)
 ```
 
@@ -682,19 +678,19 @@ which(df$Name == "無鉄砲がむしゃら")
 　データ内に「河童ラーメン本舗 押熊店」がより上に位置することが分かります。「もし同点なら口コミ評価数が多いところにしたい」場合はどうすれば良いでしょうか。これは`arrange()`内に変数名を足すだけで十分です。
 
 ```{r}
-df %>%
-  filter(Pref == "奈良県", !is.na(Station), ScoreN > 0) %>%
-  select(Name, Station, Walk, ScoreN, Score) %>%
-  arrange(desc(Score), desc(ScoreN)) %>%
+df |>
+  filter(Pref == "奈良県", !is.na(Station), ScoreN > 0) |>
+  select(Name, Station, Walk, ScoreN, Score) |>
+  arrange(desc(Score), desc(ScoreN)) |>
   print(n = Inf)
 ```
 
 　ソートの基準は`arrange()`内において先に指定された変数の順番となります。「口コミ評価も評価数も同じなら、駅から近いところにしたい」場合は変数が3つとなり、`Score`、`ScoreN`、`Walk`の順で入れます。
 
 ```{r}
-df %>%
-  filter(Pref == "奈良県", !is.na(Station), ScoreN > 0) %>%
-  select(Name, Station, Walk, ScoreN, Score) %>%
-  arrange(desc(Score), desc(ScoreN), Walk) %>%
+df |>
+  filter(Pref == "奈良県", !is.na(Station), ScoreN > 0) |>
+  select(Name, Station, Walk, ScoreN, Score) |>
+  arrange(desc(Score), desc(ScoreN), Walk) |>
   print(n = Inf)
 ```

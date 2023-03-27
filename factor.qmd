@@ -2,8 +2,8 @@
 
 ```{r}
 #| include: false
-pacman::p_load(tidyverse, knitr, kableExtra)
-knitr::opts_chunk$set(dev = "ragg_png", attr.source='.numberLines')
+source("_common.R")
+pacman::p_load(tidyverse, gt, gtExtras)
 ```
 
 ## 名目変数を含むグラフを作成する際の注意点
@@ -22,11 +22,11 @@ knitr::opts_chunk$set(dev = "ragg_png", attr.source='.numberLines')
 library(tidyverse)
 df <- read_csv("Data/Ramen.csv")
 
-df %>%
-    group_by(Pref) %>%
+df |>
+    group_by(Pref) |>
     summarise(Score   = mean(Score, na.rm = TRUE),
-              .groups = "drop") %>%
-    arrange(Score) %>%
+              .groups = "drop") |>
+    arrange(Score) |>
     ggplot() +
     geom_bar(aes(x = Pref, y = Score), stat = "identity") +
     coord_cartesian(ylim = c(1, 5)) +
@@ -52,8 +52,8 @@ df <- read_csv("Data/Ramen.csv")
 ```
 
 ```{r}
-Score_df <- df %>%
-    group_by(Pref) %>%
+Score_df <- df |>
+    group_by(Pref) |>
     summarise(Score   = mean(Score, na.rm = TRUE),
               .groups = "drop")
 
@@ -69,7 +69,7 @@ Score_df
 #| fig-width: 6
 #| fig-height: 4
 #| fig-cap: "Prefがcharacter型の場合 (1)"
-Score_df %>%
+Score_df |>
   ggplot() +
   geom_bar(aes(x = Pref, y = Score), stat = "identity") +
   labs(x = "都府県", y = "口コミ評価の平均値 (1~5)") +
@@ -79,7 +79,7 @@ Score_df %>%
 横軸の順番があまり直感的ではありませんね。それでは、`Score_df`を`Score`が高い順にソートし、`Score_df2`で保存してから、もう一回試してみます。
 
 ```{r}
-Score_df2 <- Score_df %>%
+Score_df2 <- Score_df |>
   arrange(desc(Score))
 
 Score_df2
@@ -92,7 +92,7 @@ Score_df2
 #| fig-width: 6
 #| fig-height: 4
 #| fig-cap: "Prefがcharacter型の場合 (2)"
-Score_df2 %>%
+Score_df2 |>
   ggplot() +
   geom_bar(aes(x = Pref, y = Score), stat = "identity") +
   labs(x = "都府県", y = "口コミ評価の平均値 (1~5)") +
@@ -102,7 +102,7 @@ Score_df2 %>%
 結果は全く変わっておりません。それでは、`Score_df`の`Pref`列をfactor型に変換し、順番は口コミ評価の平均値が高い順番にしてみましょう。結果は`Score_df_f1`という名で保存します。
 
 ```{r}
-Score_df_f1 <- Score_df %>%
+Score_df_f1 <- Score_df |>
   mutate(Pref = factor(Pref, levels = c("和歌山県", "奈良県", "大阪府",
                                         "千葉県", "京都府", "東京都",
                                         "埼玉県", "兵庫県", "神奈川県")))
@@ -123,7 +123,7 @@ Score_df_f1$Pref
 #| fig-width: 6
 #| fig-height: 4
 #| fig-cap: "Prefがcharacter型の場合 (3)"
-Score_df_f1 %>%
+Score_df_f1 |>
   ggplot() +
   geom_bar(aes(x = Pref, y = Score), stat = "identity") +
   labs(x = "都府県", y = "口コミ評価の平均値 (1~5)") +
@@ -140,7 +140,7 @@ Score_df_f1 %>%
 これからはfactor型変換の際に便利な関数をいくつか紹介しますが、その前に数値として表現された名目変数について話します。たとえば、`Score_df_f1`に関東地域なら`1`を、その他の地域なら`0`を付けた`Kanto`という変数があるとします。
 
 ```{r}
-Score_df_f1 <- Score_df_f1 %>%
+Score_df_f1 <- Score_df_f1 |>
   mutate(Kanto = ifelse(Pref %in% c("東京都", "神奈川県", "千葉県", "埼玉県"), 1, 0))
 
 Score_df_f1
@@ -154,18 +154,17 @@ Score_df_f1
 #| fig-height: 4
 #| echo: false
 #| fig-cap: "Kantoがnumeric型の場合"
-Score_df_f1 %>%
+Score_df_f1 |>
   ggplot() +
   geom_bar(aes(x = Kanto, y = Score), stat = "identity") +
   labs(x = "関東地域", y = "口コミ評価の平均値 (1~5)") +
-  theme_gray(base_family = "HiraKakuProN-W3") +
   theme(text = element_text(size = 12))
 ```
 
 この場合、図の横軸は`Kanto`の値が小さい順でソートされます。ただし、このような図は非常に見にくいため、`1`に`"関東"`、`0`に`"関西"`とラベルを付けたfactor型に変換した方が望ましいです。numeric型をラベル付きのfactor型にするためには、`levels`引数には元の数値を、`labels`引数にはそれぞれの数値に対応したラベルを指定します。また、関東の方を先に出したいので、`factor()`内の`levels`引数は`c(0, 1)`でなく、`c(1, 0)`にします。
 
 ```{r}
-Score_df_f1 <- Score_df_f1 %>%
+Score_df_f1 <- Score_df_f1 |>
   mutate(Kanto = factor(Kanto, levels = c(1, 0), labels = c("関東", "その他")))
 
 Score_df_f1
@@ -185,11 +184,10 @@ Score_df_f1$Kanto
 #| fig-height: 4
 #| echo: false
 #| fig-cap: "Kantoがfactor型の場合"
-Score_df_f1 %>%
+Score_df_f1 |>
   ggplot() +
   geom_bar(aes(x = Kanto, y = Score), stat = "identity") +
   labs(x = "地域", y = "口コミ評価の平均値 (1~5)") +
-  theme_gray(base_family = "HiraKakuProN-W3") +
   theme(text = element_text(size = 12))
 ```
 
@@ -206,7 +204,7 @@ Score_df_f1 %>%
 ```{r}
 #| eval: false
 # 新しい変数名と元となる変数名が一致すると上書きになる
-データフレーム名 %>%
+データフレーム名 |>
   mutate(新しい変数名 = fct_releve(元となる変数名, 
                                     "水準1", "水準2", "水準3", ...))
 ```
@@ -214,7 +212,7 @@ Score_df_f1 %>%
 ここでは、`Pref`変数を再調整した`Pref2`変数を作ってみましょう。
 
 ```{r}
-Score_df_f1 <- Score_df_f1 %>%
+Score_df_f1 <- Score_df_f1 |>
   mutate(Pref2 = fct_relevel(Pref, "大阪府", "神奈川県", "京都府", 
                              "埼玉県", "千葉県", "東京都", 
                              "奈良県", "兵庫県", "和歌山県"))
@@ -232,7 +230,7 @@ levels(Score_df_f1$Pref2) # Pref2の水準
 問題なく50音順になっていることが分かります。他にも`fct_relevel()`には全ての水準名を指定する必要がありません。一部の水準名も可能です。たとえば、「関東が関西の先に来るなんでけしからん！」と思う読者もいるでしょう。この場合、関西の府県名を入れると、指定した水準が最初に位置するようになります。
 
 ```{r}
-Score_df_f1 <- Score_df_f1 %>%
+Score_df_f1 <- Score_df_f1 |>
   mutate(Pref3 = fct_relevel(Pref, "京都府", "大阪府",
                              "兵庫県", "奈良県", "和歌山県"))
 
@@ -242,7 +240,7 @@ levels(Score_df_f1$Pref3) # Pref3の水準
 一部の水準名のみを指定するとその水準が最初に移動されますが、`after`引数を指定すると、位置を調整することも可能です。`after = 2`の場合、元となる変数の1、3番目の水準は維持され、3番目以降に指定した水準、それに続いて指定されていない水準の順番になります。`Pref`は和歌山、奈良、大阪の順ですが、ここで京都と東京を、奈良と大阪の間に移動するなら、
 
 ```{r}
-Score_df_f1 <- Score_df_f1 %>%
+Score_df_f1 <- Score_df_f1 |>
   mutate(Pref4 = fct_relevel(Pref, "京都府", "東京都", after = 2))
 
 levels(Score_df_f1$Pref4) # Pref4の水準
@@ -257,7 +255,7 @@ levels(Score_df_f1$Pref4) # Pref4の水準
 ```{r}
 #| eval: false
 # 新しい変数名と元となる変数名が一致すると上書きになる
-データフレーム名 %>%
+データフレーム名 |>
   mutate(新しい変数名 = fct_recode(元となる変数名, 
                                    新しいラベル1 = "既存のラベル1",
                                    新しいラベル2 = "既存のラベル2",
@@ -268,7 +266,7 @@ levels(Score_df_f1$Pref4) # Pref4の水準
 注意点としては新しいラベルは`"`で囲まず、既存のラベルは`"`で囲む点です。それでは、`Pref`のラベルをローマ字に変更してみましょう。
 
 ```{r}
-Score_df_f1 <- Score_df_f1 %>%
+Score_df_f1 <- Score_df_f1 |>
   mutate(Pref5 = fct_recode(Pref,
                             Saitama  = "埼玉県",
                             Wakayama = "和歌山県",
@@ -295,7 +293,7 @@ levels(Score_df_f1$Pref5) # Pref5の水準
 水準の順番を反転することは非常によくあります。たとえば、グラフの読みやすさのために、左右または上下を反転するケースがあります。既に何回も強調しましたように、名目変数は基本的にfactor型にすべきであり、ここで`fct_rev()`関数が非常に便利です。たとえば、`Pref2`の水準は50音順でありますが、これを反転し、`Pref6`という名の列として追加してみましょう。
 
 ```{r}
-Score_df_f1 <- Score_df_f1 %>%
+Score_df_f1 <- Score_df_f1 |>
   mutate(Pref6 = fct_rev(Pref2))
 
 levels(Score_df_f1$Pref6)
@@ -308,7 +306,7 @@ levels(Score_df_f1$Pref6)
 続いて、水準の順番を頻度順に合わせる`fct_infreq()`関数です。たとえば、`Score`が欠損でないケースのみで構成された`df2`を考えてみましょう。
 
 ```{r}
-df2 <- df %>%
+df2 <- df |>
   filter(!is.na(Score))
 ```
 
@@ -321,7 +319,7 @@ table(df2$Pref)
 ここで`Pref`をfactor化しますが、水準の順番を店舗数が多い方を先にするにはどうすれば良いでしょうか。`fct_infreq()`関数は指定された変数の各値の個数を計算し、多い順にfactorの水準を調整します。
 
 ```{r}
-df2 <- df2 %>%
+df2 <- df2 |>
   # 多く出現した値順でfactor化する
   mutate(Pref = fct_infreq(Pref))
 
@@ -337,7 +335,7 @@ levels(df2$Pref) # df2のPref変数の水準を出力
 たとえば、`df`の`Pref`は`"東京都"`が1000個並び、続いて`"神奈川県"`が1000個、`"千葉県"`が1000個、...の順番で格納されています。この順番をそのままfactorの順番にするには以下のように書きます。
 
 ```{r}
-df3 <- df %>%
+df3 <- df |>
   # Pref変数をfactor化し、水準は出現順とする
   # 変換後の結果はPrefに上書きする
   mutate(Pref = fct_inorder(Pref))
@@ -355,7 +353,7 @@ df4 <- tibble(
   Q1 = c(1, 5, 3, 2, 9, 2, 4, 9, 5, 1)
 ) 
 
-df4 <- df4 %>%
+df4 <- df4 |>
   mutate(Q1 = factor(Q1, levels = c(1:5, 9),
                      labels = c("そう思う", 
                                 "どちらかと言えばそう思う",
@@ -370,7 +368,7 @@ df4
 水準の順番も「そう思う」〜「答えたくない」順で綺麗に整っています。この水準を反転するには`fct_rev()`関数が便利です。`Q1`の水準を反転した変数を`Q1_R`という新しい列として追加し、水準を確認してみましょう。
 
 ```{r}
-df4 <- df4 %>%
+df4 <- df4 |>
   mutate(Q1_R = fct_rev(Q1))
 
 df4
@@ -382,7 +380,7 @@ levels(df4$Q1_R)
 ```{r}
 #| eval: false
 # fct_shift()の使い方
-データ名 %>%
+データ名 |>
   mutate(新しい変数名 = fct_shift(元の変数名, n = 左方向へずらす個数))
 ```
 
@@ -392,24 +390,25 @@ levels(df4$Q1_R)
 #| echo: false
 #| message: false
 #| tbl-cap: "`fct_shift()`の仕組み"
-tibble(水準の順番 = c("`n = -2`", "`n = -1`", "`n = 0`",
-                 "`n = 1`", "`n = 2`"),
-            `1番目` = c("`E`", "`F`", "`A`", "`B`", "`C`"),
-            `2番目` = c("`F`", "`A`", "`B`", "`C`", "`D`"),
-            `3番目` = c("`A`", "`B`", "`C`", "`D`", "`E`"),
-            `4番目` = c("`B`", "`C`", "`D`", "`E`", "`F`"),
-            `5番目` = c("`C`", "`D`", "`E`", "`F`", "`A`"),
-            `6番目` = c("`D`", "`E`", "`F`", "`A`", "`B`")) %>%
-  kable(align = c("l", "c", "c", "c", "c", "c", "c")) %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed",
-                                      "responsive"),
-                full_width = FALSE)
+tibble(n = c("`n = -2`", "`n = -1`", "`n = 0`",
+             "`n = 1`", "`n = 2`"),
+       First = c("`E`", "`F`", "`A`", "`B`", "`C`"),
+       Second = c("`F`", "`A`", "`B`", "`C`", "`D`"),
+       Third = c("`A`", "`B`", "`C`", "`D`", "`E`"),
+       Fourth = c("`B`", "`C`", "`D`", "`E`", "`F`"),
+       Fifth = c("`C`", "`D`", "`E`", "`F`", "`A`"),
+       Sixth = c("`D`", "`E`", "`F`", "`A`", "`B`")) |>
+  gt() |> 
+  cols_label("n" = "", "First" = "1番目", "Second" = "2番目",
+             "Third" = "3番目", "Fourth" = "4番目",
+             "Fifth" = "5番目", "Sixth" = "6番目") |> 
+  fmt_markdown(columns = everything())
 ```
 
 具体的には水準は左方向へ`n`個移動します。元の水準が`A`, `B`, `C`, ..., `F`の順で、`n = 1`の場合、`A`が`F`の後ろへ移動し、`B`, `C`, `D`, `E`, `F`が前の方へ1つずつ移動します。逆に右側へ1つ移動したい場合は`n = -1`のように書きます。今回は最初の水準を最後に移動させたいので、`n = 1`と指定します。
 
 ```{r}
-df4 <- df4 %>%
+df4 <- df4 |>
   # Q1_Rの水準を左方向で1ずらす
   mutate(Q1_R = fct_shift(Q1_R, n = 1))
 
@@ -423,7 +422,7 @@ levels(df4$Q1_R)
 あまり使わない機能ですが、水準の順番をランダム化することも可能です。使い方は非常に簡単で、`fct_shuffle()`に元の変数名を入れるだけです。たとえば、`Score_df`の`Pref`の順番をランダム化し、`Pref2`として追加します。同じことをもう2回繰り返し、それぞれ`Pref3`と`Pref4`という名前で追加してみましょう。
 
 ```{r}
-Score_df <- Score_df %>%
+Score_df <- Score_df |>
   mutate(Pref2 = fct_shuffle(Pref),
          Pref3 = fct_shuffle(Pref),
          Pref4 = fct_shuffle(Pref))
@@ -443,7 +442,7 @@ levels(Score_df$Pref4)
 
 ```{r}
 #| eval: false
-データ名 %>%
+データ名 |>
   mutate(新しい変数名 = fct_reorder(元の変数名, 基準となる変数, 
                                    関数名, 関数の引数))
 ```
@@ -451,7 +450,7 @@ levels(Score_df$Pref4)
 必要な引数が多いですね。解説よりも実際の例を見ながら説明します。今回も`Pref`をfactor変数にし、`Pref_R`という列で格納しますが、平均予算が安い順でfactorの水準を決めたいと思います。
 
 ```{r}
-df <- df %>%
+df <- df |>
   mutate(Pref_R = fct_reorder(Pref, Budget, mean, na.rm = TRUE))
 
 levels(df$Pref_R)
@@ -460,10 +459,10 @@ levels(df$Pref_R)
 `Pref_R`の水準は千葉県、埼玉県、奈良県、...の順ですが、本当にそうでしょうか。`group_by()`と`summarise()`などを使って確認してみましょう。
 
 ```{r}
-df %>% 
-  group_by(Pref) %>%
+df |> 
+  group_by(Pref) |>
   summarise(Budget  = mean(Budget, na.rm = TRUE),
-            .groups = "drop") %>%
+            .groups = "drop") |>
   arrange(Budget)
 ```
 
@@ -472,7 +471,7 @@ df %>%
 また、低い順ではなく、高い順にすることも可能です。次は`Score`の中央値が高い順に水準を設定した`Pref_R2`を作ってみましょう。
 
 ```{r}
-df <- df %>%
+df <- df |>
   mutate(Pref_R2 = fct_reorder(Pref, Score, median, na.rm = TRUE, .desc = TRUE))
 
 levels(df$Pref_R2)
@@ -481,10 +480,10 @@ levels(df$Pref_R2)
 変わったのは`mean`の代わりに`median`を使ったこと、そして`.desc`引数が追加された点です。`fct_reorder()`には`.desc = FALSE`がデフォルトとして指定されており、省略した場合は昇順でfactorの水準が決まります。ここで`.desc = TRUE`を指定すると、降順となります。実際、`Score`の中央値順になっているかを確認してみましょう。
 
 ```{r}
-df %>% 
-  group_by(Pref) %>%
+df |> 
+  group_by(Pref) |>
   summarise(Score   = median(Score, na.rm = TRUE),
-            .groups = "drop") %>%
+            .groups = "drop") |>
   arrange(desc(Score))
 ```
 
@@ -511,7 +510,7 @@ Reorder2_df <- tibble(
                 1,  2,  4,   2,  28)
 )
 
-Reorder2_df <- Reorder2_df %>%
+Reorder2_df <- Reorder2_df |>
   mutate(Date = as.Date(Date))
 
 Reorder2_df
@@ -521,13 +520,12 @@ Reorder2_df
 
 ```{r}
 #| fig-height: 3.5
-Reorder2_df %>%
+Reorder2_df |>
   ggplot() +
   geom_line(aes(x = Date, y = NewPat, color = Country),
             size = 1) +
   scale_x_date(date_labels = "%Y年%m月%d日") +
-  labs(x = "年月日", y = "新規感染者数 (人)", color = "") +
-  theme_gray(base_family = "HiraKakuProN-W3")
+  labs(x = "年月日", y = "新規感染者数 (人)", color = "")
 ```
 
 このグラフに違和感はあまりありませんが、「読みやすさ」の麺では改善の余地があります。たとえば、7月1日の時点で、新規感染者数が多いのは日本、韓国、香港、中国 (本土)、台湾の順です。しかし、右側の凡例の順番はそうではありません。この順番が一致すれば、更に図は読みやすくなるでしょう。
@@ -539,8 +537,8 @@ factor(Reorder2_df$Country)
 実際、何も指定せずに`Reorder2_df`の`Country`をfactor化すると、韓国、香港、台湾、...の順であり、これは上のグラフと一致します。これをグラフにおける7月1日の新規感染者数の順で並べるためには、`Date`を昇順にソートし、そして最後の要素 (`"2020/07/01"`)内で新規感染者数 (`NewPat`)を降順に並べ替えた場合の順番にする必要があります。実際、`Reorder2_df`を`Date`で昇順、`NewPat`で降順にソートし、最後の5行を抽出した結果が以下のコードです。
 
 ```{r}
-Reorder2_df %>%
-  arrange(Date, desc(NewPat)) %>%
+Reorder2_df |>
+  arrange(Date, desc(NewPat)) |>
   slice_tail(n = 5)
 ```
 
@@ -548,7 +546,7 @@ Reorder2_df %>%
 
 ```{r}
 #| eval: false
-データ名 %>%
+データ名 |>
   mutate(新しい変数名 = fct_reorder2(元の変数名, 
                                     基準となる変数1, 基準となる変数2,
                                     関数名, 関数の引数))
@@ -557,7 +555,7 @@ Reorder2_df %>%
 重要なのはここの関数のところですが、`fct_reorder2()`はデフォルトで`last2()`という関数が指定されており、まさに私たちに必要な関数です。したがって、ここでは関数名も省略できますが、ここでは一応明記しておきます。
 
 ```{r}
-Reorder2_df <- Reorder2_df %>%
+Reorder2_df <- Reorder2_df |>
   mutate(Country2 = fct_reorder2(Country, Date, NewPat, last2)) 
 ```
 
@@ -571,13 +569,12 @@ levels(Reorder2_df$Country2)
 
 ```{r}
 #| fig-height: 3.5
-Reorder2_df %>%
+Reorder2_df |>
   ggplot() +
   geom_line(aes(x = Date, y = NewPat, color = Country2),
             size = 1) +
   scale_x_date(date_labels = "%Y年%m月%d日") +
-  labs(x = "年月日", y = "新規感染者数 (人)", color = "") +
-  theme_gray(base_family = "HiraKakuProN-W3")
+  labs(x = "年月日", y = "新規感染者数 (人)", color = "")
 ```
 
 これで図がさらに読みやすくなりました。ちなみに、`forcats`パッケージは`last2()`以外にも`first2()`という関数も提供しております。これを使うと、7月1日でなく、6月27日の新規感染者数の降順で水準の順番が調整されます。他にも引数を2つ使用する自作関数も使えますが、`fct_reorder2()`の主な使いみちは`last2()`で十分でしょう。
@@ -594,7 +591,7 @@ levels(df4$Q1)
 
 ```{r}
 # fct_recode()を使った例
-df4 <- df4 %>% 
+df4 <- df4 |> 
     mutate(Q1_R2 = fct_recode(Q1,
                               そう思う          = "そう思う",
                               そう思う          = "どちらかと言えばそう思う",
@@ -611,7 +608,7 @@ levels(df4$Q1_R2)
 
 ```{r}
 # fct_collapse()を使った例
-df4 <- df4 %>% 
+df4 <- df4 |> 
     mutate(Q1_R3 = fct_collapse(Q1,
                                 そう思う = c("そう思う", "どちらかと言えばそう思う"),
                                 どちらとも言えない = "どちらとも言えない",
@@ -629,10 +626,10 @@ levels(df4$Q1_R3)
 水準としては存在するものの、データとしては存在しないケースもあります。これをここでは「空水準 (empty levels)」と呼びます。たとえば、以下のコードは`Pref`をfactor化してから`Pref == "奈良県"`のケースを落としたものです。
 
 ```{r}
-Score_df_f2 <- df %>%
-  mutate(Pref = fct_inorder(Pref)) %>%
-  filter(Pref != "奈良県") %>%
-  group_by(Pref) %>%
+Score_df_f2 <- df |>
+  mutate(Pref = fct_inorder(Pref)) |>
+  filter(Pref != "奈良県") |>
+  group_by(Pref) |>
   summarise(Score   = mean(Score, na.rm = TRUE),
             .groups = "drop")
 
@@ -648,7 +645,7 @@ levels(Score_df_f2$Pref)
 このように水準としては残っていることが分かります。使われていない水準が分析や可視化に影響を与えないケースもありますが、与えるケースもあります。これもこれまで勉強してきた`fct_*()`関数群で対応可能ですが、`fct_drop()`関数を使えば一発で終わります。実際にやってみましょう。
 
 ```{r}
-Score_df_f2 <- Score_df_f2 %>%
+Score_df_f2 <- Score_df_f2 |>
   mutate(Pref = fct_drop(Pref))
 ```
 
@@ -663,7 +660,7 @@ levels(Score_df_f2$Pref)
 一方、空水準を追加することも可能です。`fct_expand()`関数には元の変数名に加え、追加する水準名を入れるだけです。たとえば、`df`の`Pref`の水準は関東と関西の9都府県名となっていますが、ここに`"滋賀県"`という水準を追加してみます。。
 
 ```{r}
-df5 <- df %>%
+df5 <- df |>
   mutate(Pref = fct_expand(Pref, "滋賀県"))
 
 levels(df5$Pref)
@@ -674,8 +671,8 @@ levels(df5$Pref)
 新しく水準が追加されることによって、何かの変化はあるでしょうか。まずは都府県ごとに`Score`の平均値とケース数を計算してみましょう。
 
 ```{r}
-df5 %>%
-  group_by(Pref) %>%
+df5 |>
+  group_by(Pref) |>
   summarise(Score   = mean(Score, na.rm = TRUE),
             N       = n(),
             .groups = "drop")
@@ -690,8 +687,8 @@ table(df5$Pref)
 `"滋賀県"`という列があり、合致するケースが0と表示されます。`group_by()`でも空の水準まで含めて出力する引数`.drop`があります。デフォルトは`TRUE`ですが、これを`FALSE`に指定してみます。
 
 ```{r}
-df5 %>%
-  group_by(Pref, .drop = FALSE) %>%
+df5 |>
+  group_by(Pref, .drop = FALSE) |>
   summarise(Score   = mean(Score, na.rm = TRUE),
             N       = n(),
             .groups = "drop")
@@ -709,7 +706,7 @@ df6 <- tibble(
   X1 = c(1, 3, 2, NA, 2, 2, 1, NA, 3, NA)
 )
 
-df6 <- df6 %>%
+df6 <- df6 |>
   mutate(X1 = factor(X1, 
                      levels = c(1, 2, 3),
                      labels = c("ラーメン", "うどん", "そば")))
@@ -720,8 +717,8 @@ df6
 それでは`X1`をグループ化変数とし、ケース数を計算してみましょう。
 
 ```{r}
-df6 %>%
-  group_by(X1) %>%
+df6 |>
+  group_by(X1) |>
   summarise(N       = n(),
             .groups = "drop")
 ```
@@ -731,7 +728,7 @@ df6 %>%
 まずは、これまで紹介した関数を使ったやり方から紹介します。
 
 ```{r}
-df6 %>%
+df6 |>
          # まず、X1をcharacter型に変換し、X2という列に保存
   mutate(X2 = as.character(X1),
          # X2がNAなら"欠損値"、それ以外なら元のX2の値に置換
@@ -753,7 +750,7 @@ ifelse(is.na(df6$X1), "欠損値", df6$X1)
 `"ラーメン"`と`"うどん"`、`"そば"`がfactor化前の1, 2, 3に戻っただけでなく、`NA`が`"欠損値"`というcharacter型に置換されたため、全体がcharacter型に変換されました。このように欠損値に水準を与える作業は難しくはありませんが、面倒な作業です。そこで登場する関数が`fct_exlpicit_na()`関数です。使い方は、元の変数に加え、欠損値の水準名を指定する`na_level`です。
 
 ```{r}
-df6 <- df6 %>%
+df6 <- df6 |>
   # na_levelのデフォルト値は"(Missing)"
   mutate(X2 = fct_explicit_na(X1, na_level = "欠損値"))
 
@@ -763,8 +760,8 @@ df6
 欠損値が一つの水準になったことが分かります。
 
 ```{r}
-df6 %>%
-  group_by(X2) %>%
+df6 |>
+  group_by(X2) |>
   summarise(N       = n(),
             .groups = "drop")
 ```

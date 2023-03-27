@@ -6,13 +6,6 @@
 source("_common.R")
 ```
 
-```{css}
-#| echo: false
-table.gt_table {
-  width: initial;
-}
-```
-
 　記述統計や推定結果を示す場合は図表が用いられることが多い。図に関しては{ggplot2}が最もポピュラーなパッケージである（Base Rもまた根強い人気を誇る）。一方、表の場合、現時点において2つの選択肢がある[^ft]。一つはこれまで長らく使われてきた{knitr}パッケージの`kable()`と{kabelExtra}パッケージの組み合わせ、もう一つが近年注目を集めている{gt}パッケージだ。
 
 [^ft]: 他にも{[flextable](https://davidgohel.github.io/flextable/index.html)} + {ftExtra}という有力な選択肢もある。
@@ -124,14 +117,18 @@ df1 |>
 df1 |>
   gt() |>
   fmt_number(columns = 2:5, decimals = 3) |>
-  tab_style(style     = cell_text(align = "center"), # どうする?: 中央揃え
-            locations = cells_column_labels())       # どこを?: 列レベルだけ
+  tab_style(style     = cell_text(align = "center"), # <1>
+            locations = cells_column_labels())       # <2>
 ```
+
+1. セル内のテキストを中央揃えにする。
+2. 列ラベルのみに適用
 
 　また、HTMLのCSSによって異なるが、{gt}で作成された表の幅がページの幅に強制的に調整される場合がある。本書は[Quarto](quarto.qmd)で執筆されているが、まさにそのケースである）。この場合は、`as_raw_html()`を使えば良い。一つ注意すべき点は`as_raw_html()`は必ず最後のレイヤーにする必要がある。`as_raw_html()`の後ろにレイヤーが足される場合はエラーが発生する。
 
 ```{r}
 #| label: table-column-6
+#| eval: false
 df1 |>
     gt() |>
     fmt_number(columns = 2:5, decimals = 3) |>

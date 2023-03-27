@@ -5,15 +5,6 @@
 source("_common.R")
 ```
 
-```{css}
-#| echo: false
-table.gt_table {
-  width: initial;
-  margin-left: auto;
-  margin-right: auto;
-}
-```
-
 本章ではグラフの作成に適した形へデータを整形することについて学習します。ただし、これはグラフに限られた話ではありません。作図に適したデータは分析にも適します。
 
 ## 整然データ (tidy data)とは {#sec-tidydata-intro}
@@ -376,11 +367,8 @@ df2 <- df1 |>
               values_from = 人口) |>
   relocate(面積, .after = 外国人)
 
-kable(df1, booktabs = TRUE) |>
-  kable_styling(bootstrap_options = c("striped"))
-
-kable(df2, booktabs = TRUE) |>
-  kable_styling(bootstrap_options = c("striped"))
+gt(df1)
+gt(df2)
 ```
 
 変数名が日本語になっていますが、これは「読むための表」を読み込むことを仮定しています。このように変数名として日本語は使えますが、自分でデータセットを作成する際、変数名はローマ字にすることを強く推奨します。
@@ -402,14 +390,15 @@ df3
 #| label: tbl-tidydata_df3_detail
 #| message: false
 #| echo: false
-#| tbl-cap: "df3の詳細"
-tibble(変数名 = c("`都道府県`", "`区分`", "`人口`", "`面積`"),
-       説明 = c("都道府県名",
-              "総人口/外国人人口の区分",
-              "人口 (人)",
-              "面積 (km$^2$)")) |> 
+#| tbl-cap: "`df3`の詳細"
+tibble(Var = c("`都道府県`", "`区分`", "`人口`", "`面積`"),
+       Desc = c("都道府県名",
+                "総人口/外国人人口の区分",
+                "人口 (人)",
+                "面積 (km<sup>2</sup>)")) |> 
   gt() |> 
-  fmt_markdown(columns = 1)
+  cols_label("Var" = "変数名", "Desc" = "説明") |> 
+  fmt_markdown(columns = everything())
 ```
 
 まずは変数名が日本語になっているので、`rename()`関数を使ってそれぞれ`Pref`、`Type`、`Population`、`Area`に変更します。
