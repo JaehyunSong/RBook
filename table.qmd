@@ -400,61 +400,6 @@ gtsave(gt_table, "my_table.rtf")  # リッチテキスト
 gtsave(gt_table, "my_table.png")  # 画像（PNG）
 ```
 
-## データの出力 {#sec-DT}
-
-　PDF、Microsoft Word形式の文書を作成する場合、生データ（raw data）を掲載することはめったにないだろう。数十行のデータなら掲載することもあるが[^lijphart]、規模の大きいデータセットの場合、資源（紙）の無駄遣いとなる。しかし、HTMLフォーマットの文書なら話は別だ。ファイルの容量は大きくなるものの、生データを全て掲載することもできる。
-
-[^lijphart]: どうでも良い話だが、Arend Lijphartの*Pattern of Democracy*の場合（邦訳：『民主主義対民主主義』）、データセットがMicrosoft Word形式で公開されている...。
-
-　そこまで大きいデータセットではないが、たとえば`df2`をR Markdown / QuartoのHTML文書に掲載するとしよう。この場合、まず考えられるのは普通に`df2`を出力することだ。ただし、`df2`のクラスによって出力結果がややことなる。たとえば、`df2`は`read_csv()`関数で読み込んだデータであるため、data.frameでなく、tibbleである。実際にクラスを確認してみよう。「クラス（class）」の概念については第[-@sec-oop]章を参照されたい。
-
-```{r}
-#| label: table-df-print-1
-class(df2)
-```
-
-　data.frameクラスを継承しているが、クラスに`"tbl"`や`"tbl_df"`も含まれており、これは`df2`がtibble形式であることを意味する。これをこのまま出力してみよう。
-
-```{r}
-#| label: table-df-print-2
-df2
-```
-
-　tibble形式のデータは通常、最初の10行のみ出力される。また、小数点も2〜3桁目で丸められる。もう一つの特徴としては横に長い表の場合（つまり、列が多い場合）、一部の列は省略される（省略された列の簡単な情報は表示される）。このようにtibbleクラスのデータは読みやすく出力される長所があるものの、**全て**のデータが出力されないケースもある。
-
-　一方、`read_csv()`でなく、`read.csv()`で読み込んだ表形式データのクラスはdata.frameだ。`df2`を`as.data.frame()`関数を使ってdata.frameクラスに変更してみよう。クラスを変更した`df2`は`df4_df`と名付ける。
-
-```{r}
-#| label: table-df-print-3
-df4_df <- as.data.frame(df2)
-
-class(df4_df)
-```
-
-　それでは`df4_df`を出力してみよう。
-
-```{r}
-#| label: table-df-print-4
-df4_df
-```
-
-　今回は**全て**の行と列が出力された。そもそも生データを掲載するのが目的であれば、tibbleクラスよりも、data.frameクラスが目的に合致する。しかし、読みにくいという深刻な問題がある。また、世論調査データのように数千行、変数も数十列以上あるデータセットを出力するとあまりにも長い画面になってしまう。
-
-　ここで便利なのが{DT}パッケージの`datatable()`関数だ。全ての行と列を読みやすい形式で出力してくれる。
-
-```{r}
-#| label: table-df-print-5
-datatable(df2)
-```
-
-　このように情報が損失されることなく、非常に読みやすい表になった。これで十分かも知れないが、小数点を丸めたい人もいるかも知れないので、その方法を紹介する。具体的には`dataframe()`で作成した表を`formatRound()`関数に渡すだけだ。`formatRound()`関数の引数は`columns`と`digits`があり、それぞれ適用する列と小数点を桁数を指定すればよい。
-
-```{r}
-#| label: table-df-print-6
-datatable(df2) |>
-    formatRound(columns = 3:6, digits = 3)
-```
-
 ## 画像・プロットの追加
 
 * <https://jthomasmock.github.io/gtExtras/articles/plotting-with-gtExtras.html#graphs-vs-tables>
@@ -547,3 +492,61 @@ df1_tbl |>
 ```
 :::
 
+::: {.content-visible when-format="html"}
+
+## データの出力 {#sec-DT}
+
+　PDF、Microsoft Word形式の文書を作成する場合、生データ（raw data）を掲載することはめったにないだろう。数十行のデータなら掲載することもあろうが[^lijphart]、規模の大きいデータセットの場合、資源（紙）の無駄遣いとなる。しかし、HTMLフォーマットの文書なら話は別だ。ファイルの容量は大きくなるものの、生データを全て掲載することもできる。
+
+[^lijphart]: どうでも良い話だが、Arend Lijphartの*Pattern of Democracy*の場合（邦訳：『民主主義対民主主義』）、データセットがMicrosoft Word形式で公開されている...。
+
+　そこまで大きいデータセットではないが、たとえば`df2`をR Markdown / QuartoのHTML文書に掲載するとしよう。この場合、まず考えられるのは普通に`df2`を出力することだ。ただし、`df2`のクラスによって出力結果がややことなる。たとえば、`df2`は`read_csv()`関数で読み込んだデータであるため、data.frameでなく、tibbleである。実際にクラスを確認してみよう。「クラス（class）」の概念については第[-@sec-oop]章を参照されたい。
+
+```{r}
+#| label: table-df-print-1
+class(df2)
+```
+
+　data.frameクラスを継承しているが、クラスに`"tbl"`や`"tbl_df"`も含まれており、これは`df2`がtibble形式であることを意味する。これをこのまま出力してみよう。
+
+```{r}
+#| label: table-df-print-2
+df2
+```
+
+　tibble形式のデータは通常、最初の10行のみ出力される。また、小数点も2〜3桁目で丸められる。もう一つの特徴としては横に長い表の場合（つまり、列が多い場合）、一部の列は省略される（省略された列の簡単な情報は表示される）。このようにtibbleクラスのデータは読みやすく出力される長所があるものの、**全て**のデータが出力されないケースもある。
+
+　一方、`read_csv()`でなく、`read.csv()`で読み込んだ表形式データのクラスはdata.frameだ。`df2`を`as.data.frame()`関数を使ってdata.frameクラスに変更してみよう。クラスを変更した`df2`は`df4_df`と名付ける。
+
+```{r}
+#| label: table-df-print-3
+df4_df <- as.data.frame(df2)
+
+class(df4_df)
+```
+
+　それでは`df4_df`を出力してみよう。
+
+```{r}
+#| label: table-df-print-4
+df4_df
+```
+
+　今回は**全て**の行と列が出力された。そもそも生データを掲載するのが目的であれば、tibbleクラスよりも、data.frameクラスが目的に合致する。しかし、読みにくいという深刻な問題がある。また、世論調査データのように数千行、変数も数十列以上あるデータセットを出力するとあまりにも長い画面になってしまう。
+
+　ここで便利なのが{DT}パッケージの`datatable()`関数だ。全ての行と列を読みやすい形式で出力してくれる。
+
+```{r}
+#| label: table-df-print-5
+datatable(df2)
+```
+
+　このように情報が損失されることなく、非常に読みやすい表になった。これで十分かも知れないが、小数点を丸めたい人もいるかも知れないので、その方法を紹介する。具体的には`dataframe()`で作成した表を`formatRound()`関数に渡すだけだ。`formatRound()`関数の引数は`columns`と`digits`があり、それぞれ適用する列と小数点を桁数を指定すればよい。
+
+```{r}
+#| label: table-df-print-6
+datatable(df2) |>
+    formatRound(columns = 3:6, digits = 3)
+```
+
+:::
