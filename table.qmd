@@ -4,6 +4,7 @@
 #| label: table-common
 #| include: false
 source("_common.R")
+options(width = 120)
 ```
 
 　記述統計や推定結果を示す場合は図表が用いられることが多い。図に関しては{ggplot2}が最もポピュラーなパッケージである（Base Rもまた根強い人気を誇る）。一方、表の場合、現時点において2つの選択肢がある[^ft]。一つはこれまで長らく使われてきた{knitr}パッケージの`kable()`と{kabelExtra}パッケージの組み合わせ、もう一つが近年注目を集めている{gt}パッケージだ。
@@ -369,37 +370,6 @@ df3_tbl |>
 RColorBrewer::display.brewer.all()
 ```
 
-## 表の出力 {#sec-gt-export}
-
-　{gt}で作成した表は様々なフォーマットで出力することができる。現在（`r format(Sys.Date(), "%Y年%m月%d日")`; {gt} `r packageVersion("gt")`）、Microsoft Word（`.docx`）、$\LaTeX$（`.tex`）、ハイパーテキスト（`.html`）、リッチテキスト（`.rtf`）、画像（`.png`）形式で出力可能だ。ここでは簡単な例を紹介する。
-
-　まず、{gt}を使って表を作成し、オブジェクトとして作業環境内に格納する。ここでは`gt_table`と名付けた。
-
-```{r}
-#| label: table-export-1
-gt_table <- df1 |>
-  gt() |>
-  fmt_number(columns = 2:5, decimals = 3) |>
-  tab_header(title = "タイトル", subtitle = "サブタイトル") |>
-  tab_footnote(footnote = "注1: ここにはフットノート1が入る") |>
-  tab_footnote(footnote = "注2: ここにはフットノート2が入る") |>
-  tab_source_note(source_note = md("出典: 『[私たちのR](https://www.jaysong.net/RBook/)』"))
-
-gt_table
-```
-
-　この`gt_table`を保存する関数は`gtsave()`である。第1引数は先ほど作成した表のオブジェクト名、第2引数は出力するファイル名である。このファイル名の拡張子によって保存されるファイルのフォーマットが変わる。結果をここで見せることは難しいが、難しい作業ではないので各自やってみよう。
-
-```{r}
-#| label: table-export-2
-#| eval: false
-gtsave(gt_table, "my_table.docx") # Microsoft Word
-gtsave(gt_table, "my_table.tex")  # LaTeX
-gtsave(gt_table, "my_table.html") # HTML
-gtsave(gt_table, "my_table.rtf")  # リッチテキスト
-gtsave(gt_table, "my_table.png")  # 画像（PNG）
-```
-
 ## 画像・プロットの追加
 
 * <https://jthomasmock.github.io/gtExtras/articles/plotting-with-gtExtras.html#graphs-vs-tables>
@@ -491,6 +461,65 @@ df1_tbl |>
   gt_theme_pff()
 ```
 :::
+
+## 表の書き出し {#sec-gt-export}
+
+　{gt}で作成した表は様々なフォーマットで出力することができる。現在（`r format(Sys.Date(), "%Y年%m月%d日")`; {gt} `r packageVersion("gt")`）、Microsoft Word（`.docx`）、$\LaTeX$（`.tex`）、ハイパーテキスト（`.html`）、リッチテキスト（`.rtf`）、画像（`.png`）形式で出力可能だ。ここでは簡単な例を紹介する。
+
+　まず、{gt}を使って表を作成し、オブジェクトとして作業環境内に格納する。ここでは`gt_table`と名付けた。
+
+```{r}
+#| label: table-export-1
+gt_table <- df1 |>
+  gt() |>
+  fmt_number(columns = 2:5, decimals = 3) |>
+  tab_header(title = "タイトル", subtitle = "サブタイトル") |>
+  tab_footnote(footnote = "注1: ここにはフットノート1が入る") |>
+  tab_footnote(footnote = "注2: ここにはフットノート2が入る") |>
+  tab_source_note(source_note = md("出典: 『[私たちのR](https://www.jaysong.net/RBook/)』"))
+
+gt_table
+```
+
+　この`gt_table`を保存する関数は`gtsave()`である。第1引数は先ほど作成した表のオブジェクト名、第2引数は出力するファイル名である。このファイル名の拡張子によって保存されるファイルのフォーマットが変わる。結果をここで見せることは難しいが、難しい作業ではないので各自やってみよう。
+
+```{r}
+#| label: table-export-2
+#| eval: false
+gtsave(gt_table, "my_table.docx") # Microsoft Word
+gtsave(gt_table, "my_table.tex")  # LaTeX
+gtsave(gt_table, "my_table.html") # HTML
+gtsave(gt_table, "my_table.rtf")  # リッチテキスト
+gtsave(gt_table, "my_table.png")  # 画像（PNG）
+```
+
+　たとえば、`.tex`形式で書き出したファイルを開いてみると、以下のような$\LaTeX$コードが書かれていることが確認できる。
+
+```tex
+\setlength{\LTpost}{0mm}
+\begin{longtable}{lrrrrr}
+\caption*{
+{\large タイトル} \\ 
+{\small サブタイトル}
+} \\ 
+\toprule
+Variable & Mean & SD & Min & Max & Obs \\ 
+\midrule
+Population & $41.738$ & $151.270$ & $0.001$ & $1,447.470$ & 186 \\ 
+Area & $69.607$ & $187.241$ & $0.000$ & $1,637.687$ & 186 \\ 
+GDP\_per\_capita & $1.616$ & $2.571$ & $0.006$ & $18.318$ & 185 \\ 
+PPP\_per\_capita & $2.083$ & $2.099$ & $0.073$ & $11.342$ & 178 \\ 
+HDI\_2018 & $0.713$ & $0.153$ & $0.377$ & $0.954$ & 180 \\ 
+Polity\_Score & $4.259$ & $6.102$ & $-10.000$ & $10.000$ & 158 \\ 
+FH\_Total & $57.714$ & $29.866$ & $0.000$ & $100.000$ & 185 \\ 
+\bottomrule
+\end{longtable}
+\begin{minipage}{\linewidth}
+\textsuperscript{\textit{NA}}注1: ここにはフットノート1が入る\\
+\textsuperscript{\textit{NA}}注2: ここにはフットノート2が入る\\
+出典: 『\href{https://www.jaysong.net/RBook/}{私たちのR}』\\
+\end{minipage}
+```
 
 ::: {.content-visible when-format="html"}
 
