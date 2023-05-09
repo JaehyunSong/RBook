@@ -30,6 +30,8 @@ pacman::p_load(tidyverse, gt, gtExtras, DT)
 df1 <- read_csv("Data/countries_desc1.csv")
 df2 <- read_csv("Data/countries_desc2.csv")
 df3 <- read_csv("Data/countries_desc3.csv")
+df4 <- read_csv("Data/countries_ppp.csv")
+df5 <- read_csv("Data/package_download.csv")
 ```
 
 :::{.panel-tabset}
@@ -52,6 +54,20 @@ df2
 ```{r}
 #| label: table-dataset-3
 df3
+```
+
+## `df4`の中身
+
+```{r}
+#| label: table-dataset-4
+df4
+```
+
+## `df5`の中身
+
+```{r}
+#| label: table-dataset-5
+df5
 ```
 :::
 
@@ -372,9 +388,142 @@ RColorBrewer::display.brewer.all()
 
 ## 画像・プロットの追加
 
-* <https://jthomasmock.github.io/gtExtras/articles/plotting-with-gtExtras.html#graphs-vs-tables>
-* `add_text_img()`
-* `gt_img_rows()`
+```{r}
+#| label: table-plot-data-1
+df4_grouped <- df4 |> 
+  group_by(Continent) |> 
+  summarise(Mean = mean(PPP_per_capita),
+            SD   = sd(PPP_per_capita),
+            Min  = min(PPP_per_capita),
+            Max  = max(PPP_per_capita),
+            PPP  = list(PPP_per_capita))
+```
+
+```{r}
+#| label: table-plot-data-2
+df4_grouped 
+```
+
+```{r}
+#| label: table-plot-density-1
+df4_grouped |> 
+  gt()
+```
+
+```{r}
+#| label: table-plot-density-2
+df4_grouped |> 
+  gt() |> 
+  fmt_number(columns = Mean:Max, decimals = 1) |> 
+  cols_label("Continent" = "大陸",
+             "Mean"      = "平均値",
+             "SD"        = "標準偏差",
+             "Min"       = "最小値",
+             "Max"       = "最大値",
+             "PPP"       = "分布") |> 
+  tab_header(title = "大陸別一人あたり購買力平価GDP")
+```
+
+```{r}
+#| label: table-plot-density-3
+df4_grouped |> 
+  gt() |> 
+  fmt_number(columns = Mean:Max, decimals = 1) |> 
+  cols_label("Continent" = "大陸",
+             "Mean"      = "平均値",
+             "SD"        = "標準偏差",
+             "Min"       = "最小値",
+             "Max"       = "最大値",
+             "PPP"       = "分布") |> 
+  tab_header(title = "大陸別一人あたり購買力平価GDP") |> 
+  gt_plt_dist(PPP)
+```
+
+```{r}
+#| label: table-plot-density-4
+df4_grouped |> 
+  gt() |> 
+  fmt_number(columns = Mean:Max, decimals = 1) |> 
+  cols_label("Continent" = "大陸",
+             "Mean"      = "平均値",
+             "SD"        = "標準偏差",
+             "Min"       = "最小値",
+             "Max"       = "最大値",
+             "PPP"       = "分布") |> 
+  tab_header(title = "大陸別一人あたり購買力平価GDP") |> 
+  gt_plt_dist(PPP, type = "histogram")
+```
+
+```{r}
+#| label: table-plot-image-1
+df5 |> 
+  gt()
+```
+
+```{r}
+#| label: table-plot-image-2
+df5 |> 
+  gt() |> 
+  gt_img_rows(Hex)
+```
+
+```{r}
+#| label: table-plot-image-3
+df5 |> 
+  gt() |> 
+  gt_img_rows(Hex, height = 50)
+```
+
+```{r}
+#| label: table-plot-image-4
+df5 |> 
+  gt() |> 
+  gt_img_rows(Hex, height = 50) |> 
+  cols_label("Name" = "Package",
+             "Hex"  = "Logo")
+```
+
+```{r}
+#| label: table-plot-image-5
+df5 |> 
+  gt() |> 
+  gt_img_rows(Hex, height = 50) |> 
+  cols_label("Name" = "Package",
+             "Hex"  = "Logo")
+```
+
+```{r}
+#| label: table-plot-image-6
+df5 |> 
+  gt() |> 
+  gt_img_rows(Hex, height = 50) |> 
+  cols_label("Name" = "Package",
+             "Hex"  = "Logo") |> 
+  gt_plt_bar(Download)
+```
+
+```{r}
+#| label: table-plot-image-7
+df5 |> 
+  gt() |> 
+  gt_img_rows(Hex, height = 50) |> 
+  cols_label("Name" = "Package",
+             "Hex"  = "Logo") |> 
+  gt_plt_bar(Download, keep_column = TRUE)
+```
+
+```{r}
+#| label: table-plot-image-8
+df5 |> 
+  gt() |> 
+  gt_img_rows(Hex, height = 50) |> 
+  cols_label("Name" = "Package",
+             "Hex"  = "Logo") |> 
+  gt_plt_bar(Download, keep_column = TRUE, color = "royalblue") |> 
+  tab_header(title = "Number of packages downloaded on May 9, 2023")
+```
+
+* <https://jthomasmock.github.io/gtExtras/index.html>
 
 ## テーマ
 
@@ -545,20 +694,20 @@ df2
 
 　tibble形式のデータは通常、最初の10行のみ出力される。また、小数点も2〜3桁目で丸められる。もう一つの特徴としては横に長い表の場合（つまり、列が多い場合）、一部の列は省略される（省略された列の簡単な情報は表示される）。このようにtibbleクラスのデータは読みやすく出力される長所があるものの、**全て**のデータが出力されないケースもある。
 
-　一方、`read_csv()`でなく、`read.csv()`で読み込んだ表形式データのクラスはdata.frameだ。`df2`を`as.data.frame()`関数を使ってdata.frameクラスに変更してみよう。クラスを変更した`df2`は`df4_df`と名付ける。
+　一方、`read_csv()`でなく、`read.csv()`で読み込んだ表形式データのクラスはdata.frameだ。`df2`を`as.data.frame()`関数を使ってdata.frameクラスに変更してみよう。クラスを変更した`df2`は`df6_df`と名付ける。
 
 ```{r}
 #| label: table-df-print-3
-df4_df <- as.data.frame(df2)
+df6_df <- as.data.frame(df2)
 
-class(df4_df)
+class(df6_df)
 ```
 
-　それでは`df4_df`を出力してみよう。
+　それでは`df6_df`を出力してみよう。
 
 ```{r}
 #| label: table-df-print-4
-df4_df
+df6_df
 ```
 
 　今回は**全て**の行と列が出力された。そもそも生データを掲載するのが目的であれば、tibbleクラスよりも、data.frameクラスが目的に合致する。しかし、読みにくいという深刻な問題がある。また、世論調査データのように数千行、変数も数十列以上あるデータセットを出力するとあまりにも長い画面になってしまう。
