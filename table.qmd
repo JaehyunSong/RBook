@@ -388,6 +388,8 @@ RColorBrewer::display.brewer.all()
 
 ## 画像・プロットの追加
 
+　以下では表の中にプロットや画像を入れる方法について紹介する。まずは`df4`を利用し、大陸（`Continent`）ごとの一人あたり購買力平価GDP（`PPP_per_capita`）の記述統計と分布を作成する。グループごとの記述統計を作成するため、ここでは`group_by()`と`summarise()`関数を使用する。平均値、標準偏差、最小値、最大値、国家数をそれぞれ`Mean`、`SD`、`Min`、`Max`、`N`列にする。そして、当該大陸に属する国の`PPP_per_capita`を一つのベクトルとし、`PPP`列に入れる。この場合、`list()`関数を使えば良い。以上の結果を`df4_grouped`に格納する。
+
 ```{r}
 #| label: table-plot-data-1
 df4_grouped <- df4 |> 
@@ -396,19 +398,26 @@ df4_grouped <- df4 |>
             SD   = sd(PPP_per_capita),
             Min  = min(PPP_per_capita),
             Max  = max(PPP_per_capita),
+            N    = n(),
             PPP  = list(PPP_per_capita))
 ```
+
+　出来上がった`df4_grouped`は以下の通りだ。
 
 ```{r}
 #| label: table-plot-data-2
 df4_grouped 
 ```
 
+　それでは`df4_grouped`を`gt()`で表にしてみよう。
+
 ```{r}
 #| label: table-plot-density-1
 df4_grouped |> 
   gt()
 ```
+
+　続いて、平均値から最大値までの値を小数点1桁で丸め、列名を修正し、タイトルを付ける。
 
 ```{r}
 #| label: table-plot-density-2
@@ -420,9 +429,12 @@ df4_grouped |>
              "SD"        = "標準偏差",
              "Min"       = "最小値",
              "Max"       = "最大値",
+             "N"         = "国家数",
              "PPP"       = "分布") |> 
   tab_header(title = "大陸別一人あたり購買力平価GDP")
 ```
+
+　それではこの`PPP`列をプロットにしてみよう。ここで使うのが{gtExtras}の`gt_plt_dist()`だ。引数はプロットにする列名で十分だ。
 
 ```{r}
 #| label: table-plot-density-3
@@ -434,10 +446,13 @@ df4_grouped |>
              "SD"        = "標準偏差",
              "Min"       = "最小値",
              "Max"       = "最大値",
+             "N"         = "国家数",
              "PPP"       = "分布") |> 
   tab_header(title = "大陸別一人あたり購買力平価GDP") |> 
   gt_plt_dist(PPP)
 ```
+
+　このように密度曲線が生成される。もし、密度曲線ではなく、ヒストグラムにしたい場合は`type`引数を追加し、`"histogram"`を指定すれば良い。
 
 ```{r}
 #| label: table-plot-density-4
@@ -449,16 +464,21 @@ df4_grouped |>
              "SD"        = "標準偏差",
              "Min"       = "最小値",
              "Max"       = "最大値",
+             "N"         = "国家数",
              "PPP"       = "分布") |> 
   tab_header(title = "大陸別一人あたり購買力平価GDP") |> 
   gt_plt_dist(PPP, type = "histogram")
 ```
+
+　続いて、画像について解説する。ここでは`df5`を使用する。まずは`gt()`で中身を確認してみよう。
 
 ```{r}
 #| label: table-plot-image-1
 df5 |> 
   gt()
 ```
+
+　3つの列があり、1列目はパッケージ名（`Name`）、2列目はHEXロゴのURL（`Hex`）、3列目は2023年5月9日現在のダウンロード数（`Download`）である。ここで{gtExtras}の`gt_img_rows()`関数を使用し、画像のパス・URLが格納されている列名を指定すれば、当該画像が表示される。
 
 ```{r}
 #| label: table-plot-image-2
@@ -467,12 +487,16 @@ df5 |>
   gt_img_rows(Hex)
 ```
 
+　画像の大きさは`height`で調整できる。今回は50ピクセル（50px）にしてみよう。
+
 ```{r}
 #| label: table-plot-image-3
 df5 |> 
   gt() |> 
   gt_img_rows(Hex, height = 50)
 ```
+
+　続いて、列名を変更する。`Name`は`Package`に、`Hex`は`Logo`とする。
 
 ```{r}
 #| label: table-plot-image-4
@@ -483,17 +507,10 @@ df5 |>
              "Hex"  = "Logo")
 ```
 
-```{r}
-#| label: table-plot-image-5
-df5 |> 
-  gt() |> 
-  gt_img_rows(Hex, height = 50) |> 
-  cols_label("Name" = "Package",
-             "Hex"  = "Logo")
-```
+　ここで更に`Download`列を棒グラフに変えてみよう。棒グラフの作成は`gt_plt_bar()`を使用する。第1引数は棒グラフにしたい列名だ。
 
 ```{r}
-#| label: table-plot-image-6
+#| label: table-plot-image-5
 df5 |> 
   gt() |> 
   gt_img_rows(Hex, height = 50) |> 
@@ -502,8 +519,10 @@ df5 |>
   gt_plt_bar(Download)
 ```
 
+　棒グラフにすることで相対的な比較がしやすくなった。しかし、元々あった数字がなくなったので、具体的に何回ダウンロードされたかに関する情報を消えている。もし、元の列を残したい場合は`keep_column = TRUE`を指定する。
+
 ```{r}
-#| label: table-plot-image-7
+#| label: table-plot-image-6
 df5 |> 
   gt() |> 
   gt_img_rows(Hex, height = 50) |> 
@@ -512,9 +531,12 @@ df5 |>
   gt_plt_bar(Download, keep_column = TRUE)
 ```
 
+　最後にタイトルを付け、棒グラフの色を`"royalblue"`にしてみよう。棒の色は`color`引数で指定できる。また、`df5`を`gt()`に渡す前に`arrange()`を使って、パッケージの表示順番もダウンロード数の多いものからに並べ替えてみよう。
+
 ```{r}
-#| label: table-plot-image-8
+#| label: table-plot-image-7
 df5 |> 
+  arrange(desc(Download)) |> 
   gt() |> 
   gt_img_rows(Hex, height = 50) |> 
   cols_label("Name" = "Package",
@@ -523,7 +545,7 @@ df5 |>
   tab_header(title = "Number of packages downloaded on May 9, 2023")
 ```
 
-* <https://jthomasmock.github.io/gtExtras/index.html>
+　{gtExtras}は他にも様々なプロットを提供し、画像の追加にもいくつかのバリエーションがある。詳細は{gtExtras}の[公式マニュアル](https://jthomasmock.github.io/gtExtras/index.html)を参照されたい。
 
 ## テーマ
 
