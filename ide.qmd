@@ -15,51 +15,57 @@ source("_common.R")
 
 　プログラマにとって優れたIDEを使うということは、優れた秘書を雇用するようなものだ。ファイルの管理、うろ覚えのコマンドの補完入力、コードの色分けなどを自動的に行ってくれる。さらに、コードの実行結果の画面をコードと同時に表示してくれたり、これまでの作業を記録してくれるなど、多くの作業を手助けしてくれる。Rにはいくつかの優れたIDEが用意されている。本書では代表的なIDEである [RStudio](https://rstudio.com) を使うことにする。ただし、プログラミングにIDEは必須ではない。IDEをインストールしなくても、本書を読む上で特に問題はない（RStudioに関する説明の部分を除く）が、Rの実行環境に特にこだわりがないなら RStudioの導入を強く推奨する。
 
-```{r fig-ide-intro-rstudio}
-#| echo: false
-#| out-width: "800px"
-#| fig-cap: "RStudio"
-knitr::include_graphics("Figs/AboutR/IDE_RStudio.png")
-```
+![RStudio](Figs/IDE/RStudio.png)
 
 　RStudio以外にもRのIDEはある。魔界において圧倒的なシェアを誇ると噂されるWindowsという名のOSを使用しているなら、[R Tools for Visual Studio](https://docs.microsoft.com/ja-jp/visualstudio/rtvs/installer?view=vs-2017) がRStudioの代替候補として有力だ。
 
-```{r fig-ide-intro-rtvs}
-#| echo: false
-#| out.width: "800px"
-#| fig.cap: "R Tools for Visual Studio"
-knitr::include_graphics("Figs/AboutR/IDE_RTVS.png")
-```
+![R Tools for Visual Studio](Figs/IDE/RTVS.png)
 
-　自分が使い慣れたテキストエディタをIDEとして使うことも可能である。[Sublime Text](https://www.sublimetext.com) や [Atom](https://atom.io) はむろん、伝統のある [Emacs](https://www.gnu.org/software/emacs/) や [Vim](https://www.vim.org) を使うこともできる。
+　自分が使い慣れたテキストエディタをIDEとして使うことも可能である。[Sublime Text](https://www.sublimetext.com) や [Atom](https://atom.io) はむろん、伝統のある [Emacs](https://www.gnu.org/software/emacs/) や [Vim](https://www.vim.org) を使うこともできる。近年、人気のテキストエディターである[Visual Studio Code](https://code.visualstudio.com/)をIDEとして使用する人も増えている。
+
+![Visual Studio Code](Figs/IDE/vscode.png)
 
 ## RStudioのインストールと起動 {#ide-install}
 
+　RStudioは[posit社](https://posit.co/)が無料で提供しているRのIDEであり、最も人気のあるIDEだ。以下ではRStudioのインストール手順を画像を示しながら解説するが、posit社ホームページのレイアウトなどは随時変更される可能性がある。以下は画像は2023年6月現在の画像である。
+
+### インストーラーのダウンロード
+
+**Step 1:** positのホームページ（<https://posit.co/>）へアクセスする。あるいはRStudioダウンロードページ（<https://posit.co/download/rstudio-desktop/>）へ直接アクセスする。この場合はStep 4へ飛ぶ。
+
+**Step 2:** 画面右上の「DOWNLOAD RSTUDIO」をクリックする。
+
+![](Figs/IDE/download1.png)
+
+**Step 3:** 画面を下へスクロールし、RStudio Desktopパネルの「Download」をクロックする。
+
+![](Figs/IDE/download2.png)
+
+**Step 4:** 画面を下へスクロールし、自分が使用するOSにインストーラーをダウンロードする。macOSは`.DMG`ファイル、Windowsは`.EXE`ファイル、Ubuntu（Debian）なら`.DEB`ファイルだ。Ubuntu（Debian）の場合、自分のOSはバージョンを確認してからダウンロードすること。画面をもう少し下へスクロールすると、`.ZIP`や`.TAR.GZ`形式のインストーラーもあるが、こちらは推奨しない。
+
+![](Figs/IDE/download3.png)
+
 ### macOSの場合
 
-ポチポチ、ドラッグ・アンド・ドロップ
+　ダウンロードした`.dmg`ファイルをクリックすると以下のような画面が表示される。
+
+![](Figs/IDE/install_macos.png)
+
+　あとはRStudio.appのアイコンをクリックしたまま、Applicationsフォルダーへ移動させる（ドラッグ・アンド・ドロップ）だけだ。すでにRStudioがインストールされている場合は上書きするかと聞かれるが、そのまま上書きしても問題ない（既存のRStudioの設定は引き継がれる）。
 
 ### Linux (Ubuntu)の場合
 
-ダウンロードしたバージョン (例えば、最新バージョン) が分かっていれば、ターミナルで`wget`コマンドで直接ダウンロード
-
-たとえば、`~/Downloads`フォルダーに2020.02.0-443バージョンをダウンロードする場合は
+　`.deb`ファイルのインストールは、ターミナルを使う必要がある。たとえば、ダウンロードしたインストーラーのファイル名が`rstudio-2023.03.1-446-amd64.deb`であり、`Download`フォルダーに保存されていると仮定する。ターミナルを開き、以下のように入力する。
 
 ```bash
-$ cd ~/Downloads/
-$ wget https://download1.rstudio.org/desktop/bionic/amd64/rstudio-2022.02.0-443-amd64.deb
+$ cd Downloads # <1>
+$ sudo apt install rstudio-2022.02.0-443-amd64.deb # <2>
 ```
 
-分からない場合は、[RStudioのホームページ](https://www.rstudio.com/products/rstudio/download/)の「All Installer」のリストから「Ubuntu 18+/Debian 10+」用の`.deb`ファイルをダウンロード
+1. `Download`フォルダーへ移動
+2. `rstudio-2023.03.1-446-amd64.deb`ファイルを管理者権限（`sudo`）でインストール（`apt install`）する。
 
-`.deb`ファイルのインストールは、ターミナルを使って`~/Download`フォルダー内の`rstudio-2022.02.0-443-amd64.deb`ファイルをインストールするなら...
-
-```bash
-$ cd ~/Downloads/
-$ sudo gdebi rstudio-2022.02.0-443-amd64.deb
-```
-
-[gdebi](https://launchpad.net/gdebi)がインストール済みならnautilus (Linux MintならNemo?)で`.deb`ファイルをダブルクリックしてインストール可能
+　もし、[gdebi](https://launchpad.net/gdebi)がインストール済みならnautilus (UbuntuベースのディストリビューションであるLinux MintならNemo/Caja)で`.deb`ファイルをダブルクリックしてインストールすることもできる。
 
 ### Windowsの場合
 
