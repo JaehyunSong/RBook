@@ -619,14 +619,19 @@ Do you want to install from sources the packages which need compilation? (Yes/no
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># {pacman}のp_load() を使う場合</span></span>
 <span id="cb12-2"><a href="#cb12-2"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, broom, estimatr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>　また、<code>p_load()</code>内のパッケージがインストールされていない場合、CRANのパッケージリストから検索し、そのパッケージをインストールしてくれる。したがって、上で紹介した<code>p_install()</code>は実質的に使うケースはほぼない。ただし、GitHub上のパッケージは自動的にインストールしてくれない。たとえば、GitHub上のみにて公開されている{BlanceR}パッケージがインストールされていない場合、<code>p_load(BalanceR)</code>を実行しても{BalanceR}はインストールされない<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>。あらかじめ<code>p_install_gh()</code>でインストールしておく必要がある。</p>
+<p>　また、<code>p_load()</code>内のパッケージがインストールされていない場合、CRANのパッケージリストから検索し、そのパッケージをインストールしてくれる。したがって、上で紹介した<code>p_install()</code>は実質的に使うケースはほぼない。</p>
+<p>　ただし、GitHub上のパッケージは自動的にインストールしてくれない。たとえば、GitHub上のみにて公開されている{BlanceR}パッケージがインストールされていない場合、<code>p_load(BalanceR)</code>を実行しても{BalanceR}はインストールされない。あらかじめ<code>p_install_gh()</code>でインストールしておく必要がある。しかし、GitHub上のパッケージを検索し、インストール&amp;読み込みをする<code>p_load_gh()</code>という関数もある。ユーザー名JaehyunSongのBalanceRレポジトリーのパッケージを読み込む場合は以下のように入力する。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>pacman<span class="sc">::</span><span class="fu">p_load_gh</span>(<span class="st">"JaehyunSong/BalanceR"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>　このコードは{BalanceR}パッケージがインストールされていると読み込みのみ行い、インストールされていない場合はJaehyunSongのBalanceRレポジトリからパッケージをインストールし、読み込む。書くのがやや面倒であるが、便利な関数である。</p>
 </section>
 <section id="アップデート" class="level3" data-number="5.5.3">
 <h3 data-number="5.5.3" class="anchored" data-anchor-id="アップデート"><span class="header-section-number">5.5.3</span> アップデート</h3>
-<p>　{pacman}にはアップデートが可能なパッケージを全てアップデートしてくれる<code>p_update()</code>という関数も用意されている。使い方は簡単で、コンソール上に<code>p_update()</code>のみの入力すれば良い。ただし、一部のパッケージのみをアップデートしたいのであれば、RStudioが提供するアップデート機能を使った方が良いかも知れない<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>。</p>
+<p>　{pacman}にはアップデートが可能なパッケージを全てアップデートしてくれる<code>p_update()</code>という関数も用意されている。使い方は簡単で、コンソール上に<code>p_update()</code>のみの入力すれば良い。ただし、一部のパッケージのみをアップデートしたいのであれば、RStudioが提供するアップデート機能を使った方が良いかも知れない<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>。</p>
 <p>　また、同じ機能の関数として<code>p_up()</code>があるが、コードの可読性のために<code>p_update()</code>の方を推奨したい。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>pacman<span class="sc">::</span><span class="fu">p_update</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>pacman<span class="sc">::</span><span class="fu">p_update</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -634,8 +639,8 @@ Do you want to install from sources the packages which need compilation? (Yes/no
 <h2 data-number="5.6" class="anchored" data-anchor-id="sec-packages_tidyverse"><span class="header-section-number">5.6</span> 必須パッケージのインストール</h2>
 <p>　ここでは現在のRにおいて必須パッケージである{tidyverse}をインストールする。{tidyverse}は{dplyr}、{ggplot2}、{tidyr}など、Rにおいて不可欠なパッケージを含むパッケージ<strong>群</strong>である。また、上で紹介した{devtools}も今のうちにインストールしておこう。既に導入済みの読者は走らせなくても良い。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span>
-<span id="cb14-2"><a href="#cb14-2"></a><span class="fu">install.packages</span>(<span class="st">"devtools"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="fu">install.packages</span>(<span class="st">"devtools"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
@@ -646,8 +651,7 @@ Do you want to install from sources the packages which need compilation? (Yes/no
 <li id="fn1"><p>他にも<a href="https://about.gitlab.com">GitLab</a>、<a href="https://bitbucket.org/product/">Bitbucket</a>などがある。<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p><code>mean()</code>や<code>sum()</code>、<code>lm()</code>のように、よく使われる関数 (=工具)はR起動と同時に作業台上に載せられる。<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>作業台上に載せずに、収納から必要な時だけ道具を取り出して使うことも可能である。この場合、<code>パッケージ名::関数名()</code>のように関数を使う。よく使うパッケージなら読み込んだ方が効率的だが、1、2回くらいしか使わないパッケージなら、このような使い方も良いだろう。<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>GitHubからパッケージを検索し、インストール&amp;読み込みをする<code>p_load_gh()</code>という関数もある。たとえば、<code>pacman::p_load_gh("JaehyunSong/BalanceR")</code>を実行した場合、{BalanceR}パッケージがインストールされていると読み込みのみ行い、インストールされていない場合はJaehyunSongレポジトリから{BalanceR}をインストールし、読み込む。コードの最上段に<code>p_load()</code>を使うなら、<code>p_load()</code>と<code>p_load_gh()</code>を分けて記述するのも良いだろう。<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p><code>p_update(ask = TRUE)</code>を実行すれば個々のパッケージに対してアップデートするかどうかを決めることができるが、面倒である。<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><code>p_update(ask = TRUE)</code>を実行すれば個々のパッケージに対してアップデートするかどうかを決めることができるが、面倒である。<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </aside>
 
