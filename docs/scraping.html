@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -481,6 +515,1603 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <li>注意点（<code>Sys.sleep()</code>など）</li>
 </ul></li>
 </ul>
+<p>Wikipediaの<a href="https://ja.wikipedia.org/wiki/%E4%B8%96%E7%95%8C%E5%A0%B1%E9%81%93%E8%87%AA%E7%94%B1%E5%BA%A6%E3%83%A9%E3%83%B3%E3%82%AD%E3%83%B3%E3%82%B0">世界報道自由度ランキング</a>の表をスクレイピング</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, rvest, gt, gtExtras)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://ja.wikipedia.org/wiki/%E4%B8%96%E7%95%8C%E5%A0%B1%E9%81%93%E8%87%AA%E7%94%B1%E5%BA%A6%E3%83%A9%E3%83%B3%E3%82%AD%E3%83%B3%E3%82%B0"</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a></span>
+<span id="cb2-3"><a href="#cb2-3"></a>df <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url)</span>
+<span id="cb2-4"><a href="#cb2-4"></a></span>
+<span id="cb2-5"><a href="#cb2-5"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{html_document}
+&lt;html class="client-nojs vector-feature-language-in-header-enabled vector-feature-language-in-main-page-header-disabled vector-feature-sticky-header-disabled vector-feature-page-tools-pinned-disabled vector-feature-toc-pinned-enabled vector-feature-main-menu-pinned-disabled vector-feature-limited-width-enabled vector-feature-limited-width-content-enabled vector-feature-zebra-design-disabled" lang="ja" dir="ltr"&gt;
+[1] &lt;head&gt;\n&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8 ...
+[2] &lt;body class="skin-vector skin-vector-search-vue mediawiki ltr sitedir-ltr ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>df_tbl <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span> </span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">html_table</span>()</span>
+<span id="cb4-3"><a href="#cb4-3"></a></span>
+<span id="cb4-4"><a href="#cb4-4"></a>pfi_df <span class="ot">&lt;-</span> df_tbl[[<span class="dv">1</span>]] <span class="sc">|&gt;</span> </span>
+<span id="cb4-5"><a href="#cb4-5"></a>  <span class="fu">rename</span>(<span class="st">"Name"</span>     <span class="ot">=</span> <span class="st">"国・地域"</span>,</span>
+<span id="cb4-6"><a href="#cb4-6"></a>         <span class="st">"Year2023"</span> <span class="ot">=</span> <span class="st">"2023年[10]"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7"></a>         <span class="st">"Year2022"</span> <span class="ot">=</span> <span class="st">"2022年[11]"</span>,</span>
+<span id="cb4-8"><a href="#cb4-8"></a>         <span class="st">"Year2021"</span> <span class="ot">=</span> <span class="st">"2021年[12]"</span>,</span>
+<span id="cb4-9"><a href="#cb4-9"></a>         <span class="st">"Year2020"</span> <span class="ot">=</span> <span class="st">"2020年[13]"</span>,</span>
+<span id="cb4-10"><a href="#cb4-10"></a>         <span class="st">"Year2019"</span> <span class="ot">=</span> <span class="st">"2019年[14]"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb4-11"><a href="#cb4-11"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(Year2023<span class="sc">:</span>Year2019, <span class="sc">~</span><span class="fu">str_replace</span>(.x, <span class="st">"</span><span class="sc">\\</span><span class="st">(([0-9]+)</span><span class="sc">\\</span><span class="st">)"</span>, <span class="st">""</span>)),</span>
+<span id="cb4-12"><a href="#cb4-12"></a>         <span class="fu">across</span>(Year2023<span class="sc">:</span>Year2019, as.numeric))</span>
+<span id="cb4-13"><a href="#cb4-13"></a></span>
+<span id="cb4-14"><a href="#cb4-14"></a>pfi_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 180 × 6
+   Name         Year2023 Year2022 Year2021 Year2020 Year2019
+   &lt;chr&gt;           &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+ 1 ノルウェー       95.2     92.6     93.3     92.2     92.2
+ 2 アイルランド     89.9     88.3     88.1     87.4     85  
+ 3 デンマーク       89.5     90.3     91.4     91.9     90.1
+ 4 スウェーデン     88.2     88.8     92.8     90.8     91.7
+ 5 フィンランド     87.9     88.4     93.0     92.1     92.1
+ 6 オランダ         87       77.9     90.3     90.0     91.4
+ 7 リトアニア       86.8     84.1     80.0     78.8     77.9
+ 8 エストニア       85.3     88.8     84.8     87.4     87.7
+ 9 ポルトガル       84.6     87.1     89.9     88.2     87.4
+10 東ティモール     84.5     81.9     70.9     70.1     70.1
+# ℹ 170 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>pfi_df <span class="sc">|&gt;</span> </span>
+<span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">cols_label</span>(<span class="st">"Name"</span>     <span class="ot">=</span> <span class="st">"国・地域"</span>,</span>
+<span id="cb6-4"><a href="#cb6-4"></a>             <span class="st">"Year2023"</span> <span class="ot">=</span> <span class="st">"2023年"</span>,</span>
+<span id="cb6-5"><a href="#cb6-5"></a>             <span class="st">"Year2022"</span> <span class="ot">=</span> <span class="st">"2022年"</span>,</span>
+<span id="cb6-6"><a href="#cb6-6"></a>             <span class="st">"Year2021"</span> <span class="ot">=</span> <span class="st">"2021年"</span>,</span>
+<span id="cb6-7"><a href="#cb6-7"></a>             <span class="st">"Year2020"</span> <span class="ot">=</span> <span class="st">"2020年"</span>,</span>
+<span id="cb6-8"><a href="#cb6-8"></a>             <span class="st">"Year2019"</span> <span class="ot">=</span> <span class="st">"2019年"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb6-9"><a href="#cb6-9"></a>  <span class="fu">gt_color_rows</span>(<span class="at">columns =</span> Year2023<span class="sc">:</span>Year2019,</span>
+<span id="cb6-10"><a href="#cb6-10"></a>                <span class="at">palette =</span> <span class="st">"ggsci::blue_material"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="wdlzfwkvns" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#wdlzfwkvns table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#wdlzfwkvns thead, #wdlzfwkvns tbody, #wdlzfwkvns tfoot, #wdlzfwkvns tr, #wdlzfwkvns td, #wdlzfwkvns th {
+  border-style: none;
+}
+
+#wdlzfwkvns p {
+  margin: 0;
+  padding: 0;
+}
+
+#wdlzfwkvns .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#wdlzfwkvns .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#wdlzfwkvns .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#wdlzfwkvns .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#wdlzfwkvns .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#wdlzfwkvns .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#wdlzfwkvns .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#wdlzfwkvns .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#wdlzfwkvns .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#wdlzfwkvns .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#wdlzfwkvns .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#wdlzfwkvns .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#wdlzfwkvns .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#wdlzfwkvns .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#wdlzfwkvns .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#wdlzfwkvns .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#wdlzfwkvns .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#wdlzfwkvns .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#wdlzfwkvns .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wdlzfwkvns .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#wdlzfwkvns .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#wdlzfwkvns .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#wdlzfwkvns .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wdlzfwkvns .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#wdlzfwkvns .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#wdlzfwkvns .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#wdlzfwkvns .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wdlzfwkvns .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#wdlzfwkvns .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#wdlzfwkvns .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#wdlzfwkvns .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#wdlzfwkvns .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#wdlzfwkvns .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wdlzfwkvns .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#wdlzfwkvns .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wdlzfwkvns .gt_left {
+  text-align: left;
+}
+
+#wdlzfwkvns .gt_center {
+  text-align: center;
+}
+
+#wdlzfwkvns .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#wdlzfwkvns .gt_font_normal {
+  font-weight: normal;
+}
+
+#wdlzfwkvns .gt_font_bold {
+  font-weight: bold;
+}
+
+#wdlzfwkvns .gt_font_italic {
+  font-style: italic;
+}
+
+#wdlzfwkvns .gt_super {
+  font-size: 65%;
+}
+
+#wdlzfwkvns .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#wdlzfwkvns .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#wdlzfwkvns .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#wdlzfwkvns .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#wdlzfwkvns .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#wdlzfwkvns .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#wdlzfwkvns .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="国・地域">国・地域</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="2023年">2023年</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="2022年">2022年</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="2021年">2021年</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="2020年">2020年</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="2019年">2019年</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="Name" class="gt_row gt_left">ノルウェー</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #0D47A1; color: #FFFFFF;">95.18</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #0D47A1; color: #FFFFFF;">92.65</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #0D47A1; color: #FFFFFF;">93.28</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #0D47A1; color: #FFFFFF;">92.16</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #0D47A1; color: #FFFFFF;">92.18</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">アイルランド</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #135AB5; color: #FFFFFF;">89.91</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1256B0; color: #FFFFFF;">88.30</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #135AB4; color: #FFFFFF;">88.09</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1257B2; color: #FFFFFF;">87.40</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1460BB; color: #FFFFFF;">85.00</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">デンマーク</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #135CB7; color: #FFFFFF;">89.48</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #104FA9; color: #FFFFFF;">90.27</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #0F4EA8; color: #FFFFFF;">91.43</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #0D48A2; color: #FFFFFF;">91.87</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #0F4EA8; color: #FFFFFF;">90.13</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">スウェーデン</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1461BC; color: #FFFFFF;">88.15</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1154AE; color: #FFFFFF;">88.84</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #0E49A3; color: #FFFFFF;">92.76</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #0F4CA6; color: #FFFFFF;">90.75</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #0E49A3; color: #FFFFFF;">91.69</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">フィンランド</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1462BC; color: #FFFFFF;">87.94</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1255B0; color: #FFFFFF;">88.42</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #0D48A2; color: #FFFFFF;">93.01</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #0D47A1; color: #FFFFFF;">92.07</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #0D47A1; color: #FFFFFF;">92.10</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">オランダ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1565C0; color: #FFFFFF;">87.00</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1871CC; color: #FFFFFF;">77.93</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1152AC; color: #FFFFFF;">90.33</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #104EA9; color: #FFFFFF;">90.04</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #0E4AA4; color: #FFFFFF;">91.37</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">リトアニア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1565C0; color: #FFFFFF;">86.79</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1564BF; color: #FFFFFF;">84.14</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #186FCB; color: #FFFFFF;">79.95</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #176ECA; color: #FFFFFF;">78.81</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1870CC; color: #FFFFFF;">77.94</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">エストニア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1669C4; color: #FFFFFF;">85.31</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1154AE; color: #FFFFFF;">88.83</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1565C0; color: #FFFFFF;">84.75</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1257B2; color: #FFFFFF;">87.39</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1256B1; color: #FFFFFF;">87.73</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ポルトガル</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #166AC5; color: #FFFFFF;">84.60</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #135AB5; color: #FFFFFF;">87.07</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1153AE; color: #FFFFFF;">89.89</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1155AF; color: #FFFFFF;">88.17</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1258B2; color: #FFFFFF;">87.37</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">東ティモール</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #166AC6; color: #FFFFFF;">84.49</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1669C4; color: #FFFFFF;">81.89</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1D82DF; color: #FFFFFF;">70.89</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1C80DC; color: #FFFFFF;">70.10</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1C80DD; color: #FFFFFF;">70.07</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">リヒテンシュタイン</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #166AC6; color: #FFFFFF;">84.47</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1565C0; color: #FFFFFF;">84.03</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #176ECA; color: #FFFFFF;">80.51</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #176BC6; color: #FFFFFF;">80.48</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #176DC8; color: #FFFFFF;">79.51</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">スイス</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #166AC6; color: #FFFFFF;">84.40</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1667C2; color: #FFFFFF;">82.72</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1155AF; color: #FFFFFF;">89.45</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1050AB; color: #FFFFFF;">89.38</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1050AB; color: #FFFFFF;">89.48</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ニュージーランド</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #166BC6; color: #FFFFFF;">84.23</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1566C1; color: #FFFFFF;">83.54</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1153AD; color: #FFFFFF;">89.96</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1051AB; color: #FFFFFF;">89.31</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1051AB; color: #FFFFFF;">89.25</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">チェコ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #176CC8; color: #FFFFFF;">83.58</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #176BC7; color: #FFFFFF;">80.54</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1976D2; color: #FFFFFF;">76.62</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1873CF; color: #FFFFFF;">76.43</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1976D2; color: #FFFFFF;">75.11</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">カナダ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #176CC8; color: #FFFFFF;">83.53</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1669C4; color: #FFFFFF;">81.74</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1565C0; color: #FFFFFF;">84.75</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1461BC; color: #FFFFFF;">84.71</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1562BD; color: #FFFFFF;">84.31</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ラトビア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #176DC8; color: #FFFFFF;">83.27</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #176ECA; color: #FFFFFF;">79.17</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #176EC9; color: #FFFFFF;">80.74</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1669C4; color: #FFFFFF;">81.44</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #176BC6; color: #FFFFFF;">80.47</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">スロバキア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #176DC8; color: #FFFFFF;">83.22</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1870CB; color: #FFFFFF;">78.37</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1975D1; color: #FFFFFF;">76.98</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1871CD; color: #FFFFFF;">77.33</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1873CF; color: #FFFFFF;">76.42</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">アイスランド</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #176DC8; color: #FFFFFF;">83.19</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1667C2; color: #FFFFFF;">82.69</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1566C1; color: #FFFFFF;">84.63</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1460BB; color: #FFFFFF;">84.88</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #145FBA; color: #FFFFFF;">85.29</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">サモア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #186FCB; color: #FFFFFF;">82.15</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1B7EDA; color: #FFFFFF;">71.39</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #176EC9; color: #FFFFFF;">80.76</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1668C4; color: #FFFFFF;">81.75</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1669C4; color: #FFFFFF;">81.75</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ルクセンブルク</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #186FCB; color: #FFFFFF;">81.98</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #176DC8; color: #FFFFFF;">79.81</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #166AC5; color: #FFFFFF;">82.44</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1461BC; color: #FFFFFF;">84.54</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1562BD; color: #FFFFFF;">84.34</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ドイツ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1870CB; color: #FFFFFF;">81.91</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1669C4; color: #FFFFFF;">82.04</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1565C0; color: #FFFFFF;">84.76</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1256B0; color: #FFFFFF;">87.84</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #145EB9; color: #FFFFFF;">85.40</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ナミビア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1872CD; color: #FFFFFF;">80.91</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1669C4; color: #FFFFFF;">81.84</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #176FCA; color: #FFFFFF;">80.28</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #166AC6; color: #FFFFFF;">80.75</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #166AC5; color: #FFFFFF;">81.05</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">コスタリカ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #176FCA; color: #FFFFFF;">82.30</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #145EB9; color: #FFFFFF;">85.92</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #104EA9; color: #FFFFFF;">91.24</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1050AB; color: #FFFFFF;">89.47</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1256B1; color: #FFFFFF;">87.76</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">フランス</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1976D2; color: #FFFFFF;">78.72</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #186FCB; color: #FFFFFF;">78.53</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1974D0; color: #FFFFFF;">77.40</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1872CD; color: #FFFFFF;">77.08</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1870CC; color: #FFFFFF;">77.79</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">南アフリカ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1977D3; color: #FFFFFF;">78.60</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1975D1; color: #FFFFFF;">75.56</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1872CE; color: #FFFFFF;">78.41</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1871CC; color: #FFFFFF;">77.59</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1870CC; color: #FFFFFF;">77.81</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">イギリス</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1977D3; color: #FFFFFF;">78.51</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #186FCB; color: #FFFFFF;">78.71</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1872CE; color: #FFFFFF;">78.41</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1872CD; color: #FFFFFF;">77.07</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1870CC; color: #FFFFFF;">77.77</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">オーストラリア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1977D3; color: #FFFFFF;">78.24</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1A79D5; color: #FFFFFF;">73.77</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #176FCA; color: #FFFFFF;">80.21</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #176CC8; color: #FFFFFF;">79.79</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1565C0; color: #FFFFFF;">83.45</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">モルドバ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1A79D5; color: #FFFFFF;">77.62</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1A79D6; color: #FFFFFF;">73.47</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1E88E5; color: #FFFFFF;">68.39</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1D82DF; color: #FFFFFF;">68.84</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1D83DF; color: #FFFFFF;">68.79</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">オーストリア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1A79D6; color: #FFFFFF;">77.30</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1873CF; color: #FFFFFF;">76.74</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1668C3; color: #FFFFFF;">83.66</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1562BD; color: #FFFFFF;">84.22</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1461BC; color: #FFFFFF;">84.67</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">トリニダード・トバゴ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1B7BD7; color: #FFFFFF;">76.54</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #186FCB; color: #FFFFFF;">78.68</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1872CE; color: #FFFFFF;">78.45</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1872CE; color: #FFFFFF;">76.78</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1975D1; color: #FFFFFF;">75.26</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ベルギー</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1B7BD8; color: #FFFFFF;">76.47</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #176FCA; color: #FFFFFF;">78.86</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1259B3; color: #FFFFFF;">88.31</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1257B2; color: #FFFFFF;">87.43</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1256B0; color: #FFFFFF;">87.93</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ジャマイカ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1B7CD9; color: #FFFFFF;">75.89</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1566C1; color: #FFFFFF;">83.35</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1153AD; color: #FFFFFF;">90.04</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1050AA; color: #FFFFFF;">89.49</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1152AD; color: #FFFFFF;">88.87</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">カーボベルデ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1B7DD9; color: #FFFFFF;">75.72</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1976D2; color: #FFFFFF;">75.37</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #186FCB; color: #FFFFFF;">79.91</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #176CC8; color: #FFFFFF;">79.85</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #176CC7; color: #FFFFFF;">80.19</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">セーシェル</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1B7DD9; color: #FFFFFF;">75.71</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1566C1; color: #FFFFFF;">83.33</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1B7BD7; color: #FFFFFF;">74.34</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1B7DDA; color: #FFFFFF;">71.34</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1C7FDC; color: #FFFFFF;">70.59</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">中華民国</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1B7DDA; color: #FFFFFF;">75.54</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1A78D4; color: #FFFFFF;">74.08</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1977D3; color: #FFFFFF;">76.14</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1873CF; color: #FFFFFF;">76.24</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1976D2; color: #FFFFFF;">75.02</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">スペイン</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1B7EDA; color: #FFFFFF;">75.37</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1873CF; color: #FFFFFF;">76.71</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1870CC; color: #FFFFFF;">79.56</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1870CC; color: #FFFFFF;">77.84</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1870CC; color: #FFFFFF;">78.01</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">アンドラ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1B7EDB; color: #FFFFFF;">75.05</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1D83E0; color: #FFFFFF;">68.79</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1976D2; color: #FFFFFF;">76.68</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1872CE; color: #FFFFFF;">76.77</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1975D1; color: #FFFFFF;">75.37</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">北マケドニア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1C80DC; color: #FFFFFF;">74.35</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1D84E1; color: #FFFFFF;">68.44</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1E88E5; color: #FFFFFF;">68.33</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1D83DF; color: #FFFFFF;">68.72</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1D84E0; color: #FFFFFF;">68.34</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">モンテネグロ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1C80DD; color: #FFFFFF;">74.28</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1E88E5; color: #FFFFFF;">66.54</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1F8DEA; color: #FFFFFF;">65.67</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1E88E5; color: #FFFFFF;">66.17</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1D86E3; color: #FFFFFF;">67.26</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">アルゼンチン</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1C82DF; color: #FFFFFF;">73.36</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1872CE; color: #FFFFFF;">77.28</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1D82DF; color: #FFFFFF;">71.01</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1B7DDA; color: #FFFFFF;">71.22</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1B7DD9; color: #FFFFFF;">71.70</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">イタリア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1D85E2; color: #FFFFFF;">72.05</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1D84E1; color: #FFFFFF;">68.16</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1976D2; color: #FFFFFF;">76.61</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1873CF; color: #FFFFFF;">76.31</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1976D2; color: #FFFFFF;">75.02</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">クロアチア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1D85E2; color: #FFFFFF;">71.95</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1C80DC; color: #FFFFFF;">70.42</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1C80DD; color: #FFFFFF;">72.05</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1B7DD9; color: #FFFFFF;">71.49</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1B7EDB; color: #FFFFFF;">70.97</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ドミニカ共和国</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1D85E2; color: #FFFFFF;">71.88</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1873CE; color: #FFFFFF;">76.90</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1A7BD7; color: #FFFFFF;">74.40</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1B7CD8; color: #FFFFFF;">72.10</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1B7CD8; color: #FFFFFF;">72.10</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">トンガ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1E87E4; color: #FFFFFF;">71.29</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1C81DE; color: #FFFFFF;">69.74</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1A79D5; color: #FFFFFF;">75.41</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1A7AD7; color: #FFFFFF;">72.73</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1977D3; color: #FFFFFF;">74.59</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">アメリカ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1E87E4; color: #FFFFFF;">71.22</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1A7BD7; color: #FFFFFF;">72.74</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1977D3; color: #FFFFFF;">76.07</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1873CF; color: #FFFFFF;">76.15</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1977D3; color: #FFFFFF;">74.31</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ガンビア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1E87E4; color: #FFFFFF;">71.06</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1C82DF; color: #FFFFFF;">69.25</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1E86E3; color: #FFFFFF;">69.24</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1C81DE; color: #FFFFFF;">69.38</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1D83E0; color: #FFFFFF;">68.65</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">韓国</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1E88E5; color: #FFFFFF;">70.83</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1B7CD9; color: #FFFFFF;">72.11</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1976D2; color: #FFFFFF;">76.57</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1873CF; color: #FFFFFF;">76.30</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1976D2; color: #FFFFFF;">75.06</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">スリナム</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1E88E5; color: #FFFFFF;">70.62</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1D83DF; color: #FFFFFF;">68.95</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1669C4; color: #FFFFFF;">83.05</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1667C2; color: #FFFFFF;">82.50</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1565C0; color: #FFFFFF;">83.62</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">アルメニア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1E88E5; color: #FFFFFF;">70.61</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1D83DF; color: #FFFFFF;">68.97</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1C82DF; color: #FFFFFF;">71.17</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1B7DD9; color: #FFFFFF;">71.40</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1B7EDB; color: #FFFFFF;">71.02</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">スロベニア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1E88E5; color: #FFFFFF;">70.59</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1D84E0; color: #FFFFFF;">68.54</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1976D2; color: #FFFFFF;">76.90</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1871CD; color: #FFFFFF;">77.36</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1871CC; color: #FFFFFF;">77.69</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ベリーズ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1E88E5; color: #FFFFFF;">70.49</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1C7FDC; color: #FFFFFF;">70.67</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1C7FDC; color: #FFFFFF;">72.39</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1A7BD7; color: #FFFFFF;">72.50</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1B7BD7; color: #FFFFFF;">72.50</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ウルグアイ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1E89E6; color: #FFFFFF;">70.33</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1B7CD9; color: #FFFFFF;">72.03</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1668C3; color: #FFFFFF;">83.62</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1562BD; color: #FFFFFF;">84.21</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1564BF; color: #FFFFFF;">83.94</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ルーマニア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1F8BE8; color: #FFFFFF;">69.04</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1D84E1; color: #FFFFFF;">68.46</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1A79D6; color: #FFFFFF;">75.09</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1978D4; color: #FFFFFF;">74.09</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1977D3; color: #FFFFFF;">74.33</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">コートジボワール</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1F8BE8; color: #FFFFFF;">68.83</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1977D3; color: #FFFFFF;">74.46</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1C82DF; color: #FFFFFF;">71.13</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1B7EDA; color: #FFFFFF;">71.06</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1C7FDC; color: #FFFFFF;">70.48</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">キプロス</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1F8CE9; color: #FFFFFF;">68.62</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1E89E6; color: #FFFFFF;">65.97</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #176FCA; color: #FFFFFF;">80.15</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #176DC8; color: #FFFFFF;">79.55</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #186FCB; color: #FFFFFF;">78.26</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">コソボ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1F8CE9; color: #FFFFFF;">68.38</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1E87E4; color: #FFFFFF;">67.00</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1D85E2; color: #FFFFFF;">69.68</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1C7FDB; color: #FFFFFF;">70.67</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1C80DC; color: #FFFFFF;">70.32</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ポーランド</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1F8DEA; color: #FFFFFF;">67.66</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1E89E6; color: #FFFFFF;">65.64</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1C82DF; color: #FFFFFF;">71.16</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1B7DDA; color: #FFFFFF;">71.35</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1B7EDA; color: #FFFFFF;">71.11</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ブルキナファソ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1F8DEA; color: #FFFFFF;">67.64</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1A7AD6; color: #FFFFFF;">73.12</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1976D2; color: #FFFFFF;">76.83</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1873CE; color: #FFFFFF;">76.53</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1975D1; color: #FFFFFF;">75.47</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">パプアニューギニア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1F8DEA; color: #FFFFFF;">67.62</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1E87E4; color: #FFFFFF;">66.66</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1A79D6; color: #FFFFFF;">75.12</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1874CF; color: #FFFFFF;">76.07</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1975D1; color: #FFFFFF;">75.30</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ガイアナ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1F8DEA; color: #FFFFFF;">67.50</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1874CF; color: #FFFFFF;">76.41</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1A7BD7; color: #FFFFFF;">74.39</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1A79D5; color: #FFFFFF;">73.37</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1A79D5; color: #FFFFFF;">73.37</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ニジェール</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #1F8FEC; color: #FFFFFF;">66.84</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1D85E2; color: #FFFFFF;">67.80</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1C81DE; color: #FFFFFF;">71.56</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1B7CD9; color: #FFFFFF;">71.75</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1C7FDB; color: #FFFFFF;">70.74</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ガーナ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #2090ED; color: #FFFFFF;">65.93</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1D86E3; color: #FFFFFF;">67.43</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1872CE; color: #FFFFFF;">78.67</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1870CC; color: #FFFFFF;">77.74</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #176EC9; color: #FFFFFF;">79.19</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">モーリシャス</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #2091EE; color: #FFFFFF;">65.56</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1E89E6; color: #FFFFFF;">66.07</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1C82DE; color: #FFFFFF;">71.26</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1B7CD8; color: #FFFFFF;">72.00</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1B7DD9; color: #FFFFFF;">71.54</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ボスニア・ヘルツェゴビナ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #2091EE; color: #FFFFFF;">65.43</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1E89E6; color: #FFFFFF;">65.64</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1C81DD; color: #FFFFFF;">71.66</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1B7DD9; color: #FFFFFF;">71.49</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1B7EDB; color: #FFFFFF;">70.98</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ボツワナ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #2092EF; color: #FFFFFF;">64.61</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2195F2; color: #FFFFFF;">58.49</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1976D2; color: #FFFFFF;">76.75</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1873CF; color: #FFFFFF;">76.44</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1976D2; color: #FFFFFF;">74.91</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">リベリア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #2093F0; color: #FFFFFF;">64.34</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1F8EEB; color: #FFFFFF;">62.77</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1F8BE8; color: #FFFFFF;">66.64</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1D85E2; color: #FFFFFF;">67.75</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1D83E0; color: #FFFFFF;">68.51</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">レソト</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #2093F0; color: #FFFFFF;">64.29</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2093F0; color: #FFFFFF;">59.39</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1E88E5; color: #FFFFFF;">68.30</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1C81DE; color: #FFFFFF;">69.55</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1C80DC; color: #FFFFFF;">70.26</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">日本</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #2194F1; color: #FFFFFF;">63.95</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1F8BE8; color: #FFFFFF;">64.37</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1C82DF; color: #FFFFFF;">71.12</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1B7EDA; color: #FFFFFF;">71.14</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1C7FDB; color: #FFFFFF;">70.64</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">パナマ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #2194F1; color: #FFFFFF;">63.67</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1F8EEB; color: #FFFFFF;">62.78</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1D84E1; color: #FFFFFF;">70.06</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1C80DC; color: #FFFFFF;">70.22</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1C80DC; color: #FFFFFF;">70.22</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">トーゴ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #2195F2; color: #FFFFFF;">63.06</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2497F3; color: #FFFFFF;">57.17</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1D84E0; color: #FFFFFF;">70.41</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1C7FDB; color: #FFFFFF;">70.67</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1C80DC; color: #FFFFFF;">70.31</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ブルガリア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #2195F2; color: #FFFFFF;">62.98</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2194F1; color: #FFFFFF;">59.12</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #2092EF; color: #FFFFFF;">62.71</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1E8AE7; color: #FFFFFF;">64.94</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1F8AE7; color: #FFFFFF;">64.89</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ハンガリー</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #2195F2; color: #FFFFFF;">62.96</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2093F0; color: #FFFFFF;">59.80</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1E88E5; color: #FFFFFF;">68.24</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1C82DE; color: #FFFFFF;">69.16</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1C81DE; color: #FFFFFF;">69.56</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">マレーシア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #2195F2; color: #FFFFFF;">62.83</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #3AA0F4; color: #FFFFFF;">51.55</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #2195F2; color: #FFFFFF;">60.53</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1E87E3; color: #FFFFFF;">66.88</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1F8DEA; color: #FFFFFF;">63.26</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">シエラレオネ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #2196F3; color: #FFFFFF;">62.55</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1B7EDB; color: #FFFFFF;">71.03</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1D84E0; color: #FFFFFF;">70.39</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1C81DD; color: #FFFFFF;">69.72</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1C81DE; color: #FFFFFF;">69.64</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">コモロ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #2397F3; color: #FFFFFF;">62.25</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2092EF; color: #FFFFFF;">60.16</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1D86E3; color: #FFFFFF;">69.35</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1C80DC; color: #FFFFFF;">70.23</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1B7CD8; color: #FFFFFF;">72.09</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">北キプロス</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #2697F3; color: #FFFFFF;">61.73</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2090EE; color: #FFFFFF;">61.08</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1D84E1; color: #FFFFFF;">70.18</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1C80DC; color: #FFFFFF;">70.21</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1C80DC; color: #FFFFFF;">70.33</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ジョージア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #2698F3; color: #FFFFFF;">61.69</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2093F0; color: #FFFFFF;">59.30</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1C81DE; color: #FFFFFF;">71.36</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1B7DD9; color: #FFFFFF;">71.41</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1B7EDB; color: #FFFFFF;">71.02</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ギニアビサウ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #2698F3; color: #FFFFFF;">61.57</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2194F1; color: #FFFFFF;">58.79</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1E8AE7; color: #FFFFFF;">67.32</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1D84E1; color: #FFFFFF;">67.94</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1D82DF; color: #FFFFFF;">69.05</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ウクライナ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #2898F3; color: #FFFFFF;">61.19</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2A99F3; color: #FFFFFF;">55.76</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1F8AE7; color: #FFFFFF;">67.04</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1D85E2; color: #FFFFFF;">67.48</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1D85E2; color: #FFFFFF;">67.54</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">エクアドル</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #2C9AF4; color: #FFFFFF;">60.51</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1F8BE8; color: #FFFFFF;">64.61</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1E8AE7; color: #FFFFFF;">67.17</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1D85E2; color: #FFFFFF;">67.38</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1D84E1; color: #FFFFFF;">68.12</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">コンゴ共和国</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #2C9AF4; color: #FFFFFF;">60.42</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2194F1; color: #FFFFFF;">58.64</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #2194F1; color: #FFFFFF;">61.17</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1F8CE9; color: #FFFFFF;">63.44</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1F8CE9; color: #FFFFFF;">63.96</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">マラウイ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #2C9AF4; color: #FFFFFF;">60.34</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2090ED; color: #FFFFFF;">61.40</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1C82DE; color: #FFFFFF;">71.20</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1C7FDB; color: #FFFFFF;">70.68</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1C7FDB; color: #FFFFFF;">70.64</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">チリ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #2D9AF4; color: #FFFFFF;">60.09</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2091EE; color: #FFFFFF;">60.61</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1C80DC; color: #FFFFFF;">72.11</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1A7AD7; color: #FFFFFF;">72.69</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1977D3; color: #FFFFFF;">74.35</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">マルタ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #2F9BF4; color: #FFFFFF;">59.76</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2090ED; color: #FFFFFF;">61.55</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1D85E2; color: #FFFFFF;">69.54</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1C80DD; color: #FFFFFF;">69.84</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1C80DC; color: #FFFFFF;">70.26</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ギニア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #309CF4; color: #FFFFFF;">59.51</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2093F0; color: #FFFFFF;">59.82</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1F8EEB; color: #FFFFFF;">64.58</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1E89E6; color: #FFFFFF;">65.66</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1E88E5; color: #FFFFFF;">66.51</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">モーリタニア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #309CF4; color: #FFFFFF;">59.45</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2195F2; color: #FFFFFF;">58.10</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1E89E6; color: #FFFFFF;">67.75</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1D85E2; color: #FFFFFF;">67.46</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1D84E0; color: #FFFFFF;">68.35</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ザンビア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #309CF4; color: #FFFFFF;">59.41</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2C9AF4; color: #FFFFFF;">55.40</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #2093F0; color: #FFFFFF;">61.79</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1F8DEA; color: #FFFFFF;">63.00</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1F8CE9; color: #FFFFFF;">63.62</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">モンゴル</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #319CF4; color: #FFFFFF;">59.33</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2194F1; color: #FFFFFF;">59.17</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1D82DF; color: #FFFFFF;">71.03</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1C7FDC; color: #FFFFFF;">70.39</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1C7FDC; color: #FFFFFF;">70.49</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">フィジー</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #319CF4; color: #FFFFFF;">59.27</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2597F3; color: #FFFFFF;">56.91</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1C80DC; color: #FFFFFF;">72.08</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1A7BD7; color: #FFFFFF;">72.59</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1A7AD7; color: #FFFFFF;">72.82</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ブータン</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #319CF4; color: #FFFFFF;">59.25</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1873CF; color: #FFFFFF;">76.46</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1C82DF; color: #FFFFFF;">71.14</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1B7EDA; color: #FFFFFF;">71.10</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1C80DC; color: #FFFFFF;">70.19</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">セルビア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #319CF4; color: #FFFFFF;">59.16</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2090ED; color: #FFFFFF;">61.51</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1E89E6; color: #FFFFFF;">67.97</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1D83E0; color: #FFFFFF;">68.38</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1D83DF; color: #FFFFFF;">68.82</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ブラジル</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #339DF4; color: #FFFFFF;">58.67</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2C9AF4; color: #FFFFFF;">55.36</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #2090ED; color: #FFFFFF;">63.75</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1E88E5; color: #FFFFFF;">65.95</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1E86E3; color: #FFFFFF;">67.21</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">東カリブ諸国機構</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #359EF4; color: #FFFFFF;">58.36</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1D84E0; color: #FFFFFF;">68.49</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1977D3; color: #FFFFFF;">76.02</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1873CF; color: #FFFFFF;">76.22</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1A78D4; color: #FFFFFF;">73.96</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ガボン</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #359EF4; color: #FFFFFF;">58.12</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2999F3; color: #FFFFFF;">56.00</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #2194F1; color: #FFFFFF;">61.40</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1F8DEA; color: #FFFFFF;">62.80</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1F8BE8; color: #FFFFFF;">64.40</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ネパール</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #369EF4; color: #FFFFFF;">57.89</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1F8EEB; color: #FFFFFF;">62.67</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1F8DEA; color: #FFFFFF;">65.38</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1E8AE7; color: #FFFFFF;">64.90</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1E87E4; color: #FFFFFF;">66.60</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">アルバニア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #369FF4; color: #FFFFFF;">57.86</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2798F3; color: #FFFFFF;">56.41</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1D86E3; color: #FFFFFF;">69.41</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1C81DD; color: #FFFFFF;">69.75</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1C80DC; color: #FFFFFF;">70.16</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">イスラエル</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #379FF4; color: #FFFFFF;">57.57</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2093F0; color: #FFFFFF;">59.62</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1E86E3; color: #FFFFFF;">69.10</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1C82DE; color: #FFFFFF;">69.16</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1C82DF; color: #FFFFFF;">69.20</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">中央アフリカ共和国</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #379FF4; color: #FFFFFF;">57.56</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2597F3; color: #FFFFFF;">56.96</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #2B9AF3; color: #FFFFFF;">58.08</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #2397F3; color: #FFFFFF;">57.13</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #369FF4; color: #FFFFFF;">52.73</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ハイチ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #389FF4; color: #FFFFFF;">57.38</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1F8BE8; color: #FFFFFF;">64.55</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1E87E4; color: #FFFFFF;">68.88</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1C80DD; color: #FFFFFF;">69.80</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1B7EDB; color: #FFFFFF;">71.00</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">モルディブ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #3AA0F4; color: #FFFFFF;">56.93</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2093F0; color: #FFFFFF;">59.55</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1D83DF; color: #FFFFFF;">70.87</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1C80DC; color: #FFFFFF;">70.07</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1D85E2; color: #FFFFFF;">67.84</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">マダガスカル</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #3BA1F4; color: #FFFFFF;">56.66</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2195F2; color: #FFFFFF;">58.02</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1C81DD; color: #FFFFFF;">71.76</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1B7BD7; color: #FFFFFF;">72.32</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1B7CD8; color: #FFFFFF;">72.24</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">モザンビーク</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #3CA2F5; color: #FFFFFF;">56.13</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #3FA3F5; color: #FFFFFF;">49.89</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1F8EEB; color: #FFFFFF;">64.61</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1E88E5; color: #FFFFFF;">66.21</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1D86E3; color: #FFFFFF;">67.34</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">パラグアイ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #3DA2F5; color: #FFFFFF;">55.96</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2195F2; color: #FFFFFF;">58.36</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1F8BE8; color: #FFFFFF;">66.48</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1E86E3; color: #FFFFFF;">67.03</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1D85E2; color: #FFFFFF;">67.60</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">セネガル</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #3DA2F5; color: #FFFFFF;">55.82</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1F8DEA; color: #FFFFFF;">63.07</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1A7AD6; color: #FFFFFF;">74.78</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1974D0; color: #FFFFFF;">76.01</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1978D4; color: #FFFFFF;">74.19</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">カタール</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #3FA3F5; color: #FFFFFF;">55.28</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #42A5F5; color: #FFFFFF;">49.03</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #2E9BF4; color: #FFFFFF;">57.40</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #2196F3; color: #FFFFFF;">57.49</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #2296F3; color: #FFFFFF;">57.49</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">タイ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #3FA3F5; color: #FFFFFF;">55.24</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #3EA3F5; color: #FFFFFF;">50.15</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #38A0F4; color: #FFFFFF;">54.78</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #2D9AF4; color: #FFFFFF;">55.06</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #2A99F3; color: #FFFFFF;">55.90</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ギリシャ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #3FA3F5; color: #FFFFFF;">55.20</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2B9AF4; color: #FFFFFF;">55.52</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1D82DF; color: #FFFFFF;">70.99</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1B7DDA; color: #FFFFFF;">71.20</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1B7EDB; color: #FFFFFF;">70.92</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">インドネシア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #41A4F5; color: #FFFFFF;">54.83</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #41A4F5; color: #FFFFFF;">49.27</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #2092EF; color: #FFFFFF;">62.60</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1F8DEA; color: #FFFFFF;">63.18</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1F8DEA; color: #FFFFFF;">63.23</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">チャド</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #45A6F5; color: #FFFFFF;">53.73</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2899F3; color: #FFFFFF;">56.18</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #2396F3; color: #FFFFFF;">59.80</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #2091EE; color: #FFFFFF;">60.30</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1F8DEA; color: #FFFFFF;">63.29</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ペルー</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #4AA8F5; color: #FFFFFF;">52.74</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #208FEC; color: #FFFFFF;">61.75</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1E88E5; color: #FFFFFF;">68.29</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1C82DF; color: #FFFFFF;">69.06</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1C81DD; color: #FFFFFF;">69.78</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">エスワティニ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #4AA8F5; color: #FFFFFF;">52.66</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #4DAAF5; color: #000000;">46.42</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #3CA2F5; color: #FFFFFF;">53.66</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #2E9BF4; color: #FFFFFF;">54.85</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #3CA2F5; color: #FFFFFF;">50.91</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ベナン</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #4BA9F5; color: #000000;">52.44</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #44A6F5; color: #FFFFFF;">48.39</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #2093F0; color: #FFFFFF;">61.82</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1E8AE7; color: #FFFFFF;">64.89</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1D84E1; color: #FFFFFF;">68.26</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">マリ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #4CA9F5; color: #000000;">52.29</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #309BF4; color: #FFFFFF;">54.48</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1F8BE8; color: #FFFFFF;">66.50</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1E88E5; color: #FFFFFF;">65.88</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1F8AE7; color: #FFFFFF;">64.77</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ブルンジ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #4DA9F5; color: #000000;">52.14</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2A99F3; color: #FFFFFF;">55.74</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #40A4F5; color: #FFFFFF;">52.43</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #54ADF6; color: #000000;">44.67</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #4BA9F5; color: #000000;">47.11</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">エルサルバドル</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #50ABF5; color: #000000;">51.36</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #319CF4; color: #FFFFFF;">54.09</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1D86E2; color: #FFFFFF;">69.51</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1C7FDC; color: #FFFFFF;">70.30</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1C80DC; color: #FFFFFF;">70.19</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ケニア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #51ABF5; color: #000000;">51.15</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1F8BE8; color: #FFFFFF;">64.59</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1F8BE8; color: #FFFFFF;">66.35</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1E88E5; color: #FFFFFF;">66.28</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1D85E2; color: #FFFFFF;">67.56</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ボリビア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #51ABF5; color: #000000;">51.09</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #48A7F5; color: #FFFFFF;">47.58</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1F8EEB; color: #FFFFFF;">64.53</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1F8AE7; color: #FFFFFF;">64.63</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1F8BE8; color: #FFFFFF;">64.62</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">南スーダン</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #53ACF5; color: #000000;">50.62</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #4AA8F5; color: #FFFFFF;">47.06</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #3AA1F4; color: #FFFFFF;">54.22</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #2B99F3; color: #FFFFFF;">55.51</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #309CF4; color: #FFFFFF;">54.35</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">レバノン</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #54ADF6; color: #000000;">50.46</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #4CA9F5; color: #000000;">46.58</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1F8EEB; color: #FFFFFF;">65.07</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1E87E4; color: #FFFFFF;">66.81</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1D85E2; color: #FFFFFF;">67.56</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">赤道ギニア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #54ADF6; color: #000000;">50.35</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #57AEF6; color: #000000;">43.96</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #61B3F6; color: #000000;">44.33</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #58AFF6; color: #000000;">43.62</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #60B3F6; color: #000000;">41.65</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">チュニジア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #55ADF6; color: #000000;">50.11</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2195F2; color: #FFFFFF;">58.49</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1D83E0; color: #FFFFFF;">70.47</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1C7FDB; color: #FFFFFF;">70.55</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1C7FDC; color: #FFFFFF;">70.39</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">キルギス</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #56AEF6; color: #000000;">49.91</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #1F8BE8; color: #FFFFFF;">64.25</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1D85E2; color: #FFFFFF;">69.63</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1C80DD; color: #FFFFFF;">69.81</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1C80DD; color: #FFFFFF;">70.08</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ナイジェリア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #58AEF6; color: #000000;">49.56</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #4CA9F5; color: #000000;">46.79</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #2196F3; color: #FFFFFF;">60.31</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1F8BE8; color: #FFFFFF;">64.37</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1F8DEA; color: #FFFFFF;">63.50</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">コンゴ民主共和国</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #5BB0F6; color: #000000;">48.55</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #48A7F5; color: #FFFFFF;">47.66</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #44A6F5; color: #FFFFFF;">51.41</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #3CA1F5; color: #FFFFFF;">50.91</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #46A6F5; color: #FFFFFF;">48.29</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">アンゴラ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #5CB1F6; color: #000000;">48.30</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #2497F3; color: #FFFFFF;">57.17</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1F8CE9; color: #FFFFFF;">65.94</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1E88E5; color: #FFFFFF;">66.08</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1E8AE7; color: #FFFFFF;">65.04</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ジンバブエ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #5DB1F6; color: #000000;">48.17</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #53ACF5; color: #000000;">44.94</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #309CF4; color: #FFFFFF;">56.88</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #2193F0; color: #FFFFFF;">59.05</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #2196F3; color: #FFFFFF;">57.77</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">グアテマラ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #5DB1F6; color: #000000;">48.12</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #47A7F5; color: #FFFFFF;">47.94</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #2193F0; color: #FFFFFF;">61.55</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1F8BE8; color: #FFFFFF;">64.26</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1F8CE9; color: #FFFFFF;">64.06</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">メキシコ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #5EB1F6; color: #000000;">47.98</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #48A7F5; color: #FFFFFF;">47.57</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #3DA2F5; color: #FFFFFF;">53.29</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #2F9BF4; color: #FFFFFF;">54.55</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #359EF4; color: #FFFFFF;">53.22</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">シンガポール</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #5EB2F6; color: #000000;">47.88</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #56AEF6; color: #000000;">44.23</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #5FB2F6; color: #000000;">44.80</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #54ACF5; color: #000000;">44.77</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #44A6F5; color: #FFFFFF;">48.59</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">エチオピア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #5FB2F6; color: #000000;">47.70</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #3DA2F5; color: #FFFFFF;">50.53</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1F8BE8; color: #FFFFFF;">66.37</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1D86E3; color: #FFFFFF;">67.18</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1F8AE7; color: #FFFFFF;">64.89</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ルワンダ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #63B4F6; color: #000000;">46.58</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #52ACF5; color: #000000;">45.18</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #4DAAF5; color: #000000;">49.34</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #40A4F5; color: #FFFFFF;">49.66</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #49A8F5; color: #FFFFFF;">47.57</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">フィリピン</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #64B5F6; color: #000000;">46.21</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #5EB2F6; color: #000000;">41.84</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #3AA0F4; color: #FFFFFF;">54.36</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #2698F3; color: #FFFFFF;">56.46</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #2999F3; color: #FFFFFF;">56.09</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ウガンダ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #65B5F6; color: #000000;">46.08</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #4DAAF5; color: #000000;">46.35</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #2898F3; color: #FFFFFF;">58.81</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #2193F0; color: #FFFFFF;">59.05</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #2091EE; color: #FFFFFF;">60.58</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">カザフスタン</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #66B6F6; color: #000000;">45.87</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #45A6F5; color: #FFFFFF;">48.28</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #4CA9F5; color: #000000;">49.72</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #4FAAF5; color: #000000;">45.89</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #4BA8F5; color: #FFFFFF;">47.18</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">スリランカ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #66B6F6; color: #000000;">45.85</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #5DB1F6; color: #000000;">42.13</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #2C9AF4; color: #FFFFFF;">57.80</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #2195F2; color: #FFFFFF;">58.06</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #2092EF; color: #FFFFFF;">60.39</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">アルジェリア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #67B6F6; color: #000000;">45.74</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #51ABF5; color: #000000;">45.53</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #3FA3F5; color: #FFFFFF;">52.74</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #2F9BF4; color: #FFFFFF;">54.48</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #319CF4; color: #FFFFFF;">54.25</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ウズベキスタン</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #67B6F6; color: #000000;">45.73</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #4DAAF5; color: #000000;">46.35</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #4EAAF5; color: #000000;">49.26</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #4BA8F5; color: #FFFFFF;">46.93</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #4EAAF5; color: #000000;">46.48</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">カメルーン</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #68B7F6; color: #000000;">45.58</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #41A5F5; color: #FFFFFF;">49.10</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #339DF4; color: #FFFFFF;">56.22</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #2597F3; color: #FFFFFF;">56.72</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #2698F3; color: #FFFFFF;">56.68</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">コロンビア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #69B7F6; color: #000000;">45.32</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #5CB1F6; color: #000000;">42.43</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #339DF4; color: #FFFFFF;">56.26</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #2296F3; color: #FFFFFF;">57.34</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #2497F3; color: #FFFFFF;">57.18</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">香港</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #6CB8F7; color: #000000;">44.86</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #5FB2F6; color: #000000;">41.64</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1D85E2; color: #FFFFFF;">69.56</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1C80DD; color: #FFFFFF;">69.99</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1C80DC; color: #FFFFFF;">70.35</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ソマリア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #70BAF7; color: #000000;">44.24</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #57AEF6; color: #000000;">44.01</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #60B3F6; color: #000000;">44.53</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #54ADF6; color: #000000;">44.55</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #5CB1F6; color: #000000;">42.76</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ブルネイ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #70BAF7; color: #000000;">44.20</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #5CB1F6; color: #000000;">42.53</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #4AA8F5; color: #FFFFFF;">50.09</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #3EA2F5; color: #FFFFFF;">50.35</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #45A6F5; color: #FFFFFF;">48.52</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">タンザニア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #71BBF7; color: #000000;">44.02</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #45A6F5; color: #FFFFFF;">48.28</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #2597F3; color: #FFFFFF;">59.31</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #2092EF; color: #FFFFFF;">59.75</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1F8CE9; color: #FFFFFF;">63.72</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">モロッコ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #73BBF7; color: #000000;">43.69</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #51ABF5; color: #000000;">45.42</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #349DF4; color: #FFFFFF;">56.06</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #2397F3; color: #FFFFFF;">57.12</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #2999F3; color: #FFFFFF;">56.02</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">アラブ首長国連邦</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #77BDF7; color: #000000;">42.99</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #55ADF6; color: #000000;">44.46</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #309CF4; color: #FFFFFF;">56.87</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #2296F3; color: #FFFFFF;">57.31</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #2898F3; color: #FFFFFF;">56.37</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ヨルダン</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #78BEF7; color: #000000;">42.79</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #43A5F5; color: #FFFFFF;">48.66</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #2F9BF4; color: #FFFFFF;">57.11</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #2195F2; color: #FFFFFF;">57.92</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #2597F3; color: #FFFFFF;">56.89</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">カンボジア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #7CC0F8; color: #000000;">42.02</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #59AFF6; color: #000000;">43.48</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #3EA2F5; color: #FFFFFF;">53.16</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #2F9BF4; color: #FFFFFF;">54.54</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #319CF4; color: #FFFFFF;">54.10</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">スーダン</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #82C3F8; color: #000000;">40.83</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #61B4F6; color: #000000;">40.96</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #57AEF6; color: #000000;">47.07</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #54ADF6; color: #000000;">44.67</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #A6D4FA; color: #000000;">27.55</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">リビア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #85C4F8; color: #000000;">40.22</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #5AAFF6; color: #000000;">43.16</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #61B3F6; color: #000000;">44.27</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #56ADF6; color: #000000;">44.23</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #57AEF6; color: #000000;">44.23</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">パキスタン</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #87C5F8; color: #000000;">39.95</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #70BAF7; color: #000000;">37.99</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #3EA2F5; color: #FFFFFF;">53.14</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #2F9BF4; color: #FFFFFF;">54.48</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #319CF4; color: #FFFFFF;">54.17</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">アゼルバイジャン</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #87C5F8; color: #000000;">39.93</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #68B7F6; color: #000000;">39.40</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #71BBF7; color: #000000;">41.23</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #5FB2F6; color: #000000;">41.52</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #63B4F6; color: #000000;">40.87</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">アフガニスタン</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #88C6F8; color: #000000;">39.75</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #6FB9F7; color: #000000;">38.27</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #2296F3; color: #FFFFFF;">59.81</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1F8EEB; color: #FFFFFF;">62.30</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1F8DEA; color: #FFFFFF;">63.45</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">タジキスタン</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #8BC7F9; color: #000000;">39.06</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #64B5F6; color: #000000;">40.26</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #60B3F6; color: #000000;">44.48</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #54ADF6; color: #000000;">44.66</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #50ABF5; color: #000000;">45.98</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">クウェート</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #8CC8F9; color: #000000;">38.84</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #71BAF7; color: #000000;">37.87</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #1F8DEA; color: #FFFFFF;">65.64</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1E89E6; color: #FFFFFF;">65.70</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1E88E5; color: #FFFFFF;">66.14</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">オマーン</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #91CAF9; color: #000000;">37.87</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #7ABFF7; color: #000000;">35.99</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #319CF4; color: #FFFFFF;">56.63</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #2698F3; color: #FFFFFF;">56.58</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #2798F3; color: #FFFFFF;">56.58</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">パレスチナ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #91CAF9; color: #000000;">37.86</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #9DD0FA; color: #000000;">28.98</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #319CF4; color: #FFFFFF;">56.82</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #2999F3; color: #FFFFFF;">55.91</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #2D9AF4; color: #FFFFFF;">55.32</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ベラルーシ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #95CCF9; color: #000000;">37.17</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #67B6F6; color: #000000;">39.62</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #4EAAF5; color: #000000;">49.18</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #3EA3F5; color: #FFFFFF;">50.25</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #45A6F5; color: #FFFFFF;">48.34</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ニカラグア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #95CCF9; color: #000000;">37.09</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #75BCF7; color: #000000;">37.09</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #2196F3; color: #FFFFFF;">60.02</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #1F8BE8; color: #FFFFFF;">64.19</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #1F8BE8; color: #FFFFFF;">64.47</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ベネズエラ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #96CDF9; color: #000000;">36.99</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #71BBF7; color: #000000;">37.78</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #40A4F5; color: #FFFFFF;">52.40</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #309BF4; color: #FFFFFF;">54.34</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #3CA2F5; color: #FFFFFF;">50.90</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ラオス</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #98CDF9; color: #000000;">36.66</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #77BDF7; color: #000000;">36.64</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #AED8FA; color: #000000;">29.44</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #7CC0F8; color: #000000;">35.72</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #7EC1F8; color: #000000;">35.51</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">インド</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #98CDF9; color: #000000;">36.62</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #61B3F6; color: #000000;">41.00</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #3DA2F5; color: #FFFFFF;">53.44</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #2E9BF4; color: #FFFFFF;">54.67</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #319CF4; color: #FFFFFF;">54.33</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ジブチ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #9CCFFA; color: #000000;">35.87</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #7CC0F8; color: #000000;">35.75</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #D6EBFC; color: #000000;">21.38</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #B9DDFB; color: #000000;">23.27</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #A1D1FA; color: #000000;">28.64</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">バングラデシュ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #9FD1FA; color: #000000;">35.31</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #77BDF7; color: #000000;">36.63</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #49A8F5; color: #FFFFFF;">50.29</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #3DA2F5; color: #FFFFFF;">50.63</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #41A5F5; color: #FFFFFF;">49.26</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ロシア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #A2D2FA; color: #000000;">34.77</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #6CB8F6; color: #000000;">38.82</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #44A6F5; color: #FFFFFF;">51.29</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #3BA1F4; color: #FFFFFF;">51.08</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #40A4F5; color: #FFFFFF;">49.69</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">トルコ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #A6D4FA; color: #000000;">33.97</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #60B3F6; color: #000000;">41.25</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #4AA8F5; color: #FFFFFF;">50.21</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #3FA3F5; color: #FFFFFF;">49.98</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #4BA8F5; color: #FFFFFF;">47.19</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">エジプト</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #A9D5FA; color: #000000;">33.37</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #96CDF9; color: #000000;">30.23</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #63B4F6; color: #000000;">43.83</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #5AAFF6; color: #000000;">43.18</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #59AFF6; color: #000000;">43.53</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">イラク</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #ACD6FA; color: #000000;">32.94</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #9FD0FA; color: #000000;">28.59</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #61B3F6; color: #000000;">44.43</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #54ADF6; color: #000000;">44.63</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #4AA8F5; color: #FFFFFF;">47.40</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">イエメン</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #ACD7FA; color: #000000;">32.78</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #9CCFFA; color: #000000;">29.14</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #84C4F8; color: #000000;">37.65</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #5FB2F6; color: #000000;">41.75</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #70BAF7; color: #000000;">38.34</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ホンジュラス</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #ADD7FA; color: #000000;">32.65</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #81C2F8; color: #000000;">34.61</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #47A7F5; color: #FFFFFF;">50.65</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #39A0F4; color: #FFFFFF;">51.80</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #3BA1F4; color: #FFFFFF;">51.47</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">サウジアラビア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #AED8FA; color: #000000;">32.43</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #85C4F8; color: #000000;">33.71</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #86C5F8; color: #000000;">37.27</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #71BBF7; color: #000000;">37.86</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #85C4F8; color: #000000;">34.12</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">バーレーン</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #B7DCFB; color: #000000;">30.59</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #92CBF9; color: #000000;">30.97</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #7EC0F8; color: #000000;">38.90</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #66B6F6; color: #000000;">39.87</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #6EB9F7; color: #000000;">38.69</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">キューバ</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #BFE0FB; color: #000000;">29.00</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #A5D3FA; color: #000000;">27.32</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #8CC8F9; color: #000000;">36.06</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #7ABFF7; color: #000000;">36.19</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #7BBFF8; color: #000000;">36.19</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ミャンマー</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #C3E2FB; color: #000000;">28.26</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #B0D9FA; color: #000000;">25.03</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #3BA1F5; color: #FFFFFF;">53.86</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #2C9AF4; color: #FFFFFF;">55.23</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #2E9AF4; color: #FFFFFF;">55.08</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">エリトリア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #C5E3FC; color: #000000;">27.86</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #C9E5FC; color: #000000;">19.62</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #E3F2FD; color: #000000;">18.55</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #D9EDFC; color: #000000;">16.50</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #CBE6FC; color: #000000;">19.74</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">シリア</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #C8E4FC; color: #000000;">27.22</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #9DD0FA; color: #000000;">28.94</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #AFD8FA; color: #000000;">29.37</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #A5D3FA; color: #000000;">27.43</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #A3D2FA; color: #000000;">28.22</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">トルクメニスタン</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #CFE8FC; color: #000000;">25.82</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #B0D9FA; color: #000000;">25.01</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #DCEFFD; color: #000000;">19.97</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #E1F1FD; color: #000000;">14.56</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #E3F2FD; color: #000000;">14.56</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">イラン</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #D4EAFC; color: #000000;">24.81</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #B8DDFB; color: #000000;">23.22</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #B9DDFB; color: #000000;">27.30</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #7FC1F8; color: #000000;">35.19</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #7EC1F8; color: #000000;">35.59</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">ベトナム</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #D5EBFC; color: #000000;">24.58</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #ABD6FA; color: #000000;">26.11</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #D5EBFC; color: #000000;">21.54</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #AFD8FA; color: #000000;">25.29</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #B2DAFB; color: #000000;">25.07</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">中国</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #DDEFFD; color: #000000;">22.97</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #AFD8FA; color: #000000;">25.17</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #D6EBFC; color: #000000;">21.28</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #C1E1FB; color: #000000;">21.52</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #C5E3FC; color: #000000;">21.08</td></tr>
+    <tr><td headers="Name" class="gt_row gt_left">朝鮮民主主義人民共和国</td>
+<td headers="Year2023" class="gt_row gt_right" style="background-color: #E3F2FD; color: #000000;">21.72</td>
+<td headers="Year2022" class="gt_row gt_right" style="background-color: #E3F2FD; color: #000000;">13.92</td>
+<td headers="Year2021" class="gt_row gt_right" style="background-color: #E2F2FD; color: #000000;">18.72</td>
+<td headers="Year2020" class="gt_row gt_right" style="background-color: #E3F2FD; color: #000000;">14.18</td>
+<td headers="Year2019" class="gt_row gt_right" style="background-color: #DAEDFD; color: #000000;">16.60</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
 
 
 

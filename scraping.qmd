@@ -15,3 +15,44 @@ source("_common.R")
 * 表の取得
 * 反復作業
    * 注意点（`Sys.sleep()`など）
+
+Wikipediaの[世界報道自由度ランキング](https://ja.wikipedia.org/wiki/%E4%B8%96%E7%95%8C%E5%A0%B1%E9%81%93%E8%87%AA%E7%94%B1%E5%BA%A6%E3%83%A9%E3%83%B3%E3%82%AD%E3%83%B3%E3%82%B0)の表をスクレイピング
+
+```{r}
+pacman::p_load(tidyverse, rvest, gt, gtExtras)
+```
+
+```{r}
+#| warning: false
+url <- "https://ja.wikipedia.org/wiki/%E4%B8%96%E7%95%8C%E5%A0%B1%E9%81%93%E8%87%AA%E7%94%B1%E5%BA%A6%E3%83%A9%E3%83%B3%E3%82%AD%E3%83%B3%E3%82%B0"
+
+df <- read_html(url)
+
+df
+
+df_tbl <- df |> 
+  html_table()
+
+pfi_df <- df_tbl[[1]] |> 
+  rename("Name"     = "国・地域",
+         "Year2023" = "2023年[10]",
+         "Year2022" = "2022年[11]",
+         "Year2021" = "2021年[12]",
+         "Year2020" = "2020年[13]",
+         "Year2019" = "2019年[14]") |> 
+  mutate(across(Year2023:Year2019, ~str_replace(.x, "\\(([0-9]+)\\)", "")),
+         across(Year2023:Year2019, as.numeric))
+
+pfi_df
+
+pfi_df |> 
+  gt() |> 
+  cols_label("Name"     = "国・地域",
+             "Year2023" = "2023年",
+             "Year2022" = "2022年",
+             "Year2021" = "2021年",
+             "Year2020" = "2020年",
+             "Year2019" = "2019年") |> 
+  gt_color_rows(columns = Year2023:Year2019,
+                palette = "ggsci::blue_material")
+```
