@@ -56,3 +56,36 @@ pfi_df |>
   gt_color_rows(columns = Year2023:Year2019,
                 palette = "ggsci::blue_material")
 ```
+
+```{r}
+#| cache: true
+j_list <- paste0("https://www.jleague.jp/standings/j", 1:3)
+
+tbl_list <- list()
+
+for (i in seq_along(j_list)) {
+  temp_html <- read_html(j_list[i])
+  temp_tbl  <- temp_html |> 
+    html_table(header = TRUE)
+  
+  tbl_list[[paste0("J", i)]] <- temp_tbl[[1]]
+  
+  Sys.sleep(1)
+}
+
+tbl_list
+
+j_df <- bind_rows(tbl_list, .id = "League")
+
+j_df
+
+j_df <- j_df |> 
+  select(!c("...1", "直近5試合"))
+
+j_df |> 
+  mutate(クラブ名 = str_sub(クラブ名, 1, nchar(クラブ名) / 2)) |> 
+  group_by(League) |> 
+  gt()
+```
+
+イメージのリンクは抽出されない？
