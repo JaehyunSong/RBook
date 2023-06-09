@@ -5,32 +5,90 @@
 source("_common.R")
 ```
 
-{rvest}の使い方?
+　まず、本章で使用するパッケージを読み込んでおく。
 
-* HTMLの構造
-   * タグ
-   * タグの入れ子構造
-   * セレクター（クラス[`.classname`]、ID[`#idname`]）
+```{r}
+#| label: scraping-setup
+pacman::p_load(tidyverse, rvest, gt, gtExtras)
+```
+
+## HTML
+
+　我々が普段見るウェブページは主にHTML（**H**yper**T**ext **M**arkup **L**anguage）という言語で記述されている。裏ではPhp、Ruby、Pythonなどが動いているかも知れないが、少なくとも我々がウェブブラウザー（Firefox、Chrome、Safari、Edge等）越しで見る内容はHTMLだ。（ウェブ）スクレイピングはこのHTMLで記述された表示内容（の一部）を構造化されたデータとして読み込むことである。
+
+　したがって、スクレイピングをするためにはHTMLの基本的な知識が必要だ。一つの画面に表示された内容の中で我々が欲しいものは、全体内容の一部だ。これはスクレイピングを行う際、全体内容の中から取得する箇所を指定する必要があることを意味する。そこで重要なのがタグ（tag）と属性（attribute）、セレクター（selector）だ。
+
+### タグ
+
+　タグは`<タグ名>`と`</タグ名>`で構成され[^tag-pair]、この間に挟まれた内容は予め決まった書式となる。例えば、`<em>R Not for Everyone</em>`は「R Not for Everyone」という文字列に対して`<em>`タグを適用するコードである。`<em>`タグは予めHTMLで用意されているものであり、文字列をイタリック（例：<em>R Not for Everyone</em>）にするものだ。また、`<strong>`タグは太字を意味し、`<strong>R Not for Everyone</strong>`は「<strong>R Not for Everyone</strong>」と出力される。また、段落を意味する`<p>`関数も頻繁に使われる。HTMLには様々なタグが用意されており、詳細なリストは[W3C](https://www.w3.org/TR/2018/SPSD-html5-20180327/index.html#elements-1)などを参照されたい（リンク先はHTML5基準）。
+
+[^tag-pair]: 通常、タグはカッコのように開いたら（`<タグ名>`）閉じる（`</タグ名>`）必要がある。しかし、タグの中には閉じる必要のないものもある。たとえば、改行を意味するタグとして`<br>`があるが、これは`<br>`、または`<br/>`のみで良い。
+
+　タグの中にタグを入れることもできる。以下のコードを見てみよう。
+
+::::{.columns}
+:::{.column width=49%}
+**HTMLコード**
+
+```html
+<ol>
+  <li> 項目1 
+    <ul>
+      <li> 項目1A </li>
+      <li> 項目1B </li>
+      <li> 項目1C </li>
+    </ul>
+  </li>
+  <li> 項目2 </li>
+  <li> 項目3 </li>
+</ol>
+```
+:::
+
+:::{.column width=2%}
+:::
+
+:::{.column width=49%}
+**ブラウザー上の出力内容**
+
+1. 項目1
+   * 項目1A
+   * 項目1B
+   * 項目1C
+1. 項目2
+1. 項目3
+:::
+::::
+
+　`<ol>`は順序付きリスト（箇条書き）を意味し、一つ一つの項目は`<li>`タグで指定する。以上の例は`<ol>`タグの中に`<li>`タグが入っている入れ子構造だ。また、順序なしリストのタグ`<ul>`は最初の`<li>`の中に入っている。たとえば、「項目1B」は`<ol>` > `<li>` > `<ul>` > `<li>`で定義された内容である。
+
+### 属性
+
+　タグの中には属性といものが定義されている場合がある。タグをプログラミング言語における関数とすれば、属性は引数（argument / parameter）に該当する。たとえば、画像を貼り付けるタグは`<img>`だ。ちなみに`<img>`はタグを閉じる必要がなく、単体のみ存在するため`<img>`〜`</img>`でなく、`<img>`のみか`<img/>`と記述する。本書では単体で使う関数を区分するために`<img/>`と表記する。この`<img/>`関数だけではどの画像を表示するかが分からない。画像の具体的なパスやURLを指定する必要がある。`<img/>`タグには`src`という属性があり、`src="パス or URL"`と書く。たとえば、<https://www.jaysong.net/RBook/Figs/favicon.png>というURLの画像を表示させるためには`<img src="https://www.jaysong.net/RBook/Figs/favicon.png"/>`と記述する必要がある。
+
+　一つのタグは複数の属性を持つこともできる。`<img/>`タグの場合、画像の幅と高さを`width`と`height`属性で指定することができ、`alt`で代替テキストを指定することもできる。ちなみに属性を持つことが**できない**タグは存在しない。すべてのタグは`class`や`hidden`、`style`などの属性を持つことができ、このようにすべてのタグで使える属性はグローバル属性（global attributes）と呼ばれる。
+
+### セレクター
+
+　セレクターを理解するためにはCSS（Cascading Style Sheets）の知識が必要であるが、ここでは最低限のことのみ解説する。ウェブスクレイピングは指定したHTMLファイルから特定のタグに囲まれた内容を取得するのが一般的、かつ基本的なやり方だ。たとえば、あるページ上の表を取得するためには表のタグである`<table>`タグで囲まれた内容を取得する。しかし、一つのページ内に複数の`<table>`関数があればどうだろうか。多くのスクレイピングのパッケージやライブラリはすべてを読み込むが、それはメモリの無駄遣いだ。予め具体的にどの表を取得するかを指定した方が効率的だろう。ここで必要なのがセレクターだ。
+
+## {rvest}の使い方
+
+実習用のページを作っておこう。
+
 * テキスト/表の取得
    * `html_elment()`、`html_elments()`で特定のタグやクラス、IDを抽出
    * `html_text()`、`html_text2()`や`html_table()`で抽出
-   * 画像の場合、`<img>`タグの`src`属性を抽出する必要があるため、`html_attr()`を使用
-* 反復作業
-   * 注意点
-      * Terms and conditions / Terms of serviceを読もう
-      * 著作権
-      * 個人情報
-      * `Sys.sleep()`
+   * 画像の場合、`<img>`タグの`src`属性を抽出する必要があるため、`html_attr()`
+
+## 実践
+
+### 表の抽出
 
 Wikipediaの[世界報道自由度ランキング](https://ja.wikipedia.org/wiki/%E4%B8%96%E7%95%8C%E5%A0%B1%E9%81%93%E8%87%AA%E7%94%B1%E5%BA%A6%E3%83%A9%E3%83%B3%E3%82%AD%E3%83%B3%E3%82%B0)の表をスクレイピング
 
 ```{r}
-pacman::p_load(tidyverse, rvest, gt, gtExtras)
-```
-
-## 表の抽出
-
-```{r}
+#| label: scraping-hdi
 #| cache: true
 #| warning: false
 url <- "https://ja.wikipedia.org/wiki/%E4%B8%96%E7%95%8C%E5%A0%B1%E9%81%93%E8%87%AA%E7%94%B1%E5%BA%A6%E3%83%A9%E3%83%B3%E3%82%AD%E3%83%B3%E3%82%B0"
@@ -66,7 +124,10 @@ pfi_df |>
                 palette = "ggsci::blue_material")
 ```
 
+### 表の抽出（複数ページ）
+
 ```{r}
+#| label: scraping-j
 #| cache: true
 j_list <- paste0("https://www.jleague.jp/standings/j", 1:3)
 
@@ -97,7 +158,7 @@ j_df |>
   gt()
 ```
 
-## 表以外の内容
+### 表以外の内容
 
 OpenCritic (2021; PC Games)
 
@@ -106,6 +167,7 @@ OpenCritic (2021; PC Games)
 * `html_nodes()`でランキング、画像URL、スコアなどをベクトルとして抽出し、R側で表にする。
 
 ```{r}
+#| label: scraping-oc-single
 #| cache: true
 oc_html <- read_html("https://opencritic.com/browse/pc/2021")
 
@@ -131,9 +193,12 @@ oc_df |>
   cols_label("Date" = "First release date")
 ```
 
+### 表以外の内容（複数ページ）
+
 1位から500位まで
 
 ```{r}
+#| label: scraping-oc-multiple
 #| cache: true
 oc_url <- paste0("https://opencritic.com/browse/pc/2021?page=", 1:25)
 
@@ -171,3 +236,10 @@ bind_rows(oc_list) |>
   gt_img_rows(Tier) |> 
   cols_label("Date" = "First release date")
 ```
+
+### スクレイピングの注意事項
+
+* Terms and conditions / Terms of serviceを読もう
+* 著作権
+* 個人情報
+* `Sys.sleep()`
