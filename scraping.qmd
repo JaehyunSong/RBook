@@ -10,9 +10,11 @@ source("_common.R")
 * HTMLの構造
    * タグ
    * タグの入れ子構造
-   * セレクター
-* テキストの取得
-* 表の取得
+   * セレクター（クラス[`.classname`]、ID[`#idname`]）
+* テキスト/表の取得
+   * `html_elment()`、`html_elments()`で特定のタグやクラス、IDを抽出
+   * `html_text()`、`html_text2()`や`html_table()`で抽出
+   * 画像の場合、`<img>`タグの`src`属性を抽出する必要があるため、`html_attr()`を使用
 * 反復作業
    * 注意点（`Sys.sleep()`など）
 
@@ -22,7 +24,10 @@ Wikipediaの[世界報道自由度ランキング](https://ja.wikipedia.org/wiki
 pacman::p_load(tidyverse, rvest, gt, gtExtras)
 ```
 
+## 表の抽出
+
 ```{r}
+#| cache: true
 #| warning: false
 url <- "https://ja.wikipedia.org/wiki/%E4%B8%96%E7%95%8C%E5%A0%B1%E9%81%93%E8%87%AA%E7%94%B1%E5%BA%A6%E3%83%A9%E3%83%B3%E3%82%AD%E3%83%B3%E3%82%B0"
 
@@ -88,4 +93,36 @@ j_df |>
   gt()
 ```
 
-イメージのリンクは抽出されない？
+## 表以外の内容
+
+OpenCritic (2021; PC Games)
+
+* <https://opencritic.com/browse/pc/2021>
+* 表のように見えるが、表ではない（`<div>`が並んでいるだけ）。
+* `html_nodes()`でランキング、画像URL、スコアなどをベクトルとして抽出し、R側で表にする。
+
+```{r}
+#| cache: true
+oc_html <- read_html("https://opencritic.com/browse/pc/2021")
+
+oc_html <- oc_html |> 
+  html_element(".desktop-game-display")
+
+
+oc_df <- tibble(Rank  = html_elements(oc_html, ".rank") |> html_text2(),
+                Tier  = html_elements(oc_html, "img") |> html_attr("src"),
+                Score = html_elements(oc_html, ".score") |> html_text2(),
+                Name  = html_elements(oc_html, ".game-name") |> html_text2(),
+                Date  = html_elements(oc_html, ".first-release-date") |> html_text2()) |> 
+  mutate(Rank = str_remove(Rank, "\\."),
+         Rank = as.numeric(Rank),
+         Date = paste0(Date, ", 2021"),
+         Date = mdy(Date))
+
+oc_df
+
+oc_df |> 
+  gt() |> 
+  gt_img_rows(Tier) |> 
+  cols_label("Date" = "First release date")
+```
