@@ -16,7 +16,11 @@ source("_common.R")
    * `html_text()`、`html_text2()`や`html_table()`で抽出
    * 画像の場合、`<img>`タグの`src`属性を抽出する必要があるため、`html_attr()`を使用
 * 反復作業
-   * 注意点（`Sys.sleep()`など）
+   * 注意点
+      * Terms and conditions / Terms of serviceを読もう
+      * 著作権
+      * 個人情報
+      * `Sys.sleep()`
 
 Wikipediaの[世界報道自由度ランキング](https://ja.wikipedia.org/wiki/%E4%B8%96%E7%95%8C%E5%A0%B1%E9%81%93%E8%87%AA%E7%94%B1%E5%BA%A6%E3%83%A9%E3%83%B3%E3%82%AD%E3%83%B3%E3%82%B0)の表をスクレイピング
 
@@ -122,6 +126,47 @@ oc_df <- tibble(Rank  = html_elements(oc_html, ".rank") |> html_text2(),
 oc_df
 
 oc_df |> 
+  gt() |> 
+  gt_img_rows(Tier) |> 
+  cols_label("Date" = "First release date")
+```
+
+1位から500位まで
+
+```{r}
+#| cache: true
+oc_url <- paste0("https://opencritic.com/browse/pc/2021?page=", 1:25)
+
+oc_list <- list()
+
+get_oc <- function (url) {
+  temp_html <- read_html(url) |> 
+    html_element(".desktop-game-display")
+  temp_df <- tibble(Rank  = html_elements(temp_html, ".rank") |> 
+                      html_text2(),
+                    Tier  = html_elements(temp_html, "img") |> 
+                      html_attr("src"),
+                    Score = html_elements(temp_html, ".score") |> 
+                      html_text2(),
+                    Name  = html_elements(temp_html, ".game-name") |>
+                      html_text2(),
+                    Date  = html_elements(temp_html, ".first-release-date") |>
+                      html_text2()) |> 
+    mutate(Rank = str_remove(Rank, "\\."),
+           Rank = as.numeric(Rank),
+           Date = paste0(Date, ", 2021"),
+           Date = mdy(Date))
+}
+
+for (i in seq_along(oc_url)) {
+  
+  temp_df      <- get_oc(oc_url[i])
+  oc_list[[i]] <- temp_df
+  
+  Sys.sleep(1)
+}
+
+bind_rows(oc_list) |> 
   gt() |> 
   gt_img_rows(Tier) |> 
   cols_label("Date" = "First release date")
