@@ -1701,7 +1701,7 @@ Levels: 1 0</code></pre>
 9     9 I     TRUE </code></pre>
 </div>
 </div>
-<p>このように変数の順番が異なっても、先に指定したデータの変数順で問題なく結合できました。これまでの作業は<code>dplyr</code>パッケージの<code>bind_rows()</code>を使わずに、R内蔵関数の<code>rbind()</code>でも同じやり方でできます。<code>bind_rows()</code>の特徴は、変数名が一致しない場合、つまり今回の例だと<code>rbind_df4</code>が含まれる場合です。<code>rbind_df1</code>から<code>rbind_df3</code>までは順番が違っても<code>X1</code>、<code>X2</code>、<code>X3</code>変数で構成されていました。一方、<code>rbind_dr4</code>には<code>X3</code>がなく、新たに<code>X4</code>という変数があります。これを<code>rbind()</code>関数で結合するとエラーが出力されます。</p>
+<p>このように変数の順番が異なっても、先に指定したデータの変数順で問題なく結合できました。これまでの作業は{dplyr}パッケージの<code>bind_rows()</code>を使わずに、R内蔵関数の<code>rbind()</code>でも同じやり方でできます。<code>bind_rows()</code>の特徴は、変数名が一致しない場合、つまり今回の例だと<code>rbind_df4</code>が含まれる場合です。<code>rbind_df1</code>から<code>rbind_df3</code>までは順番が違っても<code>X1</code>、<code>X2</code>、<code>X3</code>変数で構成されていました。一方、<code>rbind_dr4</code>には<code>X3</code>がなく、新たに<code>X4</code>という変数があります。これを<code>rbind()</code>関数で結合するとエラーが出力されます。</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb140"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb140-1"><a href="#cb140-1"></a><span class="co"># rbind()を使う場合</span></span>
 <span id="cb140-2"><a href="#cb140-2"></a><span class="fu">rbind</span>(rbind_df1, rbind_df2, rbind_df3, rbind_df4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1732,7 +1732,40 @@ Levels: 1 0</code></pre>
 </div>
 </div>
 <p><code>X1</code>から<code>X4</code>まで全ての列が生成され、元のデータにはなかった列に関しては<code>NA</code>で埋められています。</p>
-<p>ならば、<code>bind_rows()</code>の完全勝利かというと、そうとは限りません。自分で架空した複数のデータフレーム、またはtibbleを結合する際、「このデータは全て同じ変数を持っているはず」と事前に分かっているなら<code>rbind()</code>の方が効果的です。なぜなら、変数名が異なる場合、エラーが出力されるからです。<code>bind_rows()</code>を使うと、コーディングミスなどにより、列名の相違がある場合でも結合してくれてしまうので、分析の結果を歪ませる可能性があります。</p>
+<p>他にも<code>bind_rows()</code>には<code>.id</code>という便利な引数があります。これは結合の際に新しい列を追加し、結合前のデータごとの固有の値を割り当ててくれます。たとえば、<code>rbind_df1</code>と<code>rbind_df2</code>を結合し、それぞれ<code>"Data1"</code>、<code>"Data2"</code>という値を割り当てるとしましょう。この場合、2つの表を<code>list()</code>関数でまとめ、<code>.id</code>には新しく追加される列名を指定します。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb144"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb144-1"><a href="#cb144-1"></a><span class="fu">bind_rows</span>(<span class="fu">list</span>(<span class="st">"Data1"</span> <span class="ot">=</span> rbind_df1, <span class="st">"Data2"</span> <span class="ot">=</span> rbind_df2),</span>
+<span id="cb144-2"><a href="#cb144-2"></a>          <span class="at">.id =</span> <span class="st">"Data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+  Data     X1 X2    X3   
+  &lt;chr&gt; &lt;int&gt; &lt;chr&gt; &lt;lgl&gt;
+1 Data1     1 A     TRUE 
+2 Data1     2 B     TRUE 
+3 Data1     3 C     FALSE
+4 Data2     4 D     FALSE
+5 Data2     5 E     TRUE 
+6 Data2     6 F     FALSE</code></pre>
+</div>
+</div>
+<p>予めリストを作っておいて、それを<code>bind_rows()</code>に渡すこともできます。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb146"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb146-1"><a href="#cb146-1"></a>rbind_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">"Data1"</span> <span class="ot">=</span> rbind_df1, <span class="st">"Data2"</span> <span class="ot">=</span> rbind_df2)</span>
+<span id="cb146-2"><a href="#cb146-2"></a></span>
+<span id="cb146-3"><a href="#cb146-3"></a><span class="fu">bind_rows</span>(rbind_list, <span class="at">.id =</span> <span class="st">"Data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+  Data     X1 X2    X3   
+  &lt;chr&gt; &lt;int&gt; &lt;chr&gt; &lt;lgl&gt;
+1 Data1     1 A     TRUE 
+2 Data1     2 B     TRUE 
+3 Data1     3 C     FALSE
+4 Data2     4 D     FALSE
+5 Data2     5 E     TRUE 
+6 Data2     6 F     FALSE</code></pre>
+</div>
+</div>
+<p>このように<code>bind_rows()</code>は<code>rbind()</code>よりも便利です。しかし、<code>bind_rows()</code>の完全勝利かというと、そうとは限りません。自分で架空した複数のデータフレーム、またはtibbleを結合する際、「このデータは全て同じ変数を持っているはず」と事前に分かっているなら<code>rbind()</code>の方が効果的です。なぜなら、変数名が異なる場合、エラーが出力されるからです。<code>bind_rows()</code>を使うと、コーディングミスなどにより、列名の相違がある場合でも結合してくれてしまうので、分析の結果を歪ませる可能性があります。</p>
 </section>
 <section id="列の結合" class="level3" data-number="14.5.2">
 <h3 data-number="14.5.2" class="anchored" data-anchor-id="列の結合"><span class="header-section-number">14.5.2</span> 列の結合</h3>
@@ -1745,15 +1778,15 @@ Levels: 1 0</code></pre>
 </div>
 <p>まずは、本章で作成した<code>df2</code>をもう一回作ってみます。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb144"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb144-1"><a href="#cb144-1"></a>df2 <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb144-2"><a href="#cb144-2"></a>  <span class="fu">group_by</span>(Pref) <span class="sc">|&gt;</span></span>
-<span id="cb144-3"><a href="#cb144-3"></a>  <span class="fu">summarise</span>(<span class="at">Budget_Mean =</span> <span class="fu">mean</span>(Budget, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb144-4"><a href="#cb144-4"></a>            <span class="at">ScoreN_Sum  =</span> <span class="fu">sum</span>(ScoreN, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb144-5"><a href="#cb144-5"></a>            <span class="at">Score_Mean  =</span> <span class="fu">mean</span>(Score, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb144-6"><a href="#cb144-6"></a>            <span class="at">N           =</span> <span class="fu">n</span>(),</span>
-<span id="cb144-7"><a href="#cb144-7"></a>            <span class="at">.groups     =</span> <span class="st">"drop"</span>)</span>
-<span id="cb144-8"><a href="#cb144-8"></a></span>
-<span id="cb144-9"><a href="#cb144-9"></a>df2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb148"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb148-1"><a href="#cb148-1"></a>df2 <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb148-2"><a href="#cb148-2"></a>  <span class="fu">group_by</span>(Pref) <span class="sc">|&gt;</span></span>
+<span id="cb148-3"><a href="#cb148-3"></a>  <span class="fu">summarise</span>(<span class="at">Budget_Mean =</span> <span class="fu">mean</span>(Budget, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb148-4"><a href="#cb148-4"></a>            <span class="at">ScoreN_Sum  =</span> <span class="fu">sum</span>(ScoreN, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb148-5"><a href="#cb148-5"></a>            <span class="at">Score_Mean  =</span> <span class="fu">mean</span>(Score, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb148-6"><a href="#cb148-6"></a>            <span class="at">N           =</span> <span class="fu">n</span>(),</span>
+<span id="cb148-7"><a href="#cb148-7"></a>            <span class="at">.groups     =</span> <span class="st">"drop"</span>)</span>
+<span id="cb148-8"><a href="#cb148-8"></a></span>
+<span id="cb148-9"><a href="#cb148-9"></a>df2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 9 × 5
   Pref     Budget_Mean ScoreN_Sum Score_Mean     N
@@ -1771,7 +1804,7 @@ Levels: 1 0</code></pre>
 </div>
 <p>ラーメン屋の店舗ですが、たしかにデータには埼玉、東京、大阪などは1000店舗しか入っておりません。実はもっと多いですが、ぐるなびAPIの仕様上、最大1000店舗しか情報取得が出来ないからです。ここに実際の店舗数が入っている新しいデータセット、<a href="Data/Ramen2.csv">Ramen2.csv</a>があります。これを読み込み、<code>df3</code>という名で格納しましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb146"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb146-1"><a href="#cb146-1"></a>df3 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Data/Ramen2.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb150"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb150-1"><a href="#cb150-1"></a>df3 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Data/Ramen2.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 47 Columns: 15
 ── Column specification ────────────────────────────────────────────────────────
@@ -1783,7 +1816,7 @@ num  (2): Pop, Area
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb148"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb148-1"><a href="#cb148-1"></a>df3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb152"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb152-1"><a href="#cb152-1"></a>df3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 47 × 15
    Pref      Pop   Area RamenN Turnout   LDP   CDP  DPFP Komei   JIP   JCP   SDP
@@ -1805,23 +1838,23 @@ num  (2): Pop, Area
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div id="tbl-handling2_dataset" class="anchored">
-<div id="aumuxojxrn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#aumuxojxrn table {
+<div id="slbtmetfpc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#slbtmetfpc table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#aumuxojxrn thead, #aumuxojxrn tbody, #aumuxojxrn tfoot, #aumuxojxrn tr, #aumuxojxrn td, #aumuxojxrn th {
+#slbtmetfpc thead, #slbtmetfpc tbody, #slbtmetfpc tfoot, #slbtmetfpc tr, #slbtmetfpc td, #slbtmetfpc th {
   border-style: none;
 }
 
-#aumuxojxrn p {
+#slbtmetfpc p {
   margin: 0;
   padding: 0;
 }
 
-#aumuxojxrn .gt_table {
+#slbtmetfpc .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1847,12 +1880,12 @@ num  (2): Pop, Area
   border-left-color: #D3D3D3;
 }
 
-#aumuxojxrn .gt_caption {
+#slbtmetfpc .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#aumuxojxrn .gt_title {
+#slbtmetfpc .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1864,7 +1897,7 @@ num  (2): Pop, Area
   border-bottom-width: 0;
 }
 
-#aumuxojxrn .gt_subtitle {
+#slbtmetfpc .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1876,7 +1909,7 @@ num  (2): Pop, Area
   border-top-width: 0;
 }
 
-#aumuxojxrn .gt_heading {
+#slbtmetfpc .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1888,13 +1921,13 @@ num  (2): Pop, Area
   border-right-color: #D3D3D3;
 }
 
-#aumuxojxrn .gt_bottom_border {
+#slbtmetfpc .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#aumuxojxrn .gt_col_headings {
+#slbtmetfpc .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1909,7 +1942,7 @@ num  (2): Pop, Area
   border-right-color: #D3D3D3;
 }
 
-#aumuxojxrn .gt_col_heading {
+#slbtmetfpc .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1929,7 +1962,7 @@ num  (2): Pop, Area
   overflow-x: hidden;
 }
 
-#aumuxojxrn .gt_column_spanner_outer {
+#slbtmetfpc .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1941,15 +1974,15 @@ num  (2): Pop, Area
   padding-right: 4px;
 }
 
-#aumuxojxrn .gt_column_spanner_outer:first-child {
+#slbtmetfpc .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#aumuxojxrn .gt_column_spanner_outer:last-child {
+#slbtmetfpc .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#aumuxojxrn .gt_column_spanner {
+#slbtmetfpc .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1961,11 +1994,11 @@ num  (2): Pop, Area
   width: 100%;
 }
 
-#aumuxojxrn .gt_spanner_row {
+#slbtmetfpc .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#aumuxojxrn .gt_group_heading {
+#slbtmetfpc .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1991,7 +2024,7 @@ num  (2): Pop, Area
   text-align: left;
 }
 
-#aumuxojxrn .gt_empty_group_heading {
+#slbtmetfpc .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2006,15 +2039,15 @@ num  (2): Pop, Area
   vertical-align: middle;
 }
 
-#aumuxojxrn .gt_from_md > :first-child {
+#slbtmetfpc .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#aumuxojxrn .gt_from_md > :last-child {
+#slbtmetfpc .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#aumuxojxrn .gt_row {
+#slbtmetfpc .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2033,7 +2066,7 @@ num  (2): Pop, Area
   overflow-x: hidden;
 }
 
-#aumuxojxrn .gt_stub {
+#slbtmetfpc .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2046,7 +2079,7 @@ num  (2): Pop, Area
   padding-right: 5px;
 }
 
-#aumuxojxrn .gt_stub_row_group {
+#slbtmetfpc .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2060,15 +2093,15 @@ num  (2): Pop, Area
   vertical-align: top;
 }
 
-#aumuxojxrn .gt_row_group_first td {
+#slbtmetfpc .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#aumuxojxrn .gt_row_group_first th {
+#slbtmetfpc .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#aumuxojxrn .gt_summary_row {
+#slbtmetfpc .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2078,16 +2111,16 @@ num  (2): Pop, Area
   padding-right: 5px;
 }
 
-#aumuxojxrn .gt_first_summary_row {
+#slbtmetfpc .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#aumuxojxrn .gt_first_summary_row.thick {
+#slbtmetfpc .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#aumuxojxrn .gt_last_summary_row {
+#slbtmetfpc .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2097,7 +2130,7 @@ num  (2): Pop, Area
   border-bottom-color: #D3D3D3;
 }
 
-#aumuxojxrn .gt_grand_summary_row {
+#slbtmetfpc .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2107,7 +2140,7 @@ num  (2): Pop, Area
   padding-right: 5px;
 }
 
-#aumuxojxrn .gt_first_grand_summary_row {
+#slbtmetfpc .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2117,7 +2150,7 @@ num  (2): Pop, Area
   border-top-color: #D3D3D3;
 }
 
-#aumuxojxrn .gt_last_grand_summary_row_top {
+#slbtmetfpc .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2127,11 +2160,11 @@ num  (2): Pop, Area
   border-bottom-color: #D3D3D3;
 }
 
-#aumuxojxrn .gt_striped {
+#slbtmetfpc .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#aumuxojxrn .gt_table_body {
+#slbtmetfpc .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2140,7 +2173,7 @@ num  (2): Pop, Area
   border-bottom-color: #D3D3D3;
 }
 
-#aumuxojxrn .gt_footnotes {
+#slbtmetfpc .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2154,7 +2187,7 @@ num  (2): Pop, Area
   border-right-color: #D3D3D3;
 }
 
-#aumuxojxrn .gt_footnote {
+#slbtmetfpc .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2163,7 +2196,7 @@ num  (2): Pop, Area
   padding-right: 5px;
 }
 
-#aumuxojxrn .gt_sourcenotes {
+#slbtmetfpc .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2177,7 +2210,7 @@ num  (2): Pop, Area
   border-right-color: #D3D3D3;
 }
 
-#aumuxojxrn .gt_sourcenote {
+#slbtmetfpc .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2185,63 +2218,63 @@ num  (2): Pop, Area
   padding-right: 5px;
 }
 
-#aumuxojxrn .gt_left {
+#slbtmetfpc .gt_left {
   text-align: left;
 }
 
-#aumuxojxrn .gt_center {
+#slbtmetfpc .gt_center {
   text-align: center;
 }
 
-#aumuxojxrn .gt_right {
+#slbtmetfpc .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#aumuxojxrn .gt_font_normal {
+#slbtmetfpc .gt_font_normal {
   font-weight: normal;
 }
 
-#aumuxojxrn .gt_font_bold {
+#slbtmetfpc .gt_font_bold {
   font-weight: bold;
 }
 
-#aumuxojxrn .gt_font_italic {
+#slbtmetfpc .gt_font_italic {
   font-style: italic;
 }
 
-#aumuxojxrn .gt_super {
+#slbtmetfpc .gt_super {
   font-size: 65%;
 }
 
-#aumuxojxrn .gt_footnote_marks {
+#slbtmetfpc .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#aumuxojxrn .gt_asterisk {
+#slbtmetfpc .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#aumuxojxrn .gt_indent_1 {
+#slbtmetfpc .gt_indent_1 {
   text-indent: 5px;
 }
 
-#aumuxojxrn .gt_indent_2 {
+#slbtmetfpc .gt_indent_2 {
   text-indent: 10px;
 }
 
-#aumuxojxrn .gt_indent_3 {
+#slbtmetfpc .gt_indent_3 {
   text-indent: 15px;
 }
 
-#aumuxojxrn .gt_indent_4 {
+#slbtmetfpc .gt_indent_4 {
   text-indent: 20px;
 }
 
-#aumuxojxrn .gt_indent_5 {
+#slbtmetfpc .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -2310,18 +2343,18 @@ num  (2): Pop, Area
 <p>本データは都道府県ごとの人口、面積、ぐるなびに登録されたラーメン屋の店舗数、2019年参議院議員通常選挙の結果が格納されています。人口と面積は2015年国勢調査、ぐるなびの情報は2020年6月時点での情報です。</p>
 <p><code>df2</code>にデータ上の店舗数ではなく、実際の店舗数を新しい列として追加したい場合はどうすれば良いでしょうか。簡単な方法としては<code>df3</code>から情報を取得し、それを自分で入れる方法です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="annotated-cell-82"><pre class="sourceCode numberSource r numberLines code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-82-1"><a href="#annotated-cell-82-1"></a>df3 <span class="sc">|&gt;</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-82" data-target-annotation="1">1</button><span id="annotated-cell-82-2" class="code-annotation-target"><a href="#annotated-cell-82-2"></a>  <span class="fu">filter</span>(Pref <span class="sc">%in%</span> df2<span class="sc">$</span>Pref) <span class="sc">|&gt;</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-82" data-target-annotation="2">2</button><span id="annotated-cell-82-3" class="code-annotation-target"><a href="#annotated-cell-82-3"></a>  <span class="fu">select</span>(Pref, RamenN)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="annotated-cell-84"><pre class="sourceCode numberSource r numberLines code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-84-1"><a href="#annotated-cell-84-1"></a>df3 <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-84" data-target-annotation="1">1</button><span id="annotated-cell-84-2" class="code-annotation-target"><a href="#annotated-cell-84-2"></a>  <span class="fu">filter</span>(Pref <span class="sc">%in%</span> df2<span class="sc">$</span>Pref) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-84" data-target-annotation="2">2</button><span id="annotated-cell-84-3" class="code-annotation-target"><a href="#annotated-cell-84-3"></a>  <span class="fu">select</span>(Pref, RamenN)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-82" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-84" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-82" data-code-lines="2" data-code-annotation="1">df2のPrefベクトルの要素と一致するものに絞る</span>
+<span data-code-cell="annotated-cell-84" data-code-lines="2" data-code-annotation="1">df2のPrefベクトルの要素と一致するものに絞る</span>
 </dd>
-<dt data-target-cell="annotated-cell-82" data-target-annotation="2">2</dt>
+<dt data-target-cell="annotated-cell-84" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-82" data-code-lines="3" data-code-annotation="2">都道府県名とラーメン屋の店舗数のみ抽出</span>
+<span data-code-cell="annotated-cell-84" data-code-lines="3" data-code-annotation="2">都道府県名とラーメン屋の店舗数のみ抽出</span>
 </dd>
 </dl>
 </div>
@@ -2343,28 +2376,28 @@ num  (2): Pop, Area
 <p>そして、この情報を<code>df2$RamenN &lt;- c(415, 1106, 1254, ...)</code>のように追加すればいいですね。</p>
 <p>しかし、このような方法は非効率的です。そもそも<code>df3</code>から得られた結果の順番と<code>df2</code>の順番も一致しないので、一々対照しながらベクトルを作ることになります。ここで登場する関数が<code>dplyr</code>の<code>*_join()</code>関数群です。この関数群には4つの関数が含まれており、以下のような使い方になります。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb151"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb151-1"><a href="#cb151-1"></a><span class="co"># 新しいデータ名ではなく、データ1またはデータ2の名前に格納すると上書きとなる</span></span>
-<span id="cb151-2"><a href="#cb151-2"></a></span>
-<span id="cb151-3"><a href="#cb151-3"></a><span class="co"># 1. データ1を基準に結合</span></span>
-<span id="cb151-4"><a href="#cb151-4"></a>新しいデータ名 <span class="ot">&lt;-</span>  <span class="fu">left_join</span>(データ1, データ2, <span class="at">by =</span> <span class="st">"共通変数名"</span>)</span>
-<span id="cb151-5"><a href="#cb151-5"></a></span>
-<span id="cb151-6"><a href="#cb151-6"></a><span class="co"># 2. データ2を基準に結合</span></span>
-<span id="cb151-7"><a href="#cb151-7"></a>新しいデータ名 <span class="ot">&lt;-</span> <span class="fu">right_join</span>(データ1, データ2, <span class="at">by =</span> <span class="st">"共通変数名"</span>)</span>
-<span id="cb151-8"><a href="#cb151-8"></a></span>
-<span id="cb151-9"><a href="#cb151-9"></a><span class="co"># 3. データ1とデータ2両方に共通するケースのみ結合</span></span>
-<span id="cb151-10"><a href="#cb151-10"></a>新しいデータ名 <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(データ1, データ2, <span class="at">by =</span> <span class="st">"共通変数名"</span>)</span>
-<span id="cb151-11"><a href="#cb151-11"></a></span>
-<span id="cb151-12"><a href="#cb151-12"></a><span class="co"># 4. データ1とデータ2、どれかに存在するケースを結合</span></span>
-<span id="cb151-13"><a href="#cb151-13"></a>新しいデータ名 <span class="ot">&lt;-</span>  <span class="fu">full_join</span>(データ1, データ2, <span class="at">by =</span> <span class="st">"共通変数名"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb155"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb155-1"><a href="#cb155-1"></a><span class="co"># 新しいデータ名ではなく、データ1またはデータ2の名前に格納すると上書きとなる</span></span>
+<span id="cb155-2"><a href="#cb155-2"></a></span>
+<span id="cb155-3"><a href="#cb155-3"></a><span class="co"># 1. データ1を基準に結合</span></span>
+<span id="cb155-4"><a href="#cb155-4"></a>新しいデータ名 <span class="ot">&lt;-</span>  <span class="fu">left_join</span>(データ1, データ2, <span class="at">by =</span> <span class="st">"共通変数名"</span>)</span>
+<span id="cb155-5"><a href="#cb155-5"></a></span>
+<span id="cb155-6"><a href="#cb155-6"></a><span class="co"># 2. データ2を基準に結合</span></span>
+<span id="cb155-7"><a href="#cb155-7"></a>新しいデータ名 <span class="ot">&lt;-</span> <span class="fu">right_join</span>(データ1, データ2, <span class="at">by =</span> <span class="st">"共通変数名"</span>)</span>
+<span id="cb155-8"><a href="#cb155-8"></a></span>
+<span id="cb155-9"><a href="#cb155-9"></a><span class="co"># 3. データ1とデータ2両方に共通するケースのみ結合</span></span>
+<span id="cb155-10"><a href="#cb155-10"></a>新しいデータ名 <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(データ1, データ2, <span class="at">by =</span> <span class="st">"共通変数名"</span>)</span>
+<span id="cb155-11"><a href="#cb155-11"></a></span>
+<span id="cb155-12"><a href="#cb155-12"></a><span class="co"># 4. データ1とデータ2、どれかに存在するケースを結合</span></span>
+<span id="cb155-13"><a href="#cb155-13"></a>新しいデータ名 <span class="ot">&lt;-</span>  <span class="fu">full_join</span>(データ1, データ2, <span class="at">by =</span> <span class="st">"共通変数名"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>4つの関数の違いについて説明する前に、<code>by</code>引数について話したいと思います。これは主にキー (key)変数と呼ばれる変数で、それぞれのデータに同じ名前の変数がある必要があります。<code>df2</code>と<code>df3</code>だとそれが<code>Pref</code>変数です。どの<code>*_join()</code>関数でも、<code>Pref</code>の値が同じもの同士を結合することになります。</p>
 <p>データのキー変数名が異なる場合もあります。たとえば、データ1の都道府県名は<code>Pref</code>という列に、データ2の都道府県名は<code>Prefecture</code>という列になっている場合、<code>by = "Pref"</code>でなく、<code>by = c("データ1のキー変数名" = "データ2のキー変数名")</code>、つまり、<code>by = c("Pref" = "Prefecture")</code>と指定します。</p>
 <p>それでは、<code>df3</code>から都道府県名とラーメン屋の店舗数だけ抽出し、<code>df4</code>として格納しておきます。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb152"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb152-1"><a href="#cb152-1"></a>df4 <span class="ot">&lt;-</span> df3 <span class="sc">|&gt;</span></span>
-<span id="cb152-2"><a href="#cb152-2"></a>  <span class="fu">select</span>(Pref, RamenN)</span>
-<span id="cb152-3"><a href="#cb152-3"></a></span>
-<span id="cb152-4"><a href="#cb152-4"></a>df4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb156"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb156-1"><a href="#cb156-1"></a>df4 <span class="ot">&lt;-</span> df3 <span class="sc">|&gt;</span></span>
+<span id="cb156-2"><a href="#cb156-2"></a>  <span class="fu">select</span>(Pref, RamenN)</span>
+<span id="cb156-3"><a href="#cb156-3"></a></span>
+<span id="cb156-4"><a href="#cb156-4"></a>df4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 47 × 2
    Pref   RamenN
@@ -2392,7 +2425,7 @@ num  (2): Pop, Area
 </div>
 <p>実際にやってみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb154"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb154-1"><a href="#cb154-1"></a><span class="fu">inner_join</span>(df2, df4, <span class="at">by =</span> <span class="st">"Pref"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb158"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb158-1"><a href="#cb158-1"></a><span class="fu">inner_join</span>(df2, df4, <span class="at">by =</span> <span class="st">"Pref"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 9 × 6
   Pref     Budget_Mean ScoreN_Sum Score_Mean     N RamenN
@@ -2418,8 +2451,8 @@ num  (2): Pop, Area
 </div>
 <p>それでは実際、結果を確認してみましょう。今回は結合後、<code>RamenN</code>が大きい順で出力します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb156"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb156-1"><a href="#cb156-1"></a><span class="fu">full_join</span>(df2, df4, <span class="at">by =</span> <span class="st">"Pref"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb156-2"><a href="#cb156-2"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(RamenN)) <span class="co"># ぐるなびに登録された店舗の多い都道府県から出力</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb160"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb160-1"><a href="#cb160-1"></a><span class="fu">full_join</span>(df2, df4, <span class="at">by =</span> <span class="st">"Pref"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb160-2"><a href="#cb160-2"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(RamenN)) <span class="co"># ぐるなびに登録された店舗の多い都道府県から出力</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 47 × 6
    Pref     Budget_Mean ScoreN_Sum Score_Mean     N RamenN
@@ -2456,17 +2489,17 @@ num  (2): Pop, Area
 <p>ここまではキー変数が一つである場合についてのみ考えましたが、複数のキー変数が必要な場合もあります。たとえば、市区町村の人口・面積データと市区町村の投票率データを結合するとします。各自治体に与えられている「<a href="https://www.soumu.go.jp/denshijiti/code.html">全国地方公共団体コード</a>」が両データに含まれている場合は、このコードをキー変数として使えば問題ありませんが、市区町村名をキー変数として使わざる得ないケースもあるでしょう。しかし、キー変数が複数ある場合もあります。たとえば、府中市は東京都と広島県にありますし、太子町は大阪府と兵庫県にあります。この場合、市区町村名のみでケースをマッチングすると、重複されてマッチングされる恐れがあります。この場合はキー変数を増やすことで対処できます。たとえば、同じ都道府県なら同じ市区町村は存在しないでしょう<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>。キー変数を複数指定する方法は簡単です。たとえば、市区町村名変数が<code>Munip</code>、都道府県名変数が<code>Pref</code>なら<code>by = c("Munip", "Pref")</code>と指定するだけです。</p>
 <p>最後に、キー変数以外の変数名が重複する場合について考えましょう。これはパネルデータを結合する時によく直面する問題です。同じ回答者に2回の調査を行った場合、回答者のIDでデータを結合することになります。ただし、それぞれのデータにおいて回答者の性別に関する変数が<code>F1</code>という名前の場合、どうなるでしょうか。同じデータの同じ名前の変数が複数あると、非常に扱いにくくなります。実際の結果を見てみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb158"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb158-1"><a href="#cb158-1"></a>Wave1_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">ID =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>),</span>
-<span id="cb158-2"><a href="#cb158-2"></a>                   <span class="at">F1 =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>),</span>
-<span id="cb158-3"><a href="#cb158-3"></a>                   <span class="at">F2 =</span> <span class="fu">c</span>(<span class="dv">18</span>, <span class="dv">77</span>, <span class="dv">37</span>, <span class="dv">50</span>, <span class="dv">41</span>),</span>
-<span id="cb158-4"><a href="#cb158-4"></a>                   <span class="at">Q1 =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>))</span>
-<span id="cb158-5"><a href="#cb158-5"></a></span>
-<span id="cb158-6"><a href="#cb158-6"></a>Wave2_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">ID =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">7</span>),</span>
-<span id="cb158-7"><a href="#cb158-7"></a>                   <span class="at">F1 =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>),</span>
-<span id="cb158-8"><a href="#cb158-8"></a>                   <span class="at">F2 =</span> <span class="fu">c</span>(<span class="dv">18</span>, <span class="dv">37</span>, <span class="dv">50</span>, <span class="dv">20</span>, <span class="dv">62</span>),</span>
-<span id="cb158-9"><a href="#cb158-9"></a>                   <span class="at">Q1 =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">4</span>))</span>
-<span id="cb158-10"><a href="#cb158-10"></a></span>
-<span id="cb158-11"><a href="#cb158-11"></a><span class="fu">full_join</span>(Wave1_df, Wave2_df, <span class="at">by =</span> <span class="st">"ID"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb162"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb162-1"><a href="#cb162-1"></a>Wave1_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">ID =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>),</span>
+<span id="cb162-2"><a href="#cb162-2"></a>                   <span class="at">F1 =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb162-3"><a href="#cb162-3"></a>                   <span class="at">F2 =</span> <span class="fu">c</span>(<span class="dv">18</span>, <span class="dv">77</span>, <span class="dv">37</span>, <span class="dv">50</span>, <span class="dv">41</span>),</span>
+<span id="cb162-4"><a href="#cb162-4"></a>                   <span class="at">Q1 =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>))</span>
+<span id="cb162-5"><a href="#cb162-5"></a></span>
+<span id="cb162-6"><a href="#cb162-6"></a>Wave2_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">ID =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">7</span>),</span>
+<span id="cb162-7"><a href="#cb162-7"></a>                   <span class="at">F1 =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb162-8"><a href="#cb162-8"></a>                   <span class="at">F2 =</span> <span class="fu">c</span>(<span class="dv">18</span>, <span class="dv">37</span>, <span class="dv">50</span>, <span class="dv">20</span>, <span class="dv">62</span>),</span>
+<span id="cb162-9"><a href="#cb162-9"></a>                   <span class="at">Q1 =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">4</span>))</span>
+<span id="cb162-10"><a href="#cb162-10"></a></span>
+<span id="cb162-11"><a href="#cb162-11"></a><span class="fu">full_join</span>(Wave1_df, Wave2_df, <span class="at">by =</span> <span class="st">"ID"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 7 × 7
      ID  F1.x  F2.x  Q1.x  F1.y  F2.y  Q1.y
@@ -2482,7 +2515,7 @@ num  (2): Pop, Area
 </div>
 <p>それぞれの変数名の後に<code>.x</code>と<code>.y</code>が付きます。この接尾辞 (suffix)は<code>suffix</code>引数を指定することで、分析側からカスタマイズ可能です。たとえば、接尾辞を<code>_W1</code>、<code>_W2</code>にしたい場合は</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb160"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb160-1"><a href="#cb160-1"></a><span class="fu">full_join</span>(Wave1_df, Wave2_df, <span class="at">by =</span> <span class="st">"ID"</span>, <span class="at">suffix =</span> <span class="fu">c</span>(<span class="st">"_W1"</span>, <span class="st">"_W2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb164"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb164-1"><a href="#cb164-1"></a><span class="fu">full_join</span>(Wave1_df, Wave2_df, <span class="at">by =</span> <span class="st">"ID"</span>, <span class="at">suffix =</span> <span class="fu">c</span>(<span class="st">"_W1"</span>, <span class="st">"_W2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 7 × 7
      ID F1_W1 F2_W1 Q1_W1 F1_W2 F2_W2 Q1_W2
