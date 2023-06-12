@@ -74,6 +74,8 @@ pacman::p_load(tidyverse, rvest, gt, gtExtras)
 
 　そもそもセレクターが何なのかを知るためには、CSSの話を簡単にしておく必要がある。CSSはHTMLの「見た目」を担当するものであり、通常、HTMLとは別途のファイル（`.css`ファイル）で作成され、HTMLに読み込まれる。`.css`ファイルの内部には「この箇所はこのような見た目にしてくれ」といったものが細かく書かれている。
 
+<https://www.jaysong.net/garage/rbook/scraping/sample00.html>
+
 ```{.html filename="sample00.html" code-line-numbers="true"}
 <html>
 	<head>
@@ -92,9 +94,11 @@ pacman::p_load(tidyverse, rvest, gt, gtExtras)
 		<h2>数学成績</h2>
 		<table class="math_score" width=300px>
 			<thead>
-				<td>ID</td>
-				<td>名前</td>
-				<td>成績</td>
+				<tr>
+					<td>ID</td>
+					<td>名前</td>
+					<td>成績</td>
+				</tr>
 			</thead>
 			<tbody>
 				<tr>
@@ -143,6 +147,8 @@ pacman::p_load(tidyverse, rvest, gt, gtExtras)
 </html>
 ```
 
+<https://www.jaysong.net/garage/rbook/scraping/sample01.html>
+
 :::{.panel-tabset}
 ## `.html`ファイル
 
@@ -165,9 +171,11 @@ pacman::p_load(tidyverse, rvest, gt, gtExtras)
 		<h2>数学成績</h2>
 		<table class="math_score" width=300px>
 			<thead>
-				<td>ID</td>
-				<td>名前</td>
-				<td>成績</td>
+				<tr>
+					<td>ID</td>
+					<td>名前</td>
+					<td>成績</td>
+				</tr>
 			</thead>
 			<tbody>
 				<tr>
@@ -268,6 +276,85 @@ thead {
    * `html_elment()`、`html_elments()`で特定のタグやクラス、IDを抽出
    * `html_text()`、`html_text2()`や`html_table()`で抽出
    * 画像の場合、`<img>`タグの`src`属性を抽出する必要があるため、`html_attr()`
+
+```{r}
+#| label: scraping-rvest-read
+url <- "https://www.jaysong.net/garage/rbook/scraping/sample01.html"
+
+my_html <- read_html(url)
+my_html
+```
+
+セレクターを指定した要素の抽出
+
+```{r}
+#| label: scraping-rvest-elements-01
+my_html |> 
+  html_elements("a")
+```
+
+更に`href`の値を抽出
+
+```{r}
+#| label: scraping-rvest-elements-02
+my_html |> 
+  html_elements("a") |> 
+  html_attr("href")
+```
+
+箇条書きの要素を抽出
+
+```{r}
+#| label: scraping-rvest-elements-03
+my_html |> 
+  html_elements("li")
+```
+
+さらにテキストのみ抽出
+
+```{r}
+#| label: scraping-rvest-elements-04
+my_html |> 
+  html_elements("li") |> 
+  html_text()
+```
+
+クラス（`.クラス名`）の指定もOK
+
+```{r}
+#| label: scraping-rvest-elements-05
+my_html |> 
+  html_elements(".book-title") |> 
+  html_text()
+```
+
+```{r}
+#| label: scraping-rvest-table-01
+my_html |> 
+  html_table()
+```
+
+```{r}
+#| label: scraping-rvest-table-02
+my_tables <- my_html |> 
+  html_table(header = TRUE)
+
+my_tables
+```
+
+```{r}
+#| label: scraping-rvest-table-03
+names(my_tables) <- c("数学", "英語")
+
+my_tables
+```
+
+```{r}
+#| label: scraping-rvest-table-04
+my_table <- bind_rows(my_tables, .id = "科目")
+
+my_table
+```
 
 ## 実践
 

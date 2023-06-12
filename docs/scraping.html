@@ -573,6 +573,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <h3 data-number="30.1.3" class="anchored" data-anchor-id="セレクター"><span class="header-section-number">30.1.3</span> セレクター</h3>
 <p>　セレクターを理解するためにはCSS（Cascading Style Sheets）の知識が必要であるが、ここでは最低限のことのみ解説する。ウェブスクレイピングは指定したHTMLファイルから特定のタグに囲まれた内容を取得するのが一般的、かつ基本的なやり方だ。たとえば、あるページ上の表を取得するためには表のタグである<code>&lt;table&gt;</code>タグで囲まれた内容を取得する。しかし、一つのページ内に複数の<code>&lt;table&gt;</code>タグがあればどうだろうか。多くのスクレイピングのパッケージやライブラリはすべてを読み込むが、それはメモリの無駄遣いだ。予め具体的にどの表を取得するかを指定した方が効率的だろう。ここで必要なのがセレクターだ。</p>
 <p>　そもそもセレクターが何なのかを知るためには、CSSの話を簡単にしておく必要がある。CSSはHTMLの「見た目」を担当するものであり、通常、HTMLとは別途のファイル（<code>.css</code>ファイル）で作成され、HTMLに読み込まれる。<code>.css</code>ファイルの内部には「この箇所はこのような見た目にしてくれ」といったものが細かく書かれている。</p>
+<p><a href="https://www.jaysong.net/garage/rbook/scraping/sample00.html" class="uri">https://www.jaysong.net/garage/rbook/scraping/sample00.html</a></p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>sample00.html</strong></pre>
@@ -594,56 +595,59 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <span id="cb3-15"><a href="#cb3-15"></a>        <span class="kw">&lt;h2&gt;</span>数学成績<span class="kw">&lt;/h2&gt;</span></span>
 <span id="cb3-16"><a href="#cb3-16"></a>        <span class="kw">&lt;table</span> <span class="er">class</span><span class="ot">=</span><span class="st">"math_score"</span> <span class="er">width</span><span class="ot">=</span><span class="st">300px</span><span class="kw">&gt;</span></span>
 <span id="cb3-17"><a href="#cb3-17"></a>            <span class="kw">&lt;thead&gt;</span></span>
-<span id="cb3-18"><a href="#cb3-18"></a>                <span class="kw">&lt;td&gt;</span>ID<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb3-19"><a href="#cb3-19"></a>                <span class="kw">&lt;td&gt;</span>名前<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb3-20"><a href="#cb3-20"></a>                <span class="kw">&lt;td&gt;</span>成績<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb3-21"><a href="#cb3-21"></a>            <span class="kw">&lt;/thead&gt;</span></span>
-<span id="cb3-22"><a href="#cb3-22"></a>            <span class="kw">&lt;tbody&gt;</span></span>
-<span id="cb3-23"><a href="#cb3-23"></a>                <span class="kw">&lt;tr&gt;</span></span>
-<span id="cb3-24"><a href="#cb3-24"></a>                    <span class="kw">&lt;td&gt;</span>1<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb3-25"><a href="#cb3-25"></a>                    <span class="kw">&lt;td&gt;</span>田中<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb3-26"><a href="#cb3-26"></a>                    <span class="kw">&lt;td</span> <span class="er">class</span><span class="ot">=</span><span class="st">"tbl-score"</span><span class="kw">&gt;</span>80<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb3-27"><a href="#cb3-27"></a>                <span class="kw">&lt;/tr&gt;</span></span>
-<span id="cb3-28"><a href="#cb3-28"></a>                <span class="kw">&lt;tr&gt;</span></span>
-<span id="cb3-29"><a href="#cb3-29"></a>                    <span class="kw">&lt;td&gt;</span>2<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb3-30"><a href="#cb3-30"></a>                    <span class="kw">&lt;td&gt;</span>佐藤<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb3-31"><a href="#cb3-31"></a>                    <span class="kw">&lt;td</span> <span class="er">class</span><span class="ot">=</span><span class="st">"tbl-score"</span><span class="kw">&gt;</span>100<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb3-32"><a href="#cb3-32"></a>                <span class="kw">&lt;/tr&gt;</span></span>
-<span id="cb3-33"><a href="#cb3-33"></a>                <span class="kw">&lt;tr&gt;</span></span>
-<span id="cb3-34"><a href="#cb3-34"></a>                    <span class="kw">&lt;td&gt;</span>3<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb3-35"><a href="#cb3-35"></a>                    <span class="kw">&lt;td&gt;</span>渡辺<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb3-36"><a href="#cb3-36"></a>                    <span class="kw">&lt;td</span> <span class="er">class</span><span class="ot">=</span><span class="st">"tbl-score"</span><span class="kw">&gt;</span>75<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb3-37"><a href="#cb3-37"></a>                <span class="kw">&lt;/tr&gt;</span></span>
-<span id="cb3-38"><a href="#cb3-38"></a>            <span class="kw">&lt;/tbody&gt;</span></span>
-<span id="cb3-39"><a href="#cb3-39"></a>        <span class="kw">&lt;/table&gt;</span></span>
-<span id="cb3-40"><a href="#cb3-40"></a>        <span class="kw">&lt;h2&gt;</span>英語成績<span class="kw">&lt;/h2&gt;</span></span>
-<span id="cb3-41"><a href="#cb3-41"></a>        <span class="kw">&lt;table</span> <span class="er">class</span><span class="ot">=</span><span class="st">"english_score"</span> <span class="er">width</span><span class="ot">=</span><span class="st">300px</span><span class="kw">&gt;</span></span>
-<span id="cb3-42"><a href="#cb3-42"></a>            <span class="kw">&lt;thead&gt;</span></span>
-<span id="cb3-43"><a href="#cb3-43"></a>                <span class="kw">&lt;td&gt;</span>ID<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb3-44"><a href="#cb3-44"></a>                <span class="kw">&lt;td&gt;</span>名前<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb3-45"><a href="#cb3-45"></a>                <span class="kw">&lt;td&gt;</span>成績<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb3-46"><a href="#cb3-46"></a>            <span class="kw">&lt;/thead&gt;</span></span>
-<span id="cb3-47"><a href="#cb3-47"></a>            <span class="kw">&lt;tbody&gt;</span></span>
-<span id="cb3-48"><a href="#cb3-48"></a>                <span class="kw">&lt;tr&gt;</span></span>
-<span id="cb3-49"><a href="#cb3-49"></a>                    <span class="kw">&lt;td&gt;</span>1<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb3-50"><a href="#cb3-50"></a>                    <span class="kw">&lt;td&gt;</span>田中<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb3-51"><a href="#cb3-51"></a>                    <span class="kw">&lt;td</span> <span class="er">class</span><span class="ot">=</span><span class="st">"tbl-score"</span><span class="kw">&gt;</span>20<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb3-52"><a href="#cb3-52"></a>                <span class="kw">&lt;/tr&gt;</span></span>
-<span id="cb3-53"><a href="#cb3-53"></a>                <span class="kw">&lt;tr&gt;</span></span>
-<span id="cb3-54"><a href="#cb3-54"></a>                    <span class="kw">&lt;td&gt;</span>2<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb3-55"><a href="#cb3-55"></a>                    <span class="kw">&lt;td&gt;</span>佐藤<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb3-56"><a href="#cb3-56"></a>                    <span class="kw">&lt;td</span> <span class="er">class</span><span class="ot">=</span><span class="st">"tbl-score"</span><span class="kw">&gt;</span>100<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb3-57"><a href="#cb3-57"></a>                <span class="kw">&lt;/tr&gt;</span></span>
-<span id="cb3-58"><a href="#cb3-58"></a>                <span class="kw">&lt;tr&gt;</span></span>
-<span id="cb3-59"><a href="#cb3-59"></a>                    <span class="kw">&lt;td&gt;</span>3<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb3-60"><a href="#cb3-60"></a>                    <span class="kw">&lt;td&gt;</span>渡辺<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb3-61"><a href="#cb3-61"></a>                    <span class="kw">&lt;td</span> <span class="er">class</span><span class="ot">=</span><span class="st">"tbl-score"</span><span class="kw">&gt;</span>90<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb3-62"><a href="#cb3-62"></a>                <span class="kw">&lt;/tr&gt;</span></span>
-<span id="cb3-63"><a href="#cb3-63"></a>            <span class="kw">&lt;/tbody&gt;</span></span>
-<span id="cb3-64"><a href="#cb3-64"></a>        <span class="kw">&lt;/table&gt;</span></span>
-<span id="cb3-65"><a href="#cb3-65"></a>    <span class="kw">&lt;/body&gt;</span></span>
-<span id="cb3-66"><a href="#cb3-66"></a><span class="kw">&lt;/html&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-18"><a href="#cb3-18"></a>                <span class="kw">&lt;tr&gt;</span></span>
+<span id="cb3-19"><a href="#cb3-19"></a>                    <span class="kw">&lt;td&gt;</span>ID<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a>                    <span class="kw">&lt;td&gt;</span>名前<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb3-21"><a href="#cb3-21"></a>                    <span class="kw">&lt;td&gt;</span>成績<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb3-22"><a href="#cb3-22"></a>                <span class="kw">&lt;/tr&gt;</span></span>
+<span id="cb3-23"><a href="#cb3-23"></a>            <span class="kw">&lt;/thead&gt;</span></span>
+<span id="cb3-24"><a href="#cb3-24"></a>            <span class="kw">&lt;tbody&gt;</span></span>
+<span id="cb3-25"><a href="#cb3-25"></a>                <span class="kw">&lt;tr&gt;</span></span>
+<span id="cb3-26"><a href="#cb3-26"></a>                    <span class="kw">&lt;td&gt;</span>1<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb3-27"><a href="#cb3-27"></a>                    <span class="kw">&lt;td&gt;</span>田中<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb3-28"><a href="#cb3-28"></a>                    <span class="kw">&lt;td</span> <span class="er">class</span><span class="ot">=</span><span class="st">"tbl-score"</span><span class="kw">&gt;</span>80<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb3-29"><a href="#cb3-29"></a>                <span class="kw">&lt;/tr&gt;</span></span>
+<span id="cb3-30"><a href="#cb3-30"></a>                <span class="kw">&lt;tr&gt;</span></span>
+<span id="cb3-31"><a href="#cb3-31"></a>                    <span class="kw">&lt;td&gt;</span>2<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb3-32"><a href="#cb3-32"></a>                    <span class="kw">&lt;td&gt;</span>佐藤<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb3-33"><a href="#cb3-33"></a>                    <span class="kw">&lt;td</span> <span class="er">class</span><span class="ot">=</span><span class="st">"tbl-score"</span><span class="kw">&gt;</span>100<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb3-34"><a href="#cb3-34"></a>                <span class="kw">&lt;/tr&gt;</span></span>
+<span id="cb3-35"><a href="#cb3-35"></a>                <span class="kw">&lt;tr&gt;</span></span>
+<span id="cb3-36"><a href="#cb3-36"></a>                    <span class="kw">&lt;td&gt;</span>3<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb3-37"><a href="#cb3-37"></a>                    <span class="kw">&lt;td&gt;</span>渡辺<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb3-38"><a href="#cb3-38"></a>                    <span class="kw">&lt;td</span> <span class="er">class</span><span class="ot">=</span><span class="st">"tbl-score"</span><span class="kw">&gt;</span>75<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb3-39"><a href="#cb3-39"></a>                <span class="kw">&lt;/tr&gt;</span></span>
+<span id="cb3-40"><a href="#cb3-40"></a>            <span class="kw">&lt;/tbody&gt;</span></span>
+<span id="cb3-41"><a href="#cb3-41"></a>        <span class="kw">&lt;/table&gt;</span></span>
+<span id="cb3-42"><a href="#cb3-42"></a>        <span class="kw">&lt;h2&gt;</span>英語成績<span class="kw">&lt;/h2&gt;</span></span>
+<span id="cb3-43"><a href="#cb3-43"></a>        <span class="kw">&lt;table</span> <span class="er">class</span><span class="ot">=</span><span class="st">"english_score"</span> <span class="er">width</span><span class="ot">=</span><span class="st">300px</span><span class="kw">&gt;</span></span>
+<span id="cb3-44"><a href="#cb3-44"></a>            <span class="kw">&lt;thead&gt;</span></span>
+<span id="cb3-45"><a href="#cb3-45"></a>                <span class="kw">&lt;td&gt;</span>ID<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb3-46"><a href="#cb3-46"></a>                <span class="kw">&lt;td&gt;</span>名前<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb3-47"><a href="#cb3-47"></a>                <span class="kw">&lt;td&gt;</span>成績<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb3-48"><a href="#cb3-48"></a>            <span class="kw">&lt;/thead&gt;</span></span>
+<span id="cb3-49"><a href="#cb3-49"></a>            <span class="kw">&lt;tbody&gt;</span></span>
+<span id="cb3-50"><a href="#cb3-50"></a>                <span class="kw">&lt;tr&gt;</span></span>
+<span id="cb3-51"><a href="#cb3-51"></a>                    <span class="kw">&lt;td&gt;</span>1<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb3-52"><a href="#cb3-52"></a>                    <span class="kw">&lt;td&gt;</span>田中<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb3-53"><a href="#cb3-53"></a>                    <span class="kw">&lt;td</span> <span class="er">class</span><span class="ot">=</span><span class="st">"tbl-score"</span><span class="kw">&gt;</span>20<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb3-54"><a href="#cb3-54"></a>                <span class="kw">&lt;/tr&gt;</span></span>
+<span id="cb3-55"><a href="#cb3-55"></a>                <span class="kw">&lt;tr&gt;</span></span>
+<span id="cb3-56"><a href="#cb3-56"></a>                    <span class="kw">&lt;td&gt;</span>2<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb3-57"><a href="#cb3-57"></a>                    <span class="kw">&lt;td&gt;</span>佐藤<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb3-58"><a href="#cb3-58"></a>                    <span class="kw">&lt;td</span> <span class="er">class</span><span class="ot">=</span><span class="st">"tbl-score"</span><span class="kw">&gt;</span>100<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb3-59"><a href="#cb3-59"></a>                <span class="kw">&lt;/tr&gt;</span></span>
+<span id="cb3-60"><a href="#cb3-60"></a>                <span class="kw">&lt;tr&gt;</span></span>
+<span id="cb3-61"><a href="#cb3-61"></a>                    <span class="kw">&lt;td&gt;</span>3<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb3-62"><a href="#cb3-62"></a>                    <span class="kw">&lt;td&gt;</span>渡辺<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb3-63"><a href="#cb3-63"></a>                    <span class="kw">&lt;td</span> <span class="er">class</span><span class="ot">=</span><span class="st">"tbl-score"</span><span class="kw">&gt;</span>90<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb3-64"><a href="#cb3-64"></a>                <span class="kw">&lt;/tr&gt;</span></span>
+<span id="cb3-65"><a href="#cb3-65"></a>            <span class="kw">&lt;/tbody&gt;</span></span>
+<span id="cb3-66"><a href="#cb3-66"></a>        <span class="kw">&lt;/table&gt;</span></span>
+<span id="cb3-67"><a href="#cb3-67"></a>    <span class="kw">&lt;/body&gt;</span></span>
+<span id="cb3-68"><a href="#cb3-68"></a><span class="kw">&lt;/html&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p><a href="https://www.jaysong.net/garage/rbook/scraping/sample01.html" class="uri">https://www.jaysong.net/garage/rbook/scraping/sample01.html</a></p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page"><code>.html</code>ファイル</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false"><code>.css</code>ファイル</a></li></ul>
 <div class="tab-content">
@@ -670,55 +674,57 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <span id="cb4-16"><a href="#cb4-16"></a>        <span class="kw">&lt;h2&gt;</span>数学成績<span class="kw">&lt;/h2&gt;</span></span>
 <span id="cb4-17"><a href="#cb4-17"></a>        <span class="kw">&lt;table</span> <span class="er">class</span><span class="ot">=</span><span class="st">"math_score"</span> <span class="er">width</span><span class="ot">=</span><span class="st">300px</span><span class="kw">&gt;</span></span>
 <span id="cb4-18"><a href="#cb4-18"></a>            <span class="kw">&lt;thead&gt;</span></span>
-<span id="cb4-19"><a href="#cb4-19"></a>                <span class="kw">&lt;td&gt;</span>ID<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb4-20"><a href="#cb4-20"></a>                <span class="kw">&lt;td&gt;</span>名前<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb4-21"><a href="#cb4-21"></a>                <span class="kw">&lt;td&gt;</span>成績<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb4-22"><a href="#cb4-22"></a>            <span class="kw">&lt;/thead&gt;</span></span>
-<span id="cb4-23"><a href="#cb4-23"></a>            <span class="kw">&lt;tbody&gt;</span></span>
-<span id="cb4-24"><a href="#cb4-24"></a>                <span class="kw">&lt;tr&gt;</span></span>
-<span id="cb4-25"><a href="#cb4-25"></a>                    <span class="kw">&lt;td&gt;</span>1<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb4-26"><a href="#cb4-26"></a>                    <span class="kw">&lt;td&gt;</span>田中<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb4-27"><a href="#cb4-27"></a>                    <span class="kw">&lt;td</span> <span class="er">class</span><span class="ot">=</span><span class="st">"tbl-score"</span><span class="kw">&gt;</span>80<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb4-28"><a href="#cb4-28"></a>                <span class="kw">&lt;/tr&gt;</span></span>
-<span id="cb4-29"><a href="#cb4-29"></a>                <span class="kw">&lt;tr&gt;</span></span>
-<span id="cb4-30"><a href="#cb4-30"></a>                    <span class="kw">&lt;td&gt;</span>2<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb4-31"><a href="#cb4-31"></a>                    <span class="kw">&lt;td&gt;</span>佐藤<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb4-32"><a href="#cb4-32"></a>                    <span class="kw">&lt;td</span> <span class="er">class</span><span class="ot">=</span><span class="st">"tbl-score"</span><span class="kw">&gt;</span>100<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb4-33"><a href="#cb4-33"></a>                <span class="kw">&lt;/tr&gt;</span></span>
-<span id="cb4-34"><a href="#cb4-34"></a>                <span class="kw">&lt;tr&gt;</span></span>
-<span id="cb4-35"><a href="#cb4-35"></a>                    <span class="kw">&lt;td&gt;</span>3<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb4-36"><a href="#cb4-36"></a>                    <span class="kw">&lt;td&gt;</span>渡辺<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb4-37"><a href="#cb4-37"></a>                    <span class="kw">&lt;td</span> <span class="er">class</span><span class="ot">=</span><span class="st">"tbl-score"</span><span class="kw">&gt;</span>75<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb4-38"><a href="#cb4-38"></a>                <span class="kw">&lt;/tr&gt;</span></span>
-<span id="cb4-39"><a href="#cb4-39"></a>            <span class="kw">&lt;/tbody&gt;</span></span>
-<span id="cb4-40"><a href="#cb4-40"></a>        <span class="kw">&lt;/table&gt;</span></span>
-<span id="cb4-41"><a href="#cb4-41"></a>        <span class="kw">&lt;h2&gt;</span>英語成績<span class="kw">&lt;/h2&gt;</span></span>
-<span id="cb4-42"><a href="#cb4-42"></a>        <span class="kw">&lt;table</span> <span class="er">class</span><span class="ot">=</span><span class="st">"english_score"</span> <span class="er">width</span><span class="ot">=</span><span class="st">300px</span><span class="kw">&gt;</span></span>
-<span id="cb4-43"><a href="#cb4-43"></a>            <span class="kw">&lt;thead&gt;</span></span>
-<span id="cb4-44"><a href="#cb4-44"></a>                <span class="kw">&lt;td&gt;</span>ID<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb4-45"><a href="#cb4-45"></a>                <span class="kw">&lt;td&gt;</span>名前<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb4-46"><a href="#cb4-46"></a>                <span class="kw">&lt;td&gt;</span>成績<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb4-47"><a href="#cb4-47"></a>            <span class="kw">&lt;/thead&gt;</span></span>
-<span id="cb4-48"><a href="#cb4-48"></a>            <span class="kw">&lt;tbody&gt;</span></span>
-<span id="cb4-49"><a href="#cb4-49"></a>                <span class="kw">&lt;tr&gt;</span></span>
-<span id="cb4-50"><a href="#cb4-50"></a>                    <span class="kw">&lt;td&gt;</span>1<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb4-51"><a href="#cb4-51"></a>                    <span class="kw">&lt;td&gt;</span>田中<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb4-52"><a href="#cb4-52"></a>                    <span class="kw">&lt;td</span> <span class="er">class</span><span class="ot">=</span><span class="st">"tbl-score"</span><span class="kw">&gt;</span>20<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb4-53"><a href="#cb4-53"></a>                <span class="kw">&lt;/tr&gt;</span></span>
-<span id="cb4-54"><a href="#cb4-54"></a>                <span class="kw">&lt;tr&gt;</span></span>
-<span id="cb4-55"><a href="#cb4-55"></a>                    <span class="kw">&lt;td&gt;</span>2<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb4-56"><a href="#cb4-56"></a>                    <span class="kw">&lt;td&gt;</span>佐藤<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb4-57"><a href="#cb4-57"></a>                    <span class="kw">&lt;td</span> <span class="er">class</span><span class="ot">=</span><span class="st">"tbl-score"</span><span class="kw">&gt;</span>100<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb4-58"><a href="#cb4-58"></a>                <span class="kw">&lt;/tr&gt;</span></span>
-<span id="cb4-59"><a href="#cb4-59"></a>                <span class="kw">&lt;tr&gt;</span></span>
-<span id="cb4-60"><a href="#cb4-60"></a>                    <span class="kw">&lt;td&gt;</span>3<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb4-61"><a href="#cb4-61"></a>                    <span class="kw">&lt;td&gt;</span>渡辺<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb4-62"><a href="#cb4-62"></a>                    <span class="kw">&lt;td</span> <span class="er">class</span><span class="ot">=</span><span class="st">"tbl-score"</span><span class="kw">&gt;</span>90<span class="kw">&lt;/td&gt;</span></span>
-<span id="cb4-63"><a href="#cb4-63"></a>                <span class="kw">&lt;/tr&gt;</span></span>
-<span id="cb4-64"><a href="#cb4-64"></a>            <span class="kw">&lt;/tbody&gt;</span></span>
-<span id="cb4-65"><a href="#cb4-65"></a>        <span class="kw">&lt;/table&gt;</span></span>
-<span id="cb4-66"><a href="#cb4-66"></a>    <span class="kw">&lt;/body&gt;</span></span>
-<span id="cb4-67"><a href="#cb4-67"></a><span class="kw">&lt;/html&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-19"><a href="#cb4-19"></a>                <span class="kw">&lt;tr&gt;</span></span>
+<span id="cb4-20"><a href="#cb4-20"></a>                    <span class="kw">&lt;td&gt;</span>ID<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb4-21"><a href="#cb4-21"></a>                    <span class="kw">&lt;td&gt;</span>名前<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb4-22"><a href="#cb4-22"></a>                    <span class="kw">&lt;td&gt;</span>成績<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb4-23"><a href="#cb4-23"></a>                <span class="kw">&lt;/tr&gt;</span></span>
+<span id="cb4-24"><a href="#cb4-24"></a>            <span class="kw">&lt;/thead&gt;</span></span>
+<span id="cb4-25"><a href="#cb4-25"></a>            <span class="kw">&lt;tbody&gt;</span></span>
+<span id="cb4-26"><a href="#cb4-26"></a>                <span class="kw">&lt;tr&gt;</span></span>
+<span id="cb4-27"><a href="#cb4-27"></a>                    <span class="kw">&lt;td&gt;</span>1<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb4-28"><a href="#cb4-28"></a>                    <span class="kw">&lt;td&gt;</span>田中<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb4-29"><a href="#cb4-29"></a>                    <span class="kw">&lt;td</span> <span class="er">class</span><span class="ot">=</span><span class="st">"tbl-score"</span><span class="kw">&gt;</span>80<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb4-30"><a href="#cb4-30"></a>                <span class="kw">&lt;/tr&gt;</span></span>
+<span id="cb4-31"><a href="#cb4-31"></a>                <span class="kw">&lt;tr&gt;</span></span>
+<span id="cb4-32"><a href="#cb4-32"></a>                    <span class="kw">&lt;td&gt;</span>2<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb4-33"><a href="#cb4-33"></a>                    <span class="kw">&lt;td&gt;</span>佐藤<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb4-34"><a href="#cb4-34"></a>                    <span class="kw">&lt;td</span> <span class="er">class</span><span class="ot">=</span><span class="st">"tbl-score"</span><span class="kw">&gt;</span>100<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb4-35"><a href="#cb4-35"></a>                <span class="kw">&lt;/tr&gt;</span></span>
+<span id="cb4-36"><a href="#cb4-36"></a>                <span class="kw">&lt;tr&gt;</span></span>
+<span id="cb4-37"><a href="#cb4-37"></a>                    <span class="kw">&lt;td&gt;</span>3<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb4-38"><a href="#cb4-38"></a>                    <span class="kw">&lt;td&gt;</span>渡辺<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb4-39"><a href="#cb4-39"></a>                    <span class="kw">&lt;td</span> <span class="er">class</span><span class="ot">=</span><span class="st">"tbl-score"</span><span class="kw">&gt;</span>75<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb4-40"><a href="#cb4-40"></a>                <span class="kw">&lt;/tr&gt;</span></span>
+<span id="cb4-41"><a href="#cb4-41"></a>            <span class="kw">&lt;/tbody&gt;</span></span>
+<span id="cb4-42"><a href="#cb4-42"></a>        <span class="kw">&lt;/table&gt;</span></span>
+<span id="cb4-43"><a href="#cb4-43"></a>        <span class="kw">&lt;h2&gt;</span>英語成績<span class="kw">&lt;/h2&gt;</span></span>
+<span id="cb4-44"><a href="#cb4-44"></a>        <span class="kw">&lt;table</span> <span class="er">class</span><span class="ot">=</span><span class="st">"english_score"</span> <span class="er">width</span><span class="ot">=</span><span class="st">300px</span><span class="kw">&gt;</span></span>
+<span id="cb4-45"><a href="#cb4-45"></a>            <span class="kw">&lt;thead&gt;</span></span>
+<span id="cb4-46"><a href="#cb4-46"></a>                <span class="kw">&lt;td&gt;</span>ID<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb4-47"><a href="#cb4-47"></a>                <span class="kw">&lt;td&gt;</span>名前<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb4-48"><a href="#cb4-48"></a>                <span class="kw">&lt;td&gt;</span>成績<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb4-49"><a href="#cb4-49"></a>            <span class="kw">&lt;/thead&gt;</span></span>
+<span id="cb4-50"><a href="#cb4-50"></a>            <span class="kw">&lt;tbody&gt;</span></span>
+<span id="cb4-51"><a href="#cb4-51"></a>                <span class="kw">&lt;tr&gt;</span></span>
+<span id="cb4-52"><a href="#cb4-52"></a>                    <span class="kw">&lt;td&gt;</span>1<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb4-53"><a href="#cb4-53"></a>                    <span class="kw">&lt;td&gt;</span>田中<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb4-54"><a href="#cb4-54"></a>                    <span class="kw">&lt;td</span> <span class="er">class</span><span class="ot">=</span><span class="st">"tbl-score"</span><span class="kw">&gt;</span>20<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb4-55"><a href="#cb4-55"></a>                <span class="kw">&lt;/tr&gt;</span></span>
+<span id="cb4-56"><a href="#cb4-56"></a>                <span class="kw">&lt;tr&gt;</span></span>
+<span id="cb4-57"><a href="#cb4-57"></a>                    <span class="kw">&lt;td&gt;</span>2<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb4-58"><a href="#cb4-58"></a>                    <span class="kw">&lt;td&gt;</span>佐藤<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb4-59"><a href="#cb4-59"></a>                    <span class="kw">&lt;td</span> <span class="er">class</span><span class="ot">=</span><span class="st">"tbl-score"</span><span class="kw">&gt;</span>100<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb4-60"><a href="#cb4-60"></a>                <span class="kw">&lt;/tr&gt;</span></span>
+<span id="cb4-61"><a href="#cb4-61"></a>                <span class="kw">&lt;tr&gt;</span></span>
+<span id="cb4-62"><a href="#cb4-62"></a>                    <span class="kw">&lt;td&gt;</span>3<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb4-63"><a href="#cb4-63"></a>                    <span class="kw">&lt;td&gt;</span>渡辺<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb4-64"><a href="#cb4-64"></a>                    <span class="kw">&lt;td</span> <span class="er">class</span><span class="ot">=</span><span class="st">"tbl-score"</span><span class="kw">&gt;</span>90<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb4-65"><a href="#cb4-65"></a>                <span class="kw">&lt;/tr&gt;</span></span>
+<span id="cb4-66"><a href="#cb4-66"></a>            <span class="kw">&lt;/tbody&gt;</span></span>
+<span id="cb4-67"><a href="#cb4-67"></a>        <span class="kw">&lt;/table&gt;</span></span>
+<span id="cb4-68"><a href="#cb4-68"></a>    <span class="kw">&lt;/body&gt;</span></span>
+<span id="cb4-69"><a href="#cb4-69"></a><span class="kw">&lt;/html&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
@@ -787,6 +793,152 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <li>画像の場合、<code>&lt;img&gt;</code>タグの<code>src</code>属性を抽出する必要があるため、<code>html_attr()</code></li>
 </ul></li>
 </ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://www.jaysong.net/garage/rbook/scraping/sample01.html"</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a>my_html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url)</span>
+<span id="cb6-4"><a href="#cb6-4"></a>my_html</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{html_document}
+&lt;html&gt;
+[1] &lt;head&gt;\n&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8 ...
+[2] &lt;body&gt;\n\t\t&lt;h1&gt;第1章：文章&lt;/h1&gt;\n\t\t&lt;p&gt;『&lt;a href="https://www.jaysong.net/RBo ...</code></pre>
+</div>
+</div>
+<p>セレクターを指定した要素の抽出</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>my_html <span class="sc">|&gt;</span> </span>
+<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">html_elements</span>(<span class="st">"a"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{xml_nodeset (3)}
+[1] &lt;a href="https://www.jaysong.net/RBook/" id="rbook" class="book-title"&gt;私た ...
+[2] &lt;a href="https://www.jaysong.net/"&gt;宋財泫&lt;/a&gt;
+[3] &lt;a href="https://yukiyanai.github.io/"&gt;矢内勇生&lt;/a&gt;</code></pre>
+</div>
+</div>
+<p>更に<code>href</code>の値を抽出</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>my_html <span class="sc">|&gt;</span> </span>
+<span id="cb10-2"><a href="#cb10-2"></a>  <span class="fu">html_elements</span>(<span class="st">"a"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb10-3"><a href="#cb10-3"></a>  <span class="fu">html_attr</span>(<span class="st">"href"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "https://www.jaysong.net/RBook/" "https://www.jaysong.net/"      
+[3] "https://yukiyanai.github.io/"  </code></pre>
+</div>
+</div>
+<p>箇条書きの要素を抽出</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>my_html <span class="sc">|&gt;</span> </span>
+<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">html_elements</span>(<span class="st">"li"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{xml_nodeset (2)}
+[1] &lt;li&gt;浅野正彦・矢内勇生. 2018. 『&lt;span class="book-title"&gt;Rによる計量政治学&lt;/span&gt;』オーム社.&lt;/li&gt;
+[2] &lt;li&gt;飯田健. 2013.『&lt;span class="book-title"&gt;計量政治分析&lt;/span&gt;』共立出版.&lt;/li&gt;</code></pre>
+</div>
+</div>
+<p>さらにテキストのみ抽出</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>my_html <span class="sc">|&gt;</span> </span>
+<span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">html_elements</span>(<span class="st">"li"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb14-3"><a href="#cb14-3"></a>  <span class="fu">html_text</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "浅野正彦・矢内勇生. 2018. 『Rによる計量政治学』オーム社."
+[2] "飯田健. 2013.『計量政治分析』共立出版."                  </code></pre>
+</div>
+</div>
+<p>クラス（<code>.クラス名</code>）の指定もOK</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>my_html <span class="sc">|&gt;</span> </span>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">html_elements</span>(<span class="st">".book-title"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb16-3"><a href="#cb16-3"></a>  <span class="fu">html_text</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "私たちのR"         "Rによる計量政治学" "計量政治分析"     </code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>my_html <span class="sc">|&gt;</span> </span>
+<span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">html_table</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+# A tibble: 4 × 3
+  X1    X2    X3   
+  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+1 ID    名前  成績 
+2 1     田中  80   
+3 2     佐藤  100  
+4 3     渡辺  75   
+
+[[2]]
+# A tibble: 4 × 3
+  X1    X2    X3   
+  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+1 ID    名前  成績 
+2 1     田中  20   
+3 2     佐藤  100  
+4 3     渡辺  90   </code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>my_tables <span class="ot">&lt;-</span> my_html <span class="sc">|&gt;</span> </span>
+<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">html_table</span>(<span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-3"><a href="#cb20-3"></a></span>
+<span id="cb20-4"><a href="#cb20-4"></a>my_tables</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+# A tibble: 3 × 3
+     ID 名前   成績
+  &lt;int&gt; &lt;chr&gt; &lt;int&gt;
+1     1 田中     80
+2     2 佐藤    100
+3     3 渡辺     75
+
+[[2]]
+# A tibble: 3 × 3
+     ID 名前   成績
+  &lt;int&gt; &lt;chr&gt; &lt;int&gt;
+1     1 田中     20
+2     2 佐藤    100
+3     3 渡辺     90</code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">names</span>(my_tables) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"数学"</span>, <span class="st">"英語"</span>)</span>
+<span id="cb22-2"><a href="#cb22-2"></a></span>
+<span id="cb22-3"><a href="#cb22-3"></a>my_tables</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$数学
+# A tibble: 3 × 3
+     ID 名前   成績
+  &lt;int&gt; &lt;chr&gt; &lt;int&gt;
+1     1 田中     80
+2     2 佐藤    100
+3     3 渡辺     75
+
+$英語
+# A tibble: 3 × 3
+     ID 名前   成績
+  &lt;int&gt; &lt;chr&gt; &lt;int&gt;
+1     1 田中     20
+2     2 佐藤    100
+3     3 渡辺     90</code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>my_table <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(my_tables, <span class="at">.id =</span> <span class="st">"科目"</span>)</span>
+<span id="cb24-2"><a href="#cb24-2"></a></span>
+<span id="cb24-3"><a href="#cb24-3"></a>my_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+  科目     ID 名前   成績
+  &lt;chr&gt; &lt;int&gt; &lt;chr&gt; &lt;int&gt;
+1 数学      1 田中     80
+2 数学      2 佐藤    100
+3 数学      3 渡辺     75
+4 英語      1 田中     20
+5 英語      2 佐藤    100
+6 英語      3 渡辺     90</code></pre>
+</div>
+</div>
 </section>
 <section id="実践" class="level2" data-number="30.3">
 <h2 data-number="30.3" class="anchored" data-anchor-id="実践"><span class="header-section-number">30.3</span> 実践</h2>
@@ -794,31 +946,31 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <h3 data-number="30.3.1" class="anchored" data-anchor-id="表の抽出"><span class="header-section-number">30.3.1</span> 表の抽出</h3>
 <p>Wikipediaの<a href="https://ja.wikipedia.org/wiki/%E4%B8%96%E7%95%8C%E5%A0%B1%E9%81%93%E8%87%AA%E7%94%B1%E5%BA%A6%E3%83%A9%E3%83%B3%E3%82%AD%E3%83%B3%E3%82%B0">世界報道自由度ランキング</a>の表をスクレイピング</p>
 <div class="cell" data-layout-align="center" data-hash="scraping_cache/html/scraping-hdi_bad0ce3910cc9b669f6a7b1c4d001952">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://ja.wikipedia.org/wiki/%E4%B8%96%E7%95%8C%E5%A0%B1%E9%81%93%E8%87%AA%E7%94%B1%E5%BA%A6%E3%83%A9%E3%83%B3%E3%82%AD%E3%83%B3%E3%82%B0"</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a></span>
-<span id="cb6-3"><a href="#cb6-3"></a>df <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url)</span>
-<span id="cb6-4"><a href="#cb6-4"></a></span>
-<span id="cb6-5"><a href="#cb6-5"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://ja.wikipedia.org/wiki/%E4%B8%96%E7%95%8C%E5%A0%B1%E9%81%93%E8%87%AA%E7%94%B1%E5%BA%A6%E3%83%A9%E3%83%B3%E3%82%AD%E3%83%B3%E3%82%B0"</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a></span>
+<span id="cb26-3"><a href="#cb26-3"></a>df <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url)</span>
+<span id="cb26-4"><a href="#cb26-4"></a></span>
+<span id="cb26-5"><a href="#cb26-5"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{html_document}
 &lt;html class="client-nojs vector-feature-language-in-header-enabled vector-feature-language-in-main-page-header-disabled vector-feature-sticky-header-disabled vector-feature-page-tools-pinned-disabled vector-feature-toc-pinned-enabled vector-feature-main-menu-pinned-disabled vector-feature-limited-width-enabled vector-feature-limited-width-content-enabled vector-feature-zebra-design-disabled" lang="ja" dir="ltr"&gt;
 [1] &lt;head&gt;\n&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8 ...
 [2] &lt;body class="skin-vector skin-vector-search-vue mediawiki ltr sitedir-ltr ...</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>df_tbl <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span> </span>
-<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">html_table</span>()</span>
-<span id="cb8-3"><a href="#cb8-3"></a></span>
-<span id="cb8-4"><a href="#cb8-4"></a>pfi_df <span class="ot">&lt;-</span> df_tbl[[<span class="dv">1</span>]] <span class="sc">|&gt;</span> </span>
-<span id="cb8-5"><a href="#cb8-5"></a>  <span class="fu">rename</span>(<span class="st">"Name"</span>     <span class="ot">=</span> <span class="st">"国・地域"</span>,</span>
-<span id="cb8-6"><a href="#cb8-6"></a>         <span class="st">"Year2023"</span> <span class="ot">=</span> <span class="st">"2023年[10]"</span>,</span>
-<span id="cb8-7"><a href="#cb8-7"></a>         <span class="st">"Year2022"</span> <span class="ot">=</span> <span class="st">"2022年[11]"</span>,</span>
-<span id="cb8-8"><a href="#cb8-8"></a>         <span class="st">"Year2021"</span> <span class="ot">=</span> <span class="st">"2021年[12]"</span>,</span>
-<span id="cb8-9"><a href="#cb8-9"></a>         <span class="st">"Year2020"</span> <span class="ot">=</span> <span class="st">"2020年[13]"</span>,</span>
-<span id="cb8-10"><a href="#cb8-10"></a>         <span class="st">"Year2019"</span> <span class="ot">=</span> <span class="st">"2019年[14]"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb8-11"><a href="#cb8-11"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(Year2023<span class="sc">:</span>Year2019, <span class="sc">~</span><span class="fu">str_replace</span>(.x, <span class="st">"</span><span class="sc">\\</span><span class="st">(([0-9]+)</span><span class="sc">\\</span><span class="st">)"</span>, <span class="st">""</span>)),</span>
-<span id="cb8-12"><a href="#cb8-12"></a>         <span class="fu">across</span>(Year2023<span class="sc">:</span>Year2019, as.numeric))</span>
-<span id="cb8-13"><a href="#cb8-13"></a></span>
-<span id="cb8-14"><a href="#cb8-14"></a>pfi_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>df_tbl <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span> </span>
+<span id="cb28-2"><a href="#cb28-2"></a>  <span class="fu">html_table</span>()</span>
+<span id="cb28-3"><a href="#cb28-3"></a></span>
+<span id="cb28-4"><a href="#cb28-4"></a>pfi_df <span class="ot">&lt;-</span> df_tbl[[<span class="dv">1</span>]] <span class="sc">|&gt;</span> </span>
+<span id="cb28-5"><a href="#cb28-5"></a>  <span class="fu">rename</span>(<span class="st">"Name"</span>     <span class="ot">=</span> <span class="st">"国・地域"</span>,</span>
+<span id="cb28-6"><a href="#cb28-6"></a>         <span class="st">"Year2023"</span> <span class="ot">=</span> <span class="st">"2023年[10]"</span>,</span>
+<span id="cb28-7"><a href="#cb28-7"></a>         <span class="st">"Year2022"</span> <span class="ot">=</span> <span class="st">"2022年[11]"</span>,</span>
+<span id="cb28-8"><a href="#cb28-8"></a>         <span class="st">"Year2021"</span> <span class="ot">=</span> <span class="st">"2021年[12]"</span>,</span>
+<span id="cb28-9"><a href="#cb28-9"></a>         <span class="st">"Year2020"</span> <span class="ot">=</span> <span class="st">"2020年[13]"</span>,</span>
+<span id="cb28-10"><a href="#cb28-10"></a>         <span class="st">"Year2019"</span> <span class="ot">=</span> <span class="st">"2019年[14]"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb28-11"><a href="#cb28-11"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(Year2023<span class="sc">:</span>Year2019, <span class="sc">~</span><span class="fu">str_replace</span>(.x, <span class="st">"</span><span class="sc">\\</span><span class="st">(([0-9]+)</span><span class="sc">\\</span><span class="st">)"</span>, <span class="st">""</span>)),</span>
+<span id="cb28-12"><a href="#cb28-12"></a>         <span class="fu">across</span>(Year2023<span class="sc">:</span>Year2019, as.numeric))</span>
+<span id="cb28-13"><a href="#cb28-13"></a></span>
+<span id="cb28-14"><a href="#cb28-14"></a>pfi_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 180 × 6
    Name         Year2023 Year2022 Year2021 Year2020 Year2019
@@ -835,16 +987,16 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 10 東ティモール     84.5     81.9     70.9     70.1     70.1
 # ℹ 170 more rows</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>pfi_df <span class="sc">|&gt;</span> </span>
-<span id="cb10-2"><a href="#cb10-2"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb10-3"><a href="#cb10-3"></a>  <span class="fu">cols_label</span>(<span class="st">"Name"</span>     <span class="ot">=</span> <span class="st">"国・地域"</span>,</span>
-<span id="cb10-4"><a href="#cb10-4"></a>             <span class="st">"Year2023"</span> <span class="ot">=</span> <span class="st">"2023年"</span>,</span>
-<span id="cb10-5"><a href="#cb10-5"></a>             <span class="st">"Year2022"</span> <span class="ot">=</span> <span class="st">"2022年"</span>,</span>
-<span id="cb10-6"><a href="#cb10-6"></a>             <span class="st">"Year2021"</span> <span class="ot">=</span> <span class="st">"2021年"</span>,</span>
-<span id="cb10-7"><a href="#cb10-7"></a>             <span class="st">"Year2020"</span> <span class="ot">=</span> <span class="st">"2020年"</span>,</span>
-<span id="cb10-8"><a href="#cb10-8"></a>             <span class="st">"Year2019"</span> <span class="ot">=</span> <span class="st">"2019年"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb10-9"><a href="#cb10-9"></a>  <span class="fu">gt_color_rows</span>(<span class="at">columns =</span> Year2023<span class="sc">:</span>Year2019,</span>
-<span id="cb10-10"><a href="#cb10-10"></a>                <span class="at">palette =</span> <span class="st">"ggsci::blue_material"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>pfi_df <span class="sc">|&gt;</span> </span>
+<span id="cb30-2"><a href="#cb30-2"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb30-3"><a href="#cb30-3"></a>  <span class="fu">cols_label</span>(<span class="st">"Name"</span>     <span class="ot">=</span> <span class="st">"国・地域"</span>,</span>
+<span id="cb30-4"><a href="#cb30-4"></a>             <span class="st">"Year2023"</span> <span class="ot">=</span> <span class="st">"2023年"</span>,</span>
+<span id="cb30-5"><a href="#cb30-5"></a>             <span class="st">"Year2022"</span> <span class="ot">=</span> <span class="st">"2022年"</span>,</span>
+<span id="cb30-6"><a href="#cb30-6"></a>             <span class="st">"Year2021"</span> <span class="ot">=</span> <span class="st">"2021年"</span>,</span>
+<span id="cb30-7"><a href="#cb30-7"></a>             <span class="st">"Year2020"</span> <span class="ot">=</span> <span class="st">"2020年"</span>,</span>
+<span id="cb30-8"><a href="#cb30-8"></a>             <span class="st">"Year2019"</span> <span class="ot">=</span> <span class="st">"2019年"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb30-9"><a href="#cb30-9"></a>  <span class="fu">gt_color_rows</span>(<span class="at">columns =</span> Year2023<span class="sc">:</span>Year2019,</span>
+<span id="cb30-10"><a href="#cb30-10"></a>                <span class="at">palette =</span> <span class="st">"ggsci::blue_material"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="onedwdrzxm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#onedwdrzxm table {
@@ -2390,21 +2542,21 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <section id="表の抽出複数ページ" class="level3" data-number="30.3.2">
 <h3 data-number="30.3.2" class="anchored" data-anchor-id="表の抽出複数ページ"><span class="header-section-number">30.3.2</span> 表の抽出（複数ページ）</h3>
 <div class="cell" data-layout-align="center" data-hash="scraping_cache/html/scraping-j_1d2c9514d85ea5349da8956cc015b96a">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>j_list <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"https://www.jleague.jp/standings/j"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span>
-<span id="cb11-2"><a href="#cb11-2"></a></span>
-<span id="cb11-3"><a href="#cb11-3"></a>tbl_list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb11-4"><a href="#cb11-4"></a></span>
-<span id="cb11-5"><a href="#cb11-5"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(j_list)) {</span>
-<span id="cb11-6"><a href="#cb11-6"></a>  temp_html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(j_list[i])</span>
-<span id="cb11-7"><a href="#cb11-7"></a>  temp_tbl  <span class="ot">&lt;-</span> temp_html <span class="sc">|&gt;</span> </span>
-<span id="cb11-8"><a href="#cb11-8"></a>    <span class="fu">html_table</span>(<span class="at">header =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb11-9"><a href="#cb11-9"></a>  </span>
-<span id="cb11-10"><a href="#cb11-10"></a>  tbl_list[[<span class="fu">paste0</span>(<span class="st">"J"</span>, i)]] <span class="ot">&lt;-</span> temp_tbl[[<span class="dv">1</span>]]</span>
-<span id="cb11-11"><a href="#cb11-11"></a>  </span>
-<span id="cb11-12"><a href="#cb11-12"></a>  <span class="fu">Sys.sleep</span>(<span class="dv">1</span>)</span>
-<span id="cb11-13"><a href="#cb11-13"></a>}</span>
-<span id="cb11-14"><a href="#cb11-14"></a></span>
-<span id="cb11-15"><a href="#cb11-15"></a>tbl_list</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>j_list <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"https://www.jleague.jp/standings/j"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span>
+<span id="cb31-2"><a href="#cb31-2"></a></span>
+<span id="cb31-3"><a href="#cb31-3"></a>tbl_list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb31-4"><a href="#cb31-4"></a></span>
+<span id="cb31-5"><a href="#cb31-5"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(j_list)) {</span>
+<span id="cb31-6"><a href="#cb31-6"></a>  temp_html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(j_list[i])</span>
+<span id="cb31-7"><a href="#cb31-7"></a>  temp_tbl  <span class="ot">&lt;-</span> temp_html <span class="sc">|&gt;</span> </span>
+<span id="cb31-8"><a href="#cb31-8"></a>    <span class="fu">html_table</span>(<span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb31-9"><a href="#cb31-9"></a>  </span>
+<span id="cb31-10"><a href="#cb31-10"></a>  tbl_list[[<span class="fu">paste0</span>(<span class="st">"J"</span>, i)]] <span class="ot">&lt;-</span> temp_tbl[[<span class="dv">1</span>]]</span>
+<span id="cb31-11"><a href="#cb31-11"></a>  </span>
+<span id="cb31-12"><a href="#cb31-12"></a>  <span class="fu">Sys.sleep</span>(<span class="dv">1</span>)</span>
+<span id="cb31-13"><a href="#cb31-13"></a>}</span>
+<span id="cb31-14"><a href="#cb31-14"></a></span>
+<span id="cb31-15"><a href="#cb31-15"></a>tbl_list</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$J1
 # A tibble: 18 × 12
@@ -2473,14 +2625,14 @@ $J3
 20 NA       20 ギラヴァンツ北…     6     12     1     3     8    11    19     -8
 # ℹ 1 more variable: 直近5試合 &lt;lgl&gt;</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>j_df <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(tbl_list, <span class="at">.id =</span> <span class="st">"League"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>j_df <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(tbl_list, <span class="at">.id =</span> <span class="st">"League"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>New names:
 New names:
 New names:
 • `` -&gt; `...1`</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>j_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>j_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 60 × 13
    League ...1   順位 クラブ名  勝点 試合数    勝    分    負  得点  失点 得失点
@@ -2498,13 +2650,13 @@ New names:
 # ℹ 50 more rows
 # ℹ 1 more variable: 直近5試合 &lt;lgl&gt;</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>j_df <span class="ot">&lt;-</span> j_df <span class="sc">|&gt;</span> </span>
-<span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">select</span>(<span class="sc">!</span><span class="fu">c</span>(<span class="st">"...1"</span>, <span class="st">"直近5試合"</span>))</span>
-<span id="cb17-3"><a href="#cb17-3"></a></span>
-<span id="cb17-4"><a href="#cb17-4"></a>j_df <span class="sc">|&gt;</span> </span>
-<span id="cb17-5"><a href="#cb17-5"></a>  <span class="fu">mutate</span>(クラブ名 <span class="ot">=</span> <span class="fu">str_sub</span>(クラブ名, <span class="dv">1</span>, <span class="fu">nchar</span>(クラブ名) <span class="sc">/</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb17-6"><a href="#cb17-6"></a>  <span class="fu">group_by</span>(League) <span class="sc">|&gt;</span> </span>
-<span id="cb17-7"><a href="#cb17-7"></a>  <span class="fu">gt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>j_df <span class="ot">&lt;-</span> j_df <span class="sc">|&gt;</span> </span>
+<span id="cb37-2"><a href="#cb37-2"></a>  <span class="fu">select</span>(<span class="sc">!</span><span class="fu">c</span>(<span class="st">"...1"</span>, <span class="st">"直近5試合"</span>))</span>
+<span id="cb37-3"><a href="#cb37-3"></a></span>
+<span id="cb37-4"><a href="#cb37-4"></a>j_df <span class="sc">|&gt;</span> </span>
+<span id="cb37-5"><a href="#cb37-5"></a>  <span class="fu">mutate</span>(クラブ名 <span class="ot">=</span> <span class="fu">str_sub</span>(クラブ名, <span class="dv">1</span>, <span class="fu">nchar</span>(クラブ名) <span class="sc">/</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb37-6"><a href="#cb37-6"></a>  <span class="fu">group_by</span>(League) <span class="sc">|&gt;</span> </span>
+<span id="cb37-7"><a href="#cb37-7"></a>  <span class="fu">gt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="xcoyyxtyvz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#xcoyyxtyvz table {
@@ -3589,38 +3741,38 @@ New names:
 <li><code>html_nodes()</code>でランキング、画像URL、スコアなどをベクトルとして抽出し、R側で表にする。</li>
 </ul>
 <div class="cell" data-layout-align="center" data-hash="scraping_cache/html/scraping-oc-single_76290119b6dc11f1d9208539d643423e">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>oc_html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="st">"https://opencritic.com/browse/all/2021"</span>)</span>
-<span id="cb18-2"><a href="#cb18-2"></a></span>
-<span id="cb18-3"><a href="#cb18-3"></a>oc_html <span class="ot">&lt;-</span> oc_html <span class="sc">|&gt;</span> </span>
-<span id="cb18-4"><a href="#cb18-4"></a>  <span class="fu">html_element</span>(<span class="st">".desktop-game-display"</span>)</span>
-<span id="cb18-5"><a href="#cb18-5"></a></span>
-<span id="cb18-6"><a href="#cb18-6"></a></span>
-<span id="cb18-7"><a href="#cb18-7"></a>oc_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Rank      =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".rank"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb18-8"><a href="#cb18-8"></a>                  <span class="fu">html_text2</span>(),</span>
-<span id="cb18-9"><a href="#cb18-9"></a>                <span class="at">Tier      =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">"img"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb18-10"><a href="#cb18-10"></a>                  <span class="fu">html_attr</span>(<span class="st">"src"</span>),</span>
-<span id="cb18-11"><a href="#cb18-11"></a>                <span class="at">Score     =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".score"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb18-12"><a href="#cb18-12"></a>                  <span class="fu">html_text2</span>(),</span>
-<span id="cb18-13"><a href="#cb18-13"></a>                <span class="at">Name      =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".game-name"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb18-14"><a href="#cb18-14"></a>                  <span class="fu">html_text2</span>(),</span>
-<span id="cb18-15"><a href="#cb18-15"></a>                <span class="at">Platforms =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".platforms"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb18-16"><a href="#cb18-16"></a>                  <span class="fu">html_text2</span>(),</span>
-<span id="cb18-17"><a href="#cb18-17"></a>                <span class="at">Date      =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".first-release-date"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb18-18"><a href="#cb18-18"></a>                  <span class="fu">html_text2</span>()) <span class="sc">|&gt;</span> </span>
-<span id="cb18-19"><a href="#cb18-19"></a>  <span class="fu">mutate</span>(<span class="at">Rank =</span> <span class="fu">str_remove</span>(Rank, <span class="st">"</span><span class="sc">\\</span><span class="st">."</span>),</span>
-<span id="cb18-20"><a href="#cb18-20"></a>         <span class="at">Rank =</span> <span class="fu">as.numeric</span>(Rank),</span>
-<span id="cb18-21"><a href="#cb18-21"></a>         <span class="at">Date =</span> <span class="fu">paste0</span>(Date, <span class="st">", 2021"</span>),</span>
-<span id="cb18-22"><a href="#cb18-22"></a>         <span class="at">Date =</span> <span class="fu">mdy</span>(Date))</span>
-<span id="cb18-23"><a href="#cb18-23"></a></span>
-<span id="cb18-24"><a href="#cb18-24"></a><span class="co">#oc_df |&gt; </span></span>
-<span id="cb18-25"><a href="#cb18-25"></a><span class="co">#  separate(Platforms,</span></span>
-<span id="cb18-26"><a href="#cb18-26"></a><span class="co">#           into = paste0("P", 1:6),</span></span>
-<span id="cb18-27"><a href="#cb18-27"></a><span class="co">#           sep = ", ")</span></span>
-<span id="cb18-28"><a href="#cb18-28"></a></span>
-<span id="cb18-29"><a href="#cb18-29"></a>oc_df <span class="sc">|&gt;</span> </span>
-<span id="cb18-30"><a href="#cb18-30"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb18-31"><a href="#cb18-31"></a>  <span class="fu">gt_img_rows</span>(Tier) <span class="sc">|&gt;</span> </span>
-<span id="cb18-32"><a href="#cb18-32"></a>  <span class="fu">cols_label</span>(<span class="st">"Date"</span> <span class="ot">=</span> <span class="st">"First release date"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>oc_html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="st">"https://opencritic.com/browse/all/2021"</span>)</span>
+<span id="cb38-2"><a href="#cb38-2"></a></span>
+<span id="cb38-3"><a href="#cb38-3"></a>oc_html <span class="ot">&lt;-</span> oc_html <span class="sc">|&gt;</span> </span>
+<span id="cb38-4"><a href="#cb38-4"></a>  <span class="fu">html_element</span>(<span class="st">".desktop-game-display"</span>)</span>
+<span id="cb38-5"><a href="#cb38-5"></a></span>
+<span id="cb38-6"><a href="#cb38-6"></a></span>
+<span id="cb38-7"><a href="#cb38-7"></a>oc_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Rank      =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".rank"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb38-8"><a href="#cb38-8"></a>                  <span class="fu">html_text2</span>(),</span>
+<span id="cb38-9"><a href="#cb38-9"></a>                <span class="at">Tier      =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">"img"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb38-10"><a href="#cb38-10"></a>                  <span class="fu">html_attr</span>(<span class="st">"src"</span>),</span>
+<span id="cb38-11"><a href="#cb38-11"></a>                <span class="at">Score     =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".score"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb38-12"><a href="#cb38-12"></a>                  <span class="fu">html_text2</span>(),</span>
+<span id="cb38-13"><a href="#cb38-13"></a>                <span class="at">Name      =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".game-name"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb38-14"><a href="#cb38-14"></a>                  <span class="fu">html_text2</span>(),</span>
+<span id="cb38-15"><a href="#cb38-15"></a>                <span class="at">Platforms =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".platforms"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb38-16"><a href="#cb38-16"></a>                  <span class="fu">html_text2</span>(),</span>
+<span id="cb38-17"><a href="#cb38-17"></a>                <span class="at">Date      =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".first-release-date"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb38-18"><a href="#cb38-18"></a>                  <span class="fu">html_text2</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb38-19"><a href="#cb38-19"></a>  <span class="fu">mutate</span>(<span class="at">Rank =</span> <span class="fu">str_remove</span>(Rank, <span class="st">"</span><span class="sc">\\</span><span class="st">."</span>),</span>
+<span id="cb38-20"><a href="#cb38-20"></a>         <span class="at">Rank =</span> <span class="fu">as.numeric</span>(Rank),</span>
+<span id="cb38-21"><a href="#cb38-21"></a>         <span class="at">Date =</span> <span class="fu">paste0</span>(Date, <span class="st">", 2021"</span>),</span>
+<span id="cb38-22"><a href="#cb38-22"></a>         <span class="at">Date =</span> <span class="fu">mdy</span>(Date))</span>
+<span id="cb38-23"><a href="#cb38-23"></a></span>
+<span id="cb38-24"><a href="#cb38-24"></a><span class="co">#oc_df |&gt; </span></span>
+<span id="cb38-25"><a href="#cb38-25"></a><span class="co">#  separate(Platforms,</span></span>
+<span id="cb38-26"><a href="#cb38-26"></a><span class="co">#           into = paste0("P", 1:6),</span></span>
+<span id="cb38-27"><a href="#cb38-27"></a><span class="co">#           sep = ", ")</span></span>
+<span id="cb38-28"><a href="#cb38-28"></a></span>
+<span id="cb38-29"><a href="#cb38-29"></a>oc_df <span class="sc">|&gt;</span> </span>
+<span id="cb38-30"><a href="#cb38-30"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb38-31"><a href="#cb38-31"></a>  <span class="fu">gt_img_rows</span>(Tier) <span class="sc">|&gt;</span> </span>
+<span id="cb38-32"><a href="#cb38-32"></a>  <span class="fu">cols_label</span>(<span class="st">"Date"</span> <span class="ot">=</span> <span class="st">"First release date"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="tzxtfovlvk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#tzxtfovlvk table {
@@ -4207,41 +4359,41 @@ New names:
 <h3 data-number="30.3.4" class="anchored" data-anchor-id="表以外の内容複数ページ"><span class="header-section-number">30.3.4</span> 表以外の内容（複数ページ）</h3>
 <p>1位から500位まで</p>
 <div class="cell" data-layout-align="center" data-hash="scraping_cache/html/scraping-oc-multiple_57578e43c8db067af504ea710e2cc51b">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>oc_url <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"https://opencritic.com/browse/pc/2021?page="</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">25</span>)</span>
-<span id="cb19-2"><a href="#cb19-2"></a></span>
-<span id="cb19-3"><a href="#cb19-3"></a>oc_list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb19-4"><a href="#cb19-4"></a></span>
-<span id="cb19-5"><a href="#cb19-5"></a>get_oc <span class="ot">&lt;-</span> <span class="cf">function</span> (url) {</span>
-<span id="cb19-6"><a href="#cb19-6"></a>  temp_html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url) <span class="sc">|&gt;</span> </span>
-<span id="cb19-7"><a href="#cb19-7"></a>    <span class="fu">html_element</span>(<span class="st">".desktop-game-display"</span>)</span>
-<span id="cb19-8"><a href="#cb19-8"></a>  temp_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Rank  =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">".rank"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb19-9"><a href="#cb19-9"></a>                      <span class="fu">html_text2</span>(),</span>
-<span id="cb19-10"><a href="#cb19-10"></a>                    <span class="at">Tier  =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">"img"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb19-11"><a href="#cb19-11"></a>                      <span class="fu">html_attr</span>(<span class="st">"src"</span>),</span>
-<span id="cb19-12"><a href="#cb19-12"></a>                    <span class="at">Score =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">".score"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb19-13"><a href="#cb19-13"></a>                      <span class="fu">html_text2</span>(),</span>
-<span id="cb19-14"><a href="#cb19-14"></a>                    <span class="at">Name  =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">".game-name"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb19-15"><a href="#cb19-15"></a>                      <span class="fu">html_text2</span>(),</span>
-<span id="cb19-16"><a href="#cb19-16"></a>                    <span class="at">Date  =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">".first-release-date"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb19-17"><a href="#cb19-17"></a>                      <span class="fu">html_text2</span>()) <span class="sc">|&gt;</span> </span>
-<span id="cb19-18"><a href="#cb19-18"></a>    <span class="fu">mutate</span>(<span class="at">Rank =</span> <span class="fu">str_remove</span>(Rank, <span class="st">"</span><span class="sc">\\</span><span class="st">."</span>),</span>
-<span id="cb19-19"><a href="#cb19-19"></a>           <span class="at">Rank =</span> <span class="fu">as.numeric</span>(Rank),</span>
-<span id="cb19-20"><a href="#cb19-20"></a>           <span class="at">Date =</span> <span class="fu">paste0</span>(Date, <span class="st">", 2021"</span>),</span>
-<span id="cb19-21"><a href="#cb19-21"></a>           <span class="at">Date =</span> <span class="fu">mdy</span>(Date))</span>
-<span id="cb19-22"><a href="#cb19-22"></a>}</span>
-<span id="cb19-23"><a href="#cb19-23"></a></span>
-<span id="cb19-24"><a href="#cb19-24"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(oc_url)) {</span>
-<span id="cb19-25"><a href="#cb19-25"></a>  </span>
-<span id="cb19-26"><a href="#cb19-26"></a>  temp_df      <span class="ot">&lt;-</span> <span class="fu">get_oc</span>(oc_url[i])</span>
-<span id="cb19-27"><a href="#cb19-27"></a>  oc_list[[i]] <span class="ot">&lt;-</span> temp_df</span>
-<span id="cb19-28"><a href="#cb19-28"></a>  </span>
-<span id="cb19-29"><a href="#cb19-29"></a>  <span class="fu">Sys.sleep</span>(<span class="dv">1</span>)</span>
-<span id="cb19-30"><a href="#cb19-30"></a>}</span>
-<span id="cb19-31"><a href="#cb19-31"></a></span>
-<span id="cb19-32"><a href="#cb19-32"></a><span class="fu">bind_rows</span>(oc_list) <span class="sc">|&gt;</span> </span>
-<span id="cb19-33"><a href="#cb19-33"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb19-34"><a href="#cb19-34"></a>  <span class="fu">gt_img_rows</span>(Tier) <span class="sc">|&gt;</span> </span>
-<span id="cb19-35"><a href="#cb19-35"></a>  <span class="fu">cols_label</span>(<span class="st">"Date"</span> <span class="ot">=</span> <span class="st">"First release date"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>oc_url <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"https://opencritic.com/browse/pc/2021?page="</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">25</span>)</span>
+<span id="cb39-2"><a href="#cb39-2"></a></span>
+<span id="cb39-3"><a href="#cb39-3"></a>oc_list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb39-4"><a href="#cb39-4"></a></span>
+<span id="cb39-5"><a href="#cb39-5"></a>get_oc <span class="ot">&lt;-</span> <span class="cf">function</span> (url) {</span>
+<span id="cb39-6"><a href="#cb39-6"></a>  temp_html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url) <span class="sc">|&gt;</span> </span>
+<span id="cb39-7"><a href="#cb39-7"></a>    <span class="fu">html_element</span>(<span class="st">".desktop-game-display"</span>)</span>
+<span id="cb39-8"><a href="#cb39-8"></a>  temp_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Rank  =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">".rank"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb39-9"><a href="#cb39-9"></a>                      <span class="fu">html_text2</span>(),</span>
+<span id="cb39-10"><a href="#cb39-10"></a>                    <span class="at">Tier  =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">"img"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb39-11"><a href="#cb39-11"></a>                      <span class="fu">html_attr</span>(<span class="st">"src"</span>),</span>
+<span id="cb39-12"><a href="#cb39-12"></a>                    <span class="at">Score =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">".score"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb39-13"><a href="#cb39-13"></a>                      <span class="fu">html_text2</span>(),</span>
+<span id="cb39-14"><a href="#cb39-14"></a>                    <span class="at">Name  =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">".game-name"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb39-15"><a href="#cb39-15"></a>                      <span class="fu">html_text2</span>(),</span>
+<span id="cb39-16"><a href="#cb39-16"></a>                    <span class="at">Date  =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">".first-release-date"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb39-17"><a href="#cb39-17"></a>                      <span class="fu">html_text2</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb39-18"><a href="#cb39-18"></a>    <span class="fu">mutate</span>(<span class="at">Rank =</span> <span class="fu">str_remove</span>(Rank, <span class="st">"</span><span class="sc">\\</span><span class="st">."</span>),</span>
+<span id="cb39-19"><a href="#cb39-19"></a>           <span class="at">Rank =</span> <span class="fu">as.numeric</span>(Rank),</span>
+<span id="cb39-20"><a href="#cb39-20"></a>           <span class="at">Date =</span> <span class="fu">paste0</span>(Date, <span class="st">", 2021"</span>),</span>
+<span id="cb39-21"><a href="#cb39-21"></a>           <span class="at">Date =</span> <span class="fu">mdy</span>(Date))</span>
+<span id="cb39-22"><a href="#cb39-22"></a>}</span>
+<span id="cb39-23"><a href="#cb39-23"></a></span>
+<span id="cb39-24"><a href="#cb39-24"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(oc_url)) {</span>
+<span id="cb39-25"><a href="#cb39-25"></a>  </span>
+<span id="cb39-26"><a href="#cb39-26"></a>  temp_df      <span class="ot">&lt;-</span> <span class="fu">get_oc</span>(oc_url[i])</span>
+<span id="cb39-27"><a href="#cb39-27"></a>  oc_list[[i]] <span class="ot">&lt;-</span> temp_df</span>
+<span id="cb39-28"><a href="#cb39-28"></a>  </span>
+<span id="cb39-29"><a href="#cb39-29"></a>  <span class="fu">Sys.sleep</span>(<span class="dv">1</span>)</span>
+<span id="cb39-30"><a href="#cb39-30"></a>}</span>
+<span id="cb39-31"><a href="#cb39-31"></a></span>
+<span id="cb39-32"><a href="#cb39-32"></a><span class="fu">bind_rows</span>(oc_list) <span class="sc">|&gt;</span> </span>
+<span id="cb39-33"><a href="#cb39-33"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb39-34"><a href="#cb39-34"></a>  <span class="fu">gt_img_rows</span>(Tier) <span class="sc">|&gt;</span> </span>
+<span id="cb39-35"><a href="#cb39-35"></a>  <span class="fu">cols_label</span>(<span class="st">"Date"</span> <span class="ot">=</span> <span class="st">"First release date"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="eyujqxyguc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#eyujqxyguc table {
