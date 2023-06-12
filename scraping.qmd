@@ -20,7 +20,7 @@ pacman::p_load(tidyverse, rvest, gt, gtExtras)
 
 ### タグ
 
-　タグは`<タグ名>`と`</タグ名>`で構成され[^tag-pair]、この間に挟まれた内容は予め決まった書式となる。例えば、`<em>R Not for Everyone</em>`は「R Not for Everyone」という文字列に対して`<em>`タグを適用するコードである。`<em>`タグは予めHTMLで用意されているものであり、文字列をイタリック（例：<em>R Not for Everyone</em>）にするものだ。また、`<strong>`タグは太字を意味し、`<strong>R Not for Everyone</strong>`は「<strong>R Not for Everyone</strong>」と出力される。また、段落を意味する`<p>`関数も頻繁に使われる。HTMLには様々なタグが用意されており、詳細なリストは[W3C](https://www.w3.org/TR/2018/SPSD-html5-20180327/index.html#elements-1)などを参照されたい（リンク先はHTML5基準）。
+　タグは`<タグ名>`と`</タグ名>`で構成され[^tag-pair]、この間に挟まれた内容は予め決まった書式となる。例えば、`<em>R Not for Everyone</em>`は「R Not for Everyone」という文字列に対して`<em>`タグを適用するコードである。`<em>`タグは予めHTMLで用意されているものであり、文字列をイタリック（例：<em>R Not for Everyone</em>）にするものだ。また、`<strong>`タグは太字を意味し、`<strong>R Not for Everyone</strong>`は「<strong>R Not for Everyone</strong>」と出力される。また、段落を意味する`<p>`タグも頻繁に使われる。HTMLには様々なタグが用意されており、詳細なリストは[W3C](https://www.w3.org/TR/2018/SPSD-html5-20180327/index.html#elements-1)などを参照されたい（リンク先はHTML5基準）。
 
 [^tag-pair]: 通常、タグはカッコのように開いたら（`<タグ名>`）閉じる（`</タグ名>`）必要がある。しかし、タグの中には閉じる必要のないものもある。たとえば、改行を意味するタグとして`<br>`があるが、これは`<br>`、または`<br/>`のみで良い。
 
@@ -64,13 +64,13 @@ pacman::p_load(tidyverse, rvest, gt, gtExtras)
 
 ### 属性
 
-　タグの中には属性といものが定義されている場合がある。タグをプログラミング言語における関数とすれば、属性は引数（argument / parameter）に該当する。たとえば、画像を貼り付けるタグは`<img>`だ。ちなみに`<img>`はタグを閉じる必要がなく、単体のみ存在するため`<img>`〜`</img>`でなく、`<img>`のみか`<img/>`と記述する。本書では単体で使う関数を区分するために`<img/>`と表記する。この`<img/>`関数だけではどの画像を表示するかが分からない。画像の具体的なパスやURLを指定する必要がある。`<img/>`タグには`src`という属性があり、`src="パス or URL"`と書く。たとえば、<https://www.jaysong.net/RBook/Figs/favicon.png>というURLの画像を表示させるためには`<img src="https://www.jaysong.net/RBook/Figs/favicon.png"/>`と記述する必要がある。
+　タグの中には属性といものが定義されている場合がある。タグをプログラミング言語における関数とすれば、属性は引数（argumentとparameter）に該当する。たとえば、画像を貼り付けるタグは`<img>`だ。ちなみに`<img>`はタグを閉じる必要がなく、単体のみ存在するため`<img>`〜`</img>`でなく、`<img>`のみか`<img/>`と記述する。本書では単体で使うタグを区分するために`<img/>`と表記する。この`<img/>`タグだけではどの画像を表示するかが分からない。画像の具体的なパスやURLを指定する必要がある。`<img/>`タグには`src`という属性があり、`src="パス or URL"`と書く。たとえば、<https://www.jaysong.net/RBook/Figs/favicon.png>というURLの画像を表示させるためには`<img src="https://www.jaysong.net/RBook/Figs/favicon.png"/>`と記述する必要がある。
 
-　一つのタグは複数の属性を持つこともできる。`<img/>`タグの場合、画像の幅と高さを`width`と`height`属性で指定することができ、`alt`で代替テキストを指定することもできる。ちなみに属性を持つことが**できない**タグは存在しない。すべてのタグは`class`や`hidden`、`style`などの属性を持つことができ、このようにすべてのタグで使える属性はグローバル属性（global attributes）と呼ばれる。
+　一つのタグは複数の属性を持つこともできる。`<img/>`タグの場合、画像の幅と高さを`width`と`height`属性で指定することができ、`alt`で代替テキストを指定することもできる。ちなみに属性が不要なタグもあるが、属性を持つことが**できない**タグは存在しない。すべてのタグは`class`や`hidden`、`style`などの属性を持つことができ、このようにすべてのタグで使える属性はグローバル属性（global attributes）と呼ばれる。
 
 ### セレクター
 
-　セレクターを理解するためにはCSS（Cascading Style Sheets）の知識が必要であるが、ここでは最低限のことのみ解説する。ウェブスクレイピングは指定したHTMLファイルから特定のタグに囲まれた内容を取得するのが一般的、かつ基本的なやり方だ。たとえば、あるページ上の表を取得するためには表のタグである`<table>`タグで囲まれた内容を取得する。しかし、一つのページ内に複数の`<table>`関数があればどうだろうか。多くのスクレイピングのパッケージやライブラリはすべてを読み込むが、それはメモリの無駄遣いだ。予め具体的にどの表を取得するかを指定した方が効率的だろう。ここで必要なのがセレクターだ。
+　セレクターを理解するためにはCSS（Cascading Style Sheets）の知識が必要であるが、ここでは最低限のことのみ解説する。ウェブスクレイピングは指定したHTMLファイルから特定のタグに囲まれた内容を取得するのが一般的、かつ基本的なやり方だ。たとえば、あるページ上の表を取得するためには表のタグである`<table>`タグで囲まれた内容を取得する。しかし、一つのページ内に複数の`<table>`タグがあればどうだろうか。多くのスクレイピングのパッケージやライブラリはすべてを読み込むが、それはメモリの無駄遣いだ。予め具体的にどの表を取得するかを指定した方が効率的だろう。ここで必要なのがセレクターだ。
 
 ## {rvest}の使い方
 
@@ -169,23 +169,33 @@ OpenCritic (2021; PC Games)
 ```{r}
 #| label: scraping-oc-single
 #| cache: true
-oc_html <- read_html("https://opencritic.com/browse/pc/2021")
+oc_html <- read_html("https://opencritic.com/browse/all/2021")
 
 oc_html <- oc_html |> 
   html_element(".desktop-game-display")
 
 
-oc_df <- tibble(Rank  = html_elements(oc_html, ".rank") |> html_text2(),
-                Tier  = html_elements(oc_html, "img") |> html_attr("src"),
-                Score = html_elements(oc_html, ".score") |> html_text2(),
-                Name  = html_elements(oc_html, ".game-name") |> html_text2(),
-                Date  = html_elements(oc_html, ".first-release-date") |> html_text2()) |> 
+oc_df <- tibble(Rank      = html_elements(oc_html, ".rank") |> 
+                  html_text2(),
+                Tier      = html_elements(oc_html, "img") |> 
+                  html_attr("src"),
+                Score     = html_elements(oc_html, ".score") |> 
+                  html_text2(),
+                Name      = html_elements(oc_html, ".game-name") |>
+                  html_text2(),
+                Platforms = html_elements(oc_html, ".platforms") |>
+                  html_text2(),
+                Date      = html_elements(oc_html, ".first-release-date") |>
+                  html_text2()) |> 
   mutate(Rank = str_remove(Rank, "\\."),
          Rank = as.numeric(Rank),
          Date = paste0(Date, ", 2021"),
          Date = mdy(Date))
 
-oc_df
+#oc_df |> 
+#  separate(Platforms,
+#           into = paste0("P", 1:6),
+#           sep = ", ")
 
 oc_df |> 
   gt() |> 
