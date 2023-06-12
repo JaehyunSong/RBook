@@ -573,10 +573,14 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <h3 data-number="30.1.3" class="anchored" data-anchor-id="セレクター"><span class="header-section-number">30.1.3</span> セレクター</h3>
 <p>　セレクターを理解するためにはCSS（Cascading Style Sheets）の知識が必要であるが、ここでは最低限のことのみ解説する。ウェブスクレイピングは指定したHTMLファイルから特定のタグに囲まれた内容を取得するのが一般的、かつ基本的なやり方だ。たとえば、あるページ上の表を取得するためには表のタグである<code>&lt;table&gt;</code>タグで囲まれた内容を取得する。しかし、一つのページ内に複数の<code>&lt;table&gt;</code>タグがあればどうだろうか。多くのスクレイピングのパッケージやライブラリはすべてを読み込むが、それはメモリの無駄遣いだ。予め具体的にどの表を取得するかを指定した方が効率的だろう。ここで必要なのがセレクターだ。</p>
 <p>　そもそもセレクターが何なのかを知るためには、CSSの話を簡単にしておく必要がある。CSSはHTMLの「見た目」を担当するものであり、通常、HTMLとは別途のファイル（<code>.css</code>ファイル）で作成され、HTMLに読み込まれる。<code>.css</code>ファイルの内部には「この箇所はこのような見た目にしてくれ」といったものが細かく書かれている。</p>
-<p><a href="https://www.jaysong.net/garage/rbook/scraping/sample00.html" class="uri">https://www.jaysong.net/garage/rbook/scraping/sample00.html</a></p>
+<p>　まずは以下のリンクをクリックし、簡単なHTMLページ（<code>sample00.html</code>）を確認してみよう。</p>
+<ul>
+<li><a href="https://www.jaysong.net/garage/rbook/scraping/sample00.html" target="_blank">https://www.jaysong.net/garage/rbook/scraping/sample00.html</a></li>
+</ul>
+<p>　変哲もないページであるが、このページのソースコードは以下の通りである。例えば、<code>&lt;title&gt;</code>タグで囲まれているテキストはそのページのタイトルとなり、<code>&lt;h1&gt;</code>は見出しとなる。いくつかのタグには<code>id</code>や<code>class</code>といった属性もついている。たとえば、7行目の<code>&lt;a&gt;</code>タグには<code>href</code>、<code>id</code>、<code>class</code>の3つの属性がある。</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>sample00.html</strong></pre>
+<pre><strong>https://www.jaysong.net/garage/rbook/scraping/sample00.html</strong></pre>
 </div>
 <div class="sourceCode" id="cb3"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">&lt;html&gt;</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a>    <span class="kw">&lt;head&gt;</span></span>
@@ -647,14 +651,18 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <span id="cb3-67"><a href="#cb3-67"></a>    <span class="kw">&lt;/body&gt;</span></span>
 <span id="cb3-68"><a href="#cb3-68"></a><span class="kw">&lt;/html&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><a href="https://www.jaysong.net/garage/rbook/scraping/sample01.html" class="uri">https://www.jaysong.net/garage/rbook/scraping/sample01.html</a></p>
+<p>　続いて、以下のページ（<code>sample01.html</code>）も見てみよう。</p>
+<ul>
+<li><a href="https://www.jaysong.net/garage/rbook/scraping/sample01.html" target="_blank">https://www.jaysong.net/garage/rbook/scraping/sample01.html</a></li>
+</ul>
+<p>　内容的には同じものであるが、見た目がだいぶ異なることが分かるだろう。このページのソースを見ると、99%以上が一致していることが分かる。具体的には3行目に<code>&lt;link&gt;</code>タグが追加されているだけだ。3行目のコードは<code>style01.css</code>ファイルを読み込み、本ファイル（<code>sample01.html</code>）へ適用するということを意味する。他の内容は<code>sample00.html</code>と全く同じだ。つまり、この2つのファイルの見た目が異なるのは<code>style01.css</code>の存在が原因であると推測できる。</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page"><code>.html</code>ファイル</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false"><code>.css</code>ファイル</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>sample01.html</strong></pre>
+<pre><strong>https://www.jaysong.net/garage/rbook/scraping/sample01.html</strong></pre>
 </div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">&lt;html&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>    <span class="kw">&lt;head&gt;</span></span>
@@ -730,7 +738,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>sample01.css</strong></pre>
+<pre><strong>https://www.jaysong.net/garage/rbook/scraping/sample01.css</strong></pre>
 </div>
 <div class="sourceCode" id="cb5"><pre class="sourceCode numberSource css number-lines code-with-copy"><code class="sourceCode css"><span id="cb5-1"><a href="#cb5-1"></a>h1<span class="op">,</span> h2<span class="op">,</span> h3 {</span>
 <span id="cb5-2"><a href="#cb5-2"></a>    <span class="kw">font-family</span>: <span class="dv">sans-serif</span><span class="op">;</span></span>
