@@ -903,21 +903,45 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 [3] "https://yukiyanai.github.io/"  </code></pre>
 </div>
 </div>
-<p>箇条書きの要素を抽出</p>
+<p>続いて、箇条書きの要素を抽出してみよう。今回は2本の書籍リストが対象だ。箇条書きの内容は<code>&lt;li&gt;</code>タグで記述されるので、<code>html_elements("li")</code>で<code>&lt;li&gt;</code>タグの内容を取得してみよう。</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>my_html <span class="sc">|&gt;</span> </span>
 <span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">html_elements</span>(<span class="st">"li"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{xml_nodeset (5)}
+[1] &lt;li&gt;浅野正彦・矢内勇生. 2018. 『&lt;span class="book-title"&gt;Rによる計量政治学&lt;/span&gt;』オーム社.&lt;/li&gt;
+[2] &lt;li&gt;飯田健. 2013.『&lt;span class="book-title"&gt;計量政治分析&lt;/span&gt;』共立出版.&lt;/li&gt;
+[3] &lt;li&gt;聞いて...&lt;/li&gt;
+[4] &lt;li&gt;感じて...&lt;/li&gt;
+[5] &lt;li&gt;考えて...&lt;/li&gt;</code></pre>
+</div>
+</div>
+<p>　書籍リストだけでなく、謎の言葉も取得される。実際、サンプルページには2つの箇条書きがあり、書籍は順序なしの箇条書き（<code>&lt;ul&gt;</code>）、謎の言葉は順序付き箇条書き（<code>&lt;ol&gt;</code>）である。したがって、まず、<code>&lt;ul&gt;</code>タグを抽出し、そこから<code>&lt;li&gt;</code>を抽出すれば良い。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>my_html <span class="sc">|&gt;</span> </span>
+<span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">html_elements</span>(<span class="st">"ul"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb19-3"><a href="#cb19-3"></a>  <span class="fu">html_elements</span>(<span class="st">"li"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{xml_nodeset (2)}
 [1] &lt;li&gt;浅野正彦・矢内勇生. 2018. 『&lt;span class="book-title"&gt;Rによる計量政治学&lt;/span&gt;』オーム社.&lt;/li&gt;
 [2] &lt;li&gt;飯田健. 2013.『&lt;span class="book-title"&gt;計量政治分析&lt;/span&gt;』共立出版.&lt;/li&gt;</code></pre>
 </div>
 </div>
-<p>さらにテキストのみ抽出</p>
+<p>　ちなみに<code>html_elements()</code>が続く場合は引数を<code>"タグ名 &gt; タグ名"</code>にしても同じ結果が得られる。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>my_html <span class="sc">|&gt;</span> </span>
-<span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">html_elements</span>(<span class="st">"li"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb19-3"><a href="#cb19-3"></a>  <span class="fu">html_text</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>my_html <span class="sc">|&gt;</span> </span>
+<span id="cb21-2"><a href="#cb21-2"></a>  <span class="fu">html_elements</span>(<span class="st">"ul &gt; li"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{xml_nodeset (2)}
+[1] &lt;li&gt;浅野正彦・矢内勇生. 2018. 『&lt;span class="book-title"&gt;Rによる計量政治学&lt;/span&gt;』オーム社.&lt;/li&gt;
+[2] &lt;li&gt;飯田健. 2013.『&lt;span class="book-title"&gt;計量政治分析&lt;/span&gt;』共立出版.&lt;/li&gt;</code></pre>
+</div>
+</div>
+<p>　ここから更にテキストのみ抽出する場合は<code>html_text()</code>を使えば良い。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>my_html <span class="sc">|&gt;</span> </span>
+<span id="cb23-2"><a href="#cb23-2"></a>  <span class="fu">html_elements</span>(<span class="st">"ul &gt; li"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb23-3"><a href="#cb23-3"></a>  <span class="fu">html_text</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "浅野正彦・矢内勇生. 2018. 『Rによる計量政治学』オーム社."
 [2] "飯田健. 2013.『計量政治分析』共立出版."                  </code></pre>
@@ -925,8 +949,8 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 <p>　<code>html_elements()</code>にはタグ名以外のセレクターも使える。たとえば、クラス（<code>.クラス名</code>）やID（<code>#ID名</code>）の指定もできる。サンプルページには書籍名が3回登場し、それらは<code>&lt;span&gt;</code>タグに囲まれている。<code>&lt;span&gt;</code>タグ単体の機能はないが、特定のテキストにIDやクラスを割り当てる際によく使われる。今回の例だと、書籍名はクラスが<code>book-title</code>の<code>&lt;span&gt;</code>タグで囲まれている。したがって、書籍名を抽出する時には<code>html_elements(".book-title")</code></p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>my_html <span class="sc">|&gt;</span> </span>
-<span id="cb21-2"><a href="#cb21-2"></a>  <span class="fu">html_elements</span>(<span class="st">".book-title"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>my_html <span class="sc">|&gt;</span> </span>
+<span id="cb25-2"><a href="#cb25-2"></a>  <span class="fu">html_elements</span>(<span class="st">".book-title"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{xml_nodeset (3)}
 [1] &lt;a href="https://www.jaysong.net/RBook/" id="rbook" class="book-title"&gt;私た ...
@@ -936,16 +960,17 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 <p>　このように<code>book-title</code>クラスのタグと、その内容が全て抽出される。ここからテキストを抽出する場合は<code>html_text()</code>を使えば良い。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>my_html <span class="sc">|&gt;</span> </span>
-<span id="cb23-2"><a href="#cb23-2"></a>  <span class="fu">html_elements</span>(<span class="st">".book-title"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb23-3"><a href="#cb23-3"></a>  <span class="fu">html_text</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>my_html <span class="sc">|&gt;</span> </span>
+<span id="cb27-2"><a href="#cb27-2"></a>  <span class="fu">html_elements</span>(<span class="st">".book-title"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb27-3"><a href="#cb27-3"></a>  <span class="fu">html_text</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "私たちのR"         "Rによる計量政治学" "計量政治分析"     </code></pre>
 </div>
 </div>
+<p>　スクレイピングで最も需要の高いものは表だろう。表の場合、HTMLでは<code>&lt;table&gt;</code>タグで記述されるが、{rvest}は表を取得し、tibble形式で返す<code>html_table()</code>関数が用意されている。これまで使ってきた<code>html_elements()</code>関数はあっても良いが、なくても問題ない。サンプルページには2つの表があるが、HTMLオブジェクトをそのまま<code>html_table()</code>に渡すと表が抽出される。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>my_html <span class="sc">|&gt;</span> </span>
-<span id="cb25-2"><a href="#cb25-2"></a>  <span class="fu">html_table</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>my_html <span class="sc">|&gt;</span> </span>
+<span id="cb29-2"><a href="#cb29-2"></a>  <span class="fu">html_table</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
 # A tibble: 4 × 3
@@ -966,11 +991,12 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 4 3     渡辺  90   </code></pre>
 </div>
 </div>
+<p>　長さ2のリストが出力され、それぞれ表が格納されている。今回のように、表のヘッダー（1行目）が中身として出力される場合もあるが、このような場合は<code>header = TRUE</code>を指定すると、1行目が変数名となる。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>my_tables <span class="ot">&lt;-</span> my_html <span class="sc">|&gt;</span> </span>
-<span id="cb27-2"><a href="#cb27-2"></a>  <span class="fu">html_table</span>(<span class="at">header =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb27-3"><a href="#cb27-3"></a></span>
-<span id="cb27-4"><a href="#cb27-4"></a>my_tables</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>my_tables <span class="ot">&lt;-</span> my_html <span class="sc">|&gt;</span> </span>
+<span id="cb31-2"><a href="#cb31-2"></a>  <span class="fu">html_table</span>(<span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb31-3"><a href="#cb31-3"></a></span>
+<span id="cb31-4"><a href="#cb31-4"></a>my_tables</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
 # A tibble: 3 × 3
@@ -989,10 +1015,11 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 3     3 渡辺     90</code></pre>
 </div>
 </div>
+<p>　この2つの表を<code>bind_rows()</code>を使って結合することもできる。まず、<code>names()</code>関数を使って、リストの各要素に名前を割り当てる。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="fu">names</span>(my_tables) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"数学"</span>, <span class="st">"英語"</span>)</span>
-<span id="cb29-2"><a href="#cb29-2"></a></span>
-<span id="cb29-3"><a href="#cb29-3"></a>my_tables</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="fu">names</span>(my_tables) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"数学"</span>, <span class="st">"英語"</span>)</span>
+<span id="cb33-2"><a href="#cb33-2"></a></span>
+<span id="cb33-3"><a href="#cb33-3"></a>my_tables</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$数学
 # A tibble: 3 × 3
@@ -1011,10 +1038,11 @@ $英語
 3     3 渡辺     90</code></pre>
 </div>
 </div>
+<p>　続いて、<code>bind_rows()</code>関数に表のリストを入れ、<code>.id</code>変数で2つの表を識別する値が格納される列名を指定する。<code>bind_rows()</code>の詳細は第<a href="datahandling2.html#sec-handling2-merge" class="quarto-xref"><span>14.5</span></a>章を参照されたい。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>my_table <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(my_tables, <span class="at">.id =</span> <span class="st">"科目"</span>)</span>
-<span id="cb31-2"><a href="#cb31-2"></a></span>
-<span id="cb31-3"><a href="#cb31-3"></a>my_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>my_table <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(my_tables, <span class="at">.id =</span> <span class="st">"科目"</span>)</span>
+<span id="cb35-2"><a href="#cb35-2"></a></span>
+<span id="cb35-3"><a href="#cb35-3"></a>my_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 4
   科目     ID 名前   成績
@@ -1027,11 +1055,11 @@ $英語
 6 英語      3 渡辺     90</code></pre>
 </div>
 </div>
-<p>sのついてないやつ</p>
+<p>　すべての表ではない、英語成績の表だけを抽出する場合はどうすれば良いだろうか。今回は表が2つしかなく、2番目の表が英語成績ということが分かっているので<code>my_table[[2]]</code>のような書き方でも問題ない。しかし、表が数百個ある場合は、何番目の表かを数えるのも簡単ではない。幸い、今回はそれぞれの表に<code>math</code>と<code>english</code>といったIDが割り当てられている。このセレクターを使えば、IDが<code>"english"</code>の表を選択することもできよう。<code>html_element()</code>関数の引数として<code>"#english"</code>を指定し、そこから<code>html_table()</code>を実行すると英語成績の表だけが抽出される。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>my_html <span class="sc">|&gt;</span> </span>
-<span id="cb33-2"><a href="#cb33-2"></a>  <span class="fu">html_element</span>(<span class="st">"#english"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb33-3"><a href="#cb33-3"></a>  <span class="fu">html_table</span>(<span class="at">header =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>my_html <span class="sc">|&gt;</span> </span>
+<span id="cb37-2"><a href="#cb37-2"></a>  <span class="fu">html_element</span>(<span class="st">"#english"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb37-3"><a href="#cb37-3"></a>  <span class="fu">html_table</span>(<span class="at">header =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 3
      ID 名前   成績
@@ -1041,6 +1069,7 @@ $英語
 3     3 渡辺     90</code></pre>
 </div>
 </div>
+<p>　ここで一つ注意事項があるが、<code>html_elements()</code>でなく、<code>html_element()</code>を使う点だ。IDが1ページに1つしか存在しないため、<code>html_element()</code>を使った方が楽である。<code>html_elements()</code>を使っても良いが、返ってくるのはtibbleでなく、長さ1のリストになるので、更に<code>[[1]]</code>などでリストから表を取り出す必要がある。</p>
 </section>
 <section id="実践" class="level2" data-number="30.3">
 <h2 data-number="30.3" class="anchored" data-anchor-id="実践"><span class="header-section-number">30.3</span> 実践</h2>
@@ -1048,30 +1077,30 @@ $英語
 <h3 data-number="30.3.1" class="anchored" data-anchor-id="表の抽出"><span class="header-section-number">30.3.1</span> 表の抽出</h3>
 <p>Wikipediaの<a href="https://en.wikipedia.org/wiki/World_Press_Freedom_Index">世界報道自由度ランキング</a>の表をスクレイピング</p>
 <div class="cell" data-layout-align="center" data-hash="scraping_cache/html/scraping-hdi_8f4efe2dee5540001013531b7a49266b">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://en.wikipedia.org/wiki/World_Press_Freedom_Index"</span></span>
-<span id="cb35-2"><a href="#cb35-2"></a></span>
-<span id="cb35-3"><a href="#cb35-3"></a>pfi_html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url)</span>
-<span id="cb35-4"><a href="#cb35-4"></a></span>
-<span id="cb35-5"><a href="#cb35-5"></a>pfi_html</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://en.wikipedia.org/wiki/World_Press_Freedom_Index"</span></span>
+<span id="cb39-2"><a href="#cb39-2"></a></span>
+<span id="cb39-3"><a href="#cb39-3"></a>pfi_html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url)</span>
+<span id="cb39-4"><a href="#cb39-4"></a></span>
+<span id="cb39-5"><a href="#cb39-5"></a>pfi_html</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{html_document}
 &lt;html class="client-nojs vector-feature-language-in-header-enabled vector-feature-language-in-main-page-header-disabled vector-feature-sticky-header-disabled vector-feature-page-tools-pinned-disabled vector-feature-toc-pinned-enabled vector-feature-main-menu-pinned-disabled vector-feature-limited-width-enabled vector-feature-limited-width-content-enabled vector-feature-zebra-design-disabled" lang="en" dir="ltr"&gt;
 [1] &lt;head&gt;\n&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8 ...
 [2] &lt;body class="skin-vector skin-vector-search-vue mediawiki ltr sitedir-ltr ...</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>pfi_tbls <span class="ot">&lt;-</span> pfi_html <span class="sc">|&gt;</span> </span>
-<span id="cb37-2"><a href="#cb37-2"></a>  <span class="fu">html_table</span>()</span>
-<span id="cb37-3"><a href="#cb37-3"></a></span>
-<span id="cb37-4"><a href="#cb37-4"></a>pfi_df <span class="ot">&lt;-</span> pfi_tbls[[<span class="dv">1</span>]] <span class="sc">|&gt;</span> </span>
-<span id="cb37-5"><a href="#cb37-5"></a>  <span class="fu">rename</span>(<span class="st">"Year2023"</span> <span class="ot">=</span> <span class="st">"2023[5]"</span>,</span>
-<span id="cb37-6"><a href="#cb37-6"></a>         <span class="st">"Year2022"</span> <span class="ot">=</span> <span class="st">"2022[6]"</span>,</span>
-<span id="cb37-7"><a href="#cb37-7"></a>         <span class="st">"Year2021"</span> <span class="ot">=</span> <span class="st">"2021[7]"</span>,</span>
-<span id="cb37-8"><a href="#cb37-8"></a>         <span class="st">"Year2020"</span> <span class="ot">=</span> <span class="st">"2020[8]"</span>,</span>
-<span id="cb37-9"><a href="#cb37-9"></a>         <span class="st">"Year2019"</span> <span class="ot">=</span> <span class="st">"2019[9]"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb37-10"><a href="#cb37-10"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(Year2023<span class="sc">:</span>Year2019, <span class="sc">~</span><span class="fu">str_replace</span>(.x, <span class="st">"</span><span class="sc">\\</span><span class="st">(([0-9]+)</span><span class="sc">\\</span><span class="st">)"</span>, <span class="st">""</span>)),</span>
-<span id="cb37-11"><a href="#cb37-11"></a>         <span class="fu">across</span>(Year2023<span class="sc">:</span>Year2019, as.numeric))</span>
-<span id="cb37-12"><a href="#cb37-12"></a></span>
-<span id="cb37-13"><a href="#cb37-13"></a>pfi_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>pfi_tbls <span class="ot">&lt;-</span> pfi_html <span class="sc">|&gt;</span> </span>
+<span id="cb41-2"><a href="#cb41-2"></a>  <span class="fu">html_table</span>()</span>
+<span id="cb41-3"><a href="#cb41-3"></a></span>
+<span id="cb41-4"><a href="#cb41-4"></a>pfi_df <span class="ot">&lt;-</span> pfi_tbls[[<span class="dv">1</span>]] <span class="sc">|&gt;</span> </span>
+<span id="cb41-5"><a href="#cb41-5"></a>  <span class="fu">rename</span>(<span class="st">"Year2023"</span> <span class="ot">=</span> <span class="st">"2023[5]"</span>,</span>
+<span id="cb41-6"><a href="#cb41-6"></a>         <span class="st">"Year2022"</span> <span class="ot">=</span> <span class="st">"2022[6]"</span>,</span>
+<span id="cb41-7"><a href="#cb41-7"></a>         <span class="st">"Year2021"</span> <span class="ot">=</span> <span class="st">"2021[7]"</span>,</span>
+<span id="cb41-8"><a href="#cb41-8"></a>         <span class="st">"Year2020"</span> <span class="ot">=</span> <span class="st">"2020[8]"</span>,</span>
+<span id="cb41-9"><a href="#cb41-9"></a>         <span class="st">"Year2019"</span> <span class="ot">=</span> <span class="st">"2019[9]"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb41-10"><a href="#cb41-10"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(Year2023<span class="sc">:</span>Year2019, <span class="sc">~</span><span class="fu">str_replace</span>(.x, <span class="st">"</span><span class="sc">\\</span><span class="st">(([0-9]+)</span><span class="sc">\\</span><span class="st">)"</span>, <span class="st">""</span>)),</span>
+<span id="cb41-11"><a href="#cb41-11"></a>         <span class="fu">across</span>(Year2023<span class="sc">:</span>Year2019, as.numeric))</span>
+<span id="cb41-12"><a href="#cb41-12"></a></span>
+<span id="cb41-13"><a href="#cb41-13"></a>pfi_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 180 × 6
    Country     Year2023 Year2022 Year2021 Year2020 Year2019
@@ -1088,17 +1117,17 @@ $英語
 10 East Timor      84.5     81.9     70.9     70.1     70.1
 # ℹ 170 more rows</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>pfi_df <span class="sc">|&gt;</span> </span>
-<span id="cb39-2"><a href="#cb39-2"></a>  <span class="fu">filter</span>(Country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Japan"</span>, <span class="st">"South Korea"</span>, <span class="st">"North Korea"</span>, <span class="st">"China"</span>,</span>
-<span id="cb39-3"><a href="#cb39-3"></a>                        <span class="st">"Hong Kong"</span>, <span class="st">"Taiwan"</span>, <span class="st">"Mongolia"</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb39-4"><a href="#cb39-4"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb39-5"><a href="#cb39-5"></a>  <span class="fu">cols_label</span>(<span class="st">"Year2023"</span> <span class="ot">=</span> <span class="st">"2023"</span>,</span>
-<span id="cb39-6"><a href="#cb39-6"></a>             <span class="st">"Year2022"</span> <span class="ot">=</span> <span class="st">"2022"</span>,</span>
-<span id="cb39-7"><a href="#cb39-7"></a>             <span class="st">"Year2021"</span> <span class="ot">=</span> <span class="st">"2021"</span>,</span>
-<span id="cb39-8"><a href="#cb39-8"></a>             <span class="st">"Year2020"</span> <span class="ot">=</span> <span class="st">"2020"</span>,</span>
-<span id="cb39-9"><a href="#cb39-9"></a>             <span class="st">"Year2019"</span> <span class="ot">=</span> <span class="st">"2019"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb39-10"><a href="#cb39-10"></a>  <span class="fu">data_color</span>(<span class="at">columns =</span> Year2023<span class="sc">:</span>Year2019,</span>
-<span id="cb39-11"><a href="#cb39-11"></a>             <span class="at">palette =</span> <span class="st">"ggsci::blue_material"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>pfi_df <span class="sc">|&gt;</span> </span>
+<span id="cb43-2"><a href="#cb43-2"></a>  <span class="fu">filter</span>(Country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Japan"</span>, <span class="st">"South Korea"</span>, <span class="st">"North Korea"</span>, <span class="st">"China"</span>,</span>
+<span id="cb43-3"><a href="#cb43-3"></a>                        <span class="st">"Hong Kong"</span>, <span class="st">"Taiwan"</span>, <span class="st">"Mongolia"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb43-4"><a href="#cb43-4"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb43-5"><a href="#cb43-5"></a>  <span class="fu">cols_label</span>(<span class="st">"Year2023"</span> <span class="ot">=</span> <span class="st">"2023"</span>,</span>
+<span id="cb43-6"><a href="#cb43-6"></a>             <span class="st">"Year2022"</span> <span class="ot">=</span> <span class="st">"2022"</span>,</span>
+<span id="cb43-7"><a href="#cb43-7"></a>             <span class="st">"Year2021"</span> <span class="ot">=</span> <span class="st">"2021"</span>,</span>
+<span id="cb43-8"><a href="#cb43-8"></a>             <span class="st">"Year2020"</span> <span class="ot">=</span> <span class="st">"2020"</span>,</span>
+<span id="cb43-9"><a href="#cb43-9"></a>             <span class="st">"Year2019"</span> <span class="ot">=</span> <span class="st">"2019"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb43-10"><a href="#cb43-10"></a>  <span class="fu">data_color</span>(<span class="at">columns =</span> Year2023<span class="sc">:</span>Year2019,</span>
+<span id="cb43-11"><a href="#cb43-11"></a>             <span class="at">palette =</span> <span class="st">"ggsci::blue_material"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="oxgmldcbzj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#oxgmldcbzj table {
@@ -1606,21 +1635,21 @@ $英語
 <section id="表の抽出複数ページ" class="level3" data-number="30.3.2">
 <h3 data-number="30.3.2" class="anchored" data-anchor-id="表の抽出複数ページ"><span class="header-section-number">30.3.2</span> 表の抽出（複数ページ）</h3>
 <div class="cell" data-layout-align="center" data-hash="scraping_cache/html/scraping-j_1d2c9514d85ea5349da8956cc015b96a">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>j_list <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"https://www.jleague.jp/standings/j"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span>
-<span id="cb40-2"><a href="#cb40-2"></a></span>
-<span id="cb40-3"><a href="#cb40-3"></a>tbl_list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb40-4"><a href="#cb40-4"></a></span>
-<span id="cb40-5"><a href="#cb40-5"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(j_list)) {</span>
-<span id="cb40-6"><a href="#cb40-6"></a>  temp_html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(j_list[i])</span>
-<span id="cb40-7"><a href="#cb40-7"></a>  temp_tbl  <span class="ot">&lt;-</span> temp_html <span class="sc">|&gt;</span> </span>
-<span id="cb40-8"><a href="#cb40-8"></a>    <span class="fu">html_table</span>(<span class="at">header =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb40-9"><a href="#cb40-9"></a>  </span>
-<span id="cb40-10"><a href="#cb40-10"></a>  tbl_list[[<span class="fu">paste0</span>(<span class="st">"J"</span>, i)]] <span class="ot">&lt;-</span> temp_tbl[[<span class="dv">1</span>]]</span>
-<span id="cb40-11"><a href="#cb40-11"></a>  </span>
-<span id="cb40-12"><a href="#cb40-12"></a>  <span class="fu">Sys.sleep</span>(<span class="dv">1</span>)</span>
-<span id="cb40-13"><a href="#cb40-13"></a>}</span>
-<span id="cb40-14"><a href="#cb40-14"></a></span>
-<span id="cb40-15"><a href="#cb40-15"></a>tbl_list</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a>j_list <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"https://www.jleague.jp/standings/j"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span>
+<span id="cb44-2"><a href="#cb44-2"></a></span>
+<span id="cb44-3"><a href="#cb44-3"></a>tbl_list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb44-4"><a href="#cb44-4"></a></span>
+<span id="cb44-5"><a href="#cb44-5"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(j_list)) {</span>
+<span id="cb44-6"><a href="#cb44-6"></a>  temp_html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(j_list[i])</span>
+<span id="cb44-7"><a href="#cb44-7"></a>  temp_tbl  <span class="ot">&lt;-</span> temp_html <span class="sc">|&gt;</span> </span>
+<span id="cb44-8"><a href="#cb44-8"></a>    <span class="fu">html_table</span>(<span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb44-9"><a href="#cb44-9"></a>  </span>
+<span id="cb44-10"><a href="#cb44-10"></a>  tbl_list[[<span class="fu">paste0</span>(<span class="st">"J"</span>, i)]] <span class="ot">&lt;-</span> temp_tbl[[<span class="dv">1</span>]]</span>
+<span id="cb44-11"><a href="#cb44-11"></a>  </span>
+<span id="cb44-12"><a href="#cb44-12"></a>  <span class="fu">Sys.sleep</span>(<span class="dv">1</span>)</span>
+<span id="cb44-13"><a href="#cb44-13"></a>}</span>
+<span id="cb44-14"><a href="#cb44-14"></a></span>
+<span id="cb44-15"><a href="#cb44-15"></a>tbl_list</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$J1
 # A tibble: 18 × 12
@@ -1689,14 +1718,14 @@ $J3
 20 NA       20 ギラヴァンツ北…     6     12     1     3     8    11    19     -8
 # ℹ 1 more variable: 直近5試合 &lt;lgl&gt;</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a>j_df <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(tbl_list, <span class="at">.id =</span> <span class="st">"League"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a>j_df <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(tbl_list, <span class="at">.id =</span> <span class="st">"League"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>New names:
 New names:
 New names:
 • `` -&gt; `...1`</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a>j_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a>j_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 60 × 13
    League ...1   順位 クラブ名  勝点 試合数    勝    分    負  得点  失点 得失点
@@ -1714,13 +1743,13 @@ New names:
 # ℹ 50 more rows
 # ℹ 1 more variable: 直近5試合 &lt;lgl&gt;</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a>j_df <span class="ot">&lt;-</span> j_df <span class="sc">|&gt;</span> </span>
-<span id="cb46-2"><a href="#cb46-2"></a>  <span class="fu">select</span>(<span class="sc">!</span><span class="fu">c</span>(<span class="st">"...1"</span>, <span class="st">"直近5試合"</span>))</span>
-<span id="cb46-3"><a href="#cb46-3"></a></span>
-<span id="cb46-4"><a href="#cb46-4"></a>j_df <span class="sc">|&gt;</span> </span>
-<span id="cb46-5"><a href="#cb46-5"></a>  <span class="fu">mutate</span>(クラブ名 <span class="ot">=</span> <span class="fu">str_sub</span>(クラブ名, <span class="dv">1</span>, <span class="fu">nchar</span>(クラブ名) <span class="sc">/</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb46-6"><a href="#cb46-6"></a>  <span class="fu">group_by</span>(League) <span class="sc">|&gt;</span> </span>
-<span id="cb46-7"><a href="#cb46-7"></a>  <span class="fu">gt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a>j_df <span class="ot">&lt;-</span> j_df <span class="sc">|&gt;</span> </span>
+<span id="cb50-2"><a href="#cb50-2"></a>  <span class="fu">select</span>(<span class="sc">!</span><span class="fu">c</span>(<span class="st">"...1"</span>, <span class="st">"直近5試合"</span>))</span>
+<span id="cb50-3"><a href="#cb50-3"></a></span>
+<span id="cb50-4"><a href="#cb50-4"></a>j_df <span class="sc">|&gt;</span> </span>
+<span id="cb50-5"><a href="#cb50-5"></a>  <span class="fu">mutate</span>(クラブ名 <span class="ot">=</span> <span class="fu">str_sub</span>(クラブ名, <span class="dv">1</span>, <span class="fu">nchar</span>(クラブ名) <span class="sc">/</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb50-6"><a href="#cb50-6"></a>  <span class="fu">group_by</span>(League) <span class="sc">|&gt;</span> </span>
+<span id="cb50-7"><a href="#cb50-7"></a>  <span class="fu">gt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="xcoyyxtyvz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#xcoyyxtyvz table {
@@ -2805,38 +2834,38 @@ New names:
 <li><code>html_nodes()</code>でランキング、画像URL、スコアなどをベクトルとして抽出し、R側で表にする。</li>
 </ul>
 <div class="cell" data-layout-align="center" data-hash="scraping_cache/html/scraping-oc-single_76290119b6dc11f1d9208539d643423e">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a>oc_html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="st">"https://opencritic.com/browse/all/2021"</span>)</span>
-<span id="cb47-2"><a href="#cb47-2"></a></span>
-<span id="cb47-3"><a href="#cb47-3"></a>oc_html <span class="ot">&lt;-</span> oc_html <span class="sc">|&gt;</span> </span>
-<span id="cb47-4"><a href="#cb47-4"></a>  <span class="fu">html_element</span>(<span class="st">".desktop-game-display"</span>)</span>
-<span id="cb47-5"><a href="#cb47-5"></a></span>
-<span id="cb47-6"><a href="#cb47-6"></a></span>
-<span id="cb47-7"><a href="#cb47-7"></a>oc_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Rank      =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".rank"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb47-8"><a href="#cb47-8"></a>                  <span class="fu">html_text2</span>(),</span>
-<span id="cb47-9"><a href="#cb47-9"></a>                <span class="at">Tier      =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">"img"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb47-10"><a href="#cb47-10"></a>                  <span class="fu">html_attr</span>(<span class="st">"src"</span>),</span>
-<span id="cb47-11"><a href="#cb47-11"></a>                <span class="at">Score     =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".score"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb47-12"><a href="#cb47-12"></a>                  <span class="fu">html_text2</span>(),</span>
-<span id="cb47-13"><a href="#cb47-13"></a>                <span class="at">Name      =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".game-name"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb47-14"><a href="#cb47-14"></a>                  <span class="fu">html_text2</span>(),</span>
-<span id="cb47-15"><a href="#cb47-15"></a>                <span class="at">Platforms =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".platforms"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb47-16"><a href="#cb47-16"></a>                  <span class="fu">html_text2</span>(),</span>
-<span id="cb47-17"><a href="#cb47-17"></a>                <span class="at">Date      =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".first-release-date"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb47-18"><a href="#cb47-18"></a>                  <span class="fu">html_text2</span>()) <span class="sc">|&gt;</span> </span>
-<span id="cb47-19"><a href="#cb47-19"></a>  <span class="fu">mutate</span>(<span class="at">Rank =</span> <span class="fu">str_remove</span>(Rank, <span class="st">"</span><span class="sc">\\</span><span class="st">."</span>),</span>
-<span id="cb47-20"><a href="#cb47-20"></a>         <span class="at">Rank =</span> <span class="fu">as.numeric</span>(Rank),</span>
-<span id="cb47-21"><a href="#cb47-21"></a>         <span class="at">Date =</span> <span class="fu">paste0</span>(Date, <span class="st">", 2021"</span>),</span>
-<span id="cb47-22"><a href="#cb47-22"></a>         <span class="at">Date =</span> <span class="fu">mdy</span>(Date))</span>
-<span id="cb47-23"><a href="#cb47-23"></a></span>
-<span id="cb47-24"><a href="#cb47-24"></a><span class="co">#oc_df |&gt; </span></span>
-<span id="cb47-25"><a href="#cb47-25"></a><span class="co">#  separate(Platforms,</span></span>
-<span id="cb47-26"><a href="#cb47-26"></a><span class="co">#           into = paste0("P", 1:6),</span></span>
-<span id="cb47-27"><a href="#cb47-27"></a><span class="co">#           sep = ", ")</span></span>
-<span id="cb47-28"><a href="#cb47-28"></a></span>
-<span id="cb47-29"><a href="#cb47-29"></a>oc_df <span class="sc">|&gt;</span> </span>
-<span id="cb47-30"><a href="#cb47-30"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb47-31"><a href="#cb47-31"></a>  <span class="fu">gt_img_rows</span>(Tier) <span class="sc">|&gt;</span> </span>
-<span id="cb47-32"><a href="#cb47-32"></a>  <span class="fu">cols_label</span>(<span class="st">"Date"</span> <span class="ot">=</span> <span class="st">"First release date"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1"></a>oc_html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="st">"https://opencritic.com/browse/all/2021"</span>)</span>
+<span id="cb51-2"><a href="#cb51-2"></a></span>
+<span id="cb51-3"><a href="#cb51-3"></a>oc_html <span class="ot">&lt;-</span> oc_html <span class="sc">|&gt;</span> </span>
+<span id="cb51-4"><a href="#cb51-4"></a>  <span class="fu">html_element</span>(<span class="st">".desktop-game-display"</span>)</span>
+<span id="cb51-5"><a href="#cb51-5"></a></span>
+<span id="cb51-6"><a href="#cb51-6"></a></span>
+<span id="cb51-7"><a href="#cb51-7"></a>oc_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Rank      =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".rank"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb51-8"><a href="#cb51-8"></a>                  <span class="fu">html_text2</span>(),</span>
+<span id="cb51-9"><a href="#cb51-9"></a>                <span class="at">Tier      =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">"img"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb51-10"><a href="#cb51-10"></a>                  <span class="fu">html_attr</span>(<span class="st">"src"</span>),</span>
+<span id="cb51-11"><a href="#cb51-11"></a>                <span class="at">Score     =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".score"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb51-12"><a href="#cb51-12"></a>                  <span class="fu">html_text2</span>(),</span>
+<span id="cb51-13"><a href="#cb51-13"></a>                <span class="at">Name      =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".game-name"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb51-14"><a href="#cb51-14"></a>                  <span class="fu">html_text2</span>(),</span>
+<span id="cb51-15"><a href="#cb51-15"></a>                <span class="at">Platforms =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".platforms"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb51-16"><a href="#cb51-16"></a>                  <span class="fu">html_text2</span>(),</span>
+<span id="cb51-17"><a href="#cb51-17"></a>                <span class="at">Date      =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".first-release-date"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb51-18"><a href="#cb51-18"></a>                  <span class="fu">html_text2</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb51-19"><a href="#cb51-19"></a>  <span class="fu">mutate</span>(<span class="at">Rank =</span> <span class="fu">str_remove</span>(Rank, <span class="st">"</span><span class="sc">\\</span><span class="st">."</span>),</span>
+<span id="cb51-20"><a href="#cb51-20"></a>         <span class="at">Rank =</span> <span class="fu">as.numeric</span>(Rank),</span>
+<span id="cb51-21"><a href="#cb51-21"></a>         <span class="at">Date =</span> <span class="fu">paste0</span>(Date, <span class="st">", 2021"</span>),</span>
+<span id="cb51-22"><a href="#cb51-22"></a>         <span class="at">Date =</span> <span class="fu">mdy</span>(Date))</span>
+<span id="cb51-23"><a href="#cb51-23"></a></span>
+<span id="cb51-24"><a href="#cb51-24"></a><span class="co">#oc_df |&gt; </span></span>
+<span id="cb51-25"><a href="#cb51-25"></a><span class="co">#  separate(Platforms,</span></span>
+<span id="cb51-26"><a href="#cb51-26"></a><span class="co">#           into = paste0("P", 1:6),</span></span>
+<span id="cb51-27"><a href="#cb51-27"></a><span class="co">#           sep = ", ")</span></span>
+<span id="cb51-28"><a href="#cb51-28"></a></span>
+<span id="cb51-29"><a href="#cb51-29"></a>oc_df <span class="sc">|&gt;</span> </span>
+<span id="cb51-30"><a href="#cb51-30"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb51-31"><a href="#cb51-31"></a>  <span class="fu">gt_img_rows</span>(Tier) <span class="sc">|&gt;</span> </span>
+<span id="cb51-32"><a href="#cb51-32"></a>  <span class="fu">cols_label</span>(<span class="st">"Date"</span> <span class="ot">=</span> <span class="st">"First release date"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="tzxtfovlvk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#tzxtfovlvk table {
@@ -3423,41 +3452,41 @@ New names:
 <h3 data-number="30.3.4" class="anchored" data-anchor-id="表以外の内容複数ページ"><span class="header-section-number">30.3.4</span> 表以外の内容（複数ページ）</h3>
 <p>1位から500位まで</p>
 <div class="cell" data-layout-align="center" data-hash="scraping_cache/html/scraping-oc-multiple_57578e43c8db067af504ea710e2cc51b">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a>oc_url <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"https://opencritic.com/browse/pc/2021?page="</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">25</span>)</span>
-<span id="cb48-2"><a href="#cb48-2"></a></span>
-<span id="cb48-3"><a href="#cb48-3"></a>oc_list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb48-4"><a href="#cb48-4"></a></span>
-<span id="cb48-5"><a href="#cb48-5"></a>get_oc <span class="ot">&lt;-</span> <span class="cf">function</span> (url) {</span>
-<span id="cb48-6"><a href="#cb48-6"></a>  temp_html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url) <span class="sc">|&gt;</span> </span>
-<span id="cb48-7"><a href="#cb48-7"></a>    <span class="fu">html_element</span>(<span class="st">".desktop-game-display"</span>)</span>
-<span id="cb48-8"><a href="#cb48-8"></a>  temp_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Rank  =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">".rank"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb48-9"><a href="#cb48-9"></a>                      <span class="fu">html_text2</span>(),</span>
-<span id="cb48-10"><a href="#cb48-10"></a>                    <span class="at">Tier  =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">"img"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb48-11"><a href="#cb48-11"></a>                      <span class="fu">html_attr</span>(<span class="st">"src"</span>),</span>
-<span id="cb48-12"><a href="#cb48-12"></a>                    <span class="at">Score =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">".score"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb48-13"><a href="#cb48-13"></a>                      <span class="fu">html_text2</span>(),</span>
-<span id="cb48-14"><a href="#cb48-14"></a>                    <span class="at">Name  =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">".game-name"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb48-15"><a href="#cb48-15"></a>                      <span class="fu">html_text2</span>(),</span>
-<span id="cb48-16"><a href="#cb48-16"></a>                    <span class="at">Date  =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">".first-release-date"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb48-17"><a href="#cb48-17"></a>                      <span class="fu">html_text2</span>()) <span class="sc">|&gt;</span> </span>
-<span id="cb48-18"><a href="#cb48-18"></a>    <span class="fu">mutate</span>(<span class="at">Rank =</span> <span class="fu">str_remove</span>(Rank, <span class="st">"</span><span class="sc">\\</span><span class="st">."</span>),</span>
-<span id="cb48-19"><a href="#cb48-19"></a>           <span class="at">Rank =</span> <span class="fu">as.numeric</span>(Rank),</span>
-<span id="cb48-20"><a href="#cb48-20"></a>           <span class="at">Date =</span> <span class="fu">paste0</span>(Date, <span class="st">", 2021"</span>),</span>
-<span id="cb48-21"><a href="#cb48-21"></a>           <span class="at">Date =</span> <span class="fu">mdy</span>(Date))</span>
-<span id="cb48-22"><a href="#cb48-22"></a>}</span>
-<span id="cb48-23"><a href="#cb48-23"></a></span>
-<span id="cb48-24"><a href="#cb48-24"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(oc_url)) {</span>
-<span id="cb48-25"><a href="#cb48-25"></a>  </span>
-<span id="cb48-26"><a href="#cb48-26"></a>  temp_df      <span class="ot">&lt;-</span> <span class="fu">get_oc</span>(oc_url[i])</span>
-<span id="cb48-27"><a href="#cb48-27"></a>  oc_list[[i]] <span class="ot">&lt;-</span> temp_df</span>
-<span id="cb48-28"><a href="#cb48-28"></a>  </span>
-<span id="cb48-29"><a href="#cb48-29"></a>  <span class="fu">Sys.sleep</span>(<span class="dv">1</span>)</span>
-<span id="cb48-30"><a href="#cb48-30"></a>}</span>
-<span id="cb48-31"><a href="#cb48-31"></a></span>
-<span id="cb48-32"><a href="#cb48-32"></a><span class="fu">bind_rows</span>(oc_list) <span class="sc">|&gt;</span> </span>
-<span id="cb48-33"><a href="#cb48-33"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb48-34"><a href="#cb48-34"></a>  <span class="fu">gt_img_rows</span>(Tier) <span class="sc">|&gt;</span> </span>
-<span id="cb48-35"><a href="#cb48-35"></a>  <span class="fu">cols_label</span>(<span class="st">"Date"</span> <span class="ot">=</span> <span class="st">"First release date"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a>oc_url <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"https://opencritic.com/browse/pc/2021?page="</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">25</span>)</span>
+<span id="cb52-2"><a href="#cb52-2"></a></span>
+<span id="cb52-3"><a href="#cb52-3"></a>oc_list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb52-4"><a href="#cb52-4"></a></span>
+<span id="cb52-5"><a href="#cb52-5"></a>get_oc <span class="ot">&lt;-</span> <span class="cf">function</span> (url) {</span>
+<span id="cb52-6"><a href="#cb52-6"></a>  temp_html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url) <span class="sc">|&gt;</span> </span>
+<span id="cb52-7"><a href="#cb52-7"></a>    <span class="fu">html_element</span>(<span class="st">".desktop-game-display"</span>)</span>
+<span id="cb52-8"><a href="#cb52-8"></a>  temp_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Rank  =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">".rank"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb52-9"><a href="#cb52-9"></a>                      <span class="fu">html_text2</span>(),</span>
+<span id="cb52-10"><a href="#cb52-10"></a>                    <span class="at">Tier  =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">"img"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb52-11"><a href="#cb52-11"></a>                      <span class="fu">html_attr</span>(<span class="st">"src"</span>),</span>
+<span id="cb52-12"><a href="#cb52-12"></a>                    <span class="at">Score =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">".score"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb52-13"><a href="#cb52-13"></a>                      <span class="fu">html_text2</span>(),</span>
+<span id="cb52-14"><a href="#cb52-14"></a>                    <span class="at">Name  =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">".game-name"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb52-15"><a href="#cb52-15"></a>                      <span class="fu">html_text2</span>(),</span>
+<span id="cb52-16"><a href="#cb52-16"></a>                    <span class="at">Date  =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">".first-release-date"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb52-17"><a href="#cb52-17"></a>                      <span class="fu">html_text2</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb52-18"><a href="#cb52-18"></a>    <span class="fu">mutate</span>(<span class="at">Rank =</span> <span class="fu">str_remove</span>(Rank, <span class="st">"</span><span class="sc">\\</span><span class="st">."</span>),</span>
+<span id="cb52-19"><a href="#cb52-19"></a>           <span class="at">Rank =</span> <span class="fu">as.numeric</span>(Rank),</span>
+<span id="cb52-20"><a href="#cb52-20"></a>           <span class="at">Date =</span> <span class="fu">paste0</span>(Date, <span class="st">", 2021"</span>),</span>
+<span id="cb52-21"><a href="#cb52-21"></a>           <span class="at">Date =</span> <span class="fu">mdy</span>(Date))</span>
+<span id="cb52-22"><a href="#cb52-22"></a>}</span>
+<span id="cb52-23"><a href="#cb52-23"></a></span>
+<span id="cb52-24"><a href="#cb52-24"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(oc_url)) {</span>
+<span id="cb52-25"><a href="#cb52-25"></a>  </span>
+<span id="cb52-26"><a href="#cb52-26"></a>  temp_df      <span class="ot">&lt;-</span> <span class="fu">get_oc</span>(oc_url[i])</span>
+<span id="cb52-27"><a href="#cb52-27"></a>  oc_list[[i]] <span class="ot">&lt;-</span> temp_df</span>
+<span id="cb52-28"><a href="#cb52-28"></a>  </span>
+<span id="cb52-29"><a href="#cb52-29"></a>  <span class="fu">Sys.sleep</span>(<span class="dv">1</span>)</span>
+<span id="cb52-30"><a href="#cb52-30"></a>}</span>
+<span id="cb52-31"><a href="#cb52-31"></a></span>
+<span id="cb52-32"><a href="#cb52-32"></a><span class="fu">bind_rows</span>(oc_list) <span class="sc">|&gt;</span> </span>
+<span id="cb52-33"><a href="#cb52-33"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb52-34"><a href="#cb52-34"></a>  <span class="fu">gt_img_rows</span>(Tier) <span class="sc">|&gt;</span> </span>
+<span id="cb52-35"><a href="#cb52-35"></a>  <span class="fu">cols_label</span>(<span class="st">"Date"</span> <span class="ot">=</span> <span class="st">"First release date"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="eyujqxyguc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#eyujqxyguc table {

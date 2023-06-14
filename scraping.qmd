@@ -422,7 +422,7 @@ my_html |>
   html_attr("href")
 ```
 
-箇条書きの要素を抽出
+ 続いて、箇条書きの要素を抽出してみよう。今回は2本の書籍リストが対象だ。箇条書きの内容は`<li>`タグで記述されるので、`html_elements("li")`で`<li>`タグの内容を取得してみよう。
 
 ```{r}
 #| label: scraping-rvest-elements-04
@@ -430,19 +430,36 @@ my_html |>
   html_elements("li")
 ```
 
-さらにテキストのみ抽出
+　書籍リストだけでなく、謎の言葉も取得される。実際、サンプルページには2つの箇条書きがあり、書籍は順序なしの箇条書き（`<ul>`）、謎の言葉は順序付き箇条書き（`<ol>`）である。したがって、まず、`<ul>`タグを抽出し、そこから`<li>`を抽出すれば良い。
 
 ```{r}
 #| label: scraping-rvest-elements-05
 my_html |> 
-  html_elements("li") |> 
+  html_elements("ul") |> 
+  html_elements("li")
+```
+
+　ちなみに`html_elements()`が続く場合は引数を`"タグ名 > タグ名"`にしても同じ結果が得られる。
+
+```{r}
+#| label: scraping-rvest-elements-06
+my_html |> 
+  html_elements("ul > li")
+```
+
+　ここから更にテキストのみ抽出する場合は`html_text()`を使えば良い。
+
+```{r}
+#| label: scraping-rvest-elements-07
+my_html |> 
+  html_elements("ul > li") |> 
   html_text()
 ```
 
 　`html_elements()`にはタグ名以外のセレクターも使える。たとえば、クラス（`.クラス名`）やID（`#ID名`）の指定もできる。サンプルページには書籍名が3回登場し、それらは`<span>`タグに囲まれている。`<span>`タグ単体の機能はないが、特定のテキストにIDやクラスを割り当てる際によく使われる。今回の例だと、書籍名はクラスが`book-title`の`<span>`タグで囲まれている。したがって、書籍名を抽出する時には`html_elements(".book-title")`
 
 ```{r}
-#| label: scraping-rvest-elements-06
+#| label: scraping-rvest-elements-08
 my_html |> 
   html_elements(".book-title")
 ```
@@ -450,17 +467,21 @@ my_html |>
 　このように`book-title`クラスのタグと、その内容が全て抽出される。ここからテキストを抽出する場合は`html_text()`を使えば良い。
 
 ```{r}
-#| label: scraping-rvest-elements-07
+#| label: scraping-rvest-elements-09
 my_html |> 
   html_elements(".book-title") |> 
   html_text()
 ```
+
+　スクレイピングで最も需要の高いものは表だろう。表の場合、HTMLでは`<table>`タグで記述されるが、{rvest}は表を取得し、tibble形式で返す`html_table()`関数が用意されている。これまで使ってきた`html_elements()`関数はあっても良いが、なくても問題ない。サンプルページには2つの表があるが、HTMLオブジェクトをそのまま`html_table()`に渡すと表が抽出される。
 
 ```{r}
 #| label: scraping-rvest-table-01
 my_html |> 
   html_table()
 ```
+
+　長さ2のリストが出力され、それぞれ表が格納されている。今回のように、表のヘッダー（1行目）が中身として出力される場合もあるが、このような場合は`header = TRUE`を指定すると、1行目が変数名となる。
 
 ```{r}
 #| label: scraping-rvest-table-02
@@ -470,12 +491,16 @@ my_tables <- my_html |>
 my_tables
 ```
 
+　この2つの表を`bind_rows()`を使って結合することもできる。まず、`names()`関数を使って、リストの各要素に名前を割り当てる。
+
 ```{r}
 #| label: scraping-rvest-table-03
 names(my_tables) <- c("数学", "英語")
 
 my_tables
 ```
+
+　続いて、`bind_rows()`関数に表のリストを入れ、`.id`変数で2つの表を識別する値が格納される列名を指定する。`bind_rows()`の詳細は第[-@sec-handling2-merge]章を参照されたい。
 
 ```{r}
 #| label: scraping-rvest-table-04
@@ -484,7 +509,7 @@ my_table <- bind_rows(my_tables, .id = "科目")
 my_table
 ```
 
-sのついてないやつ
+　すべての表ではない、英語成績の表だけを抽出する場合はどうすれば良いだろうか。今回は表が2つしかなく、2番目の表が英語成績ということが分かっているので`my_table[[2]]`のような書き方でも問題ない。しかし、表が数百個ある場合は、何番目の表かを数えるのも簡単ではない。幸い、今回はそれぞれの表に`math`と`english`といったIDが割り当てられている。このセレクターを使えば、IDが`"english"`の表を選択することもできよう。`html_element()`関数の引数として`"#english"`を指定し、そこから`html_table()`を実行すると英語成績の表だけが抽出される。
 
 ```{r}
 #| label: scraping-rvest-table-05
@@ -492,6 +517,8 @@ my_html |>
   html_element("#english") |> 
   html_table(header = TRUE)
 ```
+
+　ここで一つ注意事項があるが、`html_elements()`でなく、`html_element()`を使う点だ。IDが1ページに1つしか存在しないため、`html_element()`を使った方が楽である。`html_elements()`を使っても良いが、返ってくるのはtibbleでなく、長さ1のリストになるので、更に`[[1]]`などでリストから表を取り出す必要がある。
 
 ## 実践
 
