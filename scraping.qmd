@@ -457,43 +457,43 @@ my_table
 
 ### 表の抽出
 
-Wikipediaの[世界報道自由度ランキング](https://ja.wikipedia.org/wiki/%E4%B8%96%E7%95%8C%E5%A0%B1%E9%81%93%E8%87%AA%E7%94%B1%E5%BA%A6%E3%83%A9%E3%83%B3%E3%82%AD%E3%83%B3%E3%82%B0)の表をスクレイピング
+Wikipediaの[世界報道自由度ランキング](https://en.wikipedia.org/wiki/World_Press_Freedom_Index)の表をスクレイピング
 
 ```{r}
 #| label: scraping-hdi
 #| cache: true
 #| warning: false
-url <- "https://ja.wikipedia.org/wiki/%E4%B8%96%E7%95%8C%E5%A0%B1%E9%81%93%E8%87%AA%E7%94%B1%E5%BA%A6%E3%83%A9%E3%83%B3%E3%82%AD%E3%83%B3%E3%82%B0"
+url <- "https://en.wikipedia.org/wiki/World_Press_Freedom_Index"
 
-df <- read_html(url)
+pfi_html <- read_html(url)
 
-df
+pfi_html
 
-df_tbl <- df |> 
+pfi_tbls <- pfi_html |> 
   html_table()
 
-pfi_df <- df_tbl[[1]] |> 
-  rename("Name"     = "国・地域",
-         "Year2023" = "2023年[10]",
-         "Year2022" = "2022年[11]",
-         "Year2021" = "2021年[12]",
-         "Year2020" = "2020年[13]",
-         "Year2019" = "2019年[14]") |> 
+pfi_df <- pfi_tbls[[1]] |> 
+  rename("Year2023" = "2023[5]",
+         "Year2022" = "2022[6]",
+         "Year2021" = "2021[7]",
+         "Year2020" = "2020[8]",
+         "Year2019" = "2019[9]") |> 
   mutate(across(Year2023:Year2019, ~str_replace(.x, "\\(([0-9]+)\\)", "")),
          across(Year2023:Year2019, as.numeric))
 
 pfi_df
 
 pfi_df |> 
+  filter(Country %in% c("Japan", "South Korea", "North Korea", "China",
+                        "Hong Kong", "Taiwan", "Mongolia")) |> 
   gt() |> 
-  cols_label("Name"     = "国・地域",
-             "Year2023" = "2023年",
-             "Year2022" = "2022年",
-             "Year2021" = "2021年",
-             "Year2020" = "2020年",
-             "Year2019" = "2019年") |> 
-  gt_color_rows(columns = Year2023:Year2019,
-                palette = "ggsci::blue_material")
+  cols_label("Year2023" = "2023",
+             "Year2022" = "2022",
+             "Year2021" = "2021",
+             "Year2020" = "2020",
+             "Year2019" = "2019") |> 
+  data_color(columns = Year2023:Year2019,
+             palette = "ggsci::blue_material")
 ```
 
 ### 表の抽出（複数ページ）
