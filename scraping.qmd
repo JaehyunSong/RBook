@@ -1,6 +1,4 @@
 ---
-filters:
-   - lightbox
 resources: 
   - "Data/scraping/sample00.html"
   - "Data/scraping/sample01.html"
@@ -106,7 +104,7 @@ pacman::p_load(tidyverse, rvest, gt, gtExtras)
   		</ul>
 		<h1>第3章：表</h1>
 		<h2>数学成績</h2>
-		<table class="math_score" width=300px>
+		<table class="score" id="math">
 			<thead>
 				<tr>
 					<td>ID</td>
@@ -133,11 +131,13 @@ pacman::p_load(tidyverse, rvest, gt, gtExtras)
 			</tbody>
 		</table>
 		<h2>英語成績</h2>
-		<table class="english_score" width=300px>
+		<table class="score" id="english">
 			<thead>
-				<td>ID</td>
-				<td>名前</td>
-				<td>成績</td>
+				<tr>
+					<td>ID</td>
+					<td>名前</td>
+					<td>成績</td>
+				</tr>
 			</thead>
 			<tbody>
 				<tr>
@@ -165,7 +165,7 @@ pacman::p_load(tidyverse, rvest, gt, gtExtras)
 
 * [https://www.jaysong.net/RBook/Data/scraping/sample01.html](Data/scraping/sample01.html){target="_blank"}
 
-　内容的には同じものであるが、見た目がだいぶ異なることが分かるだろう。このページのソースを見ると、99%以上が一致していることが分かる。具体的には3行目に`<link>`タグが追加されているだけだ。3行目のコードは`style01.css`ファイルを読み込み、本ファイル（`sample01.html`）へ適用するということを意味する。他の内容は`sample00.html`と全く同じだ。つまり、この2つのファイルの見た目が異なるのは`style01.css`の存在が原因であると推測できる。
+　内容的には同じものであるが、見た目がだいぶ異なることが分かるだろう。ソースコードを見ると、一行を除き、`sample00.html`と`sample01.html`のコードは一致していることが分かる。具体的には4行目に`<link/>`タグが追加されているだけだ。この4行目のコードは`style01.css`ファイルを読み込み、本ファイル（`sample01.html`）へ適用するということを意味する。他の内容は`sample00.html`と全く同じだ。つまり、この2つのファイルの見た目が異なるのは`style01.css`の存在が原因であると推測できる。
 
 :::{.panel-tabset}
 ## `.html`コード
@@ -173,8 +173,8 @@ pacman::p_load(tidyverse, rvest, gt, gtExtras)
 ```{.html filename="https://www.jaysong.net/RBook/Data/scraping/sample01.html" code-line-numbers="true"}
 <html>
 	<head>
-		<link href="sample01.css" rel="stylesheet" type="text/css" media="all"/>
 		<meta charset="utf-8">
+		<link href="sample01.css" rel="stylesheet" type="text/css" media="all"/>
 		<title>HTMLの例</title>
 	</head>
 	<body>
@@ -188,7 +188,7 @@ pacman::p_load(tidyverse, rvest, gt, gtExtras)
   		</ul>
 		<h1>第3章：表</h1>
 		<h2>数学成績</h2>
-		<table class="math_score" width=300px>
+		<table class="score" id="math">
 			<thead>
 				<tr>
 					<td>ID</td>
@@ -215,11 +215,13 @@ pacman::p_load(tidyverse, rvest, gt, gtExtras)
 			</tbody>
 		</table>
 		<h2>英語成績</h2>
-		<table class="english_score" width=300px>
+		<table class="score" id="english">
 			<thead>
-				<td>ID</td>
-				<td>名前</td>
-				<td>成績</td>
+				<tr>
+					<td>ID</td>
+					<td>名前</td>
+					<td>成績</td>
+				</tr>
 			</thead>
 			<tbody>
 				<tr>
@@ -270,6 +272,9 @@ thead {
 }
 .book-title {
 	font-weight: 600;
+}
+.score {
+	width: 300px;
 }
 .tbl-score {
 	text-align: right;
@@ -367,22 +372,26 @@ h1, h2, h3 {
 
 ## {rvest}の使い方
 
-実習用のページを作っておこう。
+　実際のウェブスクレイピングをやってみる前に、{rvest}パッケージを使って[実習用のページ](https://www.jaysong.net/RBook/Data/scraping/sample01.html)（`sample01.html`）の内容を取得してみよう。
 
 * テキスト/表の取得
    * `html_elment()`、`html_elments()`で特定のタグやクラス、IDを抽出
    * `html_text()`、`html_text2()`や`html_table()`で抽出
    * 画像の場合、`<img>`タグの`src`属性を抽出する必要があるため、`html_attr()`
 
+　まずは、`read_html()`関数を使用し、スクレイピングするHTMLファイルそのものを読み込んでおく必要がある。引数はHTMLファイルのURL、もしくはパスだけで問題ないが、Shift-JISやEUC-KRといった邪悪なロケールで作成されたページであれば、`encoding`引数が必要となる。サンプルページはUTF-8であるため、URLのみで問題ない。
+
 ```{r}
 #| label: scraping-rvest-read
-url <- "https://www.jaysong.net/garage/rbook/scraping/sample01.html"
-
-my_html <- read_html(url)
+my_html <- read_html("https://www.jaysong.net/garage/rbook/scraping/sample01.html")
 my_html
 ```
 
-セレクターを指定した要素の抽出
+　中身は簡単にしか確認できないが、そもそもRでコードをすべて表示する必要もないので問題ないだろう。HTMLのソースコード全体が見たい場合はウェブブラウザーから確認しよう。ここでは問題なくHTMLファイルが読み込まれていることだけを確認すれば良い。
+
+　それではこの`my_html`からいくつかの要素を抽出してみよう。まずは、`タグ名`セレクターを使用し、特定のタグだけを抽出する。ここで使用する関数は`html_elements()`だ[^html_elements]。たとえば、ハイパーリンクを意味する`<a>`タグが使用された箇所すべてを読み組むには`html_elemtns(HTMLオブジェクト名, "a")`で良い。HTMLオブジェクト名（今回は`my_html`）は第1引数だから、パイプ演算子を使用しよう。
+
+[^html_elements]: 似たような名前の`html_element()`がある。ほぼ同じものであるが、`html_element()`は1ページ内に当該セレクターが複数回ある場合、最初のものだけを抽出する。一方、`html_elements()`はすべての要素を抽出する。
 
 ```{r}
 #| label: scraping-rvest-elements-01
@@ -390,10 +399,21 @@ my_html |>
   html_elements("a")
 ```
 
-更に`href`の値を抽出
+　しかし、通常、これらの内容すべてが必要になるケースは稀だろう。普通、`<a>`と`</a>`に囲まれたテキストの内容や、リンク先のURLのリストが欲しいだろう。`html_elements()`で指定したセレクター内のテキストを抽出する場合は、`html_text()`を使用する[^html_text2]。
+
+[^html_text2]: 似たような関数として`html_text2()`があるが、これは前後の不要なスペースやタブ、改行などを除外した上でテキストを取得する関数だ。
 
 ```{r}
 #| label: scraping-rvest-elements-02
+my_html |> 
+  html_elements("a") |> 
+  html_text()
+```
+
+　`<a>`と`</a>`に囲まれたテキストの内容でなく、リンク先のURLを抽出することもできる。`<a>`タグのリンク先は`href`属性で指定するため、`href`属性の値を抽出すれば良い。特定の属性の値を取得する関数は`html_attr()`であり、引数として属性名を指定すれば良い。
+
+```{r}
+#| label: scraping-rvest-elements-03
 my_html |> 
   html_elements("a") |> 
   html_attr("href")
@@ -402,7 +422,7 @@ my_html |>
 箇条書きの要素を抽出
 
 ```{r}
-#| label: scraping-rvest-elements-03
+#| label: scraping-rvest-elements-04
 my_html |> 
   html_elements("li")
 ```
@@ -410,16 +430,24 @@ my_html |>
 さらにテキストのみ抽出
 
 ```{r}
-#| label: scraping-rvest-elements-04
+#| label: scraping-rvest-elements-05
 my_html |> 
   html_elements("li") |> 
   html_text()
 ```
 
-クラス（`.クラス名`）の指定もOK
+　`html_elements()`にはタグ名以外のセレクターも使える。たとえば、クラス（`.クラス名`）やID（`#ID名`）の指定もできる。サンプルページには書籍名が3回登場し、それらは`<span>`タグに囲まれている。`<span>`タグ単体の機能はないが、特定のテキストにIDやクラスを割り当てる際によく使われる。今回の例だと、書籍名はクラスが`book-title`の`<span>`タグで囲まれている。したがって、書籍名を抽出する時には`html_elements(".book-title")`
 
 ```{r}
-#| label: scraping-rvest-elements-05
+#| label: scraping-rvest-elements-06
+my_html |> 
+  html_elements(".book-title")
+```
+
+　このように`book-title`クラスのタグと、その内容が全て抽出される。ここからテキストを抽出する場合は`html_text()`を使えば良い。
+
+```{r}
+#| label: scraping-rvest-elements-07
 my_html |> 
   html_elements(".book-title") |> 
   html_text()
@@ -451,6 +479,13 @@ my_tables
 my_table <- bind_rows(my_tables, .id = "科目")
 
 my_table
+```
+
+```{r}
+#| label: scraping-rvest-table-05
+my_html |> 
+  html_elements("h1") |> 
+  html_table()
 ```
 
 ## 実践
