@@ -524,21 +524,28 @@ my_html |>
 
 ### 表の抽出
 
-Wikipediaの[世界報道自由度ランキング](https://en.wikipedia.org/wiki/World_Press_Freedom_Index)の表をスクレイピング
+　まずは簡単な例から始めよう。ここでは英語版Wikipediaの[世界報道自由度ランキング](https://en.wikipedia.org/wiki/World_Press_Freedom_Index)の表をスクレイピングする。
 
 ```{r}
-#| label: scraping-hdi
-#| cache: true
+#| label: scraping-hdi-1
 #| warning: false
 url <- "https://en.wikipedia.org/wiki/World_Press_Freedom_Index"
 
 pfi_html <- read_html(url)
 
 pfi_html
+```
 
+```{r}
+#| label: scraping-hdi-2
 pfi_tbls <- pfi_html |> 
   html_table()
 
+pfi_tbls
+```
+
+```{r}
+#| label: scraping-hdi-3
 pfi_df <- pfi_tbls[[1]] |> 
   rename("Year2023" = "2023[5]",
          "Year2022" = "2022[6]",
@@ -549,7 +556,10 @@ pfi_df <- pfi_tbls[[1]] |>
          across(Year2023:Year2019, as.numeric))
 
 pfi_df
+```
 
+```{r}
+#| label: scraping-hdi-4
 pfi_df |> 
   filter(Country %in% c("Japan", "South Korea", "North Korea", "China",
                         "Hong Kong", "Taiwan", "Mongolia")) |> 
@@ -631,15 +641,39 @@ oc_df <- tibble(Rank      = html_elements(oc_html, ".rank") |>
          Date = paste0(Date, ", 2021"),
          Date = mdy(Date))
 
-#oc_df |> 
-#  separate(Platforms,
-#           into = paste0("P", 1:6),
-#           sep = ", ")
-
 oc_df |> 
   gt() |> 
   gt_img_rows(Tier) |> 
   cols_label("Date" = "First release date")
+
+oc_df |> 
+  separate(Platforms,
+           into = paste0("P", 1:6),
+           sep = ", ") |> 
+  pivot_longer(cols = P1:P6,
+               names_to = "X",
+               values_to = "Platform") |> 
+  drop_na(Platform) |> 
+  select(-X) |> 
+  mutate(Platform = factor(Platform, levels = c("PC", "PS4", "PS5",
+                                                "XB1", "XBXS", "Switch",
+                                                "Oculus"))) |> 
+  arrange(Rank, Platform) |> 
+  mutate(Platform = as.character(Platform),
+         Platform = recode(Platform,
+                           "PC"     = "Figs/Scraping/icon_pc.svg",
+                           "PS5"    = "Figs/Scraping/icon_ps5.svg",
+                           "PS4"    = "Figs/Scraping/icon_ps4.svg",
+                           "XB1"    = "Figs/Scraping/icon_xb1.svg",
+                           "XBXS"   = "Figs/Scraping/icon_xbxs.svg",
+                           "Switch" = "Figs/Scraping/icon_switch.svg",
+                           "Oculus" = "Figs/Scraping/icon_oculus.svg")) |> 
+  nest(Platform = Platform) |> 
+  select(-Date) |> 
+  gt() |> 
+  gt_img_rows(columns = Tier) |> 
+  gt_img_multi_rows(columns = Platform, height = 15) |> 
+  cols_align(columns = Platform, align = "left")
 ```
 
 ### 表以外の内容（複数ページ）
