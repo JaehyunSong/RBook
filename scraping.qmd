@@ -528,7 +528,64 @@ my_html |>
 
 ## 実践
 
-### 表の抽出
+### テキスト
+
+```{r}
+#| label: scraping-text-1
+rbook_html <- read_html("https://www.jaysong.net/RBook/")
+rbook_html
+```
+
+```{r}
+#| label: scraping-text-2
+rbook_html |> 
+  html_elements("#進捗状況") |> 
+  html_elements("a")
+```
+
+```{r}
+#| label: scraping-text-3
+rbook_urls <- rbook_html |> 
+  html_elements("#進捗状況") |> 
+  html_elements("a") |> 
+  html_attr("href")
+```
+
+```{r}
+#| label: scraping-text-4
+rbook_html |> 
+  html_elements("#進捗状況") |> 
+  html_elements("li") |> 
+  html_text()
+```
+
+```{r}
+#| label: scraping-text-5
+rbook_titles <- rbook_html |> 
+  html_elements("#進捗状況") |> 
+  html_elements("ul > li > ul > li") |> 
+  html_text()
+```
+
+```{r}
+#| label: scraping-text-6
+tibble(Titles = rbook_titles,
+       URL    = rbook_urls) |> 
+  separate(col  = Titles,
+           into = c("Section", "Title"),
+           sep  = ": ",
+           fill = "left") |> 
+  mutate(URL = str_remove(URL, "^\\.\\/"),
+         URL = paste0("https://www.jaysong.net/RBook/", URL)) |> 
+  gt() |> 
+  cols_label("Section" = "章",
+             "Title"   = "タイトル",
+             "URL"     = "リンク") |> 
+  sub_missing(columns = Section, missing_text = "付録") |> 
+  fmt_url(columns = URL, as_button = TRUE, label = "Link")
+```
+
+### 表
 
 　まずは簡単な例から始めよう。ここでは英語版Wikipediaの[世界報道自由度ランキング](https://en.wikipedia.org/wiki/World_Press_Freedom_Index)の表をスクレイピングする。長いURLは別途のオブジェクトに格納しておくと、コードが簡潔になるだけでなく、コードのリサイクルも簡単になる。ここでは読み込んだHTMLファイルを`pfi_html`という名のオブジェクトとして格納しておく。
 
@@ -593,7 +650,7 @@ pfi_df |>
              palette = "ggsci::blue_material")
 ```
 
-### 表の抽出（複数ページ）
+### 表（複数ページ）
 
 　続いて、複数のHTMLページから表を取得してみよう。今回はJリーグ（1部から3部まで）の順位表が対象である。
 
