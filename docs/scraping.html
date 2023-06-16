@@ -1075,7 +1075,7 @@ $英語
 <h2 data-number="30.3" class="anchored" data-anchor-id="実践"><span class="header-section-number">30.3</span> 実践</h2>
 <section id="表の抽出" class="level3" data-number="30.3.1">
 <h3 data-number="30.3.1" class="anchored" data-anchor-id="表の抽出"><span class="header-section-number">30.3.1</span> 表の抽出</h3>
-<p>　まずは簡単な例から始めよう。ここでは英語版Wikipediaの<a href="https://en.wikipedia.org/wiki/World_Press_Freedom_Index">世界報道自由度ランキング</a>の表をスクレイピングする。</p>
+<p>　まずは簡単な例から始めよう。ここでは英語版Wikipediaの<a href="https://en.wikipedia.org/wiki/World_Press_Freedom_Index">世界報道自由度ランキング</a>の表をスクレイピングする。長いURLは別途のオブジェクトに格納しておくと、コードが簡潔になるだけでなく、コードのリサイクルも簡単になる。ここでは読み込んだHTMLファイルを<code>pfi_html</code>という名のオブジェクトとして格納しておく。</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://en.wikipedia.org/wiki/World_Press_Freedom_Index"</span></span>
 <span id="cb39-2"><a href="#cb39-2"></a></span>
@@ -1089,6 +1089,7 @@ $英語
 [2] &lt;body class="skin-vector skin-vector-search-vue mediawiki ltr sitedir-ltr ...</code></pre>
 </div>
 </div>
+<p>　続いて、<code>html_table()</code>を使用し、<code>pfi_html</code>から表（<code>&lt;table&gt;</code>タグ）を取得し、<code>pfi_tbls</code>オブジェクトに格納する。</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>pfi_tbls <span class="ot">&lt;-</span> pfi_html <span class="sc">|&gt;</span> </span>
 <span id="cb41-2"><a href="#cb41-2"></a>  <span class="fu">html_table</span>()</span>
@@ -1128,17 +1129,40 @@ $英語
 #   ²​`.mw-parser-output .navbar{display:inline;font-size:88%;font-weight:normal}.mw-parser-output .navbar-collapse{float:left;text-align:left}.mw-parser-output .navbar-boxtext{word-spacing:0}.mw-parser-output .navbar ul{display:inline-block;white-space:nowrap;line-height:inherit}.mw-parser-output .navbar-brackets::before{margin-right:-0.125em;content:"[ "}.mw-parser-output .navbar-brackets::after{margin-left:-0.125em;content:" ]"}.mw-parser-output .navbar li{word-spacing:-0.125em}.mw-parser-output .navbar a&gt;span,.mw-parser-output .navbar a&gt;abbr{text-decoration:inherit}.mw-parser-output .navbar-mini abbr{font-variant:small-caps;border-bottom:none;text-decoration:none;cursor:inherit}.mw-parser-output .navbar-ct-full{font-size:114%;margin:0 7em}.mw-parser-output .navbar-ct-mini{font-size:114%;margin:0 4em}vteLists of countries by political rankings`</code></pre>
 </div>
 </div>
+<p>　当該ページには2つの表があり、我々が欲しい表はリストの1番目の要素である。<code>pfi_tbls</code>の1番目の要素のみを抽出し、更に<code>2023[5]</code>のような列名を<code>Year2023</code>のように修正し、<code>pfi_df</code>に格納する。</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>pfi_df <span class="ot">&lt;-</span> pfi_tbls[[<span class="dv">1</span>]] <span class="sc">|&gt;</span> </span>
 <span id="cb43-2"><a href="#cb43-2"></a>  <span class="fu">rename</span>(<span class="st">"Year2023"</span> <span class="ot">=</span> <span class="st">"2023[5]"</span>,</span>
 <span id="cb43-3"><a href="#cb43-3"></a>         <span class="st">"Year2022"</span> <span class="ot">=</span> <span class="st">"2022[6]"</span>,</span>
 <span id="cb43-4"><a href="#cb43-4"></a>         <span class="st">"Year2021"</span> <span class="ot">=</span> <span class="st">"2021[7]"</span>,</span>
 <span id="cb43-5"><a href="#cb43-5"></a>         <span class="st">"Year2020"</span> <span class="ot">=</span> <span class="st">"2020[8]"</span>,</span>
-<span id="cb43-6"><a href="#cb43-6"></a>         <span class="st">"Year2019"</span> <span class="ot">=</span> <span class="st">"2019[9]"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb43-7"><a href="#cb43-7"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(Year2023<span class="sc">:</span>Year2019, <span class="sc">~</span><span class="fu">str_replace</span>(.x, <span class="st">"</span><span class="sc">\\</span><span class="st">(([0-9]+)</span><span class="sc">\\</span><span class="st">)"</span>, <span class="st">""</span>)),</span>
-<span id="cb43-8"><a href="#cb43-8"></a>         <span class="fu">across</span>(Year2023<span class="sc">:</span>Year2019, as.numeric))</span>
-<span id="cb43-9"><a href="#cb43-9"></a></span>
-<span id="cb43-10"><a href="#cb43-10"></a>pfi_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb43-6"><a href="#cb43-6"></a>         <span class="st">"Year2019"</span> <span class="ot">=</span> <span class="st">"2019[9]"</span>)</span>
+<span id="cb43-7"><a href="#cb43-7"></a></span>
+<span id="cb43-8"><a href="#cb43-8"></a>pfi_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 180 × 6
+   Country     Year2023   Year2022   Year2021   Year2020   Year2019  
+   &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;     
+ 1 Norway      (001)95.18 (001)92.65 (001)93.28 (001)92.16 (001)92.18
+ 2 Ireland     (002)89.91 (006)88.3  (012)88.09 (013)87.40 (015)85.00
+ 3 Denmark     (003)89.48 (002)90.27 (004)91.43 (003)91.87 (005)90.13
+ 4 Sweden      (004)88.15 (003)88.84 (003)92.76 (004)90.75 (003)91.69
+ 5 Finland     (005)87.94 (005)88.42 (002)93.01 (002)92.07 (002)92.10
+ 6 Netherlands (006)87.00 (028)77.93 (006)90.33 (005)90.04 (004)91.37
+ 7 Lithuania   (007)86.79 (009)84.14 (028)79.95 (028)78.81 (030)77.94
+ 8 Estonia     (008)85.31 (004)88.83 (015)84.75 (014)87.39 (011)87.73
+ 9 Portugal    (009)84.60 (007)87.07 (009)89.89 (010)88.17 (012)87.37
+10 East Timor  (010)84.49 (017)81.89 (071)70.89 (078)70.10 (084)70.07
+# ℹ 170 more rows</code></pre>
+</div>
+</div>
+<p>　<code>pfi_df</code>を見ると、<code>Country</code>以外の列は世界報道自由度<strong>指数</strong>以外にもカッコ内に<strong>順位</strong>が書かれていることが分かる。具体的には<code>(順位)指数</code>の構造になっている。<code>str_remove()</code>関数を使って、ここから<code>(順位)</code>の箇所を削除しよう。「<code>(</code>で始まり（=<code>^\\(</code>）、一つ以上の数字が並び（=<code>([0-9]+)</code>）、その後に出てくる<code>)</code>まで（=<code>\\)</code>）」の箇所が削除対象であるため、正規表現は<code>^\\(([0-9]+)\\)</code>となる。正規表現の詳細は第<a href="string.html" class="quarto-xref"><span>17</span></a>章を参照されたい。抽出が終わっても、まだcharacter型のままなので、<code>as.numeric()</code>関数でnumeric型に変換する。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a>pfi_df <span class="ot">&lt;-</span> pfi_df <span class="sc">|&gt;</span> </span>
+<span id="cb45-2"><a href="#cb45-2"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(Year2023<span class="sc">:</span>Year2019, <span class="sc">~</span><span class="fu">str_remove</span>(.x, <span class="st">"^</span><span class="sc">\\</span><span class="st">(([0-9]+)</span><span class="sc">\\</span><span class="st">)"</span>)),</span>
+<span id="cb45-3"><a href="#cb45-3"></a>         <span class="fu">across</span>(Year2023<span class="sc">:</span>Year2019, as.numeric))</span>
+<span id="cb45-4"><a href="#cb45-4"></a></span>
+<span id="cb45-5"><a href="#cb45-5"></a>pfi_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 180 × 6
    Country     Year2023 Year2022 Year2021 Year2020 Year2019
@@ -1156,36 +1180,37 @@ $英語
 # ℹ 170 more rows</code></pre>
 </div>
 </div>
+<p>　これで表の抽出が終わった。すべての表を出力しても良いが、かなり長くなるため東アジア地域のみに限定して<code>pfi_df</code>を{gt}パッケージで出力し、指数の値ごとに色分けをする。セルの色塗りについては第<a href="table.html#sec-gt-highlight" class="quarto-xref"><span>22.5</span></a>章を参照されたい。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a>pfi_df <span class="sc">|&gt;</span> </span>
-<span id="cb45-2"><a href="#cb45-2"></a>  <span class="fu">filter</span>(Country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Japan"</span>, <span class="st">"South Korea"</span>, <span class="st">"North Korea"</span>, <span class="st">"China"</span>,</span>
-<span id="cb45-3"><a href="#cb45-3"></a>                        <span class="st">"Hong Kong"</span>, <span class="st">"Taiwan"</span>, <span class="st">"Mongolia"</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb45-4"><a href="#cb45-4"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb45-5"><a href="#cb45-5"></a>  <span class="fu">cols_label</span>(<span class="st">"Year2023"</span> <span class="ot">=</span> <span class="st">"2023"</span>,</span>
-<span id="cb45-6"><a href="#cb45-6"></a>             <span class="st">"Year2022"</span> <span class="ot">=</span> <span class="st">"2022"</span>,</span>
-<span id="cb45-7"><a href="#cb45-7"></a>             <span class="st">"Year2021"</span> <span class="ot">=</span> <span class="st">"2021"</span>,</span>
-<span id="cb45-8"><a href="#cb45-8"></a>             <span class="st">"Year2020"</span> <span class="ot">=</span> <span class="st">"2020"</span>,</span>
-<span id="cb45-9"><a href="#cb45-9"></a>             <span class="st">"Year2019"</span> <span class="ot">=</span> <span class="st">"2019"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb45-10"><a href="#cb45-10"></a>  <span class="fu">data_color</span>(<span class="at">columns =</span> Year2023<span class="sc">:</span>Year2019,</span>
-<span id="cb45-11"><a href="#cb45-11"></a>             <span class="at">palette =</span> <span class="st">"ggsci::blue_material"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a>pfi_df <span class="sc">|&gt;</span> </span>
+<span id="cb47-2"><a href="#cb47-2"></a>  <span class="fu">filter</span>(Country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Japan"</span>, <span class="st">"South Korea"</span>, <span class="st">"North Korea"</span>, <span class="st">"China"</span>,</span>
+<span id="cb47-3"><a href="#cb47-3"></a>                        <span class="st">"Hong Kong"</span>, <span class="st">"Taiwan"</span>, <span class="st">"Mongolia"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb47-4"><a href="#cb47-4"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb47-5"><a href="#cb47-5"></a>  <span class="fu">cols_label</span>(<span class="st">"Year2023"</span> <span class="ot">=</span> <span class="st">"2023"</span>,</span>
+<span id="cb47-6"><a href="#cb47-6"></a>             <span class="st">"Year2022"</span> <span class="ot">=</span> <span class="st">"2022"</span>,</span>
+<span id="cb47-7"><a href="#cb47-7"></a>             <span class="st">"Year2021"</span> <span class="ot">=</span> <span class="st">"2021"</span>,</span>
+<span id="cb47-8"><a href="#cb47-8"></a>             <span class="st">"Year2020"</span> <span class="ot">=</span> <span class="st">"2020"</span>,</span>
+<span id="cb47-9"><a href="#cb47-9"></a>             <span class="st">"Year2019"</span> <span class="ot">=</span> <span class="st">"2019"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb47-10"><a href="#cb47-10"></a>  <span class="fu">data_color</span>(<span class="at">columns =</span> Year2023<span class="sc">:</span>Year2019,</span>
+<span id="cb47-11"><a href="#cb47-11"></a>             <span class="at">palette =</span> <span class="st">"ggsci::blue_material"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="ivfvxkbmua" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ivfvxkbmua table {
+<div id="okqnpfxlsr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#okqnpfxlsr table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ivfvxkbmua thead, #ivfvxkbmua tbody, #ivfvxkbmua tfoot, #ivfvxkbmua tr, #ivfvxkbmua td, #ivfvxkbmua th {
+#okqnpfxlsr thead, #okqnpfxlsr tbody, #okqnpfxlsr tfoot, #okqnpfxlsr tr, #okqnpfxlsr td, #okqnpfxlsr th {
   border-style: none;
 }
 
-#ivfvxkbmua p {
+#okqnpfxlsr p {
   margin: 0;
   padding: 0;
 }
 
-#ivfvxkbmua .gt_table {
+#okqnpfxlsr .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1211,12 +1236,12 @@ $英語
   border-left-color: #D3D3D3;
 }
 
-#ivfvxkbmua .gt_caption {
+#okqnpfxlsr .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ivfvxkbmua .gt_title {
+#okqnpfxlsr .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1228,7 +1253,7 @@ $英語
   border-bottom-width: 0;
 }
 
-#ivfvxkbmua .gt_subtitle {
+#okqnpfxlsr .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1240,7 +1265,7 @@ $英語
   border-top-width: 0;
 }
 
-#ivfvxkbmua .gt_heading {
+#okqnpfxlsr .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1252,13 +1277,13 @@ $英語
   border-right-color: #D3D3D3;
 }
 
-#ivfvxkbmua .gt_bottom_border {
+#okqnpfxlsr .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ivfvxkbmua .gt_col_headings {
+#okqnpfxlsr .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1273,7 +1298,7 @@ $英語
   border-right-color: #D3D3D3;
 }
 
-#ivfvxkbmua .gt_col_heading {
+#okqnpfxlsr .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1293,7 +1318,7 @@ $英語
   overflow-x: hidden;
 }
 
-#ivfvxkbmua .gt_column_spanner_outer {
+#okqnpfxlsr .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1305,15 +1330,15 @@ $英語
   padding-right: 4px;
 }
 
-#ivfvxkbmua .gt_column_spanner_outer:first-child {
+#okqnpfxlsr .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ivfvxkbmua .gt_column_spanner_outer:last-child {
+#okqnpfxlsr .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ivfvxkbmua .gt_column_spanner {
+#okqnpfxlsr .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1325,11 +1350,11 @@ $英語
   width: 100%;
 }
 
-#ivfvxkbmua .gt_spanner_row {
+#okqnpfxlsr .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ivfvxkbmua .gt_group_heading {
+#okqnpfxlsr .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1355,7 +1380,7 @@ $英語
   text-align: left;
 }
 
-#ivfvxkbmua .gt_empty_group_heading {
+#okqnpfxlsr .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1370,15 +1395,15 @@ $英語
   vertical-align: middle;
 }
 
-#ivfvxkbmua .gt_from_md > :first-child {
+#okqnpfxlsr .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ivfvxkbmua .gt_from_md > :last-child {
+#okqnpfxlsr .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ivfvxkbmua .gt_row {
+#okqnpfxlsr .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1397,7 +1422,7 @@ $英語
   overflow-x: hidden;
 }
 
-#ivfvxkbmua .gt_stub {
+#okqnpfxlsr .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1410,7 +1435,7 @@ $英語
   padding-right: 5px;
 }
 
-#ivfvxkbmua .gt_stub_row_group {
+#okqnpfxlsr .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1424,15 +1449,15 @@ $英語
   vertical-align: top;
 }
 
-#ivfvxkbmua .gt_row_group_first td {
+#okqnpfxlsr .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ivfvxkbmua .gt_row_group_first th {
+#okqnpfxlsr .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ivfvxkbmua .gt_summary_row {
+#okqnpfxlsr .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1442,16 +1467,16 @@ $英語
   padding-right: 5px;
 }
 
-#ivfvxkbmua .gt_first_summary_row {
+#okqnpfxlsr .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ivfvxkbmua .gt_first_summary_row.thick {
+#okqnpfxlsr .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ivfvxkbmua .gt_last_summary_row {
+#okqnpfxlsr .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1461,7 +1486,7 @@ $英語
   border-bottom-color: #D3D3D3;
 }
 
-#ivfvxkbmua .gt_grand_summary_row {
+#okqnpfxlsr .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1471,7 +1496,7 @@ $英語
   padding-right: 5px;
 }
 
-#ivfvxkbmua .gt_first_grand_summary_row {
+#okqnpfxlsr .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1481,7 +1506,7 @@ $英語
   border-top-color: #D3D3D3;
 }
 
-#ivfvxkbmua .gt_last_grand_summary_row_top {
+#okqnpfxlsr .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1491,11 +1516,11 @@ $英語
   border-bottom-color: #D3D3D3;
 }
 
-#ivfvxkbmua .gt_striped {
+#okqnpfxlsr .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ivfvxkbmua .gt_table_body {
+#okqnpfxlsr .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1504,7 +1529,7 @@ $英語
   border-bottom-color: #D3D3D3;
 }
 
-#ivfvxkbmua .gt_footnotes {
+#okqnpfxlsr .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1518,7 +1543,7 @@ $英語
   border-right-color: #D3D3D3;
 }
 
-#ivfvxkbmua .gt_footnote {
+#okqnpfxlsr .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1527,7 +1552,7 @@ $英語
   padding-right: 5px;
 }
 
-#ivfvxkbmua .gt_sourcenotes {
+#okqnpfxlsr .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1541,7 +1566,7 @@ $英語
   border-right-color: #D3D3D3;
 }
 
-#ivfvxkbmua .gt_sourcenote {
+#okqnpfxlsr .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1549,63 +1574,63 @@ $英語
   padding-right: 5px;
 }
 
-#ivfvxkbmua .gt_left {
+#okqnpfxlsr .gt_left {
   text-align: left;
 }
 
-#ivfvxkbmua .gt_center {
+#okqnpfxlsr .gt_center {
   text-align: center;
 }
 
-#ivfvxkbmua .gt_right {
+#okqnpfxlsr .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ivfvxkbmua .gt_font_normal {
+#okqnpfxlsr .gt_font_normal {
   font-weight: normal;
 }
 
-#ivfvxkbmua .gt_font_bold {
+#okqnpfxlsr .gt_font_bold {
   font-weight: bold;
 }
 
-#ivfvxkbmua .gt_font_italic {
+#okqnpfxlsr .gt_font_italic {
   font-style: italic;
 }
 
-#ivfvxkbmua .gt_super {
+#okqnpfxlsr .gt_super {
   font-size: 65%;
 }
 
-#ivfvxkbmua .gt_footnote_marks {
+#okqnpfxlsr .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ivfvxkbmua .gt_asterisk {
+#okqnpfxlsr .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ivfvxkbmua .gt_indent_1 {
+#okqnpfxlsr .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ivfvxkbmua .gt_indent_2 {
+#okqnpfxlsr .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ivfvxkbmua .gt_indent_3 {
+#okqnpfxlsr .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ivfvxkbmua .gt_indent_4 {
+#okqnpfxlsr .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ivfvxkbmua .gt_indent_5 {
+#okqnpfxlsr .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1675,21 +1700,21 @@ $英語
 <section id="表の抽出複数ページ" class="level3" data-number="30.3.2">
 <h3 data-number="30.3.2" class="anchored" data-anchor-id="表の抽出複数ページ"><span class="header-section-number">30.3.2</span> 表の抽出（複数ページ）</h3>
 <div class="cell" data-layout-align="center" data-hash="scraping_cache/html/scraping-j_1d2c9514d85ea5349da8956cc015b96a">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a>j_list <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"https://www.jleague.jp/standings/j"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span>
-<span id="cb46-2"><a href="#cb46-2"></a></span>
-<span id="cb46-3"><a href="#cb46-3"></a>tbl_list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb46-4"><a href="#cb46-4"></a></span>
-<span id="cb46-5"><a href="#cb46-5"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(j_list)) {</span>
-<span id="cb46-6"><a href="#cb46-6"></a>  temp_html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(j_list[i])</span>
-<span id="cb46-7"><a href="#cb46-7"></a>  temp_tbl  <span class="ot">&lt;-</span> temp_html <span class="sc">|&gt;</span> </span>
-<span id="cb46-8"><a href="#cb46-8"></a>    <span class="fu">html_table</span>(<span class="at">header =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb46-9"><a href="#cb46-9"></a>  </span>
-<span id="cb46-10"><a href="#cb46-10"></a>  tbl_list[[<span class="fu">paste0</span>(<span class="st">"J"</span>, i)]] <span class="ot">&lt;-</span> temp_tbl[[<span class="dv">1</span>]]</span>
-<span id="cb46-11"><a href="#cb46-11"></a>  </span>
-<span id="cb46-12"><a href="#cb46-12"></a>  <span class="fu">Sys.sleep</span>(<span class="dv">1</span>)</span>
-<span id="cb46-13"><a href="#cb46-13"></a>}</span>
-<span id="cb46-14"><a href="#cb46-14"></a></span>
-<span id="cb46-15"><a href="#cb46-15"></a>tbl_list</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a>j_list <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"https://www.jleague.jp/standings/j"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span>
+<span id="cb48-2"><a href="#cb48-2"></a></span>
+<span id="cb48-3"><a href="#cb48-3"></a>tbl_list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb48-4"><a href="#cb48-4"></a></span>
+<span id="cb48-5"><a href="#cb48-5"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(j_list)) {</span>
+<span id="cb48-6"><a href="#cb48-6"></a>  temp_html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(j_list[i])</span>
+<span id="cb48-7"><a href="#cb48-7"></a>  temp_tbl  <span class="ot">&lt;-</span> temp_html <span class="sc">|&gt;</span> </span>
+<span id="cb48-8"><a href="#cb48-8"></a>    <span class="fu">html_table</span>(<span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb48-9"><a href="#cb48-9"></a>  </span>
+<span id="cb48-10"><a href="#cb48-10"></a>  tbl_list[[<span class="fu">paste0</span>(<span class="st">"J"</span>, i)]] <span class="ot">&lt;-</span> temp_tbl[[<span class="dv">1</span>]]</span>
+<span id="cb48-11"><a href="#cb48-11"></a>  </span>
+<span id="cb48-12"><a href="#cb48-12"></a>  <span class="fu">Sys.sleep</span>(<span class="dv">1</span>)</span>
+<span id="cb48-13"><a href="#cb48-13"></a>}</span>
+<span id="cb48-14"><a href="#cb48-14"></a></span>
+<span id="cb48-15"><a href="#cb48-15"></a>tbl_list</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$J1
 # A tibble: 18 × 12
@@ -1758,14 +1783,14 @@ $J3
 20 NA       20 ギラヴァンツ北…     6     12     1     3     8    11    19     -8
 # ℹ 1 more variable: 直近5試合 &lt;lgl&gt;</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a>j_df <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(tbl_list, <span class="at">.id =</span> <span class="st">"League"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a>j_df <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(tbl_list, <span class="at">.id =</span> <span class="st">"League"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>New names:
 New names:
 New names:
 • `` -&gt; `...1`</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a>j_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a>j_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 60 × 13
    League ...1   順位 クラブ名  勝点 試合数    勝    分    負  得点  失点 得失点
@@ -1783,13 +1808,13 @@ New names:
 # ℹ 50 more rows
 # ℹ 1 more variable: 直近5試合 &lt;lgl&gt;</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a>j_df <span class="ot">&lt;-</span> j_df <span class="sc">|&gt;</span> </span>
-<span id="cb52-2"><a href="#cb52-2"></a>  <span class="fu">select</span>(<span class="sc">!</span><span class="fu">c</span>(<span class="st">"...1"</span>, <span class="st">"直近5試合"</span>))</span>
-<span id="cb52-3"><a href="#cb52-3"></a></span>
-<span id="cb52-4"><a href="#cb52-4"></a>j_df <span class="sc">|&gt;</span> </span>
-<span id="cb52-5"><a href="#cb52-5"></a>  <span class="fu">mutate</span>(クラブ名 <span class="ot">=</span> <span class="fu">str_sub</span>(クラブ名, <span class="dv">1</span>, <span class="fu">nchar</span>(クラブ名) <span class="sc">/</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb52-6"><a href="#cb52-6"></a>  <span class="fu">group_by</span>(League) <span class="sc">|&gt;</span> </span>
-<span id="cb52-7"><a href="#cb52-7"></a>  <span class="fu">gt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a>j_df <span class="ot">&lt;-</span> j_df <span class="sc">|&gt;</span> </span>
+<span id="cb54-2"><a href="#cb54-2"></a>  <span class="fu">select</span>(<span class="sc">!</span><span class="fu">c</span>(<span class="st">"...1"</span>, <span class="st">"直近5試合"</span>))</span>
+<span id="cb54-3"><a href="#cb54-3"></a></span>
+<span id="cb54-4"><a href="#cb54-4"></a>j_df <span class="sc">|&gt;</span> </span>
+<span id="cb54-5"><a href="#cb54-5"></a>  <span class="fu">mutate</span>(クラブ名 <span class="ot">=</span> <span class="fu">str_sub</span>(クラブ名, <span class="dv">1</span>, <span class="fu">nchar</span>(クラブ名) <span class="sc">/</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb54-6"><a href="#cb54-6"></a>  <span class="fu">group_by</span>(League) <span class="sc">|&gt;</span> </span>
+<span id="cb54-7"><a href="#cb54-7"></a>  <span class="fu">gt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="xcoyyxtyvz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#xcoyyxtyvz table {
@@ -2873,34 +2898,34 @@ New names:
 <li>表のように見えるが、表ではない（<code>&lt;div&gt;</code>が並んでいるだけ）。</li>
 <li><code>html_nodes()</code>でランキング、画像URL、スコアなどをベクトルとして抽出し、R側で表にする。</li>
 </ul>
-<div class="cell" data-layout-align="center" data-hash="scraping_cache/html/scraping-oc-single_fb936513245ea690746d6a66e0052e69">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1"></a>oc_html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="st">"https://opencritic.com/browse/all/2021"</span>)</span>
-<span id="cb53-2"><a href="#cb53-2"></a></span>
-<span id="cb53-3"><a href="#cb53-3"></a>oc_html <span class="ot">&lt;-</span> oc_html <span class="sc">|&gt;</span> </span>
-<span id="cb53-4"><a href="#cb53-4"></a>  <span class="fu">html_element</span>(<span class="st">".desktop-game-display"</span>)</span>
-<span id="cb53-5"><a href="#cb53-5"></a></span>
-<span id="cb53-6"><a href="#cb53-6"></a></span>
-<span id="cb53-7"><a href="#cb53-7"></a>oc_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Rank      =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".rank"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb53-8"><a href="#cb53-8"></a>                  <span class="fu">html_text2</span>(),</span>
-<span id="cb53-9"><a href="#cb53-9"></a>                <span class="at">Tier      =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">"img"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb53-10"><a href="#cb53-10"></a>                  <span class="fu">html_attr</span>(<span class="st">"src"</span>),</span>
-<span id="cb53-11"><a href="#cb53-11"></a>                <span class="at">Score     =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".score"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb53-12"><a href="#cb53-12"></a>                  <span class="fu">html_text2</span>(),</span>
-<span id="cb53-13"><a href="#cb53-13"></a>                <span class="at">Name      =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".game-name"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb53-14"><a href="#cb53-14"></a>                  <span class="fu">html_text2</span>(),</span>
-<span id="cb53-15"><a href="#cb53-15"></a>                <span class="at">Platforms =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".platforms"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb53-16"><a href="#cb53-16"></a>                  <span class="fu">html_text2</span>(),</span>
-<span id="cb53-17"><a href="#cb53-17"></a>                <span class="at">Date      =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".first-release-date"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb53-18"><a href="#cb53-18"></a>                  <span class="fu">html_text2</span>()) <span class="sc">|&gt;</span> </span>
-<span id="cb53-19"><a href="#cb53-19"></a>  <span class="fu">mutate</span>(<span class="at">Rank =</span> <span class="fu">str_remove</span>(Rank, <span class="st">"</span><span class="sc">\\</span><span class="st">."</span>),</span>
-<span id="cb53-20"><a href="#cb53-20"></a>         <span class="at">Rank =</span> <span class="fu">as.numeric</span>(Rank),</span>
-<span id="cb53-21"><a href="#cb53-21"></a>         <span class="at">Date =</span> <span class="fu">paste0</span>(Date, <span class="st">", 2021"</span>),</span>
-<span id="cb53-22"><a href="#cb53-22"></a>         <span class="at">Date =</span> <span class="fu">mdy</span>(Date))</span>
-<span id="cb53-23"><a href="#cb53-23"></a></span>
-<span id="cb53-24"><a href="#cb53-24"></a>oc_df <span class="sc">|&gt;</span> </span>
-<span id="cb53-25"><a href="#cb53-25"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb53-26"><a href="#cb53-26"></a>  <span class="fu">gt_img_rows</span>(Tier) <span class="sc">|&gt;</span> </span>
-<span id="cb53-27"><a href="#cb53-27"></a>  <span class="fu">cols_label</span>(<span class="st">"Date"</span> <span class="ot">=</span> <span class="st">"First release date"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-layout-align="center" data-hash="scraping_cache/html/scraping-oc-single_21f802d22bcbc176504f94a5603664f0">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1"></a>oc_html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="st">"https://opencritic.com/browse/all/2021"</span>)</span>
+<span id="cb55-2"><a href="#cb55-2"></a></span>
+<span id="cb55-3"><a href="#cb55-3"></a>oc_html <span class="ot">&lt;-</span> oc_html <span class="sc">|&gt;</span> </span>
+<span id="cb55-4"><a href="#cb55-4"></a>  <span class="fu">html_element</span>(<span class="st">".desktop-game-display"</span>)</span>
+<span id="cb55-5"><a href="#cb55-5"></a></span>
+<span id="cb55-6"><a href="#cb55-6"></a></span>
+<span id="cb55-7"><a href="#cb55-7"></a>oc_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Rank      =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".rank"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb55-8"><a href="#cb55-8"></a>                  <span class="fu">html_text2</span>(),</span>
+<span id="cb55-9"><a href="#cb55-9"></a>                <span class="at">Tier      =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">"img"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb55-10"><a href="#cb55-10"></a>                  <span class="fu">html_attr</span>(<span class="st">"src"</span>),</span>
+<span id="cb55-11"><a href="#cb55-11"></a>                <span class="at">Score     =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".score"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb55-12"><a href="#cb55-12"></a>                  <span class="fu">html_text2</span>(),</span>
+<span id="cb55-13"><a href="#cb55-13"></a>                <span class="at">Name      =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".game-name"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb55-14"><a href="#cb55-14"></a>                  <span class="fu">html_text2</span>(),</span>
+<span id="cb55-15"><a href="#cb55-15"></a>                <span class="at">Platforms =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".platforms"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb55-16"><a href="#cb55-16"></a>                  <span class="fu">html_text2</span>(),</span>
+<span id="cb55-17"><a href="#cb55-17"></a>                <span class="at">Date      =</span> <span class="fu">html_elements</span>(oc_html, <span class="st">".first-release-date"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb55-18"><a href="#cb55-18"></a>                  <span class="fu">html_text2</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb55-19"><a href="#cb55-19"></a>  <span class="fu">mutate</span>(<span class="at">Rank =</span> <span class="fu">str_remove</span>(Rank, <span class="st">"</span><span class="sc">\\</span><span class="st">."</span>),</span>
+<span id="cb55-20"><a href="#cb55-20"></a>         <span class="at">Rank =</span> <span class="fu">as.numeric</span>(Rank),</span>
+<span id="cb55-21"><a href="#cb55-21"></a>         <span class="at">Date =</span> <span class="fu">paste0</span>(Date, <span class="st">", 2021"</span>),</span>
+<span id="cb55-22"><a href="#cb55-22"></a>         <span class="at">Date =</span> <span class="fu">mdy</span>(Date))</span>
+<span id="cb55-23"><a href="#cb55-23"></a></span>
+<span id="cb55-24"><a href="#cb55-24"></a>oc_df <span class="sc">|&gt;</span> </span>
+<span id="cb55-25"><a href="#cb55-25"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb55-26"><a href="#cb55-26"></a>  <span class="fu">gt_img_rows</span>(Tier) <span class="sc">|&gt;</span> </span>
+<span id="cb55-27"><a href="#cb55-27"></a>  <span class="fu">cols_label</span>(<span class="st">"Date"</span> <span class="ot">=</span> <span class="st">"First release date"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="tzxtfovlvk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#tzxtfovlvk table {
@@ -3481,38 +3506,35 @@ New names:
 </table>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a>oc_df <span class="sc">|&gt;</span> </span>
-<span id="cb54-2"><a href="#cb54-2"></a>  <span class="fu">separate</span>(Platforms,</span>
-<span id="cb54-3"><a href="#cb54-3"></a>           <span class="at">into =</span> <span class="fu">paste0</span>(<span class="st">"P"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>),</span>
-<span id="cb54-4"><a href="#cb54-4"></a>           <span class="at">sep =</span> <span class="st">", "</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb54-5"><a href="#cb54-5"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> P1<span class="sc">:</span>P6,</span>
-<span id="cb54-6"><a href="#cb54-6"></a>               <span class="at">names_to =</span> <span class="st">"X"</span>,</span>
-<span id="cb54-7"><a href="#cb54-7"></a>               <span class="at">values_to =</span> <span class="st">"Platform"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb54-8"><a href="#cb54-8"></a>  <span class="fu">drop_na</span>(Platform) <span class="sc">|&gt;</span> </span>
-<span id="cb54-9"><a href="#cb54-9"></a>  <span class="fu">select</span>(<span class="sc">-</span>X) <span class="sc">|&gt;</span> </span>
-<span id="cb54-10"><a href="#cb54-10"></a>  <span class="fu">mutate</span>(<span class="at">Platform =</span> <span class="fu">factor</span>(Platform, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"PC"</span>, <span class="st">"PS4"</span>, <span class="st">"PS5"</span>,</span>
-<span id="cb54-11"><a href="#cb54-11"></a>                                                <span class="st">"XB1"</span>, <span class="st">"XBXS"</span>, <span class="st">"Switch"</span>,</span>
-<span id="cb54-12"><a href="#cb54-12"></a>                                                <span class="st">"Oculus"</span>))) <span class="sc">|&gt;</span> </span>
-<span id="cb54-13"><a href="#cb54-13"></a>  <span class="fu">arrange</span>(Rank, Platform) <span class="sc">|&gt;</span> </span>
-<span id="cb54-14"><a href="#cb54-14"></a>  <span class="fu">mutate</span>(<span class="at">Platform =</span> <span class="fu">as.character</span>(Platform),</span>
-<span id="cb54-15"><a href="#cb54-15"></a>         <span class="at">Platform =</span> <span class="fu">recode</span>(Platform,</span>
-<span id="cb54-16"><a href="#cb54-16"></a>                           <span class="st">"PC"</span>     <span class="ot">=</span> <span class="st">"Figs/Scraping/icon_pc.svg"</span>,</span>
-<span id="cb54-17"><a href="#cb54-17"></a>                           <span class="st">"PS5"</span>    <span class="ot">=</span> <span class="st">"Figs/Scraping/icon_ps5.svg"</span>,</span>
-<span id="cb54-18"><a href="#cb54-18"></a>                           <span class="st">"PS4"</span>    <span class="ot">=</span> <span class="st">"Figs/Scraping/icon_ps4.svg"</span>,</span>
-<span id="cb54-19"><a href="#cb54-19"></a>                           <span class="st">"XB1"</span>    <span class="ot">=</span> <span class="st">"Figs/Scraping/icon_xb1.svg"</span>,</span>
-<span id="cb54-20"><a href="#cb54-20"></a>                           <span class="st">"XBXS"</span>   <span class="ot">=</span> <span class="st">"Figs/Scraping/icon_xbxs.svg"</span>,</span>
-<span id="cb54-21"><a href="#cb54-21"></a>                           <span class="st">"Switch"</span> <span class="ot">=</span> <span class="st">"Figs/Scraping/icon_switch.svg"</span>,</span>
-<span id="cb54-22"><a href="#cb54-22"></a>                           <span class="st">"Oculus"</span> <span class="ot">=</span> <span class="st">"Figs/Scraping/icon_oculus.svg"</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb54-23"><a href="#cb54-23"></a>  <span class="fu">nest</span>(<span class="at">Platform =</span> Platform) <span class="sc">|&gt;</span> </span>
-<span id="cb54-24"><a href="#cb54-24"></a>  <span class="fu">select</span>(<span class="sc">-</span>Date) <span class="sc">|&gt;</span> </span>
-<span id="cb54-25"><a href="#cb54-25"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb54-26"><a href="#cb54-26"></a>  <span class="fu">gt_img_rows</span>(<span class="at">columns =</span> Tier) <span class="sc">|&gt;</span> </span>
-<span id="cb54-27"><a href="#cb54-27"></a>  <span class="fu">gt_img_multi_rows</span>(<span class="at">columns =</span> Platform, <span class="at">height =</span> <span class="dv">15</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb54-28"><a href="#cb54-28"></a>  <span class="fu">cols_align</span>(<span class="at">columns =</span> Platform, <span class="at">align =</span> <span class="st">"left"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Expected 6 pieces. Missing pieces filled with `NA` in 19 rows [1, 2, 3, 4, 5,
-6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20].</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1"></a>oc_df <span class="sc">|&gt;</span> </span>
+<span id="cb56-2"><a href="#cb56-2"></a>  <span class="fu">separate</span>(Platforms,</span>
+<span id="cb56-3"><a href="#cb56-3"></a>           <span class="at">into =</span> <span class="fu">paste0</span>(<span class="st">"P"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>),</span>
+<span id="cb56-4"><a href="#cb56-4"></a>           <span class="at">sep  =</span> <span class="st">", "</span>,</span>
+<span id="cb56-5"><a href="#cb56-5"></a>           <span class="at">fill =</span> <span class="st">"right"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb56-6"><a href="#cb56-6"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols      =</span> P1<span class="sc">:</span>P6,</span>
+<span id="cb56-7"><a href="#cb56-7"></a>               <span class="at">names_to  =</span> <span class="st">"temp"</span>,</span>
+<span id="cb56-8"><a href="#cb56-8"></a>               <span class="at">values_to =</span> <span class="st">"Platform"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb56-9"><a href="#cb56-9"></a>  <span class="fu">drop_na</span>(Platform) <span class="sc">|&gt;</span> </span>
+<span id="cb56-10"><a href="#cb56-10"></a>  <span class="fu">select</span>(<span class="sc">!</span>temp) <span class="sc">|&gt;</span> </span>
+<span id="cb56-11"><a href="#cb56-11"></a>  <span class="fu">mutate</span>(<span class="at">Platform =</span> <span class="fu">factor</span>(Platform, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"PC"</span>, <span class="st">"PS4"</span>, <span class="st">"PS5"</span>,</span>
+<span id="cb56-12"><a href="#cb56-12"></a>                                                <span class="st">"XB1"</span>, <span class="st">"XBXS"</span>, <span class="st">"Switch"</span>,</span>
+<span id="cb56-13"><a href="#cb56-13"></a>                                                <span class="st">"Oculus"</span>))) <span class="sc">|&gt;</span> </span>
+<span id="cb56-14"><a href="#cb56-14"></a>  <span class="fu">arrange</span>(Rank, Platform) <span class="sc">|&gt;</span> </span>
+<span id="cb56-15"><a href="#cb56-15"></a>  <span class="fu">mutate</span>(<span class="at">Platform =</span> <span class="fu">as.character</span>(Platform),</span>
+<span id="cb56-16"><a href="#cb56-16"></a>         <span class="at">Platform =</span> <span class="fu">recode</span>(Platform,</span>
+<span id="cb56-17"><a href="#cb56-17"></a>                           <span class="st">"PC"</span>     <span class="ot">=</span> <span class="st">"Figs/Scraping/icon_pc.svg"</span>,</span>
+<span id="cb56-18"><a href="#cb56-18"></a>                           <span class="st">"PS5"</span>    <span class="ot">=</span> <span class="st">"Figs/Scraping/icon_ps5.svg"</span>,</span>
+<span id="cb56-19"><a href="#cb56-19"></a>                           <span class="st">"PS4"</span>    <span class="ot">=</span> <span class="st">"Figs/Scraping/icon_ps4.svg"</span>,</span>
+<span id="cb56-20"><a href="#cb56-20"></a>                           <span class="st">"XB1"</span>    <span class="ot">=</span> <span class="st">"Figs/Scraping/icon_xb1.svg"</span>,</span>
+<span id="cb56-21"><a href="#cb56-21"></a>                           <span class="st">"XBXS"</span>   <span class="ot">=</span> <span class="st">"Figs/Scraping/icon_xbxs.svg"</span>,</span>
+<span id="cb56-22"><a href="#cb56-22"></a>                           <span class="st">"Switch"</span> <span class="ot">=</span> <span class="st">"Figs/Scraping/icon_switch.svg"</span>,</span>
+<span id="cb56-23"><a href="#cb56-23"></a>                           <span class="st">"Oculus"</span> <span class="ot">=</span> <span class="st">"Figs/Scraping/icon_oculus.svg"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb56-24"><a href="#cb56-24"></a>  <span class="fu">nest</span>(<span class="at">Platform =</span> Platform) <span class="sc">|&gt;</span> </span>
+<span id="cb56-25"><a href="#cb56-25"></a>  <span class="fu">select</span>(<span class="sc">-</span>Date) <span class="sc">|&gt;</span> </span>
+<span id="cb56-26"><a href="#cb56-26"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb56-27"><a href="#cb56-27"></a>  <span class="fu">gt_img_rows</span>(<span class="at">columns =</span> Tier) <span class="sc">|&gt;</span> </span>
+<span id="cb56-28"><a href="#cb56-28"></a>  <span class="fu">gt_img_multi_rows</span>(<span class="at">columns =</span> Platform, <span class="at">height =</span> <span class="dv">15</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb56-29"><a href="#cb56-29"></a>  <span class="fu">cols_align</span>(<span class="at">columns =</span> Platform, <span class="at">align =</span> <span class="st">"left"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="eyujqxyguc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#eyujqxyguc table {
@@ -4078,41 +4100,41 @@ New names:
 <h3 data-number="30.3.4" class="anchored" data-anchor-id="表以外の内容複数ページ"><span class="header-section-number">30.3.4</span> 表以外の内容（複数ページ）</h3>
 <p>1位から500位まで</p>
 <div class="cell" data-layout-align="center" data-hash="scraping_cache/html/scraping-oc-multiple_57578e43c8db067af504ea710e2cc51b">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1"></a>oc_url <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"https://opencritic.com/browse/pc/2021?page="</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">25</span>)</span>
-<span id="cb56-2"><a href="#cb56-2"></a></span>
-<span id="cb56-3"><a href="#cb56-3"></a>oc_list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb56-4"><a href="#cb56-4"></a></span>
-<span id="cb56-5"><a href="#cb56-5"></a>get_oc <span class="ot">&lt;-</span> <span class="cf">function</span> (url) {</span>
-<span id="cb56-6"><a href="#cb56-6"></a>  temp_html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url) <span class="sc">|&gt;</span> </span>
-<span id="cb56-7"><a href="#cb56-7"></a>    <span class="fu">html_element</span>(<span class="st">".desktop-game-display"</span>)</span>
-<span id="cb56-8"><a href="#cb56-8"></a>  temp_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Rank  =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">".rank"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb56-9"><a href="#cb56-9"></a>                      <span class="fu">html_text2</span>(),</span>
-<span id="cb56-10"><a href="#cb56-10"></a>                    <span class="at">Tier  =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">"img"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb56-11"><a href="#cb56-11"></a>                      <span class="fu">html_attr</span>(<span class="st">"src"</span>),</span>
-<span id="cb56-12"><a href="#cb56-12"></a>                    <span class="at">Score =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">".score"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb56-13"><a href="#cb56-13"></a>                      <span class="fu">html_text2</span>(),</span>
-<span id="cb56-14"><a href="#cb56-14"></a>                    <span class="at">Name  =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">".game-name"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb56-15"><a href="#cb56-15"></a>                      <span class="fu">html_text2</span>(),</span>
-<span id="cb56-16"><a href="#cb56-16"></a>                    <span class="at">Date  =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">".first-release-date"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb56-17"><a href="#cb56-17"></a>                      <span class="fu">html_text2</span>()) <span class="sc">|&gt;</span> </span>
-<span id="cb56-18"><a href="#cb56-18"></a>    <span class="fu">mutate</span>(<span class="at">Rank =</span> <span class="fu">str_remove</span>(Rank, <span class="st">"</span><span class="sc">\\</span><span class="st">."</span>),</span>
-<span id="cb56-19"><a href="#cb56-19"></a>           <span class="at">Rank =</span> <span class="fu">as.numeric</span>(Rank),</span>
-<span id="cb56-20"><a href="#cb56-20"></a>           <span class="at">Date =</span> <span class="fu">paste0</span>(Date, <span class="st">", 2021"</span>),</span>
-<span id="cb56-21"><a href="#cb56-21"></a>           <span class="at">Date =</span> <span class="fu">mdy</span>(Date))</span>
-<span id="cb56-22"><a href="#cb56-22"></a>}</span>
-<span id="cb56-23"><a href="#cb56-23"></a></span>
-<span id="cb56-24"><a href="#cb56-24"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(oc_url)) {</span>
-<span id="cb56-25"><a href="#cb56-25"></a>  </span>
-<span id="cb56-26"><a href="#cb56-26"></a>  temp_df      <span class="ot">&lt;-</span> <span class="fu">get_oc</span>(oc_url[i])</span>
-<span id="cb56-27"><a href="#cb56-27"></a>  oc_list[[i]] <span class="ot">&lt;-</span> temp_df</span>
-<span id="cb56-28"><a href="#cb56-28"></a>  </span>
-<span id="cb56-29"><a href="#cb56-29"></a>  <span class="fu">Sys.sleep</span>(<span class="dv">1</span>)</span>
-<span id="cb56-30"><a href="#cb56-30"></a>}</span>
-<span id="cb56-31"><a href="#cb56-31"></a></span>
-<span id="cb56-32"><a href="#cb56-32"></a><span class="fu">bind_rows</span>(oc_list) <span class="sc">|&gt;</span> </span>
-<span id="cb56-33"><a href="#cb56-33"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb56-34"><a href="#cb56-34"></a>  <span class="fu">gt_img_rows</span>(Tier) <span class="sc">|&gt;</span> </span>
-<span id="cb56-35"><a href="#cb56-35"></a>  <span class="fu">cols_label</span>(<span class="st">"Date"</span> <span class="ot">=</span> <span class="st">"First release date"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1"></a>oc_url <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"https://opencritic.com/browse/pc/2021?page="</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">25</span>)</span>
+<span id="cb57-2"><a href="#cb57-2"></a></span>
+<span id="cb57-3"><a href="#cb57-3"></a>oc_list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb57-4"><a href="#cb57-4"></a></span>
+<span id="cb57-5"><a href="#cb57-5"></a>get_oc <span class="ot">&lt;-</span> <span class="cf">function</span> (url) {</span>
+<span id="cb57-6"><a href="#cb57-6"></a>  temp_html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url) <span class="sc">|&gt;</span> </span>
+<span id="cb57-7"><a href="#cb57-7"></a>    <span class="fu">html_element</span>(<span class="st">".desktop-game-display"</span>)</span>
+<span id="cb57-8"><a href="#cb57-8"></a>  temp_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Rank  =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">".rank"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb57-9"><a href="#cb57-9"></a>                      <span class="fu">html_text2</span>(),</span>
+<span id="cb57-10"><a href="#cb57-10"></a>                    <span class="at">Tier  =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">"img"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb57-11"><a href="#cb57-11"></a>                      <span class="fu">html_attr</span>(<span class="st">"src"</span>),</span>
+<span id="cb57-12"><a href="#cb57-12"></a>                    <span class="at">Score =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">".score"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb57-13"><a href="#cb57-13"></a>                      <span class="fu">html_text2</span>(),</span>
+<span id="cb57-14"><a href="#cb57-14"></a>                    <span class="at">Name  =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">".game-name"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb57-15"><a href="#cb57-15"></a>                      <span class="fu">html_text2</span>(),</span>
+<span id="cb57-16"><a href="#cb57-16"></a>                    <span class="at">Date  =</span> <span class="fu">html_elements</span>(temp_html, <span class="st">".first-release-date"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb57-17"><a href="#cb57-17"></a>                      <span class="fu">html_text2</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb57-18"><a href="#cb57-18"></a>    <span class="fu">mutate</span>(<span class="at">Rank =</span> <span class="fu">str_remove</span>(Rank, <span class="st">"</span><span class="sc">\\</span><span class="st">."</span>),</span>
+<span id="cb57-19"><a href="#cb57-19"></a>           <span class="at">Rank =</span> <span class="fu">as.numeric</span>(Rank),</span>
+<span id="cb57-20"><a href="#cb57-20"></a>           <span class="at">Date =</span> <span class="fu">paste0</span>(Date, <span class="st">", 2021"</span>),</span>
+<span id="cb57-21"><a href="#cb57-21"></a>           <span class="at">Date =</span> <span class="fu">mdy</span>(Date))</span>
+<span id="cb57-22"><a href="#cb57-22"></a>}</span>
+<span id="cb57-23"><a href="#cb57-23"></a></span>
+<span id="cb57-24"><a href="#cb57-24"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(oc_url)) {</span>
+<span id="cb57-25"><a href="#cb57-25"></a>  </span>
+<span id="cb57-26"><a href="#cb57-26"></a>  temp_df      <span class="ot">&lt;-</span> <span class="fu">get_oc</span>(oc_url[i])</span>
+<span id="cb57-27"><a href="#cb57-27"></a>  oc_list[[i]] <span class="ot">&lt;-</span> temp_df</span>
+<span id="cb57-28"><a href="#cb57-28"></a>  </span>
+<span id="cb57-29"><a href="#cb57-29"></a>  <span class="fu">Sys.sleep</span>(<span class="dv">1</span>)</span>
+<span id="cb57-30"><a href="#cb57-30"></a>}</span>
+<span id="cb57-31"><a href="#cb57-31"></a></span>
+<span id="cb57-32"><a href="#cb57-32"></a><span class="fu">bind_rows</span>(oc_list) <span class="sc">|&gt;</span> </span>
+<span id="cb57-33"><a href="#cb57-33"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb57-34"><a href="#cb57-34"></a>  <span class="fu">gt_img_rows</span>(Tier) <span class="sc">|&gt;</span> </span>
+<span id="cb57-35"><a href="#cb57-35"></a>  <span class="fu">cols_label</span>(<span class="st">"Date"</span> <span class="ot">=</span> <span class="st">"First release date"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="eyujqxyguc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#eyujqxyguc table {

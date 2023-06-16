@@ -524,7 +524,7 @@ my_html |>
 
 ### 表の抽出
 
-　まずは簡単な例から始めよう。ここでは英語版Wikipediaの[世界報道自由度ランキング](https://en.wikipedia.org/wiki/World_Press_Freedom_Index)の表をスクレイピングする。
+　まずは簡単な例から始めよう。ここでは英語版Wikipediaの[世界報道自由度ランキング](https://en.wikipedia.org/wiki/World_Press_Freedom_Index)の表をスクレイピングする。長いURLは別途のオブジェクトに格納しておくと、コードが簡潔になるだけでなく、コードのリサイクルも簡単になる。ここでは読み込んだHTMLファイルを`pfi_html`という名のオブジェクトとして格納しておく。
 
 ```{r}
 #| label: scraping-hdi-1
@@ -536,6 +536,8 @@ pfi_html <- read_html(url)
 pfi_html
 ```
 
+　続いて、`html_table()`を使用し、`pfi_html`から表（`<table>`タグ）を取得し、`pfi_tbls`オブジェクトに格納する。
+
 ```{r}
 #| label: scraping-hdi-2
 pfi_tbls <- pfi_html |> 
@@ -544,6 +546,8 @@ pfi_tbls <- pfi_html |>
 pfi_tbls
 ```
 
+　当該ページには2つの表があり、我々が欲しい表はリストの1番目の要素である。`pfi_tbls`の1番目の要素のみを抽出し、更に`2023[5]`のような列名を`Year2023`のように修正し、`pfi_df`に格納する。
+
 ```{r}
 #| label: scraping-hdi-3
 pfi_df <- pfi_tbls[[1]] |> 
@@ -551,15 +555,26 @@ pfi_df <- pfi_tbls[[1]] |>
          "Year2022" = "2022[6]",
          "Year2021" = "2021[7]",
          "Year2020" = "2020[8]",
-         "Year2019" = "2019[9]") |> 
-  mutate(across(Year2023:Year2019, ~str_replace(.x, "\\(([0-9]+)\\)", "")),
+         "Year2019" = "2019[9]")
+
+pfi_df
+```
+
+　`pfi_df`を見ると、`Country`以外の列は世界報道自由度**指数**以外にもカッコ内に**順位**が書かれていることが分かる。具体的には`(順位)指数`の構造になっている。`str_remove()`関数を使って、ここから`(順位)`の箇所を削除しよう。「`(`で始まり（=`^\\(`）、一つ以上の数字が並び（=`([0-9]+)`）、その後に出てくる`)`まで（=`\\)`）」の箇所が削除対象であるため、正規表現は`^\\(([0-9]+)\\)`となる。正規表現の詳細は第[-@sec-string]章を参照されたい。抽出が終わっても、まだcharacter型のままなので、`as.numeric()`関数でnumeric型に変換する。
+
+```{r}
+#| label: scraping-hdi-4
+pfi_df <- pfi_df |> 
+  mutate(across(Year2023:Year2019, ~str_remove(.x, "^\\(([0-9]+)\\)")),
          across(Year2023:Year2019, as.numeric))
 
 pfi_df
 ```
 
+　これで表の抽出が終わった。すべての表を出力しても良いが、かなり長くなるため東アジア地域のみに限定して`pfi_df`を{gt}パッケージで出力し、指数の値ごとに色分けをする。セルの色塗りについては第[-@sec-gt-highlight]章を参照されたい。
+
 ```{r}
-#| label: scraping-hdi-4
+#| label: scraping-hdi-5
 pfi_df |> 
   filter(Country %in% c("Japan", "South Korea", "North Korea", "China",
                         "Hong Kong", "Taiwan", "Mongolia")) |> 
@@ -649,12 +664,13 @@ oc_df |>
 oc_df |> 
   separate(Platforms,
            into = paste0("P", 1:6),
-           sep = ", ") |> 
-  pivot_longer(cols = P1:P6,
-               names_to = "X",
+           sep  = ", ",
+           fill = "right") |> 
+  pivot_longer(cols      = P1:P6,
+               names_to  = "temp",
                values_to = "Platform") |> 
   drop_na(Platform) |> 
-  select(-X) |> 
+  select(!temp) |> 
   mutate(Platform = factor(Platform, levels = c("PC", "PS4", "PS5",
                                                 "XB1", "XBXS", "Switch",
                                                 "Oculus"))) |> 

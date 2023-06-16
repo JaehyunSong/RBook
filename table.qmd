@@ -332,54 +332,46 @@ df3_tbl |>
 
 ### セルの色分け
 
-　以上の例は「行」と「列」のハイライトであった。ここでは「セル」に注目する。セルの色塗りには2つのケースがある。1つ目は特定のセルをハイライトすることであり、2つ目は値に応じて色分けをすることである。まず、特定のセルを強調したい場合は`gt_hightlight_rows()`関数を使用する。ただし、`rows`引数のみだと全列がハイライトされてしまうので、今回は更に`columns`引数も追加し、「何行目、何列目のセル」かを特定する必要がある。
+　以上の例は「行」と「列」のハイライトであった。ここでは「セル」に注目する。セルの色塗りには2つのケースがある。1つ目は特定のセルをハイライトすることであり、2つ目は値に応じて色分けをすることである。まず、特定のセルを強調したい場合は`data_color()`関数を使用する。ただし、`rows`引数のみだと全列がハイライトされてしまうので、今回は更に`columns`引数も追加し、「何行目、何列目のセル」かを特定する必要がある。
 
 ```{r}
 #| label: table-color-1
 df3_tbl |>
-  gt_highlight_rows(rows = 3, columns = 6)
+  data_color(rows = 3, columns = 6)
 ```
 
-　セルの値に応じて色分けをする場合は`gt_color_rows()`関数を使う。たとえば、`Population`列（2列目）の値に応じて色分けをするなら、`columns = Population`、または`columns = 2`を指定する。
+　セルの値に応じて色分けをする場合も`data_color()`関数を使う。たとえば、`Population`列（2列目）の値に応じて色分けをするなら、`columns = Population`、または`columns = 2`を指定する。
 
 ```{r}
 #| label: table-color-2
 df3_tbl |>
-  gt_color_rows(columns = Population)
+  data_color(columns = Population)
 ```
 
-　謎の警告メッセージが表示された。これは`Population`が取りうる値の範囲が必要であることを意味する。これが省略されても表の作成には問題はないが、できれば`domain`引数に、`c(最小値, 最大値)`の実引数を指定しよう。指定しない場合は既定値は`Population`列の最小値と最大値が指定される。たとえば、`Population`が（理論上）取りうる値が10から110までであれば、`domain = c(0, 110)`のように指定する。この`domain`はなくても一応表は作れるので、以降は省略する。
+　ちなみに、色についても説明する。デフォルトの色だと値の高低が分かりにくいため、もう少し直感的なパレットにした方が良いだろう。このパレットは`palette`引数で指定することができる。特定のパッケージが提供するパレットであれば`"パッケージ名::パレット名"`と指定する。たとえば、`Population`列から`FH`列まで色分けをし、{ggsci}の`blue_material`パレットを使う場合は`palette = "ggsci::blue_material"`のように指定する必要がある。
 
 ```{r}
 #| label: table-color-3
+#| warning: false
 df3_tbl |>
-  gt_color_rows(Population, domain = c(10, 110))
+  data_color(Population:FH,
+             palette = "ggsci::blue_material")
 ```
 
-　ちなみに、色についても説明する。デフォルトの色は赤系であり、数値が高いほど赤くなる。この色は`palette`で指定することができる。既定値は{ggsci}パッケージが提供する`red_material`というパレットだ（{ggsci}パッケージは{gtExtras}パッケージと一緒にインストールされる）。特定のパッケージが提供するパレットであれば`"パッケージ名::パレット名"`と指定する。たとえば、`Population`列から`FH`列まで色分けをし、{ggsci}の`blue_material`パレットを使う場合は`palette = "ggsci::blue_material"`のように指定する必要がある。
+　このように濃いほど値が大きく、薄いほど小さいことが一目瞭然となる。{ggsci}は他にも様々なパレットを提供しているが、詳細は[公式レファレンス](https://cran.r-project.org/web/packages/ggsci/vignettes/ggsci.html)を参照されたい。また、{ggsci}以外のパッケージが提供するパレットも使える。定番の{RColorBrewer}パッケージも様々なパレットを提供しており、以下の例は`YlOrRd`パレットを使った例だ。
 
 ```{r}
 #| label: table-color-4
 #| warning: false
 df3_tbl |>
-  gt_color_rows(Population:FH,
-                palette = "ggsci::blue_material")
-```
-
-　{ggsci}は他にも様々なパレットを提供しているが、詳細は[公式レファレンス](https://cran.r-project.org/web/packages/ggsci/vignettes/ggsci.html)を参照されたい。また、{ggsci}以外のパッケージが提供するパレットも使える。定番の{RColorBrewer}パッケージも様々なパレットを提供しており、以下の例は`YlOrRd`パレットを使った例だ。
-
-```{r}
-#| label: table-color-5
-#| warning: false
-df3_tbl |>
-  gt_color_rows(Population:FH,
-                palette = "RColorBrewer::YlOrRd")
+  data_color(Population:FH,
+             palette = "RColorBrewer::YlOrRd")
 ```
 
 　{RColorBrewer}が提供するパレットの例はコンソール上で`RColorBrewer::display.brewer.all()`と打つと出力される（ @fig-table-color-6 ）。
 
 ```{r}
-#| label: fig-table-color-6
+#| label: fig-table-color-5
 #| fig-cap: "{RColorBrewer}が提供するパレット"
 #| fig-width: 8
 #| fig-height: 9
