@@ -534,7 +534,6 @@ my_html |>
 
 ```{r}
 #| label: scraping-hdi-1
-#| warning: false
 url <- "https://en.wikipedia.org/wiki/World_Press_Freedom_Index"
 
 pfi_html <- read_html(url)
@@ -596,35 +595,95 @@ pfi_df |>
 
 ### 表の抽出（複数ページ）
 
+　続いて、複数のHTMLページから表を取得してみよう。今回はJリーグ（1部から3部まで）の順位表が対象である。
+
+* J1: <https://www.jleague.jp/standings/j1/>
+* J2: <https://www.jleague.jp/standings/j2/>
+* J3: <https://www.jleague.jp/standings/j3/>
+
+　3つのページを見ると、ページの構造は一致することが分かる。また、表を意味する`<table>`タグを見ると、いずれも`scoreTable01`クラスが付与されていること分かる（各自、開発者メニューから確認してみよう）。したがって、同じ作業を3つのページに対して繰り返すだけで良いだろう。まずは、J1リーグだけ試してみよう。まず、HTMLファイルを読み込み、`html_element(".scoreTable01")`で`scoreTalbe01`クラスの要素を抽出し、そこから`html_table()`で表を抽出してみよう。
+
 ```{r}
-#| label: scraping-j
-#| cache: true
-j_list <- paste0("https://www.jleague.jp/standings/j", 1:3)
+#| label: scraping-j-1
+j1_url  <- "https://www.jleague.jp/standings/j1"
+j1_html <- read_html(j1_url)
 
+j1_html |> 
+  html_element(".scoreTable01") |> 
+  html_table()
+```
+
+　今回も`header = TRUE`を入れてヘッダーを指定する必要があると考えられる。また、取得する列は`順位`から`得失点`までなので、必要な列だけを抽出してみよう。
+
+```{r}
+#| label: scraping-j-2
+j1_html |> 
+  html_element(".scoreTable01") |> 
+  html_table(header = TRUE) |> 
+  select(順位:得失点)
+```
+
+　以上の作業を3つのページに対して繰り返せば良い。まずは、3つのURLが格納されたcharacter型ベクトルを作成しよう。
+
+```{r}
+#| label: scraping-j-3
+j_urls <- paste0("https://www.jleague.jp/standings/j", 1:3)
+j_urls
+```
+
+　また、取得した3つの表を格納する空のリストを作成する。
+
+```{r}
+#| label: scraping-j-4
 tbl_list <- list()
+tbl_list
+```
 
-for (i in seq_along(j_list)) {
-  temp_html <- read_html(j_list[i])
+　続いて`for()`を使用し、これらのスクレイピングを繰り返す。`seq_along(j_urls)`は`1:length(j_urls)`と同じ意味だ。
+
+```{r}
+#| label: scraping-j-5
+for (i in seq_along(j_urls)) {
+  # j_urlsのi番目のURLからHTMLファイルを読み込み、temp_htmlに格納
+  temp_html <- read_html(j_urls[i])
+  # 表を取得し、temp_tblに格納
   temp_tbl  <- temp_html |> 
-    html_table(header = TRUE)
+    html_element(".scoreTable01") |> 
+    html_table(header = TRUE) |> 
+    select(順位:得失点)
   
-  tbl_list[[paste0("J", i)]] <- temp_tbl[[1]]
+  # tbl_listにtemp_tblを格納する。
+  # tbl_listの名前はJ1、J2、J3になるようにする。
+  tbl_list[[paste0("J", i)]] <- temp_tbl
   
+  # 1つの表を取得したら1秒休む
   Sys.sleep(1)
 }
 
 tbl_list
+```
 
-j_df <- bind_rows(tbl_list, .id = "League")
+　`bind_rows()`を使ってリスト内の3つの表を結合し、{gt}パッケージで表示する。
 
-j_df
-
-j_df <- j_df |> 
-  select(!c("...1", "直近5試合"))
+```{r}
+#| label: scraping-j-6
+j_df <- bind_rows(tbl_list, .id = "リーグ")
 
 j_df |> 
+  gt()
+```
+
+　クラブ名が「FC矢内FC矢内」のようになっていることが分かる。元のページを見ると、チームのエンブレムが表示されるが、これらの画像には代替テキスト（`alt`）が付与されており、スクレイピングのように画像が読み込めない場合は、その代替テキストが取得されるのが原因である。
+
+　解決方法はいくつかあるが、ここでは事後的な解決方法を採用する。具体的には`クラブ名`列内の文字列を半分だけ残せば良い。たとえば、「FC矢内FC矢内」は8文字であるため、1番目の文字から8文字の半分である4文字まで残す。文字列から一部を取り出す関数は`str_sub()`であり、`str_sub(文字列, スタート位置, 終了位置)`を指定する。スタート位置は1固定であり、終了位置は文字列の長さ（`nchar(文字列)`）の半分だから`nchar(文字列) / 2`で良い。
+
+　処理が終わったら、`リーグ`列でグルーピングして表として出力する。
+
+```{r}
+#| label: scraping-j-7
+j_df |> 
   mutate(クラブ名 = str_sub(クラブ名, 1, nchar(クラブ名) / 2)) |> 
-  group_by(League) |> 
+  group_by(リーグ) |> 
   gt()
 ```
 
@@ -742,7 +801,7 @@ bind_rows(oc_list) |>
   cols_label("Date" = "First release date")
 ```
 
-### スクレイピングの注意事項
+## スクレイピングの注意事項
 
 * Terms and conditions / Terms of serviceを読もう
 * 著作権
