@@ -391,8 +391,12 @@ h1, h2, h3 {
 　まずは、`read_html()`関数を使用し、スクレイピングするHTMLファイルそのものを読み込んでおく必要がある。引数はHTMLファイルのURL、もしくはパスだけで問題ないが、Shift-JISやEUC-KRといった邪悪なロケールで作成されたページであれば、`encoding`引数が必要となる。サンプルページはUTF-8であるため、URLのみで問題ない。
 
 ```{r}
-#| label: scraping-rvest-read
+#| label: scraping-rvest-read-1
 my_html <- read_html("https://www.jaysong.net/RBook/Data/scraping/sample01.html")
+```
+
+```{r}
+#| label: scraping-rvest-read-2
 my_html
 ```
 
@@ -588,30 +592,50 @@ rbook_html |>
   <li>第2部: Rの基礎
 ```
 
-　「第1章: R?」は上記のコードの7行目にある。また、その親タグは`<ul>`、そしてそれの親タグは`<li>`、そして`<ul>`もある。これは第2章も、第30章も同じだ。つまり、IDが`進捗状況`の内容（`#進捗状況`）の中、`<ul>`の中の`<li>`の中の`<ul>`の中の`<li>`の箇所を取り出せば良い。セレクターは`"ul > li > ul > li"`と記述する。
+　「第1章: R?」は上記のコードの7行目にある。また、その親タグは`<ul>`、そしてそれの親タグは`<li>`、そして`<ul>`もある。これは第2章も、第30章も同じだ。つまり、IDが`進捗状況`の内容（`#進捗状況`）の中、`<ul>`の中の`<li>`の中の`<ul>`の中の`<li>`の箇所を取り出せば良い。セレクターは`"ul li ul li"`と記述する[^descendant]。
+
+[^descendant]: 今回の場合、`"ul > li > ul > li"`のような書き方もできる。空白で区切る方法を子孫結合子（descendant combinator）、`>`で区切る方法を子結合子（child combinator）と呼ぶ。タグの構造が`<a><b><c></c></b></a>`の構造になっている場合、`<c>`タグを指定するケースを考えてみよう。子孫結合子だと`"a c"`のように表記することができるが、`<a>`が持つ全ての子孫から`<c>`タグを探索することになる。つまり、`<a>`の子だけでなく、孫、曾孫（やそれ以上）までも探索の対象となる。一方、子結合子は自分の子のみ探索することになるため、`"a > b > c"`のように孫を指定するためには、まずは自分の子を経由する必要がある。
 
 ```{r}
 #| label: scraping-text-5
 rbook_titles <- rbook_html |> 
   html_element("#進捗状況") |> 
-  html_elements("ul > li > ul > li") |> 
+  html_elements("ul li ul li") |> 
   html_text()
 
 rbook_titles
 ```
 
-　今回は章の文字列だけ取得できた。
+　今回は章の文字列だけ取得できた。それでは章のタイトルのベクトル（`rbook_titles`）とURL（`rbook_urls`）を一つの表としてまとめてみよう。
 
 ```{r}
 #| label: scraping-text-6
-tibble(Titles = rbook_titles,
-       URL    = rbook_urls) |> 
+rbook_df <- tibble(Titles = rbook_titles,
+                   URL    = rbook_urls)
+
+print(rbook_df, n = Inf)
+```
+
+　続いて、`separate()`関数を使って章とタイトルを`": "`文字列を基準に別の列として分割し、それぞれ`Section`と`Title`という列とする。ただし、30章以降は付録であるため、`": "`は存在しない。したがって、章かタイトルどちらかは欠損値となるが、今回は左側を欠損値として埋めたいので`fill = "left"`を追加する。さらに、URLも完全なURLにする。まず、付録のURLが何故か`"./"`で始まるようになっているので、`str_remove()`を使って除去する。そうすればファイル名だけが残り、後はこれらのファイル名の前に`"https://www.jaysong.net/RBook/"`を付けるだけだ。
+
+```{r}
+#| label: scraping-text-7
+rbook_df <- rbook_df |>   
   separate(col  = Titles,
            into = c("Section", "Title"),
            sep  = ": ",
            fill = "left") |> 
   mutate(URL = str_remove(URL, "^\\.\\/"),
-         URL = paste0("https://www.jaysong.net/RBook/", URL)) |> 
+         URL = paste0("https://www.jaysong.net/RBook/", URL))
+
+print(rbook_df, n = Inf)
+```
+
+　最後に`rbook_df`を{gt}パッケージを使って表にする。`sub_missing()`関数を使って、欠損値の箇所を`"付録"`に置換し、`fmt_url()`を使って、URL列をリンクボタン化する。
+
+```{r}
+#| label: scraping-text-8
+rbook_df |>   
   gt() |> 
   cols_label("Section" = "章",
              "Title"   = "タイトル",
@@ -728,7 +752,6 @@ j_urls
 ```{r}
 #| label: scraping-j-4
 tbl_list <- list()
-tbl_list
 ```
 
 　続いて`for()`を使用し、これらのスクレイピングを繰り返す。`seq_along(j_urls)`は`1:length(j_urls)`と同じ意味だ。
@@ -781,43 +804,155 @@ j_df |>
 
 ### 表以外の内容
 
-OpenCritic (2021; PC Games)
+　続いて、表のように見えて表ではないものをスクレイピングしてみよう。[OpenCritic](https://opencritic.com/)というゲームの口コミサイトから2021年発売されたPCゲームのランキングを取得してみよう。対象ページは以下のURLだ。
 
-* <https://opencritic.com/browse/pc/2021>
-* 表のように見えるが、表ではない（`<div>`が並んでいるだけ）。
-* `html_nodes()`でランキング、画像URL、スコアなどをベクトルとして抽出し、R側で表にする。
+* <https://opencritic.com/browse/all/2021>
+
+![](Figs/Scraping/oc_index.png)
+
+　ここには上位20位までのゲームのリストがあり、20行[^20-rows]6列[^6-cols]の**表**のように見える。まず、このページを読み込んだものを`oc_html`に格納する。
+
+[^20-rows]: 20ゲーム
+
+[^6-cols]: 順位、スコア、ティア（Tier）の画像、ゲーム名、機種、発売日
 
 ```{r}
-#| label: scraping-oc-single
-#| cache: true
+#| label: scraping-oc-single-read-1
 oc_html <- read_html("https://opencritic.com/browse/all/2021")
+oc_html
+```
 
+　続いて`oc_html`から`html_table()`を使用し、表を抽出してみよう。
+
+```{r}
+#| label: scraping-oc-single-read-2
+oc_html |> 
+  html_table()
+```
+
+　どうみても表があるように見えるものの、`html_table()`から表は抽出されていない。実はこのページの順位表、`<table>`タグで記述された表ではない。100個以上の`<div>`要素を表のように並べたものである。開発者メニューからこの表のようなもののコードを確認してみよう。
+
+```{.html code-line-numbers="true"}
+<div _ngcontent-serverapp-c79="" class="desktop-game-display">
+	<div _ngcontent-serverapp-c79="">
+		<div _ngcontent-serverapp-c79="" class="row no-gutters py-2 game-row align-items-center">
+			<div _ngcontent-serverapp-c79="" class="rank"> 1. </div>
+			<div _ngcontent-serverapp-c79="" class="score col-auto"> 93 </div>
+			<div _ngcontent-serverapp-c79="" class="tier col-auto"><app-tier-display _ngcontent-serverapp-c79="" display="man" _nghost-serverapp-c65=""><img _ngcontent-serverapp-c65="" src="//img.opencritic.com/mighty-man/mighty-man.png" alt="Mighty" width="45" height="42"></app-tier-display></div>
+			<div _ngcontent-serverapp-c79="" class="game-name col"><a _ngcontent-serverapp-c79="" href="/game/11626/final-fantasy-xiv-endwalker">Final Fantasy XIV: Endwalker</a></div>
+			<div _ngcontent-serverapp-c79="" class="platforms col-auto"> PC, PS5, PS4 </div>
+			<div _ngcontent-serverapp-c79="" class="first-release-date col-auto"><span _ngcontent-serverapp-c79="">Dec 7</span></div>
+		</div>
+		<div _ngcontent-serverapp-c79="" class="row no-gutters py-2 game-row align-items-center">
+			<div _ngcontent-serverapp-c79="" class="rank"> 2. </div>
+			<div _ngcontent-serverapp-c79="" class="score col-auto"> 92 </div>
+			...
+```
+
+　数百の`<div>`タグが入れ子構造でなっていることが分かる。この`<div>`タグそのものに特別な機能はない。`<span>`が文中の文章に対してクラスやIDを割り当てるために使われるということは既に説明したが、`<div>`もほぼ同じ役割をする。違いがあれば、`<span>`は**文中の文章**が対象であり、`<div>`は**領域**が対象とすることだ。この構造を実際のページに対応すると以下のようになる。
+
+![](Figs/Scraping/oc_structure.png)
+
+　まず、この順位表全体はクラス名が`desktop-game-display`の`<div>`タグに囲まれている。この中に、各行は`row`、`no-gutters`、`py-2`、`game-row`、`align-items-center`計5つのクラスを持つ`<div>`タグで囲まれている。そしてこの中に順位（クラス名：`rank`）やスコア（クラス名：`score`、`col-auto`）、ティア（クラス名：`tier`、`col-auto`）の`<div>`があり、それぞれのセルを構成している。
+
+　ここからランクを取り出してみよう。まずはクラスが`desktop-game-display`である`<div>`タグに限定するために、`html_element("div.desktop-game-display")`で当該`<div>`のみを残し、`oc_html`を上書きする。このようにクラス名とタグを同時に指定する場合のセレクターは`タグ名.クラス名`と表記する。
+
+```{r}
+#| label: scraping-oc-single-3
 oc_html <- oc_html |> 
-  html_element(".desktop-game-display")
+  html_element("div.desktop-game-display")
+oc_html
+```
 
+　続いて、`oc_html`からクラス名が`rank`の`<div>`タグを抽出する。今回は抽出対象が20個あるため、`html_element()`でなく、`html_elements()`を使用する。
 
-oc_df <- tibble(Rank      = html_elements(oc_html, ".rank") |> 
+```{r}
+#| label: scraping-oc-single-4
+oc_html |> 
+  html_elements("div.rank")
+```
+
+　さらにここから`html_text()`を使用してテキストのみ抽出してみよう。
+
+```{r}
+#| label: scraping-oc-single-5
+oc_html |> 
+  html_elements("div.rank") |> 
+  html_text()
+```
+
+　前後の空白が気になる。この場合、`html_text2()`を使うと無駄な空白や改行、タブなどを除去することができる。
+
+```{r}
+#| label: scraping-oc-single-6
+oc_html |> 
+  html_elements("div.rank") |> 
+  html_text2()
+```
+
+　これでランキングの抽出ができた。まだ数字の後に付いている点が気になるが、こちらは後ほどまとめて除去しよう。つづいて、ティアーの画像URLを取得してみよう。既にクラスが`desktop-game-display`である`<div>`タグに限定された`oc_html`からクラス名が`tier`の`<div>`を選択し、さらにそこから`<img>`タグを抽出し、画像のURLが指定されている`"src"`**属性**を抽出してみよう。
+
+```{r}
+#| label: scraping-oc-single-7
+oc_html |> 
+  html_elements("div.tier img") |> 
+  html_attr("src")
+```
+
+　20個の画像が抽出された。URLなのに`"//"`で始まるのが不自然だと感じるかも知れないが、`"//"`で始まるURLは`"https://"`や`http://`に勝手に認識されるので問題ない。あとはこれらの作業を他のセル（ゲーム名、スコアなど）にも適用し、一つの表としてまとめるだけだ。`oc_df`という名のオブジェクトとして格納しよう。
+
+```{r}
+#| label: scraping-oc-single-8
+oc_df <- tibble(Rank      = html_elements(oc_html, "div.rank") |> 
                   html_text2(),
-                Tier      = html_elements(oc_html, "img") |> 
+                Tier      = html_elements(oc_html, "div.tier img") |> 
                   html_attr("src"),
-                Score     = html_elements(oc_html, ".score") |> 
+                Score     = html_elements(oc_html, "div.score") |> 
                   html_text2(),
-                Name      = html_elements(oc_html, ".game-name") |>
+                Name      = html_elements(oc_html, "div.game-name") |>
                   html_text2(),
-                Platforms = html_elements(oc_html, ".platforms") |>
+                Platforms = html_elements(oc_html, "div.platforms") |>
                   html_text2(),
-                Date      = html_elements(oc_html, ".first-release-date") |>
-                  html_text2()) |> 
-  mutate(Rank = str_remove(Rank, "\\."),
-         Rank = as.numeric(Rank),
-         Date = paste0(Date, ", 2021"),
-         Date = mdy(Date))
+                Date      = html_elements(oc_html, "div.first-release-date") |>
+                  html_text2())
 
+oc_df
+```
+
+　後はこの表の細かいところを修正しよう。たとえば、`Rank`列から`"."`を除去し、numeric型に変換したり、`Date`列をdate型に変換する。
+
+```{r}
+#| label: scraping-oc-single-9
+oc_df <- oc_df |> 
+  mutate(Rank  = str_remove(Rank, "\\."), # <1>
+         Rank  = as.numeric(Rank),        # <2>
+         Score = as.numeric(Score),       # <3>
+         Date  = paste0(Date, ", 2021"),  # <4>
+         Date  = mdy(Date))               # <5>
+
+oc_df
+```
+
+1. `Rank`列から`.`を除去する。
+2. `Rank`列をnumeric型に変換する。
+3. `Score`列をnumeric型に変換する。
+4. `Date`列の後に`", 2021"`を付ける。
+4. `Date`列がmonth-day-yearで記述されていることを伝え、date型に変換する。
+
+　最後に`oc_df`を{gt}パッケージを使って表として出力してみよう。
+
+```{r}
+#| label: scraping-oc-single-10
 oc_df |> 
   gt() |> 
   gt_img_rows(Tier) |> 
   cols_label("Date" = "First release date")
+```
 
+<!---
+
+```r
+#| label: scraping-oc-single-11
 oc_df |> 
   separate(Platforms,
            into = paste0("P", 1:6),
@@ -853,10 +988,10 @@ oc_df |>
 
 1位から500位まで
 
-```{r}
+```r
 #| label: scraping-oc-multiple
 #| cache: true
-oc_url <- paste0("https://opencritic.com/browse/pc/2021?page=", 1:25)
+oc_urls <- paste0("https://opencritic.com/browse/pc/2021?page=", 1:25)
 
 oc_list <- list()
 
@@ -879,9 +1014,9 @@ get_oc <- function (url) {
            Date = mdy(Date))
 }
 
-for (i in seq_along(oc_url)) {
+for (i in seq_along(oc_urls)) {
   
-  temp_df      <- get_oc(oc_url[i])
+  temp_df      <- get_oc(oc_urls[i])
   oc_list[[i]] <- temp_df
   
   Sys.sleep(1)
@@ -892,6 +1027,7 @@ bind_rows(oc_list) |>
   gt_img_rows(Tier) |> 
   cols_label("Date" = "First release date")
 ```
+--->
 
 ## スクレイピングの注意事項
 
