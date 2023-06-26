@@ -5,44 +5,108 @@
 source("_common.R")
 ```
 
-## 自分のPCにインストール
-
 本章の内容は今後、以下の資料に基づき、再作成する予定である。
 
 * 矢内による資料 ([macOS編](https://yukiyanai.github.io/jp/resources/docs/install-R_macOS.pdf)、[Linux (Ubuntu)編](https://yukiyanai.github.io/jp/resources/docs/install-R_ubuntu.pdf)、[Windows編](https://yukiyanai.github.io/jp/resources/docs/install-R_windows.pdf))
 
 * Windowsの場合、R 4.2からはUTF-8対応、32bit版の削除などかなりの変化があるはず
 
-## クラウド版R+RStudio
+## 自分のPCにインストール
+
+　Rのバージョン、使用するOSのバージョンによってインストール方法が変更される可能性がある。したがって、最新情報はネット上の解説記事等を参照されたい。以下の内容はmacOS 13（Ventura）、Ubuntu 20、Windows 11にR 4.3.0をインストールする方法である。Rのインストールが終わったら、統合開発環境（IDE）であるRStudioのインストールを推奨する。RStudioのインストール方法は第[-@sec-ide]章を参照すること。
+
+### macOS
+
+* Xcode
+* Command Line Tools（CLT）
+* Xquartz
+* R
+* RStudio
+
+### Windows
+
+* ユーザー名の確認
+   * <http://nineworks2.blog.fc2.com/blog-entry-123.html>
+* R
+* Rtools
+* RStudio
+
+### Ubuntu
+
+Debian系（Debian / Ubuntu / Mint等）共通
+
+```bash
+$ sudo apt update
+$ sudo apt install -y gdebi-core wget
+```
+
+```bash
+$ sudo apt install -y fonts-ipaexfont
+$ fc-cache -f -v
+```
+
+```bash
+$ fc-list | grep IPAex
+```
+
+```bash
+$ sudo apt install -y build-essential
+$ sudo apt install -y libcurl4-openssl-dev
+$ sudo apt install -y libcurl4-gnutls-dev
+$ sudo apt install -y libxml2-dev
+$ sudo apt install -y libssl-dev
+$ sudo apt install -y libx11-dev
+$ sudo apt install -y libglu1-mesa-dev
+$ sudo apt install -y libmagick++-dev
+$ sudo apt install -y libudunits2-0
+$ sudo apt install -y libudunits2-dev
+$ sudo apt install -y libgdal-dev libproj-dev
+$ sudo apt install -y libgmp3-dev
+$ sudo apt install -y curl
+$ sudo apt install -y poppler-utils
+$ sudo apt install -y poppler-data
+```
+
+* R
+* RStudio
+
+## クラウド版の利用
+
+　自分のPCでなく、クラウドでRとRStudioを使うこともできる。この場合、インターネットさえ繋がっていれば、どのPCでも使用可能だ。また、自分のPCのスペックが低い場合でも、快適な分析ができる[^cloud-spec]。そして何より複雑なインストール手順が不要という点が最大のメリットである。
+
+[^cloud-spec]: ただし、自分のPCがハイスペックでも、クラウド版のRはサーバーの性能に依存するため、ハイスペックの恩恵は受けられない。
 
 ### RStudio Cloud
 
-<https://posit.cloud/>
+　[RStudio Cloud](https://posit.cloud/)はRStudioの開発元である[Posit](https://posit.co/)社が提供するクラウドサービスである。会員登録さえすればすぐにRとRStudioが使える。無料のプランもあるが、月25時間までしか使用できず、性能面での制約も大きい。有料のプランはいくつか用意されており、最も安い月5米ドルのプラン（Cloud Plus）だと無料プランと同じ性能で月75時間まで使用可能だ。
 
 ### JDCat分析ツール
 
-`ac.jp`、または`go.jp`で終わるメールアドレスを持っている場合のみ使用可能
+　[JDCat分析ツール](https://meatwiki.nii.ac.jp/confluence/display/jdcatanalysis)は国立情報学研究所（NII）が提供するクラウド版のR + RStudioであり、`ac.jp`、または`go.jp`で終わるメールアドレスを持っている場合**のみ**使用可能だ。有料のプランは存在せず、全て無料である。また、稼働時間の制約もないため、おすすめだ。また、Rだけでなく、Python + Jupyterも使えるのも長所の一つだ。ただし、常に最新版が使えるわけではなく、RとRStudioは半年〜1年遅れてアップデートされる。
 
-* 詳細は<https://meatwiki.nii.ac.jp/confluence/display/jdcatanalysis>を参照
+:::{.callout-important}
+#### 「導入」は1回だけで十分
 
-#### 導入の手順（初回のみ）
+　以下は「導入」と「再利用」について解説するが、「導入」はインストールに該当する内容であり、1回だけで十分だ。2回以上行っても良いが、新しいサーバーを立ち上げることになる（サーバー間のデータ転送はできない）。また、一人が生成可能な最大サーバー数は10個までだ。特段の事情が無い限り、「導入」は1回のみ実行し、次回からは「最利用」の手順に従ってJDCat分析ツールを起動すること。
+:::
 
-1. OpenIdPのアカウントを作成する。
+#### 導入
+
+1. [OpenIdPのホームーページ](https://openidp.nii.ac.jp/)へ作成し、アカウントを作成する。登録に使用するメールアドレスは**必ず**`ac.jp`または`go.jp`で終わるメールアドレスを入力する必要がある。
    * <https://openidp.nii.ac.jp/>
-2. 以下のURLへアクセス
+2. アカウントが発行されたら、以下のURLへアクセスする。『私たちのR』で使用するパッケージを事前にインストールするように設定したレポジトリである。
    * <https://binder.cs.rcos.nii.ac.jp/v2/gh/JaehyunSong/Binder_R/HEAD>
-   * 『私たちのR』で使用するパッケージを事前にインストールしたR + RStudio
 3. 所属機関の選択で「OpenIdP」を入力し、選択する。
-4. OpenIdPログイン
-5. 送信属性の選択画面が表示されたら、そのまま「同意」
-6. しばらく待つとJupyter Hubのホーム画面が表示される。
+4. OpenIdPのアカウント情報を入力し、ログインする。
+5. 送信属性の選択画面が表示されたら、そのまま「同意」を選択する。
+6. しばらく待つとJupyter Hubのホーム画面が表示される（〜5分所要）。
 7. RStudio Serverの起動は画面右側の「▼」をクリックし、RStudioを選択
 
-#### 2回目以降の手順
+#### 再利用
 
-1. 以下のURLへアクセスする。
+1. 以下のURLへアクセスする。ブラウザーのお気に入りに追加しておいても良いだろう。
    * <https://jupyter.cs.rcos.nii.ac.jp/>
 2. 所属機関の選択で「OpenIdP」を入力し、選択する。
-3. OpenIdPログイン
-4. 送信属性の選択画面が表示されたら、そのまま「同意」
+3. OpenIdPのアカウント情報を入力し、ログインする。
+4. 送信属性の選択画面が表示されたら、そのまま「同意」を選択する。
 5. サーバーリストにあるURLをクリックすると、Jupyter Hubのホーム画面が表示される。
