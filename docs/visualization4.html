@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.151">
+<meta name="generator" content="quarto-1.4.161">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -128,6 +128,8 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&amp;display=swap" rel="stylesheet"> 
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mono&amp;display=swap" rel="stylesheet"> 
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -1747,30 +1749,25 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <p>　今回使用するパッケージは{rnaturalearth}、{rnaturalearthdata}、{rgeos}です。他にも使うパッケージはありますが、世界地図ならとりあえずこれで十分です。</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(rnaturalearth, rnaturalearthdata, rgeos)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-The downloaded binary packages are in
-    /var/folders/kz/d5mmkxh14jg5dw15w70834bh0000gn/T//RtmprFV16l/downloaded_packages</code></pre>
-</div>
 </div>
 <p>　世界地図を読み込む関数は{rnaturalearth}が提供する<code>ne_countries()</code>です。とりあえず指定する引数は<code>scale</code>と<code>retunrclass</code>です。<code>scale</code>は地図の解像度であり、世界地図なら<code>"small"</code>で十分です。もう少し拡大される大陸地図なら<code>"medium"</code>が、一国だけの地図なら<code>"large"</code>が良いかも知れません。<code>reutrnclass</code>は<code>"sf"</code>と指定します。今回は低解像度の世界地図をsfクラスで読み込んでみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1"></a>world_map <span class="ot">&lt;-</span> <span class="fu">ne_countries</span>(<span class="at">scale =</span> <span class="st">"small"</span>, <span class="at">returnclass =</span> <span class="st">"sf"</span>)</span>
-<span id="cb75-2"><a href="#cb75-2"></a></span>
-<span id="cb75-3"><a href="#cb75-3"></a>world_map <span class="ot">&lt;-</span> world_map <span class="sc">|&gt;</span> </span>
-<span id="cb75-4"><a href="#cb75-4"></a>  <span class="fu">mutate</span>(<span class="at">pop_est =</span> <span class="fu">as.numeric</span>(pop_est))</span>
-<span id="cb75-5"><a href="#cb75-5"></a></span>
-<span id="cb75-6"><a href="#cb75-6"></a><span class="fu">class</span>(world_map)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1"></a>world_map <span class="ot">&lt;-</span> <span class="fu">ne_countries</span>(<span class="at">scale =</span> <span class="st">"small"</span>, <span class="at">returnclass =</span> <span class="st">"sf"</span>)</span>
+<span id="cb74-2"><a href="#cb74-2"></a></span>
+<span id="cb74-3"><a href="#cb74-3"></a>world_map <span class="ot">&lt;-</span> world_map <span class="sc">|&gt;</span> </span>
+<span id="cb74-4"><a href="#cb74-4"></a>  <span class="fu">mutate</span>(<span class="at">pop_est =</span> <span class="fu">as.numeric</span>(pop_est))</span>
+<span id="cb74-5"><a href="#cb74-5"></a></span>
+<span id="cb74-6"><a href="#cb74-6"></a><span class="fu">class</span>(world_map)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "sf"         "data.frame"</code></pre>
 </div>
 </div>
 <p>　クラスはdata.frameとsfであり、実際、<code>world_map</code>を出力してみると、見た目がデータフレームであることが分かります。地図の出力は<code>geom_sf()</code>幾何オブジェクトを使用します。とりあえず、やってみましょう。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-map3_42828a10e0e3fef9776ccca481540a3c">
-<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1"></a>world_map <span class="sc">|&gt;</span> </span>
-<span id="cb77-2"><a href="#cb77-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb77-3"><a href="#cb77-3"></a>  <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
-<span id="cb77-4"><a href="#cb77-4"></a>  <span class="fu">theme_void</span>() <span class="co"># 何もないテーマを指定する。ここはお好みで</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1"></a>world_map <span class="sc">|&gt;</span> </span>
+<span id="cb76-2"><a href="#cb76-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb76-3"><a href="#cb76-3"></a>  <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
+<span id="cb76-4"><a href="#cb76-4"></a>  <span class="fu">theme_void</span>() <span class="co"># 何もないテーマを指定する。ここはお好みで</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -1781,13 +1778,13 @@ The downloaded binary packages are in
 </div>
 <p>　もし、各国の人口に応じて色塗りをする場合はどうすれば良いでしょうか。実は、今回使用するデータがデータフレーム形式であることを考えると、これまでの{ggplot2}の使い方とあまり変わりません。{rnaturalearth}から読み込んだデータには既に<code>pop_est</code>という各国の人口データが含まれています（他にも自分で構築したデータがあるなら、データを結合して使用すれば良いですが、これについては後述します。）。この値に応じて色塗りを行うため、<code>geom_sf()</code>内に<code>fill = pop_est</code>でマッピングするだけです。また、国境線の色は<code>color</code>で指定可能です。白（<code>"white"</code>）だと少しおしゃれな感じがするのでやってみましょう。国境線は全ての国に適用されるものなので、<code>aes()</code>の外側で指定します。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-map4_f8ea56c3fbbd3397677a95b9b48a69d3">
-<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1"></a>world_map <span class="sc">|&gt;</span> </span>
-<span id="cb78-2"><a href="#cb78-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb78-3"><a href="#cb78-3"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> pop_est), <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
-<span id="cb78-4"><a href="#cb78-4"></a>  <span class="co"># 人口が少ない国はcornflowerblue色に、多い国はbrown3色とする</span></span>
-<span id="cb78-5"><a href="#cb78-5"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">"cornflowerblue"</span>, <span class="at">high =</span> <span class="st">"brown3"</span>) <span class="sc">+</span></span>
-<span id="cb78-6"><a href="#cb78-6"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"人口"</span>) <span class="sc">+</span></span>
-<span id="cb78-7"><a href="#cb78-7"></a>  <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1"></a>world_map <span class="sc">|&gt;</span> </span>
+<span id="cb77-2"><a href="#cb77-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb77-3"><a href="#cb77-3"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> pop_est), <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb77-4"><a href="#cb77-4"></a>  <span class="co"># 人口が少ない国はcornflowerblue色に、多い国はbrown3色とする</span></span>
+<span id="cb77-5"><a href="#cb77-5"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">"cornflowerblue"</span>, <span class="at">high =</span> <span class="st">"brown3"</span>) <span class="sc">+</span></span>
+<span id="cb77-6"><a href="#cb77-6"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"人口"</span>) <span class="sc">+</span></span>
+<span id="cb77-7"><a href="#cb77-7"></a>  <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -1798,14 +1795,14 @@ The downloaded binary packages are in
 </div>
 <p>　もし、世界でなく一部の地域だけを出力するなら、<code>coord_sf()</code>で座標系を調整します。東アジアと東南アジアの一部を出力したいとします。この場合、経度は90度から150度まで、緯度は10度から50度に絞ることになります。経度は<code>xlim</code>で、緯度は<code>ylim</code>で調整します。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-map5_0e0a1487df2423b8981237d03a9578d1">
-<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1"></a>world_map <span class="sc">|&gt;</span> </span>
-<span id="cb79-2"><a href="#cb79-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb79-3"><a href="#cb79-3"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> pop_est)) <span class="sc">+</span></span>
-<span id="cb79-4"><a href="#cb79-4"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">"cornflowerblue"</span>, <span class="at">high =</span> <span class="st">"brown3"</span>) <span class="sc">+</span></span>
-<span id="cb79-5"><a href="#cb79-5"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"人口"</span>) <span class="sc">+</span></span>
-<span id="cb79-6"><a href="#cb79-6"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">90</span>, <span class="dv">150</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">50</span>)) <span class="sc">+</span></span>
-<span id="cb79-7"><a href="#cb79-7"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb79-8"><a href="#cb79-8"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1"></a>world_map <span class="sc">|&gt;</span> </span>
+<span id="cb78-2"><a href="#cb78-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb78-3"><a href="#cb78-3"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> pop_est)) <span class="sc">+</span></span>
+<span id="cb78-4"><a href="#cb78-4"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">"cornflowerblue"</span>, <span class="at">high =</span> <span class="st">"brown3"</span>) <span class="sc">+</span></span>
+<span id="cb78-5"><a href="#cb78-5"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"人口"</span>) <span class="sc">+</span></span>
+<span id="cb78-6"><a href="#cb78-6"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">90</span>, <span class="dv">150</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">50</span>)) <span class="sc">+</span></span>
+<span id="cb78-7"><a href="#cb78-7"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb78-8"><a href="#cb78-8"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -1816,15 +1813,15 @@ The downloaded binary packages are in
 </div>
 <p>　他にも<code>ne_countries()</code>内に<code>continent</code>引数を指定し、特定の大陸だけを読み込むことで可能です。ここではアジアの国のみを抽出し、<code>asia_map</code>という名のオブジェクトとして格納します。解像度は中程度とします。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-map6_24dcb57af6b1c3c710d977b519b9a281">
-<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1"></a>asia_map <span class="ot">&lt;-</span> <span class="fu">ne_countries</span>(<span class="at">scale =</span> <span class="st">"medium"</span>, <span class="at">continent =</span> <span class="st">"Asia"</span>, </span>
-<span id="cb80-2"><a href="#cb80-2"></a>                         <span class="at">returnclass =</span> <span class="st">"sf"</span>)</span>
-<span id="cb80-3"><a href="#cb80-3"></a></span>
-<span id="cb80-4"><a href="#cb80-4"></a>asia_map <span class="sc">|&gt;</span></span>
-<span id="cb80-5"><a href="#cb80-5"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb80-6"><a href="#cb80-6"></a>    <span class="co"># 所得グループで色塗り</span></span>
-<span id="cb80-7"><a href="#cb80-7"></a>    <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> income_grp)) <span class="sc">+</span></span>
-<span id="cb80-8"><a href="#cb80-8"></a>    <span class="fu">theme_void</span>() <span class="sc">+</span></span>
-<span id="cb80-9"><a href="#cb80-9"></a>    <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"Income Group"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1"></a>asia_map <span class="ot">&lt;-</span> <span class="fu">ne_countries</span>(<span class="at">scale =</span> <span class="st">"medium"</span>, <span class="at">continent =</span> <span class="st">"Asia"</span>, </span>
+<span id="cb79-2"><a href="#cb79-2"></a>                         <span class="at">returnclass =</span> <span class="st">"sf"</span>)</span>
+<span id="cb79-3"><a href="#cb79-3"></a></span>
+<span id="cb79-4"><a href="#cb79-4"></a>asia_map <span class="sc">|&gt;</span></span>
+<span id="cb79-5"><a href="#cb79-5"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb79-6"><a href="#cb79-6"></a>    <span class="co"># 所得グループで色塗り</span></span>
+<span id="cb79-7"><a href="#cb79-7"></a>    <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> income_grp)) <span class="sc">+</span></span>
+<span id="cb79-8"><a href="#cb79-8"></a>    <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb79-9"><a href="#cb79-9"></a>    <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"Income Group"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -1835,12 +1832,12 @@ The downloaded binary packages are in
 </div>
 <p>　アジアの中から更に東アジアに絞りたい場合は<code>filter()</code>を使用し、<code>subregion</code>列を基準に抽出することも可能です。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-map7_49ef497b42b2b47712c828f2792b6554">
-<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1"></a>asia_map <span class="sc">|&gt;</span></span>
-<span id="cb81-2"><a href="#cb81-2"></a>    <span class="fu">filter</span>(subregion <span class="sc">==</span> <span class="st">"Eastern Asia"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb81-3"><a href="#cb81-3"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb81-4"><a href="#cb81-4"></a>    <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> income_grp)) <span class="sc">+</span></span>
-<span id="cb81-5"><a href="#cb81-5"></a>    <span class="fu">theme_void</span>() <span class="sc">+</span></span>
-<span id="cb81-6"><a href="#cb81-6"></a>    <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"Income Group"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1"></a>asia_map <span class="sc">|&gt;</span></span>
+<span id="cb80-2"><a href="#cb80-2"></a>    <span class="fu">filter</span>(subregion <span class="sc">==</span> <span class="st">"Eastern Asia"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb80-3"><a href="#cb80-3"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb80-4"><a href="#cb80-4"></a>    <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> income_grp)) <span class="sc">+</span></span>
+<span id="cb80-5"><a href="#cb80-5"></a>    <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb80-6"><a href="#cb80-6"></a>    <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"Income Group"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -1851,7 +1848,7 @@ The downloaded binary packages are in
 </div>
 <p>　<code>subregion</code>の値は以下のように確認可能です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1"></a><span class="fu">unique</span>(asia_map<span class="sc">$</span>subregion)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1"></a><span class="fu">unique</span>(asia_map<span class="sc">$</span>subregion)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Southern Asia"           "Western Asia"           
 [3] "South-Eastern Asia"      "Eastern Asia"           
@@ -1860,21 +1857,21 @@ The downloaded binary packages are in
 </div>
 <p>　これまで使用してきたデータがデータフレームと同じ見た目をしているため、{dplyr}を用いたデータハンドリングも可能です。たとえば、人口を連続変数としてでなく、factor型に変換してからマッピングをしてみましょう。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-map9_17750f43fa892b04c959c7b632f59d8d">
-<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1"></a>asia_map <span class="sc">|&gt;</span> </span>
-<span id="cb84-2"><a href="#cb84-2"></a>  <span class="fu">mutate</span>(<span class="at">Population =</span> <span class="fu">case_when</span>(pop_est <span class="sc">&lt;</span> <span class="dv">10000000</span>  <span class="sc">~</span> <span class="st">"1千万未満"</span>,</span>
-<span id="cb84-3"><a href="#cb84-3"></a>                                pop_est <span class="sc">&lt;</span> <span class="dv">50000000</span>  <span class="sc">~</span> <span class="st">"5千万未満"</span>,</span>
-<span id="cb84-4"><a href="#cb84-4"></a>                                pop_est <span class="sc">&lt;</span> <span class="dv">100000000</span> <span class="sc">~</span> <span class="st">"1億未満"</span>,</span>
-<span id="cb84-5"><a href="#cb84-5"></a>                                pop_est <span class="sc">&lt;</span> <span class="dv">500000000</span> <span class="sc">~</span> <span class="st">"5億未満"</span>,</span>
-<span id="cb84-6"><a href="#cb84-6"></a>                                <span class="cn">TRUE</span>                <span class="sc">~</span> <span class="st">"5億以上"</span>),</span>
-<span id="cb84-7"><a href="#cb84-7"></a>         <span class="at">Population =</span> <span class="fu">factor</span>(Population, </span>
-<span id="cb84-8"><a href="#cb84-8"></a>                             <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"1千万未満"</span>, <span class="st">"5千万未満"</span>, <span class="st">"1億未満"</span>,</span>
-<span id="cb84-9"><a href="#cb84-9"></a>                                        <span class="st">"5億未満"</span>, <span class="st">"5億以上"</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb84-10"><a href="#cb84-10"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb84-11"><a href="#cb84-11"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Population)) <span class="sc">+</span></span>
-<span id="cb84-12"><a href="#cb84-12"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Blues"</span>, <span class="at">drop =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb84-13"><a href="#cb84-13"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"人口"</span>) <span class="sc">+</span></span>
-<span id="cb84-14"><a href="#cb84-14"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
-<span id="cb84-15"><a href="#cb84-15"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1"></a>asia_map <span class="sc">|&gt;</span> </span>
+<span id="cb83-2"><a href="#cb83-2"></a>  <span class="fu">mutate</span>(<span class="at">Population =</span> <span class="fu">case_when</span>(pop_est <span class="sc">&lt;</span> <span class="dv">10000000</span>  <span class="sc">~</span> <span class="st">"1千万未満"</span>,</span>
+<span id="cb83-3"><a href="#cb83-3"></a>                                pop_est <span class="sc">&lt;</span> <span class="dv">50000000</span>  <span class="sc">~</span> <span class="st">"5千万未満"</span>,</span>
+<span id="cb83-4"><a href="#cb83-4"></a>                                pop_est <span class="sc">&lt;</span> <span class="dv">100000000</span> <span class="sc">~</span> <span class="st">"1億未満"</span>,</span>
+<span id="cb83-5"><a href="#cb83-5"></a>                                pop_est <span class="sc">&lt;</span> <span class="dv">500000000</span> <span class="sc">~</span> <span class="st">"5億未満"</span>,</span>
+<span id="cb83-6"><a href="#cb83-6"></a>                                <span class="cn">TRUE</span>                <span class="sc">~</span> <span class="st">"5億以上"</span>),</span>
+<span id="cb83-7"><a href="#cb83-7"></a>         <span class="at">Population =</span> <span class="fu">factor</span>(Population, </span>
+<span id="cb83-8"><a href="#cb83-8"></a>                             <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"1千万未満"</span>, <span class="st">"5千万未満"</span>, <span class="st">"1億未満"</span>,</span>
+<span id="cb83-9"><a href="#cb83-9"></a>                                        <span class="st">"5億未満"</span>, <span class="st">"5億以上"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb83-10"><a href="#cb83-10"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb83-11"><a href="#cb83-11"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Population)) <span class="sc">+</span></span>
+<span id="cb83-12"><a href="#cb83-12"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Blues"</span>, <span class="at">drop =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb83-13"><a href="#cb83-13"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"人口"</span>) <span class="sc">+</span></span>
+<span id="cb83-14"><a href="#cb83-14"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb83-15"><a href="#cb83-15"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -1889,10 +1886,10 @@ The downloaded binary packages are in
 <h3 data-number="21.11.2" class="anchored" data-anchor-id="日本地図全体"><span class="header-section-number">21.11.2</span> 日本地図（全体）</h3>
 <p>　次は日本地図の出力についてです。日本全土だけを出力するなら、これまで使いました<code>ne_countries</code>に<code>country</code>引数を指定するだけで使えます。たとえば、日本の地図だけなら、<code>country = "Japan"</code>を指定します。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-map10_23aec189f61262625773c0e9e7703854">
-<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1"></a><span class="fu">ne_countries</span>(<span class="at">scale =</span> <span class="st">"small"</span>, <span class="at">country =</span> <span class="st">"Japan"</span>, <span class="at">returnclass =</span> <span class="st">"sf"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb85-2"><a href="#cb85-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb85-3"><a href="#cb85-3"></a>    <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
-<span id="cb85-4"><a href="#cb85-4"></a>    <span class="fu">theme_void</span>() <span class="co"># 空っぽのテーマ</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1"></a><span class="fu">ne_countries</span>(<span class="at">scale =</span> <span class="st">"small"</span>, <span class="at">country =</span> <span class="st">"Japan"</span>, <span class="at">returnclass =</span> <span class="st">"sf"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb84-2"><a href="#cb84-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb84-3"><a href="#cb84-3"></a>    <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
+<span id="cb84-4"><a href="#cb84-4"></a>    <span class="fu">theme_void</span>() <span class="co"># 空っぽのテーマ</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -1903,10 +1900,10 @@ The downloaded binary packages are in
 </div>
 <p>　これだと、物足りない感があるので、もう少し高解像度の地図にしてみましょう。高解像度の地図データを読み込む際は<code>scale = "large"</code>を指定します。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-map11_233351cbb9efac1233da0110ee43bebe">
-<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1"></a><span class="fu">ne_countries</span>(<span class="at">scale =</span> <span class="st">"large"</span>, <span class="at">country =</span> <span class="st">"Japan"</span>, <span class="at">returnclass =</span> <span class="st">"sf"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb86-2"><a href="#cb86-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb86-3"><a href="#cb86-3"></a>    <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
-<span id="cb86-4"><a href="#cb86-4"></a>    <span class="fu">theme_void</span>() <span class="co"># 空っぽのテーマ</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1"></a><span class="fu">ne_countries</span>(<span class="at">scale =</span> <span class="st">"large"</span>, <span class="at">country =</span> <span class="st">"Japan"</span>, <span class="at">returnclass =</span> <span class="st">"sf"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb85-2"><a href="#cb85-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb85-3"><a href="#cb85-3"></a>    <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
+<span id="cb85-4"><a href="#cb85-4"></a>    <span class="fu">theme_void</span>() <span class="co"># 空っぽのテーマ</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -1915,18 +1912,18 @@ The downloaded binary packages are in
 </div>
 </div>
 </div>
-<p>　ただ、日本地図を出すという場合、多くは都道府県レベルでマッピングが目的でしょう。世界地図のマッピングならこれで問題ありませんが、一国だけなら、その下の自治体の境界線も必要です。したがって、先ほど使用しましたパッケージのより高解像度の地図が含まれている{rnaturalearthhires}をインストールし、読み込みましょう。2023年Jun月16日現在、{rnaturalearthhires}はCRANに登録されておらず、GitHubの<a href="https://github.com/ropensci">ropensciレポジトリー</a>のみで公開されているため、今回は{pacman}の<code>p_load()</code>でなく、<code>p_load_gh()</code>を使用します。</p>
+<p>　ただ、日本地図を出すという場合、多くは都道府県レベルでマッピングが目的でしょう。世界地図のマッピングならこれで問題ありませんが、一国だけなら、その下の自治体の境界線も必要です。したがって、先ほど使用しましたパッケージのより高解像度の地図が含まれている{rnaturalearthhires}をインストールし、読み込みましょう。2023年Jun月26日現在、{rnaturalearthhires}はCRANに登録されておらず、GitHubの<a href="https://github.com/ropensci">ropensciレポジトリー</a>のみで公開されているため、今回は{pacman}の<code>p_load()</code>でなく、<code>p_load_gh()</code>を使用します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1"></a>pacman<span class="sc">::</span><span class="fu">p_load_gh</span>(<span class="st">"ropensci/rnaturalearthhires"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1"></a>pacman<span class="sc">::</span><span class="fu">p_load_gh</span>(<span class="st">"ropensci/rnaturalearthhires"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　地図データの抽出には<code>ne_states()</code>関数を使用します。第一引数として国家名を指定し、地図データのクラスはsfとします。抽出したデータの使い方は世界地図の時と同じです。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-map13_9419bcd4dea4ffad138bd7cd3333d363">
-<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1"></a>Japan_Map <span class="ot">&lt;-</span> <span class="fu">ne_states</span>(<span class="st">"Japan"</span>, <span class="at">returnclass =</span> <span class="st">"sf"</span>)</span>
-<span id="cb88-2"><a href="#cb88-2"></a></span>
-<span id="cb88-3"><a href="#cb88-3"></a>Japan_Map <span class="sc">|&gt;</span></span>
-<span id="cb88-4"><a href="#cb88-4"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb88-5"><a href="#cb88-5"></a>  <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
-<span id="cb88-6"><a href="#cb88-6"></a>  <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1"></a>Japan_Map <span class="ot">&lt;-</span> <span class="fu">ne_states</span>(<span class="st">"Japan"</span>, <span class="at">returnclass =</span> <span class="st">"sf"</span>)</span>
+<span id="cb87-2"><a href="#cb87-2"></a></span>
+<span id="cb87-3"><a href="#cb87-3"></a>Japan_Map <span class="sc">|&gt;</span></span>
+<span id="cb87-4"><a href="#cb87-4"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb87-5"><a href="#cb87-5"></a>  <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
+<span id="cb87-6"><a href="#cb87-6"></a>  <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -1937,9 +1934,9 @@ The downloaded binary packages are in
 </div>
 <p>　今回は各都道府県を人口密度ごとに色塗りをしてみましょう。<code>ne_states()</code>で読み込んだデータに人口密度のデータはないため、別途のデータと結合する必要があります。筆者が予め作成しておいた<a href="Data/Japan_Density.csv">データ</a>を読み込み、中身を確認してみます。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1"></a>Japan_Density <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Data/Japan_Density.csv"</span>)</span>
-<span id="cb89-2"><a href="#cb89-2"></a></span>
-<span id="cb89-3"><a href="#cb89-3"></a>Japan_Density</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1"></a>Japan_Density <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Data/Japan_Density.csv"</span>)</span>
+<span id="cb88-2"><a href="#cb88-2"></a></span>
+<span id="cb88-3"><a href="#cb88-3"></a>Japan_Density</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 47 × 3
     Code Name   Density
@@ -1960,7 +1957,7 @@ The downloaded binary packages are in
 <p>　各都道府県の人口密度がついております、左側の<code>Code</code>は何でしょうか。これは各都道府県のISOコードであり、このコードをキー変数としてデータを結合することとなります。各都道府県のコードは<a href="https://nlftp.mlit.go.jp/ksj/gml/codelist/PrefCd.html">国土交通省のホームページ</a>から確認可能です。</p>
 <p>　それではデータを結合してみましょう。<code>ne_states()</code>で読み込んだデータの場合、地域のコードは<code>iso_3166_2</code>という列に格納されています。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1"></a>Japan_Map<span class="sc">$</span>iso_3166_2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1"></a>Japan_Map<span class="sc">$</span>iso_3166_2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "JP-46" "JP-44" "JP-40" "JP-41" "JP-42" "JP-43" "JP-45" "JP-36" "JP-37"
 [10] "JP-38" "JP-39" "JP-32" "JP-35" "JP-31" "JP-28" "JP-26" "JP-18" "JP-17"
@@ -1972,11 +1969,11 @@ The downloaded binary packages are in
 </div>
 <p>　こちらは文字列となっていますね。これを左から4番目の文字から切り取り、数値型に変換します。変換したコードは結合のために<code>Code</code>という名の列として追加しましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1"></a>Japan_Map <span class="ot">&lt;-</span> Japan_Map <span class="sc">|&gt;</span></span>
-<span id="cb93-2"><a href="#cb93-2"></a>    <span class="fu">mutate</span>(<span class="at">Code =</span> <span class="fu">str_sub</span>(iso_3166_2, <span class="dv">4</span>),</span>
-<span id="cb93-3"><a href="#cb93-3"></a>           <span class="at">Code =</span> <span class="fu">as.numeric</span>(Code))</span>
-<span id="cb93-4"><a href="#cb93-4"></a></span>
-<span id="cb93-5"><a href="#cb93-5"></a>Japan_Map<span class="sc">$</span>Code</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1"></a>Japan_Map <span class="ot">&lt;-</span> Japan_Map <span class="sc">|&gt;</span></span>
+<span id="cb92-2"><a href="#cb92-2"></a>    <span class="fu">mutate</span>(<span class="at">Code =</span> <span class="fu">str_sub</span>(iso_3166_2, <span class="dv">4</span>),</span>
+<span id="cb92-3"><a href="#cb92-3"></a>           <span class="at">Code =</span> <span class="fu">as.numeric</span>(Code))</span>
+<span id="cb92-4"><a href="#cb92-4"></a></span>
+<span id="cb92-5"><a href="#cb92-5"></a>Japan_Map<span class="sc">$</span>Code</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] 46 44 40 41 42 43 45 36 37 38 39 32 35 31 28 26 18 17 16 15  6  5  2  3  4
 [26]  7  8 12 13 14 22 23 24 30 27 33 34  1 47 10 20  9 21 25 11 19 29</code></pre>
@@ -1984,9 +1981,9 @@ The downloaded binary packages are in
 </div>
 <p>　続いて、<code>Japan_Map</code>と<code>Japan_Density</code>を<code>Code</code>列をキー変数として結合します。データの中身を確認すると、<code>Density</code>列が最後(の直前)の列に追加されたことが分かります。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1"></a>Japan_Map <span class="ot">&lt;-</span> <span class="fu">left_join</span>(Japan_Map, Japan_Density, <span class="at">by =</span> <span class="st">"Code"</span>)</span>
-<span id="cb95-2"><a href="#cb95-2"></a></span>
-<span id="cb95-3"><a href="#cb95-3"></a>Japan_Map</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1"></a>Japan_Map <span class="ot">&lt;-</span> <span class="fu">left_join</span>(Japan_Map, Japan_Density, <span class="at">by =</span> <span class="st">"Code"</span>)</span>
+<span id="cb94-2"><a href="#cb94-2"></a></span>
+<span id="cb94-3"><a href="#cb94-3"></a>Japan_Map</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Simple feature collection with 47 features and 86 fields
 Geometry type: MULTIPOLYGON
@@ -2082,7 +2079,7 @@ First 10 features:
 8      &lt;NA&gt;         1      jpn     JA39       &lt;NA&gt;         7        11        3
 9      &lt;NA&gt;         1      jpn     JA17       &lt;NA&gt;         7        11        3
 10     &lt;NA&gt;         1      jpn     JA05       &lt;NA&gt;         7        11        3
-   wikidataid name_ar name_bn              name_de              name_en
+   wikidataid name_ar name_bn             name_de              name_en
 1      Q15701    &lt;NA&gt;    &lt;NA&gt; Präfektur Kagoshima Kagoshima Prefecture
 2     Q133924    &lt;NA&gt;    &lt;NA&gt;      Präfektur Oita      Oita Prefecture
 3     Q123258    &lt;NA&gt;    &lt;NA&gt;   Präfektur Fukuoka   Fukuoka Prefecture
@@ -2093,7 +2090,7 @@ First 10 features:
 8     Q160734    &lt;NA&gt;    &lt;NA&gt; Präfektur Tokushima Tokushima Prefecture
 9     Q161454    &lt;NA&gt;    &lt;NA&gt;    Präfektur Kagawa    Kagawa Prefecture
 10    Q123376    &lt;NA&gt;    &lt;NA&gt;     Präfektur Ehime     Ehime Prefecture
-                   name_es                  name_fr name_el name_hi
+                   name_es                 name_fr name_el name_hi
 1  Prefectura de Kagoshima Préfecture de Kagoshima    &lt;NA&gt;    &lt;NA&gt;
 2       Prefectura de Oita       Préfecture d'Oita    &lt;NA&gt;    &lt;NA&gt;
 3    Prefectura de Fukuoka   Préfecture de Fukuoka    &lt;NA&gt;    &lt;NA&gt;
@@ -2104,9 +2101,9 @@ First 10 features:
 8  Prefectura de Tokushima Préfecture de Tokushima    &lt;NA&gt;    &lt;NA&gt;
 9     Prefectura de Kagawa    Préfecture de Kagawa    &lt;NA&gt;    &lt;NA&gt;
 10     Prefectura de Ehime      Préfecture d'Ehime    &lt;NA&gt;    &lt;NA&gt;
-                 name_hu             name_id                 name_it name_ja
+                name_hu             name_id                 name_it name_ja
 1   Kagosima prefektúra Prefektur Kagoshima prefettura di Kagoshima    &lt;NA&gt;
-2      Óita prefektúra      Prefektur Oita      prefettura di Oita    &lt;NA&gt;
+2       Óita prefektúra      Prefektur Oita      prefettura di Oita    &lt;NA&gt;
 3    Fukuoka prefektúra   Prefektur Fukuoka   prefettura di Fukuoka    &lt;NA&gt;
 4      Szaga prefektúra      Prefektur Saga      Prefettura di Saga    &lt;NA&gt;
 5  Nagaszaki prefektúra  Prefektur Nagasaki  prefettura di Nagasaki    &lt;NA&gt;
@@ -2152,19 +2149,19 @@ First 10 features:
 </div>
 <p>　それではマッピングをしてみましょう。人口密度を5つのカテゴリーに順序付きfactor化してから、そのカテゴリーに応じて色塗りをします。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-map18_3248a2b595e2c7cf15d86c19cf55337c">
-<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1"></a>Japan_Map <span class="sc">|&gt;</span></span>
-<span id="cb97-2"><a href="#cb97-2"></a>    <span class="fu">mutate</span>(<span class="at">Density2 =</span> <span class="fu">case_when</span>(Density <span class="sc">&gt;=</span> <span class="dv">3000</span> <span class="sc">~</span> <span class="st">"3000人以上"</span>,</span>
-<span id="cb97-3"><a href="#cb97-3"></a>                                Density <span class="sc">&gt;=</span> <span class="dv">1000</span> <span class="sc">~</span> <span class="st">"1000人以上"</span>,</span>
-<span id="cb97-4"><a href="#cb97-4"></a>                                Density <span class="sc">&gt;=</span>  <span class="dv">500</span> <span class="sc">~</span> <span class="st">"500人以上"</span>,</span>
-<span id="cb97-5"><a href="#cb97-5"></a>                                Density <span class="sc">&gt;=</span>  <span class="dv">100</span> <span class="sc">~</span> <span class="st">"100人以上"</span>,</span>
-<span id="cb97-6"><a href="#cb97-6"></a>                                <span class="cn">TRUE</span>            <span class="sc">~</span> <span class="st">"100人未満"</span>),</span>
-<span id="cb97-7"><a href="#cb97-7"></a>           <span class="at">Density2 =</span> <span class="fu">factor</span>(Density2, <span class="at">ordered =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb97-8"><a href="#cb97-8"></a>                             <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"3000人以上"</span>, <span class="st">"1000人以上"</span>, <span class="st">"500人以上"</span>,</span>
-<span id="cb97-9"><a href="#cb97-9"></a>                                        <span class="st">"100人以上"</span>, <span class="st">"100人未満"</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb97-10"><a href="#cb97-10"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb97-11"><a href="#cb97-11"></a>    <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Density2)) <span class="sc">+</span></span>
-<span id="cb97-12"><a href="#cb97-12"></a>    <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"人口密度 (km^2)"</span>) <span class="sc">+</span></span>
-<span id="cb97-13"><a href="#cb97-13"></a>    <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1"></a>Japan_Map <span class="sc">|&gt;</span></span>
+<span id="cb96-2"><a href="#cb96-2"></a>    <span class="fu">mutate</span>(<span class="at">Density2 =</span> <span class="fu">case_when</span>(Density <span class="sc">&gt;=</span> <span class="dv">3000</span> <span class="sc">~</span> <span class="st">"3000人以上"</span>,</span>
+<span id="cb96-3"><a href="#cb96-3"></a>                                Density <span class="sc">&gt;=</span> <span class="dv">1000</span> <span class="sc">~</span> <span class="st">"1000人以上"</span>,</span>
+<span id="cb96-4"><a href="#cb96-4"></a>                                Density <span class="sc">&gt;=</span>  <span class="dv">500</span> <span class="sc">~</span> <span class="st">"500人以上"</span>,</span>
+<span id="cb96-5"><a href="#cb96-5"></a>                                Density <span class="sc">&gt;=</span>  <span class="dv">100</span> <span class="sc">~</span> <span class="st">"100人以上"</span>,</span>
+<span id="cb96-6"><a href="#cb96-6"></a>                                <span class="cn">TRUE</span>            <span class="sc">~</span> <span class="st">"100人未満"</span>),</span>
+<span id="cb96-7"><a href="#cb96-7"></a>           <span class="at">Density2 =</span> <span class="fu">factor</span>(Density2, <span class="at">ordered =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb96-8"><a href="#cb96-8"></a>                             <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"3000人以上"</span>, <span class="st">"1000人以上"</span>, <span class="st">"500人以上"</span>,</span>
+<span id="cb96-9"><a href="#cb96-9"></a>                                        <span class="st">"100人以上"</span>, <span class="st">"100人未満"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb96-10"><a href="#cb96-10"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb96-11"><a href="#cb96-11"></a>    <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Density2)) <span class="sc">+</span></span>
+<span id="cb96-12"><a href="#cb96-12"></a>    <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"人口密度 (km^2)"</span>) <span class="sc">+</span></span>
+<span id="cb96-13"><a href="#cb96-13"></a>    <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2179,24 +2176,24 @@ First 10 features:
 <h3 data-number="21.11.3" class="anchored" data-anchor-id="日本地図特定の都道府県"><span class="header-section-number">21.11.3</span> 日本地図（特定の都道府県）</h3>
 <p>　また日本地図のマッピングですが、今回は市区町村レベルまで見てみましょう。<code>ne_states()</code>では市区町村までマッピングすることはできませんので、今回は徳島大学の<a href="https://twitter.com/u_ribo">瓜生真也</a>先生が公開しました{jpndistrict}を使います。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1"></a>pacman<span class="sc">::</span><span class="fu">p_load_gh</span>(<span class="st">"uribo/jpndistrict"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1"></a>pacman<span class="sc">::</span><span class="fu">p_load_gh</span>(<span class="st">"uribo/jpndistrict"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　今回は大阪府の地図を出力してみましょう。特定の都道府県の地図を読み込むためには<code>jpn_pref()</code>関数を使用します。都道府県は<code>pref_code</code>または<code>admin_name</code>で指定します。大阪のコードは27であるため、<code>pref_code = 27</code>でも良いですし、<code>admin_name = "大阪府"</code>でも同じです。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1"></a><span class="co"># Osaka_map &lt;- jpn_pref(admin_name = "大阪府") でも同じ</span></span>
-<span id="cb99-2"><a href="#cb99-2"></a>Osaka_map <span class="ot">&lt;-</span> <span class="fu">jpn_pref</span>(<span class="at">pref_code =</span> <span class="dv">27</span>)</span>
-<span id="cb99-3"><a href="#cb99-3"></a></span>
-<span id="cb99-4"><a href="#cb99-4"></a><span class="fu">class</span>(Osaka_map)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1"></a><span class="co"># Osaka_map &lt;- jpn_pref(admin_name = "大阪府") でも同じ</span></span>
+<span id="cb98-2"><a href="#cb98-2"></a>Osaka_map <span class="ot">&lt;-</span> <span class="fu">jpn_pref</span>(<span class="at">pref_code =</span> <span class="dv">27</span>)</span>
+<span id="cb98-3"><a href="#cb98-3"></a></span>
+<span id="cb98-4"><a href="#cb98-4"></a><span class="fu">class</span>(Osaka_map)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "sf"         "tbl_df"     "tbl"        "data.frame"</code></pre>
 </div>
 </div>
 <p>　プロットの方法は同じです。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-map21_1988ad32de4ee6b624a80da42929661d">
-<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1"></a>Osaka_map <span class="sc">|&gt;</span></span>
-<span id="cb101-2"><a href="#cb101-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb101-3"><a href="#cb101-3"></a>  <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
-<span id="cb101-4"><a href="#cb101-4"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1"></a>Osaka_map <span class="sc">|&gt;</span></span>
+<span id="cb100-2"><a href="#cb100-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb100-3"><a href="#cb100-3"></a>  <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
+<span id="cb100-4"><a href="#cb100-4"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2207,9 +2204,9 @@ First 10 features:
 </div>
 <p>　ここでもデータの結合&amp;マッピングが可能です。大阪府内自治体の人口と学生数が格納された<a href="data/Osaka_Student.csv">データ</a>を読み込んでみましょう。こちらは2015年国勢調査の結果から取得したデータです。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1"></a>Osaka_Student <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/Osaka_Student.csv"</span>)</span>
-<span id="cb102-2"><a href="#cb102-2"></a></span>
-<span id="cb102-3"><a href="#cb102-3"></a>Osaka_Student</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1"></a>Osaka_Student <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/Osaka_Student.csv"</span>)</span>
+<span id="cb101-2"><a href="#cb101-2"></a></span>
+<span id="cb101-3"><a href="#cb101-3"></a>Osaka_Student</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 75 × 4
     Code Name                Pop Student
@@ -2229,21 +2226,21 @@ First 10 features:
 </div>
 <p>　各市区町村にもコードが指定されており、<code>Osaka_Student</code>では<code>Code</code>列、<code>Osaka_map</code>では<code>citi_code</code>列となります。<code>Osaka_map</code>の<code>city_code</code>は文字列であるため、こちらを数値型に変換し<code>Code</code>という名の列として追加しておきましょう。続いて、<code>Code</code>列をキー変数とし、2つのデータセットを結合します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1"></a>Osaka_map <span class="ot">&lt;-</span> Osaka_map <span class="sc">|&gt;</span></span>
-<span id="cb104-2"><a href="#cb104-2"></a>    <span class="fu">mutate</span>(<span class="at">Code =</span> <span class="fu">as.numeric</span>(city_code))</span>
-<span id="cb104-3"><a href="#cb104-3"></a></span>
-<span id="cb104-4"><a href="#cb104-4"></a>Osaka_map <span class="ot">&lt;-</span> <span class="fu">left_join</span>(Osaka_map, Osaka_Student, <span class="at">by =</span> <span class="st">"Code"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1"></a>Osaka_map <span class="ot">&lt;-</span> Osaka_map <span class="sc">|&gt;</span></span>
+<span id="cb103-2"><a href="#cb103-2"></a>    <span class="fu">mutate</span>(<span class="at">Code =</span> <span class="fu">as.numeric</span>(city_code))</span>
+<span id="cb103-3"><a href="#cb103-3"></a></span>
+<span id="cb103-4"><a href="#cb103-4"></a>Osaka_map <span class="ot">&lt;-</span> <span class="fu">left_join</span>(Osaka_map, Osaka_Student, <span class="at">by =</span> <span class="st">"Code"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　最後にマッピングです。ここでは人口1万人当たり学生数を<code>Student_Ratio</code>という列として追加し、こちらの値に合わせて色塗りをしてみましょう。<code>scale_fill_gradient()</code>を使用し、人口1万人当たり学生数が少ないほど白、多いほど黒塗りします。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-map24_b26f2558ffa2ac228e02612c91208bb8">
-<div class="sourceCode cell-code" id="cb105"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1"></a>Osaka_map <span class="sc">|&gt;</span></span>
-<span id="cb105-2"><a href="#cb105-2"></a>  <span class="fu">mutate</span>(<span class="at">Student_Ratio =</span> Student <span class="sc">/</span> Pop <span class="sc">*</span> <span class="dv">10000</span>) <span class="sc">|&gt;</span></span>
-<span id="cb105-3"><a href="#cb105-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb105-4"><a href="#cb105-4"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Student_Ratio)) <span class="sc">+</span></span>
-<span id="cb105-5"><a href="#cb105-5"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">"white"</span>, <span class="at">high =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb105-6"><a href="#cb105-6"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"1万人当たり学生数 (人)"</span>) <span class="sc">+</span></span>
-<span id="cb105-7"><a href="#cb105-7"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb105-8"><a href="#cb105-8"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1"></a>Osaka_map <span class="sc">|&gt;</span></span>
+<span id="cb104-2"><a href="#cb104-2"></a>  <span class="fu">mutate</span>(<span class="at">Student_Ratio =</span> Student <span class="sc">/</span> Pop <span class="sc">*</span> <span class="dv">10000</span>) <span class="sc">|&gt;</span></span>
+<span id="cb104-3"><a href="#cb104-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb104-4"><a href="#cb104-4"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Student_Ratio)) <span class="sc">+</span></span>
+<span id="cb104-5"><a href="#cb104-5"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">"white"</span>, <span class="at">high =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb104-6"><a href="#cb104-6"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"1万人当たり学生数 (人)"</span>) <span class="sc">+</span></span>
+<span id="cb104-7"><a href="#cb104-7"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb104-8"><a href="#cb104-8"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2270,17 +2267,17 @@ First 10 features:
 <p>　ここでX、Y、Zはノード（node）と呼ばれ、それぞれのノードをつなぐ線のことをエッジ（edge）と呼びます。また、これらのエッジには方向があります（有向）。簡単に言うと原因と結果といった関係ですが、DAGを描く際は、各ノード間の関係を記述する必要があります。</p>
 <p>　それではまず、以上の図を作ってみましょう。最初のステップとして{dagitty}と{ggdag}をインストールし、読み込みましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(dagitty, ggdag)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb105"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(dagitty, ggdag)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　つづいて、DAGの情報を含むオブジェクトを作成します。使用する関数は<code>dagify()</code>であり、ここには<code>結果 ~ 原因</code>の形式で各ノード間の関係を記述します。先ほどの図では<code>X</code>は<code>Y</code>の原因（<code>X ~ Y</code>）、<code>Z</code>は<code>X</code>と<code>Y</code>の原因（<code>X ~ Z</code>と<code>Y ~ Z</code>）です。これらの情報を<code>dagify()</code>内で指定します。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-dag3_ed474099116edb69e77f87cddb1423ec">
-<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1"></a>DAG_data1 <span class="ot">&lt;-</span> <span class="fu">dagify</span>(X <span class="sc">~</span> Z,</span>
-<span id="cb107-2"><a href="#cb107-2"></a>                    Y <span class="sc">~</span> Z,</span>
-<span id="cb107-3"><a href="#cb107-3"></a>                    Y <span class="sc">~</span> X,</span>
-<span id="cb107-4"><a href="#cb107-4"></a>                    <span class="at">exposure =</span> <span class="st">"X"</span>,</span>
-<span id="cb107-5"><a href="#cb107-5"></a>                    <span class="at">outcome  =</span> <span class="st">"Y"</span>)</span>
-<span id="cb107-6"><a href="#cb107-6"></a></span>
-<span id="cb107-7"><a href="#cb107-7"></a>DAG_data1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1"></a>DAG_data1 <span class="ot">&lt;-</span> <span class="fu">dagify</span>(X <span class="sc">~</span> Z,</span>
+<span id="cb106-2"><a href="#cb106-2"></a>                    Y <span class="sc">~</span> Z,</span>
+<span id="cb106-3"><a href="#cb106-3"></a>                    Y <span class="sc">~</span> X,</span>
+<span id="cb106-4"><a href="#cb106-4"></a>                    <span class="at">exposure =</span> <span class="st">"X"</span>,</span>
+<span id="cb106-5"><a href="#cb106-5"></a>                    <span class="at">outcome  =</span> <span class="st">"Y"</span>)</span>
+<span id="cb106-6"><a href="#cb106-6"></a></span>
+<span id="cb106-7"><a href="#cb106-7"></a>DAG_data1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>dag {
 X [exposure]
@@ -2294,15 +2291,15 @@ Z -&gt; Y
 </div>
 <p>　<code>Y ~ X</code>と<code>Y ~ Z</code>は<code>Y ~ X + Z</code>とまとめることも可能です。これは「<code>Y</code>の原因は<code>X</code>と<code>Z</code>である」という意味であり、「<code>Y</code>の原因は<code>X</code>であり、<code>Y</code>の原因は<code>Z</code>である」と同じ意味です。また、DAGを作図する際、<code>dagify()</code>内に<code>exposure</code>と<code>outcome</code>は不要ですが、もし<code>adjustmentSets()</code>関数などを使って統制変数を特定したい場合は処置変数（<code>exposure</code>）と応答変数（<code>outcome</code>）にそれぞれ変数名を指定します。ちなみに、以上のコードは以下のように書くことも可能です。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-dag4_91a70dfef29f6b36fabd4bf1c6896fe2">
-<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1"></a>DAG_data1 <span class="ot">&lt;-</span> <span class="fu">dagitty</span>(</span>
-<span id="cb109-2"><a href="#cb109-2"></a>  <span class="st">"dag{</span></span>
-<span id="cb109-3"><a href="#cb109-3"></a><span class="st">  X -&gt; Y</span></span>
-<span id="cb109-4"><a href="#cb109-4"></a><span class="st">  X &lt;- Z -&gt; Y</span></span>
-<span id="cb109-5"><a href="#cb109-5"></a><span class="st">  X [exposure]</span></span>
-<span id="cb109-6"><a href="#cb109-6"></a><span class="st">  Y [outcome]</span></span>
-<span id="cb109-7"><a href="#cb109-7"></a><span class="st">  }"</span>)</span>
-<span id="cb109-8"><a href="#cb109-8"></a></span>
-<span id="cb109-9"><a href="#cb109-9"></a>DAG_data1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1"></a>DAG_data1 <span class="ot">&lt;-</span> <span class="fu">dagitty</span>(</span>
+<span id="cb108-2"><a href="#cb108-2"></a>  <span class="st">"dag{</span></span>
+<span id="cb108-3"><a href="#cb108-3"></a><span class="st">  X -&gt; Y</span></span>
+<span id="cb108-4"><a href="#cb108-4"></a><span class="st">  X &lt;- Z -&gt; Y</span></span>
+<span id="cb108-5"><a href="#cb108-5"></a><span class="st">  X [exposure]</span></span>
+<span id="cb108-6"><a href="#cb108-6"></a><span class="st">  Y [outcome]</span></span>
+<span id="cb108-7"><a href="#cb108-7"></a><span class="st">  }"</span>)</span>
+<span id="cb108-8"><a href="#cb108-8"></a></span>
+<span id="cb108-9"><a href="#cb108-9"></a>DAG_data1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>dag {
 X [exposure]
@@ -2316,8 +2313,8 @@ Z -&gt; Y
 </div>
 <p>　格納された<code>DAG_data1</code>オブジェクトのクラスは<code>"dagitty"</code>です。<code>"dagitty"</code>の可視化には{ggdag}の<code>ggdag()</code>を使用します。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-dag5_bbf599255dd122cfba185551fa73d729">
-<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1"></a>DAG_data1 <span class="sc">|&gt;</span></span>
-<span id="cb111-2"><a href="#cb111-2"></a>  <span class="fu">ggdag</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb110"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1"></a>DAG_data1 <span class="sc">|&gt;</span></span>
+<span id="cb110-2"><a href="#cb110-2"></a>  <span class="fu">ggdag</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2328,9 +2325,9 @@ Z -&gt; Y
 </div>
 <p>　DAGにおいて背景、軸の目盛り、ラベルは不要ですので、<code>theme_dag_blank()</code>テーマを指定して全て除去します。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-dag6_c04883bc05eeef1380e44aeeefd2e17a">
-<div class="sourceCode cell-code" id="cb112"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1"></a>DAG_data1 <span class="sc">|&gt;</span></span>
-<span id="cb112-2"><a href="#cb112-2"></a>  <span class="fu">ggdag</span>() <span class="sc">+</span></span>
-<span id="cb112-3"><a href="#cb112-3"></a>  <span class="fu">theme_dag_blank</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1"></a>DAG_data1 <span class="sc">|&gt;</span></span>
+<span id="cb111-2"><a href="#cb111-2"></a>  <span class="fu">ggdag</span>() <span class="sc">+</span></span>
+<span id="cb111-3"><a href="#cb111-3"></a>  <span class="fu">theme_dag_blank</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2343,18 +2340,18 @@ Z -&gt; Y
 <h3 data-number="21.12.1" class="anchored" data-anchor-id="ノードの位置を指定する"><span class="header-section-number">21.12.1</span> ノードの位置を指定する</h3>
 <p>　読者の多くは以上のグラフと異なるものが得られたかも知れません。ノード間の関係は同じはずですが、ノードの位置が異なるでしょう。また、同じコードを実行する度にノードの位置は変わります。以下ではノードの位置を固定する方法について紹介します。位置を指定するには<code>dagify()</code>内で<code>coords</code>引数に各ノードの情報が格納されたリスト型オブジェクトを指定する必要があります。リストの長さは2であり、それぞれの名前は<code>x</code>と<code>y</code>です。そしてリストの各要素にはベクトルが入ります。たとえば、ノード<code>X</code>の位置を (1, 1)、<code>Y</code>の位置を (3, 1)、<code>Z</code>の位置を (2, 2)に指定してみましょう。<code>dagify()</code>内で直接リストを書くことも可能ですが、コードの可読性が落ちるため、別途のオブジェクト（<code>DAG_Pos2</code>）として格納しておきます。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-dag7_29d796274f1fd23dd5759e5b24c1b929">
-<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1"></a>DAG_Pos2  <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="at">X =</span> <span class="dv">1</span>, <span class="at">Y =</span> <span class="dv">3</span>, <span class="at">Z =</span> <span class="dv">2</span>),</span>
-<span id="cb113-2"><a href="#cb113-2"></a>                  <span class="at">y =</span> <span class="fu">c</span>(<span class="at">X =</span> <span class="dv">1</span>, <span class="at">Y =</span> <span class="dv">1</span>, <span class="at">Z =</span> <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb112"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1"></a>DAG_Pos2  <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="at">X =</span> <span class="dv">1</span>, <span class="at">Y =</span> <span class="dv">3</span>, <span class="at">Z =</span> <span class="dv">2</span>),</span>
+<span id="cb112-2"><a href="#cb112-2"></a>                  <span class="at">y =</span> <span class="fu">c</span>(<span class="at">X =</span> <span class="dv">1</span>, <span class="at">Y =</span> <span class="dv">1</span>, <span class="at">Z =</span> <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　続いて、<code>dagify()</code>内で<code>coords</code>引数を追加し、ノードの位置情報が格納されている<code>DAG_Pos2</code>を指定します。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-dag8_668be6ecee9eeb8ad4af94384207a569">
-<div class="sourceCode cell-code" id="cb114"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1"></a>DAG_data2 <span class="ot">&lt;-</span> <span class="fu">dagify</span>(X <span class="sc">~</span> Z,</span>
-<span id="cb114-2"><a href="#cb114-2"></a>                    Y <span class="sc">~</span> X <span class="sc">+</span> Z,</span>
-<span id="cb114-3"><a href="#cb114-3"></a>                    <span class="at">exposure =</span> <span class="st">"X"</span>,</span>
-<span id="cb114-4"><a href="#cb114-4"></a>                    <span class="at">outcome  =</span> <span class="st">"Y"</span>,</span>
-<span id="cb114-5"><a href="#cb114-5"></a>                    <span class="at">coords   =</span> DAG_Pos2)</span>
-<span id="cb114-6"><a href="#cb114-6"></a></span>
-<span id="cb114-7"><a href="#cb114-7"></a>DAG_data2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1"></a>DAG_data2 <span class="ot">&lt;-</span> <span class="fu">dagify</span>(X <span class="sc">~</span> Z,</span>
+<span id="cb113-2"><a href="#cb113-2"></a>                    Y <span class="sc">~</span> X <span class="sc">+</span> Z,</span>
+<span id="cb113-3"><a href="#cb113-3"></a>                    <span class="at">exposure =</span> <span class="st">"X"</span>,</span>
+<span id="cb113-4"><a href="#cb113-4"></a>                    <span class="at">outcome  =</span> <span class="st">"Y"</span>,</span>
+<span id="cb113-5"><a href="#cb113-5"></a>                    <span class="at">coords   =</span> DAG_Pos2)</span>
+<span id="cb113-6"><a href="#cb113-6"></a></span>
+<span id="cb113-7"><a href="#cb113-7"></a>DAG_data2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>dag {
 X [exposure,pos="1.000,1.000"]
@@ -2368,9 +2365,9 @@ Z -&gt; Y
 </div>
 <p>　可視化の方法は同じです。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-dag9_6b9581a2b0d8faa6a9508ffead3bd008">
-<div class="sourceCode cell-code" id="cb116"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1"></a>DAG_data2 <span class="sc">|&gt;</span></span>
-<span id="cb116-2"><a href="#cb116-2"></a>  <span class="fu">ggdag</span>() <span class="sc">+</span></span>
-<span id="cb116-3"><a href="#cb116-3"></a>  <span class="fu">theme_dag_blank</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1"></a>DAG_data2 <span class="sc">|&gt;</span></span>
+<span id="cb115-2"><a href="#cb115-2"></a>  <span class="fu">ggdag</span>() <span class="sc">+</span></span>
+<span id="cb115-3"><a href="#cb115-3"></a>  <span class="fu">theme_dag_blank</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2381,19 +2378,19 @@ Z -&gt; Y
 </div>
 <p>　以上の使い方だけでも、ほとんどのDAGは描けるでしょう。また、ノードを若干オシャレ（?）にするには、<code>ggdag()</code>内で<code>stylized = TRUE</code>を指定します。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-dag10_1951bca7653278b76706c54055fc615f">
-<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1"></a>DAG_Pos3  <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="at">X1 =</span> <span class="dv">3</span>, <span class="at">X2 =</span> <span class="dv">3</span>, <span class="at">X3 =</span> <span class="dv">1</span>, <span class="at">T =</span> <span class="dv">2</span>, <span class="at">Y =</span> <span class="dv">4</span>),</span>
-<span id="cb117-2"><a href="#cb117-2"></a>                  <span class="at">y =</span> <span class="fu">c</span>(<span class="at">X1 =</span> <span class="dv">1</span>, <span class="at">X2 =</span> <span class="dv">2</span>, <span class="at">X3 =</span> <span class="dv">2</span>, <span class="at">T =</span> <span class="dv">3</span>, <span class="at">Y =</span> <span class="dv">3</span>))</span>
-<span id="cb117-3"><a href="#cb117-3"></a></span>
-<span id="cb117-4"><a href="#cb117-4"></a>DAG_data3 <span class="ot">&lt;-</span> <span class="fu">dagify</span>(Y  <span class="sc">~</span> T <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
-<span id="cb117-5"><a href="#cb117-5"></a>                    T  <span class="sc">~</span> X3,</span>
-<span id="cb117-6"><a href="#cb117-6"></a>                    X2 <span class="sc">~</span> T <span class="sc">+</span>X1 <span class="sc">+</span> X3,</span>
-<span id="cb117-7"><a href="#cb117-7"></a>                    <span class="at">exposure =</span> <span class="st">"T"</span>,</span>
-<span id="cb117-8"><a href="#cb117-8"></a>                    <span class="at">outcome  =</span> <span class="st">"Y"</span>,</span>
-<span id="cb117-9"><a href="#cb117-9"></a>                    <span class="at">coords   =</span> DAG_Pos3)</span>
-<span id="cb117-10"><a href="#cb117-10"></a></span>
-<span id="cb117-11"><a href="#cb117-11"></a>DAG_data3 <span class="sc">|&gt;</span></span>
-<span id="cb117-12"><a href="#cb117-12"></a>  <span class="fu">ggdag</span>(<span class="at">stylized =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb117-13"><a href="#cb117-13"></a>  <span class="fu">theme_dag_blank</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb116"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1"></a>DAG_Pos3  <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="at">X1 =</span> <span class="dv">3</span>, <span class="at">X2 =</span> <span class="dv">3</span>, <span class="at">X3 =</span> <span class="dv">1</span>, <span class="at">T =</span> <span class="dv">2</span>, <span class="at">Y =</span> <span class="dv">4</span>),</span>
+<span id="cb116-2"><a href="#cb116-2"></a>                  <span class="at">y =</span> <span class="fu">c</span>(<span class="at">X1 =</span> <span class="dv">1</span>, <span class="at">X2 =</span> <span class="dv">2</span>, <span class="at">X3 =</span> <span class="dv">2</span>, <span class="at">T =</span> <span class="dv">3</span>, <span class="at">Y =</span> <span class="dv">3</span>))</span>
+<span id="cb116-3"><a href="#cb116-3"></a></span>
+<span id="cb116-4"><a href="#cb116-4"></a>DAG_data3 <span class="ot">&lt;-</span> <span class="fu">dagify</span>(Y  <span class="sc">~</span> T <span class="sc">+</span> X1 <span class="sc">+</span> X2,</span>
+<span id="cb116-5"><a href="#cb116-5"></a>                    T  <span class="sc">~</span> X3,</span>
+<span id="cb116-6"><a href="#cb116-6"></a>                    X2 <span class="sc">~</span> T <span class="sc">+</span>X1 <span class="sc">+</span> X3,</span>
+<span id="cb116-7"><a href="#cb116-7"></a>                    <span class="at">exposure =</span> <span class="st">"T"</span>,</span>
+<span id="cb116-8"><a href="#cb116-8"></a>                    <span class="at">outcome  =</span> <span class="st">"Y"</span>,</span>
+<span id="cb116-9"><a href="#cb116-9"></a>                    <span class="at">coords   =</span> DAG_Pos3)</span>
+<span id="cb116-10"><a href="#cb116-10"></a></span>
+<span id="cb116-11"><a href="#cb116-11"></a>DAG_data3 <span class="sc">|&gt;</span></span>
+<span id="cb116-12"><a href="#cb116-12"></a>  <span class="fu">ggdag</span>(<span class="at">stylized =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb116-13"><a href="#cb116-13"></a>  <span class="fu">theme_dag_blank</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2404,14 +2401,14 @@ Z -&gt; Y
 </div>
 <p>　可視化の話ではありませんが、<code>adjustmentSets()</code>関数を用いると、処置変数<code>T</code>の総効果（total effect）を推定するためにはどの変数を統制（調整）する必要があるかを調べることも可能です。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-dag11_bc85c3247a79884395d57a048a082487">
-<div class="sourceCode cell-code" id="cb118"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1"></a><span class="fu">adjustmentSets</span>(DAG_data3, <span class="at">effect =</span> <span class="st">"total"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1"></a><span class="fu">adjustmentSets</span>(DAG_data3, <span class="at">effect =</span> <span class="st">"total"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{ X3 }</code></pre>
 </div>
 </div>
 <p>　<code>X3</code>変数のみ統制すれば良いという結果が得られました。また、<code>T</code>から<code>Y</code>への直接効果（direct effect）の場合、<code>effect = "direct"</code>を指定します。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-dag12_35aa63a313802bc636e61eddec4f77f9">
-<div class="sourceCode cell-code" id="cb120"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1"></a><span class="fu">adjustmentSets</span>(DAG_data3, <span class="at">effect =</span> <span class="st">"direct"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb119"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1"></a><span class="fu">adjustmentSets</span>(DAG_data3, <span class="at">effect =</span> <span class="st">"direct"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{ X1, X2 }</code></pre>
 </div>
@@ -2425,40 +2422,40 @@ Z -&gt; Y
 <p>　バンプチャート (bump chart)は順位の変化などを示す時に有効なグラフです。たとえば、G7構成国の新型コロナ感染者数の順位の変化を示すにはどうすれば良いでしょうか。そもそもどのような形式のデータが必要でしょうか。まずは必要なデータ形式を紹介したいと思います。</p>
 <p>　まず、{ggplot2}によるバンプチャートの作成を支援する{ggbump}パッケージをインストールし、読み込みましょう<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb122"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggbump)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb121"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb121-1"><a href="#cb121-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggbump)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　ここではG7構成国の100万人当り新型コロナ感染者数の順位がどのように変化したのかを2020年4月から7月まで1ヶ月単位で表したデータが必要です。データは以下のようなコードで作成しますが、<a href="https://github.com/JaehyunSong/RBook">本書のサポートページ</a>からもダウンロード可能です。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-bump2_4c1298e3e4d5d5bc1c75efde5fe6ff67">
-<div class="sourceCode cell-code" id="cb123"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb123-1"><a href="#cb123-1"></a>Bump_df <span class="ot">&lt;-</span> <span class="fu">left_join</span>(COVID19_df, Country_df, <span class="at">by =</span> <span class="st">"Country"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb123-2"><a href="#cb123-2"></a>  <span class="fu">select</span>(Country, Date, Population, Confirmed_Total, G7) <span class="sc">|&gt;</span></span>
-<span id="cb123-3"><a href="#cb123-3"></a>  <span class="fu">separate</span>(Date, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"Year"</span>, <span class="st">"Month"</span>, <span class="st">"Day"</span>), <span class="at">sep =</span> <span class="st">"/"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb123-4"><a href="#cb123-4"></a>  <span class="fu">mutate</span>(<span class="at">Month =</span> <span class="fu">as.numeric</span>(Month)) <span class="sc">|&gt;</span></span>
-<span id="cb123-5"><a href="#cb123-5"></a>  <span class="fu">filter</span>(Month <span class="sc">&gt;=</span> <span class="dv">4</span>, G7 <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb123-6"><a href="#cb123-6"></a>  <span class="fu">group_by</span>(Country, Month) <span class="sc">|&gt;</span></span>
-<span id="cb123-7"><a href="#cb123-7"></a>  <span class="fu">summarise</span>(<span class="at">Population            =</span> <span class="fu">mean</span>(Population),</span>
-<span id="cb123-8"><a href="#cb123-8"></a>            <span class="at">New_Cases             =</span> <span class="fu">sum</span>(Confirmed_Total, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb123-9"><a href="#cb123-9"></a>            <span class="at">New_Cases_per_million =</span> New_Cases <span class="sc">/</span> Population <span class="sc">*</span> <span class="dv">1000000</span>,</span>
-<span id="cb123-10"><a href="#cb123-10"></a>            <span class="at">.groups               =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb123-11"><a href="#cb123-11"></a>  <span class="fu">select</span>(Country, Month, New_Cases_per_million)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb122"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1"></a>Bump_df <span class="ot">&lt;-</span> <span class="fu">left_join</span>(COVID19_df, Country_df, <span class="at">by =</span> <span class="st">"Country"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb122-2"><a href="#cb122-2"></a>  <span class="fu">select</span>(Country, Date, Population, Confirmed_Total, G7) <span class="sc">|&gt;</span></span>
+<span id="cb122-3"><a href="#cb122-3"></a>  <span class="fu">separate</span>(Date, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"Year"</span>, <span class="st">"Month"</span>, <span class="st">"Day"</span>), <span class="at">sep =</span> <span class="st">"/"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb122-4"><a href="#cb122-4"></a>  <span class="fu">mutate</span>(<span class="at">Month =</span> <span class="fu">as.numeric</span>(Month)) <span class="sc">|&gt;</span></span>
+<span id="cb122-5"><a href="#cb122-5"></a>  <span class="fu">filter</span>(Month <span class="sc">&gt;=</span> <span class="dv">4</span>, G7 <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb122-6"><a href="#cb122-6"></a>  <span class="fu">group_by</span>(Country, Month) <span class="sc">|&gt;</span></span>
+<span id="cb122-7"><a href="#cb122-7"></a>  <span class="fu">summarise</span>(<span class="at">Population            =</span> <span class="fu">mean</span>(Population),</span>
+<span id="cb122-8"><a href="#cb122-8"></a>            <span class="at">New_Cases             =</span> <span class="fu">sum</span>(Confirmed_Total, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb122-9"><a href="#cb122-9"></a>            <span class="at">New_Cases_per_million =</span> New_Cases <span class="sc">/</span> Population <span class="sc">*</span> <span class="dv">1000000</span>,</span>
+<span id="cb122-10"><a href="#cb122-10"></a>            <span class="at">.groups               =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb122-11"><a href="#cb122-11"></a>  <span class="fu">select</span>(Country, Month, New_Cases_per_million)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-bump3_4d758bce8b068bc566074d025151dda7">
-<div class="sourceCode cell-code" id="cb124"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1"></a>Bump_df <span class="ot">&lt;-</span> Bump_df <span class="sc">|&gt;</span></span>
-<span id="cb124-2"><a href="#cb124-2"></a>  <span class="fu">group_by</span>(Month) <span class="sc">|&gt;</span></span>
-<span id="cb124-3"><a href="#cb124-3"></a>  <span class="fu">mutate</span>(<span class="at">Rank =</span> <span class="fu">rank</span>(New_Cases_per_million, <span class="at">ties.method =</span> <span class="st">"random"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb124-4"><a href="#cb124-4"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
-<span id="cb124-5"><a href="#cb124-5"></a>  <span class="fu">select</span>(Country, Month, Rank, New_Cases_per_million)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb123"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb123-1"><a href="#cb123-1"></a>Bump_df <span class="ot">&lt;-</span> Bump_df <span class="sc">|&gt;</span></span>
+<span id="cb123-2"><a href="#cb123-2"></a>  <span class="fu">group_by</span>(Month) <span class="sc">|&gt;</span></span>
+<span id="cb123-3"><a href="#cb123-3"></a>  <span class="fu">mutate</span>(<span class="at">Rank =</span> <span class="fu">rank</span>(New_Cases_per_million, <span class="at">ties.method =</span> <span class="st">"random"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb123-4"><a href="#cb123-4"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb123-5"><a href="#cb123-5"></a>  <span class="fu">select</span>(Country, Month, Rank, New_Cases_per_million)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　必要なデータは以下のような形式です。ちなみにバンプチャートを作成するためには最後の<code>New_Cases_per_million</code>列 (100万人当り新型コロナ感染者数)は不要です。つまり、国名、月、順位のみで十分です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb125"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb125-1"><a href="#cb125-1"></a><span class="co"># 以上のコードを省略し、加工済みのデータを読み込んでもOK</span></span>
-<span id="cb125-2"><a href="#cb125-2"></a><span class="co"># Bump_df &lt;- read_csv("Data/Bumpchart.csv")</span></span>
-<span id="cb125-3"><a href="#cb125-3"></a>Bump_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb124"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1"></a><span class="co"># 以上のコードを省略し、加工済みのデータを読み込んでもOK</span></span>
+<span id="cb124-2"><a href="#cb124-2"></a><span class="co"># Bump_df &lt;- read_csv("Data/Bumpchart.csv")</span></span>
+<span id="cb124-3"><a href="#cb124-3"></a>Bump_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　それでは{ggbump}が提供する<code>geom_bump()</code>幾何オブジェクトを使用し、簡単なバンプチャートを作成してみましょう。必要なマッピング要素は<code>x</code>と<code>y</code>、<code>color</code>です。<code>x</code>には時間を表す変数である<code>Month</code>を、<code>y</code>には順位を表す<code>Rank</code>をマッピングします。また、7本の線が出るため、月と順位、それぞれの値がどの国の値かを特定する必要があります。<code>groups</code>に国名である<code>Country</code>をマッピングしても線は引けますが、どの線がどの国かが分からなくなるため、<code>color</code>に<code>Country</code>をマッピングし、線の色分けをします。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-bump5_36c6e4d63eb4cf2dc06a2053dfece5a9">
-<div class="sourceCode cell-code" id="cb126"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1"></a>Bump_df <span class="sc">|&gt;</span></span>
-<span id="cb126-2"><a href="#cb126-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> Rank, <span class="at">color =</span> Country)) <span class="sc">+</span></span>
-<span id="cb126-3"><a href="#cb126-3"></a>  <span class="fu">geom_bump</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb125"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb125-1"><a href="#cb125-1"></a>Bump_df <span class="sc">|&gt;</span></span>
+<span id="cb125-2"><a href="#cb125-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> Rank, <span class="at">color =</span> Country)) <span class="sc">+</span></span>
+<span id="cb125-3"><a href="#cb125-3"></a>  <span class="fu">geom_bump</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2469,11 +2466,11 @@ Z -&gt; Y
 </div>
 <p>　これで最低限のバンプチャートはできましたが、もう少し見やすく、可愛くしてみましょう。今は線が細いのでややぶ厚めにします。これは<code>geom_bump()</code>レイヤーの<code>size</code>引数で指定可能です。また、各月に点を付けることによって、同時期における順位の比較をよりしやすくしてみましょう。これは散布図と同じであるため、<code>geom_point()</code>幾何オブジェクトを使用します。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-bump6_17ba9ad70582db704284b52c66114004">
-<div class="sourceCode cell-code" id="cb127"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb127-1"><a href="#cb127-1"></a>Bump_df <span class="sc">|&gt;</span></span>
-<span id="cb127-2"><a href="#cb127-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> Rank, <span class="at">color =</span> Country)) <span class="sc">+</span></span>
-<span id="cb127-3"><a href="#cb127-3"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">7</span>) <span class="sc">+</span></span>
-<span id="cb127-4"><a href="#cb127-4"></a>  <span class="fu">geom_bump</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb127-5"><a href="#cb127-5"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb126"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1"></a>Bump_df <span class="sc">|&gt;</span></span>
+<span id="cb126-2"><a href="#cb126-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> Rank, <span class="at">color =</span> Country)) <span class="sc">+</span></span>
+<span id="cb126-3"><a href="#cb126-3"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">7</span>) <span class="sc">+</span></span>
+<span id="cb126-4"><a href="#cb126-4"></a>  <span class="fu">geom_bump</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb126-5"><a href="#cb126-5"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
 ℹ Please use `linewidth` instead.</code></pre>
@@ -2488,12 +2485,12 @@ Z -&gt; Y
 </div>
 <p>　これでだいぶ見やすくなりましたが、凡例における国名の順番がやや気になりますね。7月の時点において順位が最も高い国はアメリカ、最も低い国は日本ですが、凡例の順番はアルファベット順となっています。この凡例の順番を7月時点における<code>Rank</code>の値に合わせた方がより見やすいでしょう。ここで第<a href="factor.html#sec-factor-forcat-reorder2" class="quarto-xref"><span>15.2.9</span></a>章で紹介しました<code>fct_reorder2()</code>を使って<code>Country</code>変数の水準 (level)を7月時点における<code>Rank</code>の順位に合わせます。この場合、<code>Country</code>変数 (<code>.f = Country</code>)の水準を<code>Month</code>が (<code>.x = Month</code>)最も大きい (<code>.fun = last2</code>)時点における<code>Rank</code>の順番に合わせる (<code>.y = Rank</code>)こととなります。<code>fct_reorder2()</code>内の引数の順番の既定値は<code>.f</code>、<code>.x</code>、<code>.y</code>、<code>.fun</code>となります。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-bump7_2900c55c5e446b083260b438869842c0">
-<div class="sourceCode cell-code" id="cb129"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb129-1"><a href="#cb129-1"></a>Bump_df <span class="sc">|&gt;</span></span>
-<span id="cb129-2"><a href="#cb129-2"></a>  <span class="fu">mutate</span>(<span class="at">Country =</span> <span class="fu">fct_reorder2</span>(Country, Month, Rank, last2)) <span class="sc">|&gt;</span></span>
-<span id="cb129-3"><a href="#cb129-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> Rank, <span class="at">color =</span> Country)) <span class="sc">+</span></span>
-<span id="cb129-4"><a href="#cb129-4"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">7</span>) <span class="sc">+</span></span>
-<span id="cb129-5"><a href="#cb129-5"></a>  <span class="fu">geom_bump</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb129-6"><a href="#cb129-6"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb128"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb128-1"><a href="#cb128-1"></a>Bump_df <span class="sc">|&gt;</span></span>
+<span id="cb128-2"><a href="#cb128-2"></a>  <span class="fu">mutate</span>(<span class="at">Country =</span> <span class="fu">fct_reorder2</span>(Country, Month, Rank, last2)) <span class="sc">|&gt;</span></span>
+<span id="cb128-3"><a href="#cb128-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> Rank, <span class="at">color =</span> Country)) <span class="sc">+</span></span>
+<span id="cb128-4"><a href="#cb128-4"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">7</span>) <span class="sc">+</span></span>
+<span id="cb128-5"><a href="#cb128-5"></a>  <span class="fu">geom_bump</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb128-6"><a href="#cb128-6"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2504,14 +2501,14 @@ Z -&gt; Y
 </div>
 <p>　最後に縦軸の目盛りラベルを付けます。上に行くほど順位が高くなりますので、1を7に、2を6に、…、7を1に変更します。また、図内のグリッドも不要ですので、<code>theme()</code>を使用し、グリッドを削除します (<code>panel.grid = element_blank()</code>)。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-bump8_5ca7bcb6980b0a7f326b0d8cbfa04f61">
-<div class="sourceCode cell-code" id="cb130"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1"></a>Bump_df <span class="sc">|&gt;</span></span>
-<span id="cb130-2"><a href="#cb130-2"></a>  <span class="fu">mutate</span>(<span class="at">Country =</span> <span class="fu">fct_reorder2</span>(Country, Month, Rank, last2)) <span class="sc">|&gt;</span></span>
-<span id="cb130-3"><a href="#cb130-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> Rank, <span class="at">color =</span> Country)) <span class="sc">+</span></span>
-<span id="cb130-4"><a href="#cb130-4"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">7</span>) <span class="sc">+</span></span>
-<span id="cb130-5"><a href="#cb130-5"></a>  <span class="fu">geom_bump</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb130-6"><a href="#cb130-6"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="at">labels =</span> <span class="dv">7</span><span class="sc">:</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb130-7"><a href="#cb130-7"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
-<span id="cb130-8"><a href="#cb130-8"></a>  <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb129"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb129-1"><a href="#cb129-1"></a>Bump_df <span class="sc">|&gt;</span></span>
+<span id="cb129-2"><a href="#cb129-2"></a>  <span class="fu">mutate</span>(<span class="at">Country =</span> <span class="fu">fct_reorder2</span>(Country, Month, Rank, last2)) <span class="sc">|&gt;</span></span>
+<span id="cb129-3"><a href="#cb129-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> Rank, <span class="at">color =</span> Country)) <span class="sc">+</span></span>
+<span id="cb129-4"><a href="#cb129-4"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">7</span>) <span class="sc">+</span></span>
+<span id="cb129-5"><a href="#cb129-5"></a>  <span class="fu">geom_bump</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb129-6"><a href="#cb129-6"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="at">labels =</span> <span class="dv">7</span><span class="sc">:</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb129-7"><a href="#cb129-7"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb129-8"><a href="#cb129-8"></a>  <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2524,26 +2521,26 @@ Z -&gt; Y
 <p>　図に文字列を追加するためには<code>geom_text()</code>幾何オブジェクトを使用します。マッピング要素は文字列の横軸上の位置 (<code>x</code>)、縦軸上の位置 (<code>y</code>)、そして出力する文字列 (<code>label</code>)です。左端に文字列を出力するのであれば、横軸上の位置は4 (= 4月)よりも若干左側が良いでしょう。ぴったり4になると、点と文字列が重なって読みにくくなりますね。縦軸上の位置は<strong>4月の時点</strong>での順位 (<code>Rank</code>)で、出力する文字列は国名 (<code>Country</code>)です。現在、使用しているデータは4月から7月までのデータですが、4月に限定したデータを使いたいので、<code>geom_text()</code>内に<code>data</code>引数を追加し、<code>Bump_df</code>から<code>Month</code>の値が4の行のみを抽出したデータを割り当てます (<code>data = filter(Bump_df, Month == 4</code>)、または<code>data = Bump_df |&gt; filter(Month == 4)</code>)。右端についても同じです。横軸上の位置は7から右方向へずらし、使用するデータは7月のデータとなります。</p>
 <p>　最後にもう一点調整が必要ですが、それは座標系です。図の座標系は<code>ggplot()</code>関数で使用するデータに基づきます。<code>Bump_df</code>の場合、横軸 (<code>Month</code>)は4から7です。しかし、文字列を追加した場合、文字列がすべて出力されないかも知れません。したがって、座標系を横方向に広める必要があります。今回は3から8までに調整します。座標系や文字列の位置調整は出力結果を見ながら、少しずつ調整していきましょう。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-bump9_357535bd7204c697f77d85391321089c">
-<div class="sourceCode cell-code" id="cb131"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb131-1"><a href="#cb131-1"></a>Bump_df <span class="sc">|&gt;</span></span>
-<span id="cb131-2"><a href="#cb131-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> Rank, <span class="at">color =</span> Country)) <span class="sc">+</span></span>
-<span id="cb131-3"><a href="#cb131-3"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">7</span>) <span class="sc">+</span></span>
-<span id="cb131-4"><a href="#cb131-4"></a>  <span class="fu">geom_bump</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb131-5"><a href="#cb131-5"></a>  <span class="co"># 4月の時点での行のみ抽出し、xはMonthより0.15分左方向、</span></span>
-<span id="cb131-6"><a href="#cb131-6"></a>  <span class="co"># yはRankの値の位置に国名を出力する。揃える方向は右揃え (hjust = 1)</span></span>
-<span id="cb131-7"><a href="#cb131-7"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> <span class="fu">filter</span>(Bump_df, Month <span class="sc">==</span> <span class="dv">4</span>),</span>
-<span id="cb131-8"><a href="#cb131-8"></a>            <span class="fu">aes</span>(<span class="at">x =</span> Month <span class="sc">-</span> <span class="fl">0.15</span>, <span class="at">y =</span> Rank, <span class="at">label =</span> Country), <span class="at">hjust =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb131-9"><a href="#cb131-9"></a>  <span class="co"># 7月の時点での行のみ抽出し、xはMonthより0.15分右方向、</span></span>
-<span id="cb131-10"><a href="#cb131-10"></a>  <span class="co"># yはRankの値の位置に国名を出力する。揃える方向は左揃え (hjust = 0)</span></span>
-<span id="cb131-11"><a href="#cb131-11"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> <span class="fu">filter</span>(Bump_df, Month <span class="sc">==</span> <span class="dv">7</span>),</span>
-<span id="cb131-12"><a href="#cb131-12"></a>            <span class="fu">aes</span>(<span class="at">x =</span> Month <span class="sc">+</span> <span class="fl">0.15</span>, <span class="at">y =</span> Rank, <span class="at">label =</span> Country), <span class="at">hjust =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
-<span id="cb131-13"><a href="#cb131-13"></a>  <span class="co"># 座標系の調整</span></span>
-<span id="cb131-14"><a href="#cb131-14"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">8</span>)) <span class="sc">+</span></span>
-<span id="cb131-15"><a href="#cb131-15"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">7</span>, <span class="at">labels =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">7</span>) <span class="sc">+</span></span>
-<span id="cb131-16"><a href="#cb131-16"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="at">labels =</span> <span class="dv">7</span><span class="sc">:</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb131-17"><a href="#cb131-17"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Rank"</span>, <span class="at">x =</span> <span class="st">"Month"</span>) <span class="sc">+</span></span>
-<span id="cb131-18"><a href="#cb131-18"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
-<span id="cb131-19"><a href="#cb131-19"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
-<span id="cb131-20"><a href="#cb131-20"></a>        <span class="at">panel.grid      =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb130"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1"></a>Bump_df <span class="sc">|&gt;</span></span>
+<span id="cb130-2"><a href="#cb130-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> Rank, <span class="at">color =</span> Country)) <span class="sc">+</span></span>
+<span id="cb130-3"><a href="#cb130-3"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">7</span>) <span class="sc">+</span></span>
+<span id="cb130-4"><a href="#cb130-4"></a>  <span class="fu">geom_bump</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb130-5"><a href="#cb130-5"></a>  <span class="co"># 4月の時点での行のみ抽出し、xはMonthより0.15分左方向、</span></span>
+<span id="cb130-6"><a href="#cb130-6"></a>  <span class="co"># yはRankの値の位置に国名を出力する。揃える方向は右揃え (hjust = 1)</span></span>
+<span id="cb130-7"><a href="#cb130-7"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> <span class="fu">filter</span>(Bump_df, Month <span class="sc">==</span> <span class="dv">4</span>),</span>
+<span id="cb130-8"><a href="#cb130-8"></a>            <span class="fu">aes</span>(<span class="at">x =</span> Month <span class="sc">-</span> <span class="fl">0.15</span>, <span class="at">y =</span> Rank, <span class="at">label =</span> Country), <span class="at">hjust =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb130-9"><a href="#cb130-9"></a>  <span class="co"># 7月の時点での行のみ抽出し、xはMonthより0.15分右方向、</span></span>
+<span id="cb130-10"><a href="#cb130-10"></a>  <span class="co"># yはRankの値の位置に国名を出力する。揃える方向は左揃え (hjust = 0)</span></span>
+<span id="cb130-11"><a href="#cb130-11"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> <span class="fu">filter</span>(Bump_df, Month <span class="sc">==</span> <span class="dv">7</span>),</span>
+<span id="cb130-12"><a href="#cb130-12"></a>            <span class="fu">aes</span>(<span class="at">x =</span> Month <span class="sc">+</span> <span class="fl">0.15</span>, <span class="at">y =</span> Rank, <span class="at">label =</span> Country), <span class="at">hjust =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb130-13"><a href="#cb130-13"></a>  <span class="co"># 座標系の調整</span></span>
+<span id="cb130-14"><a href="#cb130-14"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">8</span>)) <span class="sc">+</span></span>
+<span id="cb130-15"><a href="#cb130-15"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">7</span>, <span class="at">labels =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">7</span>) <span class="sc">+</span></span>
+<span id="cb130-16"><a href="#cb130-16"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="at">labels =</span> <span class="dv">7</span><span class="sc">:</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb130-17"><a href="#cb130-17"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Rank"</span>, <span class="at">x =</span> <span class="st">"Month"</span>) <span class="sc">+</span></span>
+<span id="cb130-18"><a href="#cb130-18"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb130-19"><a href="#cb130-19"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb130-20"><a href="#cb130-20"></a>        <span class="at">panel.grid      =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2559,13 +2556,13 @@ Z -&gt; Y
 <p>　沖積図 (alluvial plot)は同じ対象を複数回観察したデータ（パネル・データなど）から変化を示すことに適したグラフです。たとえば、同じ回答者を対象に2回世論調査を実施し、1回目調査時の支持政党と2回目調査時の支持政党を変化を見ることも可能です。もし、変化が大きい場合は政党支持態度は弱いこととなりますし、変化が小さい場合は安定していると解釈できるでしょう。</p>
 <p>　ここでは2020年の選挙と2021年の選挙における有権者の投票先の変化を沖積図で確認してみたいと思います。まずは、沖積図の作成に特化した{ggalluvial}パッケージをインストールし、読み込みます。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb132"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggalluvial)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb131"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb131-1"><a href="#cb131-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggalluvial)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　続きまして、実習用データを読み込みます。データは架空のデータです。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb133"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb133-1"><a href="#cb133-1"></a>Vote_2021 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Data/Vote_20_21.csv"</span>)</span>
-<span id="cb133-2"><a href="#cb133-2"></a></span>
-<span id="cb133-3"><a href="#cb133-3"></a><span class="fu">head</span>(Vote_2021, <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb132"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1"></a>Vote_2021 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Data/Vote_20_21.csv"</span>)</span>
+<span id="cb132-2"><a href="#cb132-2"></a></span>
+<span id="cb132-3"><a href="#cb132-3"></a><span class="fu">head</span>(Vote_2021, <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 20 × 3
       ID Vote20 Vote21
@@ -2616,12 +2613,12 @@ Z -&gt; Y
 </table>
 <p>　たとえば、1番目の回答者は2020年に棄権し、2021年も棄権したことを意味する。また、5番目の回答者は2020年に政党Bに投票し、2021年は政党Cに投票したことを意味する。続いて、このデータを{ggalluvial}に適した形式のデータに加工します。具体的には「2020年棄権、かつ2021年棄権」、「2020年棄権、かつ2021年政党Aへ投票」、…、「2020年政党Bへ投票、かつ2021年政党Aへ投票」のように全ての組み合わせに対し、該当するケース数を計算する必要があります。今回のデータだと、投票先はいずれも政党A、政党B、政党C、政党D、その他、棄権、DK (わからない)の7であるため、49パターンができます。それぞれのパターンに該当するケース数を計算するためには<code>Vote20</code>と<code>Vote21</code>でデータをグループ化し、ケース数を計算します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb135"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb135-1"><a href="#cb135-1"></a>Vote_2021 <span class="ot">&lt;-</span> Vote_2021 <span class="sc">|&gt;</span></span>
-<span id="cb135-2"><a href="#cb135-2"></a>  <span class="fu">group_by</span>(Vote20, Vote21) <span class="sc">|&gt;</span></span>
-<span id="cb135-3"><a href="#cb135-3"></a>  <span class="fu">summarise</span>(<span class="at">Freq    =</span> <span class="fu">n</span>(),</span>
-<span id="cb135-4"><a href="#cb135-4"></a>            <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
-<span id="cb135-5"><a href="#cb135-5"></a></span>
-<span id="cb135-6"><a href="#cb135-6"></a>Vote_2021</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb134"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb134-1"><a href="#cb134-1"></a>Vote_2021 <span class="ot">&lt;-</span> Vote_2021 <span class="sc">|&gt;</span></span>
+<span id="cb134-2"><a href="#cb134-2"></a>  <span class="fu">group_by</span>(Vote20, Vote21) <span class="sc">|&gt;</span></span>
+<span id="cb134-3"><a href="#cb134-3"></a>  <span class="fu">summarise</span>(<span class="at">Freq    =</span> <span class="fu">n</span>(),</span>
+<span id="cb134-4"><a href="#cb134-4"></a>            <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb134-5"><a href="#cb134-5"></a></span>
+<span id="cb134-6"><a href="#cb134-6"></a>Vote_2021</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 47 × 3
    Vote20 Vote21  Freq
@@ -2642,18 +2639,18 @@ Z -&gt; Y
 <p>　2020年の調査で「わからない」と回答し、2021年の調査でも「わからない」と回答した回答者数は111名、2020年の調査で「わからない」と回答し、2021年の調査では「その他」と回答した回答者数は8名、…といったことが分かりますね。</p>
 <p>　続いて、グラフを作成する前に投票先変数 (<code>Vote20</code>と<code>Vote21</code>)をfactor化します。可視化の際、投票先が出力される順番に決まりはありませんが、政党A、政党B、政党C、…、DKの順が自然かと思います。むろん、こちらは自分から見て分かりやいように順番を決めましょう。ただし、2変数における水準 (level)の順番は一致させた方が良いでしょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb137"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb137-1"><a href="#cb137-1"></a>Vote_2021 <span class="ot">&lt;-</span> Vote_2021 <span class="sc">|&gt;</span></span>
-<span id="cb137-2"><a href="#cb137-2"></a>  <span class="fu">mutate</span>(<span class="at">Vote20 =</span> <span class="fu">factor</span>(Vote20, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"政党A"</span>, <span class="st">"政党B"</span>, <span class="st">"政党C"</span>, <span class="st">"政党D"</span>, </span>
-<span id="cb137-3"><a href="#cb137-3"></a>                                            <span class="st">"その他"</span>, <span class="st">"棄権"</span>, <span class="st">"DK"</span>)),</span>
-<span id="cb137-4"><a href="#cb137-4"></a>         <span class="at">Vote21 =</span> <span class="fu">factor</span>(Vote21, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"政党A"</span>, <span class="st">"政党B"</span>, <span class="st">"政党C"</span>, <span class="st">"政党D"</span>, </span>
-<span id="cb137-5"><a href="#cb137-5"></a>                                            <span class="st">"その他"</span>, <span class="st">"棄権"</span>, <span class="st">"DK"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb136"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb136-1"><a href="#cb136-1"></a>Vote_2021 <span class="ot">&lt;-</span> Vote_2021 <span class="sc">|&gt;</span></span>
+<span id="cb136-2"><a href="#cb136-2"></a>  <span class="fu">mutate</span>(<span class="at">Vote20 =</span> <span class="fu">factor</span>(Vote20, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"政党A"</span>, <span class="st">"政党B"</span>, <span class="st">"政党C"</span>, <span class="st">"政党D"</span>, </span>
+<span id="cb136-3"><a href="#cb136-3"></a>                                            <span class="st">"その他"</span>, <span class="st">"棄権"</span>, <span class="st">"DK"</span>)),</span>
+<span id="cb136-4"><a href="#cb136-4"></a>         <span class="at">Vote21 =</span> <span class="fu">factor</span>(Vote21, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"政党A"</span>, <span class="st">"政党B"</span>, <span class="st">"政党C"</span>, <span class="st">"政党D"</span>, </span>
+<span id="cb136-5"><a href="#cb136-5"></a>                                            <span class="st">"その他"</span>, <span class="st">"棄権"</span>, <span class="st">"DK"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　それでは沖積図を描いてみましょう。使用する幾何オブジェクトは<code>geom_alluvium()</code>と<code>geom_stratum()</code>です。必ずこの順番でレイヤーを重ねてください。マッピングは<code>y</code>、<code>axis1</code>、<code>axis2</code>に対し、<code>y</code>には当該パターン内のケース数 (<code>Freq</code>)、<code>axis1</code>は2009年の投票先 (<code>Vote20</code>)、<code>axis2</code>は2010年の投票先 (<code>Vote21</code>)を指定します<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>。これらのマッピングは<code>geom_stratum()</code>と<code>geom_alluvim()</code>共通であるため、<code>ggplot()</code>内でマッピングした方が効率的です。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-alluvial5_1c8e1c263cdad87741e6c3bee24f240b">
-<div class="sourceCode cell-code" id="cb138"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb138-1"><a href="#cb138-1"></a>Vote_2021 <span class="sc">|&gt;</span></span>
-<span id="cb138-2"><a href="#cb138-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> Freq, <span class="at">axis1 =</span> Vote20, <span class="at">axis2 =</span> Vote21)) <span class="sc">+</span></span>
-<span id="cb138-3"><a href="#cb138-3"></a>    <span class="fu">geom_alluvium</span>() <span class="sc">+</span></span>
-<span id="cb138-4"><a href="#cb138-4"></a>    <span class="fu">geom_stratum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb137"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb137-1"><a href="#cb137-1"></a>Vote_2021 <span class="sc">|&gt;</span></span>
+<span id="cb137-2"><a href="#cb137-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> Freq, <span class="at">axis1 =</span> Vote20, <span class="at">axis2 =</span> Vote21)) <span class="sc">+</span></span>
+<span id="cb137-3"><a href="#cb137-3"></a>    <span class="fu">geom_alluvium</span>() <span class="sc">+</span></span>
+<span id="cb137-4"><a href="#cb137-4"></a>    <span class="fu">geom_stratum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2664,12 +2661,12 @@ Z -&gt; Y
 </div>
 <p>　何かの図は出てきましたが、これだけだと、それぞれの四角形がどの政党を示しているのかが分かりませんね。四角形内に政党名を出力するためには{ggplot2}内蔵の<code>geom_text()</code>を使用します。マッピング要素は<code>ggplot()</code>内でマッピングしたものに加え、<code>label</code>が必要ですが、ここでは<code>after_stat(stratum)</code>を指定します。そして、<code>aes()</code>のその側に<code>stat = "stratum"</code>を指定するだけです。もし、文字化けが生じる場合は、<code>geom_text()</code>内にフォントの指定が必要があり、<code>family</code>を使います (たとえば、<code>family = "HiraginoSans-W3"</code>など)。<code>theme_*()</code>内で<code>base_family</code>を指定した場合でも必要です。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-alluvial6_c74e75f6e17db62647ac8bd5846fa124">
-<div class="sourceCode cell-code" id="cb139"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb139-1"><a href="#cb139-1"></a>Vote_2021 <span class="sc">|&gt;</span></span>
-<span id="cb139-2"><a href="#cb139-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> Freq, <span class="at">axis1 =</span> Vote20, <span class="at">axis2 =</span> Vote21)) <span class="sc">+</span></span>
-<span id="cb139-3"><a href="#cb139-3"></a>    <span class="fu">geom_alluvium</span>() <span class="sc">+</span></span>
-<span id="cb139-4"><a href="#cb139-4"></a>    <span class="fu">geom_stratum</span>() <span class="sc">+</span></span>
-<span id="cb139-5"><a href="#cb139-5"></a>    <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">after_stat</span>(stratum)), </span>
-<span id="cb139-6"><a href="#cb139-6"></a>              <span class="at">stat =</span> <span class="st">"stratum"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb138"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb138-1"><a href="#cb138-1"></a>Vote_2021 <span class="sc">|&gt;</span></span>
+<span id="cb138-2"><a href="#cb138-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> Freq, <span class="at">axis1 =</span> Vote20, <span class="at">axis2 =</span> Vote21)) <span class="sc">+</span></span>
+<span id="cb138-3"><a href="#cb138-3"></a>    <span class="fu">geom_alluvium</span>() <span class="sc">+</span></span>
+<span id="cb138-4"><a href="#cb138-4"></a>    <span class="fu">geom_stratum</span>() <span class="sc">+</span></span>
+<span id="cb138-5"><a href="#cb138-5"></a>    <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">after_stat</span>(stratum)), </span>
+<span id="cb138-6"><a href="#cb138-6"></a>              <span class="at">stat =</span> <span class="st">"stratum"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2680,12 +2677,12 @@ Z -&gt; Y
 </div>
 <p>　これで沖積図はとりあえず完成ですが、少し読みやすく加工してみましょう。たとえば、2020年に政党Aに投票した回答者における2021年の投票先の割合を見たいとした場合、<code>geom_alluvium()</code>内に<code>fill = Vote20</code>をマッピングします。これで帯に2020年の投票先ごとの色付けができます。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-alluvial7_b570545ffcb9f27b31a79456d4e1d7ca">
-<div class="sourceCode cell-code" id="cb140"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb140-1"><a href="#cb140-1"></a>Vote_2021 <span class="sc">|&gt;</span></span>
-<span id="cb140-2"><a href="#cb140-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> Freq, <span class="at">axis1 =</span> Vote20, <span class="at">axis2 =</span> Vote21)) <span class="sc">+</span></span>
-<span id="cb140-3"><a href="#cb140-3"></a>    <span class="fu">geom_alluvium</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Vote20)) <span class="sc">+</span></span>
-<span id="cb140-4"><a href="#cb140-4"></a>    <span class="fu">geom_stratum</span>() <span class="sc">+</span></span>
-<span id="cb140-5"><a href="#cb140-5"></a>    <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">after_stat</span>(stratum)), </span>
-<span id="cb140-6"><a href="#cb140-6"></a>              <span class="at">stat =</span> <span class="st">"stratum"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb139"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb139-1"><a href="#cb139-1"></a>Vote_2021 <span class="sc">|&gt;</span></span>
+<span id="cb139-2"><a href="#cb139-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> Freq, <span class="at">axis1 =</span> Vote20, <span class="at">axis2 =</span> Vote21)) <span class="sc">+</span></span>
+<span id="cb139-3"><a href="#cb139-3"></a>    <span class="fu">geom_alluvium</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Vote20)) <span class="sc">+</span></span>
+<span id="cb139-4"><a href="#cb139-4"></a>    <span class="fu">geom_stratum</span>() <span class="sc">+</span></span>
+<span id="cb139-5"><a href="#cb139-5"></a>    <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">after_stat</span>(stratum)), </span>
+<span id="cb139-6"><a href="#cb139-6"></a>              <span class="at">stat =</span> <span class="st">"stratum"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2696,14 +2693,14 @@ Z -&gt; Y
 </div>
 <p>　<code>fill = Vote21</code>とマッピングした場合は、感覚が変わります。実際にやってみましょう。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-alluvial8_6c74b7ec23fe8f194aca5345f54682dc">
-<div class="sourceCode cell-code" id="cb141"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb141-1"><a href="#cb141-1"></a>Alluvial_Plot <span class="ot">&lt;-</span> Vote_2021 <span class="sc">|&gt;</span></span>
-<span id="cb141-2"><a href="#cb141-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> Freq, <span class="at">axis1 =</span> Vote20, <span class="at">axis2 =</span> Vote21)) <span class="sc">+</span></span>
-<span id="cb141-3"><a href="#cb141-3"></a>    <span class="fu">geom_alluvium</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Vote21)) <span class="sc">+</span></span>
-<span id="cb141-4"><a href="#cb141-4"></a>    <span class="fu">geom_stratum</span>() <span class="sc">+</span></span>
-<span id="cb141-5"><a href="#cb141-5"></a>    <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">after_stat</span>(stratum)), </span>
-<span id="cb141-6"><a href="#cb141-6"></a>              <span class="at">stat =</span> <span class="st">"stratum"</span>, <span class="at">family =</span> <span class="st">"HiraginoSans-W3"</span>)</span>
-<span id="cb141-7"><a href="#cb141-7"></a></span>
-<span id="cb141-8"><a href="#cb141-8"></a>Alluvial_Plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb140"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb140-1"><a href="#cb140-1"></a>Alluvial_Plot <span class="ot">&lt;-</span> Vote_2021 <span class="sc">|&gt;</span></span>
+<span id="cb140-2"><a href="#cb140-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> Freq, <span class="at">axis1 =</span> Vote20, <span class="at">axis2 =</span> Vote21)) <span class="sc">+</span></span>
+<span id="cb140-3"><a href="#cb140-3"></a>    <span class="fu">geom_alluvium</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Vote21)) <span class="sc">+</span></span>
+<span id="cb140-4"><a href="#cb140-4"></a>    <span class="fu">geom_stratum</span>() <span class="sc">+</span></span>
+<span id="cb140-5"><a href="#cb140-5"></a>    <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">after_stat</span>(stratum)), </span>
+<span id="cb140-6"><a href="#cb140-6"></a>              <span class="at">stat =</span> <span class="st">"stratum"</span>, <span class="at">family =</span> <span class="st">"HiraginoSans-W3"</span>)</span>
+<span id="cb140-7"><a href="#cb140-7"></a></span>
+<span id="cb140-8"><a href="#cb140-8"></a>Alluvial_Plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2715,14 +2712,14 @@ Z -&gt; Y
 <p>　この場合、2020年に政党Aに投票した人が2021年にどこに流れたかが分かりやすくなります。<code>Vote20</code>に色分けするか、<code>Vote21</code>に色分けするかは作成する人が決める問題であり、自分の主張・メッセージに適したマッピングをしましょう。</p>
 <p>　最後に、図をもう少し加工してみましょう。まず、横軸に0.8、1.2、1.6、2.0となっている目盛りを修正し、1と2の箇所に「2020年選挙」と「2021年選挙」を出力します。これは<code>scale_x_continuous()</code>で調整可能です。そして、<code>theme_minimal()</code>で余計なものを排除したテーマを適用します。最後に<code>theme()</code>内で全ての凡例を削除 (<code>legend.position = "none"</code>)し、パネルのグリッド (<code>panel.grid</code>)と縦軸・横軸のタイトル (<code>axis.title</code>)、縦軸の目盛りラベル (<code>axis.text.y</code>)を削除 (<code>element_blank()</code>)します。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-alluvial9_40dfdfc460ca7c2573b2034c0138a251">
-<div class="sourceCode cell-code" id="cb142"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb142-1"><a href="#cb142-1"></a>Alluvial_Plot <span class="sc">+</span></span>
-<span id="cb142-2"><a href="#cb142-2"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, </span>
-<span id="cb142-3"><a href="#cb142-3"></a>                       <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"2020年選挙"</span>, <span class="st">"2021年選挙"</span>)) <span class="sc">+</span></span>
-<span id="cb142-4"><a href="#cb142-4"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
-<span id="cb142-5"><a href="#cb142-5"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
-<span id="cb142-6"><a href="#cb142-6"></a>          <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb142-7"><a href="#cb142-7"></a>          <span class="at">axis.title =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb142-8"><a href="#cb142-8"></a>          <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb141"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb141-1"><a href="#cb141-1"></a>Alluvial_Plot <span class="sc">+</span></span>
+<span id="cb141-2"><a href="#cb141-2"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, </span>
+<span id="cb141-3"><a href="#cb141-3"></a>                       <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"2020年選挙"</span>, <span class="st">"2021年選挙"</span>)) <span class="sc">+</span></span>
+<span id="cb141-4"><a href="#cb141-4"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb141-5"><a href="#cb141-5"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb141-6"><a href="#cb141-6"></a>          <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb141-7"><a href="#cb141-7"></a>          <span class="at">axis.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb141-8"><a href="#cb141-8"></a>          <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2739,14 +2736,14 @@ Z -&gt; Y
 <p>　ツリーマップ（tree map）は変数の値の大きさを長方形の面積として表すグラフです。全体におけるシェアを示す時に使う点で、円グラフの代替案の一つになります。円グラフは項目が多すぎると読みにくいデメリットがありますが、ツリーマップは項目が多い場合でも有効です。むろん、多すぎると読みにくいことは同じですので、注意が必要です。</p>
 <p>　ツリーマップを作成するためには{treemapify}パッケージの<code>geom_treemap()</code>幾何オブジェクトを使用します。まず、{treemapify}をインストールし、読み込みます。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb143"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb143-1"><a href="#cb143-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(treemapify)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb142"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb142-1"><a href="#cb142-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(treemapify)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　ここでは<code>Country_df</code>からアジア諸国の人口（<code>Population</code>）をツリーマップをして可視化したいと思います。<code>geom_treemap()</code>の場合、各長方形は面積の情報のみを持ちます。この面積の情報を<code>area</code>にマッピングします。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-tree2_5d2c9359a4091756adf037091248cc8f">
-<div class="sourceCode cell-code" id="cb144"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb144-1"><a href="#cb144-1"></a>Country_df <span class="sc">|&gt;</span></span>
-<span id="cb144-2"><a href="#cb144-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">"Asia"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb144-3"><a href="#cb144-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb144-4"><a href="#cb144-4"></a>  <span class="fu">geom_treemap</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb143"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb143-1"><a href="#cb143-1"></a>Country_df <span class="sc">|&gt;</span></span>
+<span id="cb143-2"><a href="#cb143-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">"Asia"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb143-3"><a href="#cb143-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb143-4"><a href="#cb143-4"></a>  <span class="fu">geom_treemap</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2757,11 +2754,11 @@ Z -&gt; Y
 </div>
 <p>　これだけだと各長方形がどの国を指しているのかが分かりませんね。長方形の上に国名（<code>Country</code>）を追加するためには<code>geom_treemap_text()</code>幾何オブジェクトを使用します。マッピングは<code>area</code>と<code>label</code>に対し、それぞれ面積を表す<code>Population</code>と国名を表す<code>Country</code>を指定します。<code>area</code>は<code>geom_treemap()</code>と<code>geom_treemap_text()</code>両方で使われるので<code>ggplot()</code>の内部でマッピングしても問題ありません<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>。また、<code>aes()</code>の外側に<code>color = "white"</code>で文字を白に指定し、<code>place = "center"</code>で長方形の真ん中にラベルが付くようにします。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-tree3_7378debe2ae31cd63c7ead75be874730">
-<div class="sourceCode cell-code" id="cb145"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb145-1"><a href="#cb145-1"></a>Country_df <span class="sc">|&gt;</span></span>
-<span id="cb145-2"><a href="#cb145-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">"Asia"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb145-3"><a href="#cb145-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population)) <span class="sc">+</span></span>
-<span id="cb145-4"><a href="#cb145-4"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
-<span id="cb145-5"><a href="#cb145-5"></a>  <span class="fu">geom_treemap_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> Country), <span class="at">color =</span> <span class="st">"white"</span>, <span class="at">place =</span> <span class="st">"center"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb144"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb144-1"><a href="#cb144-1"></a>Country_df <span class="sc">|&gt;</span></span>
+<span id="cb144-2"><a href="#cb144-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">"Asia"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb144-3"><a href="#cb144-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population)) <span class="sc">+</span></span>
+<span id="cb144-4"><a href="#cb144-4"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
+<span id="cb144-5"><a href="#cb144-5"></a>  <span class="fu">geom_treemap_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> Country), <span class="at">color =</span> <span class="st">"white"</span>, <span class="at">place =</span> <span class="st">"center"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2772,12 +2769,12 @@ Z -&gt; Y
 </div>
 <p>　これでツリーマップが完成しました。インドと中国の存在感がかなり大きいですね。更にラベルのサイズを長方形に合わせると、その存在感をより高めることができます。ラベルの大きさを長方形に合わせるには<code>geom_treepmap_text()</code>の内部に<code>grow = TRUE</code>を指定します。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-tree4_3e6a5ed9878a511cf8570f503cfa45c4">
-<div class="sourceCode cell-code" id="cb146"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb146-1"><a href="#cb146-1"></a>Country_df <span class="sc">|&gt;</span></span>
-<span id="cb146-2"><a href="#cb146-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">"Asia"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb146-3"><a href="#cb146-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">label =</span> Country)) <span class="sc">+</span></span>
-<span id="cb146-4"><a href="#cb146-4"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
-<span id="cb146-5"><a href="#cb146-5"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">color =</span> <span class="st">"white"</span>, <span class="at">place =</span> <span class="st">"center"</span>,</span>
-<span id="cb146-6"><a href="#cb146-6"></a>                    <span class="at">grow =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb145"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb145-1"><a href="#cb145-1"></a>Country_df <span class="sc">|&gt;</span></span>
+<span id="cb145-2"><a href="#cb145-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">"Asia"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb145-3"><a href="#cb145-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">label =</span> Country)) <span class="sc">+</span></span>
+<span id="cb145-4"><a href="#cb145-4"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
+<span id="cb145-5"><a href="#cb145-5"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">color =</span> <span class="st">"white"</span>, <span class="at">place =</span> <span class="st">"center"</span>,</span>
+<span id="cb145-6"><a href="#cb145-6"></a>                    <span class="at">grow =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2788,17 +2785,17 @@ Z -&gt; Y
 </div>
 <p>　ここで更に次元を追加するために、色塗りをしてみましょう。たとえば、G20加盟国か否かで色分けをしたい場合、<code>fill</code>に<code>G20</code>をマッピングします。ただし、今のままだと<code>G20</code>は連続変数扱いになりますので、character型、またはfactor型に変換します。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-tree5_8b6b272275afdf1633fa7256abc19294">
-<div class="sourceCode cell-code" id="cb147"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb147-1"><a href="#cb147-1"></a>Country_df <span class="sc">|&gt;</span></span>
-<span id="cb147-2"><a href="#cb147-2"></a>  <span class="fu">mutate</span>(<span class="at">G20 =</span> <span class="fu">if_else</span>(G20 <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"Member"</span>, <span class="st">"Non-member"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb147-3"><a href="#cb147-3"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">"Asia"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb147-4"><a href="#cb147-4"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">fill =</span> G20,</span>
-<span id="cb147-5"><a href="#cb147-5"></a>             <span class="at">label =</span> Country)) <span class="sc">+</span></span>
-<span id="cb147-6"><a href="#cb147-6"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
-<span id="cb147-7"><a href="#cb147-7"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">color =</span> <span class="st">"white"</span>, <span class="at">place =</span> <span class="st">"centre"</span>,</span>
-<span id="cb147-8"><a href="#cb147-8"></a>                    <span class="at">grow =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb147-9"><a href="#cb147-9"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"G20"</span>) <span class="sc">+</span></span>
-<span id="cb147-10"><a href="#cb147-10"></a>  <span class="fu">ggtitle</span>(<span class="st">"Population in Asia"</span>) <span class="sc">+</span></span>
-<span id="cb147-11"><a href="#cb147-11"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb146"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb146-1"><a href="#cb146-1"></a>Country_df <span class="sc">|&gt;</span></span>
+<span id="cb146-2"><a href="#cb146-2"></a>  <span class="fu">mutate</span>(<span class="at">G20 =</span> <span class="fu">if_else</span>(G20 <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"Member"</span>, <span class="st">"Non-member"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb146-3"><a href="#cb146-3"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">"Asia"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb146-4"><a href="#cb146-4"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">fill =</span> G20,</span>
+<span id="cb146-5"><a href="#cb146-5"></a>             <span class="at">label =</span> Country)) <span class="sc">+</span></span>
+<span id="cb146-6"><a href="#cb146-6"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
+<span id="cb146-7"><a href="#cb146-7"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">color =</span> <span class="st">"white"</span>, <span class="at">place =</span> <span class="st">"centre"</span>,</span>
+<span id="cb146-8"><a href="#cb146-8"></a>                    <span class="at">grow =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb146-9"><a href="#cb146-9"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"G20"</span>) <span class="sc">+</span></span>
+<span id="cb146-10"><a href="#cb146-10"></a>  <span class="fu">ggtitle</span>(<span class="st">"Population in Asia"</span>) <span class="sc">+</span></span>
+<span id="cb146-11"><a href="#cb146-11"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2810,20 +2807,20 @@ Z -&gt; Y
 <p>　色塗りは連続変数に対して行うことも可能です。ここでは2018年人間開発指数（<code>HDI_2108</code>）の値に応じて色塗りをしてみます。また、<code>HDI_2018</code>が低い（<code>low</code>）と<span style="color:#CD3333;"><strong>brown3</strong></span>、高い（<code>high</code>）と<span style="color:#6495ED;"><strong>cornflowerblue</strong></span>色にします。真ん中の値（<code>midpoint</code>）は0.7とし、色（<code>mid</code>）は<span style="color:#FFF8DC;background-color:#7F7F7F;"><strong>cornsilk</strong></span>を使います。</p>
 <p>　連続変数でマッピングされた色塗り（<code>fill</code>）の調整には<code>scale_fill_gradient()</code>、または<code>scale_fill_gradient2()</code>を使います。前者は中間点なし、後者は中間点ありです。これらの使い方は第<a href="visualization3.html" class="quarto-xref"><span>20</span></a>章で紹介しました<code>scale_color_gradient()</code>と同じです。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-tree6_d756cf9ea29ced807477c695626cc0f2">
-<div class="sourceCode cell-code" id="cb148"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb148-1"><a href="#cb148-1"></a>Country_df <span class="sc">|&gt;</span></span>
-<span id="cb148-2"><a href="#cb148-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">"Asia"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb148-3"><a href="#cb148-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">fill =</span> HDI_2018,</span>
-<span id="cb148-4"><a href="#cb148-4"></a>             <span class="at">label =</span> Country)) <span class="sc">+</span></span>
-<span id="cb148-5"><a href="#cb148-5"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
-<span id="cb148-6"><a href="#cb148-6"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">color =</span> <span class="st">"white"</span>, <span class="at">place =</span> <span class="st">"centre"</span>,</span>
-<span id="cb148-7"><a href="#cb148-7"></a>                    <span class="at">grow =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb148-8"><a href="#cb148-8"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">"brown3"</span>,</span>
-<span id="cb148-9"><a href="#cb148-9"></a>                       <span class="at">mid =</span> <span class="st">"cornsilk"</span>,</span>
-<span id="cb148-10"><a href="#cb148-10"></a>                       <span class="at">high =</span> <span class="st">"cornflowerblue"</span>,</span>
-<span id="cb148-11"><a href="#cb148-11"></a>                       <span class="at">midpoint =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb148-12"><a href="#cb148-12"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"UN Human Development Index (2018)"</span>) <span class="sc">+</span></span>
-<span id="cb148-13"><a href="#cb148-13"></a>  <span class="fu">ggtitle</span>(<span class="st">"Population in Asia"</span>) <span class="sc">+</span></span>
-<span id="cb148-14"><a href="#cb148-14"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb147"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb147-1"><a href="#cb147-1"></a>Country_df <span class="sc">|&gt;</span></span>
+<span id="cb147-2"><a href="#cb147-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">"Asia"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb147-3"><a href="#cb147-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">fill =</span> HDI_2018,</span>
+<span id="cb147-4"><a href="#cb147-4"></a>             <span class="at">label =</span> Country)) <span class="sc">+</span></span>
+<span id="cb147-5"><a href="#cb147-5"></a>  <span class="fu">geom_treemap</span>() <span class="sc">+</span></span>
+<span id="cb147-6"><a href="#cb147-6"></a>  <span class="fu">geom_treemap_text</span>(<span class="at">color =</span> <span class="st">"white"</span>, <span class="at">place =</span> <span class="st">"centre"</span>,</span>
+<span id="cb147-7"><a href="#cb147-7"></a>                    <span class="at">grow =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb147-8"><a href="#cb147-8"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">"brown3"</span>,</span>
+<span id="cb147-9"><a href="#cb147-9"></a>                       <span class="at">mid =</span> <span class="st">"cornsilk"</span>,</span>
+<span id="cb147-10"><a href="#cb147-10"></a>                       <span class="at">high =</span> <span class="st">"cornflowerblue"</span>,</span>
+<span id="cb147-11"><a href="#cb147-11"></a>                       <span class="at">midpoint =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb147-12"><a href="#cb147-12"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"UN Human Development Index (2018)"</span>) <span class="sc">+</span></span>
+<span id="cb147-13"><a href="#cb147-13"></a>  <span class="fu">ggtitle</span>(<span class="st">"Population in Asia"</span>) <span class="sc">+</span></span>
+<span id="cb147-14"><a href="#cb147-14"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2834,29 +2831,29 @@ Z -&gt; Y
 </div>
 <p>　ちなみに以上の図を円グラフにすると以下のようになります（国名は人口の割合が2.5%を超える国のみ表示）。ツリーマップと比較してかなり読みにくいことが分かります。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-tree7_926ac771958e5f55e6fe82c272e8716b">
-<div class="sourceCode cell-code" id="cb149"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb149-1"><a href="#cb149-1"></a>Country_df <span class="sc">|&gt;</span></span>
-<span id="cb149-2"><a href="#cb149-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">"Asia"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb149-3"><a href="#cb149-3"></a>  <span class="fu">arrange</span>(Population) <span class="sc">|&gt;</span></span>
-<span id="cb149-4"><a href="#cb149-4"></a>  <span class="fu">mutate</span>(<span class="at">Prop        =</span> Population <span class="sc">/</span> <span class="fu">sum</span>(Population) <span class="sc">*</span> <span class="dv">100</span>,</span>
-<span id="cb149-5"><a href="#cb149-5"></a>         <span class="at">LabelY      =</span> <span class="dv">100</span> <span class="sc">-</span> (<span class="fu">cumsum</span>(Prop) <span class="sc">-</span> <span class="fl">0.5</span> <span class="sc">*</span> Prop),</span>
-<span id="cb149-6"><a href="#cb149-6"></a>         <span class="at">CountryName =</span> <span class="fu">if_else</span>(Prop <span class="sc">&lt;</span> <span class="fl">2.5</span>, <span class="st">""</span>, Country),</span>
-<span id="cb149-7"><a href="#cb149-7"></a>         <span class="at">Country     =</span> <span class="fu">fct_inorder</span>(Country)) <span class="sc">|&gt;</span></span>
-<span id="cb149-8"><a href="#cb149-8"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb149-9"><a href="#cb149-9"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1</span>, <span class="at">y =</span> Prop, <span class="at">group =</span> Country, <span class="at">fill =</span> HDI_2018), </span>
-<span id="cb149-10"><a href="#cb149-10"></a>           <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">width =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb149-11"><a href="#cb149-11"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1</span>, <span class="at">y =</span> LabelY, <span class="at">label =</span> CountryName)) <span class="sc">+</span></span>
-<span id="cb149-12"><a href="#cb149-12"></a>  <span class="fu">coord_polar</span>(<span class="st">"y"</span>, <span class="at">start =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
-<span id="cb149-13"><a href="#cb149-13"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">"brown3"</span>,</span>
-<span id="cb149-14"><a href="#cb149-14"></a>                       <span class="at">mid =</span> <span class="st">"cornsilk"</span>,</span>
-<span id="cb149-15"><a href="#cb149-15"></a>                       <span class="at">high =</span> <span class="st">"cornflowerblue"</span>,</span>
-<span id="cb149-16"><a href="#cb149-16"></a>                       <span class="at">midpoint =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb149-17"><a href="#cb149-17"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"UN Human Development Index (2018)"</span>) <span class="sc">+</span></span>
-<span id="cb149-18"><a href="#cb149-18"></a>  <span class="fu">ggtitle</span>(<span class="st">"Population in Asia"</span>) <span class="sc">+</span></span>
-<span id="cb149-19"><a href="#cb149-19"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb149-20"><a href="#cb149-20"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
-<span id="cb149-21"><a href="#cb149-21"></a>        <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb149-22"><a href="#cb149-22"></a>        <span class="at">axis.title =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb149-23"><a href="#cb149-23"></a>        <span class="at">axis.text  =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb148"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb148-1"><a href="#cb148-1"></a>Country_df <span class="sc">|&gt;</span></span>
+<span id="cb148-2"><a href="#cb148-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">"Asia"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb148-3"><a href="#cb148-3"></a>  <span class="fu">arrange</span>(Population) <span class="sc">|&gt;</span></span>
+<span id="cb148-4"><a href="#cb148-4"></a>  <span class="fu">mutate</span>(<span class="at">Prop        =</span> Population <span class="sc">/</span> <span class="fu">sum</span>(Population) <span class="sc">*</span> <span class="dv">100</span>,</span>
+<span id="cb148-5"><a href="#cb148-5"></a>         <span class="at">LabelY      =</span> <span class="dv">100</span> <span class="sc">-</span> (<span class="fu">cumsum</span>(Prop) <span class="sc">-</span> <span class="fl">0.5</span> <span class="sc">*</span> Prop),</span>
+<span id="cb148-6"><a href="#cb148-6"></a>         <span class="at">CountryName =</span> <span class="fu">if_else</span>(Prop <span class="sc">&lt;</span> <span class="fl">2.5</span>, <span class="st">""</span>, Country),</span>
+<span id="cb148-7"><a href="#cb148-7"></a>         <span class="at">Country     =</span> <span class="fu">fct_inorder</span>(Country)) <span class="sc">|&gt;</span></span>
+<span id="cb148-8"><a href="#cb148-8"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb148-9"><a href="#cb148-9"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1</span>, <span class="at">y =</span> Prop, <span class="at">group =</span> Country, <span class="at">fill =</span> HDI_2018), </span>
+<span id="cb148-10"><a href="#cb148-10"></a>           <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">width =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb148-11"><a href="#cb148-11"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1</span>, <span class="at">y =</span> LabelY, <span class="at">label =</span> CountryName)) <span class="sc">+</span></span>
+<span id="cb148-12"><a href="#cb148-12"></a>  <span class="fu">coord_polar</span>(<span class="st">"y"</span>, <span class="at">start =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb148-13"><a href="#cb148-13"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">"brown3"</span>,</span>
+<span id="cb148-14"><a href="#cb148-14"></a>                       <span class="at">mid =</span> <span class="st">"cornsilk"</span>,</span>
+<span id="cb148-15"><a href="#cb148-15"></a>                       <span class="at">high =</span> <span class="st">"cornflowerblue"</span>,</span>
+<span id="cb148-16"><a href="#cb148-16"></a>                       <span class="at">midpoint =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb148-17"><a href="#cb148-17"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"UN Human Development Index (2018)"</span>) <span class="sc">+</span></span>
+<span id="cb148-18"><a href="#cb148-18"></a>  <span class="fu">ggtitle</span>(<span class="st">"Population in Asia"</span>) <span class="sc">+</span></span>
+<span id="cb148-19"><a href="#cb148-19"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb148-20"><a href="#cb148-20"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb148-21"><a href="#cb148-21"></a>        <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb148-22"><a href="#cb148-22"></a>        <span class="at">axis.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb148-23"><a href="#cb148-23"></a>        <span class="at">axis.text  =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2872,24 +2869,24 @@ Z -&gt; Y
 <h2 data-number="21.16" class="anchored" data-anchor-id="sec-visual4-mosaic"><span class="header-section-number">21.16</span> モザイクプロット</h2>
 <p>モザイクプロットは2つの離散変数（おもに名目変数）の関係を可視化するために <span class="citation" data-cites="Hargian_Kleiner:1984">Hartigan と Kleiner (<a href="references.html#ref-Hargian_Kleiner:1984" role="doc-biblioref">1984</a>)</span> が考案した図です。2つの名目変数間の関係を見る際によく使われるものはクロス表（クロス集計表）でしょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb150"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb150-1"><a href="#cb150-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggmosaic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb149"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb149-1"><a href="#cb149-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggmosaic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-mosaic2_cee9ace508a6d048cb684113bec16b32">
-<div class="sourceCode cell-code" id="cb151"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb151-1"><a href="#cb151-1"></a>Mosaic_df <span class="ot">&lt;-</span> Country_df <span class="sc">|&gt;</span></span>
-<span id="cb151-2"><a href="#cb151-2"></a>    <span class="fu">select</span>(Country, Continent, <span class="at">Polity =</span> Polity_Type, <span class="at">PPP =</span> PPP_per_capita) <span class="sc">|&gt;</span></span>
-<span id="cb151-3"><a href="#cb151-3"></a>    <span class="fu">mutate</span>(<span class="at">Continent =</span> <span class="fu">factor</span>(Continent, </span>
-<span id="cb151-4"><a href="#cb151-4"></a>                              <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Africa"</span>, <span class="st">"America"</span>, <span class="st">"Asia"</span>,</span>
-<span id="cb151-5"><a href="#cb151-5"></a>                                         <span class="st">"Europe"</span>, <span class="st">"Oceania"</span>)),</span>
-<span id="cb151-6"><a href="#cb151-6"></a>           <span class="at">Polity    =</span> <span class="fu">factor</span>(Polity,</span>
-<span id="cb151-7"><a href="#cb151-7"></a>                              <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Autocracy"</span>, <span class="st">"Closed Anocracy"</span>,</span>
-<span id="cb151-8"><a href="#cb151-8"></a>                                         <span class="st">"Open Anocracy"</span>, <span class="st">"Democracy"</span>,</span>
-<span id="cb151-9"><a href="#cb151-9"></a>                                         <span class="st">"Full Democracy"</span>)),</span>
-<span id="cb151-10"><a href="#cb151-10"></a>           <span class="at">PPP       =</span> <span class="fu">if_else</span>(PPP <span class="sc">&gt;=</span> <span class="dv">15000</span>, <span class="st">"High PPP"</span>, <span class="st">"Low PPP"</span>),</span>
-<span id="cb151-11"><a href="#cb151-11"></a>           <span class="at">PPP       =</span> <span class="fu">factor</span>(PPP, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Low PPP"</span>, <span class="st">"High PPP"</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb151-12"><a href="#cb151-12"></a>    <span class="fu">drop_na</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb150"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb150-1"><a href="#cb150-1"></a>Mosaic_df <span class="ot">&lt;-</span> Country_df <span class="sc">|&gt;</span></span>
+<span id="cb150-2"><a href="#cb150-2"></a>    <span class="fu">select</span>(Country, Continent, <span class="at">Polity =</span> Polity_Type, <span class="at">PPP =</span> PPP_per_capita) <span class="sc">|&gt;</span></span>
+<span id="cb150-3"><a href="#cb150-3"></a>    <span class="fu">mutate</span>(<span class="at">Continent =</span> <span class="fu">factor</span>(Continent, </span>
+<span id="cb150-4"><a href="#cb150-4"></a>                              <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Africa"</span>, <span class="st">"America"</span>, <span class="st">"Asia"</span>,</span>
+<span id="cb150-5"><a href="#cb150-5"></a>                                         <span class="st">"Europe"</span>, <span class="st">"Oceania"</span>)),</span>
+<span id="cb150-6"><a href="#cb150-6"></a>           <span class="at">Polity    =</span> <span class="fu">factor</span>(Polity,</span>
+<span id="cb150-7"><a href="#cb150-7"></a>                              <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Autocracy"</span>, <span class="st">"Closed Anocracy"</span>,</span>
+<span id="cb150-8"><a href="#cb150-8"></a>                                         <span class="st">"Open Anocracy"</span>, <span class="st">"Democracy"</span>,</span>
+<span id="cb150-9"><a href="#cb150-9"></a>                                         <span class="st">"Full Democracy"</span>)),</span>
+<span id="cb150-10"><a href="#cb150-10"></a>           <span class="at">PPP       =</span> <span class="fu">if_else</span>(PPP <span class="sc">&gt;=</span> <span class="dv">15000</span>, <span class="st">"High PPP"</span>, <span class="st">"Low PPP"</span>),</span>
+<span id="cb150-11"><a href="#cb150-11"></a>           <span class="at">PPP       =</span> <span class="fu">factor</span>(PPP, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Low PPP"</span>, <span class="st">"High PPP"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb150-12"><a href="#cb150-12"></a>    <span class="fu">drop_na</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-mosaic3_dd17993f7f287279bca8803a944677e1">
-<div class="sourceCode cell-code" id="cb152"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb152-1"><a href="#cb152-1"></a><span class="fu">head</span>(Mosaic_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb151"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb151-1"><a href="#cb151-1"></a><span class="fu">head</span>(Mosaic_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 4
   Country     Continent Polity          PPP     
@@ -2904,8 +2901,8 @@ Z -&gt; Y
 </div>
 <p>　クロス表を作成する内蔵関数としては<code>table()</code>があります。2つの変数が必要となり、第一引数が行、第二引数が列を表します。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-mosaic4_b383f07a0ac588556384ad0334850d53">
-<div class="sourceCode cell-code" id="cb154"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb154-1"><a href="#cb154-1"></a>Mosaic_Tab <span class="ot">&lt;-</span> <span class="fu">table</span>(Mosaic_df<span class="sc">$</span>Continent, Mosaic_df<span class="sc">$</span>Polity)</span>
-<span id="cb154-2"><a href="#cb154-2"></a>Mosaic_Tab</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb153"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb153-1"><a href="#cb153-1"></a>Mosaic_Tab <span class="ot">&lt;-</span> <span class="fu">table</span>(Mosaic_df<span class="sc">$</span>Continent, Mosaic_df<span class="sc">$</span>Polity)</span>
+<span id="cb153-2"><a href="#cb153-2"></a>Mosaic_Tab</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         
           Autocracy Closed Anocracy Open Anocracy Democracy Full Democracy
@@ -2918,7 +2915,7 @@ Z -&gt; Y
 </div>
 <p>　この<code>Mosaic_Tab</code>のクラスは<code>"table"</code>ですが、<code>"table"</code>クラスのオブジェクトを<code>plot()</code>に渡すと別途のパッケージを使わずモザイクプロットを作成することができます。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-mosaic6_5a2ae4961a944c69d816a5f6f5f7921f">
-<div class="sourceCode cell-code" id="cb156"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb156-1"><a href="#cb156-1"></a><span class="fu">plot</span>(Mosaic_Tab)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb155"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb155-1"><a href="#cb155-1"></a><span class="fu">plot</span>(Mosaic_Tab)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2930,12 +2927,12 @@ Z -&gt; Y
 <p>　やや地味ではありますが、モザイクプロットが出来ました。ここからはより読みやすいモザイクプロットを作成するために{ggmosaic}パッケージの<code>geom_mosaic()</code>関数を使います。</p>
 <p>　<code>geom_mosaic()</code>の場合、<code>x</code>のみのマッピングで十分です。ただし、特定の変数を指定するのではなく、<code>product(変数1, 変数2)</code>を<code>x</code>にマッピングする必要があります。<code>table()</code>関数同様、変数1は行、変数2は列です。また、欠損値が含まれている行がある場合は、<code>aes()</code>の外側に<code>na.rm = TRUE</code>を指定する必要があります。今回は<code>drop_na()</code>で欠損値をすべて除外しましたが、念の為に指定しておきます。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-mosaic7_b25205884c32af11bcde6a725b0bde5b">
-<div class="sourceCode cell-code" id="cb157"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb157-1"><a href="#cb157-1"></a>Mosaic_df <span class="sc">|&gt;</span></span>
-<span id="cb157-2"><a href="#cb157-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb157-3"><a href="#cb157-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent)), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb157-4"><a href="#cb157-4"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Continent"</span>, <span class="at">y =</span> <span class="st">"Polity Type"</span>) <span class="sc">+</span></span>
-<span id="cb157-5"><a href="#cb157-5"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb157-6"><a href="#cb157-6"></a>    <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb156"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb156-1"><a href="#cb156-1"></a>Mosaic_df <span class="sc">|&gt;</span></span>
+<span id="cb156-2"><a href="#cb156-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb156-3"><a href="#cb156-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent)), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb156-4"><a href="#cb156-4"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Continent"</span>, <span class="at">y =</span> <span class="st">"Polity Type"</span>) <span class="sc">+</span></span>
+<span id="cb156-5"><a href="#cb156-5"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb156-6"><a href="#cb156-6"></a>    <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: `unite_()` was deprecated in tidyr 1.2.0.
 ℹ Please use `unite()` instead.
@@ -2952,15 +2949,15 @@ Z -&gt; Y
 </div>
 <p>　これで出来上がりですが、<code>"table"</code>オブジェクトを<code>plot()</code>に渡した結果とあまり変わらないですね。続いて、この図を少し改良してみましょう。まずはセルの色分けですが、これは<code>fill</code>に色分けする変数をマッピングするだけです。今回は政治体制ごとにセルを色分けしましょう。また、文字を大きめにし、横軸の目盛りラベルを回転します。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-mosaic8_11308963ebc812071078397d0408c64e">
-<div class="sourceCode cell-code" id="cb159"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb159-1"><a href="#cb159-1"></a>Mosaic_df <span class="sc">|&gt;</span></span>
-<span id="cb159-2"><a href="#cb159-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb159-3"><a href="#cb159-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent), <span class="at">fill =</span> Polity), </span>
-<span id="cb159-4"><a href="#cb159-4"></a>                <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb159-5"><a href="#cb159-5"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Continent"</span>, <span class="at">y =</span> <span class="st">"Polity Type"</span>) <span class="sc">+</span></span>
-<span id="cb159-6"><a href="#cb159-6"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
-<span id="cb159-7"><a href="#cb159-7"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
-<span id="cb159-8"><a href="#cb159-8"></a>          <span class="at">panel.grid      =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb159-9"><a href="#cb159-9"></a>          <span class="at">axis.text.x     =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb158"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb158-1"><a href="#cb158-1"></a>Mosaic_df <span class="sc">|&gt;</span></span>
+<span id="cb158-2"><a href="#cb158-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb158-3"><a href="#cb158-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent), <span class="at">fill =</span> Polity), </span>
+<span id="cb158-4"><a href="#cb158-4"></a>                <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb158-5"><a href="#cb158-5"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Continent"</span>, <span class="at">y =</span> <span class="st">"Polity Type"</span>) <span class="sc">+</span></span>
+<span id="cb158-6"><a href="#cb158-6"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb158-7"><a href="#cb158-7"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb158-8"><a href="#cb158-8"></a>          <span class="at">panel.grid      =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb158-9"><a href="#cb158-9"></a>          <span class="at">axis.text.x     =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2971,16 +2968,16 @@ Z -&gt; Y
 </div>
 <p>　次元を追加するためにはファセット分割を使います。たとえば、一人当たりPPP GDPの高低（<code>PPP</code>）でファセットを分割する場合、<code>facet_wrap(~PPP)</code>レイヤーを足すだけです。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-mosaic9_66a379733b0970205c6f46bcd45ffec1">
-<div class="sourceCode cell-code" id="cb160"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb160-1"><a href="#cb160-1"></a>Mosaic_df <span class="sc">|&gt;</span></span>
-<span id="cb160-2"><a href="#cb160-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb160-3"><a href="#cb160-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent), <span class="at">fill =</span> Polity), </span>
-<span id="cb160-4"><a href="#cb160-4"></a>                <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb160-5"><a href="#cb160-5"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Continent"</span>, <span class="at">y =</span> <span class="st">"Polity Type"</span>) <span class="sc">+</span></span>
-<span id="cb160-6"><a href="#cb160-6"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>PPP, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb160-7"><a href="#cb160-7"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
-<span id="cb160-8"><a href="#cb160-8"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
-<span id="cb160-9"><a href="#cb160-9"></a>          <span class="at">panel.grid      =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb160-10"><a href="#cb160-10"></a>          <span class="at">axis.text.x     =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb159"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb159-1"><a href="#cb159-1"></a>Mosaic_df <span class="sc">|&gt;</span></span>
+<span id="cb159-2"><a href="#cb159-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb159-3"><a href="#cb159-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent), <span class="at">fill =</span> Polity), </span>
+<span id="cb159-4"><a href="#cb159-4"></a>                <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb159-5"><a href="#cb159-5"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Continent"</span>, <span class="at">y =</span> <span class="st">"Polity Type"</span>) <span class="sc">+</span></span>
+<span id="cb159-6"><a href="#cb159-6"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>PPP, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb159-7"><a href="#cb159-7"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb159-8"><a href="#cb159-8"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb159-9"><a href="#cb159-9"></a>          <span class="at">panel.grid      =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb159-10"><a href="#cb159-10"></a>          <span class="at">axis.text.x     =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -2991,16 +2988,16 @@ Z -&gt; Y
 </div>
 <p>　ただし、一つ問題があります。それは目盛りラベルの位置です。例えば、右側の横軸目盛りラベルの場合、セルの位置とラベルの位置がずれています。これは2つのファセットが同じ目盛りを共有し、左側の方に合わせられたため生じるものです。よく見ると横軸も縦軸も目盛りラベルに位置が同じであることが分かります。これを解消するためには、<code>facet_wrap()</code>の内部に<code>scale = "free"</code>を指定します<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>。これは各ファセットが独自のスケールを有することを意味します。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-mosaic10_e3e7e4fdf58bfc108d4f63d3c2fb6d01">
-<div class="sourceCode cell-code" id="cb161"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb161-1"><a href="#cb161-1"></a>Mosaic_df <span class="sc">|&gt;</span></span>
-<span id="cb161-2"><a href="#cb161-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb161-3"><a href="#cb161-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent), <span class="at">fill =</span> Polity), </span>
-<span id="cb161-4"><a href="#cb161-4"></a>                <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb161-5"><a href="#cb161-5"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Continent"</span>, <span class="at">y =</span> <span class="st">"Polity Type"</span>) <span class="sc">+</span></span>
-<span id="cb161-6"><a href="#cb161-6"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>PPP, <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">scale =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
-<span id="cb161-7"><a href="#cb161-7"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
-<span id="cb161-8"><a href="#cb161-8"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
-<span id="cb161-9"><a href="#cb161-9"></a>          <span class="at">panel.grid      =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb161-10"><a href="#cb161-10"></a>          <span class="at">axis.text.x     =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb160"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb160-1"><a href="#cb160-1"></a>Mosaic_df <span class="sc">|&gt;</span></span>
+<span id="cb160-2"><a href="#cb160-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb160-3"><a href="#cb160-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent), <span class="at">fill =</span> Polity), </span>
+<span id="cb160-4"><a href="#cb160-4"></a>                <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb160-5"><a href="#cb160-5"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Continent"</span>, <span class="at">y =</span> <span class="st">"Polity Type"</span>) <span class="sc">+</span></span>
+<span id="cb160-6"><a href="#cb160-6"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>PPP, <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">scale =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
+<span id="cb160-7"><a href="#cb160-7"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb160-8"><a href="#cb160-8"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb160-9"><a href="#cb160-9"></a>          <span class="at">panel.grid      =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb160-10"><a href="#cb160-10"></a>          <span class="at">axis.text.x     =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -3011,16 +3008,16 @@ Z -&gt; Y
 </div>
 <p>　右側ファセットの横軸ラベルが重なってしまいましたが、これでとりあえず完成です。アフリカにおけるOpen AnocracyとClosed Anocracyの頻度が0であるため、これは仕方ありません。一つの対処方法としては以下のように縦軸目盛りを削除し、凡例で代替することが考えられます。</p>
 <div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-mosaic11_e2a76c66d54067ddab3743a6e1de54b4">
-<div class="sourceCode cell-code" id="cb162"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb162-1"><a href="#cb162-1"></a>Mosaic_df <span class="sc">|&gt;</span></span>
-<span id="cb162-2"><a href="#cb162-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb162-3"><a href="#cb162-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent), <span class="at">fill =</span> Polity), </span>
-<span id="cb162-4"><a href="#cb162-4"></a>                <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb162-5"><a href="#cb162-5"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Continent"</span>, <span class="at">y =</span> <span class="st">"Polity Type"</span>, <span class="at">fill =</span> <span class="st">"Polity Type"</span>) <span class="sc">+</span></span>
-<span id="cb162-6"><a href="#cb162-6"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>PPP, <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">scale =</span> <span class="st">"free_x"</span>) <span class="sc">+</span></span>
-<span id="cb162-7"><a href="#cb162-7"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
-<span id="cb162-8"><a href="#cb162-8"></a>    <span class="fu">theme</span>(<span class="at">panel.grid  =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb162-9"><a href="#cb162-9"></a>          <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb162-10"><a href="#cb162-10"></a>          <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb161"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb161-1"><a href="#cb161-1"></a>Mosaic_df <span class="sc">|&gt;</span></span>
+<span id="cb161-2"><a href="#cb161-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb161-3"><a href="#cb161-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent), <span class="at">fill =</span> Polity), </span>
+<span id="cb161-4"><a href="#cb161-4"></a>                <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb161-5"><a href="#cb161-5"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Continent"</span>, <span class="at">y =</span> <span class="st">"Polity Type"</span>, <span class="at">fill =</span> <span class="st">"Polity Type"</span>) <span class="sc">+</span></span>
+<span id="cb161-6"><a href="#cb161-6"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>PPP, <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">scale =</span> <span class="st">"free_x"</span>) <span class="sc">+</span></span>
+<span id="cb161-7"><a href="#cb161-7"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb161-8"><a href="#cb161-8"></a>    <span class="fu">theme</span>(<span class="at">panel.grid  =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb161-9"><a href="#cb161-9"></a>          <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb161-10"><a href="#cb161-10"></a>          <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
