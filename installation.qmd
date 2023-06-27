@@ -57,15 +57,31 @@ $ xcode-select --install
 
 #### Step 2: Rのインストール
 
-#### Step 1: Rtoolsのインストール
+　Rの公式レポジトリである[CRAN](https://cran.r-project.org/)にアクセスし、画面上段の「Download R for Windows」をクリックする。続いて、「base」をクリックする。最後に次の画面で「Download R-4.3.1 for Windows」をクリックしてインストーラーをダウンロードする。「4.3.1」の箇所は最新バージョンの値であり、新しいバージョンがリリースされると、ここの数字も変わる。
 
-　Rのバージョンに合ったRtools。たとえばR 4.3.xであれば、「RTools 4.3」を選択。
+![](Figs/Install/cran_win1.png){fig-align="center" width="800px"}
 
-### Ubuntu
+　ダウンロードが完了したらインストーラーを開き、指示通りに操作する。基本的に「はい」、「次へ」だけで問題ない。
 
-Debian系（Debian / Ubuntu / Mint等）共通
+#### Step 3: Rtoolsのインストール
+
+　の公式レポジトリである[CRAN](https://cran.r-project.org/)にアクセスし、画面上段の「Download R for Windows」をクリックする。続いて、「Rtools」をクリックする。いくつかのRtoolsが表示されるが、ここでは自分が使用するRのバージョンに合ったものを選択する。たとえば、インストールしたRのバージョンが4.3.Xなら「RTools 4.3」を、4.1.3なら「RTools 4.0」を選択する。右側に対応するRバージョンが表示されるので参照すること。
+
+![](Figs/Install/cran_win2.png){fig-align="center" width="600px"}
+
+　続いてRtoolsのインストーラーをダウンロードする。ただし、インストーラーのリンクが画面の最上段に位置しないことに注意されたい。ページの真ん中辺りに「Rtools43 installer」というリンクがあるが、これをクリックするとインストーラーがダウンロードされる。ここでも「43」はRtoolsのバージョンに応じて数字が異なる。
+
+![](Figs/Install/cran_win3.png){fig-align="center" width="800px"}
+
+　ダウンロードが完了したらインストーラーを開き、指示通りに操作する。基本的に「はい」、「次へ」だけで問題ない。
+
+### Ubuntu（Linux）
+
+　以下の内容はDebian系LinuxディストリビューションであるUbuntuをベースとした解説である。他のDebian系やその他のLinux（Redhat系、Arch系）についてはCRAN公式ページを参照されたい。
 
 #### Step 1: インストールの準備
+
+　これから様々なパッケージをインストールしていくが、その前にgdebiとwgetをインストールしておく必要がある。gdebiは`.deb`形式のソフトウェア、ライブラリをインストールするためのパッケージであり、wgetはインターネット上のファイルをダウンロードするためのパッケージだ。ただ、Linuxをそこそこ使っている読者であれば、この2つはインストール済みである可能性が高く、そもそも多くのDebian系ディストリビューションでは最初から導入済みである。もし、インストールされているかどうか不安な場合はターミナル（terminal; 「端末」とも訳される場合がある）を開き、以下のように入力する（最初の`$`は入力しない）。最初はパスワード入力が求められる。
 
 ```bash
 $ sudo apt update
@@ -74,16 +90,27 @@ $ sudo apt install -y gdebi-core wget
 
 #### Step 2: 日本語フォントのインストール
 
+　引き続き、作図に使用する日本語フォントをインストールする。好きなフォントを入れても良いが、ここでは[IPAex](https://moji.or.jp/ipafont/)フォントを導入する。ターミナルから以下のコマンドを入力し、IPAexフォントをインストールする。
+
 ```bash
 $ sudo apt install -y fonts-ipaexfont
+```
+
+　続いて、以下のコマンドでフォントのキャッシュファイルを更新する。
+
+```bash
 $ fc-cache -f -v
 ```
+
+　以上でIPAexフォントは使えるが、正しく登録されているかを確認したい場合は以下のように入力する。登録されている場合、IPAexフォントがインストールされているパスが表示される。
 
 ```bash
 $ fc-list | grep IPAex
 ```
 
 #### Step 3: 依存パッケージのインストール
+
+　続いて、多くのRパッケージが依存するLinux側のパッケージをインストールする。こちらは必須ではないが、LinuxでRを使っていくといつかは通る道である。他にも依存パッケージは数十種類（それ以上かも）あるが、ここではよく使われるものをインストールしておく。
 
 ```bash
 $ sudo apt install -y build-essential
@@ -103,7 +130,36 @@ $ sudo apt install -y poppler-utils
 $ sudo apt install -y poppler-data
 ```
 
+　今後、Rでパッケージをインストールする際、「XXXがない」と表示される場合があり、その時には「ターミナルで以下のようなコマンドを入力してね」といったメッセージも表示される。その場合はターミナルで指示通りにコマンドを入力しよう。
+
 #### Step 4: Rのインストール
+
+　Rのインストールは2つの選択肢がある。簡単なやり方はUbuntu公式レポジトリからインストールする方法だ。ただし、最新版は使えず、2023年6月現在、R 4.2.1がインストールされる（最新版は4.3.1）。最新版にこだわらないなら、ターミナルで以下のように入力するだけだ。
+
+```bash
+$ sudo apt update
+$ sudo apt install -y r-base
+```
+
+　もう一つのやり方はやや面倒だが、最新版が使える方法で、Ubuntuレポジトリでなく、Rの公式レポジトリを使うやり方だ。そのためには予めRのレポジトリを登録しておく必要がある。以下のコマンドを入力するが、もしR 5.xがリリースされるとURLも変更になるため、以下のコマンドはR 4.Xの例であることを断っておきたい。
+
+```bash
+$ sudo apt update -qq
+$ sudo apt install --no-install-recommends software-properties-common dirmngr
+$ gpg --show-keys /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
+$ wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | sudo tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
+$ sudo add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
+$ sudo apt update
+$ sudo apt install -y r-base
+```
+
+　これでRのインストールは完了だ。ターミナルで以下のように入力するとRが起動される。
+
+```bash
+$ R
+```
+
+## Rのアップデート
 
 ## クラウド版の利用
 
