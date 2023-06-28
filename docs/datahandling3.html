@@ -1,0 +1,2304 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.161">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>私たちのR - 15&nbsp; データハンドリング [拡張]</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./factor.html" rel="next">
+<link href="./datahandling2.html" rel="prev">
+<link href="./Figs/favicon.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "サーチ"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-CEHS4C056W"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&amp;display=swap" rel="stylesheet"> 
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mono&amp;display=swap" rel="stylesheet"> 
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<meta property="og:title" content="私たちのR: ベストプラクティスの探求">
+<meta property="og:description" content="R Not for Everyone: An Esoteric Guide">
+<meta property="og:image" content="https://www.jaysong.net/RBook/Figs/favicon.png">
+<meta property="og:site_name" content="私たちのR">
+<meta property="og:image:height" content="260">
+<meta property="og:image:width" content="260">
+<meta name="twitter:title" content="私たちのR: ベストプラクティスの探求">
+<meta name="twitter:description" content="R Not for Everyone: An Esoteric Guide">
+<meta name="twitter:image" content="https://www.jaysong.net/RBook/Figs/favicon.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image-height" content="260">
+<meta name="twitter:image-width" content="260">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="サイドバーを切り替える" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./datahandling1.html">データハンドリング</a></li><li class="breadcrumb-item"><a href="./datahandling3.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">データハンドリング [拡張]</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="サイドバーを切り替える" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">私たちのR</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/JaehyunSong/RBook/" rel="" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <div class="dropdown">
+      <a href="" title="Share" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Share"><i class="bi bi-share"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+              <i class="bi bi-bi-twitter pe-1"></i>
+            Twitter
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://www.facebook.com/sharer/sharer.php?u=|url|">
+              <i class="bi bi-bi-facebook pe-1"></i>
+            Facebook
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="サーチ"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">紹介</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Rの導入</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="セクションを切り替え">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./aboutr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R?</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./installation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Rのインストール</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ide.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">IDEの導入</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r_customize.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">分析環境のカスタマイズ</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./packages.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Rパッケージ</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Rの基礎</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="セクションを切り替え">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">プロジェクト管理</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r_basic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">基本的な操作</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./io.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">データの入出力</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./datatype.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">データ型</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./datastructure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">データ構造</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./programming.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Rプログラミングの基礎</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">関数の自作</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">データハンドリング</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="セクションを切り替え">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./datahandling1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">データハンドリング [抽出]</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./datahandling2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">データハンドリング [要約]</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./datahandling3.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">データハンドリング [拡張]</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./factor.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">データハンドリング [factor型]</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tidydata.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">整然データ構造</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./string.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">文字列の処理</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">可視化</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="セクションを切り替え">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./visualization1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">可視化 [理論]</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./visualization2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">可視化 [基礎]</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./visualization3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">可視化 [応用]</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./visualization4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">可視化 [発展]</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./table.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">表の作成</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+ <span class="menu-text">再現可能な研究</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="セクションを切り替え">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rmarkdown.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">R Markdown [基礎]</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rmarkdown2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">R Markdown [応用]</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Quarto入門</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./renv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">分析環境の管理</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">
+ <span class="menu-text">中級者向け</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="セクションを切り替え">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./iteration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">反復処理</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./oop.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">オブジェクト指向プログラミング</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./monte.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">モンテカルロ・シミュレーション</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./scraping.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">スクレイピング</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true">
+ <span class="menu-text">付録</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true" aria-label="セクションを切り替え">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dataset.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">データセット</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./filesystem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ファイルシステム</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tips.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">R Tips</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./session.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">本書の執筆環境</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">参考文献</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">目次</h2>
+   
+  <ul>
+  <li><a href="#sec-handling3-mutate" id="toc-sec-handling3-mutate" class="nav-link active" data-scroll-target="#sec-handling3-mutate"><span class="header-section-number">15.1</span> 変数の計算</a>
+  <ul class="collapse">
+  <li><a href="#mutate関数の使い方" id="toc-mutate関数の使い方" class="nav-link" data-scroll-target="#mutate関数の使い方"><span class="header-section-number">15.1.1</span> <code>mutate()</code>関数の使い方</a></li>
+  </ul></li>
+  <li><a href="#sec-handling3-rowwise" id="toc-sec-handling3-rowwise" class="nav-link" data-scroll-target="#sec-handling3-rowwise"><span class="header-section-number">15.2</span> 行単位の操作</a></li>
+  <li><a href="#sec-handling3-merge" id="toc-sec-handling3-merge" class="nav-link" data-scroll-target="#sec-handling3-merge"><span class="header-section-number">15.3</span> データの結合</a>
+  <ul class="collapse">
+  <li><a href="#行の結合" id="toc-行の結合" class="nav-link" data-scroll-target="#行の結合"><span class="header-section-number">15.3.1</span> 行の結合</a></li>
+  <li><a href="#列の結合" id="toc-列の結合" class="nav-link" data-scroll-target="#列の結合"><span class="header-section-number">15.3.2</span> 列の結合</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-datahandling3" class="quarto-section-identifier"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">データハンドリング [拡張]</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>これまでデータの一部（subset）を抽出したり、要約する方法について説明しましたが、本章はデータの拡張について解説します。具体的にはデータ内の変数に基づき、指定された計算を行った結果を新しい列として追加する、または既存の変数を更新する方法です。そして2つ以上のデータセットを1つに結合する方法についても解説します。今回も<a href="Data/Ramen.csv">前章と同じデータ</a>を使用します。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="co"># データのパスは適宜修正すること</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="co"># 文字化けが生じる場合、以下のコードに書き換える。</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co"># df &lt;- read_csv("Data/Ramen.csv", locale = locale(encoding = "utf8"))</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Data/Ramen.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>データの詳細については第<a href="datahandling1.html#sec-handling1-select" class="quarto-xref"><span>13.3</span></a>章を参照してください。</p>
+<section id="sec-handling3-mutate" class="level2" data-number="15.1">
+<h2 data-number="15.1" class="anchored" data-anchor-id="sec-handling3-mutate"><span class="header-section-number">15.1</span> 変数の計算</h2>
+<section id="mutate関数の使い方" class="level3" data-number="15.1.1">
+<h3 data-number="15.1.1" class="anchored" data-anchor-id="mutate関数の使い方"><span class="header-section-number">15.1.1</span> <code>mutate()</code>関数の使い方</h3>
+<p>データフレーム（ティブル）内の変数を用いて計算を行い、その結果を新しい列として格納する<code>mutate()</code>関数について紹介します。まず、<code>mutate()</code>関数の書き方からです。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># mutate()関数の使い方</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>データフレーム名 <span class="sc">|&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>  <span class="fu">mutate</span>(新しい変数名 <span class="ot">=</span> 処理内容)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>これは何らかの処理を行い、その結果を新しい変数としてデータフレームに追加することを意味します。新しく出来た変数は、基本的に最後の列になります。ここでは分単位である<code>Walk</code>を時間単位に変換した<code>Walk_Hour</code>変数を作成するとします。処理内容は<code>Walk / 60</code>です。最後に、都府県名、店舗名、徒歩距離 (分)、徒歩距離 (時間)のみを残し、遠い順にソートします。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Walk)) <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>  <span class="fu">mutate</span>(<span class="at">Walk_Hour =</span> Walk <span class="sc">/</span> <span class="dv">60</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a>  <span class="fu">select</span>(Pref, Name, Walk, Walk_Hour) <span class="sc">|&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Walk_Hour))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5,375 × 4
+   Pref     Name                               Walk Walk_Hour
+   &lt;chr&gt;    &lt;chr&gt;                             &lt;dbl&gt;     &lt;dbl&gt;
+ 1 埼玉県   札幌ラーメン どさん子 小鹿野店      116     1.93 
+ 2 神奈川県 札幌ラーメン どさん子 中津店         73     1.22 
+ 3 千葉県   札幌ラーメン どさん子 佐原51号店     59     0.983
+ 4 神奈川県 札幌ラーメン どさん子 山際店         50     0.833
+ 5 千葉県   札幌ラーメン どさん子 関宿店         49     0.817
+ 6 兵庫県   濃厚醤油 中華そば いせや 玉津店      43     0.717
+ 7 大阪府   河童ラーメン本舗 岸和田店            38     0.633
+ 8 埼玉県   ラーメン山岡家 上尾店                35     0.583
+ 9 兵庫県   濃厚醤油 中華そば いせや 大蔵谷店    35     0.583
+10 大阪府   河童ラーメン本舗 松原店              31     0.517
+# ℹ 5,365 more rows</code></pre>
+</div>
+</div>
+<p><code>mutate()</code>は3行目に登場しますが、これは<code>Walk</code>を60に割った結果を<code>Walk_Hour</code>としてデータフレームの最後の列として格納することを意味します。もし、最後の列でなく、ある変数の前、または後にしたい場合は、<code>.before</code>または<code>.after</code>引数を追加します。これは<code>select()</code>関数の<code>.before</code>と<code>.after</code>と同じ使い方です。たとえば、新しく出来た<code>Walk_Hour</code>を<code>ID</code>と<code>Name</code>の間に入れたい場合は</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># コードの3行名を修正 (.before使用)</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="fu">mutate</span>(<span class="at">Walk_Hour =</span> Walk <span class="sc">/</span> <span class="dv">60</span>,</span>
+<span id="cb5-3"><a href="#cb5-3"></a>       <span class="at">.before   =</span> Name)</span>
+<span id="cb5-4"><a href="#cb5-4"></a></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co"># コードの3行名を修正 (.after使用)</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="fu">mutate</span>(<span class="at">Walk_Hour =</span> Walk <span class="sc">/</span> <span class="dv">60</span>,</span>
+<span id="cb5-7"><a href="#cb5-7"></a>       <span class="at">.after    =</span> ID)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>のようにコードを修正します。</p>
+<p>むろん、変数間同士の計算も可能です。たとえば、以下のような<code>df2</code>があり、1店舗当たりの平均口コミ数を計算し、<code>ScoreN_Mean</code>という変数名で<code>ScoreN_Sum</code>の後に格納うするとします。この場合、<code>ScoreN_Sum</code>変数を<code>N</code>で割るだけです。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>df2 <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">group_by</span>(Pref) <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">summarise</span>(<span class="at">Budget_Mean =</span> <span class="fu">mean</span>(Budget, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb6-4"><a href="#cb6-4"></a>            <span class="at">ScoreN_Sum  =</span> <span class="fu">sum</span>(ScoreN, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb6-5"><a href="#cb6-5"></a>            <span class="at">Score_Mean  =</span> <span class="fu">mean</span>(Score, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb6-6"><a href="#cb6-6"></a>            <span class="at">N           =</span> <span class="fu">n</span>(),</span>
+<span id="cb6-7"><a href="#cb6-7"></a>            <span class="at">.groups     =</span> <span class="st">"drop"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>df2 <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">mutate</span>(<span class="at">ScoreN_Mean =</span> ScoreN_Sum <span class="sc">/</span> N,</span>
+<span id="cb7-3"><a href="#cb7-3"></a>         <span class="at">.after      =</span> ScoreN_Sum)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 6
+  Pref     Budget_Mean ScoreN_Sum ScoreN_Mean Score_Mean     N
+  &lt;chr&gt;          &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt; &lt;int&gt;
+1 京都府         1399.        216       0.522       3.68   414
+2 兵庫県         1197.        230       0.389       3.54   591
+3 千葉県         1124.        259       0.259       3.72  1000
+4 和歌山県       1252          83       0.593       3.97   140
+5 埼玉県         1147.        278       0.278       3.64  1000
+6 大阪府         1203.        516       0.516       3.77  1000
+7 奈良県         1169.         45       0.306       3.85   147
+8 東京都         1283.       1165       1.16        3.67  1000
+9 神奈川県       1239.        587       0.587       3.53  1000</code></pre>
+</div>
+</div>
+<p>このように、データ内の変数を用いた計算結果を新しい列として追加する場合は、<code>mutate()</code>が便利です。これを<code>mutate()</code>を使わずに処理する場合、以下のようなコードになりますが、可読性が相対的に低いことが分かります。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>df2<span class="sc">$</span>ScoreN_Mean <span class="ot">&lt;-</span> df2<span class="sc">$</span>ScoreN_Sum <span class="sc">/</span> df2<span class="sc">$</span>N</span>
+<span id="cb9-2"><a href="#cb9-2"></a>df2 <span class="ot">&lt;-</span> df2[, <span class="fu">c</span>(<span class="st">"Pref"</span>, <span class="st">"Budget_Mean"</span>, <span class="st">"Walk_Mean"</span>, </span>
+<span id="cb9-3"><a href="#cb9-3"></a>               <span class="st">"ScoreN_Sum"</span>, <span class="st">"ScoreN_Mean"</span>, <span class="st">"Score_Mean"</span>, <span class="st">"N"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>むろんですが、計算には<code>+</code>や<code>/</code>のような演算子だけでなく、関数を使うことも可能です。たとえば、<code>Budget</code>が1000円未満なら<code>"Cheap"</code>、1000円以上なら<code>"Expensive"</code>と示す変数<code>Budget2</code>を作成する場合は<code>ifelse()</code>関数が使えます。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb10-2"><a href="#cb10-2"></a>  <span class="fu">mutate</span>(<span class="at">Budget2 =</span> <span class="fu">ifelse</span>(Budget <span class="sc">&lt;</span> <span class="dv">1000</span>, <span class="st">"Cheap"</span>, <span class="st">"Expensive"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Budget2)) <span class="sc">|&gt;</span> <span class="co"># Budget2が欠損した店舗を除外</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a>  <span class="fu">group_by</span>(Pref, Budget2) <span class="sc">|&gt;</span> <span class="co"># PrefとBudget2でグループ化</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a>  <span class="fu">summarise</span>(<span class="at">N =</span> <span class="fu">n</span>(),         <span class="co"># 店舗数を表示</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a>            <span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 18 × 3
+   Pref     Budget2       N
+   &lt;chr&gt;    &lt;chr&gt;     &lt;int&gt;
+ 1 京都府   Cheap        22
+ 2 京都府   Expensive    28
+ 3 兵庫県   Cheap        39
+ 4 兵庫県   Expensive    27
+ 5 千葉県   Cheap        64
+ 6 千葉県   Expensive    72
+ 7 和歌山県 Cheap        10
+ 8 和歌山県 Expensive     5
+ 9 埼玉県   Cheap        37
+10 埼玉県   Expensive    45
+11 大阪府   Cheap       104
+12 大阪府   Expensive   115
+13 奈良県   Cheap        11
+14 奈良県   Expensive    10
+15 東京都   Cheap       206
+16 東京都   Expensive   236
+17 神奈川県 Cheap        66
+18 神奈川県 Expensive    54</code></pre>
+</div>
+</div>
+<p>これは各都府県ごとの予算1000円未満の店と以上の店の店舗数をまとめた表となります。もし、500円未満なら<code>"Cheap"</code>、500円以上~1000円未満なら<code>"Reasonable"</code>、1000円以上なら<code>"Expensive"</code>になる<code>Budget3</code>変数を作るにはどうすればよいでしょうか。第<a href="programming.html" class="quarto-xref"><span>11</span></a>章で紹介しました<code>ifelse()</code>を重ねることも出来ますが、ここでは<code>case_when()</code>関数が便利です。まずは、<code>ifelse()</code>を使ったコードは以下の通りです。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># ifelse()を使う場合</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb12-3"><a href="#cb12-3"></a>  <span class="fu">mutate</span>(<span class="at">Budget3 =</span> <span class="fu">ifelse</span>(Budget <span class="sc">&lt;</span> <span class="dv">500</span>, <span class="st">"Cheap"</span>, </span>
+<span id="cb12-4"><a href="#cb12-4"></a>                          <span class="fu">ifelse</span>(Budget <span class="sc">&gt;=</span> <span class="dv">500</span> <span class="sc">&amp;</span> Budget <span class="sc">&lt;</span> <span class="dv">1000</span>, <span class="st">"Reasonable"</span>,</span>
+<span id="cb12-5"><a href="#cb12-5"></a>                                 <span class="st">"Expensive"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Budget3)) <span class="sc">|&gt;</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a>  <span class="fu">group_by</span>(Pref, Budget3) <span class="sc">|&gt;</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a>  <span class="fu">summarise</span>(<span class="at">N =</span> <span class="fu">n</span>(),         </span>
+<span id="cb12-9"><a href="#cb12-9"></a>            <span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>case_when()</code>を使うと以下のような書き方になります。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># case_when()を使う場合</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb13-3"><a href="#cb13-3"></a>  <span class="fu">mutate</span>(<span class="at">Budget3 =</span> <span class="fu">case_when</span>(Budget <span class="sc">&lt;</span> <span class="dv">500</span>                  <span class="sc">~</span> <span class="st">"Cheap"</span>,</span>
+<span id="cb13-4"><a href="#cb13-4"></a>                             Budget <span class="sc">&gt;=</span> <span class="dv">500</span> <span class="sc">&amp;</span> Budget <span class="sc">&lt;</span> <span class="dv">1000</span> <span class="sc">~</span> <span class="st">"Reasonable"</span>,</span>
+<span id="cb13-5"><a href="#cb13-5"></a>                             Budget <span class="sc">&gt;=</span> <span class="dv">1000</span>                <span class="sc">~</span> <span class="st">"Expensive"</span>),</span>
+<span id="cb13-6"><a href="#cb13-6"></a>         <span class="co"># 新しく出来た変数をfactor型にその場で変換することも可能</span></span>
+<span id="cb13-7"><a href="#cb13-7"></a>         <span class="at">Budget3 =</span> <span class="fu">factor</span>(Budget3, </span>
+<span id="cb13-8"><a href="#cb13-8"></a>                          <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Cheap"</span>, <span class="st">"Reasonable"</span>, <span class="st">"Expensive"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb13-9"><a href="#cb13-9"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Budget3)) <span class="sc">|&gt;</span></span>
+<span id="cb13-10"><a href="#cb13-10"></a>  <span class="fu">group_by</span>(Pref, Budget3) <span class="sc">|&gt;</span></span>
+<span id="cb13-11"><a href="#cb13-11"></a>  <span class="fu">summarise</span>(<span class="at">N =</span> <span class="fu">n</span>(),         </span>
+<span id="cb13-12"><a href="#cb13-12"></a>            <span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>書く手間の観点では<code>case_when()</code>は<code>ifelse()</code>と大きく違いはないかも知れませんが、コードが非常に読みやすくなっています。<code>case_when()</code>関数の書き方は以下の通りです。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># case_when()の使い方</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a>データフレーム名 <span class="sc">|&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a>  <span class="fu">mutate</span>(新変数名 <span class="ot">=</span> <span class="fu">case_when</span>(条件1 <span class="sc">~</span> 条件1を満たす場合の結果値, </span>
+<span id="cb14-4"><a href="#cb14-4"></a>                             条件2 <span class="sc">~</span> 条件2を満たす場合の結果値, </span>
+<span id="cb14-5"><a href="#cb14-5"></a>                             条件3 <span class="sc">~</span> 条件3を満たす場合の結果値, </span>
+<span id="cb14-6"><a href="#cb14-6"></a>                             ...))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>似たような機能をする関数として<code>recode()</code>関数があります<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>。これは変数の値を単純に置換したい場合に便利な関数です。たとえば、都府県名をローマ字に変換するケースを考えてみましょう。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># recode()を使う場合</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a>df2 <span class="sc">|&gt;</span> </span>
+<span id="cb15-3"><a href="#cb15-3"></a>  <span class="fu">mutate</span>(<span class="at">Pref2 =</span> <span class="fu">recode</span>(Pref,</span>
+<span id="cb15-4"><a href="#cb15-4"></a>                        <span class="st">"東京都"</span>   <span class="ot">=</span> <span class="st">"Tokyo"</span>,</span>
+<span id="cb15-5"><a href="#cb15-5"></a>                        <span class="st">"神奈川県"</span> <span class="ot">=</span> <span class="st">"Kanagawa"</span>,</span>
+<span id="cb15-6"><a href="#cb15-6"></a>                        <span class="st">"千葉県"</span>   <span class="ot">=</span> <span class="st">"Chiba"</span>,</span>
+<span id="cb15-7"><a href="#cb15-7"></a>                        <span class="st">"埼玉県"</span>   <span class="ot">=</span> <span class="st">"Saitama"</span>,</span>
+<span id="cb15-8"><a href="#cb15-8"></a>                        <span class="st">"大阪府"</span>   <span class="ot">=</span> <span class="st">"Osaka"</span>,</span>
+<span id="cb15-9"><a href="#cb15-9"></a>                        <span class="st">"京都府"</span>   <span class="ot">=</span> <span class="st">"Kyoto"</span>,</span>
+<span id="cb15-10"><a href="#cb15-10"></a>                        <span class="st">"兵庫県"</span>   <span class="ot">=</span> <span class="st">"Hyogo"</span>,</span>
+<span id="cb15-11"><a href="#cb15-11"></a>                        <span class="st">"奈良県"</span>   <span class="ot">=</span> <span class="st">"Nara"</span>,</span>
+<span id="cb15-12"><a href="#cb15-12"></a>                        <span class="st">"和歌山県"</span> <span class="ot">=</span> <span class="st">"Wakayama"</span>,</span>
+<span id="cb15-13"><a href="#cb15-13"></a>                        <span class="at">.default  =</span> <span class="st">"NA"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 6
+  Pref     Budget_Mean ScoreN_Sum Score_Mean     N Pref2   
+  &lt;chr&gt;          &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;   
+1 京都府         1399.        216       3.68   414 Kyoto   
+2 兵庫県         1197.        230       3.54   591 Hyogo   
+3 千葉県         1124.        259       3.72  1000 Chiba   
+4 和歌山県       1252          83       3.97   140 Wakayama
+5 埼玉県         1147.        278       3.64  1000 Saitama 
+6 大阪府         1203.        516       3.77  1000 Osaka   
+7 奈良県         1169.         45       3.85   147 Nara    
+8 東京都         1283.       1165       3.67  1000 Tokyo   
+9 神奈川県       1239.        587       3.53  1000 Kanagawa</code></pre>
+</div>
+</div>
+<p>使い方は非常に直感的です。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># recode()の使い方</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a>データフレーム名 <span class="sc">|&gt;</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a>  <span class="fu">mutate</span>(新変数名 <span class="ot">=</span> <span class="fu">recode</span>(元の変数名,</span>
+<span id="cb17-4"><a href="#cb17-4"></a>                            元の値1 <span class="ot">=</span>  新しい値1, </span>
+<span id="cb17-5"><a href="#cb17-5"></a>                            元の値2 <span class="ot">=</span>  新しい値2, </span>
+<span id="cb17-6"><a href="#cb17-6"></a>                            元の値3 <span class="ot">=</span>  新しい値3, </span>
+<span id="cb17-7"><a href="#cb17-7"></a>                            ...,</span>
+<span id="cb17-8"><a href="#cb17-8"></a>                            <span class="at">.default =</span> 該当しない場合の値))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>最後の<code>.default</code>引数は、もし該当する値がない場合に返す値を意味し、長さ1のベクトルを指定します。もし、指定しない場合は<code>NA</code>が表示されます。また、ここには紹介しておりませんでしたが、<code>.missing</code>引数もあり、これは欠損値の場合に返す値を意味します。</p>
+<p>もう一つ注意すべきところは、今回はcharacter型変数をcharacter型へ変換したため、「<code>"東京都" = "Tokyo"</code>」のような書き方をしました。しかし、numeric型からcharacter型に変換する場合は数字の部分を<code>`</code>で囲む必要があります。たとえば、「<code>`1` = "Tokyo"</code>」といった形式です。ただし、character型からnumeric型への場合は「<code>"東京都" = 1</code>」で構いません。</p>
+<p><code>recode()</code>は値をまとめる際にも便利です。たとえば、<code>EastJapan</code>という変数を作成し、関東なら<code>1</code>を、それ以外なら<code>0</code>を付けるとします。そして、これは<code>Pref</code>変数の後に位置づけます。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># 都府県を関東か否かでまとめる</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a>df2 <span class="sc">|&gt;</span> </span>
+<span id="cb18-3"><a href="#cb18-3"></a>  <span class="fu">mutate</span>(<span class="at">EastJapan =</span> <span class="fu">recode</span>(Pref,</span>
+<span id="cb18-4"><a href="#cb18-4"></a>                            <span class="st">"東京都"</span>   <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb18-5"><a href="#cb18-5"></a>                            <span class="st">"神奈川県"</span> <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb18-6"><a href="#cb18-6"></a>                            <span class="st">"千葉県"</span>   <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb18-7"><a href="#cb18-7"></a>                            <span class="st">"埼玉県"</span>   <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb18-8"><a href="#cb18-8"></a>                            <span class="st">"大阪府"</span>   <span class="ot">=</span> <span class="dv">0</span>,</span>
+<span id="cb18-9"><a href="#cb18-9"></a>                            <span class="st">"京都府"</span>   <span class="ot">=</span> <span class="dv">0</span>,</span>
+<span id="cb18-10"><a href="#cb18-10"></a>                            <span class="st">"兵庫県"</span>   <span class="ot">=</span> <span class="dv">0</span>,</span>
+<span id="cb18-11"><a href="#cb18-11"></a>                            <span class="st">"奈良県"</span>   <span class="ot">=</span> <span class="dv">0</span>,</span>
+<span id="cb18-12"><a href="#cb18-12"></a>                            <span class="st">"和歌山県"</span> <span class="ot">=</span> <span class="dv">0</span>,</span>
+<span id="cb18-13"><a href="#cb18-13"></a>                            <span class="at">.default  =</span> <span class="dv">0</span>),</span>
+<span id="cb18-14"><a href="#cb18-14"></a>         <span class="at">.after =</span> Pref)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 6
+  Pref     EastJapan Budget_Mean ScoreN_Sum Score_Mean     N
+  &lt;chr&gt;        &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;int&gt;
+1 京都府           0       1399.        216       3.68   414
+2 兵庫県           0       1197.        230       3.54   591
+3 千葉県           1       1124.        259       3.72  1000
+4 和歌山県         0       1252          83       3.97   140
+5 埼玉県           1       1147.        278       3.64  1000
+6 大阪府           0       1203.        516       3.77  1000
+7 奈良県           0       1169.         45       3.85   147
+8 東京都           1       1283.       1165       3.67  1000
+9 神奈川県         1       1239.        587       3.53  1000</code></pre>
+</div>
+</div>
+<p>ただし、関東以外は全て0になるため、以下のように省略することも可能です。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="co"># .default引数を指定する場合</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a>df3 <span class="ot">&lt;-</span> df2 <span class="sc">|&gt;</span> </span>
+<span id="cb20-3"><a href="#cb20-3"></a>  <span class="fu">mutate</span>(<span class="at">EastJapan =</span> <span class="fu">recode</span>(Pref,</span>
+<span id="cb20-4"><a href="#cb20-4"></a>                            <span class="st">"東京都"</span>   <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb20-5"><a href="#cb20-5"></a>                            <span class="st">"神奈川県"</span> <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb20-6"><a href="#cb20-6"></a>                            <span class="st">"千葉県"</span>   <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb20-7"><a href="#cb20-7"></a>                            <span class="st">"埼玉県"</span>   <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb20-8"><a href="#cb20-8"></a>                            <span class="at">.default  =</span> <span class="dv">0</span>),</span>
+<span id="cb20-9"><a href="#cb20-9"></a>         <span class="at">.after =</span> Pref)</span>
+<span id="cb20-10"><a href="#cb20-10"></a></span>
+<span id="cb20-11"><a href="#cb20-11"></a>df3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 6
+  Pref     EastJapan Budget_Mean ScoreN_Sum Score_Mean     N
+  &lt;chr&gt;        &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;int&gt;
+1 京都府           0       1399.        216       3.68   414
+2 兵庫県           0       1197.        230       3.54   591
+3 千葉県           1       1124.        259       3.72  1000
+4 和歌山県         0       1252          83       3.97   140
+5 埼玉県           1       1147.        278       3.64  1000
+6 大阪府           0       1203.        516       3.77  1000
+7 奈良県           0       1169.         45       3.85   147
+8 東京都           1       1283.       1165       3.67  1000
+9 神奈川県         1       1239.        587       3.53  1000</code></pre>
+</div>
+</div>
+<p>新しく出来た<code>EastJapan</code>のデータ型はなんでしょうか。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">class</span>(df3<span class="sc">$</span>EastJapan)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "numeric"</code></pre>
+</div>
+</div>
+<p><code>EastJapan</code>はnumeric型ですね。もし、これをfactor型にしたい場合はどうすればよいでしょうか。それは<code>mutate()</code>内で<code>EastJapan</code>を生成した後に<code>factor()</code>関数を使うだけです。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="co"># EastJapan変数をfactor型にする</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a>df3 <span class="ot">&lt;-</span> df2 <span class="sc">|&gt;</span> </span>
+<span id="cb24-3"><a href="#cb24-3"></a>  <span class="fu">mutate</span>(<span class="at">EastJapan =</span> <span class="fu">recode</span>(Pref,</span>
+<span id="cb24-4"><a href="#cb24-4"></a>                            <span class="st">"東京都"</span>   <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb24-5"><a href="#cb24-5"></a>                            <span class="st">"神奈川県"</span> <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb24-6"><a href="#cb24-6"></a>                            <span class="st">"千葉県"</span>   <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb24-7"><a href="#cb24-7"></a>                            <span class="st">"埼玉県"</span>   <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb24-8"><a href="#cb24-8"></a>                            <span class="at">.default  =</span> <span class="dv">0</span>),</span>
+<span id="cb24-9"><a href="#cb24-9"></a>         <span class="at">EastJapan =</span> <span class="fu">factor</span>(EastJapan, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)),</span>
+<span id="cb24-10"><a href="#cb24-10"></a>         <span class="at">.after =</span> Pref)</span>
+<span id="cb24-11"><a href="#cb24-11"></a></span>
+<span id="cb24-12"><a href="#cb24-12"></a>df3<span class="sc">$</span>EastJapan</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0 0 1 0 1 0 0 1 1
+Levels: 0 1</code></pre>
+</div>
+</div>
+<p><code>EastJapan</code>がfactor型になりました。実は、<code>recode</code>は再コーディングと同時にfactor化をしてくれる機能があります。ただし、<code>recode()</code>関数でなく、<code>recode_factor()</code>関数を使います。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="co"># recode_factor()を使う方法</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a>df3 <span class="ot">&lt;-</span> df2 <span class="sc">|&gt;</span> </span>
+<span id="cb26-3"><a href="#cb26-3"></a>  <span class="fu">mutate</span>(<span class="at">EastJapan =</span> <span class="fu">recode_factor</span>(Pref,</span>
+<span id="cb26-4"><a href="#cb26-4"></a>                                   <span class="st">"東京都"</span>   <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb26-5"><a href="#cb26-5"></a>                                   <span class="st">"神奈川県"</span> <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb26-6"><a href="#cb26-6"></a>                                   <span class="st">"千葉県"</span>   <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb26-7"><a href="#cb26-7"></a>                                   <span class="st">"埼玉県"</span>   <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb26-8"><a href="#cb26-8"></a>                                   <span class="at">.default  =</span> <span class="dv">0</span>),</span>
+<span id="cb26-9"><a href="#cb26-9"></a>         <span class="at">.after =</span> Pref)</span>
+<span id="cb26-10"><a href="#cb26-10"></a></span>
+<span id="cb26-11"><a href="#cb26-11"></a>df3<span class="sc">$</span>EastJapan</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0 0 1 0 1 0 0 1 1
+Levels: 1 0</code></pre>
+</div>
+</div>
+<p>ただし、levelの順番は<code>recode_factor()</code>内で定義された順番になることに注意してください。factor型のより詳細な扱いについては第<a href="factor.html" class="quarto-xref"><span>16</span></a>章で解説します。</p>
+</section>
+</section>
+<section id="sec-handling3-rowwise" class="level2" data-number="15.2">
+<h2 data-number="15.2" class="anchored" data-anchor-id="sec-handling3-rowwise"><span class="header-section-number">15.2</span> 行単位の操作</h2>
+<p>ここでは行単位の操作について考えたいと思います。第<a href="datahandling1.html#sec-handling1-select" class="quarto-xref"><span>13.3</span></a>章で使った<code>myDF1</code>を見てみましょう。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>myDF1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb28-2"><a href="#cb28-2"></a>  <span class="at">ID  =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,</span>
+<span id="cb28-3"><a href="#cb28-3"></a>  <span class="at">X1  =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">2</span>, <span class="dv">7</span>),</span>
+<span id="cb28-4"><a href="#cb28-4"></a>  <span class="at">Y1  =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb28-5"><a href="#cb28-5"></a>  <span class="at">X1D =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">6</span>, <span class="dv">9</span>),</span>
+<span id="cb28-6"><a href="#cb28-6"></a>  <span class="at">X2  =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">2</span>),</span>
+<span id="cb28-7"><a href="#cb28-7"></a>  <span class="at">Y2  =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">1</span>),</span>
+<span id="cb28-8"><a href="#cb28-8"></a>  <span class="at">X2D =</span> <span class="fu">c</span>(<span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">5</span>, <span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb28-9"><a href="#cb28-9"></a>  <span class="at">X3  =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">2</span>),</span>
+<span id="cb28-10"><a href="#cb28-10"></a>  <span class="at">Y3  =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">1</span>, <span class="dv">3</span>),</span>
+<span id="cb28-11"><a href="#cb28-11"></a>  <span class="at">X3D =</span> <span class="fu">c</span>(<span class="dv">9</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">8</span>)</span>
+<span id="cb28-12"><a href="#cb28-12"></a>)</span>
+<span id="cb28-13"><a href="#cb28-13"></a></span>
+<span id="cb28-14"><a href="#cb28-14"></a>myDF1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ID X1 Y1 X1D X2 Y2 X2D X3 Y3 X3D
+1  1  2  3   4  5  3   8  3  1   9
+2  2  4  5   2  5  3   9  0  5   1
+3  3  6  1   1  6  2   5  3  9   3
+4  4  2  1   6  0  3   0  0  1   3
+5  5  7  0   9  2  1   1  2  3   8</code></pre>
+</div>
+</div>
+<p>ここで<code>X1</code>と<code>X2</code>と<code>X3</code>の平均値を計算し、<code>X_Mean</code>という名の変数にする場合、以下のような書き方が普通でしょう。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>myDF1 <span class="sc">|&gt;</span></span>
+<span id="cb30-2"><a href="#cb30-2"></a>  <span class="fu">mutate</span>(<span class="at">X_Mean =</span> <span class="fu">mean</span>(<span class="fu">c</span>(X1, X2, X3)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ID X1 Y1 X1D X2 Y2 X2D X3 Y3 X3D   X_Mean
+1  1  2  3   4  5  3   8  3  1   9 3.133333
+2  2  4  5   2  5  3   9  0  5   1 3.133333
+3  3  6  1   1  6  2   5  3  9   3 3.133333
+4  4  2  1   6  0  3   0  0  1   3 3.133333
+5  5  7  0   9  2  1   1  2  3   8 3.133333</code></pre>
+</div>
+</div>
+<p>あら、なんかおかしくありませんか。1行目の場合、<code>X1</code>と<code>X2</code>、<code>X3</code>それぞれ2、5、3であり、平均値は3.333であるはずなのに3.133になりました。これは2行目以降も同じです。なぜでしょうか。</p>
+<p>実は{dplyr}は行単位の計算が苦手です。実際、データフレームというのは既に説明したとおり、縦ベクトルを横に並べたものです。列をまたがる場合、データ型が異なる場合も多いため、そもそも使う場面も多くありません。したがって、以下のような書き方が必要でした。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>myDF1 <span class="sc">|&gt;</span></span>
+<span id="cb32-2"><a href="#cb32-2"></a>  <span class="fu">mutate</span>(<span class="at">X_Mean =</span> (X1 <span class="sc">+</span> X2 <span class="sc">+</span> X3) <span class="sc">/</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ID X1 Y1 X1D X2 Y2 X2D X3 Y3 X3D    X_Mean
+1  1  2  3   4  5  3   8  3  1   9 3.3333333
+2  2  4  5   2  5  3   9  0  5   1 3.0000000
+3  3  6  1   1  6  2   5  3  9   3 5.0000000
+4  4  2  1   6  0  3   0  0  1   3 0.6666667
+5  5  7  0   9  2  1   1  2  3   8 3.6666667</code></pre>
+</div>
+</div>
+<p>先ほどの<code>mean(c(X1, X2, X3))</code>は(<code>X1</code>列と<code>X2</code>列、<code>X3</code>列)の平均値です。<code>X1</code>は長さ1のベクトルではなく、その列全体を指すものです。つまり、<code>mean(c(X1, X2, X3))</code>は<code>mean(c(myD1F$X1, myDF1$X2, myDF1$X3))</code>と同じことになります。だから全て3.133という結果が得られました。ただし、後者はベクトル同士の加減乗除になるため問題ありません。実際<code>c(1, 2, 3) + c(3, 5, 0)</code>は同じ位置の要素同士の計算になることを既に第<a href="datastructure.html#sec-datastructure_vector" class="quarto-xref"><span>10.2</span></a>章で説明しました。</p>
+<p>ここで<code>mean()</code>関数を使う場合には全ての演算を、一行一行に分けて行う必要があります。ある一行のみに限定する場合、<code>mean(c(X1, X2, X3))</code>の<code>X1</code>などは長さ1のベクトルになるため、<code>(X1 + X2 + X3) / 3</code>と同じことになります。この「一行単位で処理を行う」ことを指定する関数が<code>rowwise()</code>関数です。これは行単位の作業を行う前に指定するだけです。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>myDF1 <span class="sc">|&gt;</span></span>
+<span id="cb34-2"><a href="#cb34-2"></a>  <span class="fu">rowwise</span>() <span class="sc">|&gt;</span></span>
+<span id="cb34-3"><a href="#cb34-3"></a>  <span class="fu">mutate</span>(<span class="at">X_Mean =</span> <span class="fu">mean</span>(<span class="fu">c</span>(X1, X2, X3)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 11
+# Rowwise: 
+     ID    X1    Y1   X1D    X2    Y2   X2D    X3    Y3   X3D X_Mean
+  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+1     1     2     3     4     5     3     8     3     1     9  3.33 
+2     2     4     5     2     5     3     9     0     5     1  3    
+3     3     6     1     1     6     2     5     3     9     3  5    
+4     4     2     1     6     0     3     0     0     1     3  0.667
+5     5     7     0     9     2     1     1     2     3     8  3.67 </code></pre>
+</div>
+</div>
+<p>これで問題なく行単位の処理ができるようになりました。今回は変数が3つのみだったので、これで問題ありませんが、変数が多くなると<code>:</code>や<code>starts_with()</code>、<code>num_range()</code>などを使って変数を選択したくなります。この場合は計算する関数内に<code>c_across()</code>を入れます。ここでは<code>X1</code>列から<code>X3D</code>列までの平均値を求めてみましょう。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>myDF1 <span class="sc">|&gt;</span></span>
+<span id="cb36-2"><a href="#cb36-2"></a>  <span class="fu">rowwise</span>() <span class="sc">|&gt;</span></span>
+<span id="cb36-3"><a href="#cb36-3"></a>  <span class="fu">mutate</span>(<span class="at">X_Mean =</span> <span class="fu">mean</span>(X1<span class="sc">:</span>X3D))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 11
+# Rowwise: 
+     ID    X1    Y1   X1D    X2    Y2   X2D    X3    Y3   X3D X_Mean
+  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+1     1     2     3     4     5     3     8     3     1     9    5.5
+2     2     4     5     2     5     3     9     0     5     1    2.5
+3     3     6     1     1     6     2     5     3     9     3    4.5
+4     4     2     1     6     0     3     0     0     1     3    2.5
+5     5     7     0     9     2     1     1     2     3     8    7.5</code></pre>
+</div>
+</div>
+<p>実は<code>rowwise()</code>関数、2020年6月に公開されたdplyr 1.0.0で注目された関数ですが、昔のdplyrにも<code>rowwise()</code>関数はありました。ただし、{purrr}パッケージや{tidyr}パッケージの<code>nest()</code>関数などにより使い道がなくなりましたが、なぜか華麗に復活しました。データ分析に使うデータは基本単位は列であるため、実際に<code>rowwise()</code>が使われる場面は今の段階では多くないでしょう。また、簡単な作業なら<code>X1 + X2</code>のような演算でも対応できます。それでも、覚えておけば便利な関数であることには間違いありません。</p>
+</section>
+<section id="sec-handling3-merge" class="level2" data-number="15.3">
+<h2 data-number="15.3" class="anchored" data-anchor-id="sec-handling3-merge"><span class="header-section-number">15.3</span> データの結合</h2>
+<section id="行の結合" class="level3" data-number="15.3.1">
+<h3 data-number="15.3.1" class="anchored" data-anchor-id="行の結合"><span class="header-section-number">15.3.1</span> 行の結合</h3>
+<p>まずは、複数のデータフレームまたはtibbleを縦に結合する方法について解説します。イメージとしては <a href="#fig-handling3_merge_row" class="quarto-xref">図&nbsp;<span>15.1</span></a> のようなものです。</p>
+<div id="fig-handling3_merge_row" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Figs/Handling3/Merge1.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption class="figure-caption">図&nbsp;15.1: 行の結合</figcaption>
+</figure>
+</div>
+<p>行を結合する際には{dplyr}パッケージの<code>bind_rows()</code>関数を使います。この関数の使い方は以下の通りです。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="co"># 新しいデータ名ではなく、既にあるデータ名にすると上書きとなる</span></span>
+<span id="cb38-2"><a href="#cb38-2"></a>新しいデータ名 <span class="ot">&lt;-</span>  <span class="fu">bind_rows</span>(データ1, データ2, ...)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>それでは早速実際に使ってみましょう。実習のために、4つのtibbleを作成します (tibbleでなくデータフレームでも問題ありません)。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a><span class="co"># tibble()の代わりにdata.frame()も可</span></span>
+<span id="cb39-2"><a href="#cb39-2"></a>rbind_df1 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">X1 =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,</span>
+<span id="cb39-3"><a href="#cb39-3"></a>                    <span class="at">X2 =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>),</span>
+<span id="cb39-4"><a href="#cb39-4"></a>                    <span class="at">X3 =</span> <span class="fu">c</span>(T, T, F)) <span class="co"># TRUEとFALSEはTはFと省略可能</span></span>
+<span id="cb39-5"><a href="#cb39-5"></a></span>
+<span id="cb39-6"><a href="#cb39-6"></a>rbind_df2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">X1 =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>,</span>
+<span id="cb39-7"><a href="#cb39-7"></a>                    <span class="at">X2 =</span> <span class="fu">c</span>(<span class="st">"D"</span>, <span class="st">"E"</span>, <span class="st">"F"</span>),</span>
+<span id="cb39-8"><a href="#cb39-8"></a>                    <span class="at">X3 =</span> <span class="fu">c</span>(F, T, F))</span>
+<span id="cb39-9"><a href="#cb39-9"></a></span>
+<span id="cb39-10"><a href="#cb39-10"></a>rbind_df3 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">X1 =</span> <span class="dv">7</span><span class="sc">:</span><span class="dv">9</span>,</span>
+<span id="cb39-11"><a href="#cb39-11"></a>                    <span class="at">X3 =</span> <span class="fu">c</span>(T, T, T),</span>
+<span id="cb39-12"><a href="#cb39-12"></a>                    <span class="at">X2 =</span> <span class="fu">c</span>(<span class="st">"G"</span>, <span class="st">"H"</span>, <span class="st">"I"</span>))</span>
+<span id="cb39-13"><a href="#cb39-13"></a></span>
+<span id="cb39-14"><a href="#cb39-14"></a>rbind_df4 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">X1 =</span> <span class="dv">10</span><span class="sc">:</span><span class="dv">12</span>,</span>
+<span id="cb39-15"><a href="#cb39-15"></a>                    <span class="at">X2 =</span> <span class="fu">c</span>(<span class="st">"J"</span>, <span class="st">"K"</span>, <span class="st">"L"</span>),</span>
+<span id="cb39-16"><a href="#cb39-16"></a>                    <span class="at">X5 =</span> <span class="fu">c</span>(<span class="st">"Song"</span>, <span class="st">"Yanai"</span>, <span class="st">"Hadley"</span>))</span>
+<span id="cb39-17"><a href="#cb39-17"></a></span>
+<span id="cb39-18"><a href="#cb39-18"></a>rbind_df1 <span class="co"># rbind_df1を出力</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+     X1 X2    X3   
+  &lt;int&gt; &lt;chr&gt; &lt;lgl&gt;
+1     1 A     TRUE 
+2     2 B     TRUE 
+3     3 C     FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>rbind_df2 <span class="co"># rbind_df2を出力</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+     X1 X2    X3   
+  &lt;int&gt; &lt;chr&gt; &lt;lgl&gt;
+1     4 D     FALSE
+2     5 E     TRUE 
+3     6 F     FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>rbind_df3 <span class="co"># rbind_df3を出力</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+     X1 X3    X2   
+  &lt;int&gt; &lt;lgl&gt; &lt;chr&gt;
+1     7 TRUE  G    
+2     8 TRUE  H    
+3     9 TRUE  I    </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a>rbind_df4 <span class="co"># rbind_df4を出力</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+     X1 X2    X5    
+  &lt;int&gt; &lt;chr&gt; &lt;chr&gt; 
+1    10 J     Song  
+2    11 K     Yanai 
+3    12 L     Hadley</code></pre>
+</div>
+</div>
+<p>まずは、<code>rbind_df1</code>と<code>rbind_df2</code>を結合してみます。この2つのデータは同じ変数が同じ順番で並んでいますね。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a>Binded_df1 <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(rbind_df1, rbind_df2)</span>
+<span id="cb47-2"><a href="#cb47-2"></a>Binded_df1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+     X1 X2    X3   
+  &lt;int&gt; &lt;chr&gt; &lt;lgl&gt;
+1     1 A     TRUE 
+2     2 B     TRUE 
+3     3 C     FALSE
+4     4 D     FALSE
+5     5 E     TRUE 
+6     6 F     FALSE</code></pre>
+</div>
+</div>
+<p>2つのデータが結合されたことが確認できます。それでは<code>rbind_df1</code>と<code>rbind_df2</code>、<code>rbind_df3</code>はどうでしょうか。確かに3つのデータは同じ変数を持ちますが、<code>rbind_df3</code>は変数の順番が<code>X1</code>、<code>X3</code>、<code>X2</code>になっています。このまま結合するとエラーが出るでしょうか。とりあえず、やってみます。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1"></a>Binded_df2 <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(rbind_df1, rbind_df2, rbind_df3)</span>
+<span id="cb49-2"><a href="#cb49-2"></a>Binded_df2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 3
+     X1 X2    X3   
+  &lt;int&gt; &lt;chr&gt; &lt;lgl&gt;
+1     1 A     TRUE 
+2     2 B     TRUE 
+3     3 C     FALSE
+4     4 D     FALSE
+5     5 E     TRUE 
+6     6 F     FALSE
+7     7 G     TRUE 
+8     8 H     TRUE 
+9     9 I     TRUE </code></pre>
+</div>
+</div>
+<p>このように変数の順番が異なっても、先に指定したデータの変数順で問題なく結合できました。これまでの作業は{dplyr}パッケージの<code>bind_rows()</code>を使わずに、R内蔵関数の<code>rbind()</code>でも同じやり方でできます。<code>bind_rows()</code>の特徴は、変数名が一致しない場合、つまり今回の例だと<code>rbind_df4</code>が含まれる場合です。<code>rbind_df1</code>から<code>rbind_df3</code>までは順番が違っても<code>X1</code>、<code>X2</code>、<code>X3</code>変数で構成されていました。一方、<code>rbind_dr4</code>には<code>X3</code>がなく、新たに<code>X4</code>という変数があります。これを<code>rbind()</code>関数で結合するとエラーが出力されます。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1"></a><span class="co"># rbind()を使う場合</span></span>
+<span id="cb51-2"><a href="#cb51-2"></a><span class="fu">rbind</span>(rbind_df1, rbind_df2, rbind_df3, rbind_df4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in match.names(clabs, names(xi)): names do not match previous names</code></pre>
+</div>
+</div>
+<p>一方、<code>bind_rows()</code>はどうでしょうか。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1"></a>Binded_df3 <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(rbind_df1, rbind_df2, rbind_df3, rbind_df4)</span>
+<span id="cb53-2"><a href="#cb53-2"></a>Binded_df3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 4
+      X1 X2    X3    X5    
+   &lt;int&gt; &lt;chr&gt; &lt;lgl&gt; &lt;chr&gt; 
+ 1     1 A     TRUE  &lt;NA&gt;  
+ 2     2 B     TRUE  &lt;NA&gt;  
+ 3     3 C     FALSE &lt;NA&gt;  
+ 4     4 D     FALSE &lt;NA&gt;  
+ 5     5 E     TRUE  &lt;NA&gt;  
+ 6     6 F     FALSE &lt;NA&gt;  
+ 7     7 G     TRUE  &lt;NA&gt;  
+ 8     8 H     TRUE  &lt;NA&gt;  
+ 9     9 I     TRUE  &lt;NA&gt;  
+10    10 J     NA    Song  
+11    11 K     NA    Yanai 
+12    12 L     NA    Hadley</code></pre>
+</div>
+</div>
+<p><code>X1</code>から<code>X4</code>まで全ての列が生成され、元のデータにはなかった列に関しては<code>NA</code>で埋められています。</p>
+<p>他にも<code>bind_rows()</code>には<code>.id</code>という便利な引数があります。これは結合の際に新しい列を追加し、結合前のデータごとの固有の値を割り当ててくれます。たとえば、<code>rbind_df1</code>と<code>rbind_df2</code>を結合し、それぞれ<code>"Data1"</code>、<code>"Data2"</code>という値を割り当てるとしましょう。この場合、2つの表を<code>list()</code>関数でまとめ、<code>.id</code>には新しく追加される列名を指定します。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1"></a><span class="fu">bind_rows</span>(<span class="fu">list</span>(<span class="st">"Data1"</span> <span class="ot">=</span> rbind_df1, <span class="st">"Data2"</span> <span class="ot">=</span> rbind_df2),</span>
+<span id="cb55-2"><a href="#cb55-2"></a>          <span class="at">.id =</span> <span class="st">"Data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+  Data     X1 X2    X3   
+  &lt;chr&gt; &lt;int&gt; &lt;chr&gt; &lt;lgl&gt;
+1 Data1     1 A     TRUE 
+2 Data1     2 B     TRUE 
+3 Data1     3 C     FALSE
+4 Data2     4 D     FALSE
+5 Data2     5 E     TRUE 
+6 Data2     6 F     FALSE</code></pre>
+</div>
+</div>
+<p>予めリストを作っておいて、それを<code>bind_rows()</code>に渡すこともできます。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1"></a>rbind_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">"Data1"</span> <span class="ot">=</span> rbind_df1, <span class="st">"Data2"</span> <span class="ot">=</span> rbind_df2)</span>
+<span id="cb57-2"><a href="#cb57-2"></a></span>
+<span id="cb57-3"><a href="#cb57-3"></a><span class="fu">bind_rows</span>(rbind_list, <span class="at">.id =</span> <span class="st">"Data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+  Data     X1 X2    X3   
+  &lt;chr&gt; &lt;int&gt; &lt;chr&gt; &lt;lgl&gt;
+1 Data1     1 A     TRUE 
+2 Data1     2 B     TRUE 
+3 Data1     3 C     FALSE
+4 Data2     4 D     FALSE
+5 Data2     5 E     TRUE 
+6 Data2     6 F     FALSE</code></pre>
+</div>
+</div>
+<p>このように<code>bind_rows()</code>は<code>rbind()</code>よりも便利です。しかし、<code>bind_rows()</code>の完全勝利かというと、そうとは限りません。自分で架空した複数のデータフレーム、またはtibbleを結合する際、「このデータは全て同じ変数を持っているはず」と事前に分かっているなら<code>rbind()</code>の方が効果的です。なぜなら、変数名が異なる場合、エラーが出力されるからです。<code>bind_rows()</code>を使うと、コーディングミスなどにより、列名の相違がある場合でも結合してくれてしまうので、分析の結果を歪ませる可能性があります。</p>
+</section>
+<section id="列の結合" class="level3" data-number="15.3.2">
+<h3 data-number="15.3.2" class="anchored" data-anchor-id="列の結合"><span class="header-section-number">15.3.2</span> 列の結合</h3>
+<p>実はデータ分析においてデータの結合といえば、列の結合が一般的です。これは <a href="#fig-handling3_merge_col" class="quarto-xref">図&nbsp;<span>15.2</span></a> のような操作を意味します。</p>
+<div id="fig-handling3_merge_col" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Figs/Handling3/Merge2.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption class="figure-caption">図&nbsp;15.2: 列の結合</figcaption>
+</figure>
+</div>
+<p>まずは、本章で作成した<code>df2</code>をもう一回作ってみます。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1"></a>df2 <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb59-2"><a href="#cb59-2"></a>  <span class="fu">group_by</span>(Pref) <span class="sc">|&gt;</span></span>
+<span id="cb59-3"><a href="#cb59-3"></a>  <span class="fu">summarise</span>(<span class="at">Budget_Mean =</span> <span class="fu">mean</span>(Budget, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb59-4"><a href="#cb59-4"></a>            <span class="at">ScoreN_Sum  =</span> <span class="fu">sum</span>(ScoreN, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb59-5"><a href="#cb59-5"></a>            <span class="at">Score_Mean  =</span> <span class="fu">mean</span>(Score, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb59-6"><a href="#cb59-6"></a>            <span class="at">N           =</span> <span class="fu">n</span>(),</span>
+<span id="cb59-7"><a href="#cb59-7"></a>            <span class="at">.groups     =</span> <span class="st">"drop"</span>)</span>
+<span id="cb59-8"><a href="#cb59-8"></a></span>
+<span id="cb59-9"><a href="#cb59-9"></a>df2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 5
+  Pref     Budget_Mean ScoreN_Sum Score_Mean     N
+  &lt;chr&gt;          &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;int&gt;
+1 京都府         1399.        216       3.68   414
+2 兵庫県         1197.        230       3.54   591
+3 千葉県         1124.        259       3.72  1000
+4 和歌山県       1252          83       3.97   140
+5 埼玉県         1147.        278       3.64  1000
+6 大阪府         1203.        516       3.77  1000
+7 奈良県         1169.         45       3.85   147
+8 東京都         1283.       1165       3.67  1000
+9 神奈川県       1239.        587       3.53  1000</code></pre>
+</div>
+</div>
+<p>ラーメン屋の店舗ですが、たしかにデータには埼玉、東京、大阪などは1000店舗しか入っておりません。実はもっと多いですが、ぐるなびAPIの仕様上、最大1000店舗しか情報取得が出来ないからです。ここに実際の店舗数が入っている新しいデータセット、<a href="Data/Ramen2.csv">Ramen2.csv</a>があります。これを読み込み、<code>df3</code>という名で格納しましょう。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1"></a>df3 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Data/Ramen2.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 47 Columns: 15
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (1): Pref
+dbl (12): RamenN, Turnout, LDP, CDP, DPFP, Komei, JIP, JCP, SDP, Reiwa, NHK,...
+num  (2): Pop, Area
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1"></a>df3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 47 × 15
+   Pref      Pop   Area RamenN Turnout   LDP   CDP  DPFP Komei   JIP   JCP   SDP
+   &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1 北海道 5.38e6 83424.   1454    53.8  32.3  20.8  6.65 11.7   7.78 11.6   1.31
+ 2 青森県 1.31e6  9646.    336    42.9  39.8  22.0  7.24 11.3   3.4   8.31  2.36
+ 3 岩手県 1.28e6 15275.    285    56.5  35.5  17.8 12.5   8.22  4.36 10.4   3.83
+ 4 宮城県 2.33e6  7282.    557    51.2  39.6  17.8  9.02 11.1   4.6   7.89  2.1 
+ 5 秋田県 1.02e6 11638.    301    56.3  44.5  13.5  8.64 10.6   4.48  8.09  3.77
+ 6 山形県 1.12e6  9323.    512    60.7  45.2  14.9  7.37  9.87  4.28  6.51  5.08
+ 7 福島県 1.91e6 13784.    550    52.4  38.2  13.6 12.1  12.8   5.31  7.99  3.01
+ 8 茨城県 2.92e6  6097.    663    45.0  39.3  15.2  7.15 15.1   6.73  7.73  1.46
+ 9 栃木県 1.97e6  6408.    595    44.1  40.3  18.9  9.94 12.8   4.9   5.04  1.03
+10 群馬県 1.97e6  6362.    488    48.2  40.6  16.4  9.76 12.4   4.67  7.58  1.87
+# ℹ 37 more rows
+# ℹ 3 more variables: Reiwa &lt;dbl&gt;, NHK &lt;dbl&gt;, HRP &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div id="tbl-handling2_dataset" class="anchored">
+<div id="ytumvktjij" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ytumvktjij table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#ytumvktjij thead, #ytumvktjij tbody, #ytumvktjij tfoot, #ytumvktjij tr, #ytumvktjij td, #ytumvktjij th {
+  border-style: none;
+}
+
+#ytumvktjij p {
+  margin: 0;
+  padding: 0;
+}
+
+#ytumvktjij .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#ytumvktjij .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#ytumvktjij .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#ytumvktjij .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#ytumvktjij .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ytumvktjij .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ytumvktjij .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ytumvktjij .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#ytumvktjij .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#ytumvktjij .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#ytumvktjij .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#ytumvktjij .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#ytumvktjij .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#ytumvktjij .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#ytumvktjij .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#ytumvktjij .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#ytumvktjij .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#ytumvktjij .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#ytumvktjij .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ytumvktjij .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#ytumvktjij .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#ytumvktjij .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#ytumvktjij .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ytumvktjij .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#ytumvktjij .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#ytumvktjij .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ytumvktjij .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ytumvktjij .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#ytumvktjij .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ytumvktjij .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#ytumvktjij .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ytumvktjij .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ytumvktjij .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ytumvktjij .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ytumvktjij .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ytumvktjij .gt_left {
+  text-align: left;
+}
+
+#ytumvktjij .gt_center {
+  text-align: center;
+}
+
+#ytumvktjij .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#ytumvktjij .gt_font_normal {
+  font-weight: normal;
+}
+
+#ytumvktjij .gt_font_bold {
+  font-weight: bold;
+}
+
+#ytumvktjij .gt_font_italic {
+  font-style: italic;
+}
+
+#ytumvktjij .gt_super {
+  font-size: 65%;
+}
+
+#ytumvktjij .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#ytumvktjij .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#ytumvktjij .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#ytumvktjij .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#ytumvktjij .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#ytumvktjij .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#ytumvktjij .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false"><caption>表&nbsp;15.1:  <p><code>Ramen2.csv</code>の詳細</p> </caption>
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="変数名">変数名</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="説明">説明</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>Pref</code></p>
+</div></td>
+<td headers="Desc" class="gt_row gt_left">都道府県名</td></tr>
+    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>Pop</code></p>
+</div></td>
+<td headers="Desc" class="gt_row gt_left">日本人人口 (2015年国勢調査)</td></tr>
+    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>Area</code></p>
+</div></td>
+<td headers="Desc" class="gt_row gt_left">面積 (2015年国勢調査)</td></tr>
+    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>RamenN</code></p>
+</div></td>
+<td headers="Desc" class="gt_row gt_left">ぐるなびに登録されたラーメン屋の店舗数</td></tr>
+    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>Turnout</code></p>
+</div></td>
+<td headers="Desc" class="gt_row gt_left">2019年参院選: 投票率 (比例)</td></tr>
+    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>LDP</code></p>
+</div></td>
+<td headers="Desc" class="gt_row gt_left">2019年参院選: 自民党の得票率 (比例)</td></tr>
+    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>CDP</code></p>
+</div></td>
+<td headers="Desc" class="gt_row gt_left">2019年参院選: 立憲民主党の得票率 (比例)</td></tr>
+    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>DPFP</code></p>
+</div></td>
+<td headers="Desc" class="gt_row gt_left">2019年参院選: 国民民主党の得票率 (比例)</td></tr>
+    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>Komei</code></p>
+</div></td>
+<td headers="Desc" class="gt_row gt_left">2019年参院選: 公明党の得票率 (比例)</td></tr>
+    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>JIP</code></p>
+</div></td>
+<td headers="Desc" class="gt_row gt_left">2019年参院選: 日本維新の会の得票率 (比例)</td></tr>
+    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>JCP</code></p>
+</div></td>
+<td headers="Desc" class="gt_row gt_left">2019年参院選: 日本共産党の得票率 (比例)</td></tr>
+    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>SDP</code></p>
+</div></td>
+<td headers="Desc" class="gt_row gt_left">2019年参院選: 社会民主党の得票率 (比例)</td></tr>
+    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>Reiwa</code></p>
+</div></td>
+<td headers="Desc" class="gt_row gt_left">2019年参院選: れいわ新選組の得票率 (比例)</td></tr>
+    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>NHK</code></p>
+</div></td>
+<td headers="Desc" class="gt_row gt_left">2019年参院選: NHKから国民を守る党の得票率 (比例)</td></tr>
+    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>HRP</code></p>
+</div></td>
+<td headers="Desc" class="gt_row gt_left">2019年参院選: 幸福実現党の得票率 (比例)</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+</div>
+<p>本データは都道府県ごとの人口、面積、ぐるなびに登録されたラーメン屋の店舗数、2019年参議院議員通常選挙の結果が格納されています。人口と面積は2015年国勢調査、ぐるなびの情報は2020年6月時点での情報です。</p>
+<p><code>df2</code>にデータ上の店舗数ではなく、実際の店舗数を新しい列として追加したい場合はどうすれば良いでしょうか。簡単な方法としては<code>df3</code>から情報を取得し、それを自分で入れる方法です。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="annotated-cell-38"><pre class="sourceCode numberSource r numberLines code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-38-1"><a href="#annotated-cell-38-1"></a>df3 <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-38" data-target-annotation="1">1</button><span id="annotated-cell-38-2" class="code-annotation-target"><a href="#annotated-cell-38-2"></a>  <span class="fu">filter</span>(Pref <span class="sc">%in%</span> df2<span class="sc">$</span>Pref) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-38" data-target-annotation="2">2</button><span id="annotated-cell-38-3" class="code-annotation-target"><a href="#annotated-cell-38-3"></a>  <span class="fu">select</span>(Pref, RamenN)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-38" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-38" data-code-lines="2" data-code-annotation="1">df2のPrefベクトルの要素と一致するものに絞る</span>
+</dd>
+<dt data-target-cell="annotated-cell-38" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-38" data-code-lines="3" data-code-annotation="2">都道府県名とラーメン屋の店舗数のみ抽出</span>
+</dd>
+</dl>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 2
+  Pref     RamenN
+  &lt;chr&gt;     &lt;dbl&gt;
+1 埼玉県     1106
+2 千葉県     1098
+3 東京都     3220
+4 神奈川県   1254
+5 京都府      415
+6 大阪府     1325
+7 兵庫県      591
+8 奈良県      147
+9 和歌山県    140</code></pre>
+</div>
+</div>
+<p>そして、この情報を<code>df2$RamenN &lt;- c(415, 1106, 1254, ...)</code>のように追加すればいいですね。</p>
+<p>しかし、このような方法は非効率的です。そもそも<code>df3</code>から得られた結果の順番と<code>df2</code>の順番も一致しないので、一々対照しながらベクトルを作ることになります。ここで登場する関数が{dplyr}の<code>*_join()</code>関数群です。この関数群には4つの関数が含まれており、以下のような使い方になります。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1"></a><span class="co"># 新しいデータ名ではなく、データ1またはデータ2の名前に格納すると上書きとなる</span></span>
+<span id="cb66-2"><a href="#cb66-2"></a></span>
+<span id="cb66-3"><a href="#cb66-3"></a><span class="co"># 1. データ1を基準に結合</span></span>
+<span id="cb66-4"><a href="#cb66-4"></a>新しいデータ名 <span class="ot">&lt;-</span>  <span class="fu">left_join</span>(データ1, データ2, <span class="at">by =</span> <span class="st">"共通変数名"</span>)</span>
+<span id="cb66-5"><a href="#cb66-5"></a></span>
+<span id="cb66-6"><a href="#cb66-6"></a><span class="co"># 2. データ2を基準に結合</span></span>
+<span id="cb66-7"><a href="#cb66-7"></a>新しいデータ名 <span class="ot">&lt;-</span> <span class="fu">right_join</span>(データ1, データ2, <span class="at">by =</span> <span class="st">"共通変数名"</span>)</span>
+<span id="cb66-8"><a href="#cb66-8"></a></span>
+<span id="cb66-9"><a href="#cb66-9"></a><span class="co"># 3. データ1とデータ2両方に共通するケースのみ結合</span></span>
+<span id="cb66-10"><a href="#cb66-10"></a>新しいデータ名 <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(データ1, データ2, <span class="at">by =</span> <span class="st">"共通変数名"</span>)</span>
+<span id="cb66-11"><a href="#cb66-11"></a></span>
+<span id="cb66-12"><a href="#cb66-12"></a><span class="co"># 4. データ1とデータ2、どれかに存在するケースを結合</span></span>
+<span id="cb66-13"><a href="#cb66-13"></a>新しいデータ名 <span class="ot">&lt;-</span>  <span class="fu">full_join</span>(データ1, データ2, <span class="at">by =</span> <span class="st">"共通変数名"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>4つの関数の違いについて説明する前に、<code>by</code>引数について話したいと思います。これは主にキー (key)変数と呼ばれる変数で、それぞれのデータに同じ名前の変数がある必要があります。<code>df2</code>と<code>df3</code>だとそれが<code>Pref</code>変数です。どの<code>*_join()</code>関数でも、<code>Pref</code>の値が同じもの同士を結合することになります。</p>
+<p>データのキー変数名が異なる場合もあります。たとえば、データ1の都道府県名は<code>Pref</code>という列に、データ2の都道府県名は<code>Prefecture</code>という列になっている場合、<code>by = "Pref"</code>でなく、<code>by = c("データ1のキー変数名" = "データ2のキー変数名")</code>、つまり、<code>by = c("Pref" = "Prefecture")</code>と指定します。</p>
+<p>それでは、<code>df3</code>から都道府県名とラーメン屋の店舗数だけ抽出し、<code>df4</code>として格納しておきます。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1"></a>df4 <span class="ot">&lt;-</span> df3 <span class="sc">|&gt;</span></span>
+<span id="cb67-2"><a href="#cb67-2"></a>  <span class="fu">select</span>(Pref, RamenN)</span>
+<span id="cb67-3"><a href="#cb67-3"></a></span>
+<span id="cb67-4"><a href="#cb67-4"></a>df4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 47 × 2
+   Pref   RamenN
+   &lt;chr&gt;   &lt;dbl&gt;
+ 1 北海道   1454
+ 2 青森県    336
+ 3 岩手県    285
+ 4 宮城県    557
+ 5 秋田県    301
+ 6 山形県    512
+ 7 福島県    550
+ 8 茨城県    663
+ 9 栃木県    595
+10 群馬県    488
+# ℹ 37 more rows</code></pre>
+</div>
+</div>
+<p>これから共通変数名の値をキー (key)と呼びます。今回の例だと<code>Pref</code>が<code>df2</code>と<code>df4</code>のキー変数であり、その値である<code>"東京都"</code>、<code>"北海道"</code>などがキーです。</p>
+<p>まずは、<code>inner_join()</code>の仕組みについて考えます。これは<code>df2</code>と<code>df4</code>に共通するキーを持つケースのみ結合する関数です。<code>df4</code>には<code>"北海道"</code>というキーがありますが、<code>df2</code>にはありません。したがって、キーが<code>"北海道"</code>のケースは結合から除外されます。これをイメージにしたものが <a href="#fig-handling3_merge_inner" class="quarto-xref">図&nbsp;<span>15.3</span></a> です<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>。それぞれ3 <span class="math inline">\(\times\)</span> 2 (3行2列)のデータですが、キーが一致するケースは2つしかないため、結合後のデータは3 <span class="math inline">\(\times\)</span> 2となります。</p>
+<div id="fig-handling3_merge_inner" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Figs/Handling3/Merge_Inner.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption class="figure-caption">図&nbsp;15.3: <code>inner_join()</code>の仕組み</figcaption>
+</figure>
+</div>
+<p>実際にやってみましょう。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1"></a><span class="fu">inner_join</span>(df2, df4, <span class="at">by =</span> <span class="st">"Pref"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 6
+  Pref     Budget_Mean ScoreN_Sum Score_Mean     N RamenN
+  &lt;chr&gt;          &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;
+1 京都府         1399.        216       3.68   414    415
+2 兵庫県         1197.        230       3.54   591    591
+3 千葉県         1124.        259       3.72  1000   1098
+4 和歌山県       1252          83       3.97   140    140
+5 埼玉県         1147.        278       3.64  1000   1106
+6 大阪府         1203.        516       3.77  1000   1325
+7 奈良県         1169.         45       3.85   147    147
+8 東京都         1283.       1165       3.67  1000   3220
+9 神奈川県       1239.        587       3.53  1000   1254</code></pre>
+</div>
+</div>
+<p>共通するキーは9つのみであり、結果として返されたデータの大きさも9 <span class="math inline">\(\times\)</span> 6です。<code>df2</code>に足された<code>df4</code>は2列のデータですが、キー変数である<code>Pref</code>は共通するため、1列のみ足されました。キー変数を両方残す場合は<code>keep = TRUE</code>引数を追加してください。</p>
+<p>一方、<code>full_join()</code>は、すべてのキーに対して結合を行います ( <a href="#fig-handling3_merge_full" class="quarto-xref">図&nbsp;<span>15.4</span></a> )。たとえば、<code>df2</code>には<code>"北海道"</code>というキーがありません。それでも新しく出来上がるデータには北海道の列が追加されます。ただし、道内店舗の平均予算、口コミ数などの情報はないため、欠損値が代入されます。</p>
+<div id="fig-handling3_merge_full" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Figs/Handling3/Merge_Full.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption class="figure-caption">図&nbsp;15.4: <code>full_join()</code>の仕組み</figcaption>
+</figure>
+</div>
+<p>それでは実際、結果を確認してみましょう。今回は結合後、<code>RamenN</code>が大きい順で出力します。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1"></a><span class="fu">full_join</span>(df2, df4, <span class="at">by =</span> <span class="st">"Pref"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb71-2"><a href="#cb71-2"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(RamenN)) <span class="co"># ぐるなびに登録された店舗の多い都道府県から出力</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 47 × 6
+   Pref     Budget_Mean ScoreN_Sum Score_Mean     N RamenN
+   &lt;chr&gt;          &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;
+ 1 東京都         1283.       1165       3.67  1000   3220
+ 2 北海道           NA          NA      NA       NA   1454
+ 3 大阪府         1203.        516       3.77  1000   1325
+ 4 愛知県           NA          NA      NA       NA   1255
+ 5 神奈川県       1239.        587       3.53  1000   1254
+ 6 埼玉県         1147.        278       3.64  1000   1106
+ 7 千葉県         1124.        259       3.72  1000   1098
+ 8 福岡県           NA          NA      NA       NA    985
+ 9 新潟県           NA          NA      NA       NA    705
+10 静岡県           NA          NA      NA       NA    679
+# ℹ 37 more rows</code></pre>
+</div>
+</div>
+<p><code>df2</code>にはなかった北海道や愛知県などの行ができました。そして、<code>df2</code>にはない情報はすべて欠損値 (<code>NA</code>)となりました。</p>
+<p>続いて、<code>left_join()</code>ですが、これは先に指定したデータに存在するキーのみで結合を行います ( <a href="#fig-handling3_merge_left" class="quarto-xref">図&nbsp;<span>15.5</span></a> )。今回は<code>df2</code>が先に指定されていますが、<code>df2</code>のキーは<code>df4</code>のキーの部分集合であるため、<code>inner_join()</code>と同じ結果が得られます。</p>
+<div id="fig-handling3_merge_left" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Figs/Handling3/Merge_Left.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption class="figure-caption">図&nbsp;15.5: <code>left_join()</code>の仕組み</figcaption>
+</figure>
+</div>
+<p>一方、<code>right_join()</code>は<code>left_join()</code>と逆の関数であり、後に指定したデータに存在するキーを基準に結合を行います（ <a href="#fig-handling3_merge_right" class="quarto-xref">図&nbsp;<span>15.6</span></a> ）。後に指定された<code>df4</code>のキーは<code>df2</code>のキーを完全に含むので、<code>full_join()</code>と同じ結果が得られます。</p>
+<div id="fig-handling3_merge_right" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Figs/Handling3/Merge_Right.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption class="figure-caption">図&nbsp;15.6: <code>right</code>_join()`の仕組み</figcaption>
+</figure>
+</div>
+<p>これからは<code>df2</code>と<code>df4</code>を結合することになりますが、この2つのtibbleの大きさが異なります。<code>df2</code>は9つの都府県のみであるに対し、<code>df4</code>は47都道府県全てのデータが入っているからです。</p>
+<p>ここまではキー変数が一つである場合についてのみ考えましたが、複数のキー変数が必要な場合もあります。たとえば、市区町村の人口・面積データと市区町村の投票率データを結合するとします。各自治体に与えられている「<a href="https://www.soumu.go.jp/denshijiti/code.html">全国地方公共団体コード</a>」が両データに含まれている場合は、このコードをキー変数として使えば問題ありませんが、市区町村名をキー変数として使わざる得ないケースもあるでしょう。しかし、キー変数が複数ある場合もあります。たとえば、府中市は東京都と広島県にありますし、太子町は大阪府と兵庫県にあります。この場合、市区町村名のみでケースをマッチングすると、重複されてマッチングされる恐れがあります。この場合はキー変数を増やすことで対処できます。たとえば、同じ都道府県なら同じ市区町村は存在しないでしょう<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>。キー変数を複数指定する方法は簡単です。たとえば、市区町村名変数が<code>Munip</code>、都道府県名変数が<code>Pref</code>なら<code>by = c("Munip", "Pref")</code>と指定するだけです。</p>
+<p>最後に、キー変数以外の変数名が重複する場合について考えましょう。これはパネルデータを結合する時によく直面する問題です。同じ回答者に2回の調査を行った場合、回答者のIDでデータを結合することになります。ただし、それぞれのデータにおいて回答者の性別に関する変数が<code>F1</code>という名前の場合、どうなるでしょうか。同じデータの同じ名前の変数が複数あると、非常に扱いにくくなります。実際の結果を見てみましょう。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1"></a>Wave1_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">ID =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>),</span>
+<span id="cb73-2"><a href="#cb73-2"></a>                   <span class="at">F1 =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb73-3"><a href="#cb73-3"></a>                   <span class="at">F2 =</span> <span class="fu">c</span>(<span class="dv">18</span>, <span class="dv">77</span>, <span class="dv">37</span>, <span class="dv">50</span>, <span class="dv">41</span>),</span>
+<span id="cb73-4"><a href="#cb73-4"></a>                   <span class="at">Q1 =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>))</span>
+<span id="cb73-5"><a href="#cb73-5"></a></span>
+<span id="cb73-6"><a href="#cb73-6"></a>Wave2_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">ID =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">7</span>),</span>
+<span id="cb73-7"><a href="#cb73-7"></a>                   <span class="at">F1 =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb73-8"><a href="#cb73-8"></a>                   <span class="at">F2 =</span> <span class="fu">c</span>(<span class="dv">18</span>, <span class="dv">37</span>, <span class="dv">50</span>, <span class="dv">20</span>, <span class="dv">62</span>),</span>
+<span id="cb73-9"><a href="#cb73-9"></a>                   <span class="at">Q1 =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">4</span>))</span>
+<span id="cb73-10"><a href="#cb73-10"></a></span>
+<span id="cb73-11"><a href="#cb73-11"></a><span class="fu">full_join</span>(Wave1_df, Wave2_df, <span class="at">by =</span> <span class="st">"ID"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 7 × 7
+     ID  F1.x  F2.x  Q1.x  F1.y  F2.y  Q1.y
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     1     1    18     1     1    18     1
+2     2     1    77     5    NA    NA    NA
+3     3     0    37     2     0    37     2
+4     4     0    50     2     0    50     2
+5     5     1    41     3    NA    NA    NA
+6     6    NA    NA    NA     0    20     5
+7     7    NA    NA    NA     1    62     4</code></pre>
+</div>
+</div>
+<p>それぞれの変数名の後に<code>.x</code>と<code>.y</code>が付きます。この接尾辞 (suffix)は<code>suffix</code>引数を指定することで、分析側からカスタマイズ可能です。たとえば、接尾辞を<code>_W1</code>、<code>_W2</code>にしたい場合は</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1"></a><span class="fu">full_join</span>(Wave1_df, Wave2_df, <span class="at">by =</span> <span class="st">"ID"</span>, <span class="at">suffix =</span> <span class="fu">c</span>(<span class="st">"_W1"</span>, <span class="st">"_W2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 7 × 7
+     ID F1_W1 F2_W1 Q1_W1 F1_W2 F2_W2 Q1_W2
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     1     1    18     1     1    18     1
+2     2     1    77     5    NA    NA    NA
+3     3     0    37     2     0    37     2
+4     4     0    50     2     0    50     2
+5     5     1    41     3    NA    NA    NA
+6     6    NA    NA    NA     0    20     5
+7     7    NA    NA    NA     1    62     4</code></pre>
+</div>
+</div>
+<p>のように、データ1とデータ2それぞれの接尾辞を指定するだけです。</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-Grolemund_Wickham:2016" class="csl-entry" role="listitem">
+Grolemund, Garrett, と Hadley Wickham. 2016. <em>R for Data Science</em>. O’Reilly.
+</div>
+</div>
+</section>
+</section>
+<aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p><code>recode()</code>関数は他にも{car}パッケージでも提供されています。{car}も広く使われている依存パッケージの一つであるため、<code>dplyr::recode()</code>と明示した方が良いかも知れません。<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>これらの図は <span class="citation" data-cites="Grolemund_Wickham:2016">Grolemund と Wickham (<a href="references.html#ref-Grolemund_Wickham:2016" role="doc-biblioref">2016</a>)</span> を参考にしました。<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>行政区も含むなら多くの政令指定都市にある「南区」とか「北区」が重複しますが、ここでは考えないことにしましょう。<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Handle positioning of the toggle
+      window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+      const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+      for (let i=0; i<annoteTargets.length; i++) {
+        const annoteTarget = annoteTargets[i];
+        const targetCell = annoteTarget.getAttribute("data-target-cell");
+        const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+        const contentFn = () => {
+          const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          if (content) {
+            const tipContent = content.cloneNode(true);
+            tipContent.classList.add("code-annotation-tip-content");
+            return tipContent.outerHTML;
+          }
+        }
+        const config = {
+          allowHTML: true,
+          content: contentFn,
+          onShow: (instance) => {
+            selectCodeLines(instance.reference);
+            instance.reference.classList.add('code-annotation-active');
+            window.tippy.hideAll();
+          },
+          onHide: (instance) => {
+            unselectCodeLines();
+            instance.reference.classList.remove('code-annotation-active');
+          },
+          maxWidth: 300,
+          delay: [50, 0],
+          duration: [200, 0],
+          offset: [5, 10],
+          arrow: true,
+          appendTo: function(el) {
+            return el.parentElement.parentElement.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'quarto',
+          placement: 'right',
+          popperOptions: {
+            modifiers: [
+            {
+              name: 'flip',
+              options: {
+                flipVariations: false, // true by default
+                allowedAutoPlacements: ['right'],
+                fallbackPlacements: ['right', 'top', 'top-start', 'top-end'],
+              },
+            },
+            {
+              name: 'preventOverflow',
+              options: {
+                mainAxis: false,
+                altAxis: false
+              }
+            }
+            ]        
+          }      
+        };
+        window.tippy(annoteTarget, config); 
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp("https:\/\/www\.jaysong\.net\/RBook\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+      }
+    }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./datahandling2.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">データハンドリング [要約]</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./factor.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">データハンドリング [factor型]</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2023, <a href="https://www.jaysong.net">Jaehyun Song</a> and <a href="https://yukiyanai.github.io/">Yuki Yanai</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
