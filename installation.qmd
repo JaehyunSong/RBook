@@ -9,7 +9,7 @@ source("_common.R")
 
 ## 自分のPCにインストール
 
-　Rのバージョン、使用するOSのバージョンによってインストール方法が変更される可能性がある。したがって、最新情報はネット上の解説記事等を参照されたい。以下の内容はmacOS 13（Ventura）、Ubuntu 22 LTS、Windows 11にR 4.3.0をインストールする方法である。Rのインストールが終わったら、統合開発環境（IDE）であるRStudioのインストールを推奨する。RStudioのインストール方法は第[-@sec-ide]章を参照すること。
+　Rのバージョン、使用するOSのバージョンによってインストール方法が変更される可能性がある。したがって、最新情報はネット上の解説記事等を参照されたい。以下の内容はmacOS 13（Ventura）、Ubuntu 22 LTS（Jammy）、Windows 11にR 4.3.0をインストールする方法である。Rのインストールが終わったら、統合開発環境（IDE）であるRStudioのインストールを推奨する。RStudioのインストール方法は第[-@sec-ide]章を参照すること。
 
 ### macOS
 
@@ -84,7 +84,32 @@ print("C:\\Users\\ユーザー名\\AppData\\Local/R/win-library/4.2")
 
 　Rのバージョンによって、最後の数字が変わるが問題ない。重要なのはここの「ユーザー名」に英数字以外の文字が含まれているかどうかだ。ここに日本語などが使われている場合は、パッケージがインストールできなくなる可能性がある。この場合の解決方法を紹介する。
 
-* <http://nineworks2.blog.fc2.com/blog-entry-123.html>
+　まず、画面下段の検索画面から「環境変数」と入力し、「環境変数を編集」をクリックする。
+
+![](Figs/Install/win_path1.png){width="700px" fig-align="center"}
+
+　ウィンドウの真ん中辺りにある「新規（N）...」をクリックする。
+
+![](Figs/Install/win_path2.png){width="500px" fig-align="center"}
+
+　「変数名（N）：」には「R_LIBS_USER」を入力し（スペルミスに注意）、「変数値（V）：」には英数字のみで構成されたパスを入力する（「_」などの記号は使える）。ここではCドライブ直下の「r_packages」というフォルダーを指定した。まだ作っていないフォルダーではあるが、今後、自動的に生成される。入力後、OKをクリックする。
+
+![](Figs/Install/win_path3.png){width="700px" fig-align="center"}
+
+　画面上段の「〜のユーザー環境変数（U）」に「R_LIBS_USER」項目が追加されていれば、OKを選択する。
+
+![](Figs/Install/win_path4.png){width="500px" fig-align="center"}
+
+　Rを**再起動**し、もう一度`Sys.getenv("R_LIBS_USER")`を実行してみる。先ほど指定したパスが表示されれば成功だ。今後、新しいRパッケージはここで指定したフォルダーに保存されるようになる。
+
+```{.r}
+Sys.getenv("R_LIBS_USER")
+```
+
+```{r}
+#| echo: false
+print("C:\\r_packages\\")
+```
 
 ### Ubuntu（Linux）
 
