@@ -1,79 +1,262 @@
 ---
-filters: 
-  - d-btn
+toc: false
 ---
 
 # データセット {.unnumbered}
 
 ```{r}
-#| label: dataset
-#| echo: false
+#| label: common
+#| include: false
 pacman::p_load(tidyverse, gt, gtExtras)
-tibble(Chapter = c(rep(7, 6),
-                   rep(10, 3),
-                   rep(11, 1),
-                   rep(13, 1),
-                   rep(14, 2),
-                   rep(15, 2),
-                   rep(16, 2),
-                   rep(17, 1),
-                   rep(19, 2),
-                   rep(20, 2),
-                   rep(21, 6),
-                   rep(22, 5),
-                   rep(27, 1)),
-       Title   = c(rep("データの入出力", 6),
-                   rep("データ構造", 3),
-                   rep("Rプログラミングの基礎", 1),
-                   rep("データハンドリング [抽出]", 1),
-                   rep("データハンドリング [拡張]", 2),
-                   rep("データハンドリング [factor型]", 2),
-                   rep("整然データ構造", 2),
-                   rep("文字列の処理", 1),
-                   rep("可視化 [基礎]", 2),
-                   rep("可視化 [応用]", 2),
-                   rep("可視化 [発展]", 6),
-                   rep("表の作成", 5),
-                   rep("反復処理", 1)),
-       File    = c("FIFA_Women.csv",
-                   "Vote_ShiftJIS.csv",
-                   "Vote.csv",
-                   "Soccer.xlsx",
-                   "Soccer.dta",
-                   "Scores.RData",
-                   "Vote.csv",
-                   "FIFA_Women.csv",
-                   "FIFA_Men.csv",
-                   "FIFA_Men.csv",
-                   "Ramen.csv",
-                   "Ramen.csv",
-                   "Ramen2.csv",
-                   "Ramen.csv",
-                   "COVID19.csv",
-                   "Population2015.csv",
-                   "COVID19_JK.csv",
-                   "Offices.csv",
-                   "Countries.csv",
-                   "COVID19_Worldwide.csv",
-                   "Countries.csv",
-                   "COVID19_Worldwide.csv",
-                   "Countries.csv",
-                   "COVID19_Worldwide.csv",
-                   "Japan_Density.csv",
-                   "Osaka_Student.csv",
-                   "Bumpchart.csv",
-                   "Vote_20_21.csv",
-                   "countries_desc1.csv",
-                   "countries_desc2.csv",
-                   "countries_desc3.csv",
-                   "countries_ppp.csv",
-                   "package_download.csv",
-                   "Countries.csv")) |> 
-  mutate(Chapter = paste0("第", Chapter, "章：", Title),
-         URL     = paste0("Data/", File),
+```
+
+## 第[-@sec-io]章：[データの入出力](io.qmd)
+
+```{r}
+#| label: dataset-io
+#| echo: false
+c("FIFA_Women.csv", "Vote_ShiftJIS.csv", "Vote.csv",
+  "Soccer.xlsx", "Soccer.dta", "Scores.RData") |> 
+  enframe(name = "ID", value = "File") |> 
+  mutate(URL     = paste0("Data/", File),
          File    = paste0("`", File, "`")) |> 
-  select(!Title) |> 
-  group_by(Chapter) |> 
+  select(!ID) |> 
+  gt() |> 
+  cols_label("File" = "ファイル名",
+             "URL"  = "ダウンロード") |> 
+  fmt_markdown(columns = File) |> 
+  fmt_url(columns = URL, as_button = TRUE, label = "Download") |> 
+  cols_align(columns = URL, align = "center")
+```
+
+## 第[-@sec-datastructure]章：[データ構造](datastructure.qmd)
+
+```{r}
+#| label: dataset-structure
+#| echo: false
+c("Vote.csv", "FIFA_Women.csv", "FIFA_Men.csv") |> 
+  enframe(name = "ID", value = "File") |> 
+  mutate(URL     = paste0("Data/", File),
+         File    = paste0("`", File, "`")) |> 
+  select(!ID) |> 
+  gt() |> 
+  cols_label("File" = "ファイル名",
+             "URL"  = "ダウンロード") |> 
+  fmt_markdown(columns = File) |> 
+  fmt_url(columns = URL, as_button = TRUE, label = "Download") |> 
+  cols_align(columns = URL, align = "center")
+```
+
+## 第[-@sec-programming]章：[Rプログラミングの基礎](programming.qmd)
+
+```{r}
+#| label: dataset-programming
+#| echo: false
+c("FIFA_Men.csv") |> 
+  enframe(name = "ID", value = "File") |> 
+  mutate(URL     = paste0("Data/", File),
+         File    = paste0("`", File, "`")) |> 
+  select(!ID) |> 
+  gt() |> 
+  cols_label("File" = "ファイル名",
+             "URL"  = "ダウンロード") |> 
+  fmt_markdown(columns = File) |> 
+  fmt_url(columns = URL, as_button = TRUE, label = "Download") |> 
+  cols_align(columns = URL, align = "center")
+```
+
+## 第[-@sec-datahandling1]章：[データハンドリング [抽出]](datahandling1.qmd)
+
+```{r}
+#| label: dataset-handling1
+#| echo: false
+c("Ramen.csv") |> 
+  enframe(name = "ID", value = "File") |> 
+  mutate(URL     = paste0("Data/", File),
+         File    = paste0("`", File, "`")) |> 
+  select(!ID) |> 
+  gt() |> 
+  cols_label("File" = "ファイル名",
+             "URL"  = "ダウンロード") |> 
+  fmt_markdown(columns = File) |> 
+  fmt_url(columns = URL, as_button = TRUE, label = "Download") |> 
+  cols_align(columns = URL, align = "center")
+```
+
+## 第[-@sec-datahandling2]章：[データハンドリング [要約]](datahandling2.qmd)
+
+```{r}
+#| label: dataset-handling2
+#| echo: false
+c("Ramen.csv") |> 
+  enframe(name = "ID", value = "File") |> 
+  mutate(URL     = paste0("Data/", File),
+         File    = paste0("`", File, "`")) |> 
+  select(!ID) |> 
+  gt() |> 
+  cols_label("File" = "ファイル名",
+             "URL"  = "ダウンロード") |> 
+  fmt_markdown(columns = File) |> 
+  fmt_url(columns = URL, as_button = TRUE, label = "Download") |> 
+  cols_align(columns = URL, align = "center")
+```
+
+## 第[-@sec-datahandling3]章：[データハンドリング [拡張]](datahandling3.qmd)
+
+```{r}
+#| label: dataset-handling3
+#| echo: false
+c("Ramen.csv", "Ramen2.csv") |> 
+  enframe(name = "ID", value = "File") |> 
+  mutate(URL     = paste0("Data/", File),
+         File    = paste0("`", File, "`")) |> 
+  select(!ID) |> 
+  gt() |> 
+  cols_label("File" = "ファイル名",
+             "URL"  = "ダウンロード") |> 
+  fmt_markdown(columns = File) |> 
+  fmt_url(columns = URL, as_button = TRUE, label = "Download") |> 
+  cols_align(columns = URL, align = "center")
+```
+
+## 第[-@sec-factor]章：[データハンドリング [factor型]](factor.qmd)
+
+```{r}
+#| label: dataset-factor
+#| echo: false
+c("Ramen.csv", "COVID19.csv") |> 
+  enframe(name = "ID", value = "File") |> 
+  mutate(URL     = paste0("Data/", File),
+         File    = paste0("`", File, "`")) |> 
+  select(!ID) |> 
+  gt() |> 
+  cols_label("File" = "ファイル名",
+             "URL"  = "ダウンロード") |> 
+  fmt_markdown(columns = File) |> 
+  fmt_url(columns = URL, as_button = TRUE, label = "Download") |> 
+  cols_align(columns = URL, align = "center")
+```
+
+## 第[-@sec-tidydata]章：[整然データ構造](tidydata.qmd)
+
+```{r}
+#| label: dataset-tidydata
+#| echo: false
+c("Population2015.csv", "COVID19_JK.csv") |> 
+  enframe(name = "ID", value = "File") |> 
+  mutate(URL     = paste0("Data/", File),
+         File    = paste0("`", File, "`")) |> 
+  select(!ID) |> 
+  gt() |> 
+  cols_label("File" = "ファイル名",
+             "URL"  = "ダウンロード") |> 
+  fmt_markdown(columns = File) |> 
+  fmt_url(columns = URL, as_button = TRUE, label = "Download") |> 
+  cols_align(columns = URL, align = "center")
+```
+
+## 第[-@sec-string]章：[文字列の処理](string.qmd)
+
+```{r}
+#| label: dataset-string
+#| echo: false
+c("Offices.csv") |> 
+  enframe(name = "ID", value = "File") |> 
+  mutate(URL     = paste0("Data/", File),
+         File    = paste0("`", File, "`")) |> 
+  select(!ID) |> 
+  gt() |> 
+  cols_label("File" = "ファイル名",
+             "URL"  = "ダウンロード") |> 
+  fmt_markdown(columns = File) |> 
+  fmt_url(columns = URL, as_button = TRUE, label = "Download") |> 
+  cols_align(columns = URL, align = "center")
+```
+
+## 第[-@sec-visualization2]章：[可視化 [基礎]](visualization2.qmd)
+
+```{r}
+#| label: dataset-visual2
+#| echo: false
+c("Countries.csv", "COVID19_Worldwide.csv") |> 
+  enframe(name = "ID", value = "File") |> 
+  mutate(URL     = paste0("Data/", File),
+         File    = paste0("`", File, "`")) |> 
+  select(!ID) |> 
+  gt() |> 
+  cols_label("File" = "ファイル名",
+             "URL"  = "ダウンロード") |> 
+  fmt_markdown(columns = File) |> 
+  fmt_url(columns = URL, as_button = TRUE, label = "Download") |> 
+  cols_align(columns = URL, align = "center")
+```
+
+## 第[-@sec-visualization3]章：[可視化 [応用]](visualization3.qmd)
+
+```{r}
+#| label: dataset-visual3
+#| echo: false
+c("Countries.csv", "COVID19_Worldwide.csv") |> 
+  enframe(name = "ID", value = "File") |> 
+  mutate(URL     = paste0("Data/", File),
+         File    = paste0("`", File, "`")) |> 
+  select(!ID) |> 
+  gt() |> 
+  cols_label("File" = "ファイル名",
+             "URL"  = "ダウンロード") |> 
+  fmt_markdown(columns = File) |> 
+  fmt_url(columns = URL, as_button = TRUE, label = "Download") |> 
+  cols_align(columns = URL, align = "center")
+```
+
+## 第[-@sec-visualization4]章：[可視化 [発展]](visualization4.qmd)
+
+```{r}
+#| label: dataset-visual4
+#| echo: false
+c("Countries.csv", "COVID19_Worldwide.csv", "Japan_Density.csv",
+  "Osaka_Student.csv", "Bumpchart.csv", "Vote_20_21.csv") |> 
+  enframe(name = "ID", value = "File") |> 
+  mutate(URL     = paste0("Data/", File),
+         File    = paste0("`", File, "`")) |> 
+  select(!ID) |> 
+  gt() |> 
+  cols_label("File" = "ファイル名",
+             "URL"  = "ダウンロード") |> 
+  fmt_markdown(columns = File) |> 
+  fmt_url(columns = URL, as_button = TRUE, label = "Download") |> 
+  cols_align(columns = URL, align = "center")
+```
+
+## 第[-@sec-table]章：[表の作成](table.qmd)
+
+```{r}
+#| label: dataset-table
+#| echo: false
+c("countries_desc1.csv", "countries_desc2.csv", "countries_desc3.csv",
+  "countries_ppp.csv", "package_download.csv") |> 
+  enframe(name = "ID", value = "File") |> 
+  mutate(URL     = paste0("Data/", File),
+         File    = paste0("`", File, "`")) |> 
+  select(!ID) |> 
+  gt() |> 
+  cols_label("File" = "ファイル名",
+             "URL"  = "ダウンロード") |> 
+  fmt_markdown(columns = File) |> 
+  fmt_url(columns = URL, as_button = TRUE, label = "Download") |> 
+  cols_align(columns = URL, align = "center")
+```
+
+## 第[-@sec-iteration]章：[反復処理](iteration.qmd)
+
+```{r}
+#| label: dataset-iteration
+#| echo: false
+c("Countries.csv") |> 
+  enframe(name = "ID", value = "File") |> 
+  mutate(URL     = paste0("Data/", File),
+         File    = paste0("`", File, "`")) |> 
+  select(!ID) |> 
   gt() |> 
   cols_label("File" = "ファイル名",
              "URL"  = "ダウンロード") |> 
