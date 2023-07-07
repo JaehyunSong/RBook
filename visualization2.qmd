@@ -40,42 +40,36 @@ COVID19_df <- read_csv("Data/COVID19_Worldwide.csv", guess_max = 10000)
 #| echo: false
 #| message: false
 #| cache: true
-data.frame(Var  = names(Country_df),
-           Name = c("国名", "人口", "面積", 
-                    "国内総生産 (GDP)", "GDP (購買力平価):",
-                    "一人あたりGDP", "一人あたりGDP (購買力平価)",
-                    "G7構成国", "G20構成国", "OECD構成国",
-                    "人間開発指数",
-                    "民主主義の程度", "民主主義の程度 (カテゴリ)",
-                    "政治的自由の指標", "市民的自由の指標",
-                    "政治的自由と市民的自由の合計",
-                    "総合評価", "大陸"),
-           Desc = c("", "人", "km$^2$", 
-                    rep("100万米ドル", 2), 
-                    rep("米ドル", 2), 
-                    rep("1:構成国, 0:構成国以外", 3),
-                    "2018年基準", 
-                    "Polity IVから; -10:権威主義〜10:民主主義", 
-                    "",
-                    rep("2020年基準; Freedom Houseから", 3),
-                    "F:完全な自由; PF:一部自由; NF:不自由", 
-                    "")) |>
-    kable(caption   = "国家別民主主義および政治的自由データの詳細",
-          col.names = c("変数名", "説明", "備考"), 
-          booktabs  = TRUE, 
-          align     = "lll") |>
-    kable_styling(bootstrap_options = "striped",
-                  full_width        = FALSE,
-                  latex_options     = "hold_position") |>
-    row_spec(0, align = "c") |>
-    column_spec(1, monospace = TRUE)
+tibble(Var  = paste0("`", names(Country_df), "`"),
+       Name = c("国名", "人口", "面積", 
+                "国内総生産 (GDP)", "GDP (購買力平価):",
+                "一人あたりGDP", "一人あたりGDP (購買力平価)",
+                "G7構成国", "G20構成国", "OECD構成国",
+                "人間開発指数",
+                "民主主義の程度", "民主主義の程度 (カテゴリ)",
+                "政治的自由の指標", "市民的自由の指標",
+                "政治的自由と市民的自由の合計",
+                "総合評価", "大陸"),
+       Desc = c("", "人", "km$^2$", 
+                rep("100万米ドル", 2), 
+                rep("米ドル", 2), 
+                rep("1:構成国, 0:構成国以外", 3),
+                "2018年基準", 
+                "Polity IVから; -10:権威主義〜10:民主主義", 
+                "",
+                rep("2020年基準; Freedom Houseから", 3),
+                "F:完全な自由; PF:一部自由; NF:不自由", 
+                "")) |>
+  gt() |> 
+  cols_label("Var" = "変数名", "Name" = "説明", "Desc" = "備考") |> 
+  fmt_markdown(columns = 1)
 ```
 
 ```{r visual2-sampledata-2}
 #| echo: false
 #| message: false
 #| cache: true
-data.frame(Var = names(COVID19_df),
+data.frame(Var = paste0("`", names(COVID19_df), "`"),
            Desc = c("ID", "国名", "年月日",
                     "COVID-19 新規感染者数（人）", 
                     "COVID-19 累積感染者数（人）",
@@ -83,15 +77,9 @@ data.frame(Var = names(COVID19_df),
                     "COVID-19 累積死亡者数（人）",
                     "COVID-19 新規検査数（人）", 
                     "COVID-19 累積検査数（人）")) |>
-  kable(caption = "COVID-19データの詳細",
-        col.names = c("変数名", "説明"), 
-        booktabs  = TRUE, 
-        align     = "ll") |>
-  kable_styling(bootstrap_options = "striped",
-                full_width        = FALSE,
-                latex_options     = "hold_position") |>
-  row_spec(0, align = "c") |>
-  column_spec(1, monospace = TRUE)
+  gt() |> 
+  cols_label("Var" = "変数名", "Desc" = "説明") |> 
+  fmt_markdown(columns = 1)
 ```
 
 ## 棒グラフ {#sec-visual2-barplot}
@@ -488,12 +476,8 @@ Country_df |>
     separate(col = Class, into = c("Start", "End"), sep = ",") |>
     mutate(Start = parse_number(Start),
            End   = parse_number(End)) |>
-  kable(col.names = c("から", "まで", "度数"),
-        booktabs  = TRUE,
-        align     = c("rrr")) |>
-  kable_styling(full_width    = FALSE,
-                latex_options = "hold_position") |>
-  row_spec(0, align = "c")
+  gt() |> 
+  cols_label("Start" = "から", "End" = "まで", "N" = "度数")
 ```
 
 　簡単に言うと、ヒストグラムの最初の棒は0を中央にした上で、棒の幅を0.1にしたとも言えます。これによってヒストグラムの境界線 (boundary)が、データより左右に0.05 (`binwidth`の半分)ずつ広くなります。もし、これを調整したい場合は、`boundary`引数を指定します。指定しない場合、`boundary`は「棒の広さ / 2」となります。棒がデータの範囲を超えないようにするためには、`geom_histogram()`内に`boundary = 0`を指定します。
