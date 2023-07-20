@@ -1753,9 +1753,9 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <section id="世界地図" class="level3" data-number="22.11.1">
 <h3 data-number="22.11.1" class="anchored" data-anchor-id="世界地図"><span class="header-section-number">22.11.1</span> 世界地図</h3>
 <p>{ggplot2}で地図をプロットする方法は色々あります。理想としては各国政府が提供する地図データをダウンロードし、それを読み込み・加工してプロットすることでしょうが、ここではパッケージを使ったマッピングについて紹介します。</p>
-<p>　今回使用するパッケージは{rnaturalearth}、{rnaturalearthdata}、{rgeos}です。他にも使うパッケージはありますが、世界地図ならとりあえずこれで十分です。</p>
+<p>　今回使用するパッケージは{rnaturalearth}、{rnaturalearthdata}です。他にも使うパッケージはありますが、世界地図ならとりあえずこれで十分です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(rnaturalearth, rnaturalearthdata, rgeos)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(rnaturalearth, rnaturalearthdata)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　世界地図を読み込む関数は{rnaturalearth}が提供する<code>ne_countries()</code>です。とりあえず指定する引数は<code>scale</code>と<code>retunrclass</code>です。<code>scale</code>は地図の解像度であり、世界地図なら<code>"small"</code>で十分です。もう少し拡大される大陸地図なら<code>"medium"</code>が、一国だけの地図なら<code>"large"</code>が良いかも知れません。<code>reutrnclass</code>は<code>"sf"</code>と指定します。今回は低解像度の世界地図をsfクラスで読み込んでみましょう。</p>
 <div class="cell" data-layout-align="center">
@@ -1919,7 +1919,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 </div>
 </div>
-<p>　ただ、日本地図を出すという場合、多くは都道府県レベルでマッピングが目的でしょう。世界地図のマッピングならこれで問題ありませんが、一国だけなら、その下の自治体の境界線も必要です。したがって、先ほど使用しましたパッケージのより高解像度の地図が含まれている{rnaturalearthhires}をインストールし、読み込みましょう。2023年Jul月18日現在、{rnaturalearthhires}はCRANに登録されておらず、GitHubの<a href="https://github.com/ropensci">ropensciレポジトリー</a>のみで公開されているため、今回は{pacman}の<code>p_load()</code>でなく、<code>p_load_gh()</code>を使用します。</p>
+<p>　ただ、日本地図を出すという場合、多くは都道府県レベルでマッピングが目的でしょう。世界地図のマッピングならこれで問題ありませんが、一国だけなら、その下の自治体の境界線も必要です。したがって、先ほど使用しましたパッケージのより高解像度の地図が含まれている{rnaturalearthhires}をインストールし、読み込みましょう。2023年Jul月20日現在、{rnaturalearthhires}はCRANに登録されておらず、GitHubの<a href="https://github.com/ropensci">ropensciレポジトリー</a>のみで公開されているため、今回は{pacman}の<code>p_load()</code>でなく、<code>p_load_gh()</code>を使用します。</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb86"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1"></a>pacman<span class="sc">::</span><span class="fu">p_load_gh</span>(<span class="st">"ropensci/rnaturalearthhires"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -1992,166 +1992,232 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <span id="cb94-2"><a href="#cb94-2"></a></span>
 <span id="cb94-3"><a href="#cb94-3"></a>Japan_Map</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Simple feature collection with 47 features and 86 fields
+<pre><code>Simple feature collection with 47 features and 124 fields
 Geometry type: MULTIPOLYGON
 Dimension:     XY
 Bounding box:  xmin: 122.9382 ymin: 24.2121 xmax: 153.9856 ymax: 45.52041
-Geodetic CRS:  +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0
+Geodetic CRS:  WGS 84
 First 10 features:
-           featurecla scalerank adm1_code diss_me iso_3166_2 wikipedia iso_a2
-1  Admin-1 scale rank         2  JPN-3501    3501      JP-46      &lt;NA&gt;     JP
-2  Admin-1 scale rank         6  JPN-1835    1835      JP-44      &lt;NA&gt;     JP
-3  Admin-1 scale rank         6  JPN-1829    1829      JP-40      &lt;NA&gt;     JP
-4  Admin-1 scale rank         6  JPN-1827    1827      JP-41      &lt;NA&gt;     JP
-5  Admin-1 scale rank         2  JPN-3500    3500      JP-42      &lt;NA&gt;     JP
-6  Admin-1 scale rank         6  JPN-1830    1830      JP-43      &lt;NA&gt;     JP
-7  Admin-1 scale rank         6  JPN-1831    1831      JP-45      &lt;NA&gt;     JP
-8  Admin-1 scale rank         6  JPN-1836    1836      JP-36      &lt;NA&gt;     JP
-9  Admin-1 scale rank         6  JPN-1833    1833      JP-37      &lt;NA&gt;     JP
-10 Admin-1 scale rank         6  JPN-1832    1832      JP-38      &lt;NA&gt;     JP
-   adm0_sr      name name_alt name_local type    type_en code_local code_hasc
-1        5 Kagoshima     &lt;NA&gt;       &lt;NA&gt;  Ken Prefecture       &lt;NA&gt;     JP.KS
-2        1      Oita     &lt;NA&gt;       &lt;NA&gt;  Ken Prefecture       &lt;NA&gt;     JP.OT
-3        1   Fukuoka  Hukuoka       &lt;NA&gt;  Ken Prefecture       &lt;NA&gt;     JP.FO
-4        1      Saga     &lt;NA&gt;       &lt;NA&gt;  Ken Prefecture       &lt;NA&gt;     JP.SG
-5        3  Nagasaki     &lt;NA&gt;       &lt;NA&gt;  Ken Prefecture       &lt;NA&gt;     JP.NS
-6        1  Kumamoto     &lt;NA&gt;       &lt;NA&gt;  Ken Prefecture       &lt;NA&gt;     JP.KM
-7        1  Miyazaki     &lt;NA&gt;       &lt;NA&gt;  Ken Prefecture       &lt;NA&gt;     JP.MZ
-8        1 Tokushima Tokusima       &lt;NA&gt;  Ken Prefecture       &lt;NA&gt;     JP.TS
-9        1    Kagawa     &lt;NA&gt;       &lt;NA&gt;  Ken Prefecture       &lt;NA&gt;     JP.KG
-10       4     Ehime     &lt;NA&gt;       &lt;NA&gt;  Ken Prefecture       &lt;NA&gt;     JP.EH
-   note hasc_maybe  region region_cod provnum_ne gadm_level check_me datarank
-1  &lt;NA&gt;      JP.NR  Kyushu    JPN-KYS          3          1       20        9
-2  &lt;NA&gt;      JP.ON  Kyushu    JPN-SHK         48          1       20        2
-3  &lt;NA&gt;      JP.NS  Kyushu    JPN-KYS         46          1       20        2
-4  &lt;NA&gt;      JP.OS    &lt;NA&gt;       &lt;NA&gt;         47          1       20        2
-5  &lt;NA&gt;      JP.OY    &lt;NA&gt;       &lt;NA&gt;          5          1       20        9
-6  &lt;NA&gt;      JP.NI  Kyushu    JPN-KYS          6          1       20        2
-7  &lt;NA&gt;      JP.OT  Kyushu    JPN-KYS         49          1       20        2
-8  &lt;NA&gt;      JP.SZ Shikoku    JPN-SHK         45          1       20        2
-9  &lt;NA&gt;      JP.SH Shikoku    JPN-SHK          4          1       20        2
-10 &lt;NA&gt;      JP.ST Shikoku    JPN-SHK         14          1       20        2
-   abbrev postal area_sqkm sameascity labelrank name_len mapcolor9 mapcolor13
-1    &lt;NA&gt;   &lt;NA&gt;         0         NA         2        9         5          4
-2    &lt;NA&gt;     OT         0          7         7        4         5          4
-3    &lt;NA&gt;     FO         0          7         7        7         5          4
-4    &lt;NA&gt;     SG         0         NA         6        4         5          4
-5    &lt;NA&gt;   &lt;NA&gt;         0         NA         2        8         5          4
-6    &lt;NA&gt;     KM         0         NA         6        8         5          4
-7    &lt;NA&gt;     MZ         0         NA         6        8         5          4
-8    &lt;NA&gt;     TS         0         NA         6        9         5          4
-9    &lt;NA&gt;     KG         0         NA         6        6         5          4
-10   &lt;NA&gt;     EH         0         NA         6        5         5          4
-   fips fips_alt   woe_id                       woe_label  woe_name latitude
-1  JA18     JA28  2345867 Kagoshima Prefecture, JP, Japan Kagoshima  29.4572
-2  JA30     JA47  2345879      Oita Prefecture, JP, Japan      Oita  33.2006
-3  JA07     JA27 58646425   Fukuoka Prefecture, JP, Japan   Fukuoka  33.4906
-4  JA33     JA32  2345882      Saga Prefecture, JP, Japan      Saga  33.0097
-5  JA27     JA31  2345876  Nagasaki Prefecture, JP, Japan  Nagasaki  32.6745
-6  JA21     JA29  2345870  Kumamoto Prefecture, JP, Japan  Kumamoto  32.5880
-7  JA25     JA30  2345874  Miyazaki Prefecture, JP, Japan  Miyazaki  32.0981
-8  JA39     JA37  2345888 Tokushima Prefecture, JP, Japan Tokushima  33.8546
-9  JA17     JA35  2345866    Kagawa Prefecture, JP, Japan    Kagawa  34.2162
-10 JA05     JA34  2345855     Ehime Prefecture, JP, Japan     Ehime  33.8141
-   longitude sov_a3 adm0_a3 adm0_label admin geonunit gu_a3   gn_id
-1    129.601    JPN     JPN          4 Japan    Japan   JPN 1860825
-2    131.449    JPN     JPN          4 Japan    Japan   JPN 1854484
-3    130.616    JPN     JPN          4 Japan    Japan   JPN 1863958
-4    130.147    JPN     JPN          4 Japan    Japan   JPN 1853299
-5    128.755    JPN     JPN          4 Japan    Japan   JPN 1856156
-6    130.834    JPN     JPN          4 Japan    Japan   JPN 1858419
-7    131.286    JPN     JPN          4 Japan    Japan   JPN 1856710
-8    134.200    JPN     JPN          4 Japan    Japan   JPN 1850157
-9    134.001    JPN     JPN          4 Japan    Japan   JPN 1860834
-10   132.916    JPN     JPN          4 Japan    Japan   JPN 1864226
-         gn_name  gns_id      gns_name gn_level gn_region gn_a1_code region_sub
-1  Kagoshima-ken -231556 Kagoshima-ken        1      &lt;NA&gt;      JP.18       &lt;NA&gt;
-2       Oita-ken -240089      Oita-ken        1      &lt;NA&gt;      JP.30       &lt;NA&gt;
-3    Fukuoka-ken -227382   Fukuoka-ken        1      &lt;NA&gt;      JP.07       &lt;NA&gt;
-4       Saga-ken -241905      Saga-ken        1      &lt;NA&gt;      JP.33       &lt;NA&gt;
-5   Nagasaki-ken -237758  Nagasaki-ken        1      &lt;NA&gt;      JP.27       &lt;NA&gt;
-6   Kumamoto-ken -234759  Kumamoto-ken        1      &lt;NA&gt;      JP.21       &lt;NA&gt;
-7   Miyazaki-ken -236958  Miyazaki-ken        1      &lt;NA&gt;      JP.25       &lt;NA&gt;
-8  Tokushima-ken -246216 Tokushima-ken        1      &lt;NA&gt;      JP.39       &lt;NA&gt;
-9     Kagawa-ken -231546    Kagawa-ken        1      &lt;NA&gt;      JP.17       &lt;NA&gt;
-10     Ehime-ken -227007     Ehime-ken        1      &lt;NA&gt;      JP.05       &lt;NA&gt;
-   sub_code gns_level gns_lang gns_adm1 gns_region min_label max_label min_zoom
-1      &lt;NA&gt;         1      jpn     JA18       &lt;NA&gt;         7        11        3
-2      &lt;NA&gt;         1      jpn     JA30       &lt;NA&gt;         7        11        3
-3      &lt;NA&gt;         1      jpn     JA07       &lt;NA&gt;         7        11        3
-4      &lt;NA&gt;         1      jpn     JA33       &lt;NA&gt;         7        11        3
-5      &lt;NA&gt;         1      jpn     JA27       &lt;NA&gt;         7        11        3
-6      &lt;NA&gt;         1      jpn     JA21       &lt;NA&gt;         7        11        3
-7      &lt;NA&gt;         1      jpn     JA25       &lt;NA&gt;         7        11        3
-8      &lt;NA&gt;         1      jpn     JA39       &lt;NA&gt;         7        11        3
-9      &lt;NA&gt;         1      jpn     JA17       &lt;NA&gt;         7        11        3
-10     &lt;NA&gt;         1      jpn     JA05       &lt;NA&gt;         7        11        3
-   wikidataid name_ar name_bn             name_de              name_en
-1      Q15701    &lt;NA&gt;    &lt;NA&gt; Präfektur Kagoshima Kagoshima Prefecture
-2     Q133924    &lt;NA&gt;    &lt;NA&gt;      Präfektur Oita      Oita Prefecture
-3     Q123258    &lt;NA&gt;    &lt;NA&gt;   Präfektur Fukuoka   Fukuoka Prefecture
-4     Q160420    &lt;NA&gt;    &lt;NA&gt;      Präfektur Saga      Saga Prefecture
-5     Q169376    &lt;NA&gt;    &lt;NA&gt;  Präfektur Nagasaki  Nagasaki Prefecture
-6     Q130308    &lt;NA&gt;    &lt;NA&gt;  Präfektur Kumamoto  Kumamoto Prefecture
-7     Q130300    &lt;NA&gt;    &lt;NA&gt;  Präfektur Miyazaki  Miyazaki Prefecture
-8     Q160734    &lt;NA&gt;    &lt;NA&gt; Präfektur Tokushima Tokushima Prefecture
-9     Q161454    &lt;NA&gt;    &lt;NA&gt;    Präfektur Kagawa    Kagawa Prefecture
-10    Q123376    &lt;NA&gt;    &lt;NA&gt;     Präfektur Ehime     Ehime Prefecture
-                   name_es                 name_fr name_el name_hi
-1  Prefectura de Kagoshima Préfecture de Kagoshima    &lt;NA&gt;    &lt;NA&gt;
-2       Prefectura de Oita       Préfecture d'Oita    &lt;NA&gt;    &lt;NA&gt;
-3    Prefectura de Fukuoka   Préfecture de Fukuoka    &lt;NA&gt;    &lt;NA&gt;
-4       Prefectura de Saga      Préfecture de Saga    &lt;NA&gt;    &lt;NA&gt;
-5   Prefectura de Nagasaki  Préfecture de Nagasaki    &lt;NA&gt;    &lt;NA&gt;
-6   Prefectura de Kumamoto  Préfecture de Kumamoto    &lt;NA&gt;    &lt;NA&gt;
-7   Prefectura de Miyazaki  Préfecture de Miyazaki    &lt;NA&gt;    &lt;NA&gt;
-8  Prefectura de Tokushima Préfecture de Tokushima    &lt;NA&gt;    &lt;NA&gt;
-9     Prefectura de Kagawa    Préfecture de Kagawa    &lt;NA&gt;    &lt;NA&gt;
-10     Prefectura de Ehime      Préfecture d'Ehime    &lt;NA&gt;    &lt;NA&gt;
-                name_hu             name_id                 name_it name_ja
-1   Kagosima prefektúra Prefektur Kagoshima prefettura di Kagoshima    &lt;NA&gt;
-2       Óita prefektúra      Prefektur Oita      prefettura di Oita    &lt;NA&gt;
-3    Fukuoka prefektúra   Prefektur Fukuoka   prefettura di Fukuoka    &lt;NA&gt;
-4      Szaga prefektúra      Prefektur Saga      Prefettura di Saga    &lt;NA&gt;
-5  Nagaszaki prefektúra  Prefektur Nagasaki  prefettura di Nagasaki    &lt;NA&gt;
-6   Kumamoto prefektúra  Prefektur Kumamoto  prefettura di Kumamoto    &lt;NA&gt;
-7   Mijazaki prefektúra  Prefektur Miyazaki  prefettura di Miyazaki    &lt;NA&gt;
-8   Tokusima prefektúra Prefektur Tokushima prefettura di Tokushima    &lt;NA&gt;
-9     Kagava prefektúra    Prefektur Kagawa    prefettura di Kagawa    &lt;NA&gt;
-10     Ehime prefektúra     Prefektur Ehime     prefettura di Ehime    &lt;NA&gt;
-   name_ko   name_nl              name_pl   name_pt name_ru             name_sv
-1     &lt;NA&gt; Kagoshima Prefektura Kagoshima Kagoshima    &lt;NA&gt; Kagoshima prefektur
-2     &lt;NA&gt;      Oita      Prefektura Oita      Oita    &lt;NA&gt;      Oita prefektur
-3     &lt;NA&gt;   Fukuoka   Prefektura Fukuoka   Fukuoka    &lt;NA&gt;   Fukuoka prefektur
-4     &lt;NA&gt;      Saga      Prefektura Saga      Saga    &lt;NA&gt;      Saga prefektur
-5     &lt;NA&gt;  Nagasaki  Prefektura Nagasaki  Nagasaki    &lt;NA&gt;  Nagasaki prefektur
-6     &lt;NA&gt;  Kumamoto  Prefektura Kumamoto  Kumamoto    &lt;NA&gt;  Kumamoto prefektur
-7     &lt;NA&gt;  Miyazaki  Prefektura Miyazaki  Miyazaki    &lt;NA&gt;  Miyazaki prefektur
-8     &lt;NA&gt; Tokushima Prefektura Tokushima Tokushima    &lt;NA&gt; Tokushima prefektur
-9     &lt;NA&gt;    Kagawa    Prefektura Kagawa    Kagawa    &lt;NA&gt;    Kagawa prefektur
-10    &lt;NA&gt;     Ehime     Prefektura Ehime     Ehime    &lt;NA&gt;     Ehime prefektur
-        name_tr   name_vi name_zh      ne_id Code     Name Density
-1  Kagosima ili Kagoshima    &lt;NA&gt; 1159315225   46 鹿児島県   172.9
-2          Oita      Oita    &lt;NA&gt; 1159311905   44   大分県   177.2
-3       Fukuoka   Fukuoka    &lt;NA&gt; 1159311899   40   福岡県  1029.8
-4          Saga      Saga    &lt;NA&gt; 1159311895   41   佐賀県   332.5
-5      Nagasaki  Nagasaki    &lt;NA&gt; 1159315235   42   長崎県   317.7
-6      Kumamoto  Kumamoto    &lt;NA&gt; 1159311901   43   熊本県   234.6
-7      Miyazaki  Miyazaki    &lt;NA&gt; 1159311903   45   宮崎県   138.3
-8     Tokushima Tokushima    &lt;NA&gt; 1159311909   36   徳島県   173.5
-9        Kagawa    Kagawa    &lt;NA&gt; 1159311907   37   香川県   506.3
-10        Ehime     Ehime    &lt;NA&gt; 1159311139   38   愛媛県   235.2
-                         geometry
-1  MULTIPOLYGON (((129.7832 31...
-2  MULTIPOLYGON (((131.2009 33...
-3  MULTIPOLYGON (((130.0363 33...
-4  MULTIPOLYGON (((129.8145 33...
-5  MULTIPOLYGON (((130.2041 32...
-6  MULTIPOLYGON (((130.3446 32...
-7  MULTIPOLYGON (((131.8723 32...
-8  MULTIPOLYGON (((134.4424 34...
-9  MULTIPOLYGON (((133.5919 34...
-10 MULTIPOLYGON (((132.6399 32...</code></pre>
+                       featurecla scalerank adm1_code diss_me iso_3166_2
+1  Admin-1 states provinces lakes         2  JPN-3501    3501      JP-46
+2  Admin-1 states provinces lakes         6  JPN-1835    1835      JP-44
+3  Admin-1 states provinces lakes         6  JPN-1829    1829      JP-40
+4  Admin-1 states provinces lakes         6  JPN-1827    1827      JP-41
+5  Admin-1 states provinces lakes         2  JPN-3500    3500      JP-42
+6  Admin-1 states provinces lakes         6  JPN-1830    1830      JP-43
+7  Admin-1 states provinces lakes         6  JPN-1831    1831      JP-45
+8  Admin-1 states provinces lakes         6  JPN-1836    1836      JP-36
+9  Admin-1 states provinces lakes         6  JPN-1833    1833      JP-37
+10 Admin-1 states provinces lakes         6  JPN-1832    1832      JP-38
+   wikipedia iso_a2 adm0_sr      name name_alt name_local type    type_en
+1       &lt;NA&gt;     JP       5 Kagoshima     &lt;NA&gt;   鹿児島県  Ken Prefecture
+2       &lt;NA&gt;     JP       1      Ōita     &lt;NA&gt;     大分県  Ken Prefecture
+3       &lt;NA&gt;     JP       1   Fukuoka  Hukuoka     福岡県  Ken Prefecture
+4       &lt;NA&gt;     JP       1      Saga     &lt;NA&gt;     佐賀県  Ken Prefecture
+5       &lt;NA&gt;     JP       3  Nagasaki     &lt;NA&gt;     長崎県  Ken Prefecture
+6       &lt;NA&gt;     JP       1  Kumamoto     &lt;NA&gt;     熊本県  Ken Prefecture
+7       &lt;NA&gt;     JP       1  Miyazaki     &lt;NA&gt;     宮崎県  Ken Prefecture
+8       &lt;NA&gt;     JP       1 Tokushima Tokusima     徳島県  Ken Prefecture
+9       &lt;NA&gt;     JP       1    Kagawa     &lt;NA&gt;     香川県  Ken Prefecture
+10      &lt;NA&gt;     JP       4     Ehime     &lt;NA&gt;     愛媛県  Ken Prefecture
+   code_local code_hasc note hasc_maybe  region region_cod provnum_ne
+1        &lt;NA&gt;     JP.KS &lt;NA&gt;      JP.NR  Kyushu    JPN-KYS          3
+2        &lt;NA&gt;     JP.OT &lt;NA&gt;      JP.ON  Kyushu    JPN-SHK         48
+3        &lt;NA&gt;     JP.FO &lt;NA&gt;      JP.NS  Kyushu    JPN-KYS         46
+4        &lt;NA&gt;     JP.SG &lt;NA&gt;      JP.OS    &lt;NA&gt;       &lt;NA&gt;         47
+5        &lt;NA&gt;     JP.NS &lt;NA&gt;      JP.OY    &lt;NA&gt;       &lt;NA&gt;          5
+6        &lt;NA&gt;     JP.KM &lt;NA&gt;      JP.NI  Kyushu    JPN-KYS          6
+7        &lt;NA&gt;     JP.MZ &lt;NA&gt;      JP.OT  Kyushu    JPN-KYS         49
+8        &lt;NA&gt;     JP.TS &lt;NA&gt;      JP.SZ Shikoku    JPN-SHK         45
+9        &lt;NA&gt;     JP.KG &lt;NA&gt;      JP.SH Shikoku    JPN-SHK          4
+10       &lt;NA&gt;     JP.EH &lt;NA&gt;      JP.ST Shikoku    JPN-SHK         14
+   gadm_level check_me datarank abbrev postal area_sqkm sameascity labelrank
+1           1       20        9   &lt;NA&gt;   &lt;NA&gt;         0        -99         2
+2           1       20        2   &lt;NA&gt;     OT         0          7         7
+3           1       20        2   &lt;NA&gt;     FO         0          7         7
+4           1       20        2   &lt;NA&gt;     SG         0        -99         6
+5           1       20        9   &lt;NA&gt;   &lt;NA&gt;         0        -99         2
+6           1       20        2   &lt;NA&gt;     KM         0        -99         6
+7           1       20        2   &lt;NA&gt;     MZ         0        -99         6
+8           1       20        2   &lt;NA&gt;     TS         0        -99         6
+9           1       20        2   &lt;NA&gt;     KG         0        -99         6
+10          1       20        2   &lt;NA&gt;     EH         0        -99         6
+   name_len mapcolor9 mapcolor13 fips fips_alt   woe_id
+1         9         5          4 JA18     JA28  2345867
+2         4         5          4 JA30     JA47  2345879
+3         7         5          4 JA07     JA27 58646425
+4         4         5          4 JA33     JA32  2345882
+5         8         5          4 JA27     JA31  2345876
+6         8         5          4 JA21     JA29  2345870
+7         8         5          4 JA25     JA30  2345874
+8         9         5          4 JA39     JA37  2345888
+9         6         5          4 JA17     JA35  2345866
+10        5         5          4 JA05     JA34  2345855
+                         woe_label  woe_name latitude longitude sov_a3 adm0_a3
+1  Kagoshima Prefecture, JP, Japan Kagoshima  29.4572   129.601    JPN     JPN
+2       Oita Prefecture, JP, Japan      Oita  33.2006   131.449    JPN     JPN
+3    Fukuoka Prefecture, JP, Japan   Fukuoka  33.4906   130.616    JPN     JPN
+4       Saga Prefecture, JP, Japan      Saga  33.0097   130.147    JPN     JPN
+5   Nagasaki Prefecture, JP, Japan  Nagasaki  32.6745   128.755    JPN     JPN
+6   Kumamoto Prefecture, JP, Japan  Kumamoto  32.5880   130.834    JPN     JPN
+7   Miyazaki Prefecture, JP, Japan  Miyazaki  32.0981   131.286    JPN     JPN
+8  Tokushima Prefecture, JP, Japan Tokushima  33.8546   134.200    JPN     JPN
+9     Kagawa Prefecture, JP, Japan    Kagawa  34.2162   134.001    JPN     JPN
+10     Ehime Prefecture, JP, Japan     Ehime  33.8141   132.916    JPN     JPN
+   adm0_label admin geonunit gu_a3   gn_id       gn_name  gns_id      gns_name
+1           4 Japan    Japan   JPN 1860825 Kagoshima-ken -231556 Kagoshima-ken
+2           4 Japan    Japan   JPN 1854484      Oita-ken -240089      Oita-ken
+3           4 Japan    Japan   JPN 1863958   Fukuoka-ken -227382   Fukuoka-ken
+4           4 Japan    Japan   JPN 1853299      Saga-ken -241905      Saga-ken
+5           4 Japan    Japan   JPN 1856156  Nagasaki-ken -237758  Nagasaki-ken
+6           4 Japan    Japan   JPN 1858419  Kumamoto-ken -234759  Kumamoto-ken
+7           4 Japan    Japan   JPN 1856710  Miyazaki-ken -236958  Miyazaki-ken
+8           4 Japan    Japan   JPN 1850157 Tokushima-ken -246216 Tokushima-ken
+9           4 Japan    Japan   JPN 1860834    Kagawa-ken -231546    Kagawa-ken
+10          4 Japan    Japan   JPN 1864226     Ehime-ken -227007     Ehime-ken
+   gn_level gn_region gn_a1_code region_sub sub_code gns_level gns_lang
+1         1      &lt;NA&gt;      JP.18       &lt;NA&gt;     &lt;NA&gt;         1      jpn
+2         1      &lt;NA&gt;      JP.30       &lt;NA&gt;     &lt;NA&gt;         1      jpn
+3         1      &lt;NA&gt;      JP.07       &lt;NA&gt;     &lt;NA&gt;         1      jpn
+4         1      &lt;NA&gt;      JP.33       &lt;NA&gt;     &lt;NA&gt;         1      jpn
+5         1      &lt;NA&gt;      JP.27       &lt;NA&gt;     &lt;NA&gt;         1      jpn
+6         1      &lt;NA&gt;      JP.21       &lt;NA&gt;     &lt;NA&gt;         1      jpn
+7         1      &lt;NA&gt;      JP.25       &lt;NA&gt;     &lt;NA&gt;         1      jpn
+8         1      &lt;NA&gt;      JP.39       &lt;NA&gt;     &lt;NA&gt;         1      jpn
+9         1      &lt;NA&gt;      JP.17       &lt;NA&gt;     &lt;NA&gt;         1      jpn
+10        1      &lt;NA&gt;      JP.05       &lt;NA&gt;     &lt;NA&gt;         1      jpn
+   gns_adm1 gns_region min_label max_label min_zoom wikidataid  name_ar
+1      JA18       &lt;NA&gt;         7        11        3     Q15701 كاغوشيما
+2      JA30       &lt;NA&gt;         7        11        3    Q133924    أويتا
+3      JA07       &lt;NA&gt;         7        11        3    Q123258   فوكوكا
+4      JA33       &lt;NA&gt;         7        11        3    Q160420     ساغا
+5      JA27       &lt;NA&gt;         7        11        3    Q169376 ناغاساكي
+6      JA21       &lt;NA&gt;         7        11        3    Q130308 كوماموتو
+7      JA25       &lt;NA&gt;         7        11        3    Q130300  ميازاكي
+8      JA39       &lt;NA&gt;         7        11        3    Q160734 توكوشيما
+9      JA17       &lt;NA&gt;         7        11        3    Q161454   كاغاوا
+10     JA05       &lt;NA&gt;         7        11        3    Q123376    إهيمه
+                  name_bn             name_de              name_en   name_es
+1  কাগোশিমা প্রশাসনিক অঞ্চল Präfektur Kagoshima Kagoshima Prefecture Kagoshima
+2     ওওইতা প্রশাসনিক অঞ্চল      Präfektur Ōita      Ōita Prefecture      Ōita
+3     ফুকুওকা প্রশাসনিক অঞ্চল   Präfektur Fukuoka   Fukuoka Prefecture   Fukuoka
+4      সাগা প্রশাসনিক অঞ্চল      Präfektur Saga      Saga Prefecture      Saga
+5  নাগাসাকি প্রশাসনিক অঞ্চল  Präfektur Nagasaki  Nagasaki Prefecture  Nagasaki
+6   কুমামোতো প্রশাসনিক অঞ্চল  Präfektur Kumamoto  Kumamoto Prefecture  Kumamoto
+7  মিয়াযাকি প্রশাসনিক অঞ্চল  Präfektur Miyazaki  Miyazaki Prefecture  Miyazaki
+8   তোকুশিমা প্রশাসনিক অঞ্চল Präfektur Tokushima Tokushima Prefecture Tokushima
+9   কাগাওয়া প্রশাসনিক অঞ্চল    Präfektur Kagawa    Kagawa Prefecture    Kagawa
+10    এহিমে প্রশাসনিক অঞ্চল     Präfektur Ehime     Ehime Prefecture     Ehime
+              name_fr              name_el          name_hi
+1           Kagoshima Περιφέρεια Καγκοσίμα कागोशिमा प्रीफेक्चर
+2   Préfecture d'Ōita                 Όιτα     ओइटा प्रीफेक्चर
+3             Fukuoka            Φουκουόκα      फुकुओका प्रान्त
+4                Saga                Σάγκα       सागा प्रान्त
+5            Nagasaki   Νομαρχία Ναγκασάκι नागासाकी प्रीफेक्चर
+6            Kumamoto            Κουμαμότο    कुमामोटो प्रान्त
+7            Miyazaki            Μιγιαζάκι मियाज़ाकि प्रीफेक्चर
+8           Tokushima            Τοκουσίμα  तोकुशीमा प्रीफेक्चर
+9              Kagawa              Καγκάβα    कगावा प्रीफेक्चर
+10 Préfecture d'Ehime                Εχιμέ     एहिम प्रीफेक्चर
+                name_hu             name_id   name_it  name_ja    name_ko
+1   Kagosima prefektúra Prefektur Kagoshima Kagoshima 鹿児島県 가고시마현
+2       Óita prefektúra      Prefektur Oita      Ōita   大分県   오이타현
+3    Fukuoka prefektúra   Prefektur Fukuoka   Fukuoka   福岡県 후쿠오카현
+4      Szaga prefektúra      Prefektur Saga      Saga   佐賀県     사가현
+5  Nagaszaki prefektúra  Prefektur Nagasaki  Nagasaki   長崎県 나가사키현
+6   Kumamoto prefektúra  Prefektur Kumamoto  Kumamoto   熊本県 구마모토현
+7   Mijazaki prefektúra  Prefektur Miyazaki  Miyazaki   宮崎県 미야자키현
+8   Tokusima prefektúra Prefektur Tokushima Tokushima   徳島県 도쿠시마현
+9     Kagava prefektúra    Prefektur Kagawa    Kagawa   香川県   가가와현
+10     Ehime prefektúra     Prefektur Ehime     Ehime   愛媛県   에히메현
+     name_nl              name_pl   name_pt  name_ru             name_sv
+1  Kagoshima Prefektura Kagoshima Kagoshima Кагосима Kagoshima prefektur
+2       Oita      Prefektura Ōita      Oita     Оита      Oita prefektur
+3    Fukuoka   Prefektura Fukuoka   Fukuoka  Фукуока   Fukuoka prefektur
+4       Saga      Prefektura Saga      Saga     Сага      Saga prefektur
+5   Nagasaki  Prefektura Nagasaki  Nagasaki Нагасаки  Nagasaki prefektur
+6   Kumamoto  Prefektura Kumamoto  Kumamoto Кумамото  Kumamoto prefektur
+7   Miyazaki  Prefektura Miyazaki  Miyazaki Миядзаки  Miyazaki prefektur
+8  Tokushima Prefektura Tokushima Tokushima Токусима Tokushima prefektur
+9     Kagawa    Prefektura Kagawa    Kagawa   Кагава    Kagawa prefektur
+10     Ehime     Prefektura Ehime     Ehime    Эхиме     Ehime prefektur
+        name_tr   name_vi  name_zh      ne_id  name_he             name_uk
+1  Kagoşima ili Kagoshima 鹿儿岛县 1159315225  קגושימה Префектура Каґошіма
+2          Ōita      Ōita   大分县 1159311905    אויטה     Префектура Ойта
+3       Fukuoka   Fukuoka   福冈县 1159311899 פוקואוקה  Префектура Фукуока
+4          Saga      Saga   佐贺县 1159311895     סאגה     Префектура Саґа
+5      Nagasaki  Nagasaki   长崎县 1159315235   נגסאקי Префектура Наґасакі
+6      Kumamoto  Kumamoto   熊本县 1159311901  קוממוטו Префектура Кумамото
+7      Miyazaki  Miyazaki   宫崎县 1159311903   מיאזקי Префектура Міядзакі
+8     Tokushima Tokushima   德岛县 1159311909 טוקושימה Префектура Токушіма
+9        Kagawa    Kagawa   香川县 1159311907   קאגווה   Префектура Каґава
+10        Ehime     Ehime   爱媛县 1159311139    אהימה    Префектура Ехіме
+             name_ur        name_fa name_zht FCLASS_ISO FCLASS_US FCLASS_FR
+1  کاگوشیما پریفیکچر استان کاگوشیما 鹿兒島縣       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+2    اوئیتا پریفیکچر   استان اوئیتا   大分縣       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+3    فوکوکا پریفیکچر استان فوکوئوکا   福岡縣       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+4       سگا پریفیکچر     استان ساگا   佐賀縣       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+5  ناگاساکی پریفیکچر استان ناگاساکی   長崎縣       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+6  کوماموتو پریفیکچر استان کوماموتو   熊本縣       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+7   میازاکی پریفیکچر  استان میازاکی   宮崎縣       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+8  توکوشیما پریفیکچر استان توکوشیما   德島縣       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+9    کاگاوا پریفیکچر   استان کاگاوا   香川縣       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+10    اہیمے پریفیکچر    استان اهیمه   愛媛縣       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+   FCLASS_RU FCLASS_ES FCLASS_CN FCLASS_TW FCLASS_IN FCLASS_NP FCLASS_PK
+1       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+2       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+3       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+4       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+5       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+6       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+7       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+8       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+9       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+10      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+   FCLASS_DE FCLASS_GB FCLASS_BR FCLASS_IL FCLASS_PS FCLASS_SA FCLASS_EG
+1       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+2       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+3       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+4       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+5       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+6       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+7       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+8       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+9       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+10      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+   FCLASS_MA FCLASS_PT FCLASS_AR FCLASS_JP FCLASS_KO FCLASS_VN FCLASS_TR
+1       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+2       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+3       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+4       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+5       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+6       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+7       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+8       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+9       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+10      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+   FCLASS_ID FCLASS_PL FCLASS_GR FCLASS_IT FCLASS_NL FCLASS_SE FCLASS_BD
+1       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+2       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+3       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+4       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+5       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+6       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+7       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+8       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+9       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+10      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+   FCLASS_UA FCLASS_TLC Code     Name Density                       geometry
+1       &lt;NA&gt;       &lt;NA&gt;   46 鹿児島県   172.9 MULTIPOLYGON (((129.7832 31...
+2       &lt;NA&gt;       &lt;NA&gt;   44   大分県   177.2 MULTIPOLYGON (((131.2009 33...
+3       &lt;NA&gt;       &lt;NA&gt;   40   福岡県  1029.8 MULTIPOLYGON (((130.0363 33...
+4       &lt;NA&gt;       &lt;NA&gt;   41   佐賀県   332.5 MULTIPOLYGON (((129.8145 33...
+5       &lt;NA&gt;       &lt;NA&gt;   42   長崎県   317.7 MULTIPOLYGON (((130.2041 32...
+6       &lt;NA&gt;       &lt;NA&gt;   43   熊本県   234.6 MULTIPOLYGON (((130.3446 32...
+7       &lt;NA&gt;       &lt;NA&gt;   45   宮崎県   138.3 MULTIPOLYGON (((131.8723 32...
+8       &lt;NA&gt;       &lt;NA&gt;   36   徳島県   173.5 MULTIPOLYGON (((134.4424 34...
+9       &lt;NA&gt;       &lt;NA&gt;   37   香川県   506.3 MULTIPOLYGON (((133.5919 34...
+10      &lt;NA&gt;       &lt;NA&gt;   38   愛媛県   235.2 MULTIPOLYGON (((132.6399 32...</code></pre>
 </div>
 </div>
 <p>　それではマッピングをしてみましょう。人口密度を5つのカテゴリーに順序付きfactor化してから、そのカテゴリーに応じて色塗りをします。</p>
@@ -2944,7 +3010,7 @@ Z -&gt; Y
 <pre><code>Warning: `unite_()` was deprecated in tidyr 1.2.0.
 ℹ Please use `unite()` instead.
 ℹ The deprecated feature was likely used in the ggmosaic package.
-  Please report the issue at &lt;]8;;https://github.com/haleyjeppson/ggmosaichttps://github.com/haleyjeppson/ggmosaic]8;;&gt;.</code></pre>
+  Please report the issue at &lt;https://github.com/haleyjeppson/ggmosaic&gt;.</code></pre>
 </div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
