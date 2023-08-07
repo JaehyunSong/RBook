@@ -1,6 +1,7 @@
 # データ型 {#sec-datatype}
 
-```{r datatype-common}
+```{r}
+#| label: datatype-common
 #| include: false
 source("_common.R")
 ```
@@ -11,7 +12,8 @@ source("_common.R")
 
 しかし、データ分析を行う際はベクトル以外のデータも多いです。行列や表がその典型例です。しかし、行列でも表でも中身の一つ一つの要素は長さ1のベクトルに過ぎません。たとえば、以下のような2行5列のベクトルがあるとします。ここで1行3列目の要素は`11`であり、長さ1の数値型ベクトルです。あるいは5列目は`c(23, 29)`であり、長さ2の数値型ベクトルです。
 
-```{r datatype-intro-1}
+```{r}
+#| label: datatype-intro-1
 #| echo: false
 matrix(c(2, 3, 5, 7, 11, 
          13, 17, 19, 23, 29), nrow = 2)
@@ -19,7 +21,8 @@ matrix(c(2, 3, 5, 7, 11,
 
 表についても考えてみましょう。以下の表の3行2列目の要素は`"American Samoa"`という長さ1の文字型ベクトルです。また、6列目は`c("UEFA", "CAF", "OFC", "UEFA", "CAF", "CONCACAF")`であり、これは長さ6の文字型ベクトルです。このようにRで扱う全てのデータは複数のベクトルが集まっているものです。
 
-```{r datatype-intro-2}
+```{r}
+#| label: datatype-intro-2
 #| echo: false
 head(read.csv("Data/FIFA_Women.csv"))
 ```
@@ -32,7 +35,8 @@ head(read.csv("Data/FIFA_Women.csv"))
 
 Logical型は`TRUE`と`FALSE`のみで構成されたデータ型です。練習としてなにかの長さ5の論理型ベクトルを作ってみましょう。
 
-```{r datatype-logical-1}
+```{r}
+#| label: datatype-logical-1
 logical_vec1 <- c(TRUE, FALSE, TRUE, TRUE, FALSE)
 
 logical_vec1
@@ -40,7 +44,8 @@ logical_vec1
 
 注意すべきこととしては、`TRUE`と`FALSE`は`"`で囲まないことです。`"TRUE"`、`"FALSE"`と入力してしまえばlogical 型として認識されません。もし、一つ間違えて2番目の要素である`FALSE`を`"FALSE"`と入力したらどうなるでしょうか。
 
-```{r datatype-logical-2}
+```{r}
+#| label: datatype-logical-2
 logical_vec2 <- c(TRUE, "FALSE", TRUE, TRUE, FALSE)
 
 logical_vec2
@@ -48,7 +53,8 @@ logical_vec2
 
 2番目の要素だけでなく、他の全ての要素も`"`で囲まれるようになりました。実際に、この2つのベクトルのデータ型を確認してみましょう。ベクトルのデータ型を確認する関数は`class()`関数です。
 
-```{r datatype-logical-3}
+```{r}
+#| label: datatype-logical-3
 class(logical_vec1)
 class(logical_vec2)
 ```
@@ -57,7 +63,8 @@ class(logical_vec2)
 
 他にも、`is.logical()`関数を使ってあるベクトルがlogical型か否かを判定することも可能です。もし、ベクトルがlogical型なら`TRUE`が、logical型以外なら`FALSE`が返って来ます。
 
-```{r datatype-logical-4}
+```{r}
+#| label: datatype-logical-4
 is.logical(logical_vec1)
 is.logical(logical_vec2)
 ```
@@ -68,7 +75,8 @@ Logical型は様々な場面で使われますが、代表的な使い方は第[
 
 Numeric型は数値型ですが、まずはnumeric型のベクトル`numeric_vec1`を作成し、データ型を確認してみましょう。
 
-```{r datatype-numeric-1}
+```{r}
+#| label: datatype-numeric-1
 numeric_vec1 <- c(2, 0, 0, 1, 3)
 
 class(numeric_vec1)
@@ -76,7 +84,8 @@ class(numeric_vec1)
 
 `is.logical()`に似た関数`is.numeric()`も使用可能です。
 
-```{r datatype-numeric-2}
+```{r}
+#| label: datatype-numeric-2
 is.numeric(numeric_vec1)
 is.numeric(logical_vec1)
 ```
@@ -85,27 +94,31 @@ is.numeric(logical_vec1)
 
 integerは整数型であり、doubleは実数型です。これは`class()`関数では確認できず、`typeof()`関すを使います。
 
-```{r datatype-numeric-3}
+```{r}
+#| label: datatype-numeric-3
 typeof(numeric_vec1)
 ```
 
 一般的に作成するnumeric型のベクトルは全てdouble型です。もし、整数型のベクトルを作成したい場合、数値の後ろに`L`を付けます。
 
-```{r datatype-numeric-4}
+```{r}
+#| label: datatype-numeric-4
 integer_vec1 <- c(2L, 0L, 0L, 1L, 3L)
 typeof(integer_vec1)
 ```
 
 ここでも注意すべき点としては、一つでも`L`が付かない要素が含まれる場合、自動的にdouble型に変換されるという点です。
 
-```{r datatype-numeric-5}
+```{r}
+#| label: datatype-numeric-5
 integer_vec2 <- c(2L, 0L, 0, 1L, 3L)
 typeof(integer_vec2)
 ```
 
 もちろんですが、小数点のある数値に`L`を付けてもinteger型にはならず、勝手にdouble型になります。また、integer型同士の割り算の結果もdouble型になります。これは`2L/1L`のような場合でも同じです。足し算、引き算、掛け算はinteger型になります。
 
-```{r datatype-numeric-6}
+```{r}
+#| label: datatype-numeric-6
 typeof(2.3L)
 typeof(3L / 12L)
 typeof(3L / 1L)
