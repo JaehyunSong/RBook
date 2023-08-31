@@ -619,3 +619,68 @@ plot.My_Cor_Object <- function(data) {
 ```
 
 　これで相関係数の計算および可視化が便利になる関数群が完成しました。Rパッケージの開発はこれよりも数倍も複雑ですが、本記事の内容はプログラミングをより効率的に行うための入り口となります。
+
+## 例題（S7利用） {#sec-oop_example_s7}
+
+```{r}
+pacman::p_load(S7)
+```
+
+```{r}
+my_cor <- new_class("my_cor",
+                    properties = list(x      = class_double,
+                                      y      = class_double,
+                                      x_name = class_character,
+                                      y_name = class_character),
+                    validator  = function(self) {
+                      if (length(self@x) != length(self@y)) {
+                        "@xと@yの長さが一致しません。"
+                      } else if (length(self@x_name) != 1 | length(self@y_name) != 1) {
+                        "@x_nameと@y_nameは長さ1のcharacter型ベクトルです。"
+                      }
+                    })
+
+method(print, my_cor) <- function (x) {
+  cor_coef <- cor.test(x@x, x@y)
+  
+  cat(sprintf("%sの平均値: %.3f\n", 
+              x@x_name,
+              mean(x@x)))
+  cat(sprintf("%sの平均値: %.3f\n", 
+              x@y_name,
+              mean(x@y)))
+  cat(sprintf("相関係数: %.3f [%.3f, %.3f] (p = %.3f)\n", 
+              cor_coef$estimate, 
+              cor_coef$conf.int[1],
+              cor_coef$conf.int[2],
+              cor_coef$p.value))
+}
+
+method(summary, my_cor) <- function (x) {
+  print(x)
+}
+
+method(plot, my_cor) <- function (x) {
+  data <- tibble(var1 = x@x,
+                 var2 = x@y)
+  
+  data |> 
+    ggplot(aes(x = var1, y = var2)) +
+    geom_point() +
+    labs(x = x@x_name, y = x@y_name) +
+    ggtitle(sprintf("相関係数 = %.3f", cor(x@x, x@y))) +
+    theme_bw()
+}
+```
+
+```{r}
+set.seed(19861008)
+my_data <- my_cor(x = rnorm(50), y = rnorm(50),
+       x_name = "変数1", y_name = "変数2")
+
+class(my_data)
+str(my_data)
+print(my_data) # print()は省略可
+summary(my_data)
+plot(my_data)
+```

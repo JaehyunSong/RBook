@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.232">
+<meta name="generator" content="quarto-1.4.330">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -153,7 +153,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
     <div class="sidebar-title mb-0 py-0">
       <a href="./">私たちのR</a> 
         <div class="sidebar-tools-main">
-    <a href="https://github.com/JaehyunSong/RBook/" rel="" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="https://github.com/JaehyunSong/RBook/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
     <div class="dropdown">
       <a href="" title="Share" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Share"><i class="bi bi-share"></i></a>
       <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
@@ -506,6 +506,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   <li><a href="#検証用関数を作る" id="toc-検証用関数を作る" class="nav-link" data-scroll-target="#検証用関数を作る"><span class="header-section-number">29.3.3</span> 検証用関数を作る</a></li>
   </ul></li>
   <li><a href="#sec-oop_example" id="toc-sec-oop_example" class="nav-link" data-scroll-target="#sec-oop_example"><span class="header-section-number">29.4</span> 例題</a></li>
+  <li><a href="#sec-oop_example_s7" id="toc-sec-oop_example_s7" class="nav-link" data-scroll-target="#sec-oop_example_s7"><span class="header-section-number">29.5</span> 例題（S7利用）</a></li>
   </ul>
 </nav>
     </div>
@@ -526,6 +527,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
     
   </div>
   
+
 
 </header>
 
@@ -708,7 +710,7 @@ see '?methods' for accessing help and source code</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>function (object, ...) 
 UseMethod("summary")
-&lt;bytecode: 0x1069422e8&gt;
+&lt;bytecode: 0x1125c2df8&gt;
 &lt;environment: namespace:base&gt;</code></pre>
 </div>
 </div>
@@ -767,7 +769,7 @@ UseMethod("summary")
     class(value) &lt;- c("summaryDefault", "table")
     value
 }
-&lt;bytecode: 0x106945468&gt;
+&lt;bytecode: 0x1125c22d0&gt;
 &lt;environment: namespace:base&gt;</code></pre>
 </div>
 </div>
@@ -1198,6 +1200,96 @@ see '?methods' for accessing help and source code</code></pre>
 <span id="cb92-10"><a href="#cb92-10"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　これで相関係数の計算および可視化が便利になる関数群が完成しました。Rパッケージの開発はこれよりも数倍も複雑ですが、本記事の内容はプログラミングをより効率的に行うための入り口となります。</p>
+</section>
+<section id="sec-oop_example_s7" class="level2" data-number="29.5">
+<h2 data-number="29.5" class="anchored" data-anchor-id="sec-oop_example_s7"><span class="header-section-number">29.5</span> 例題（S7利用）</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(S7)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1"></a>my_cor <span class="ot">&lt;-</span> <span class="fu">new_class</span>(<span class="st">"my_cor"</span>,</span>
+<span id="cb94-2"><a href="#cb94-2"></a>                    <span class="at">properties =</span> <span class="fu">list</span>(<span class="at">x      =</span> class_double,</span>
+<span id="cb94-3"><a href="#cb94-3"></a>                                      <span class="at">y      =</span> class_double,</span>
+<span id="cb94-4"><a href="#cb94-4"></a>                                      <span class="at">x_name =</span> class_character,</span>
+<span id="cb94-5"><a href="#cb94-5"></a>                                      <span class="at">y_name =</span> class_character),</span>
+<span id="cb94-6"><a href="#cb94-6"></a>                    <span class="at">validator  =</span> <span class="cf">function</span>(self) {</span>
+<span id="cb94-7"><a href="#cb94-7"></a>                      <span class="cf">if</span> (<span class="fu">length</span>(self<span class="sc">@</span>x) <span class="sc">!=</span> <span class="fu">length</span>(self<span class="sc">@</span>y)) {</span>
+<span id="cb94-8"><a href="#cb94-8"></a>                        <span class="st">"@xと@yの長さが一致しません。"</span></span>
+<span id="cb94-9"><a href="#cb94-9"></a>                      } <span class="cf">else</span> <span class="cf">if</span> (<span class="fu">length</span>(self<span class="sc">@</span>x_name) <span class="sc">!=</span> <span class="dv">1</span> <span class="sc">|</span> <span class="fu">length</span>(self<span class="sc">@</span>y_name) <span class="sc">!=</span> <span class="dv">1</span>) {</span>
+<span id="cb94-10"><a href="#cb94-10"></a>                        <span class="st">"@x_nameと@y_nameは長さ1のcharacter型ベクトルです。"</span></span>
+<span id="cb94-11"><a href="#cb94-11"></a>                      }</span>
+<span id="cb94-12"><a href="#cb94-12"></a>                    })</span>
+<span id="cb94-13"><a href="#cb94-13"></a></span>
+<span id="cb94-14"><a href="#cb94-14"></a><span class="fu">method</span>(print, my_cor) <span class="ot">&lt;-</span> <span class="cf">function</span> (x) {</span>
+<span id="cb94-15"><a href="#cb94-15"></a>  cor_coef <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(x<span class="sc">@</span>x, x<span class="sc">@</span>y)</span>
+<span id="cb94-16"><a href="#cb94-16"></a>  </span>
+<span id="cb94-17"><a href="#cb94-17"></a>  <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"%sの平均値: %.3f</span><span class="sc">\n</span><span class="st">"</span>, </span>
+<span id="cb94-18"><a href="#cb94-18"></a>              x<span class="sc">@</span>x_name,</span>
+<span id="cb94-19"><a href="#cb94-19"></a>              <span class="fu">mean</span>(x<span class="sc">@</span>x)))</span>
+<span id="cb94-20"><a href="#cb94-20"></a>  <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"%sの平均値: %.3f</span><span class="sc">\n</span><span class="st">"</span>, </span>
+<span id="cb94-21"><a href="#cb94-21"></a>              x<span class="sc">@</span>y_name,</span>
+<span id="cb94-22"><a href="#cb94-22"></a>              <span class="fu">mean</span>(x<span class="sc">@</span>y)))</span>
+<span id="cb94-23"><a href="#cb94-23"></a>  <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"相関係数: %.3f [%.3f, %.3f] (p = %.3f)</span><span class="sc">\n</span><span class="st">"</span>, </span>
+<span id="cb94-24"><a href="#cb94-24"></a>              cor_coef<span class="sc">$</span>estimate, </span>
+<span id="cb94-25"><a href="#cb94-25"></a>              cor_coef<span class="sc">$</span>conf.int[<span class="dv">1</span>],</span>
+<span id="cb94-26"><a href="#cb94-26"></a>              cor_coef<span class="sc">$</span>conf.int[<span class="dv">2</span>],</span>
+<span id="cb94-27"><a href="#cb94-27"></a>              cor_coef<span class="sc">$</span>p.value))</span>
+<span id="cb94-28"><a href="#cb94-28"></a>}</span>
+<span id="cb94-29"><a href="#cb94-29"></a></span>
+<span id="cb94-30"><a href="#cb94-30"></a><span class="fu">method</span>(summary, my_cor) <span class="ot">&lt;-</span> <span class="cf">function</span> (x) {</span>
+<span id="cb94-31"><a href="#cb94-31"></a>  <span class="fu">print</span>(x)</span>
+<span id="cb94-32"><a href="#cb94-32"></a>}</span>
+<span id="cb94-33"><a href="#cb94-33"></a></span>
+<span id="cb94-34"><a href="#cb94-34"></a><span class="fu">method</span>(plot, my_cor) <span class="ot">&lt;-</span> <span class="cf">function</span> (x) {</span>
+<span id="cb94-35"><a href="#cb94-35"></a>  data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">var1 =</span> x<span class="sc">@</span>x,</span>
+<span id="cb94-36"><a href="#cb94-36"></a>                 <span class="at">var2 =</span> x<span class="sc">@</span>y)</span>
+<span id="cb94-37"><a href="#cb94-37"></a>  </span>
+<span id="cb94-38"><a href="#cb94-38"></a>  data <span class="sc">|&gt;</span> </span>
+<span id="cb94-39"><a href="#cb94-39"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> var1, <span class="at">y =</span> var2)) <span class="sc">+</span></span>
+<span id="cb94-40"><a href="#cb94-40"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb94-41"><a href="#cb94-41"></a>    <span class="fu">labs</span>(<span class="at">x =</span> x<span class="sc">@</span>x_name, <span class="at">y =</span> x<span class="sc">@</span>y_name) <span class="sc">+</span></span>
+<span id="cb94-42"><a href="#cb94-42"></a>    <span class="fu">ggtitle</span>(<span class="fu">sprintf</span>(<span class="st">"相関係数 = %.3f"</span>, <span class="fu">cor</span>(x<span class="sc">@</span>x, x<span class="sc">@</span>y))) <span class="sc">+</span></span>
+<span id="cb94-43"><a href="#cb94-43"></a>    <span class="fu">theme_bw</span>()</span>
+<span id="cb94-44"><a href="#cb94-44"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1"></a><span class="fu">set.seed</span>(<span class="dv">19861008</span>)</span>
+<span id="cb95-2"><a href="#cb95-2"></a>my_data <span class="ot">&lt;-</span> <span class="fu">my_cor</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(<span class="dv">50</span>), <span class="at">y =</span> <span class="fu">rnorm</span>(<span class="dv">50</span>),</span>
+<span id="cb95-3"><a href="#cb95-3"></a>       <span class="at">x_name =</span> <span class="st">"変数1"</span>, <span class="at">y_name =</span> <span class="st">"変数2"</span>)</span>
+<span id="cb95-4"><a href="#cb95-4"></a></span>
+<span id="cb95-5"><a href="#cb95-5"></a><span class="fu">class</span>(my_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "my_cor"    "S7_object"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1"></a><span class="fu">str</span>(my_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;my_cor&gt;
+ @ x     : num [1:50] -0.0863 0.3957 -1.3299 0.5741 0.152 ...
+ @ y     : num [1:50] 0.534 1.787 2.29 -1.557 0.127 ...
+ @ x_name: chr "変数1"
+ @ y_name: chr "変数2"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1"></a><span class="fu">print</span>(my_data) <span class="co"># print()は省略可</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>変数1の平均値: -0.025
+変数2の平均値: -0.158
+相関係数: -0.184 [-0.440, 0.099] (p = 0.200)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1"></a><span class="fu">summary</span>(my_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>変数1の平均値: -0.025
+変数2の平均値: -0.158
+相関係数: -0.184 [-0.440, 0.099] (p = 0.200)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1"></a><span class="fu">plot</span>(my_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="oop_files/figure-html/unnamed-chunk-42-1.png" class="img-fluid figure-img" width="2100"></p>
+</figure>
+</div>
+</div>
+</div>
 
 
 </section>
@@ -1329,6 +1421,16 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');
   const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
     if (id.startsWith('sec-')) {
       // Special case sections, only their first couple elements
       const container = document.createElement("div");
@@ -1341,6 +1443,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return note.innerHTML;
       }
     } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
       return note.innerHTML;
     }
   }
@@ -1360,7 +1467,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         const note = window.document.getElementById(id);
         if (note !== null) {
           try {
-            const html = processXRef(id, note);
+            const html = processXRef(id, note.cloneNode(true));
             instance.setContent(html);
           } finally {
             instance.enable();
@@ -1454,32 +1561,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
-      // Handle positioning of the toggle
-      window.addEventListener(
+        // Handle positioning of the toggle
+    window.addEventListener(
       "resize",
       throttle(() => {
+        console.log("RESIZE");
         elRect = undefined;
         if (selectedAnnoteEl) {
           selectCodeLines(selectedAnnoteEl);
         }
       }, 10)
-      );
-      function throttle(fn, ms) {
-      let throttle = false;
-      let timer;
-        return (...args) => {
-          if(!throttle) { // first call gets through
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
               fn.apply(this, args);
-              throttle = true;
-          } else { // all the others get throttled
-              if(timer) clearTimeout(timer); // cancel #2
-              timer = setTimeout(() => {
-                fn.apply(this, args);
-                timer = throttle = false;
-              }, ms);
-          }
-        };
-      }
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
       for (let i=0; i<annoteTargets.length; i++) {
         const annoteTarget = annoteTargets[i];
@@ -1582,7 +1690,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):(.quarto-navigation-tool)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
