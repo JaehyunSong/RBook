@@ -339,23 +339,20 @@ df |>
 
 評判が最も高い都府県は和歌山県、最も低いのは神奈川県ですね。Songも和歌山ラーメンは井出系も車庫前系も好きです。しかし、大事なのは「井出系」と「車庫前系」といった分類が正しいかどうかではありません。コードが非常に簡潔となり、ソートなども自由自在であることです。都府県ごとに`ScoreN`と`Score`の平均値を求める場合、{dplyr}を使わなかったら18行のコードとなり、ソートも自分でやる必要があります。一方、`group_by()`関数を使うことによってコードが5行になりました。
 
-また、これは2020年6月に公開された{dplyr}1.0.0からの問題ですが、`group_by()`の後に`summarise()`を使うと以下のようなメッセージが出力されます。
+:::{.callout-note}
+## `group_by()`と同じ機能を持つ`.by`引数
 
-```
-## `summarise()` ungrouping output (override with `.groups` argument)
-```
-
-これは`group_by()`で指定された変数のグループ化が自動的に解除されたことを意味します。なぜなら`summarise()`をする際は`Pref`をグループ変数として使いましたが、出力された結果の`Pref`変数はもはやグループとして機能できなくなるからです。元の`df`には`Pref`が`"東京都"`だったケースが1000行、`"京都府"`だったのが414行あったので、`Pref`変数でグループ化する意味がありました。しかし、`summarise()`から得られたデータフレームは`Pref == "東京都"`の行が1つしかありません。これはグループ化する意味がなくなったことを意味します。したがって、自動的にグループを解除してくれます。自動的にやってくれるのはありがたいことですが、可能ならば関数内に自分で明記することが推奨されます。そこで使う引数が`.groups`であり、`"drop"`を指定すると**全ての**グループ化変数を解除します。以下のようなコードだと先ほどのメッセージが表示されません。今後、意識的に入れるようにしましょう。
+最新の{dplyr}を使う場合（`r format(Sys.Date(), "%Y年%m月%d日")`現在、{dplyr}`r packageVersion("dplyr")`）、`group_by()`関数を使わず、`summarise()`関数内に`.by`引数を指定しても同じ動きをします。具体的には`.by = グルーピングする変数名`を追加するだけです。したがって、以下は上記のコードと同じ内容です。
 
 ```{r}
-# ScoreNとScoreの平均値をPrefごとに求める
 df |>
-  group_by(Pref) |>
   summarise(ScoreN_Mean = mean(ScoreN, na.rm = TRUE),
             Score_Mean  = mean(Score,  na.rm = TRUE),
-            .groups     = "drop") |>
+            .by         = Pref) |>
   arrange(desc(Score_Mean))
 ```
+
+:::
 
 続いて、一つ便利な関数を紹介します。それはグループのサイズを計算する関数、`n()`です。この関数を`summarise()`内に使うと、各グループに属するケース数を出力します[^n]。先ほどのコードを修正し、各グループのサイズを`N`という名の列として追加してみましょう。そしてソートの順番は`N`を最優先とし、同じ場合は`Score_Mean`が高い方を上に出力させます。また、`ScoreN_Mean`の前に、口コミ数の合計も出してみましょう。
 
@@ -369,8 +366,7 @@ df |>
   summarise(ScoreN_Sum  = sum(ScoreN,  na.rm = TRUE),
             ScoreN_Mean = mean(ScoreN, na.rm = TRUE),
             Score_Mean  = mean(Score,  na.rm = TRUE),
-            N           = n(),
-            .groups     = "drop") |>
+            N           = n()) |>
   arrange(desc(N), desc(Score_Mean))
 ```
 
@@ -378,7 +374,7 @@ df |>
 
 ### 複数の変数を用いたグループ化
 
-グループ化変数は2つ以上指定することも可能です。たとえば、都府県 (`Pref`)と最寄りの駅の路線 (`Line`)でグループ化することも可能です。それでは`Pref`と`Line`でグループ化し、店舗数と口コミ数、評価の平均値を計算し、ソートの順番は店舗数、店舗数が同じなら評価の平均値が高い順にしましょう。今回も`summarise()`内に`.group = "drop"`を指定し、グループ化を解除します。今回はTop 20まで出してみましょう。
+グループ化変数は2つ以上指定することも可能です。たとえば、都府県 (`Pref`)と最寄りの駅の路線 (`Line`)でグループ化することも可能です。それでは`Pref`と`Line`でグループ化し、店舗数と口コミ数、評価の平均値を計算し、ソートの順番は店舗数、店舗数が同じなら評価の平均値が高い順にしましょう。今回はTop 20まで出してみます。
 
 ```{r}
 # ScoreNとScoreの平均値をPrefごとに求める
@@ -387,51 +383,52 @@ df |>
   group_by(Pref, Line) |> # PrefとLineでグループ化
   summarise(N           = n(),
             ScoreN_Sum  = sum(ScoreN,  na.rm = TRUE),
-            Score_Mean  = mean(Score,  na.rm = TRUE),
-            .groups     = "drop") |>
+            Score_Mean  = mean(Score,  na.rm = TRUE)) |>
   arrange(desc(N), desc(Score_Mean)) |>
   print(n = 20)
 ```
 
+結果としては問題ないように見えますが、気になるメッセージが出力されます。
+
+```
+`summarise()` has grouped output by 'Pref'. You can override using the `.groups` argument.
+```
+
+これは`Line`はグルーピング変数として機能しなくなり、`Pref`変数のみグループ変数になったという意味です。なぜ`Line`が解除され、`Pref`が残るかというと、それは`group_by()`関数内で`Pref`を先に指定したからです。`group_by(Line, Pref)`でグルーピングすると、`Pref`が解除され、`Line`のみがグルーピング変数となります。`summarise()`後のグルーピング変数の扱いは`summarise()`関数の`.groups`引数で指定できます。既定値は`.groups = "drop_last"`で「最後のグルーピング変数を解除する」という意味です（場合によっては既定値が`"keep"`になりますが、後述します）。多くの場合、`summarise()`後は全グルーピングを解除するのが一般的なので、この場合は`.groups = "drop"`と指定します。もし、グルーピングを維持したい場合は`.groups = "keep"`と指定します。今回の例は`summarise()`内に`.group = "drop"`を指定し、グループ化を解除します。
+
+```{r}
+df |>
+  filter(!is.na(Line)) |>
+  group_by(Pref, Line) |>
+  summarise(N           = n(),
+            ScoreN_Sum  = sum(ScoreN,  na.rm = TRUE),
+            Score_Mean  = mean(Score,  na.rm = TRUE),
+            .groups     = "drop") |> # グルーピングをすべて解除する
+  arrange(desc(N), desc(Score_Mean)) |>
+  print(n = 20)
+```
+
+:::{.callout-note}
+## `group_by()`と同じ機能を持つ`.by`引数
+
+ちなみに`.by`引数でグルーピングを行う場合は自動的にグルーピングが解除されるので、`.groups = "drop"`は不要です。したがって、以下は上記のコードと同じ内容となります。
+
+```{r}
+df |>
+  filter(!is.na(Line)) |> 
+  summarise(N           = n(),
+            ScoreN_Sum  = sum(ScoreN,  na.rm = TRUE),
+            Score_Mean  = mean(Score,  na.rm = TRUE),
+            .by         = c(Pref, Line)) |>
+  arrange(desc(N), desc(Score_Mean)) |>
+  print(n = 20)
+```
+
+:::
+
 ぐるなびに登録されているラーメン屋が最も多い路線は埼玉県内の東武東上線で122店舗があります。東武東上線は東京都と埼玉県をまたがる路線ですので、東武東上線だけならもっと多いかも知れませんね。
 
-ここで一つ考えたいのは`summarise()`内の`.groups`引数です。前回はグループ化に使った変数ごとに1行しか残っていなかったのでグループ化を全て解除しました。しかし、今回は状況がやや異なります。グループ化変数に使った`Pref`を考えると、まだ`Pref == "東京都"`であるケースがいくつかあります。やろうとすればまだグループ化出来る状態です。これは`Line`についても同じです。`Line == "東武東上線"`の行はここには表示されていないものの、まだデータに残っています。もし、これ以上グループ化しないなら今のように`.groups = "drop"`が正しいですが、もしもう一回グループ化したい場合はどうすればよいでしょうか。方法は2つ考えられます。
-
-1. もう一度パイプ演算子を使って`group_by()`関数を使う (以下の9行目)。
-    * 結果を見ると`## # Groups:   Pref, Line [523]`で、ちゃんとグループ化されていることが分かります。
-
-```{r}
-df |>
-  filter(!is.na(Line)) |> 
-  group_by(Pref, Line) |> 
-  summarise(N           = n(),
-            ScoreN_Sum  = sum(ScoreN,  na.rm = TRUE),
-            Score_Mean  = mean(Score,  na.rm = TRUE),
-            .groups     = "drop") |>
-  arrange(desc(N), desc(Score_Mean)) |>
-  group_by(Pref, Line) |> # group_by()、もう一度
-  print(n = 5)
-```
-
-2. `.groups`引数を何とかする。
-
-推奨される方法は2番です。具体的には`.groups = "keep"`を指定するだけであり、こっちの方が無駄なコードを省けることができます。
-
-```{r}
-df |>
-  filter(!is.na(Line)) |> 
-  group_by(Pref, Line) |> 
-  summarise(N           = n(),
-            ScoreN_Sum  = sum(ScoreN,  na.rm = TRUE),
-            Score_Mean  = mean(Score,  na.rm = TRUE),
-            .groups     = "keep") |>
-  arrange(desc(N), desc(Score_Mean)) |>
-  print(n = 5)
-```
-
-`.groups`引数は`"drop"`と`"keep"`以外にも`"drop_last"`があります。実は`summarise()`に`.groups`引数を指定したい場合のデフォルト値は`.groups == "drop_last"`または`"keep"`ですが、ここがややこしいです。主なケースにおいてデフォルト値は`"drop"`となりますとなります。`.groups == "drop_last"`これは最後のグループ化変数のみ解除する意味です。今回の例だと、2番目のグループ化変数である`Line`がグループ化変数から外され、`Pref`のみがグループ化変数として残る仕組みです。
-
-それではデフォルト値が`"keep"`になるのはいつでしょうか。それは記述統計量の結果が長さ2以上のベクトルである場合です。平均値を求める`mean()`、標準偏差を求める`sd()`などは、結果として長さ1のベクトルを返します。しかし、長さ2以上ののベクトルを返す関数もあります。たとえば、分位数を求める`quantile()`関数があります。`quantile(ベクトル名, 0.25)`の場合、第一四分位点のみ返すため、結果は長さ1のベクトルです。しかし、`quantile(ベクトル名, c(0.25, 0.5, 0.75))`のように第一四分位点から第三四分位点を同時に計算し、長さ3のベクトルが返されるケースもありますし、第二引数を省略すると、最小値・第一四分位点・第二四分位点・第三四分位点・最大値、つまり、長さ5のベクトルが返される場合があります。
+ここで`.groups`引数についてもう少し考えてみたいと思います。多くの場合、`.groups`引数の既定値は`"drop_last"`ですが、場合によっては`"keep"`になるケースもあります。それは記述統計量の結果が長さ2以上のベクトルである場合です。平均値を求める`mean()`、標準偏差を求める`sd()`などは、結果として長さ1のベクトルを返します。しかし、長さ2以上ののベクトルを返す関数もあります。たとえば、分位数を求める`quantile()`関数があります。`quantile(ベクトル名, 0.25)`の場合、第一四分位点のみ返すため、結果は長さ1のベクトルです。しかし、`quantile(ベクトル名, c(0.25, 0.5, 0.75))`のように第一四分位点から第三四分位点を同時に計算し、長さ3のベクトルが返されるケースもありますし、第二引数を省略すると、最小値・第一四分位点・第二四分位点・第三四分位点・最大値、つまり、長さ5のベクトルが返される場合があります。
 
 ```{r}
 # 第一四分位点のみを求める (長さ1のベクトル)
@@ -464,4 +461,24 @@ df |>
 
 同じ`Pref`、`Line`のケースが2つずつ出来ています。最初に来る数値は第一四分位点、次に来るのが第三四分位点です。そして最初のグループ化変数であった`Pref`と`Line`が、`summarise()`後もグループ化変数として残っていることが分かります。
 
-`.groups`引数は記述統計量だけを計算する意味ではあまり意識する必要がありません。しかし、得られた記述統計量から何らかの計算をしたり、さらにもう一回記述統計量を求めたりする際、予期せぬ結果が得られる可能性があるため注意する必要があります。出来る限り`.groups`引数は指定するようにしましょう。
+しかし、気になる警告（warning）が表示されますね。
+
+```
+Warning: Returning more (or less) than 1 row per `summarise()` group was deprecated in
+dplyr 1.1.0.
+ℹ Please use `reframe()` instead.
+ℹ When switching from `summarise()` to `reframe()`, remember that `reframe()`
+  always returns an ungrouped data frame and adjust accordingly.
+```
+
+これは「長さ2以上のベクトルを返す場合、`summarise()`を使うな！」という意味です。今は警告が出るだけで結果としては問題なく動いてますが、{dplyr}1.1.0以降は`reframe()`関数の仕様を推奨しています。これは`summarise()`を`reframe()`に変えるだけで対応可能です。
+
+```{r}
+df |>
+  filter(!is.na(Walk)) |>
+  group_by(Pref, Line) |>
+  reframe(Mean     = mean(Walk),
+          Quantile = quantile(Walk, c(0.25, 0.75)))
+```
+
+`reframe()`の場合、自動的にグルーピングが解除されます（`.groups`引数の指定はできません）。長さ2以上のベクトルを返す関数を使用する場合は、なるべく`summarise()`のかわりに`reframe()`を使いましょう。
