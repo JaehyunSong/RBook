@@ -1312,22 +1312,24 @@ COVID19_df |>
 
 (以下は作成中の内容)
 
-　{ggplot2}で作成した図に日本語が含まれている場合、日本語が正しく表示されない場合があります。また、RStudioのPlotsペインには日本語が表示されていても、PDF/PNG/JPGなどのファイルとして出力した場合、表示されないケースもあります。{ggplot2}の使い方を解説する前に、ここでは日本語が正しく表示/出力されない場合の対処法について紹介します。
+　{ggplot2}で作成した図に日本語が含まれている場合、日本語が正しく表示されない場合があります。また、RStudioのPlotsペインには日本語が表示されていても、PDF/PNG/JPGなどのファイルとして出力した場合、表示されないケースもあります。ここでは日本語が正しく表示/出力されない場合の対処法について紹介します。
 
 ### macOSの場合
 
-　今後紹介する{ggplot2}の図の最後に以下のようなレイヤーを追加すればヒラギノフォントを使用することができます。
+　まず、{ggplot2}のオブジェクトに`theme()`レイヤーを追加し、`text`引数に使用するフォントを指定することができます。ここではヒラギノを使う例をお見せします。
 
 ```{r visual2-japanese-mac-1}
 #| eval: false
-theme(text = element_text(family = "HiraginoSans-W3"))
+{ggplot2}を使った作図のコード +
+  theme(text = element_text(family = "HiraginoSans-W3"))
 ```
 
 　または、`theme_bw()`や`theme_minimal()`など、特定のテーマを使用するのであればそのテーマのレイヤーにフォントを指定することもできます。たとえば、{ggplot2}のデフォルトテーマであるgrayテーマを使用するなら、{ggplot2}のオブジェクトに以下のようなレイヤーを追加する。
 
 ```{r visual2-japanese-mac-2}
 #| eval: false
-theme_gray(base_familiy = "HiraginoSans-W3")
+{ggplot2}を使った作図のコード +
+  theme_gray(base_familiy = "HiraginoSans-W3")
 ```
 
 　もう一つの方法としましては、コードの最初に以下のようなコードを追加します。このコードが実行された以降の図には全てヒラギノフォントが適用されます。
@@ -1337,13 +1339,14 @@ theme_gray(base_familiy = "HiraginoSans-W3")
 theme_update(text = element_text(family = "HiraginoSans-W3"))
 ```
 
-　ただし、いずれの方法でも、`geom_text()`、`geom_label()`、`annotate()`のような文字列を出力する幾何オブジェクトを使用する際は、各レイヤーごとにフォント族を指定する必要があります (幾何オブジェクト内に`family = "HiraginoSans-W3"`を追加)。
+　ただし、いずれの方法でも、`geom_text()`、`geom_label()`、`annotate()`のような文字列を出力する幾何オブジェクトを使用する際は、各レイヤーごとにフォント族を指定する必要があります（幾何オブジェクト内に`family = "HiraginoSans-W3"`を追加）。
 
-　作成した図ファイル (PDF) として出力 (保存) する際は`quartz()`関数と`dev.off()`関数の間に{ggplot2}で作成したオブジェクト名を入れるだけです。図でフォントが正しく指定されていれば、問題なく日本語を含まれたPDF形式の図が保存できます。
+　作成した図ファイル（PDF）として出力（保存）する際は`quartz()`関数と`dev.off()`関数の間に{ggplot2}で作成したオブジェクト名を入れるだけです。図でフォントが正しく指定されていれば、問題なく日本語を含まれたPDF形式の図が保存できます。
 
 ```{r visual2-japanese-mac-4}
 #| eval: false
-quartz(file = "出力するファイル名", type = "pdf", width = 幅, height = 高さ)
+quartz(file = "出力するファイル名", type = "pdf", 
+       width = 幅, height = 高さ, family = "HiraginoSans-W3")
 {ggplot2}で作成した図のオブジェクト名
 dev.off()
 ```
@@ -1352,11 +1355,16 @@ dev.off()
 
 ### Windowsの場合
 
-???
+　図に日本語を表示するだけなら、macOSと方法は同じですが、使用するフォントを`"HiraginoSans-W3"`から`"Yu Gothic"`に変更します。ただし、PDF出力の際は
+
+```{r visual2-japanese-win-4}
+#| eval: false
+ああああああああああああああ
+```
 
 ### {ragg}の使用
 
-　{ragg}パッケージを使用すると、使用するOSと関係なくRStudioのPlotsペイン、R Markdown (HTML出力)の文字化けを回避することができます。{ragg}はインストールのみで十分であり、別途読み込む必要がないため、インストールだけします。
+　{ragg}パッケージを使用すると、使用するOSと関係なくRStudioのPlotsペイン、R Markdown（HTML出力）の文字化けを回避することができます。{ragg}はインストールのみで十分であり、別途読み込む必要がないため、インストールだけします。
 
 ```{r visual2-japanese-ragg-1}
 #| eval: false
@@ -1369,11 +1377,28 @@ pacman::p_install(ragg)
 2. 左のGeneral>右側上段のGraphicsタブ
 3. Graphic DeviceのBackendでAGGを選択
 
-　R Markdown (HTML出力)の場合、YAMLヘッダーの直後に以下のようなチャンクを追加します。チャンクのオプションとして`include = FALSE`を指定しておけば、出力結果にコードが表示されなくなるため、指定するのを推奨します。`dpi`は任意の値で良いですが、PNG形式の場合、解像度が低いと見た目があまり良くないため、150以上に設定することをおすすめします。Web表示だけなら150でも良いですが、印刷を考えると300がおすすめです。
+　R Markdown（HTML出力）の場合、YAMLヘッダーの直後に以下のようなチャンクを追加します。チャンクのオプションとして`include = FALSE`を指定しておけば、出力結果にコードが表示されなくなるため、指定するのを推奨します。`dpi`は任意の値で良いですが、PNG形式の場合、解像度が低いと見た目があまり良くないため、150以上に設定することをおすすめします。Web表示だけなら150でも良いですが、印刷を考えると300がおすすめです。
 
 ```{r visual2-japanese-ragg-2}
 #| eval: false
 knitr::opts_chunk$set(dev = "ragg_png", dpi = 300)
+```
+
+　Quartoであれば、YAMLヘッダーに以下のような内容を追加するだけで良いです（`knitr:`以降の行を参照）。別途のチャンクにて`knitr::opts_chunk$set()`を指定する必要はありません。
+
+```yaml
+---
+title: "My Quarto"
+author: "Kuroneko Nya-nya"
+date: today
+format: 
+  html:
+    toc: true
+knitr: 
+  opts_chunk: 
+    dev: "ragg_png"
+    dpi: 300
+---
 ```
 
 ## 図の保存 {#sec-visual2-save}
