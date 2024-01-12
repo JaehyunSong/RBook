@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.542">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -22,7 +22,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -81,7 +81,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -90,6 +96,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "サーチ"
@@ -104,7 +111,6 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </script>
-
 <script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&amp;display=swap" rel="stylesheet"> 
@@ -113,10 +119,37 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
 <meta property="og:title" content="私たちのR: ベストプラクティスの探求">
 <meta property="og:description" content="R Not for Everyone: An Esoteric Guide">
 <meta property="og:image" content="https://www.jaysong.net/RBook/Figs/favicon.png">
-<meta property="og:site-name" content="私たちのR">
+<meta property="og:site_name" content="私たちのR">
 <meta property="og:image:height" content="260">
 <meta property="og:image:width" content="260">
 <meta name="twitter:title" content="私たちのR: ベストプラクティスの探求">
@@ -129,17 +162,16 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 
 <body class="nav-sidebar docked">
 
-
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="サイドバーを切り替える" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="サイドバーを切り替える" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./project.html">Rの基礎</a></li><li class="breadcrumb-item"><a href="./datastructure.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">データ構造</span></a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="サイドバーを切り替える" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./project.html">Rの基礎</a></li><li class="breadcrumb-item"><a href="./datastructure.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">データ構造</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="サイドバーを切り替える" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
@@ -149,12 +181,12 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">私たちのR</a> 
         <div class="sidebar-tools-main">
-    <a href="https://github.com/JaehyunSong/RBook/" rel="" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="https://github.com/JaehyunSong/RBook/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
     <div class="dropdown">
       <a href="" title="Share" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Share"><i class="bi bi-share"></i></a>
       <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
@@ -485,7 +517,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -525,7 +557,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./project.html">Rの基礎</a></li><li class="breadcrumb-item"><a href="./datastructure.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">データ構造</span></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title"><span id="sec-datastructure" class="quarto-section-identifier"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">データ構造</span></span></h1>
 </div>
@@ -540,7 +572,9 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   </div>
   
 
+
 </header>
+
 
 <section id="sec-datastructure_intro" class="level2" data-number="10.1">
 <h2 data-number="10.1" class="anchored" data-anchor-id="sec-datastructure_intro"><span class="header-section-number">10.1</span> データ構造とは</h2>
@@ -619,7 +653,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 <p>それぞれのベクトルの長さは1、5、6、5ということが分かりますね。</p>
 <p><strong>要素の抽出</strong></p>
-<p>これは既に説明しましたので、第<a href="r_basic.html#sec-rbasic-extract"><span>7.3</span></a>を参照してください。</p>
+<p>これは既に説明しましたので、第<a href="r_basic.html#sec-rbasic-extract" class="quarto-xref"><span>7.3</span></a>を参照してください。</p>
 <p><strong>ベクトルの加減乗除</strong></p>
 <p>ここではnumeric型のベクトルを用いた加減乗除について考えたいと思います。Rにおいてベクトルは自動的に反復作業を行います。たとえば、<code>c(1, 2, 3, 4)</code>というベクトルがあり、ここに5を足すと、ベクトルの全ての要素に対して同じ計算を行います。これは引き算でも、掛け算でも、割り算でも同じです。むろん、べき乗などの様々な操作に対しても同じです。それでは<code>myVec2</code>に対して、5を足したり、引いたり、色々してみましょう。</p>
 <div class="cell">
@@ -714,7 +748,7 @@ object length</code></pre>
 </tbody>
 </table>
 <p>実際は長さが異なるベクトル同士の計算を行うことは滅多にありません。例外としては長さ1のベクトルの計算くらいですね。</p>
-<p>文字列ベクトルの扱い方はより複雑ですので、第<a href="string.html"><span>18</span></a>章で詳細に解説します。</p>
+<p>文字列ベクトルの扱い方はより複雑ですので、第<a href="string.html" class="quarto-xref"><span>18</span></a>章で詳細に解説します。</p>
 </section>
 </section>
 <section id="sec-datastructure_matrix" class="level2" data-number="10.3">
@@ -779,7 +813,7 @@ object length</code></pre>
 <pre><code>[1] "matrix" "array" </code></pre>
 </div>
 </div>
-<p>R 4.0.0からの仕様変更により行列型はmatrix構造以外にもarrayの構造も持つようになりました。array型については第<a href="#sec-datastructure_array"><span>10.6</span></a>章で解説します。</p>
+<p>R 4.0.0からの仕様変更により行列型はmatrix構造以外にもarrayの構造も持つようになりました。array型については第<a href="#sec-datastructure_array" class="quarto-xref"><span>10.6</span></a>章で解説します。</p>
 <p><strong>単位行列</strong></p>
 <p>最後にちょっと特殊な行列である単位行列 (indetity matrix)の作り方について説明します。単位行列とは行と列の数が同じである正方形の行列ですが、対角線上は全て1、その他は全て0となっている行列です。たとえば大きさが4の単位行列は、</p>
 <p><span class="math display">\[
@@ -839,7 +873,7 @@ A = \left[
 <pre><code>[1] 4</code></pre>
 </div>
 </div>
-<p><code>dim()</code>および<code>nrow()</code>、<code>ncol()</code>関数は第<a href="#sec-datastructure-dataframe"><span>10.4</span></a>章で紹介するデータフレームでも使用可能です。</p>
+<p><code>dim()</code>および<code>nrow()</code>、<code>ncol()</code>関数は第<a href="#sec-datastructure-dataframe" class="quarto-xref"><span>10.4</span></a>章で紹介するデータフレームでも使用可能です。</p>
 <p><strong>要素の抽出</strong></p>
 <p>ベクトルと同様、要素の抽出は<code>[]</code>を使います。ただし、行列は横と縦の2次元構成となりますので、行と列のそれぞれの位置を指定する必要があります。たとえば、<code>A</code>の2行目、3列目の要素を抽出するためには、</p>
 <div class="cell">
@@ -1176,12 +1210,16 @@ A^T = \left[
 <p>データフレームはデータ分析の際に最もよく見るデータ構造です。我々が一般的に考える表形式のデータはデータフレームです。行列も見た目は表に近いですが、行列は中身の要素がnumericまたはcomplex型に限定されるに対して<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>、データフレームはcharacterやfactor、Dateなど様々なデータ型が許容されます。</p>
 <section id="データフレームの作成" class="level3" data-number="10.4.1">
 <h3 data-number="10.4.1" class="anchored" data-anchor-id="データフレームの作成"><span class="header-section-number">10.4.1</span> データフレームの作成</h3>
-<p>まずは、 <a href="#tbl-dataframe_example1">表&nbsp;<span>10.1</span></a> のようなデータフレームを作成して見ましょう。データフレームを作成する際は<code>data.frame()</code>関数を使います。</p>
+<p>まずは、 <a href="#tbl-dataframe_example1" class="quarto-xref">表&nbsp;<span>10.1</span></a> のようなデータフレームを作成して見ましょう。データフレームを作成する際は<code>data.frame()</code>関数を使います。</p>
 <div class="cell">
+<div id="tbl-dataframe_example1" class="cell quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-dataframe_example1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+表&nbsp;10.1: myDFの中身
+</figcaption>
+<div aria-describedby="tbl-dataframe_example1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="tbl-dataframe_example1" class="anchored">
-<table class="table table-striped table-sm small" data-quarto-postprocess="true">
-<caption>表&nbsp;10.1: myDFの中身</caption>
+<table class="table table-striped do-not-create-environment cell table-sm small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
 <th style="text-align: right;" data-quarto-table-cell-role="th">ID</th>
@@ -1217,9 +1255,11 @@ A^T = \left[
 </tr>
 </tbody>
 </table>
+
+
 </div>
-
-
+</div>
+</figure>
 </div>
 </div>
 <div class="cell">
@@ -1448,7 +1488,7 @@ A^T = \left[
 4  4      Tani   80   85  Kobe  Udon       5</code></pre>
 </div>
 </div>
-<p>「<code>English</code>が<code>Stat</code>の次じゃなくて気持ち悪い！」と思う方もいるかも知れませんが、列順番の変更については第<a href="datahandling1.html"><span>13</span></a>章で解説します。まずは、これで我慢しましょう。</p>
+<p>「<code>English</code>が<code>Stat</code>の次じゃなくて気持ち悪い！」と思う方もいるかも知れませんが、列順番の変更については第<a href="datahandling1.html" class="quarto-xref"><span>13</span></a>章で解説します。まずは、これで我慢しましょう。</p>
 <p>次は、列の置換についてです。実はよく考えてみるとこれは列の追加と全く同じです。たとえば、英語試験において配点が5点の問題にミスが見つかり、全生徒の英語成績に5点を上乗せるとします。そのためにはベクトル<code>myDF4$English</code>の全ての要素に5を足し、それをもう一回<code>myDf4$English</code>に代入すれば良いです。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb161"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb161-1"><a href="#cb161-1"></a>myDF4<span class="sc">$</span>English <span class="ot">&lt;-</span> myDF4<span class="sc">$</span>English <span class="sc">+</span> <span class="dv">5</span></span>
@@ -1873,11 +1913,15 @@ $Men
 <section id="sec-datastructure_array" class="level2" data-number="10.6">
 <h2 data-number="10.6" class="anchored" data-anchor-id="sec-datastructure_array"><span class="header-section-number">10.6</span> 配列 (array)</h2>
 <p>配列は行列の拡張版であり、行列は配列の特殊な形です。これまでのRでは行列と配列は区別されてきましたが、R 4.0.0以降、行列は配列の属するデータ構造となりました。</p>
-<p>配列型は簡単にいうと、同じサイズの行列を数枚重ねたものです。 <a href="#fig-structure_array">図&nbsp;<span>10.1</span></a> は配列型のイメージを表したものです。</p>
-<div id="fig-structure_array" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="Figs/DataStructure/array.png" class="img-fluid figure-img" style="width:75.0%"></p>
-<figcaption class="figure-caption">図&nbsp;10.1: 配列型データのイメージ</figcaption>
+<p>配列型は簡単にいうと、同じサイズの行列を数枚重ねたものです。 <a href="#fig-structure_array" class="quarto-xref">図&nbsp;<span>10.1</span></a> は配列型のイメージを表したものです。</p>
+<div id="fig-structure_array" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-structure_array-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Figs/DataStructure/array.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:75.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-structure_array-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+図&nbsp;10.1: 配列型データのイメージ
+</figcaption>
 </figure>
 </div>
 <p>したがって、配列型は行と列以外にも、層の要素も持つことになります。複数の行列で構成されている点では、リスト型と類似していますが、配列型は<strong>同じサイズ</strong>の<strong>行列</strong>のみで構成されている点が特徴です。</p>
@@ -1896,30 +1940,30 @@ $Men
 <div class="sourceCode cell-code" id="cb222"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb222-1"><a href="#cb222-1"></a>Mat1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3] [,4]
-[1,]   12    8    5    5
-[2,]    4   12    5    5
-[3,]    7    2    2    1</code></pre>
+[1,]   12   10   12    2
+[2,]    7    7    5    9
+[3,]    1   12    3   12</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb224"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb224-1"><a href="#cb224-1"></a>Mat2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3] [,4]
-[1,]    2    2    2    4
-[2,]    8    7   10    2
-[3,]   11    8   10    7</code></pre>
+[1,]    4   12    8   10
+[2,]    3    4    7    4
+[3,]    6    9    5   10</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb226"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb226-1"><a href="#cb226-1"></a>Mat3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3] [,4]
-[1,]    6   10   12    9
-[2,]    5    4    1    1
-[3,]   10    7    5    8</code></pre>
+[1,]    7   12    8    5
+[2,]    7   11    8   11
+[3,]    9    5    4    9</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb228"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb228-1"><a href="#cb228-1"></a>Mat4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3] [,4]
-[1,]    2   10    9    8
-[2,]    4   11   10    8
-[3,]    9    3    4    1</code></pre>
+[1,]    9    2    9    2
+[2,]    8    9    5    2
+[3,]    6    8    3    5</code></pre>
 </div>
 </div>
 <p>配列型データを作成するには<code>array()</code>関数を使います。引数としては行列名を<code>c()</code>で繋ぎ<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>、<code>dim =</code>でarrayの大きさを指定するだけです。配列を作成した後はそのデータ構造も確認してみましょう。</p>
@@ -1937,30 +1981,30 @@ $Men
 <pre><code>, , 1
 
      [,1] [,2] [,3] [,4]
-[1,]   12    8    5    5
-[2,]    4   12    5    5
-[3,]    7    2    2    1
+[1,]   12   10   12    2
+[2,]    7    7    5    9
+[3,]    1   12    3   12
 
 , , 2
 
      [,1] [,2] [,3] [,4]
-[1,]    2    2    2    4
-[2,]    8    7   10    2
-[3,]   11    8   10    7
+[1,]    4   12    8   10
+[2,]    3    4    7    4
+[3,]    6    9    5   10
 
 , , 3
 
      [,1] [,2] [,3] [,4]
-[1,]    6   10   12    9
-[2,]    5    4    1    1
-[3,]   10    7    5    8
+[1,]    7   12    8    5
+[2,]    7   11    8   11
+[3,]    9    5    4    9
 
 , , 4
 
      [,1] [,2] [,3] [,4]
-[1,]    2   10    9    8
-[2,]    4   11   10    8
-[3,]    9    3    4    1</code></pre>
+[1,]    9    2    9    2
+[2,]    8    9    5    2
+[3,]    6    8    3    5</code></pre>
 </div>
 </div>
 <p>このように一つのオブジェクト内に複数の行列が格納されたオブジェクトが生成されます。</p>
@@ -1972,16 +2016,16 @@ $Men
 <div class="sourceCode cell-code" id="cb234"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb234-1"><a href="#cb234-1"></a>Array1[, , <span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3] [,4]
-[1,]    6   10   12    9
-[2,]    5    4    1    1
-[3,]   10    7    5    8</code></pre>
+[1,]    7   12    8    5
+[2,]    7   11    8   11
+[3,]    9    5    4    9</code></pre>
 </div>
 </div>
 <p>また、2番目の行列の3行目・1列目の要素を抽出するなら<code>Array1[3, 1, 2]</code>と入力します。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb236"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb236-1"><a href="#cb236-1"></a>Array1[<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 11</code></pre>
+<pre><code>[1] 6</code></pre>
 </div>
 </div>
 <p>配列型における操作の特徴の一つは全ての行列が同じ大きさを持つため、層を貫通した操作ができるという点です。たとえば、全ての層の2行目を抽出するなら、層番号を指定せず、行番号のみで抽出します。</p>
@@ -1989,13 +2033,13 @@ $Men
 <div class="sourceCode cell-code" id="cb238"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb238-1"><a href="#cb238-1"></a>Array1[<span class="dv">2</span>, , ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3] [,4]
-[1,]    4    8    5    4
-[2,]   12    7    4   11
-[3,]    5   10    1   10
-[4,]    5    2    1    8</code></pre>
+[1,]    7    3    7    8
+[2,]    7    4   11    9
+[3,]    5    7    8    5
+[4,]    9    4   11    2</code></pre>
 </div>
 </div>
-<p>ただ、返された結果は配列型でなく行列型であることに注意しましょう。たとえば、1番目の行列の2行目の要素は4, 12, 5, 5ですが、これは先ほど抽出された行列の1列目に該当します。また、2番目の行列の2行目の要素は8, 7, 10, 2であり、これは先ほどの抽出された行列の2列目となります。全層において特定の一列を抽出しても同じです。これは各層において抽出されたデータが行列でなく、ベクトルだからです。</p>
+<p>ただ、返された結果は配列型でなく行列型であることに注意しましょう。たとえば、1番目の行列の2行目の要素は7, 7, 5, 9ですが、これは先ほど抽出された行列の1列目に該当します。また、2番目の行列の2行目の要素は3, 4, 7, 4であり、これは先ほどの抽出された行列の2列目となります。全層において特定の一列を抽出しても同じです。これは各層において抽出されたデータが行列でなく、ベクトルだからです。</p>
 <p>一方、<strong>複数</strong>の行または列を抽出した場合、結果は配列型です。<code>Array1</code>の各層から1・2行目と1・2列目の要素、つまり大きさが2 <span class="math inline">\(\times\)</span> 2の行列を抽出してみましょう。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb240"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb240-1"><a href="#cb240-1"></a>Array1[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2003,26 +2047,26 @@ $Men
 <pre><code>, , 1
 
      [,1] [,2]
-[1,]   12    8
-[2,]    4   12
+[1,]   12   10
+[2,]    7    7
 
 , , 2
 
      [,1] [,2]
-[1,]    2    2
-[2,]    8    7
+[1,]    4   12
+[2,]    3    4
 
 , , 3
 
      [,1] [,2]
-[1,]    6   10
-[2,]    5    4
+[1,]    7   12
+[2,]    7   11
 
 , , 4
 
      [,1] [,2]
-[1,]    2   10
-[2,]    4   11</code></pre>
+[1,]    9    2
+[2,]    8    9</code></pre>
 </div>
 </div>
 <p>このように各層において抽出されたデータが行列だからです。自分の操作から得られた結果がどのようなデータ型・データ構造かを予め知っておくことで分析の効率が上がるでしょう。</p>
@@ -2040,9 +2084,9 @@ $Men
 <div class="sourceCode cell-code" id="cb243"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb243-1"><a href="#cb243-1"></a>Array2[, , <span class="st">"M4"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3] [,4]
-[1,]    2   10    9    8
-[2,]    4   11   10    8
-[3,]    9    3    4    1</code></pre>
+[1,]    9    2    9    2
+[2,]    8    9    5    2
+[3,]    6    8    3    5</code></pre>
 </div>
 </div>
 <p>むろん、これまでと同様、番号で抽出することも可能です。</p>
@@ -2050,9 +2094,9 @@ $Men
 <div class="sourceCode cell-code" id="cb245"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb245-1"><a href="#cb245-1"></a>Array2[, , <span class="dv">4</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3] [,4]
-[1,]    2   10    9    8
-[2,]    4   11   10    8
-[3,]    9    3    4    1</code></pre>
+[1,]    9    2    9    2
+[2,]    8    9    5    2
+[3,]    6    8    3    5</code></pre>
 </div>
 </div>
 
@@ -2153,10 +2197,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/www\.jaysong\.net\/RBook\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -2166,8 +2227,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -2180,6 +2250,120 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -2223,6 +2407,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -2248,8 +2433,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
-      // Handle positioning of the toggle
-      window.addEventListener(
+        // Handle positioning of the toggle
+    window.addEventListener(
       "resize",
       throttle(() => {
         elRect = undefined;
@@ -2257,23 +2442,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
           selectCodeLines(selectedAnnoteEl);
         }
       }, 10)
-      );
-      function throttle(fn, ms) {
-      let throttle = false;
-      let timer;
-        return (...args) => {
-          if(!throttle) { // first call gets through
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
               fn.apply(this, args);
-              throttle = true;
-          } else { // all the others get throttled
-              if(timer) clearTimeout(timer); // cancel #2
-              timer = setTimeout(() => {
-                fn.apply(this, args);
-                timer = throttle = false;
-              }, ms);
-          }
-        };
-      }
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
       for (let i=0; i<annoteTargets.length; i++) {
         const annoteTarget = annoteTargets[i];
@@ -2318,7 +2503,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
               options: {
                 flipVariations: false, // true by default
                 allowedAutoPlacements: ['right'],
-                fallbackPlacements: ['right', 'top', 'top-start', 'top-end'],
+                fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
               },
             },
             {
@@ -2370,30 +2555,16 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
   }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var filterRegex = new RegExp("https:\/\/www\.jaysong\.net\/RBook\/");
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-          // target, if specified
-          link.setAttribute("target", "_blank");
-      }
-    }
 });
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./datatype.html" class="pagination-link">
+      <a href="./datatype.html" class="pagination-link  aria-label=" &lt;span="">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">データ型</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./programming.html" class="pagination-link">
+      <a href="./programming.html" class="pagination-link" aria-label="<span class='chapter-number'>11</span>&nbsp; <span class='chapter-title'>Rプログラミングの基礎</span>">
         <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Rプログラミングの基礎</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
@@ -2404,12 +2575,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">
       &nbsp;
     </div>   
-    <div class="nav-footer-center">Copyright 2023, <a href="https://www.jaysong.net">Jaehyun Song</a> and <a href="https://yukiyanai.github.io/">Yuki Yanai</a></div>
+    <div class="nav-footer-center">
+<p>Copyright 2023, <a href="https://www.jaysong.net">Jaehyun Song</a> and <a href="https://yukiyanai.github.io/">Yuki Yanai</a></p>
+</div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
+
 
 
 

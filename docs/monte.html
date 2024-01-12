@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.542">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -22,7 +22,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -58,6 +58,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -100,7 +101,13 @@ div.csl-indent {
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -109,6 +116,7 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "サーチ"
@@ -129,10 +137,37 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
 <meta property="og:title" content="私たちのR: ベストプラクティスの探求">
 <meta property="og:description" content="R Not for Everyone: An Esoteric Guide">
 <meta property="og:image" content="https://www.jaysong.net/RBook/Figs/favicon.png">
-<meta property="og:site-name" content="私たちのR">
+<meta property="og:site_name" content="私たちのR">
 <meta property="og:image:height" content="260">
 <meta property="og:image:width" content="260">
 <meta name="twitter:title" content="私たちのR: ベストプラクティスの探求">
@@ -145,17 +180,16 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 
 <body class="nav-sidebar docked">
 
-
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="サイドバーを切り替える" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="サイドバーを切り替える" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./iteration.html">中級者向け</a></li><li class="breadcrumb-item"><a href="./monte.html"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">モンテカルロ・シミュレーション</span></a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="サイドバーを切り替える" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./iteration.html">中級者向け</a></li><li class="breadcrumb-item"><a href="./monte.html"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">モンテカルロ・シミュレーション</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="サイドバーを切り替える" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
@@ -165,12 +199,12 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">私たちのR</a> 
         <div class="sidebar-tools-main">
-    <a href="https://github.com/JaehyunSong/RBook/" rel="" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="https://github.com/JaehyunSong/RBook/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
     <div class="dropdown">
       <a href="" title="Share" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Share"><i class="bi bi-share"></i></a>
       <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
@@ -501,7 +535,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -525,7 +559,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./iteration.html">中級者向け</a></li><li class="breadcrumb-item"><a href="./monte.html"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">モンテカルロ・シミュレーション</span></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title"><span id="sec-monte" class="quarto-section-identifier"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">モンテカルロ・シミュレーション</span></span></h1>
 </div>
@@ -540,7 +574,9 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   </div>
   
 
+
 </header>
+
 
 <section id="sec-monte-intro" class="level2" data-number="30.1">
 <h2 data-number="30.1" class="anchored" data-anchor-id="sec-monte-intro"><span class="header-section-number">30.1</span> モンテカルロシミュレーションとは</h2>
@@ -567,18 +603,22 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># この場合、prob引数は省略可能</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">3</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">6</span>, <span class="dv">6</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 5 1 2</code></pre>
+<pre><code>[1] 6 2 4</code></pre>
 </div>
 </div>
 <p>　今回はサイコロを1万回振り、それぞれの目が出た回数を棒グラフとして示してみます。無作為に抽出された値であれば、各目が出る回数は等しいはずです。ベクトルに対して<code>table()</code>関数を使うと、各要素が出現した回数が出力され、このオブジェクトを<code>barplot()</code>関数に渡すと棒グラフを作成することができます。</p>
-<div class="cell" data-layout-align="center" data-hash="monte_cache/html/fig-monte-rng-3_6fdf6bfd8ebd88cb854bedc313ce6eb0">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>Dice_vec <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">10</span><span class="sc">^</span><span class="dv">4</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="fu">table</span>(Dice_vec) <span class="sc">|&gt;</span> <span class="fu">barplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="fig-monte-rng-3" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="monte_files/figure-html/fig-monte-rng-3-1.png" class="img-fluid figure-img" width="2100"></p>
-<figcaption class="figure-caption">図&nbsp;30.1: 6面体サイコロを1万回投げた場合</figcaption>
+<div id="fig-monte-rng-3" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center" data-fig-pos="H">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-monte-rng-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="monte_files/figure-html/fig-monte-rng-3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-monte-rng-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+図&nbsp;30.1: 6面体サイコロを1万回投げた場合
+</figcaption>
 </figure>
 </div>
 </div>
@@ -696,15 +736,15 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">rnorm</span>(<span class="dv">5</span>) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] -0.822  0.284  0.510 -0.173 -0.166</code></pre>
+<pre><code>[1] -2.909  0.191  0.610 -2.046 -1.354</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">rnorm</span>(<span class="dv">5</span>) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1]  0.035  0.238  0.400  1.683 -2.911</code></pre>
+<pre><code>[1]  1.038 -0.531  1.812  1.077 -0.122</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">rnorm</span>(<span class="dv">5</span>) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] -1.700  1.044 -0.242  0.013  0.110</code></pre>
+<pre><code>[1] 1.558 0.356 0.465 0.087 0.143</code></pre>
 </div>
 </div>
 <p>　このように、抽出の度に結果が変わります。1回きりのシミュレーションではこれで問題ないでしょうが、同じシミュレーションから同じ結果を得るためには、乱数を固定する必要があります。そこで使うのがシード（seed）です。シードが同じなら抽出される乱数は同じ値を取ります。シードの指定は<code>set.seed(numeric型スカラー)</code>です。たとえば、シードを<a href="https://www.jaysong.net">19861008</a>にし、同じ作業をやってみましょう。</p>
@@ -797,7 +837,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 </div>
 <p>　100回の試行の中で<code>TRUE</code>が出たのは10回ですね。割合で考えると10%です。この試行回数を無限にすると確率として解釈できますが、無限回繰り返しは世の中が終わるまでやっても終わりませんね。ただし、十分に多い試行回数、たとえば1万回程度繰り返すと確率に近似できるでしょう。</p>
-<div class="cell" data-layout-align="center" data-hash="monte_cache/html/monte-birthday-5_00b96c4ef0aef894adabc1047e9132ad">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>n_student <span class="ot">&lt;-</span> <span class="dv">10</span>    <span class="co"># 学生数</span></span>
 <span id="cb28-2"><a href="#cb28-2"></a>n_trials  <span class="ot">&lt;-</span> <span class="dv">10000</span> <span class="co"># 試行回数</span></span>
 <span id="cb28-3"><a href="#cb28-3"></a></span>
@@ -816,8 +856,8 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 </div>
 <p>　1万回の試行から<code>TRUE</code>が出た回数は1147回であり、11.5%ですね。つまり、人が10人集まれば誕生日が同じ人が2人以上いる確率は約11.5%ということになります。実はこの確率は厳密に計算可能であり、理論的な確率は約11.7%です。シミュレーションから得られた結果が理論値にかなり近似していることが分かります。</p>
-<p>　今回は試行回数は100に固定し、学生数を2から100まで調整しながら同じ誕生日の人が2人以上いる割合を計算してみましょう。以下では割合を計算する関数<code>Birthday_Func()</code>を作成し、{purrr}の<code>map_dbl()</code>関数を使用して反復処理を行います。関数の作成は第<a href="functions.html"><span>12</span></a>章を、{purrr}の使い方については第<a href="iteration.html"><span>28</span></a>章を参照してください。</p>
-<div class="cell" data-layout-align="center" data-hash="monte_cache/html/monte-birthday-6_d4585d6ca94de4f8bad6b821a0018760">
+<p>　今回は試行回数は100に固定し、学生数を2から100まで調整しながら同じ誕生日の人が2人以上いる割合を計算してみましょう。以下では割合を計算する関数<code>Birthday_Func()</code>を作成し、{purrr}の<code>map_dbl()</code>関数を使用して反復処理を行います。関数の作成は第<a href="functions.html" class="quarto-xref"><span>12</span></a>章を、{purrr}の使い方については第<a href="iteration.html" class="quarto-xref"><span>28</span></a>章を参照してください。</p>
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="co"># 割合を計算する関数を作成する</span></span>
 <span id="cb30-2"><a href="#cb30-2"></a>Birthday_Func <span class="ot">&lt;-</span> <span class="cf">function</span> (n, n_trials) {</span>
 <span id="cb30-3"><a href="#cb30-3"></a>    </span>
@@ -912,10 +952,14 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 ℹ Please use `linewidth` instead.</code></pre>
 </div>
 <div class="cell-output-display">
-<div id="fig-monte-birthday-10" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="monte_files/figure-html/fig-monte-birthday-10-1.png" class="img-fluid figure-img" width="2100"></p>
-<figcaption class="figure-caption">図&nbsp;30.2: 同じ誕生日の人が2人以上いる割合 (%) (試行回数 = 100)</figcaption>
+<div id="fig-monte-birthday-10" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center" data-fig-pos="H">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-monte-birthday-10-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="monte_files/figure-html/fig-monte-birthday-10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-monte-birthday-10-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+図&nbsp;30.2: 同じ誕生日の人が2人以上いる割合 (%) (試行回数 = 100)
+</figcaption>
 </figure>
 </div>
 </div>
@@ -980,7 +1024,7 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 # ℹ 89 more rows</code></pre>
 </div>
 </div>
-<p>　これは人間にとっては読みやすい表ですが、可視化まで考えると、tidyなデータといは言えません。したがって、<code>pivot_longer()</code>関数を使用してtidyなデータに整形します。{tidyr}パッケージの使い方は第<a href="tidydata.html"><span>17</span></a>章を参照してください。</p>
+<p>　これは人間にとっては読みやすい表ですが、可視化まで考えると、tidyなデータといは言えません。したがって、<code>pivot_longer()</code>関数を使用してtidyなデータに整形します。{tidyr}パッケージの使い方は第<a href="tidydata.html" class="quarto-xref"><span>17</span></a>章を参照してください。</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a>Prob_df2 <span class="ot">&lt;-</span> Prob_df <span class="sc">|&gt;</span></span>
 <span id="cb48-2"><a href="#cb48-2"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols      =</span> Probs<span class="sc">:</span>Expect,</span>
@@ -1017,16 +1061,20 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <span id="cb50-8"><a href="#cb50-8"></a>    <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
 <span id="cb50-9"><a href="#cb50-9"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="fig-monte-birthday-16" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="monte_files/figure-html/fig-monte-birthday-16-1.png" class="img-fluid figure-img" width="2100"></p>
-<figcaption class="figure-caption">図&nbsp;30.3: 同じ誕生日の人が2人以上いる割合 (%) (試行回数 = 100)</figcaption>
+<div id="fig-monte-birthday-16" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center" data-fig-pos="H">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-monte-birthday-16-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="monte_files/figure-html/fig-monte-birthday-16-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-monte-birthday-16-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+図&nbsp;30.3: 同じ誕生日の人が2人以上いる割合 (%) (試行回数 = 100)
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
 <p>　最後に以上の作業を試行回数10000としてもう一回やってみましょう。</p>
-<div class="cell" data-layout-align="center" data-hash="monte_cache/html/fig-monte-birthday-17_b90fba0bbdd0906669d84ceed2012efd">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1"></a><span class="co"># 学生数をStudents列に格納したデータフレーム (tibble)を作成</span></span>
 <span id="cb51-2"><a href="#cb51-2"></a>Prob_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Students =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">100</span>)</span>
 <span id="cb51-3"><a href="#cb51-3"></a></span>
@@ -1048,10 +1096,14 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <span id="cb51-19"><a href="#cb51-19"></a>    <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
 <span id="cb51-20"><a href="#cb51-20"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="fig-monte-birthday-17" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="monte_files/figure-html/fig-monte-birthday-17-1.png" class="img-fluid figure-img" width="2100"></p>
-<figcaption class="figure-caption">図&nbsp;30.4: 同じ誕生日の人が2人以上いる割合 (%) (試行回数 = 100)</figcaption>
+<div id="fig-monte-birthday-17" class="quarto-figure quarto-figure-center quarto-float anchored" data-fig-align="center" data-fig-pos="H">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-monte-birthday-17-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="monte_files/figure-html/fig-monte-birthday-17-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-monte-birthday-17-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+図&nbsp;30.4: 同じ誕生日の人が2人以上いる割合 (%) (試行回数 = 100)
+</figcaption>
 </figure>
 </div>
 </div>
@@ -1089,7 +1141,7 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <li>3〜7の手順を1万回繰り返す。</li>
 </ol>
 <p>　以上の手順をコードで書くと以下のようになります。</p>
-<div class="cell" data-layout-align="center" data-hash="monte_cache/html/monte-monty-1_c9b878c62cedd2f338cb00efc9457002">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a>Switch_Yes <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">10000</span>)</span>
 <span id="cb52-2"><a href="#cb52-2"></a>Switch_No  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">10000</span>)</span>
 <span id="cb52-3"><a href="#cb52-3"></a></span>
@@ -1124,24 +1176,24 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="monte_files/figure-html/monte-pi-1-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="monte_files/figure-html/monte-pi-1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　円の面積は<span class="math inline">\(r^2\pi\)</span>であるため、この円の面積は<span class="math inline">\(\pi\)</span>です。また、四角形は辺の長さが2の正四角形ですから面積は4です。続いて、四角形の範囲内の点を付けます。無作為に20個を付けてみます。</p>
-<div class="cell" data-layout-align="center" data-hash="monte_cache/html/monte-pi-2_4e8631ec75e224ad6c4812a892538a4e">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="monte_files/figure-html/monte-pi-2-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="monte_files/figure-html/monte-pi-2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　20個点のうち、円の外側にあるのは5個、円の内側は15個です。つまり、75%の点が円内にあることを意味します。点の位置は無作為ですので、もし円の大きさが<span class="math inline">\(\pi\)</span>であれば、点が円内に入る確率は<span class="math inline">\(\frac{\pi}{4}\)</span>です。今回の例だと<span class="math inline">\(\frac{\pi}{4} = 0.75\)</span>であるため、<span class="math inline">\(\pi = 0.75 \times 4 = 3\)</span>となります。実際の円周率は3.141593…なので、そこそこ近似できていますね。</p>
 <p>　それではこれを実際にやってみましょう。今回は20個の点ではなく、100個にしてみましょう。まず、100個の点を無作為に抽出します。</p>
-<div class="cell" data-layout-align="center" data-hash="monte_cache/html/monte-pi-3_3c7a1242d300b0105bdf8715f43ec96c">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
 <span id="cb56-2"><a href="#cb56-2"></a>pi_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">runif</span>(<span class="dv">100</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>),</span>
 <span id="cb56-3"><a href="#cb56-3"></a>                <span class="at">y =</span> <span class="fu">runif</span>(<span class="dv">100</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>))</span>
@@ -1176,7 +1228,7 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="monte_files/figure-html/monte-pi-4-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="monte_files/figure-html/monte-pi-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -1194,7 +1246,7 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="monte_files/figure-html/monte-pi-5-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="monte_files/figure-html/monte-pi-5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -1219,7 +1271,7 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="monte_files/figure-html/monte-pi-7-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="monte_files/figure-html/monte-pi-7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -1245,11 +1297,11 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 </div>
 </div>
 <p>　今回は100個の点で円周率の近似値を計算しましたが、点の数を増やすとより正確な近似値が得られます。以下の例は10000個の点から得られた円周率の例です。</p>
-<div class="cell" data-layout-align="center" data-hash="monte_cache/html/monte-pi-10_447f8d3ec79e7a62e769f4330d042d95">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="monte_files/figure-html/monte-pi-10-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="monte_files/figure-html/monte-pi-10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -1314,7 +1366,7 @@ mean of x mean of y
 <li><code>i</code>を1増加させる。</li>
 <li>3~6の手順を1万回繰り返す。</li>
 </ol>
-<div class="cell" data-layout-align="center" data-hash="monte_cache/html/monte-boot-2_37a797ead9f6c1b077d13a8dc25714ce">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1"></a>n_trials   <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
 <span id="cb71-2"><a href="#cb71-2"></a>Result_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_trials)</span>
 <span id="cb71-3"><a href="#cb71-3"></a></span>
@@ -1374,7 +1426,6 @@ mean of x mean of y
 <p>　これまでの結果を比較してみましょう。</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-
 <div id="nqkariscnw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#nqkariscnw table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -1815,45 +1866,56 @@ mean of x mean of y
   text-indent: 25px;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: center;" scope="col" id=""></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: center;" scope="col" id="t検定">t検定</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: center;" scope="col" id="ブートストラップ">ブートストラップ</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="Stat1" class="gt_row gt_left">(1): 平均値の差分</td>
-<td headers="ttest" class="gt_row gt_right">-0.307</td>
-<td headers="boot" class="gt_row gt_right">-0.305</td></tr>
-    <tr><td headers="Stat1" class="gt_row gt_left">(2): 標準誤差</td>
-<td headers="ttest" class="gt_row gt_right">0.141</td>
-<td headers="boot" class="gt_row gt_right">0.140</td></tr>
-    <tr><td headers="Stat1" class="gt_row gt_left">(3): 95%信頼区間</td>
-<td headers="ttest" class="gt_row gt_right">[-0.585, -0.028]</td>
-<td headers="boot" class="gt_row gt_right"></td></tr>
-    <tr><td headers="Stat1" class="gt_row gt_left">(4): 95%信頼区間 (百分位数)</td>
-<td headers="ttest" class="gt_row gt_right"></td>
-<td headers="boot" class="gt_row gt_right">[-0.581, -0.030]</td></tr>
-    <tr><td headers="Stat1" class="gt_row gt_left">(5): 95%信頼区間 (Wald)</td>
-<td headers="ttest" class="gt_row gt_right"></td>
-<td headers="boot" class="gt_row gt_right">[-0.582, -0.031]</td></tr>
-    <tr><td headers="Stat1" class="gt_row gt_left">(6): 95%信頼区間 (バイアス修正Wald)</td>
-<td headers="ttest" class="gt_row gt_right"></td>
-<td headers="boot" class="gt_row gt_right">[-0.580, -0.029]</td></tr>
-  </tbody>
-  
-  
+
+<table class="gt_table table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" style="text-align: center;" data-quarto-table-cell-role="th" scope="col"></th>
+<th id="t検定" class="gt_col_heading gt_columns_bottom_border gt_right" style="text-align: center;" data-quarto-table-cell-role="th" scope="col">t検定</th>
+<th id="ブートストラップ" class="gt_col_heading gt_columns_bottom_border gt_right" style="text-align: center;" data-quarto-table-cell-role="th" scope="col">ブートストラップ</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="Stat1">(1): 平均値の差分</td>
+<td class="gt_row gt_right" headers="ttest">-0.307</td>
+<td class="gt_row gt_right" headers="boot">-0.305</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Stat1">(2): 標準誤差</td>
+<td class="gt_row gt_right" headers="ttest">0.141</td>
+<td class="gt_row gt_right" headers="boot">0.140</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Stat1">(3): 95%信頼区間</td>
+<td class="gt_row gt_right" headers="ttest">[-0.585, -0.028]</td>
+<td class="gt_row gt_right" headers="boot"></td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Stat1">(4): 95%信頼区間 (百分位数)</td>
+<td class="gt_row gt_right" headers="ttest"></td>
+<td class="gt_row gt_right" headers="boot">[-0.581, -0.030]</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Stat1">(5): 95%信頼区間 (Wald)</td>
+<td class="gt_row gt_right" headers="ttest"></td>
+<td class="gt_row gt_right" headers="boot">[-0.582, -0.031]</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Stat1">(6): 95%信頼区間 (バイアス修正Wald)</td>
+<td class="gt_row gt_right" headers="ttest"></td>
+<td class="gt_row gt_right" headers="boot">[-0.580, -0.029]</td>
+</tr>
+</tbody>
 </table>
+
 </div>
 </div>
 </div>
 <p>　今回の例は<code>t.test()</code>関数を使えば一発で終わる問題ですが、モデルが複雑になれば推定量の不確実性の計算が難しくなるケースがあります。その時に力を発揮するのがブートストラップ方であり、{boot}、{bootstrap}、{simpleboot}など様々なパッケージが利用可能です。</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
 <div id="ref-Efron:1979" class="csl-entry" role="listitem">
 Efron, Bradley. 1979. <span>「Bootstrap Methods: Another Look at the Jackknife」</span>. <em>The Annals of Statistics</em> 7: 1–26.
 </div>
@@ -1946,10 +2008,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/www\.jaysong\.net\/RBook\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1959,8 +2038,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1973,6 +2061,120 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -2016,6 +2218,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -2041,8 +2244,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
-      // Handle positioning of the toggle
-      window.addEventListener(
+        // Handle positioning of the toggle
+    window.addEventListener(
       "resize",
       throttle(() => {
         elRect = undefined;
@@ -2050,23 +2253,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
           selectCodeLines(selectedAnnoteEl);
         }
       }, 10)
-      );
-      function throttle(fn, ms) {
-      let throttle = false;
-      let timer;
-        return (...args) => {
-          if(!throttle) { // first call gets through
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
               fn.apply(this, args);
-              throttle = true;
-          } else { // all the others get throttled
-              if(timer) clearTimeout(timer); // cancel #2
-              timer = setTimeout(() => {
-                fn.apply(this, args);
-                timer = throttle = false;
-              }, ms);
-          }
-        };
-      }
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
       for (let i=0; i<annoteTargets.length; i++) {
         const annoteTarget = annoteTargets[i];
@@ -2111,7 +2314,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
               options: {
                 flipVariations: false, // true by default
                 allowedAutoPlacements: ['right'],
-                fallbackPlacements: ['right', 'top', 'top-start', 'top-end'],
+                fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
               },
             },
             {
@@ -2163,30 +2366,16 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
   }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var filterRegex = new RegExp("https:\/\/www\.jaysong\.net\/RBook\/");
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-          // target, if specified
-          link.setAttribute("target", "_blank");
-      }
-    }
 });
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./oop.html" class="pagination-link">
+      <a href="./oop.html" class="pagination-link  aria-label=" &lt;span="">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">オブジェクト指向プログラミング</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./scraping.html" class="pagination-link">
+      <a href="./scraping.html" class="pagination-link" aria-label="<span class='chapter-number'>31</span>&nbsp; <span class='chapter-title'>スクレイピング</span>">
         <span class="nav-page-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">スクレイピング</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
@@ -2197,12 +2386,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">
       &nbsp;
     </div>   
-    <div class="nav-footer-center">Copyright 2023, <a href="https://www.jaysong.net">Jaehyun Song</a> and <a href="https://yukiyanai.github.io/">Yuki Yanai</a></div>
+    <div class="nav-footer-center">
+<p>Copyright 2023, <a href="https://www.jaysong.net">Jaehyun Song</a> and <a href="https://yukiyanai.github.io/">Yuki Yanai</a></p>
+</div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
+
 
 
 

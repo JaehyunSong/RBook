@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.542">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -22,7 +22,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -81,7 +81,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -90,6 +96,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "サーチ"
@@ -110,10 +117,37 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
 <meta property="og:title" content="私たちのR: ベストプラクティスの探求">
 <meta property="og:description" content="R Not for Everyone: An Esoteric Guide">
 <meta property="og:image" content="https://www.jaysong.net/RBook/Figs/favicon.png">
-<meta property="og:site-name" content="私たちのR">
+<meta property="og:site_name" content="私たちのR">
 <meta property="og:image:height" content="260">
 <meta property="og:image:width" content="260">
 <meta name="twitter:title" content="私たちのR: ベストプラクティスの探求">
@@ -126,17 +160,16 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 
 <body class="nav-sidebar docked">
 
-
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="サイドバーを切り替える" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="サイドバーを切り替える" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./visualization1.html">可視化</a></li><li class="breadcrumb-item"><a href="./visualization2.html"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">可視化 [基礎]</span></a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="サイドバーを切り替える" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./visualization1.html">可視化</a></li><li class="breadcrumb-item"><a href="./visualization2.html"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">可視化 [基礎]</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="サイドバーを切り替える" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
@@ -146,12 +179,12 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">私たちのR</a> 
         <div class="sidebar-tools-main">
-    <a href="https://github.com/JaehyunSong/RBook/" rel="" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="https://github.com/JaehyunSong/RBook/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
     <div class="dropdown">
       <a href="" title="Share" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Share"><i class="bi bi-share"></i></a>
       <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
@@ -482,7 +515,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -536,7 +569,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./visualization1.html">可視化</a></li><li class="breadcrumb-item"><a href="./visualization2.html"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">可視化 [基礎]</span></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title"><span id="sec-visualization2" class="quarto-section-identifier"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">可視化 [基礎]</span></span></h1>
 </div>
@@ -551,7 +584,9 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   </div>
   
 
+
 </header>
+
 
 <section id="本章の内容" class="level2" data-number="20.1">
 <h2 data-number="20.1" class="anchored" data-anchor-id="本章の内容"><span class="header-section-number">20.1</span> 本章の内容</h2>
@@ -563,7 +598,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <li><a href="#sec-visual2-scatter">散布図</a></li>
 <li><a href="#sec-visual2-line">折れ線グラフ</a></li>
 </ol>
-<p>　その他の図ついては第<a href="visualization4.html"><span>22</span></a>章、図の細かい修正については第<a href="visualization3.html"><span>21</span></a>章で解説します。また、使用するPCの環境によっては図の文字化けが生じる可能性があります。この場合は第<a href="#sec-visual2-japanese"><span>20.8</span></a>、<a href="#sec-visual2-save"><span>20.9</span></a>章を参照してください。</p>
+<p>　その他の図ついては第<a href="visualization4.html" class="quarto-xref"><span>22</span></a>章、図の細かい修正については第<a href="visualization3.html" class="quarto-xref"><span>21</span></a>章で解説します。また、使用するPCの環境によっては図の文字化けが生じる可能性があります。この場合は第<a href="#sec-visual2-japanese" class="quarto-xref"><span>20.8</span></a>、<a href="#sec-visual2-save" class="quarto-xref"><span>20.9</span></a>章を参照してください。</p>
 </section>
 <section id="sec-visual2-data" class="level2" data-number="20.2">
 <h2 data-number="20.2" class="anchored" data-anchor-id="sec-visual2-data"><span class="header-section-number">20.2</span> 実習用データ</h2>
@@ -580,26 +615,25 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <span id="cb1-4"><a href="#cb1-4"></a>COVID19_df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Data/COVID19_Worldwide.csv"</span>, <span class="at">guess_max =</span> <span class="dv">10000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　これらの変数はSONGが適当にインターネットなどで集めたデータであり、あくまでも実習用データとしてのみお使い下さい。各変数の詳細は以下の通りです。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-sampledata-1_83814bc3600426165daf9fb5d9f4add3">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-
-<div id="axwdnuyjzc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#axwdnuyjzc table {
+<div id="hfxrersyid" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#hfxrersyid table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#axwdnuyjzc thead, #axwdnuyjzc tbody, #axwdnuyjzc tfoot, #axwdnuyjzc tr, #axwdnuyjzc td, #axwdnuyjzc th {
+#hfxrersyid thead, #hfxrersyid tbody, #hfxrersyid tfoot, #hfxrersyid tr, #hfxrersyid td, #hfxrersyid th {
   border-style: none;
 }
 
-#axwdnuyjzc p {
+#hfxrersyid p {
   margin: 0;
   padding: 0;
 }
 
-#axwdnuyjzc .gt_table {
+#hfxrersyid .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -625,12 +659,12 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-left-color: #D3D3D3;
 }
 
-#axwdnuyjzc .gt_caption {
+#hfxrersyid .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#axwdnuyjzc .gt_title {
+#hfxrersyid .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -642,7 +676,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-bottom-width: 0;
 }
 
-#axwdnuyjzc .gt_subtitle {
+#hfxrersyid .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -654,7 +688,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-top-width: 0;
 }
 
-#axwdnuyjzc .gt_heading {
+#hfxrersyid .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -666,13 +700,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-right-color: #D3D3D3;
 }
 
-#axwdnuyjzc .gt_bottom_border {
+#hfxrersyid .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#axwdnuyjzc .gt_col_headings {
+#hfxrersyid .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -687,7 +721,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-right-color: #D3D3D3;
 }
 
-#axwdnuyjzc .gt_col_heading {
+#hfxrersyid .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -707,7 +741,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   overflow-x: hidden;
 }
 
-#axwdnuyjzc .gt_column_spanner_outer {
+#hfxrersyid .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -719,15 +753,15 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   padding-right: 4px;
 }
 
-#axwdnuyjzc .gt_column_spanner_outer:first-child {
+#hfxrersyid .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#axwdnuyjzc .gt_column_spanner_outer:last-child {
+#hfxrersyid .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#axwdnuyjzc .gt_column_spanner {
+#hfxrersyid .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -739,11 +773,11 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   width: 100%;
 }
 
-#axwdnuyjzc .gt_spanner_row {
+#hfxrersyid .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#axwdnuyjzc .gt_group_heading {
+#hfxrersyid .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -769,7 +803,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   text-align: left;
 }
 
-#axwdnuyjzc .gt_empty_group_heading {
+#hfxrersyid .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -784,15 +818,15 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   vertical-align: middle;
 }
 
-#axwdnuyjzc .gt_from_md > :first-child {
+#hfxrersyid .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#axwdnuyjzc .gt_from_md > :last-child {
+#hfxrersyid .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#axwdnuyjzc .gt_row {
+#hfxrersyid .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -811,7 +845,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   overflow-x: hidden;
 }
 
-#axwdnuyjzc .gt_stub {
+#hfxrersyid .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -824,7 +858,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   padding-right: 5px;
 }
 
-#axwdnuyjzc .gt_stub_row_group {
+#hfxrersyid .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -838,15 +872,15 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   vertical-align: top;
 }
 
-#axwdnuyjzc .gt_row_group_first td {
+#hfxrersyid .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#axwdnuyjzc .gt_row_group_first th {
+#hfxrersyid .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#axwdnuyjzc .gt_summary_row {
+#hfxrersyid .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -856,16 +890,16 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   padding-right: 5px;
 }
 
-#axwdnuyjzc .gt_first_summary_row {
+#hfxrersyid .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#axwdnuyjzc .gt_first_summary_row.thick {
+#hfxrersyid .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#axwdnuyjzc .gt_last_summary_row {
+#hfxrersyid .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -875,7 +909,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-bottom-color: #D3D3D3;
 }
 
-#axwdnuyjzc .gt_grand_summary_row {
+#hfxrersyid .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -885,7 +919,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   padding-right: 5px;
 }
 
-#axwdnuyjzc .gt_first_grand_summary_row {
+#hfxrersyid .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -895,7 +929,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-top-color: #D3D3D3;
 }
 
-#axwdnuyjzc .gt_last_grand_summary_row_top {
+#hfxrersyid .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -905,11 +939,11 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-bottom-color: #D3D3D3;
 }
 
-#axwdnuyjzc .gt_striped {
+#hfxrersyid .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#axwdnuyjzc .gt_table_body {
+#hfxrersyid .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -918,7 +952,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-bottom-color: #D3D3D3;
 }
 
-#axwdnuyjzc .gt_footnotes {
+#hfxrersyid .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -932,7 +966,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-right-color: #D3D3D3;
 }
 
-#axwdnuyjzc .gt_footnote {
+#hfxrersyid .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -941,7 +975,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   padding-right: 5px;
 }
 
-#axwdnuyjzc .gt_sourcenotes {
+#hfxrersyid .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -955,7 +989,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-right-color: #D3D3D3;
 }
 
-#axwdnuyjzc .gt_sourcenote {
+#hfxrersyid .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -963,175 +997,196 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   padding-right: 5px;
 }
 
-#axwdnuyjzc .gt_left {
+#hfxrersyid .gt_left {
   text-align: left;
 }
 
-#axwdnuyjzc .gt_center {
+#hfxrersyid .gt_center {
   text-align: center;
 }
 
-#axwdnuyjzc .gt_right {
+#hfxrersyid .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#axwdnuyjzc .gt_font_normal {
+#hfxrersyid .gt_font_normal {
   font-weight: normal;
 }
 
-#axwdnuyjzc .gt_font_bold {
+#hfxrersyid .gt_font_bold {
   font-weight: bold;
 }
 
-#axwdnuyjzc .gt_font_italic {
+#hfxrersyid .gt_font_italic {
   font-style: italic;
 }
 
-#axwdnuyjzc .gt_super {
+#hfxrersyid .gt_super {
   font-size: 65%;
 }
 
-#axwdnuyjzc .gt_footnote_marks {
+#hfxrersyid .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#axwdnuyjzc .gt_asterisk {
+#hfxrersyid .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#axwdnuyjzc .gt_indent_1 {
+#hfxrersyid .gt_indent_1 {
   text-indent: 5px;
 }
 
-#axwdnuyjzc .gt_indent_2 {
+#hfxrersyid .gt_indent_2 {
   text-indent: 10px;
 }
 
-#axwdnuyjzc .gt_indent_3 {
+#hfxrersyid .gt_indent_3 {
   text-indent: 15px;
 }
 
-#axwdnuyjzc .gt_indent_4 {
+#hfxrersyid .gt_indent_4 {
   text-indent: 20px;
 }
 
-#axwdnuyjzc .gt_indent_5 {
+#hfxrersyid .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="変数名">変数名</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="説明">説明</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="備考">備考</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>Country</code></p>
-</div></td>
-<td headers="Name" class="gt_row gt_left">国名</td>
-<td headers="Desc" class="gt_row gt_left"></td></tr>
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>Population</code></p>
-</div></td>
-<td headers="Name" class="gt_row gt_left">人口</td>
-<td headers="Desc" class="gt_row gt_left">人</td></tr>
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>Area</code></p>
-</div></td>
-<td headers="Name" class="gt_row gt_left">面積</td>
-<td headers="Desc" class="gt_row gt_left">km$^2$</td></tr>
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>GDP</code></p>
-</div></td>
-<td headers="Name" class="gt_row gt_left">国内総生産 (GDP)</td>
-<td headers="Desc" class="gt_row gt_left">100万米ドル</td></tr>
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>PPP</code></p>
-</div></td>
-<td headers="Name" class="gt_row gt_left">GDP (購買力平価):</td>
-<td headers="Desc" class="gt_row gt_left">100万米ドル</td></tr>
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>GDP_per_capita</code></p>
-</div></td>
-<td headers="Name" class="gt_row gt_left">一人あたりGDP</td>
-<td headers="Desc" class="gt_row gt_left">米ドル</td></tr>
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>PPP_per_capita</code></p>
-</div></td>
-<td headers="Name" class="gt_row gt_left">一人あたりGDP (購買力平価)</td>
-<td headers="Desc" class="gt_row gt_left">米ドル</td></tr>
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>G7</code></p>
-</div></td>
-<td headers="Name" class="gt_row gt_left">G7構成国</td>
-<td headers="Desc" class="gt_row gt_left">1:構成国, 0:構成国以外</td></tr>
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>G20</code></p>
-</div></td>
-<td headers="Name" class="gt_row gt_left">G20構成国</td>
-<td headers="Desc" class="gt_row gt_left">1:構成国, 0:構成国以外</td></tr>
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>OECD</code></p>
-</div></td>
-<td headers="Name" class="gt_row gt_left">OECD構成国</td>
-<td headers="Desc" class="gt_row gt_left">1:構成国, 0:構成国以外</td></tr>
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>HDI_2018</code></p>
-</div></td>
-<td headers="Name" class="gt_row gt_left">人間開発指数</td>
-<td headers="Desc" class="gt_row gt_left">2018年基準</td></tr>
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>Polity_Score</code></p>
-</div></td>
-<td headers="Name" class="gt_row gt_left">民主主義の程度</td>
-<td headers="Desc" class="gt_row gt_left">Polity IVから; -10:権威主義〜10:民主主義</td></tr>
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>Polity_Type</code></p>
-</div></td>
-<td headers="Name" class="gt_row gt_left">民主主義の程度 (カテゴリ)</td>
-<td headers="Desc" class="gt_row gt_left"></td></tr>
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>FH_PR</code></p>
-</div></td>
-<td headers="Name" class="gt_row gt_left">政治的自由の指標</td>
-<td headers="Desc" class="gt_row gt_left">2020年基準; Freedom Houseから</td></tr>
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>FH_CL</code></p>
-</div></td>
-<td headers="Name" class="gt_row gt_left">市民的自由の指標</td>
-<td headers="Desc" class="gt_row gt_left">2020年基準; Freedom Houseから</td></tr>
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>FH_Total</code></p>
-</div></td>
-<td headers="Name" class="gt_row gt_left">政治的自由と市民的自由の合計</td>
-<td headers="Desc" class="gt_row gt_left">2020年基準; Freedom Houseから</td></tr>
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>FH_Status</code></p>
-</div></td>
-<td headers="Name" class="gt_row gt_left">総合評価</td>
-<td headers="Desc" class="gt_row gt_left">F:完全な自由; PF:一部自由; NF:不自由</td></tr>
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>Continent</code></p>
-</div></td>
-<td headers="Name" class="gt_row gt_left">大陸</td>
-<td headers="Desc" class="gt_row gt_left"></td></tr>
-  </tbody>
-  
-  
-</table>
-</div>
-</div>
-</div>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-sampledata-2_b7674bb2e550117a1ec29998abfd3cd8">
-<div class="cell-output-display">
 
-<div id="cfplrjuskc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#cfplrjuskc table {
+<table class="gt_table table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header gt_col_headings">
+<th id="変数名" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">変数名</th>
+<th id="説明" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">説明</th>
+<th id="備考" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">備考</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="Var"><p><code>Country</code></p></td>
+<td class="gt_row gt_left" headers="Name">国名</td>
+<td class="gt_row gt_left" headers="Desc"></td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Var"><p><code>Population</code></p></td>
+<td class="gt_row gt_left" headers="Name">人口</td>
+<td class="gt_row gt_left" headers="Desc">人</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Var"><p><code>Area</code></p></td>
+<td class="gt_row gt_left" headers="Name">面積</td>
+<td class="gt_row gt_left" headers="Desc">km$^2$</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Var"><p><code>GDP</code></p></td>
+<td class="gt_row gt_left" headers="Name">国内総生産 (GDP)</td>
+<td class="gt_row gt_left" headers="Desc">100万米ドル</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Var"><p><code>PPP</code></p></td>
+<td class="gt_row gt_left" headers="Name">GDP (購買力平価):</td>
+<td class="gt_row gt_left" headers="Desc">100万米ドル</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Var"><p><code>GDP_per_capita</code></p></td>
+<td class="gt_row gt_left" headers="Name">一人あたりGDP</td>
+<td class="gt_row gt_left" headers="Desc">米ドル</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Var"><p><code>PPP_per_capita</code></p></td>
+<td class="gt_row gt_left" headers="Name">一人あたりGDP (購買力平価)</td>
+<td class="gt_row gt_left" headers="Desc">米ドル</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Var"><p><code>G7</code></p></td>
+<td class="gt_row gt_left" headers="Name">G7構成国</td>
+<td class="gt_row gt_left" headers="Desc">1:構成国, 0:構成国以外</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Var"><p><code>G20</code></p></td>
+<td class="gt_row gt_left" headers="Name">G20構成国</td>
+<td class="gt_row gt_left" headers="Desc">1:構成国, 0:構成国以外</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Var"><p><code>OECD</code></p></td>
+<td class="gt_row gt_left" headers="Name">OECD構成国</td>
+<td class="gt_row gt_left" headers="Desc">1:構成国, 0:構成国以外</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Var"><p><code>HDI_2018</code></p></td>
+<td class="gt_row gt_left" headers="Name">人間開発指数</td>
+<td class="gt_row gt_left" headers="Desc">2018年基準</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Var"><p><code>Polity_Score</code></p></td>
+<td class="gt_row gt_left" headers="Name">民主主義の程度</td>
+<td class="gt_row gt_left" headers="Desc">Polity IVから; -10:権威主義〜10:民主主義</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Var"><p><code>Polity_Type</code></p></td>
+<td class="gt_row gt_left" headers="Name">民主主義の程度 (カテゴリ)</td>
+<td class="gt_row gt_left" headers="Desc"></td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Var"><p><code>FH_PR</code></p></td>
+<td class="gt_row gt_left" headers="Name">政治的自由の指標</td>
+<td class="gt_row gt_left" headers="Desc">2020年基準; Freedom Houseから</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Var"><p><code>FH_CL</code></p></td>
+<td class="gt_row gt_left" headers="Name">市民的自由の指標</td>
+<td class="gt_row gt_left" headers="Desc">2020年基準; Freedom Houseから</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Var"><p><code>FH_Total</code></p></td>
+<td class="gt_row gt_left" headers="Name">政治的自由と市民的自由の合計</td>
+<td class="gt_row gt_left" headers="Desc">2020年基準; Freedom Houseから</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Var"><p><code>FH_Status</code></p></td>
+<td class="gt_row gt_left" headers="Name">総合評価</td>
+<td class="gt_row gt_left" headers="Desc">F:完全な自由; PF:一部自由; NF:不自由</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Var"><p><code>Continent</code></p></td>
+<td class="gt_row gt_left" headers="Name">大陸</td>
+<td class="gt_row gt_left" headers="Desc"></td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div id="lwbjsxvizu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#lwbjsxvizu table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#cfplrjuskc thead, #cfplrjuskc tbody, #cfplrjuskc tfoot, #cfplrjuskc tr, #cfplrjuskc td, #cfplrjuskc th {
+#lwbjsxvizu thead, #lwbjsxvizu tbody, #lwbjsxvizu tfoot, #lwbjsxvizu tr, #lwbjsxvizu td, #lwbjsxvizu th {
   border-style: none;
 }
 
-#cfplrjuskc p {
+#lwbjsxvizu p {
   margin: 0;
   padding: 0;
 }
 
-#cfplrjuskc .gt_table {
+#lwbjsxvizu .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1157,12 +1212,12 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-left-color: #D3D3D3;
 }
 
-#cfplrjuskc .gt_caption {
+#lwbjsxvizu .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#cfplrjuskc .gt_title {
+#lwbjsxvizu .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1174,7 +1229,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-bottom-width: 0;
 }
 
-#cfplrjuskc .gt_subtitle {
+#lwbjsxvizu .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1186,7 +1241,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-top-width: 0;
 }
 
-#cfplrjuskc .gt_heading {
+#lwbjsxvizu .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1198,13 +1253,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-right-color: #D3D3D3;
 }
 
-#cfplrjuskc .gt_bottom_border {
+#lwbjsxvizu .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#cfplrjuskc .gt_col_headings {
+#lwbjsxvizu .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1219,7 +1274,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-right-color: #D3D3D3;
 }
 
-#cfplrjuskc .gt_col_heading {
+#lwbjsxvizu .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1239,7 +1294,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   overflow-x: hidden;
 }
 
-#cfplrjuskc .gt_column_spanner_outer {
+#lwbjsxvizu .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1251,15 +1306,15 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   padding-right: 4px;
 }
 
-#cfplrjuskc .gt_column_spanner_outer:first-child {
+#lwbjsxvizu .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#cfplrjuskc .gt_column_spanner_outer:last-child {
+#lwbjsxvizu .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#cfplrjuskc .gt_column_spanner {
+#lwbjsxvizu .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1271,11 +1326,11 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   width: 100%;
 }
 
-#cfplrjuskc .gt_spanner_row {
+#lwbjsxvizu .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#cfplrjuskc .gt_group_heading {
+#lwbjsxvizu .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1301,7 +1356,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   text-align: left;
 }
 
-#cfplrjuskc .gt_empty_group_heading {
+#lwbjsxvizu .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1316,15 +1371,15 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   vertical-align: middle;
 }
 
-#cfplrjuskc .gt_from_md > :first-child {
+#lwbjsxvizu .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#cfplrjuskc .gt_from_md > :last-child {
+#lwbjsxvizu .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#cfplrjuskc .gt_row {
+#lwbjsxvizu .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1343,7 +1398,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   overflow-x: hidden;
 }
 
-#cfplrjuskc .gt_stub {
+#lwbjsxvizu .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1356,7 +1411,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   padding-right: 5px;
 }
 
-#cfplrjuskc .gt_stub_row_group {
+#lwbjsxvizu .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1370,15 +1425,15 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   vertical-align: top;
 }
 
-#cfplrjuskc .gt_row_group_first td {
+#lwbjsxvizu .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#cfplrjuskc .gt_row_group_first th {
+#lwbjsxvizu .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#cfplrjuskc .gt_summary_row {
+#lwbjsxvizu .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1388,16 +1443,16 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   padding-right: 5px;
 }
 
-#cfplrjuskc .gt_first_summary_row {
+#lwbjsxvizu .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#cfplrjuskc .gt_first_summary_row.thick {
+#lwbjsxvizu .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#cfplrjuskc .gt_last_summary_row {
+#lwbjsxvizu .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1407,7 +1462,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-bottom-color: #D3D3D3;
 }
 
-#cfplrjuskc .gt_grand_summary_row {
+#lwbjsxvizu .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1417,7 +1472,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   padding-right: 5px;
 }
 
-#cfplrjuskc .gt_first_grand_summary_row {
+#lwbjsxvizu .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1427,7 +1482,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-top-color: #D3D3D3;
 }
 
-#cfplrjuskc .gt_last_grand_summary_row_top {
+#lwbjsxvizu .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1437,11 +1492,11 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-bottom-color: #D3D3D3;
 }
 
-#cfplrjuskc .gt_striped {
+#lwbjsxvizu .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#cfplrjuskc .gt_table_body {
+#lwbjsxvizu .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1450,7 +1505,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-bottom-color: #D3D3D3;
 }
 
-#cfplrjuskc .gt_footnotes {
+#lwbjsxvizu .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1464,7 +1519,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-right-color: #D3D3D3;
 }
 
-#cfplrjuskc .gt_footnote {
+#lwbjsxvizu .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1473,7 +1528,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   padding-right: 5px;
 }
 
-#cfplrjuskc .gt_sourcenotes {
+#lwbjsxvizu .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1487,7 +1542,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-right-color: #D3D3D3;
 }
 
-#cfplrjuskc .gt_sourcenote {
+#lwbjsxvizu .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1495,106 +1550,118 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   padding-right: 5px;
 }
 
-#cfplrjuskc .gt_left {
+#lwbjsxvizu .gt_left {
   text-align: left;
 }
 
-#cfplrjuskc .gt_center {
+#lwbjsxvizu .gt_center {
   text-align: center;
 }
 
-#cfplrjuskc .gt_right {
+#lwbjsxvizu .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#cfplrjuskc .gt_font_normal {
+#lwbjsxvizu .gt_font_normal {
   font-weight: normal;
 }
 
-#cfplrjuskc .gt_font_bold {
+#lwbjsxvizu .gt_font_bold {
   font-weight: bold;
 }
 
-#cfplrjuskc .gt_font_italic {
+#lwbjsxvizu .gt_font_italic {
   font-style: italic;
 }
 
-#cfplrjuskc .gt_super {
+#lwbjsxvizu .gt_super {
   font-size: 65%;
 }
 
-#cfplrjuskc .gt_footnote_marks {
+#lwbjsxvizu .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#cfplrjuskc .gt_asterisk {
+#lwbjsxvizu .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#cfplrjuskc .gt_indent_1 {
+#lwbjsxvizu .gt_indent_1 {
   text-indent: 5px;
 }
 
-#cfplrjuskc .gt_indent_2 {
+#lwbjsxvizu .gt_indent_2 {
   text-indent: 10px;
 }
 
-#cfplrjuskc .gt_indent_3 {
+#lwbjsxvizu .gt_indent_3 {
   text-indent: 15px;
 }
 
-#cfplrjuskc .gt_indent_4 {
+#lwbjsxvizu .gt_indent_4 {
   text-indent: 20px;
 }
 
-#cfplrjuskc .gt_indent_5 {
+#lwbjsxvizu .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="変数名">変数名</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="説明">説明</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>ID</code></p>
-</div></td>
-<td headers="Desc" class="gt_row gt_left">ID</td></tr>
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>Country</code></p>
-</div></td>
-<td headers="Desc" class="gt_row gt_left">国名</td></tr>
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>Date</code></p>
-</div></td>
-<td headers="Desc" class="gt_row gt_left">年月日</td></tr>
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>Confirmed_Day</code></p>
-</div></td>
-<td headers="Desc" class="gt_row gt_left">COVID-19 新規感染者数（人）</td></tr>
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>Confirmed_Total</code></p>
-</div></td>
-<td headers="Desc" class="gt_row gt_left">COVID-19 累積感染者数（人）</td></tr>
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>Death_Day</code></p>
-</div></td>
-<td headers="Desc" class="gt_row gt_left">COVID-19 新規死亡者数（人）</td></tr>
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>Death_Total</code></p>
-</div></td>
-<td headers="Desc" class="gt_row gt_left">COVID-19 累積死亡者数（人）</td></tr>
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>Test_Day</code></p>
-</div></td>
-<td headers="Desc" class="gt_row gt_left">COVID-19 新規検査数（人）</td></tr>
-    <tr><td headers="Var" class="gt_row gt_left"><div class="gt_from_md"><p><code>Test_Total</code></p>
-</div></td>
-<td headers="Desc" class="gt_row gt_left">COVID-19 累積検査数（人）</td></tr>
-  </tbody>
-  
-  
+
+<table class="gt_table table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header gt_col_headings">
+<th id="変数名" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">変数名</th>
+<th id="説明" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">説明</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="Var"><p><code>ID</code></p></td>
+<td class="gt_row gt_left" headers="Desc">ID</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Var"><p><code>Country</code></p></td>
+<td class="gt_row gt_left" headers="Desc">国名</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Var"><p><code>Date</code></p></td>
+<td class="gt_row gt_left" headers="Desc">年月日</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Var"><p><code>Confirmed_Day</code></p></td>
+<td class="gt_row gt_left" headers="Desc">COVID-19 新規感染者数（人）</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Var"><p><code>Confirmed_Total</code></p></td>
+<td class="gt_row gt_left" headers="Desc">COVID-19 累積感染者数（人）</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Var"><p><code>Death_Day</code></p></td>
+<td class="gt_row gt_left" headers="Desc">COVID-19 新規死亡者数（人）</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Var"><p><code>Death_Total</code></p></td>
+<td class="gt_row gt_left" headers="Desc">COVID-19 累積死亡者数（人）</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Var"><p><code>Test_Day</code></p></td>
+<td class="gt_row gt_left" headers="Desc">COVID-19 新規検査数（人）</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Var"><p><code>Test_Total</code></p></td>
+<td class="gt_row gt_left" headers="Desc">COVID-19 累積検査数（人）</td>
+</tr>
+</tbody>
 </table>
+
 </div>
 </div>
 </div>
@@ -1627,7 +1694,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-barplot-2-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-barplot-2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
@@ -1665,12 +1732,12 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-barplot-4-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-barplot-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>　考えてみれば、大陸名が英語になっていますね。図内の言語は統一するのが原則であり、図の言語は論文やレポート、報告書の言語とも一致させるべきです。ここは<code>Bar_df1</code>の<code>Continent</code>列の値を日本語に置換するだけでいいので、<code>recode()</code>関数を使います。<code>recode()</code>の使い方は第<a href="datahandling3.html#sec-handling3-mutate"><span>15.1</span></a>章を参照してください。また、順番はローマ字順にしたいので、<code>fct_inorder()</code>を使って、<code>Bar_df1</code>における表示順でfactor化を行います。</p>
+<p>　考えてみれば、大陸名が英語になっていますね。図内の言語は統一するのが原則であり、図の言語は論文やレポート、報告書の言語とも一致させるべきです。ここは<code>Bar_df1</code>の<code>Continent</code>列の値を日本語に置換するだけでいいので、<code>recode()</code>関数を使います。<code>recode()</code>の使い方は第<a href="datahandling3.html#sec-handling3-mutate" class="quarto-xref"><span>15.1</span></a>章を参照してください。また、順番はローマ字順にしたいので、<code>fct_inorder()</code>を使って、<code>Bar_df1</code>における表示順でfactor化を行います。</p>
 <div class="cell" data-layout-align="center" data-cahce="true">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>Bar_df1 <span class="sc">|&gt;</span></span>
 <span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">mutate</span>(<span class="at">Continent =</span> <span class="fu">recode</span>(Continent,</span>
@@ -1687,7 +1754,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-barplot-5-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-barplot-5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
@@ -1760,7 +1827,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-barplot-8-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization2_files/figure-html/visual2-barplot-8-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -1776,7 +1843,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-barplot-9-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization2_files/figure-html/visual2-barplot-9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -1827,7 +1894,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-barplot-11-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization2_files/figure-html/visual2-barplot-11-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -1838,7 +1905,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <section id="sec-visual2-histogram" class="level2" data-number="20.4">
 <h2 data-number="20.4" class="anchored" data-anchor-id="sec-visual2-histogram"><span class="header-section-number">20.4</span> ヒストグラム</h2>
 <p>　ヒストグラムは棒グラフと非常に形が似ていますが、横軸が大陸のような離散変数でなく、連続変数であるのが特徴です。連続変数をいくつの区間（階級）に分け、その区間内に属するケース数（度数）を示したのが度数分布表、そして度数分布表をかしかしたものがヒストグラムです。連続変数を扱っているため、棒間に隙間がありません。それでもケース数の棒グラフと非常に似通っているため、マッピングの仕方も同じです。異なるのは幾何オブジェクトが<code>geom_bar()</code>でなく、<code>geom_histogram()</code>に変わるくらいです。世界の富がどのように分布しているかを確認するために、<code>Country_df</code>の<code>GDP</code>のヒストグラムを作ってみます。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-histogram-1_c4fd340c5663b885bcc7271787b77f6c">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>Country_df <span class="sc">|&gt;</span> </span>
 <span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb18-3"><a href="#cb18-3"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x =</span> GDP)) <span class="sc">+</span></span>
@@ -1847,13 +1914,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-histogram-1-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-histogram-1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　ケース数の棒グラフのコードとほぼ同じです。横軸の数値が<code>2.0e+07</code>になっているのは<code>2 \times 10^7</code>、つまり2千万を意味します。普通に表記すると<code>20000000</code>になりますね。また、GDPの単位は100万ドルであるため、実際のGDPは20兆ドルになります。つまり、今のヒストグラムにおいて横軸の目盛りは5兆ドルになっています。この軸の数値を「0, 5e+06, 1e+07, 1.5e+07, 2e+07」から「0, 5, 10, 15, 20」 にし、X軸のラベルを「国内総生産（100万米ドル）」から「国内総生産（兆米ドル）」に替えてみましょう。ここで使うのは<code>scale_x_continuous()</code>関数です。これは横軸（X軸）が連続変数（continuous）の場合のスケール調整関数です。目盛りの再調整には<code>breaks</code>と<code>labels</code>引数が必要です。<code>breaks</code>は新しい目盛りの位置、<code>labels</code>は目盛りに表記する値です。それぞれベクトルが必要であり、<code>breaks</code>と<code>labels</code>の実引数の長さは必ず一致する必要があります。また、<code>breaks</code>は数値型ベクトルですが、<code>labels</code>は数値型でも文字型でも構いません。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-histogram-2_303b831d67d1791b014f64a53a4e1f5e">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>Country_df <span class="sc">|&gt;</span> </span>
 <span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb19-3"><a href="#cb19-3"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x =</span> GDP)) <span class="sc">+</span></span>
@@ -1864,23 +1931,23 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-histogram-2-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-histogram-2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　これで一通りヒストグラムが完成しました。ほんの一部の国は非常に高いGDPを誇っていることが分かります。GDPが10兆ドル以上の国はアメリカと中国のみであり、5兆ドルを国まで拡大しても日本が加わるだけです。そもそも1兆ドルを超える国はデータには16カ国しかなく、90%以上の国が図の非常に狭い範囲内（0〜1兆ドル）に集まっていることが分かります。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-histogram-3_b0393f40626eb9812f0ee5c4fcd1ac94">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-histogram-3-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-histogram-3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　この場合、2つの方法が考えられます。1つ目は方法は情報の損失を覚悟した上で、GDPが1兆ドル未満の国でヒストグラムを書く方法です。これはデータを<code>ggplot()</code>関数を渡す前に<code>filter()</code>を使って、<code>GDP</code>が100万未満のケースに絞るだけで出来ます。ただし、横軸の最大値が2000万でなく、100万になるため、目盛りを調整した方が良いでしょう。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-histogram-4_ccca26f2277b3d1edae43bc4efb874ad">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>Country_df <span class="sc">|&gt;</span> </span>
 <span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">filter</span>(GDP <span class="sc">&lt;</span> <span class="dv">1000000</span>) <span class="sc">|&gt;</span></span>
 <span id="cb20-3"><a href="#cb20-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
@@ -1892,13 +1959,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-histogram-4-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-histogram-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　2つ目の方法は横軸を対数化することです。GDPを底10の対数化（常用対数）をすると、10兆のような非常に大きい値があっても比較的に狭い範囲内にデータを収めることが出来ます。たとえば、10を常用対数化すると1, 1000は3, 10000000は7になります。自然対数（底が<span class="math inline">\(e\)</span>）も可能ですが、「読む」ためのグラフとしては底が10の方が読みやすいでしょう。横軸の変数が対数化されるということは、横軸のスケールを対数化することと同じです。そのためには<code>scale_x_continuous()</code>内に<code>trans</code>引数を指定し、<code>"log10"</code>を渡します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-histogram-5_f2b50222f8abe8563df79b32ba6509eb">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>Country_df <span class="sc">|&gt;</span> </span>
 <span id="cb21-2"><a href="#cb21-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb21-3"><a href="#cb21-3"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x =</span> GDP)) <span class="sc">+</span></span>
@@ -1910,14 +1977,14 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-histogram-5-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-histogram-5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　対数化することによってGDPの分布が綺麗な形になりました。対数化すると横軸における目盛りの間隔が等間隔でないことに注意すべきです。0から5兆ドルの距離はかなり広めですが、5兆から10兆までの距離は短くなり、10兆から15兆までの距離は更に短くなります。したがって、この図から「世界のGDPは鐘型に分布している」と解釈することは出来ません。分布を可視化するには対数化する前の図が適します。</p>
 <p>　対数化のもう一つの方法は<code>scale_x_continuous()</code>の代わりに<code>scale_x_log10()</code>を使うことです。使い方は<code>scale_x_continuous()</code>と同じですが、<code>trans = "log10"</code>の指定は不要です。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-histogram-6_58b87896a77658322776daba25b4062b">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>Country_df <span class="sc">|&gt;</span> </span>
 <span id="cb22-2"><a href="#cb22-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb22-3"><a href="#cb22-3"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x =</span> GDP)) <span class="sc">+</span></span>
@@ -1927,13 +1994,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-histogram-6-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-histogram-6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　横軸を修正するには<code>scale_x_continuous()</code>と同様、<code>breaks</code>と<code>labels</code>引数を指定します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-histogram-7_f8c8e02c191254fdf904c07108d96527">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>Country_df <span class="sc">|&gt;</span> </span>
 <span id="cb23-2"><a href="#cb23-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb23-3"><a href="#cb23-3"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x =</span> GDP)) <span class="sc">+</span></span>
@@ -1944,7 +2011,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-histogram-7-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-histogram-7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
@@ -1953,7 +2020,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <section id="ヒストグラムの棒の大きさを調整する" class="level3" data-number="20.4.1">
 <h3 data-number="20.4.1" class="anchored" data-anchor-id="ヒストグラムの棒の大きさを調整する"><span class="header-section-number">20.4.1</span> ヒストグラムの棒の大きさを調整する</h3>
 <p>　棒グラフのようにもう一つの次元を追加してみましょう。まず、人間開発指数（<code>HDI_2018</code>）の分布を示してみましょう。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-histogram-8_ad1f730071f9f4a6e5bd0ef1a936276d">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb24-2"><a href="#cb24-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb24-3"><a href="#cb24-3"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x =</span> HDI_2018)) <span class="sc">+</span></span>
@@ -1964,13 +2031,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-histogram-8-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-histogram-8-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　これでもヒストグラムとしては十分すぎるかも知れませんが、色々調整してみましょう。まずは、棒の枠線を白にしてみましょう。枠線はデータ内の変数に対応していないため、<code>aes()</code>の外側に入れます。枠線を指定する引数は<code>color</code>です。ちなみに棒の色を指定する引数は<code>fill</code>です。また、警告メッセージも気になるので、<code>HDI_2018</code>が欠損している行を除外します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-histogram-9_7c80c93bff85adda88d936da0dc29bda">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb25-2"><a href="#cb25-2"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(HDI_2018)) <span class="sc">|&gt;</span></span>
 <span id="cb25-3"><a href="#cb25-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
@@ -1982,7 +2049,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-histogram-9-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-histogram-9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
@@ -1992,7 +2059,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <p>　これは「連続変数<code>HDI_2018</code>を30区間（=階級）に分けました」という意味です。この区間数を調整する方法は2つあり、区間数を指定する（1）、区間の幅を指定する（2）方法があります。</p>
 <p>　区間数を指定することはすなわちヒストグラムの棒の数を指定することであり、<code>bins</code>引数で調整可能です。たとえば、棒の数を10個にするためには<code>geom_histogram()</code>内に<code>bins = 10</code>を指定します。むろん、棒の数もデータとは無関係であるため、<code>aes()</code>の外側に位置します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-histogram-10_6710b5f604fa61fc7a8437e817060342">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb27-2"><a href="#cb27-2"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(HDI_2018)) <span class="sc">|&gt;</span></span>
 <span id="cb27-3"><a href="#cb27-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
@@ -2004,14 +2071,14 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-histogram-10-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-histogram-10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　数えてみると棒が10個だということが分かります。</p>
 <p>　他にも区間の幅を指定することも可能です。区間の幅は棒の幅と一致します。たとえば、棒の幅を0.1にしてみましょう。棒の幅は<code>binwidth</code>で調整可能です。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-histogram-11_a712ae224f0109d4ad1d1598f4dcd3ec">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb28-2"><a href="#cb28-2"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(HDI_2018)) <span class="sc">|&gt;</span></span>
 <span id="cb28-3"><a href="#cb28-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
@@ -2023,7 +2090,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-histogram-11-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-histogram-11-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
@@ -2031,24 +2098,23 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <p>　ヒストグラムが出力されましたが、棒の幅が<code>binwidth</code>で指定した0.1と一致することが分かります。たとえば、一番左の棒は0.35から0.45まで、つまり幅が0.1です。そして、一番右の棒は0.95から1.05に渡って位置します。ただし、ここでに疑問を持つ読者もいるでしょう「。なぜ0.3から0.4、0.4から0.5、…ではなく、0.35から0.45、0.45から0.55なのか」です。これは{ggplot2}の基本仕様です。ヒストグラムは度数分布表を基に作成されますが、本グラフの度数分布表は以下のようになります。</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-
-<div id="croysrbjud" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#croysrbjud table {
+<div id="dbmxzzinml" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#dbmxzzinml table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#croysrbjud thead, #croysrbjud tbody, #croysrbjud tfoot, #croysrbjud tr, #croysrbjud td, #croysrbjud th {
+#dbmxzzinml thead, #dbmxzzinml tbody, #dbmxzzinml tfoot, #dbmxzzinml tr, #dbmxzzinml td, #dbmxzzinml th {
   border-style: none;
 }
 
-#croysrbjud p {
+#dbmxzzinml p {
   margin: 0;
   padding: 0;
 }
 
-#croysrbjud .gt_table {
+#dbmxzzinml .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2074,12 +2140,12 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-left-color: #D3D3D3;
 }
 
-#croysrbjud .gt_caption {
+#dbmxzzinml .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#croysrbjud .gt_title {
+#dbmxzzinml .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2091,7 +2157,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-bottom-width: 0;
 }
 
-#croysrbjud .gt_subtitle {
+#dbmxzzinml .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2103,7 +2169,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-top-width: 0;
 }
 
-#croysrbjud .gt_heading {
+#dbmxzzinml .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2115,13 +2181,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-right-color: #D3D3D3;
 }
 
-#croysrbjud .gt_bottom_border {
+#dbmxzzinml .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#croysrbjud .gt_col_headings {
+#dbmxzzinml .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2136,7 +2202,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-right-color: #D3D3D3;
 }
 
-#croysrbjud .gt_col_heading {
+#dbmxzzinml .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2156,7 +2222,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   overflow-x: hidden;
 }
 
-#croysrbjud .gt_column_spanner_outer {
+#dbmxzzinml .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2168,15 +2234,15 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   padding-right: 4px;
 }
 
-#croysrbjud .gt_column_spanner_outer:first-child {
+#dbmxzzinml .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#croysrbjud .gt_column_spanner_outer:last-child {
+#dbmxzzinml .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#croysrbjud .gt_column_spanner {
+#dbmxzzinml .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2188,11 +2254,11 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   width: 100%;
 }
 
-#croysrbjud .gt_spanner_row {
+#dbmxzzinml .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#croysrbjud .gt_group_heading {
+#dbmxzzinml .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2218,7 +2284,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   text-align: left;
 }
 
-#croysrbjud .gt_empty_group_heading {
+#dbmxzzinml .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2233,15 +2299,15 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   vertical-align: middle;
 }
 
-#croysrbjud .gt_from_md > :first-child {
+#dbmxzzinml .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#croysrbjud .gt_from_md > :last-child {
+#dbmxzzinml .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#croysrbjud .gt_row {
+#dbmxzzinml .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2260,7 +2326,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   overflow-x: hidden;
 }
 
-#croysrbjud .gt_stub {
+#dbmxzzinml .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2273,7 +2339,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   padding-right: 5px;
 }
 
-#croysrbjud .gt_stub_row_group {
+#dbmxzzinml .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2287,15 +2353,15 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   vertical-align: top;
 }
 
-#croysrbjud .gt_row_group_first td {
+#dbmxzzinml .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#croysrbjud .gt_row_group_first th {
+#dbmxzzinml .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#croysrbjud .gt_summary_row {
+#dbmxzzinml .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2305,16 +2371,16 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   padding-right: 5px;
 }
 
-#croysrbjud .gt_first_summary_row {
+#dbmxzzinml .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#croysrbjud .gt_first_summary_row.thick {
+#dbmxzzinml .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#croysrbjud .gt_last_summary_row {
+#dbmxzzinml .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2324,7 +2390,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-bottom-color: #D3D3D3;
 }
 
-#croysrbjud .gt_grand_summary_row {
+#dbmxzzinml .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2334,7 +2400,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   padding-right: 5px;
 }
 
-#croysrbjud .gt_first_grand_summary_row {
+#dbmxzzinml .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2344,7 +2410,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-top-color: #D3D3D3;
 }
 
-#croysrbjud .gt_last_grand_summary_row_top {
+#dbmxzzinml .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2354,11 +2420,11 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-bottom-color: #D3D3D3;
 }
 
-#croysrbjud .gt_striped {
+#dbmxzzinml .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#croysrbjud .gt_table_body {
+#dbmxzzinml .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2367,7 +2433,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-bottom-color: #D3D3D3;
 }
 
-#croysrbjud .gt_footnotes {
+#dbmxzzinml .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2381,7 +2447,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-right-color: #D3D3D3;
 }
 
-#croysrbjud .gt_footnote {
+#dbmxzzinml .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2390,7 +2456,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   padding-right: 5px;
 }
 
-#croysrbjud .gt_sourcenotes {
+#dbmxzzinml .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2404,7 +2470,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   border-right-color: #D3D3D3;
 }
 
-#croysrbjud .gt_sourcenote {
+#dbmxzzinml .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2412,106 +2478,119 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   padding-right: 5px;
 }
 
-#croysrbjud .gt_left {
+#dbmxzzinml .gt_left {
   text-align: left;
 }
 
-#croysrbjud .gt_center {
+#dbmxzzinml .gt_center {
   text-align: center;
 }
 
-#croysrbjud .gt_right {
+#dbmxzzinml .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#croysrbjud .gt_font_normal {
+#dbmxzzinml .gt_font_normal {
   font-weight: normal;
 }
 
-#croysrbjud .gt_font_bold {
+#dbmxzzinml .gt_font_bold {
   font-weight: bold;
 }
 
-#croysrbjud .gt_font_italic {
+#dbmxzzinml .gt_font_italic {
   font-style: italic;
 }
 
-#croysrbjud .gt_super {
+#dbmxzzinml .gt_super {
   font-size: 65%;
 }
 
-#croysrbjud .gt_footnote_marks {
+#dbmxzzinml .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#croysrbjud .gt_asterisk {
+#dbmxzzinml .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#croysrbjud .gt_indent_1 {
+#dbmxzzinml .gt_indent_1 {
   text-indent: 5px;
 }
 
-#croysrbjud .gt_indent_2 {
+#dbmxzzinml .gt_indent_2 {
   text-indent: 10px;
 }
 
-#croysrbjud .gt_indent_3 {
+#dbmxzzinml .gt_indent_3 {
   text-indent: 15px;
 }
 
-#croysrbjud .gt_indent_4 {
+#dbmxzzinml .gt_indent_4 {
   text-indent: 20px;
 }
 
-#croysrbjud .gt_indent_5 {
+#dbmxzzinml .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="から">から</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="まで">まで</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="度数">度数</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="Start" class="gt_row gt_right">0.35</td>
-<td headers="End" class="gt_row gt_right">0.45</td>
-<td headers="N" class="gt_row gt_right">10</td></tr>
-    <tr><td headers="Start" class="gt_row gt_right">0.45</td>
-<td headers="End" class="gt_row gt_right">0.55</td>
-<td headers="N" class="gt_row gt_right">26</td></tr>
-    <tr><td headers="Start" class="gt_row gt_right">0.55</td>
-<td headers="End" class="gt_row gt_right">0.65</td>
-<td headers="N" class="gt_row gt_right">22</td></tr>
-    <tr><td headers="Start" class="gt_row gt_right">0.65</td>
-<td headers="End" class="gt_row gt_right">0.75</td>
-<td headers="N" class="gt_row gt_right">37</td></tr>
-    <tr><td headers="Start" class="gt_row gt_right">0.75</td>
-<td headers="End" class="gt_row gt_right">0.85</td>
-<td headers="N" class="gt_row gt_right">47</td></tr>
-    <tr><td headers="Start" class="gt_row gt_right">0.85</td>
-<td headers="End" class="gt_row gt_right">0.95</td>
-<td headers="N" class="gt_row gt_right">37</td></tr>
-    <tr><td headers="Start" class="gt_row gt_right">0.95</td>
-<td headers="End" class="gt_row gt_right">1.05</td>
-<td headers="N" class="gt_row gt_right">1</td></tr>
-  </tbody>
-  
-  
+
+<table class="gt_table table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th id="から" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">から</th>
+<th id="まで" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">まで</th>
+<th id="度数" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">度数</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_right" headers="Start">0.35</td>
+<td class="gt_row gt_right" headers="End">0.45</td>
+<td class="gt_row gt_right" headers="N">10</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Start">0.45</td>
+<td class="gt_row gt_right" headers="End">0.55</td>
+<td class="gt_row gt_right" headers="N">26</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Start">0.55</td>
+<td class="gt_row gt_right" headers="End">0.65</td>
+<td class="gt_row gt_right" headers="N">22</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Start">0.65</td>
+<td class="gt_row gt_right" headers="End">0.75</td>
+<td class="gt_row gt_right" headers="N">37</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Start">0.75</td>
+<td class="gt_row gt_right" headers="End">0.85</td>
+<td class="gt_row gt_right" headers="N">47</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Start">0.85</td>
+<td class="gt_row gt_right" headers="End">0.95</td>
+<td class="gt_row gt_right" headers="N">37</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Start">0.95</td>
+<td class="gt_row gt_right" headers="End">1.05</td>
+<td class="gt_row gt_right" headers="N">1</td>
+</tr>
+</tbody>
 </table>
+
 </div>
 </div>
 </div>
 <p>　簡単に言うと、ヒストグラムの最初の棒は0を中央にした上で、棒の幅を0.1にしたとも言えます。これによってヒストグラムの境界線（boundary）が、データより左右に0.05（<code>binwidth</code>の半分）ずつ広くなります。もし、これを調整したい場合は、<code>boundary</code>引数を指定します。指定しない場合、<code>boundary</code>は「棒の広さ / 2」となります。棒がデータの範囲を超えないようにするためには、<code>geom_histogram()</code>内に<code>boundary = 0</code>を指定します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-histogram-13_5833e7ce64ee82900e50beb71bd2b407">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb29-2"><a href="#cb29-2"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(HDI_2018)) <span class="sc">|&gt;</span></span>
 <span id="cb29-3"><a href="#cb29-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
@@ -2524,7 +2603,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-histogram-13-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-histogram-13-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
@@ -2534,17 +2613,17 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <section id="密度を追加する" class="level3" data-number="20.4.2">
 <h3 data-number="20.4.2" class="anchored" data-anchor-id="密度を追加する"><span class="header-section-number">20.4.2</span> 密度を追加する</h3>
 <p>　ヒストグラムには以下のように密度の表す線を同時に載せるケースもあります。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-histogram-14_cf025f0fd98f16e5bad973c16f8cfd20">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-histogram-14-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-histogram-14-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　この密度の線を追加するには<code>geom_density()</code>という幾何オブジェクトを追加する必要があります。密度の線を示すには、横軸と縦軸両方の情報が必要です。横軸は<code>HDI_2018</code>で問題ないですが、縦軸はどうでしょう。縦軸には密度の情報が必要ですが、<code>Country_df</code>にそのような情報はありません。幸い、{ggplot2}は<code>y = ..density..</code>と指定するだけで、自動的に<code>HDI_2018</code>のある時点における密度を計算してくれます。したがって、マッピングは<code>aes(x = HDI_2018, y = ..density..)</code>のように書きます。こうなるとマッピング要素<code>x</code>は<code>geom_histogram()</code>と<code>geom_density()</code>に共通するため、<code>ggplot()</code>に入れても問題ありません。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-histogram-15_e8087131f88951d7e0deb20647a76744">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb30-2"><a href="#cb30-2"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(HDI_2018)) <span class="sc">|&gt;</span></span>
 <span id="cb30-3"><a href="#cb30-3"></a>  <span class="co"># 全幾何オブジェクトにおいてxを共有するため、ここでマッピング指定</span></span>
@@ -2558,13 +2637,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-histogram-15-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-histogram-15-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　なんとも言えない微妙なグラフが出来ました。考えたものと全然違いますね。これはなぜでしょうか。それは<code>geom_density()</code>は<strong>密度</strong>を表す一方、<code>geom_histogram()</code>は<strong>度数</strong>を表すからです。2つは単位が全然違います。したがって、どちらかに単位を合わせる必要があり、この場合はヒストグラムの縦軸を度数でなく、密度に調整する必要があります。ヒストグラムの縦軸を密度にするためには、<code>y = ..density..</code>を指定するだけです。こうなると、<code>geom_histogram()</code>と<code>geom_density()</code>は<code>x</code>と<code>y</code>を共有するため、全部<code>ggplot()</code>内で指定しましょう。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-histogram-16_f30c21612cad332fb544d65577f25a0a">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb31-2"><a href="#cb31-2"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(HDI_2018)) <span class="sc">|&gt;</span></span>
 <span id="cb31-3"><a href="#cb31-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> HDI_2018, <span class="at">y =</span> ..density..)) <span class="sc">+</span></span>
@@ -2577,7 +2656,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-histogram-16-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-histogram-16-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
@@ -2587,7 +2666,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <section id="次元を追加する-1" class="level3" data-number="20.4.3">
 <h3 data-number="20.4.3" class="anchored" data-anchor-id="次元を追加する-1"><span class="header-section-number">20.4.3</span> 次元を追加する</h3>
 <p>　次元を追加するには棒グラフと同様、<code>aes()</code>内にマッピング要素を追加します。たとえば、OECD加盟有無によって人間開発指数の分布がどう異なるかを確認してみましょう。<code>OECD</code>変数は0/1であり、Rでは連続変数扱いになっているため、これを離散変数化するためには文字型かfactor型にする必要があります。<code>ifelse()</code>を使って、<code>OECD == 1</code>なら「OECD加盟国」、<code>OECD == 0</code>なら「OECD非加盟国」と置換したものを<code>OECD2</code>という列として追加します。そして、<code>OECD2</code>ごとに棒の色を変えるために、マッピング要素として<code>fill</code>を追加します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-histogram-17_71a6c0b1f27ea994b97cf016df5fa04e">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb32-2"><a href="#cb32-2"></a>  <span class="fu">mutate</span>(<span class="at">OECD2 =</span> <span class="fu">ifelse</span>(OECD <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"加盟国"</span>, <span class="st">"非加盟国"</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb32-3"><a href="#cb32-3"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(HDI_2018)) <span class="sc">|&gt;</span></span>
@@ -2602,13 +2681,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-histogram-17-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-histogram-17-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　ヒストグラムが出来上がりました。OECD加盟国の場合、人間開発指数が相対的に高いことが分かります。しかし、積み上げヒストグラムになっています。これはある階級においてOECD加盟国と非加盟国の比率を比較する際に有効ですが、OECD加盟国と非加盟国の分布の違いを見るにはやや物足りません。したがって、棒グラフ同様、<code>position</code>引数で棒の位置を調整します。ただし、ヒストグラムの場合、<code>postion = "dodge"</code>は向いていないので、ここでは<code>position = "identity"</code>を指定します。しかし、この場合、棒が重なってしまうと、一方の棒が見えなくなる可能性もあるので、<code>alpha</code>引数で棒の透明度を調整します。<code>alpha</code>の値は0から1までであり、0になると、完全透明になります。ここでは0.5くらいにしてみましょう。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-histogram-18_de64c626069c339919a953ba80f1d178">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb33-2"><a href="#cb33-2"></a>  <span class="fu">mutate</span>(<span class="at">OECD2 =</span> <span class="fu">ifelse</span>(OECD <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"OECD加盟国"</span>, <span class="st">"OECD非加盟国"</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb33-3"><a href="#cb33-3"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(HDI_2018)) <span class="sc">|&gt;</span></span>
@@ -2623,13 +2702,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-histogram-18-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-histogram-18-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　これで2つのヒストグラムを綺麗にオーバーラッピングできました。また、先ほど紹介しました<code>geom_density()</code>オブジェクトを重ねることも可能です。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-histogram-19_ad5c5f8961dd2286a8989a6288e3f674">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb34-2"><a href="#cb34-2"></a>  <span class="fu">mutate</span>(<span class="at">OECD2 =</span> <span class="fu">ifelse</span>(OECD <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"OECD加盟国"</span>, <span class="st">"OECD非加盟国"</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb34-3"><a href="#cb34-3"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(HDI_2018)) <span class="sc">|&gt;</span></span>
@@ -2648,7 +2727,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-histogram-19-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-histogram-19-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
@@ -2656,7 +2735,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <p>　この場合、OECD加盟国と非加盟国の密度をそれぞれ計算するため、ヒストグラムの見た目がこれまでのものと変わることに注意してください。</p>
 <p>　ここまで、次元拡張の方法としてヒストグラムのオーバーラッピングについて紹介しました。しかし、ヒストグラムを重なってしまうと、読みにくい人もいるかも知れません。オーバーラップ以外の方法はプロットを2つに分けることです。つまり、1つのプロットに小さいブロットを複数載せることであり、この小さいプロットをファセット（facet）と呼びます。これには<code>facet_*()</code>関数群の中の、<code>facet_wrap()</code>関数を使います。<code>facet_wrap(~ 分ける変数名)</code>を追加すると変数ごとにプロットを分割してくれます。<code>ncol</code>や<code>nrow</code>引数を指定すると、ファセットの列数や行数も指定可能です。</p>
 <p>　それではやってみましょう。<code>facet_wrap(~ OECD2)</code>を追加するだけです。2つのファセットを縦に並べるために、<code>ncol = 1</code>を追加します。2つのファセットを1列に並べるという意味です。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-histogram-20_6e7ccc0f6ea488d6f312c9faa6527554">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb35-2"><a href="#cb35-2"></a>  <span class="fu">mutate</span>(<span class="at">OECD2 =</span> <span class="fu">ifelse</span>(OECD <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"OECD加盟国"</span>, <span class="st">"OECD非加盟国"</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb35-3"><a href="#cb35-3"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(HDI_2018)) <span class="sc">|&gt;</span></span>
@@ -2672,13 +2751,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-histogram-20-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-histogram-20-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　OECDは加盟/非加盟だけですから、オーバーラッピングされたヒストグラムで十分かも知れません。しかし、大陸のように、3つ以上のグループになると、オーバーラッピングよりもファセットで分けた方が効率的です。たとえば、大陸ごとの人間開発指数のヒストグラムを作ってみましょう。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-histogram-21_2b93affd233abd3c060b872fd739e0c6">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb36-2"><a href="#cb36-2"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(HDI_2018)) <span class="sc">|&gt;</span></span>
 <span id="cb36-3"><a href="#cb36-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
@@ -2693,7 +2772,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-histogram-21-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-histogram-21-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
@@ -2704,7 +2783,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <h2 data-number="20.5" class="anchored" data-anchor-id="sec-visual2-box"><span class="header-section-number">20.5</span> 箱ひげ図</h2>
 <p>　データの分布を示す際には、離散変数ならケース数（度数）の棒グラフ、連続変数ならヒストグラムがよく使われますが、連続変数の場合、もう一つの方法があります。それが箱ひげ図です。箱ひげ図はヒストグラムより情報量がやや損なわれますが、データの中央値、四分位点（四分位範囲）、最小値と最大値の情報を素早く読み取れます。また、複数の変数、またはグループの分布を1つのプロットに示すにはヒストグラムより優れています。</p>
 <p>　まずは人間開発指数の箱ひげ図を出してみます。使用する幾何オブジェクトは<code>geom_boxplot()</code>です。そして、指定するマッピング要素は<code>y</code>のみです。箱ひげ図から読み取れる情報は最小値・最大値、中央値、第1四分位点、第3四分位点ですが、これらの情報は縦軸として表現されます。それでは、とりあえず実際に作ってみましょう。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-box-1_ca83ad7ff442a0d192aea61dfb52f959">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb37-2"><a href="#cb37-2"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(HDI_2018)) <span class="sc">|&gt;</span></span>
 <span id="cb37-3"><a href="#cb37-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
@@ -2713,23 +2792,23 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-box-1-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-box-1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　箱ひげ図の読み方は以下の通りです。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-box-2_1f47c31a44fa065caebecc30c2649a83">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-box-2-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-box-2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　これで箱ひげ図は完成ですが、人間開発指数は0から1の相対を取るので、座標系の縦軸を調整してみましょう。座標系の操作は<code>coord_*()</code>関数群を使いますが、現在使っているのは直交座標系（デカルト座標系）ですので<code>coord_cartesian()</code>を使います。ここで縦軸の上限と下限を指定する引数が<code>ylim</code>であり、長さ2の数値型ベクトルが必要です。下限0、上限1ですので、<code>ylim = c(0, 1)</code>とします。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-box-3_4e2338091bb68daea9933b54b5d7f411">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb38-2"><a href="#cb38-2"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(HDI_2018)) <span class="sc">|&gt;</span></span>
 <span id="cb38-3"><a href="#cb38-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
@@ -2739,14 +2818,14 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-box-3-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-box-3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　まだまだ改善の余地はありますが、それなりの箱ひげ図の出来上がりです。しかし、一変数の箱ひげ図はあまり使われません。変数が1つだけならヒストグラムの方がより情報量は豊富でしょう。情報量が豊富ということはヒストグラムから（完璧には無理ですが）箱ひげ図を作ることは可能である一方、その逆は不可能か非常に難しいことを意味します。</p>
 <p>　ヒストグラムが力を発揮するのは複数の変数、または複数のグループごとの分布を比較する際です。先ほど、大陸ごとの人間開発指数の分布を確認するためにヒストグラムを5つのファセットで分割しました。箱ひげ図なら1つのグラフに5つの箱を並べるだけです。これは横軸を大陸（<code>Continent</code>）にすることを意味します。先ほどのコードのマッピングに<code>x</code>引数を追加してみましょう。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-box-4_96d6ec0f8f8d9baf18efa2bb3cff31a5">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb39-2"><a href="#cb39-2"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(HDI_2018)) <span class="sc">|&gt;</span></span>
 <span id="cb39-3"><a href="#cb39-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
@@ -2756,14 +2835,14 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-box-4-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-box-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　いかがでしょうか。5大陸の分布を素早く確認することができました。ヨーロッパの場合、人間開発指数が高く、バラツキも小さいことが分かります。一方、アジアとアフリカはバラツキが非常に大きいですね。アメリカ大陸はバラツキは非常に小さいですが、極端に高い国や低い国が含まれています。このアメリカ大陸に3つの点がありますが、これは外れ値です。つまり、最小値より小さい、または最大値より大きいケースを表します。最小値より小さい、または最大値より大きいという表現に違和感を感じるかも知れません。実は一般的な箱ひげ図の最小値は「第1四分位点 - 1.5 <span class="math inline">\(\times\)</span> 四分位範囲」より大きい値の中での最小値です。同じく最大値は「第3四分位点 + 1.5 <span class="math inline">\(\times\)</span> 四分位範囲」より小さい値の中での最大値です。普通に分布している場合、ほとんどのケースは箱ひげ図の最小値と最大値の範囲内に収まりますが、極端に大きい値、小さい値が含まれる場合は箱ひげ図の最小値と最大値の範囲からはみ出る場合があります。</p>
 <p>　また、複数の箱を並べる際、それぞれの箱に異なる色を付ける場合があります。これはデータ・インク比の観点から見れば非効率的ですが、可読性を落とすこともないのでさほど問題はないでしょう。先ほどの箱ひげ図の場合、大陸ごとに異なる色を付けるにはマッピング要素として<code>fill = Continent</code>を追加するだけです。この場合、色に関する凡例が自動的に出力されますが、既に横軸で大陸の情報が分かるため、この判例は不要でしょう。したがって、<code>aes()</code>の外側に<code>show.legned = FALSE</code>を付けます。これは当該幾何オブジェクトに関する凡例を表示させないことを意味します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-box-5_c7f2e28221336292aea167fd033b05e2">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb40-2"><a href="#cb40-2"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(HDI_2018)) <span class="sc">|&gt;</span></span>
 <span id="cb40-3"><a href="#cb40-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
@@ -2774,7 +2853,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-box-5-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-box-5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
@@ -2784,7 +2863,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <h3 data-number="20.5.1" class="anchored" data-anchor-id="個別のデータを表示する"><span class="header-section-number">20.5.1</span> 個別のデータを表示する</h3>
 <p>　箱ひげ図は複数のグループや変数の分布を素早く比較できる長所がありますが、中央値、最小値、最大値、第1・3四分位点、外れ値の情報しか持ちません。人によってはもうちょっと情報量を増やすために個々の観測値を点として示す場合もあります。点を出力する幾何オブジェクトは次節で紹介する<code>geom_point()</code>です。以下の内容は散布図の節を一読してから読むのをおすすめします。</p>
 <p>　点の幾何オブジェクトにおける必須マッピング要素は点の横軸の位置と縦軸の位置、つまり<code>x</code>と<code>y</code>です。今回の場合、点の横軸が大陸（<code>Continent</code>）、縦軸は人間開発指数（<code>HDI_2018</code>）です。つまり、<code>geom_boxplot()</code>のマッピングと同じです。したがって、<code>x</code>と<code>y</code>は<code>ggplot()</code>に入れておきます。あとは大陸ごとに店の色分けをしたいので、<code>color</code>引数を<code>aes()</code>内に指定します。また、点が重なる場合、読みづらくなる可能性があるため、<code>alpha</code>引数を<code>aes()</code>外に指定して透明度を調整します。また、箱ひげ図もある程度は透明にしないと、裏にある点が見えないため、こちらも<code>alpha</code>を調整します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-box-6_0bc387b9f72550f265f1702784f1bf94">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb41-2"><a href="#cb41-2"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(HDI_2018)) <span class="sc">|&gt;</span></span>
 <span id="cb41-3"><a href="#cb41-3"></a>  <span class="co"># 全幾何オブジェクトにおいてxとyは共有されるため、ここで指定</span></span>
@@ -2798,13 +2877,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-box-6-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-box-6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　点が透明ではあるものの、それでも重なっている箇所は相変わらず読みにくいです。この場合有効な方法がジッター（jitter）です。これは点の位置に若干のノイズを付けることによって、点が重ならないようにすることです。ジッターの方法は2つありますが、ここではジッター専用の幾何オブジェクト<code>geom_jitter()</code>を使います<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>。<code>geom_jitter()</code>はノイズが追加された散布図ですので、<code>geom_point()</code>と使い方はほぼ同じです。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-box-7_ff5e4bbab508dcfb56ddc52d89e8c327">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb42-2"><a href="#cb42-2"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(HDI_2018)) <span class="sc">|&gt;</span></span>
 <span id="cb42-3"><a href="#cb42-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Continent, <span class="at">y =</span> HDI_2018)) <span class="sc">+</span></span>
@@ -2817,13 +2896,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-box-7-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-box-7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　これで点が重ならなくなりましたが、ちょっと散らばりすぎるという印象もあります。この散らばり具合を調整する引数が<code>width</code>と<code>height</code>です。もちろん、これはデータの中身に対応する要素ではないため、<code>aes()</code>の外側にいれます。それぞれの実引数は0から1の間の数値になりますが、数字が大きいほど散らばり具合が大きくなり、0になるとジッター無しの散布図と同じものになります。ここでは横の散らばり具合を0.15（<code>width = 0.15</code>）、縦の散らばり具合は0（<code>height = 0</code>）にしてみましょう。そして、横軸が英語のままなので、これも日本語に直します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-box-8_ace40d2a6ea22f9286f1c428884a3c90">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb43-2"><a href="#cb43-2"></a>  <span class="fu">mutate</span>(<span class="at">Continent2 =</span> <span class="fu">factor</span>(Continent,</span>
 <span id="cb43-3"><a href="#cb43-3"></a>                             <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Africa"</span>, <span class="st">"America"</span>, <span class="st">"Asia"</span>,</span>
@@ -2842,7 +2921,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-box-8-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-box-8-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
@@ -2851,7 +2930,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <section id="次元を追加する-2" class="level3" data-number="20.5.2">
 <h3 data-number="20.5.2" class="anchored" data-anchor-id="次元を追加する-2"><span class="header-section-number">20.5.2</span> 次元を追加する</h3>
 <p>　箱ひげ図に次元を追加する方法はこれまで見てきたように、1つのグラフに次元を追加するか、次元でファセットを分割するかの問題になります。まずは、簡単なファセット分割からやってみます。追加する次元は先進国か否かです。先進国の基準は不明瞭ですが、ここではG7、G20、OECDいずれかに加盟していれば先進国と定義しましょう。そのために<code>Country_df</code>に<code>Developed</code>変数を追加します。この変数は<code>G7</code>、<code>G20</code>、<code>OECD</code>の合計が1以上の場合は1、0の場合は0とします。そして、この<code>Developed</code>変数をfactor化します。具体的には<code>Developed</code>が1だと<code>"先進国"</code>、0だと<code>"その他"</code>にします。あとは<code>facet_wrap()</code>でファセットを分割します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-box-9_fba382dc43ea4692566ae874c8315687">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb44-2"><a href="#cb44-2"></a>  <span class="fu">mutate</span>(<span class="at">Continent2 =</span> <span class="fu">factor</span>(Continent,</span>
 <span id="cb44-3"><a href="#cb44-3"></a>                             <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Africa"</span>, <span class="st">"America"</span>, <span class="st">"Asia"</span>,</span>
@@ -2881,7 +2960,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-box-9-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-box-9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
@@ -2889,7 +2968,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <p>　次の方法はファセットを分割せずに次元を追加する方法です。ファセットに分ける場合、「先進国における大陸別人間開発指数の分布」、「先進国外における大陸別人間開発指数の分布」は素早く読み取れますが、「ある大陸における先進国/その他の国の人間開発指数の分布」を比較するにはあまり向いておりません。なぜなら目の動線が長いからです。先進国とその他の国を大陸ごとに横に並べると視線の動線が短くなり比較しやすくなります。</p>
 <p>　やり方はあまり変わりませんが、今回は色分けを<code>Continent</code>でなく<code>Developed</code>でする必要があります。1つの画面に先進国とその他の国の情報が同時に出力されるため、この2つを見分けるためには色分けが有効です。したがって、<code>geom_jitter()</code>と<code>geom_boxplot()</code>の<code>color</code>と<code>fill</code>を<code>Continent</code>から<code>Developed</code>へ変更します。</p>
 <p>　そしてもう一つ重要なことがあります。それは<code>geom_jitter()</code>の位置です。次元ごとに横軸の位置をずらす場合、<code>geom_bar()</code>は<code>position = "dodge"</code>を使いました。しかし、<code>geom_jitter()</code>では<code>"dodge"</code>が使えません。その代わりに<code>positon</code>の実引数として<code>position_jitterdodge()</code>を指定します。この中には更に<code>jitter.width</code>と<code>jitter.height</code>引数があり、散らばりの具合をここで調整します。なぜ、<code>geom_jitter()</code>で<code>width</code>と<code>height</code>を指定するのではなく、<code>position_jitter()</code>内で指定するかですが、これは<code>geom_jitter()</code>関数の仕様です。<code>geom_jitter()</code>の場合、<code>position</code>と<code>width</code>または<code>height</code>を同時に指定することは出来ません。 　 　それでは早速やってみましょう。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-box-10_a7ca8f6e0851c998f4b91e9185ea9416">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb45-2"><a href="#cb45-2"></a>  <span class="fu">mutate</span>(<span class="at">Continent2 =</span> <span class="fu">factor</span>(Continent,</span>
 <span id="cb45-3"><a href="#cb45-3"></a>                             <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Africa"</span>, <span class="st">"America"</span>, <span class="st">"Asia"</span>,</span>
@@ -2916,7 +2995,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-box-10-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-box-10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
@@ -2926,7 +3005,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <section id="複数の変数の場合" class="level3" data-number="20.5.3">
 <h3 data-number="20.5.3" class="anchored" data-anchor-id="複数の変数の場合"><span class="header-section-number">20.5.3</span> 複数の変数の場合</h3>
 <p>　箱ひげ図はグループごとにある変数の分布を比較することもできますが、複数の変数の比較も可能です。そのためにはデータの形を変形する必要があります。たとえば、Polity IVの民主主義指標（<code>Polity_Score</code>）とFreedom Houseの民主主義指標（<code>FH_Total</code>）の分布を、大陸ごとに示したいとします。<code>Country_df</code>の場合、<code>Polity_Score</code>と<code>FH_Total</code>は別々の変数になっていますが、<code>pivot_longer()</code>を使って、これらを1つの変数にまとめる必要があります。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-box-11_14b9d0d46dc9d10ea0c32256c1f72774">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a>Democracy_df <span class="ot">&lt;-</span> Country_df <span class="sc">|&gt;</span> </span>
 <span id="cb46-2"><a href="#cb46-2"></a>  <span class="fu">select</span>(Country, Continent, Polity_Score, FH_Total) <span class="sc">|&gt;</span></span>
 <span id="cb46-3"><a href="#cb46-3"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Polity_Score), <span class="sc">!</span><span class="fu">is.na</span>(FH_Total)) <span class="sc">|&gt;</span></span>
@@ -2956,7 +3035,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 </div>
 <p>　続いて、箱ひげ図の作成ですが、これは次元の追加と全く同じやり方になります。<code>fill</code>で色分けをするか、ファセット分割をするかですね。ここでは箱の色分けをします。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-box-12_7f09a710a4f780fc7a886afdd6bf2be0">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a>Democracy_df <span class="sc">|&gt;</span></span>
 <span id="cb48-2"><a href="#cb48-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb48-3"><a href="#cb48-3"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Continent, <span class="at">y =</span> Value, <span class="at">fill =</span> Type)) <span class="sc">+</span></span>
@@ -2966,14 +3045,14 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-box-12-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-box-12-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　しかし、1つ問題があります。それはPolity IVは-10から10までの指標なのに対して、Freedom Houseは0から100までの指標になっている点です。この場合、正確な比較が出来ません。複数の変数を1つの箱ひげ図に出す際は、変数のスケールが一致させた方が良いでしょう。たとえば、複数の人、または団体に対する感情温度はスケールが0から100であるため、使えます。しかし、今回の場合はあまり良いケースではありません。</p>
 <p>　もし、スケールが異なるものを示すためにはスケールを調整する必要があります。よく使われるのはスケールを平均0、標準偏差1にする「標準化」ですが、変数の分布を似通ったものにするため、あまり良くないかも知れません。ここではFreedom House指標から50を引き、そこから5で割った値を使います。こうすることで、Freedom House指標が100なら10、0なら-10になり、最小値と最大値のスケールをPolity IVに合わせることが可能です。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-box-13_3c85be227dc83ee1e0f359e43e4f89ff">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1"></a>Democracy_df <span class="ot">&lt;-</span> Country_df <span class="sc">|&gt;</span> </span>
 <span id="cb49-2"><a href="#cb49-2"></a>  <span class="fu">select</span>(Country, Continent, Polity_Score, FH_Total) <span class="sc">|&gt;</span></span>
 <span id="cb49-3"><a href="#cb49-3"></a>  <span class="co"># FH_Totalのすケース調整</span></span>
@@ -2995,7 +3074,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-box-13-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-box-13-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
@@ -3006,7 +3085,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <section id="sec-visual2-scatter" class="level2" data-number="20.6">
 <h2 data-number="20.6" class="anchored" data-anchor-id="sec-visual2-scatter"><span class="header-section-number">20.6</span> 散布図</h2>
 <p>　続いて、散布図の作成について解説します。散布図においてデータは点で表現され、点を表示するためには、少なくとも横軸と縦軸といった2つの情報が必要です。したがって、マッピングに使う変数は最低2つであり、横軸は<code>x</code>、縦軸は<code>y</code>で指定します。今回は<code>Country_df</code>を使って、一人当たりGDP（購買力平価基準）と人間開発指数の関係を調べてみましょう。散布図の幾何オブジェクト関数は<code>geom_point()</code>です。そして、それぞれの変数は<code>PPP_per_capita</code>、<code>HDI_2018</code>であるから、マッピングは<code>aes(x = PPP_per_capita, y = HDI_2018)</code>になります。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-scatter-1_3054302df4f335a80f9f27326a931a6b">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb50-2"><a href="#cb50-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb50-3"><a href="#cb50-3"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> PPP_per_capita, <span class="at">y =</span> HDI_2018)) <span class="sc">+</span></span>
@@ -3018,7 +3097,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-scatter-1-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-scatter-1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
@@ -3026,7 +3105,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <p>　以下のメッセージが表示されますが、これは一人当たりGDP（購買力平価基準）または人間開発指数が欠損しているケースが11カ国あることを意味します。たとえば、教皇聖座 (Holy See; いわゆるバチカン)や西サハラ、ソマリアなどの国があります。</p>
 <pre><code>## Warning: Removed 11 rows containing missing values (geom_point).</code></pre>
 <p>　どのようなケースが除外されたかは<code>dplyr::filter()</code>関数を使えば簡単に調べられます。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-scatter-2_27c663bf2ee931309a420aa27dee7a87">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1"></a>Country_df <span class="sc">|&gt;</span> </span>
 <span id="cb53-2"><a href="#cb53-2"></a>  <span class="fu">filter</span>(<span class="fu">is.na</span>(PPP_per_capita) <span class="sc">|</span> <span class="fu">is.na</span>(HDI_2018)) <span class="sc">|&gt;</span> </span>
 <span id="cb53-3"><a href="#cb53-3"></a>  <span class="fu">select</span>(Country, PPP_per_capita, HDI_2018)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -3049,7 +3128,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 <p>　このように何らかのケースが除外されたとメッセージが出力された場合、ちゃんとどのケースが除外されたかを確認することは重要です。この11カ国は未承認国や国内政治の不安定によりデータが正確に把握できないところがほとんどですね。</p>
 <p>　散布図を見ると経済力と人間開発指数の間には正の関係が確認できます。ただし、経済力が高くなるにつれ、人間開発指数の増加幅は減少していきます。どちらかと言えば対数関数のような関係でしょう。実際、<code>scale_x_log10()</code>や、<code>scale_x_continuous(trans = "log10")</code>などで横軸を対数化するとほぼ線形の関係が観察できます。今回は座標系を変換して横軸を対数化してみます。座標系の調整は<code>coord_*()</code>関数群を使いますが、対数化には<code>coord_trans()</code>を使います。ここで変換する軸と変換方法を指定します。今回は横軸を底10の対数化を行うから<code>x = "log10"</code>と指定します。これは<code>scale_x_log10()</code>と全く同じですが、縦軸も対数化するなどの場面においては<code>coord_trans()</code>の方が便利でしょう。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-scatter-3_db94d4cb09793d6e4968a1924587cb9a">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb55-2"><a href="#cb55-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb55-3"><a href="#cb55-3"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> PPP_per_capita, <span class="at">y =</span> HDI_2018)) <span class="sc">+</span></span>
@@ -3059,7 +3138,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-scatter-3-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-scatter-3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
@@ -3068,7 +3147,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <section id="次元を追加する-3" class="level3" data-number="20.6.1">
 <h3 data-number="20.6.1" class="anchored" data-anchor-id="次元を追加する-3"><span class="header-section-number">20.6.1</span> 次元を追加する</h3>
 <p>　散布図の点は横軸の数値と縦軸の数値を持っています。2次元平面で表現できる散布図は少なくとも2つの情報を持つことになります。しかし、2次元平面であっても、3つ以上の情報、つまり3次元以上の情報を示すことが可能です。たとえば、点ごとに色を変更することもできます。OECD加盟国と非加盟国に異なる色を与えると、2次元平面上であっても、3つの情報を含む散布図が作れます。他にも透明度（<code>alpha</code>）、点の形（<code>shape</code>）、大きさ（<code>size</code>）などで点に情報を持たせることが可能です。たとえば、国の面積に応じて点の大きさが変わる散布図を作成するなら<code>aes()</code>内に<code>size = Area</code>を追加するだけです。面積の単位は非常に大きいので、<code>Area</code>を100万で割った値を使います。また、点が大きくなると重なりやすくなるため、半透明（<code>alpha = 0.5</code>）にします。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-scatter-4_2b9eef3bbe17b8e0f9e1cdb26488a31b">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb56-2"><a href="#cb56-2"></a>  <span class="fu">mutate</span>(<span class="at">Area2 =</span> Area <span class="sc">/</span> <span class="dv">1000000</span>) <span class="sc">|&gt;</span></span>
 <span id="cb56-3"><a href="#cb56-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
@@ -3080,7 +3159,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-scatter-4-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-scatter-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
@@ -3088,7 +3167,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <p>　一人当たりGDPが非常に高い国の多くは面積が小さい国が多いですね。</p>
 <p>　以上のコードでは、<code>aes()</code>だけでなく、<code>labs()</code>内にも<code>size</code>引数を指定しました。<code>labs()</code>内に<code>x</code>と<code>y</code>以外の引数を指定することはヒストグラムのところでもしましたが、説明はしませんでした。ここで詳しく説明します。<code>labs()</code>内の引数はマッピング要素と対応します。今回は<code>geom_point()</code>幾何オブジェクト内に<code>x</code>、<code>y</code>、<code>size</code>があり、それぞれにラベルを付けることになります。これを指定しない場合、変数名がデフォルト値として出力されます。<code>x</code>と<code>y</code>は縦軸と横軸のラベルですが、その他のマッピング要素は凡例として出力される場合が多いです。凡例のラベルを修正したい時にはとりあえず<code>labs()</code>から覗いてみましょう。</p>
 <p>　続きまして、もう一つ次元を追加してみましょう。散布図は他のグラフに比べ次元拡張が容易なグラフです。ここでは色分けをしてみましょう。たとえば、OECD加盟有無（<code>OECD</code>）で色分けする場合、これまでと同様、<code>color</code>を<code>aes()</code>内に加えるだけです。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-scatter-5_7e584766e33cec100f55e5d34112501f">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb57-2"><a href="#cb57-2"></a>  <span class="fu">mutate</span>(<span class="at">Area2 =</span> Area <span class="sc">/</span> <span class="dv">1000000</span>) <span class="sc">|&gt;</span></span>
 <span id="cb57-3"><a href="#cb57-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
@@ -3100,13 +3179,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-scatter-5-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-scatter-5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　色分けはされていますが、凡例を見ると想像したものとやや違いますね。なぜなら<code>OECD</code>変数が数値型になっているからです。実際のデータには<code>OECD = 0.5</code>や<code>OECD = 0.71</code>のような値は存在しませんが、数値型である以上、その値をとること自体は出来ます。したがって、0から1までの数値に対応できるように、色分けもグラデーションになっています。これを見やすく二分するためには、<code>OECD</code>変数をfactor型か文字型に変換する必要があります。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-scatter-6_397247d2cdb191699b5bccdb3022faf3">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb58-2"><a href="#cb58-2"></a>  <span class="fu">mutate</span>(<span class="at">Area2 =</span> Area <span class="sc">/</span> <span class="dv">1000000</span>,</span>
 <span id="cb58-3"><a href="#cb58-3"></a>         <span class="at">OECD2 =</span> <span class="fu">factor</span>(OECD, <span class="at">levels =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>, </span>
@@ -3120,7 +3199,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-scatter-6-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-scatter-6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
@@ -3138,7 +3217,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <h3 data-number="20.6.2" class="anchored" data-anchor-id="一部の点をハイライトする"><span class="header-section-number">20.6.2</span> 一部の点をハイライトする</h3>
 <p>　これまでの図と比べ、散布図は一般的に表示される情報が多いです。棒グラフ、箱ひげ図の場合、数個、あるいは十数個程度の項目ごとに棒や箱が出力されますが、散布図の場合、データのサイズだけ点が出力されます。むろん、散布図というのは個々の点の情報よりも二変数間の関係を確認するために使われるため、これは短所ではありません。</p>
 <p>　しかし、散布図の中で一部の点をハイライトしたい場合もあるでしょう。たとえば、先ほどの図において日中韓だけハイライトするためにはどうすれば良いでしょうか。まず、考えられるのは<code>color</code>によるマッピングでしょう。<code>Country</code>変数を日本、韓国、中国、その他の4つの水準にまとめ、この値によって色分けをすればいいでしょう。実際にやってみましょう。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-scatter-7_b8d674a3296ee062a4e819b658d05972">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb59-2"><a href="#cb59-2"></a>  <span class="fu">mutate</span>(<span class="at">Area2    =</span> Area <span class="sc">/</span> <span class="dv">1000000</span>,</span>
 <span id="cb59-3"><a href="#cb59-3"></a>         <span class="at">Country2 =</span> <span class="fu">case_when</span>(Country <span class="sc">==</span> <span class="st">"Japan"</span>       <span class="sc">~</span> <span class="st">"Japan"</span>,</span>
@@ -3159,7 +3238,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-scatter-7-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-scatter-7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
@@ -3174,7 +3253,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <span id="cb61-2"><a href="#cb61-2"></a><span class="fu">gghighlight</span>(条件式, <span class="at">label_params =</span> <span class="fu">list</span>(引数1, 引数2, ...))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　第一引数は条件式であり、これは<code>dplyr::filter()</code>の条件式をそのまま使えます。そして、<code>label_parms</code>を指定しますが、実引数はリスト型です。中には<code>geom_labels()</code>幾何オブジェクトに使用する引数が使えます。たとえば、ハイライトされた点にはラベルが付きますが、<code>size</code>引数を入れてラベルの大きさを指定できます。それでは実際にやってみましょう。条件式は<code>Country %in% c("Japan", "South Korea", "China")</code>であり、ラベルの大きさは3にします。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-scatter-10_dd7586a282d8258bea5a62d955bd9094">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb62-2"><a href="#cb62-2"></a>  <span class="fu">mutate</span>(<span class="at">Area2 =</span> Area <span class="sc">/</span> <span class="dv">1000000</span>) <span class="sc">|&gt;</span></span>
 <span id="cb62-3"><a href="#cb62-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
@@ -3188,7 +3267,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-scatter-10-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-scatter-10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
@@ -3205,7 +3284,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <span id="cb63-2"><a href="#cb63-2"></a>  <span class="fu">mutate</span>(<span class="at">Date =</span> <span class="fu">as.Date</span>(Date))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　それでは図を作成してみましょう。横軸は日付（<code>Date</code>）、縦軸は累積感染者数（<code>Confirmed_Total</code>）にしましょう。また、縦軸のスケールは底10の対数を取ります。感染者数が数百万人となるアメリカと、数万人の国が同じグラフになると、見にくくなるからです。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-line-2_05fff24e988774e1b319f09d3823507a">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1"></a>COVID19_df <span class="sc">|&gt;</span></span>
 <span id="cb64-2"><a href="#cb64-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb64-3"><a href="#cb64-3"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Date, <span class="at">y =</span> Confirmed_Total)) <span class="sc">+</span></span>
@@ -3221,7 +3300,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-line-2-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-line-2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
@@ -3229,7 +3308,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <p>　??????????????????</p>
 <p>　なんでしょう…。想像したものと違いますね。また、警告メッセージも出力されますが、これは0を対数化すると<code>-Inf</code>になるから出力されるものです。大きな問題はないので、ここでは無視しましょう。</p>
 <p>　先ほど申し上げた通り、横軸の値はデータ内に1回のみ登場すべきです。しかし、<code>COVID19_df</code>の場合、（たとえば）2020年5月1日の行が国の数だけあります。この場合は、ちゃんと国（<code>Country</code>）ごとに線を分けるように指定する必要があります。ここで使うマッピング要素が<code>group</code>です。<code>group</code>で指定した変数の値ごとに異なる折れ線グラフを出力してくれます。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-line-3_7de08dd33f18af26817dfd9cf774dad3">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1"></a>COVID19_df <span class="sc">|&gt;</span></span>
 <span id="cb66-2"><a href="#cb66-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb66-3"><a href="#cb66-3"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Date, <span class="at">y =</span> Confirmed_Total, <span class="at">group =</span> Country)) <span class="sc">+</span></span>
@@ -3242,13 +3321,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-line-3-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-line-3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　これで折れ線グラフは出力されましたが、どの線がどの国かが分かりませんね。<code>group</code>の場合、凡例が表示されないので、<code>group</code>でなく、<code>color</code>で色分けしてみましょう。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-line-4_2debc5b1c55607cb0b9598fc862bc0a9">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1"></a>COVID19_df <span class="sc">|&gt;</span></span>
 <span id="cb67-2"><a href="#cb67-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb67-3"><a href="#cb67-3"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Date, <span class="at">y =</span> Confirmed_Total, <span class="at">color =</span> Country)) <span class="sc">+</span></span>
@@ -3261,14 +3340,14 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-line-4-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-line-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　???????????????????</p>
 <p>　なんか出ましたが、国数が多すぎて凡例だけで図が埋め尽くされています。この場合、方法は3つあります。1つ目の方法は図のサイズを大きくする方法です。これは保存の際、サイズを再調整するだけですので、ここでは割愛します。また、それでも凡例内の項目が非常に多いグラフをグラフの種類と関係なく推奨されません。2つ目は国を絞る方法であり、3つ目は<code>gghighlight()</code>で一部の国のみハイライトする方法です。まずは、G7（カナダ、フランス、ドイツ、イタリア、日本、イギリス、アメリカ）のみデータを絞って折れ線グラフを作ってみましょう。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-line-5_ac065dac104f29e999feb518a8c07105">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1"></a>G7 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Cananda"</span>, <span class="st">"France"</span>, <span class="st">"Germany"</span>, <span class="st">"Italy"</span>, <span class="st">"Japan"</span>, </span>
 <span id="cb68-2"><a href="#cb68-2"></a>        <span class="st">"United Kingdom"</span>, <span class="st">"United States"</span>)</span>
 <span id="cb68-3"><a href="#cb68-3"></a></span>
@@ -3285,13 +3364,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-line-5-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-line-5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>　これだけでもG7国のCOVID-19の状況が比較可能ですが、この図は改善の余地があります。それは凡例の順番です。できれば、一番最新の日付のデータを基準に凡例の順番を揃えることが出来たら、どの線がどの国かが分かりやすくなります。そこで登場するのは第<a href="factor.html"><span>16</span></a>章で紹介しました<code>fct_reorder2</code>関数です。実際にやってみましょう。また、線の太さも今より太めにしてみたいと思います。線の太さは<code>linewidth</code>で調整可能であり、既定値は0.5です。0.5より大きい場合はより太い線になります。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-line-6_0d86a27d5b5d78209b941971db4c20a0">
+<p>　これだけでもG7国のCOVID-19の状況が比較可能ですが、この図は改善の余地があります。それは凡例の順番です。できれば、一番最新の日付のデータを基準に凡例の順番を揃えることが出来たら、どの線がどの国かが分かりやすくなります。そこで登場するのは第<a href="factor.html" class="quarto-xref"><span>16</span></a>章で紹介しました<code>fct_reorder2</code>関数です。実際にやってみましょう。また、線の太さも今より太めにしてみたいと思います。線の太さは<code>linewidth</code>で調整可能であり、既定値は0.5です。0.5より大きい場合はより太い線になります。</p>
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1"></a>COVID19_df <span class="sc">|&gt;</span></span>
 <span id="cb69-2"><a href="#cb69-2"></a>  <span class="fu">filter</span>(Country <span class="sc">%in%</span> G7) <span class="sc">|&gt;</span></span>
 <span id="cb69-3"><a href="#cb69-3"></a>  <span class="fu">mutate</span>(<span class="at">Country =</span> <span class="fu">fct_reorder2</span>(Country, Date, Confirmed_Total, last2)) <span class="sc">|&gt;</span></span>
@@ -3307,7 +3386,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-line-6-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-line-6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
@@ -3316,7 +3395,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <section id="一部の線をハイライトする" class="level3" data-number="20.7.1">
 <h3 data-number="20.7.1" class="anchored" data-anchor-id="一部の線をハイライトする"><span class="header-section-number">20.7.1</span> 一部の線をハイライトする</h3>
 <p>　グループが多すぎる場合の対処法、その2つ目はデータを全て使い、一部の国のみハイライトする方法です。線のハイライトにも<code>gghighlight()</code>が使えます。同じく日米中韓の線のみハイライトしてみましょう。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization2_cache/html/visual2-line-7_597b264212f91dac6b8d90a5085b67dd">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1"></a>COVID19_df <span class="sc">|&gt;</span></span>
 <span id="cb70-2"><a href="#cb70-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb70-3"><a href="#cb70-3"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Date, <span class="at">y =</span> Confirmed_Total, <span class="at">color =</span> Country)) <span class="sc">+</span></span>
@@ -3331,7 +3410,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization2_files/figure-html/visual2-line-7-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization2_files/figure-html/visual2-line-7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
@@ -3452,15 +3531,15 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-70" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-annotation="1" data-code-lines="8" data-code-cell="annotated-cell-70">使用するフォントを指定する。ここで指定したフォントがPDF内に埋め込まれる。Windowsなら “Yu Gothic” でOK</span>
+<span data-code-cell="annotated-cell-70" data-code-lines="8" data-code-annotation="1">使用するフォントを指定する。ここで指定したフォントがPDF内に埋め込まれる。Windowsなら “Yu Gothic” でOK</span>
 </dd>
 <dt data-target-cell="annotated-cell-70" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-annotation="2" data-code-lines="10" data-code-cell="annotated-cell-70">拡張子はpngでなく、pdfを使用</span>
+<span data-code-cell="annotated-cell-70" data-code-lines="10" data-code-annotation="2">拡張子はpngでなく、pdfを使用</span>
 </dd>
 <dt data-target-cell="annotated-cell-70" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-annotation="3" data-code-lines="12" data-code-cell="annotated-cell-70"><code>"png"</code>の代わりに<code>CairoPDF</code>を使用する。ただし、予め{Cairo}パッケージを読み込んでおくか、{Cairo}はインストールだけしておき、<code>Cairo::CairoPDF</code>を使用する。</span>
+<span data-code-cell="annotated-cell-70" data-code-lines="12" data-code-annotation="3"><code>"png"</code>の代わりに<code>CairoPDF</code>を使用する。ただし、予め{Cairo}パッケージを読み込んでおくか、{Cairo}はインストールだけしておき、<code>Cairo::CairoPDF</code>を使用する。</span>
 </dd>
 </dl>
 </div>
@@ -3482,7 +3561,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <li><a href="https://rstudio.com/resources/cheatsheets/">ggplot2 cheatsheet</a></li>
 <li><a href="https://drive.google.com/file/d/1Dvul1p6TYH6gWJzZRwpE0YX1dO0hDF-b/view">ggplot2 aesthetics cheatsheet</a></li>
 </ul>
-<p>　2番目の資料は非常に分かりやすい資料ですが、Google Drive経由で公開されているため、いつリンクが切れかが不明です。念の為に本ページにも資料を転載します。 　 <img src="Figs/Visualization2/ggplot_aesthetics_cheatsheet.png" id="fig-visual2-summary-1" class="img-fluid" data-fig-align="center" width="800" alt="ggplot2 aesthetics cheatsheet"></p>
+<p>　2番目の資料は非常に分かりやすい資料ですが、Google Drive経由で公開されているため、いつリンクが切れかが不明です。念の為に本ページにも資料を転載します。 　 <img src="Figs/Visualization2/ggplot_aesthetics_cheatsheet.png" id="fig-visual2-summary-1" class="img-fluid quarto-figure quarto-figure-center anchored" width="800" alt="ggplot2 aesthetics cheatsheet"></p>
 <p>　青い点は「ほとんど」のケースにおいて<code>aes()</code>の中に位置する引数です。ただし、<code>geom_bar()</code>と<code>geom_histogram()</code>は自動的に度数を計算してくれるため、<code>x</code>と<code>y</code>一方だけでも可能です。黄色い資格は<code>aes()</code>の中でも、外でも使うことが可能な引数です。<code>aes()</code>の中ならマッピング要素となるため、データの変数と対応させる必要があります。ピンク色のひし形四角形は必ず<code>aes()</code>の外に位置する引数です。</p>
 
 
@@ -3574,10 +3653,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/www\.jaysong\.net\/RBook\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -3587,8 +3683,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -3601,6 +3706,120 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -3644,6 +3863,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -3669,8 +3889,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
-      // Handle positioning of the toggle
-      window.addEventListener(
+        // Handle positioning of the toggle
+    window.addEventListener(
       "resize",
       throttle(() => {
         elRect = undefined;
@@ -3678,23 +3898,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
           selectCodeLines(selectedAnnoteEl);
         }
       }, 10)
-      );
-      function throttle(fn, ms) {
-      let throttle = false;
-      let timer;
-        return (...args) => {
-          if(!throttle) { // first call gets through
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
               fn.apply(this, args);
-              throttle = true;
-          } else { // all the others get throttled
-              if(timer) clearTimeout(timer); // cancel #2
-              timer = setTimeout(() => {
-                fn.apply(this, args);
-                timer = throttle = false;
-              }, ms);
-          }
-        };
-      }
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
       for (let i=0; i<annoteTargets.length; i++) {
         const annoteTarget = annoteTargets[i];
@@ -3739,7 +3959,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
               options: {
                 flipVariations: false, // true by default
                 allowedAutoPlacements: ['right'],
-                fallbackPlacements: ['right', 'top', 'top-start', 'top-end'],
+                fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
               },
             },
             {
@@ -3791,30 +4011,16 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
   }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var filterRegex = new RegExp("https:\/\/www\.jaysong\.net\/RBook\/");
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-          // target, if specified
-          link.setAttribute("target", "_blank");
-      }
-    }
 });
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./visualization1.html" class="pagination-link">
+      <a href="./visualization1.html" class="pagination-link  aria-label=" &lt;span="" [理論]&lt;="" span&gt;"="">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">可視化 [理論]</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./visualization3.html" class="pagination-link">
+      <a href="./visualization3.html" class="pagination-link" aria-label="<span class='chapter-number'>21</span>&nbsp; <span class='chapter-title'>可視化 [応用]</span>">
         <span class="nav-page-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">可視化 [応用]</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
@@ -3825,12 +4031,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">
       &nbsp;
     </div>   
-    <div class="nav-footer-center">Copyright 2023, <a href="https://www.jaysong.net">Jaehyun Song</a> and <a href="https://yukiyanai.github.io/">Yuki Yanai</a></div>
+    <div class="nav-footer-center">
+<p>Copyright 2023, <a href="https://www.jaysong.net">Jaehyun Song</a> and <a href="https://yukiyanai.github.io/">Yuki Yanai</a></p>
+</div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
+
 
 
 

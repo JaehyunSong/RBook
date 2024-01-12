@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.542">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -22,7 +22,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -58,6 +58,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -100,7 +101,13 @@ div.csl-indent {
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -109,6 +116,7 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "サーチ"
@@ -129,10 +137,37 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
 <meta property="og:title" content="私たちのR: ベストプラクティスの探求">
 <meta property="og:description" content="R Not for Everyone: An Esoteric Guide">
 <meta property="og:image" content="https://www.jaysong.net/RBook/Figs/favicon.png">
-<meta property="og:site-name" content="私たちのR">
+<meta property="og:site_name" content="私たちのR">
 <meta property="og:image:height" content="260">
 <meta property="og:image:width" content="260">
 <meta name="twitter:title" content="私たちのR: ベストプラクティスの探求">
@@ -145,17 +180,16 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 
 <body class="nav-sidebar docked">
 
-
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="サイドバーを切り替える" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="サイドバーを切り替える" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./visualization1.html">可視化</a></li><li class="breadcrumb-item"><a href="./visualization4.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">可視化 [発展]</span></a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="サイドバーを切り替える" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./visualization1.html">可視化</a></li><li class="breadcrumb-item"><a href="./visualization4.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">可視化 [発展]</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="サイドバーを切り替える" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
@@ -165,12 +199,12 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">私たちのR</a> 
         <div class="sidebar-tools-main">
-    <a href="https://github.com/JaehyunSong/RBook/" rel="" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="https://github.com/JaehyunSong/RBook/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
     <div class="dropdown">
       <a href="" title="Share" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Share"><i class="bi bi-share"></i></a>
       <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
@@ -501,7 +535,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -543,7 +577,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./visualization1.html">可視化</a></li><li class="breadcrumb-item"><a href="./visualization4.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">可視化 [発展]</span></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title"><span id="sec-visualization4" class="quarto-section-identifier"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">可視化 [発展]</span></span></h1>
 </div>
@@ -558,11 +592,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
   </div>
   
 
+
 </header>
+
 
 <section id="sec-visual4-intro" class="level2" data-number="22.1">
 <h2 data-number="22.1" class="anchored" data-anchor-id="sec-visual4-intro"><span class="header-section-number">22.1</span> 概要</h2>
-<p>　第<a href="visualization1.html"><span>19</span></a>章では{ggplot2}の仕組みについて、第<a href="visualization2.html"><span>20</span></a>章ではよく使われる5種類のプロット（棒グラフ、散布図、折れ線グラフ、箱ひげ図、ヒストグラム）の作り方を、第<a href="visualization3.html"><span>21</span></a>章ではスケール、座標系などの操作を通じたグラフの見た目調整について解説しました。本章では第<a href="visualization2.html"><span>20</span></a>章の延長線上に位置づけることができ、紹介しきれなかった様々なグラフの作り方について簡単に解説します。本章で紹介するグラフは以下の通りです。</p>
+<p>　第<a href="visualization1.html" class="quarto-xref"><span>19</span></a>章では{ggplot2}の仕組みについて、第<a href="visualization2.html" class="quarto-xref"><span>20</span></a>章ではよく使われる5種類のプロット（棒グラフ、散布図、折れ線グラフ、箱ひげ図、ヒストグラム）の作り方を、第<a href="visualization3.html" class="quarto-xref"><span>21</span></a>章ではスケール、座標系などの操作を通じたグラフの見た目調整について解説しました。本章では第<a href="visualization2.html" class="quarto-xref"><span>20</span></a>章の延長線上に位置づけることができ、紹介しきれなかった様々なグラフの作り方について簡単に解説します。本章で紹介するグラフは以下の通りです。</p>
 <ul>
 <li><a href="#sec-visual4-violin">バイオリンプロット</a></li>
 <li><a href="#sec-visual4-rug">ラグプロット</a></li>
@@ -591,49 +627,49 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </section>
 <section id="sec-visual4-violin" class="level2" data-number="22.2">
 <h2 data-number="22.2" class="anchored" data-anchor-id="sec-visual4-violin"><span class="header-section-number">22.2</span> バイオリンプロット</h2>
-<p>　バイオリンプロットは連続変数の分布を可視化する際に使用するプロットの一つです。第<a href="visualization1.html"><span>19</span></a>章で紹介しましたヒストグラムや箱ひげ図と目的は同じです。それではバイオリンプロットとは何かについて例を見ながら解説します。</p>
+<p>　バイオリンプロットは連続変数の分布を可視化する際に使用するプロットの一つです。第<a href="visualization1.html" class="quarto-xref"><span>19</span></a>章で紹介しましたヒストグラムや箱ひげ図と目的は同じです。それではバイオリンプロットとは何かについて例を見ながら解説します。</p>
 <p>　以下の図は対数化した一人当たり購買力平価GDP（<code>PPP_per_capita</code>）のヒストグラムです。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-violin1_1f0f1c81794a1c1e944a479bef9d1568">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-violin1-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-violin1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　このヒストグラムをなめらかにすると以下のような図になります。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-violin2_f3479f1545315931f09fb0419c86cca6">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-violin2-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-violin2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　この密度曲線を上下対称にすると以下のような図となり、これがバイオリンプロットです。ヒストグラムのようにデータの分布が分かりやすくなります。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-violin3_b045f2a5da4d9d157a3b07412b9c5cc8">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-violin3-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-violin3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　しかし、この図の場合、ヒストグラムと同様、中央値や四分位数などの情報が含まれておりません。これらの箱ひげ図を使用した方が良いでしょう。バイオリンプロットの良い点はバイオリンの中に箱ひげ図を入れ、ヒストグラムと箱ひげ図両方の長所を取ることができる点です。たとえば、バイオリンプロットを90度回転させ、中にバイオリン図を入れると以下のようになります。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-violin4_72eb5a986ec6434dbbd1aea8c7ec8552">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-violin4-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-violin4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　それでは実際にバイオリンプロットを作ってみましょう。使い方は箱ひげ図（<code>geom_boxplot()</code>）と同じです。たとえば、横軸は大陸（<code>Continent</code>）に、縦軸は対数化した一人当たり購買力平価GDP（<code>PPP_per_capita</code>）にしたバイオリンプロットを作るには作るには<code>geom_violin()</code>幾何オブジェクトの中にマッピングするだけです。大陸ごとに色分けしたい場合は<code>fill</code>引数に<code>Continent</code>をマッピングします。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-violin5_b56d11a48b4505e7d711d4c3b650b335">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a>    <span class="fu">geom_violin</span>(<span class="fu">aes</span>(<span class="at">x =</span> Continent, <span class="at">y =</span> PPP_per_capita, <span class="at">fill =</span> Continent)) <span class="sc">+</span></span>
@@ -646,13 +682,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-violin5-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-violin5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　ここに箱ひげ図も載せたい場合は、<code>geom_violin()</code>オブジェクトの後に<code>geom_boxplot()</code>オブジェクトを入れるだけで十分です。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-violin6_35b7a5f7041271d397a8b6041daeca27">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb3-3"><a href="#cb3-3"></a>    <span class="fu">geom_violin</span>(<span class="fu">aes</span>(<span class="at">x =</span> Continent, <span class="at">y =</span> PPP_per_capita, <span class="at">fill =</span> Continent)) <span class="sc">+</span></span>
@@ -667,7 +703,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-violin6-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-violin6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -679,55 +715,55 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <h2 data-number="22.3" class="anchored" data-anchor-id="sec-visual4-rug"><span class="header-section-number">22.3</span> ラグプロット</h2>
 <p>　ラグプロット（rug plot）は変数の分布を示す点ではヒストグラム、箱ひげ図、バイオリンプロットと同じ目的を持ちますが、大きな違いとしてはラグプロット単体で使われるケースがない（または、非常に稀）という点です。ラグプロットは上述しましたヒストグラムや箱ひげ図、または散布図などと組み合わせて使うのが一般的です。</p>
 <p>　以下は<code>Country_df</code>の<code>PPP_per_capita</code>（常用対数変換）のヒストグラムです。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-rug1_205666bb744fcfb25573b9813a02c3dd">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-rug1-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-rug1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　一変数の分布を確認する場合、ヒストグラムは情報量の損失が少ない方です。それでも値一つ一つの情報は失われますね。例えば、上記のヒストグラムで左端の度数は1です。左端の棒の区間はおおよそ500から780であり、一人当たりPPPがこの区間に属する国は1カ国ということです。ちなみに、その国はブルンジ共和国ですが、ブルンジ共和国の具体的な一人当たりPPPはヒストグラムから分かりません。情報量をより豊富に持たせるためには区間を細かく刻むことも出来ますが、逆に分布の全体像が読みにくくなります。</p>
 <p>　ここで登場するのがラグプロットです。これは座標平面の端を使ってデータを一時現状に並べたものです。多くの場合、点ではなく、垂直線（｜）を使います。ラグプロットの幾何オブジェクトは{ggplot2}でデフォルトで提供されており、<code>geom_rug()</code>を使います。マッピングは<code>x</code>または<code>y</code>に対して行いますが、座標平面の下段にラグプロットを出力する場合は<code>x</code>に変数（ここでは<code>PPP_per_capita</code>）をマッピングします。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-rug2_8b6292f278574604c62b65ba950b3029">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-rug2-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-rug2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>ラグプロットを使うと本来のヒストグラムの外見にほぼ影響を与えず、更に情報を付け加えることが可能です。点（｜）の密度でデータの分布を確認することもできますが、その密度の相対的な比較に関してはヒストグラムの方が良いでしょう。</p>
 <p>ラグプロットは散布図に使うことも可能です。散布図は一つ一つの点が具体的な値がマッピングされるため、情報量の損失はほぼないでしょう。それでも散布図にラグプロットを加える意味はあります。まず、<code>Country_df</code>のフリーダムハウス指数（<code>FH_Total</code>）と一人当たりPPP（<code>PPP_per_capita</code>）の散布図を作ってみましょう。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-rug3_a96767260ade4aa231c5834787ed410e">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-rug3-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-rug3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>散布図の目的は二変量間の<strong>関係</strong>を確認することであって、それぞれの変数の分布を確認することではありません。もし、<code>FH_Total</code>と<code>PPP_per_capita</code>の分布が確認したいなら、それぞれのヒストグラムや箱ひげ図を作成した方が良いでしょう。しかし、ラグプロットを使えば、点（｜）の密度で大まかな分布は確認出来ますし、図の見た目にもほぼ影響を与えません。</p>
 <p>横軸と縦軸両方のラグプロットは、<code>geom_rug()</code>に<code>x</code>と<code>y</code>両方マッピングするだけです。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-rug4_24036a44a5e7e65adc95ae32cdf6a65e">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-rug4-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-rug4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　これで<code>FH_Total</code>はほぼ均等に分布していて、<code>PPP_per_capita</code>は2万ドル以下に多く密集していることが確認できます。</p>
 <p>　{ggExtra}の<code>ggMarginal()</code>を使えば、ラグプロットでなく、箱ひげ図やヒストグラムを付けることも可能です。{ggplot2}で作図した図をオブジェクトとして格納し、<code>ggMarginal()</code>の第一引数として指定します。第一引数のみだと密度のだけ出力されるため、箱ひげ図を付けるためには<code>type = "boxplot"</code>を指定します（既定値は<code>"density"</code>）。ヒストグラムを出力する場合は<code>"histogram"</code>と指定します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-rug5_e3d2fc88cd08e5bdcda90d7c70a65ee3">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-rug5-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-rug5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -738,7 +774,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <h2 data-number="22.4" class="anchored" data-anchor-id="sec-visual4-ridge"><span class="header-section-number">22.4</span> リッジプロット</h2>
 <p>　リッジプロット（ridge plot）はある変数の分布をグループごとに出力する図です。大陸ごとの人間開発指数の分布を示したり、時系列データなら分布の変化を示す時にも使えます。ここでは大陸ごとの人間開発指数の分布をリッジプロットで示してみましょう。</p>
 <p>　リッジプロットを作成する前に、<code>geom_density()</code>幾何オブジェクトを用い、変数の密度曲線（density curve）を作ってみます。マッピングは<code>x</code>に対し、分布を出力する変数名を指定します。また、密度曲線内部に色塗り（<code>fill</code>）をし、曲線を計算する際のバンド幅（<code>bw</code>）は0.054にします。<code>bw</code>が大きいほど、なめらかな曲線になります。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-ridge1_b3258f110ca80ca965034d6f99c8d5ce">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">geom_density</span>(<span class="fu">aes</span>(<span class="at">x =</span> HDI_2018), <span class="at">fill =</span> <span class="st">"gray70"</span>, <span class="at">bw =</span> <span class="fl">0.054</span>) <span class="sc">+</span></span>
@@ -750,13 +786,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-ridge1-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-ridge1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　これを大陸ごとに出力する場合、ファセット分割を行います。今回は大陸ごとに1列（<code>ncol = 1</code>）でファセットを分割します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-ridge2_b958b54e217c68901b16eb67488d5944">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">geom_density</span>(<span class="fu">aes</span>(<span class="at">x =</span> HDI_2018), <span class="at">fill =</span> <span class="st">"gray70"</span>, <span class="at">bw =</span> <span class="fl">0.054</span>) <span class="sc">+</span></span>
@@ -769,7 +805,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-ridge2-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-ridge2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -779,7 +815,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggridges)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　使用する幾何オブジェクトは<code>geom_density_ridges()</code>です。似たような幾何オブジェクトとして<code>geom_ridgeline()</code>がありますが、こちらは予め密度曲線の高さを計算しておく必要があります。一方、<code>geom_density_ridges()</code>は変数だけ指定すれば密度を自動的に計算してくれます。マッピングは<code>x</code>と<code>y</code>に対し、それぞれ分布を出力する変数名とグループ変数名を指定します。また、密度曲線が重なるケースもあるため、透明度（<code>alpha</code>）も0.5にしておきましょう。ここでは別途指定しませんが、ハンド幅も指定可能であり、<code>aes()</code>の外側に<code>bandwidth</code>を指定するだけです。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-ridge4_24856a585e76788b27204cfbdc53bf3a">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb9-3"><a href="#cb9-3"></a>  <span class="fu">geom_density_ridges</span>(<span class="fu">aes</span>(<span class="at">x =</span> HDI_2018, <span class="at">y =</span> Continent), </span>
@@ -795,13 +831,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-ridge4-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-ridge4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>先ほど作図した図と非常に似た図が出来上がりました。ファセット分割に比べ、空間を最大限に活用していることが分かります。ファセットラベルがなく、グループ名が縦軸上に位置するからです。また、リッジプロットの特徴は密度曲線がオーバラップする点ですが、以下のように<code>scale = 1</code>を指定すると、オーバラップなしで作成することも可能です。もし、<code>scale = 3</code>にすると最大2つの密度曲線が重なることになります。たとえば最下段のアフリカはアメリカの行と若干オーバラップしていますが、<code>scale = 3</code>の場合、アジアの行までオーバーラップされうることになります。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-ridge5_615fdcf3d9fdd609fe59a2e387e970e4">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb12-3"><a href="#cb12-3"></a>  <span class="fu">geom_density_ridges</span>(<span class="fu">aes</span>(<span class="at">x =</span> HDI_2018, <span class="at">y =</span> Continent), </span>
@@ -817,13 +853,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-ridge5-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-ridge5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　また、横軸の値に応じて背景の色をグラデーションで表現することも可能です。この場合、<code>geom_density_ridges()</code>幾何オブジェクトでなく、<code>geom_density_ridges_gradient()</code>を使い、<code>fill</code>にもマッピングをする必要があります。横軸（<code>x</code>）の値に応じて色塗りをする場合、<code>fill = stat(x)</code>とします。デフォルトでは横軸の値が高いほど空色、低いほど黒になります。ここでは高いほど黄色、低いほど紫ににするため、色弱にも優しい<code>scale_fill_viridis_c()</code>を使い<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>、カラーオプションはplasmaにします（<code>option = "c"</code>）。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-ridge6_2f8171656e258c97f2e9286b39a7bc03">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb15-2"><a href="#cb15-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb15-3"><a href="#cb15-3"></a>  <span class="fu">geom_density_ridges_gradient</span>(<span class="fu">aes</span>(<span class="at">x =</span> HDI_2018, <span class="at">y =</span> Continent, <span class="at">fill =</span> <span class="fu">stat</span>(x)), </span>
@@ -842,13 +878,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-ridge6-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-ridge6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　密度曲線は基本的にはなめらかな曲線であるため、データが存在しない箇所にも密度が高く見積もられるケースがあります。全体的な分布を俯瞰するには良いですが、情報の損失は避けられません。そこで出てくるのが点付きのリッジプロットです。<code>HDI_2018</code>の個々の値を点で出力するには<code>jittered_points = TRUE</code>を指定するだけです。これだけで密度曲線の内側に点が若干のズレ付き（jitter）で出力されます。ただし、密度曲線がオーバーラップされるリッジプロットの特徴を考えると、グループごとに点の色分けをする必要があります（同じ色になると、どのグループの点かが分からなくなるので）。この場合、<code>point_color</code>に対し、グループ変数（<code>Continent</code>）をマッピングします。また、密度曲線の色と合わせるために密度曲線の色塗りも<code>fill</code>で指定します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-ridge7_801c2ed9f59bbae58cb8ee899a2ce478">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb18-3"><a href="#cb18-3"></a>  <span class="fu">geom_density_ridges</span>(<span class="fu">aes</span>(<span class="at">x =</span> HDI_2018, <span class="at">y =</span> Continent, <span class="at">fill =</span> Continent,</span>
@@ -866,13 +902,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-ridge7-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-ridge7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　他にも密度曲線の下側にラグプロットを付けることも可能です。こうすれば点ごとに色訳をする必要もなくなります。ラグプロットを付けるためには点の形（<code>point_shape</code>）を「|」にする必要があります。ただ、これだけだと「|」が密度曲線内部に散らばる（jittered）だけです。散らばりをなくす、つまり密度曲線の下段に固定する必要があり、これは<code>aes()</code>その外側に<code>position = position_points_jitter(width = 0, height = 0)</code>を指定することで出来ます。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-ridge8_b45ff4dc1813779920092d3bc3282c0b">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb21-2"><a href="#cb21-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb21-3"><a href="#cb21-3"></a>  <span class="fu">geom_density_ridges</span>(<span class="fu">aes</span>(<span class="at">x =</span> HDI_2018, <span class="at">y =</span> Continent, <span class="at">fill =</span> Continent), </span>
@@ -891,13 +927,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-ridge8-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-ridge8-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　最後に密度曲線でなく、ヒストグラムで示す方法を紹介します。これは<code>geom_density_ridges()</code>の内部に<code>stat = "binline"</code>を指定するだけです。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-ridge9_0721b9b87507862b1f8fe7f99d1ef362">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb24-2"><a href="#cb24-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb24-3"><a href="#cb24-3"></a>  <span class="fu">geom_density_ridges</span>(<span class="fu">aes</span>(<span class="at">x =</span> HDI_2018, <span class="at">y =</span> Continent), <span class="at">alpha =</span> <span class="fl">0.5</span>,</span>
@@ -913,7 +949,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-ridge9-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-ridge9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -947,7 +983,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 4 America   316.     128.      504.</code></pre>
 </div>
 </div>
-<p>　実は以上のデータは以下のようなコードで作成されています。{purrr}パッケージの使い方に慣れる必要があるので、第<a href="iteration.html"><span>28</span></a>章を参照してください。</p>
+<p>　実は以上のデータは以下のようなコードで作成されています。{purrr}パッケージの使い方に慣れる必要があるので、第<a href="iteration.html" class="quarto-xref"><span>28</span></a>章を参照してください。</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>Pointrange_df <span class="ot">&lt;-</span> Country_df <span class="sc">|&gt;</span></span>
 <span id="cb30-2"><a href="#cb30-2"></a>    <span class="fu">filter</span>(Continent <span class="sc">!=</span> <span class="st">"Oceania"</span>) <span class="sc">|&gt;</span></span>
@@ -961,7 +997,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <span id="cb30-10"><a href="#cb30-10"></a>           <span class="at">Conf_lwr =</span> conf.low, <span class="at">Conf_upr =</span> conf.high) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　この<code>Pointrange_df</code>を用いて横軸は大陸（<code>Continent</code>）、縦軸には点推定値（<code>Coef</code>）と95%信頼区間（<code>Conf_lwr</code>と<code>Conf_upr</code>）を出力します。ここで使う幾何オブジェクトは<code>geom_pointrange()</code>です。横軸<code>x</code>と点推定値<code>y</code>、95%信頼区間の下限の<code>ymin</code>、上限の<code>ymax</code>にマッピングします。エラーバー付き散布図を縦に並べたい場合は<code>y</code>と<code>x</code>、<code>xmin</code>、<code>xmax</code>にマッピングします。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-pointrage5_a26b0651a4e24998a83244b4b0aa39b7">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>Pointrange_df <span class="sc">|&gt;</span></span>
 <span id="cb31-2"><a href="#cb31-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb31-3"><a href="#cb31-3"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
@@ -973,7 +1009,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-pointrage5-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-pointrage5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -1016,7 +1052,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 \end{aligned}
 \]</span></p>
 <p>　どの説明変数を用いたかでエラーバーと点の色分けを行う場合、<code>color</code>に対して<code>Term</code>をマッピングします。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-pointrage9_a07504cf237a9c0f6a96ce7ba0df6d30">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>Pointrange_df2 <span class="sc">|&gt;</span></span>
 <span id="cb35-2"><a href="#cb35-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb35-3"><a href="#cb35-3"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
@@ -1031,13 +1067,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-pointrage9-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-pointrage9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　何か違いますね。この2つのエラーバーと点の位置をずらす必要があるようです。これは3次元以上の棒グラフで使った<code>position</code>引数で調整可能です。今回は実引数として<code>position_dodge(0.5)</code>を指定してみましょう。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-pointrage10_e18e66a09e9511574e7b21410ff50a00">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>Pointrange_df2 <span class="sc">|&gt;</span></span>
 <span id="cb36-2"><a href="#cb36-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb36-3"><a href="#cb36-3"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
@@ -1053,13 +1089,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-pointrage10-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-pointrage10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　これで完成です。更に、<span class="math inline">\(\alpha = 0.05\)</span>水準で統計的に有意か否かを透明度で示し、透明度の凡例を非表示にしてみましょう。<span class="math inline">\(\alpha = 0.05\)</span>水準で統計的に有意か否かは95%信頼区間の上限と下限の積が0より大きいか否かで判定できます。<code>ggplot()</code>にデータを渡す前に統計的有意か否かを意味する<code>Sig</code>変数を作成し、<code>geom_pointrage()</code>の内部では<code>alpha</code>に<code>Sig</code>をマッピングします。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-pointrage11_0b8d83dc8c8d903252345af186391d49">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>Pointrange_df2 <span class="sc">|&gt;</span></span>
 <span id="cb37-2"><a href="#cb37-2"></a>    <span class="fu">mutate</span>(<span class="at">Sig =</span> <span class="fu">if_else</span>(Conf_lwr <span class="sc">*</span> Conf_upr <span class="sc">&gt;</span> <span class="dv">0</span>, </span>
 <span id="cb37-3"><a href="#cb37-3"></a>                         <span class="st">"Significant"</span>, <span class="st">"Insignificant"</span>)) <span class="sc">|&gt;</span></span>
@@ -1079,13 +1115,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-pointrage11-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-pointrage11-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　区間を単なる線ではなく、上限と下限に「-」を付ける場合は、<code>geom_point()</code>と<code>geom_errorbar()</code>を組み合わせます。<code>geom_errorbar()</code>は<code>geom_pointrange()</code>から点がなくなったものになるため、<code>y</code>へのマッピングは不要です。また、上限と下限に着く水平線の幅は<code>width</code>で調整します。既定値のままだとかなり広めになるため、適宜調整しましょう。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-pointrage12_939f7c9313d9234d7ceab68ad3a6843e">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>Pointrange_df2 <span class="sc">|&gt;</span></span>
 <span id="cb38-2"><a href="#cb38-2"></a>    <span class="fu">mutate</span>(<span class="at">Sig =</span> <span class="fu">if_else</span>(Conf_lwr <span class="sc">*</span> Conf_upr <span class="sc">&gt;</span> <span class="dv">0</span>, </span>
 <span id="cb38-3"><a href="#cb38-3"></a>                         <span class="st">"Significant"</span>, <span class="st">"Insignificant"</span>)) <span class="sc">|&gt;</span></span>
@@ -1105,7 +1141,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-pointrage12-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-pointrage12-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -1116,7 +1152,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <h2 data-number="22.6" class="anchored" data-anchor-id="sec-visual4-lollipop"><span class="header-section-number">22.6</span> ロリーポップチャート</h2>
 <p>　ロリーポップチャートは棒グラフの特殊な形態であり、棒がロリーポップ（チュッパチャップス）の形をしているものを指します。したがって、2つの図は本質的に同じですが、棒が多い場合はロリーポップチャートを使うケースがあります。棒が非常に多い棒グラフの場合、図を不適切に縮小すると<a href="https://ja.wikipedia.org/wiki/%E3%83%A2%E3%82%A2%E3%83%AC">モアレ</a>が生じるケースがあるからです。</p>
 <p>　まず、<code>Country_df</code>を用い、ヨーロッパ諸国の一人当たりPPP GDP（<code>PPP_per_capita</code>）の棒グラフを作るとします。<code>PPP_per_capita</code>が欠損していないヨーロッパの国は46行であり、非常に棒が多い棒グラフになります。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-lollipop1_29331fec975fd4d18b8cdc66ba807f3b">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb39-2"><a href="#cb39-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">"Europe"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb39-3"><a href="#cb39-3"></a>  <span class="fu">drop_na</span>(PPP_per_capita) <span class="sc">|&gt;</span></span>
@@ -1127,15 +1163,15 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-lollipop1-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-lollipop1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>ここで登場するのがロリーポップチャートです。ロリーポップチャートの構成要素は棒とキャンディーの部分です。棒は線になるため<code>geom_segement()</code>を、キャンディーは散布図<code>geom_point()</code>を使います。散布図については既に第<a href="visualization2.html"><span>20</span></a>章で説明しましたので、ここでは<code>geom_segment()</code>について説明します。</p>
+<p>ここで登場するのがロリーポップチャートです。ロリーポップチャートの構成要素は棒とキャンディーの部分です。棒は線になるため<code>geom_segement()</code>を、キャンディーは散布図<code>geom_point()</code>を使います。散布図については既に第<a href="visualization2.html" class="quarto-xref"><span>20</span></a>章で説明しましたので、ここでは<code>geom_segment()</code>について説明します。</p>
 <p>　<code>geom_segment()</code>は直線を引く幾何オブジェクトであり、線の起点（<code>x</code>と<code>y</code>）と終点（<code>xend</code>と<code>yend</code>）に対してマッピングをする必要があります。横軸上の起点は0、縦軸上の起点は<code>Country</code>です。そして横軸上の終点は<code>PPP_per_capita</code>、縦軸上のそれは<code>Country</code>です。縦軸上の起点と終点が同じということは水平線を引くことになります。</p>
 <p>　<code>geom_segment()</code>で水平線を描いたら、次は散布図をオーバーラップさせます。点の横軸上の位置は<code>PPP_per_capita</code>、縦軸上の位置は<code>Country</code>です。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-lollipop2_5ec501afbd50287b5ec062d92d42d612">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb40-2"><a href="#cb40-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">"Europe"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb40-3"><a href="#cb40-3"></a>  <span class="fu">drop_na</span>(PPP_per_capita) <span class="sc">|&gt;</span></span>
@@ -1151,13 +1187,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-lollipop2-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-lollipop2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　これで完成です。もし一人当たりPPP GDP順で並べ替えたい場合は<code>fct_reorder()</code>を使います。<code>Country</code>を<code>PPP_per_capita</code>の低い方を先にくるようにするなら、<code>fct_reorder(Country, PPP_per_capita)</code>です。縦に並ぶの棒グラフなら最初に来る水準が下に位置されます。もし、順番を逆にしたいなら、更に<code>fct_rev()</code>で水準の順番を逆転させます。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-lollipop3_2e3b7dd0094f1bbc3870c6e29a51f885">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb41-2"><a href="#cb41-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">"Europe"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb41-3"><a href="#cb41-3"></a>  <span class="fu">drop_na</span>(PPP_per_capita) <span class="sc">|&gt;</span></span>
@@ -1174,13 +1210,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-lollipop3-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-lollipop3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　ロリーポップロリーポップチャートで次元を追加するには点（キャンディー）の色分けが考えられます。たとえば、OECD加盟国か否かの次元を追加する場合、<code>geom_point()</code>において<code>color</code>をマッピングするだけです。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-lollipop4_9377e20257453a05c48d1a18746fee7f">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb42-2"><a href="#cb42-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">"Europe"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb42-3"><a href="#cb42-3"></a>  <span class="fu">drop_na</span>(PPP_per_capita) <span class="sc">|&gt;</span></span>
@@ -1201,14 +1237,14 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-lollipop4-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-lollipop4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　ファセット分割ももちろんできますが、この場合、OECD加盟国の一人当たりPPP GDPが相対的に高いことを示すなら、一つのファセットにまとめた方が良いでしょう。</p>
 <p>　以下のようにロリーポップを横に並べることもできますが、棒の数が多いケースがほとんどであるロリーポップチャートではラベルの回転が必要になるため、読みにくくなるかも知れません。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-lollipop5_4f5934c1fb1e63121cf702d7e943ab57">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb43-2"><a href="#cb43-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">"Europe"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb43-3"><a href="#cb43-3"></a>  <span class="fu">drop_na</span>(PPP_per_capita) <span class="sc">|&gt;</span></span>
@@ -1227,7 +1263,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-lollipop5-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-lollipop5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -1237,7 +1273,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <section id="sec-visual4-smooth" class="level2" data-number="22.7">
 <h2 data-number="22.7" class="anchored" data-anchor-id="sec-visual4-smooth"><span class="header-section-number">22.7</span> 平滑化ライン</h2>
 <p>2次元平面上に散布図をプロットし、二変数間の関係を一本の線で要約するのは平滑化ラインです。{ggplot2}では<code>geom_smooth()</code>幾何オブジェクトを重ねることで簡単に平滑化ラインをプロットすることができます。まずは、横軸をフリーダムハウス・スコア（<code>FH_Total</code>）、縦軸を一人当たり購買力平価GDP（<code>PPP_per_capita</code>）にした散布図を出力し、その上に平滑化ラインを追加してみましょう。<code>geom_smooth()</code>にもマッピングが必要で、<code>aes()</code>の内部に<code>x</code>と<code>y</code>をマッピングします。今回は<code>geom_point()</code>と<code>geom_smooth()</code>が同じマッピング情報を共有するため、<code>ggplot()</code>内部でマッピングします。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-smooth1_0d6283361268350cba55fb3dd43a5af5">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb44-2"><a href="#cb44-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> FH_Total, <span class="at">y =</span> PPP_per_capita)) <span class="sc">+</span></span>
 <span id="cb44-3"><a href="#cb44-3"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
@@ -1249,14 +1285,14 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-smooth1-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-smooth1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　青い線が平滑化ライン、網掛けの領域が95%信頼区間です。この線はLOESS (<strong>LO</strong>cal <strong>E</strong>stimated <strong>S</strong>catterplot <strong>S</strong>moothing)と呼ばれる非線形平滑化ラインです。どのようなラインを引くかは<code>method</code>引数で指定しますが、この<code>method</code>既定値が<code>"loess"</code>です。これを見るとフリーダムハウス・スコアが75以下の国では国の自由度と所得間の関係があまり見られませんが、75からは正の関係が確認できます。</p>
 <p>　LOESS平滑化の場合、<code>span</code>引数を使って滑らかさを調整することができます。<code>span</code>の既定値は0.75ですが、これが小さいほど散布図によりフィットしたラインが引かれ、よりギザギザな線になります。たとえば、<code>span</code>を0.25にすると以下のようなグラフが得られます。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-smooth2_7d147ede543d08c0185a822738a4d66c">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb45-2"><a href="#cb45-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> FH_Total, <span class="at">y =</span> PPP_per_capita)) <span class="sc">+</span></span>
 <span id="cb45-3"><a href="#cb45-3"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
@@ -1268,13 +1304,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-smooth2-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-smooth2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　他にも定番の回帰直線を引くこともできます。<code>method</code>の実引数を<code>"lm"</code>に変えるだけです。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-smooth3_2eed62d0bac1c2d035070d78574d89f7">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb46-2"><a href="#cb46-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> FH_Total, <span class="at">y =</span> PPP_per_capita)) <span class="sc">+</span></span>
 <span id="cb46-3"><a href="#cb46-3"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
@@ -1286,13 +1322,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-smooth3-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-smooth3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　信頼区間は既定値だと95%信頼区間が表示されますが、<code>level</code>引数で調整することができます。たとえば、99.9%信頼区間を表示したい場合、<code>level = 0.999</code>を指定します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-smooth4_108369b9559d714535389fa9a7de0c1f">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb47-2"><a href="#cb47-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> FH_Total, <span class="at">y =</span> PPP_per_capita)) <span class="sc">+</span></span>
 <span id="cb47-3"><a href="#cb47-3"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
@@ -1304,13 +1340,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-smooth4-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-smooth4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　信頼区間を消したい場合は<code>se = FALSE</code>を指定します（既定値は<code>TRUE</code>）。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-smooth5_b1ee2daa8ebecb4db5e76a14a49faa38">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb48-2"><a href="#cb48-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> FH_Total, <span class="at">y =</span> PPP_per_capita)) <span class="sc">+</span></span>
 <span id="cb48-3"><a href="#cb48-3"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
@@ -1322,13 +1358,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-smooth5-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-smooth5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　最後にデータのサブセットごとに回帰直線を引く方法について説明します。散布図で色分けを行う場合、<code>aes()</code>内で<code>color</code>引数を指定しますが、これだけで十分です。今回はこれまでの散布図をOECD加盟有無ごとに色分けし、それぞれ別の回帰直線を重ねてみましょう。回帰直線も色分けしたいので<code>color</code>引数で次元を増やす必要があり、これは<code>geom_point()</code>と共通であるため、<code>ggplot()</code>内でマッピングします。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-smooth6_29890beb9a237e7eba4e3ce9fdc4d125">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb49-2"><a href="#cb49-2"></a>    <span class="fu">mutate</span>(<span class="at">OECD =</span> <span class="fu">if_else</span>(OECD <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"加盟国"</span>, <span class="st">"非加盟国"</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb49-3"><a href="#cb49-3"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> FH_Total, <span class="at">y =</span> PPP_per_capita, <span class="at">color =</span> OECD)) <span class="sc">+</span></span>
@@ -1342,14 +1378,14 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-smooth6-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-smooth6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　これを見ると、国の自由度と所得の間に関係が見られるのはOECD加盟国で、非加盟国では非常に関係が弱いことが分かります。</p>
 <p>　あまりいい方法ではないと思いますが、散布図は色（<code>color</code>）で分け、回帰直線は線の種類（<code>linetype</code>）で分けるならどうすれば良いでしょうか。この場合は<code>color</code>は<code>geom_point()</code>内部で、<code>linetype</code>は<code>geom_smooth()</code>でマッピングします。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-smooth7_9f8916b5c99f22221752527d6321de95">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb50-2"><a href="#cb50-2"></a>    <span class="fu">mutate</span>(<span class="at">OECD =</span> <span class="fu">if_else</span>(OECD <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"加盟国"</span>, <span class="st">"非加盟国"</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb50-3"><a href="#cb50-3"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> FH_Total, <span class="at">y =</span> PPP_per_capita)) <span class="sc">+</span></span>
@@ -1363,7 +1399,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-smooth7-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-smooth7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -1375,7 +1411,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <h2 data-number="22.8" class="anchored" data-anchor-id="sec-visual4-text"><span class="header-section-number">22.8</span> 文字列の出力</h2>
 <p>　ここでは図の中に文字列を追加する方法について解説します。</p>
 <p>　まずは、<code>geom_text()</code>からです。これはマッピングされた<code>x</code>と<code>y</code>の箇所に文字列を付ける帰化オブジェクトです。たとえば、<code>Country_df</code>を用い、大陸（<code>Continent</code>）ごとに人間開発指数（<code>HDI_2018</code>）の平均値を棒グラフで示してみましょう。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-text-1_b3f5791732c48fa3d5e7870e09a62435">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1"></a>bar_plot <span class="ot">&lt;-</span> Country_df <span class="sc">|&gt;</span></span>
 <span id="cb51-2"><a href="#cb51-2"></a>  <span class="fu">group_by</span>(Continent) <span class="sc">|&gt;</span></span>
 <span id="cb51-3"><a href="#cb51-3"></a>  <span class="fu">summarise</span>(<span class="at">HDI =</span> <span class="fu">mean</span>(HDI_2018, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
@@ -1388,52 +1424,52 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-text-1-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-text-1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　この棒の上に具体的な平均値を追加するとしましょう。数字が位置する箇所は棒グラフの横軸上の位置（<code>x</code>）、棒グラフの高さ（<code>y</code>）と一致するため、<code>x</code>と<code>y</code>はそれぞれ<code>Continent</code>と<code>HDI</code>でマッピングします。そして、出力する内容を<code>label</code>にマッピングします。ここでは<code>HDI</code>の値をそのまま出力するので、<code>label = HDI</code>です。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-text-2_03cbfa02686f911665e36a47ffc6088f">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a>bar_plot <span class="sc">+</span></span>
 <span id="cb52-2"><a href="#cb52-2"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x =</span> Continent, <span class="at">y =</span> HDI, <span class="at">label =</span> HDI),</span>
 <span id="cb52-3"><a href="#cb52-3"></a>            <span class="at">size =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-text-2-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-text-2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>　ただし、棒と文字が重なり、やや読みにくいですね。しかも小数点も3桁くらいで十分でしょう。文字の位置をやや高めにするために<code>y = HDI</code>を<code>y = HDI + 0.03</code>に調整します。また、小数点を丸めるために<code>label = round(HDI, 3)</code>にへんこうします。ただし、<code>round()</code>を使う場合、<code>round(1.1298, 3)</code>は1.13と出力されます。もし、1.130のように出力したい場合は<code>round()</code>の代わりに、第<a href="programming.html"><span>11</span></a>章でも紹介しました<code>sprintf()</code>を使用します。今回の例の場合、<code>sprintf("%.3f", 1.1298)</code>のように書きます。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-text-3_745fa10a4cd7c74aec73a1df1d8a9576">
+<p>　ただし、棒と文字が重なり、やや読みにくいですね。しかも小数点も3桁くらいで十分でしょう。文字の位置をやや高めにするために<code>y = HDI</code>を<code>y = HDI + 0.03</code>に調整します。また、小数点を丸めるために<code>label = round(HDI, 3)</code>にへんこうします。ただし、<code>round()</code>を使う場合、<code>round(1.1298, 3)</code>は1.13と出力されます。もし、1.130のように出力したい場合は<code>round()</code>の代わりに、第<a href="programming.html" class="quarto-xref"><span>11</span></a>章でも紹介しました<code>sprintf()</code>を使用します。今回の例の場合、<code>sprintf("%.3f", 1.1298)</code>のように書きます。</p>
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1"></a>bar_plot <span class="sc">+</span></span>
 <span id="cb53-2"><a href="#cb53-2"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x =</span> Continent, <span class="at">y =</span> HDI <span class="sc">+</span> <span class="fl">0.03</span>, <span class="at">label =</span> <span class="fu">round</span>(HDI, <span class="dv">3</span>)),</span>
 <span id="cb53-3"><a href="#cb53-3"></a>            <span class="at">size =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-text-3-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-text-3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　<code>geom_text()</code>とほぼ同じ機能を持つ帰化オブジェクトとして<code>geom_label()</code>があります。これは使うと文字列が四角に囲まれた形式で出力されます。見出し紙のようなものであり、使い方は<code>geom_text()</code>と同じです。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-text-4_45e059e3613e0cfebc8015b886c4d47e">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a>bar_plot <span class="sc">+</span></span>
 <span id="cb54-2"><a href="#cb54-2"></a>  <span class="fu">geom_label</span>(<span class="fu">aes</span>(<span class="at">x =</span> Continent, <span class="at">y =</span> HDI, <span class="at">label =</span> <span class="fu">round</span>(HDI, <span class="dv">3</span>)),</span>
 <span id="cb54-3"><a href="#cb54-3"></a>             <span class="at">size =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-text-4-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-text-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　続いて、マッピングを行わず、任意の位置に文字列を出力する<code>annotate()</code>です。こちらはマッピングが必要ありません。まず、<code>Contury_df</code>を用い、フリーダムハウス・スコア（<code>FH_Total</code>）と一人あたり購買力平価GDP（<code>PPP_per_capita</code>）の散布図と回帰直線を出してみましょう。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-text-5_13aadbfbeda09c000733093ec9dc2897">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1"></a>lm_plot <span class="ot">&lt;-</span> Country_df <span class="sc">|&gt;</span></span>
 <span id="cb55-2"><a href="#cb55-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> FH_Total, <span class="at">y =</span> PPP_per_capita)) <span class="sc">+</span></span>
 <span id="cb55-3"><a href="#cb55-3"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
@@ -1444,20 +1480,20 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <span id="cb55-8"><a href="#cb55-8"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　ここに「注: 青い線は回帰直線を表す。」という文字列を追加します。位置はx = 0、y = 110000とします。まず、<code>annotate()</code>の第一引数として<code>"text"</code>を指定します<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>。そして、<code>x</code>と<code>y</code>に文字列の位置を指定し、<code>label</code>に出力する文字列を入力します。そして、<code>hjust = 0</code>で文字列を左側に寄せます。これを指定しないと、文字列の真ん中が<code>x = 0</code>に位置することになります。最後に<code>size</code>で文字列の大きさを指定します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-text-6_578e7d2fdd089785d0d0623c5b14dc73">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1"></a>lm_plot <span class="sc">+</span></span>
 <span id="cb56-2"><a href="#cb56-2"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> <span class="dv">110000</span>, <span class="at">label =</span> <span class="st">"注: 青い線は回帰直線を表す。"</span>, </span>
 <span id="cb56-3"><a href="#cb56-3"></a>           <span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">size =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-text-6-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-text-6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　図の中に数式を入れる時にはRが提供する<code>expression()</code>関数を使うことも出来ますが、LaTeX文法で数式が入力できる{latex2exp}パッケージはが便利です。使い方は単純で{latex2exp}を読み込み、<code>label</code>引数の実引数を指定する時に<code>Tex("$LaTeX文法の数式$")</code>を使うだけです。<code>""</code>の中に数式が入りますが更に<code>$</code>で囲んでください。また、LaTeX文法の数式における<code>\</code>は<code>\\</code>に置換する必要があります。。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-text-7_865def71417ad391faac35eff98a7f93">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(latex2exp)</span>
 <span id="cb57-2"><a href="#cb57-2"></a></span>
 <span id="cb57-3"><a href="#cb57-3"></a>lm_plot <span class="sc">+</span></span>
@@ -1467,7 +1503,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-text-7-1.png" class="img-fluid figure-img" width="2250"></p>
+<p><img src="visualization4_files/figure-html/visual4-text-7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2250"></p>
 </figure>
 </div>
 </div>
@@ -1550,7 +1586,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 </div>
 <p>　これでデータの準備は終わりました。ヒートマップを作成する幾何オブジェクトは<code>geom_tile()</code>です。同時分布を示したい変数を、それぞれ<code>x</code>と<code>y</code>にマッピングし、密度、または度数を表す変数を<code>fill</code>にマッピングします。ここでは横軸を大陸（<code>Continent</code>）、縦軸を一人当たり購買力平価GDP（<code>Income</code>）とし、<code>fill</code>には<code>N</code>変数をマッピングします。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-heatmap3_b9401fbd77acc6efa52447efeee07712">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1"></a>Heatmap_df1 <span class="sc">|&gt;</span></span>
 <span id="cb62-2"><a href="#cb62-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb62-3"><a href="#cb62-3"></a>  <span class="fu">geom_tile</span>(<span class="fu">aes</span>(<span class="at">x =</span> Continent, <span class="at">y =</span> Income, <span class="at">fill =</span> N)) <span class="sc">+</span></span>
@@ -1560,14 +1596,14 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-heatmap3-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-heatmap3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　明るいほどカテゴリーに属するケースが多く、暗いほど少ないことを意味します。これを見ると世界で最も多くの割合を占めているのは、一人当たり購買力平価GDPが1万ドル未満のアフリカの国で、次は一人当たり購買力平価GDPが3万ドル以上のヨーロッパの国であることが分かります。欠損している（ケース数が0）セルは白の空白となります。</p>
-<p>　色をカスタマイズするには<code>scale_fill_gradient()</code>です。これは第<a href="visualization3.html"><span>21</span></a>章で紹介しました<code>scale_color_gradient()</code>と使い方は同じです。<code>scale_fill_gradient()</code>は中間点なし、<code>scale_fill_gradient2()</code>は中間点ありの場合に使いますが、ここでは度数が小さい場合は<span style="color:#FFF8DC;font-weight:bold;">cornsilk</span>色を、大きい場合は<span style="color:#cd3333;font-weight:bold;">brown3</span>色を使います。それぞれ<code>low</code>と<code>high</code>に色を指定するだけです。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-heatmap4_469d096de82f1377bf17511bebc14e3d">
+<p>　色をカスタマイズするには<code>scale_fill_gradient()</code>です。これは第<a href="visualization3.html" class="quarto-xref"><span>21</span></a>章で紹介しました<code>scale_color_gradient()</code>と使い方は同じです。<code>scale_fill_gradient()</code>は中間点なし、<code>scale_fill_gradient2()</code>は中間点ありの場合に使いますが、ここでは度数が小さい場合は<span style="color:#FFF8DC;font-weight:bold;">cornsilk</span>色を、大きい場合は<span style="color:#cd3333;font-weight:bold;">brown3</span>色を使います。それぞれ<code>low</code>と<code>high</code>に色を指定するだけです。</p>
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1"></a>Heatmap_df1 <span class="sc">|&gt;</span></span>
 <span id="cb63-2"><a href="#cb63-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb63-3"><a href="#cb63-3"></a>  <span class="fu">geom_tile</span>(<span class="fu">aes</span>(<span class="at">x =</span> Continent, <span class="at">y =</span> Income, <span class="at">fill =</span> N)) <span class="sc">+</span></span>
@@ -1579,7 +1615,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-heatmap4-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-heatmap4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -1590,7 +1626,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <h3 data-number="22.9.2" class="anchored" data-anchor-id="離散変数times離散変数における連続変数の値を示すヒートマップ"><span class="header-section-number">22.9.2</span> 離散変数<span class="math inline">\(\times\)</span>離散変数における連続変数の値を示すヒートマップ</h3>
 <p>　次は、離散変数<span class="math inline">\(\times\)</span>離散変数における連続変数の値を示すヒートマップを作ってみましょう。ヒートマップにおけるそれぞれのタイル（tile）は横軸上の位置と縦軸上の位置情報を持ち、これは前回と同様、離散変数でマッピングされます。そして、タイルの色は何らかの連続変数にマッピングされます。前回作成しましたヒートマップは度数、または密度であり、これも実は連続変数だったので、図の作り方は本質的には同じです。</p>
 <p>　ここでは大陸と所得ごとに人間開発指数の平均値を表すヒートマップを作ってみましょう。大陸（<code>Continent</code>）と所得（<code>Income</code>）でグループ化し、人間開発指数（<code>HDI_2018</code>）の平均値を計算したものを<code>Heatmap_df2</code>という名のオブジェクトとして格納します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-heatmap5_2fe23d5d95f34fa350d34e169032882f">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1"></a>Heatmap_df2 <span class="ot">&lt;-</span> Heatmap_df <span class="sc">|&gt;</span></span>
 <span id="cb64-2"><a href="#cb64-2"></a>  <span class="fu">group_by</span>(Continent, Income) <span class="sc">|&gt;</span></span>
 <span id="cb64-3"><a href="#cb64-3"></a>  <span class="fu">summarise</span>(<span class="at">HDI     =</span> <span class="fu">mean</span>(HDI_2018, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
@@ -1622,7 +1658,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 </div>
 <p>　作図の方法は前回と同じですが、今回はタイルの色塗り（<code>fill</code>）を人間開発指数の平均値（<code>HDI</code>）でマッピングする必要があります。他の箇所は同じコードでも良いですが、ここでは色塗りの際、中間点を指定してみましょう。たとえば人間開発指数が0.75なら色を<span style="color:#fff8dc;font-weight:bold;background-color:#000000;">cornsilk</span>色とし、これより低いっほど<span style="color:#6495ED;font-weight:bold;">cornflowerblue</span>色に、高いほど<span style="color:#cd3333;font-weight:bold;">brown3</span>色になるように指定します。中間点を持つグラデーション色塗りは<code>scale_fill_gradient2()</code>で調整することができます。使い方は<code>scale_fill_gradient()</code>とほぼ同じですが、中間点の色（<code>mid</code>）と中間点の値（<code>midpoint</code>）をさらに指定する必要があります。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-heatmap6_167796318a4eed8219c2de0f6f97f137">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1"></a>Heatmap_df2 <span class="sc">|&gt;</span></span>
 <span id="cb66-2"><a href="#cb66-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb66-3"><a href="#cb66-3"></a>  <span class="fu">geom_tile</span>(<span class="fu">aes</span>(<span class="at">x =</span> Continent, <span class="at">y =</span> Income, <span class="at">fill =</span> HDI)) <span class="sc">+</span></span>
@@ -1638,7 +1674,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-heatmap6-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-heatmap6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -1650,7 +1686,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <h2 data-number="22.10" class="anchored" data-anchor-id="sec-visual4-contour"><span class="header-section-number">22.10</span> 等高線図</h2>
 <p>　ヒートマップを使えば、離散変数<span class="math inline">\(\times\)</span>離散変数の同時分布を可視化することは出来ますが、連続変数<span class="math inline">\(\times\)</span>連続変数の同時分布を可視化するには限界があります。むろん、一つ一つのタイルを小さくすることも出来ますが、効率的な方法ではないでしょう。ここで活躍するのが等高線図 (contour plot) です。</p>
 <p>　たとえば、<code>Country_df</code>の<code>FH_Total</code>と<code>HDI_2018</code>の分布は散布図を通じて可視化することができます。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-contour1_73edfc863a4e448d6710e0057477a337">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb67-2"><a href="#cb67-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb67-3"><a href="#cb67-3"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> FH_Total, <span class="at">y =</span> HDI_2018)) <span class="sc">+</span></span>
@@ -1659,13 +1695,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-contour1-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-contour1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　右上に点が集まっていることから、密度の高い箇所だと考えられます。この密度を示す等高線図の幾何オブジェクトは<code>geom_density_2d()</code>です。マッピング要素は<code>geom_point()</code>と同じなので、マッピングは<code>ggplot()</code>内で行い、<code>geom_density_2d()</code>レイヤーを使いしてみましょう。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-contour2_3a477f184c0092ff061559fdaa42f94f">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb68-2"><a href="#cb68-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> FH_Total, <span class="at">y =</span> HDI_2018)) <span class="sc">+</span></span>
 <span id="cb68-3"><a href="#cb68-3"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
@@ -1675,13 +1711,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-contour2-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-contour2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　密度に応じて色塗りをする場合は<code>geom_density_2d()</code>の代わりに<code>geom_density_2d_filled()</code>を使います。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-contour3_77f7e0ce743b79331713b7137a7bc13d">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb69-2"><a href="#cb69-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> FH_Total, <span class="at">y =</span> HDI_2018)) <span class="sc">+</span></span>
 <span id="cb69-3"><a href="#cb69-3"></a>  <span class="fu">geom_density_2d_filled</span>() <span class="sc">+</span></span>
@@ -1691,13 +1727,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-contour3-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-contour3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　<code>geom_density_2d_filled()</code>オブジェクトの後に<code>geom_density_2d()</code>オブジェクトを重ねると、区間の区画線を追加することもできます。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-contour4_656b51ca974791e365c37ed40440e0f4">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb70-2"><a href="#cb70-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> FH_Total, <span class="at">y =</span> HDI_2018)) <span class="sc">+</span></span>
 <span id="cb70-3"><a href="#cb70-3"></a>  <span class="fu">geom_density_2d_filled</span>() <span class="sc">+</span></span>
@@ -1708,13 +1744,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-contour4-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-contour4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　色が気に入らない場合、自分で調整することも可能です。<code>scale_fill_manual()</code>で各区間ごとの色を指定することもできませんが、あまり効率的ではありません。ここでは<code>scale_fill_brewer()</code>関数を使って、<a href="https://colorbrewer2.org/">ColorBrewer</a>のパレットを使ってみましょう。引数なしでも使えますが、既定値のパレットは区間が9つまで対応します。今回の等高線図は全部で10区間ですので、あまり適切ではありません。ここでは11区間まで対応可能な<code>"Spectral"</code>パレットを使いますが、これは<code>palette</code>引数で指定できます。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-contour5_c18f98366fb99307848400554fe3c1f1">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb71-2"><a href="#cb71-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> FH_Total, <span class="at">y =</span> HDI_2018)) <span class="sc">+</span></span>
 <span id="cb71-3"><a href="#cb71-3"></a>  <span class="fu">geom_density_2d_filled</span>() <span class="sc">+</span></span>
@@ -1725,19 +1761,19 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-contour5-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-contour5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　<code>palette</code>で指定可能なカラーパレットの一覧は{RColorBrewer}の<code>display.brewer.all()</code>関数で確認することが出来ます。各パレットが何区間まで対応できるかを見てから自分でパレットを作成することも可能ですが、詳細はネット上の各種記事を参照してください。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-contour6_d4109abda7353710e8a9ecea0d2452bc">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1"></a>RColorBrewer<span class="sc">::</span><span class="fu">display.brewer.all</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-contour6-1.png" class="img-fluid figure-img" width="2100"></p>
-<figcaption class="figure-caption">{RColorBrewer}が提供するパレート一覧</figcaption>
+<p><img src="visualization4_files/figure-html/visual4-contour6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="2100"></p>
+<figcaption>{RColorBrewer}が提供するパレート一覧</figcaption>
 </figure>
 </div>
 </div>
@@ -1766,7 +1802,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 </div>
 <p>　クラスはdata.frameとsfであり、実際、<code>world_map</code>を出力してみると、見た目がデータフレームであることが分かります。地図の出力は<code>geom_sf()</code>幾何オブジェクトを使用します。とりあえず、やってみましょう。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-map3_42828a10e0e3fef9776ccca481540a3c">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1"></a>world_map <span class="sc">|&gt;</span> </span>
 <span id="cb76-2"><a href="#cb76-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb76-3"><a href="#cb76-3"></a>  <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
@@ -1774,13 +1810,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-map3-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-map3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　もし、各国の人口に応じて色塗りをする場合はどうすれば良いでしょうか。実は、今回使用するデータがデータフレーム形式であることを考えると、これまでの{ggplot2}の使い方とあまり変わりません。{rnaturalearth}から読み込んだデータには既に<code>pop_est</code>という各国の人口データが含まれています（他にも自分で構築したデータがあるなら、データを結合して使用すれば良いですが、これについては後述します。）。この値に応じて色塗りを行うため、<code>geom_sf()</code>内に<code>fill = pop_est</code>でマッピングするだけです。また、国境線の色は<code>color</code>で指定可能です。白（<code>"white"</code>）だと少しおしゃれな感じがするのでやってみましょう。国境線は全ての国に適用されるものなので、<code>aes()</code>の外側で指定します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-map4_f8ea56c3fbbd3397677a95b9b48a69d3">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1"></a>world_map <span class="sc">|&gt;</span> </span>
 <span id="cb77-2"><a href="#cb77-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb77-3"><a href="#cb77-3"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> pop_est), <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
@@ -1791,13 +1827,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-map4-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-map4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　もし、世界でなく一部の地域だけを出力するなら、<code>coord_sf()</code>で座標系を調整します。東アジアと東南アジアの一部を出力したいとします。この場合、経度は90度から150度まで、緯度は10度から50度に絞ることになります。経度は<code>xlim</code>で、緯度は<code>ylim</code>で調整します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-map5_0e0a1487df2423b8981237d03a9578d1">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1"></a>world_map <span class="sc">|&gt;</span> </span>
 <span id="cb78-2"><a href="#cb78-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb78-3"><a href="#cb78-3"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> pop_est)) <span class="sc">+</span></span>
@@ -1809,13 +1845,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-map5-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-map5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　他にも<code>ne_countries()</code>内に<code>continent</code>引数を指定し、特定の大陸だけを読み込むことで可能です。ここではアジアの国のみを抽出し、<code>asia_map</code>という名のオブジェクトとして格納します。解像度は中程度とします。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-map6_24dcb57af6b1c3c710d977b519b9a281">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1"></a>asia_map <span class="ot">&lt;-</span> <span class="fu">ne_countries</span>(<span class="at">scale =</span> <span class="st">"medium"</span>, <span class="at">continent =</span> <span class="st">"Asia"</span>, </span>
 <span id="cb79-2"><a href="#cb79-2"></a>                         <span class="at">returnclass =</span> <span class="st">"sf"</span>)</span>
 <span id="cb79-3"><a href="#cb79-3"></a></span>
@@ -1828,13 +1864,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-map6-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-map6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　アジアの中から更に東アジアに絞りたい場合は<code>filter()</code>を使用し、<code>subregion</code>列を基準に抽出することも可能です。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-map7_49ef497b42b2b47712c828f2792b6554">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb80"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1"></a>asia_map <span class="sc">|&gt;</span></span>
 <span id="cb80-2"><a href="#cb80-2"></a>    <span class="fu">filter</span>(subregion <span class="sc">==</span> <span class="st">"Eastern Asia"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb80-3"><a href="#cb80-3"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
@@ -1844,7 +1880,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-map7-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-map7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -1859,7 +1895,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 </div>
 </div>
 <p>　これまで使用してきたデータがデータフレームと同じ見た目をしているため、{dplyr}を用いたデータハンドリングも可能です。たとえば、人口を連続変数としてでなく、factor型に変換してからマッピングをしてみましょう。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-map9_17750f43fa892b04c959c7b632f59d8d">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb83"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1"></a>asia_map <span class="sc">|&gt;</span> </span>
 <span id="cb83-2"><a href="#cb83-2"></a>  <span class="fu">mutate</span>(<span class="at">Population =</span> <span class="fu">case_when</span>(pop_est <span class="sc">&lt;</span> <span class="dv">10000000</span>  <span class="sc">~</span> <span class="st">"1千万未満"</span>,</span>
 <span id="cb83-3"><a href="#cb83-3"></a>                                pop_est <span class="sc">&lt;</span> <span class="dv">50000000</span>  <span class="sc">~</span> <span class="st">"5千万未満"</span>,</span>
@@ -1878,7 +1914,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-map9-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-map9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -1888,7 +1924,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <section id="日本地図全体" class="level3" data-number="22.11.2">
 <h3 data-number="22.11.2" class="anchored" data-anchor-id="日本地図全体"><span class="header-section-number">22.11.2</span> 日本地図（全体）</h3>
 <p>　次は日本地図の出力についてです。日本全土だけを出力するなら、これまで使いました<code>ne_countries</code>に<code>country</code>引数を指定するだけで使えます。たとえば、日本の地図だけなら、<code>country = "Japan"</code>を指定します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-map10_23aec189f61262625773c0e9e7703854">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb84"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1"></a><span class="fu">ne_countries</span>(<span class="at">scale =</span> <span class="st">"small"</span>, <span class="at">country =</span> <span class="st">"Japan"</span>, <span class="at">returnclass =</span> <span class="st">"sf"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb84-2"><a href="#cb84-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb84-3"><a href="#cb84-3"></a>    <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
@@ -1896,13 +1932,13 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-map10-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-map10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　これだと、物足りない感があるので、もう少し高解像度の地図にしてみましょう。高解像度の地図データを読み込む際は<code>scale = "large"</code>を指定します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-map11_233351cbb9efac1233da0110ee43bebe">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1"></a><span class="fu">ne_countries</span>(<span class="at">scale =</span> <span class="st">"large"</span>, <span class="at">country =</span> <span class="st">"Japan"</span>, <span class="at">returnclass =</span> <span class="st">"sf"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb85-2"><a href="#cb85-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb85-3"><a href="#cb85-3"></a>    <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
@@ -1910,17 +1946,17 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-map11-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-map11-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>　ただ、日本地図を出すという場合、多くは都道府県レベルでマッピングが目的でしょう。世界地図のマッピングならこれで問題ありませんが、一国だけなら、その下の自治体の境界線も必要です。したがって、先ほど使用しましたパッケージのより高解像度の地図が含まれている{rnaturalearthhires}をインストールし、読み込みましょう。2023年Nov月28日現在、{rnaturalearthhires}はCRANに登録されておらず、GitHubの<a href="https://github.com/ropensci">ropensciレポジトリー</a>のみで公開されているため、今回は{pacman}の<code>p_load()</code>でなく、<code>p_load_gh()</code>を使用します。</p>
+<p>　ただ、日本地図を出すという場合、多くは都道府県レベルでマッピングが目的でしょう。世界地図のマッピングならこれで問題ありませんが、一国だけなら、その下の自治体の境界線も必要です。したがって、先ほど使用しましたパッケージのより高解像度の地図が含まれている{rnaturalearthhires}をインストールし、読み込みましょう。2024年Jan月12日現在、{rnaturalearthhires}はCRANに登録されておらず、GitHubの<a href="https://github.com/ropensci">ropensciレポジトリー</a>のみで公開されているため、今回は{pacman}の<code>p_load()</code>でなく、<code>p_load_gh()</code>を使用します。</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb86"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1"></a>pacman<span class="sc">::</span><span class="fu">p_load_gh</span>(<span class="st">"ropensci/rnaturalearthhires"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　地図データの抽出には<code>ne_states()</code>関数を使用します。第一引数として国家名を指定し、地図データのクラスはsfとします。抽出したデータの使い方は世界地図の時と同じです。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-map13_9419bcd4dea4ffad138bd7cd3333d363">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1"></a>Japan_Map <span class="ot">&lt;-</span> <span class="fu">ne_states</span>(<span class="st">"Japan"</span>, <span class="at">returnclass =</span> <span class="st">"sf"</span>)</span>
 <span id="cb87-2"><a href="#cb87-2"></a></span>
 <span id="cb87-3"><a href="#cb87-3"></a>Japan_Map <span class="sc">|&gt;</span></span>
@@ -1930,7 +1966,7 @@ gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-map13-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-map13-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -2217,7 +2253,7 @@ First 10 features:
 </div>
 </div>
 <p>　それではマッピングをしてみましょう。人口密度を5つのカテゴリーに順序付きfactor化してから、そのカテゴリーに応じて色塗りをします。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-map18_3248a2b595e2c7cf15d86c19cf55337c">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb96"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1"></a>Japan_Map <span class="sc">|&gt;</span></span>
 <span id="cb96-2"><a href="#cb96-2"></a>    <span class="fu">mutate</span>(<span class="at">Density2 =</span> <span class="fu">case_when</span>(Density <span class="sc">&gt;=</span> <span class="dv">3000</span> <span class="sc">~</span> <span class="st">"3000人以上"</span>,</span>
 <span id="cb96-3"><a href="#cb96-3"></a>                                Density <span class="sc">&gt;=</span> <span class="dv">1000</span> <span class="sc">~</span> <span class="st">"1000人以上"</span>,</span>
@@ -2234,7 +2270,7 @@ First 10 features:
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-map18-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-map18-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -2258,7 +2294,7 @@ First 10 features:
 </div>
 </div>
 <p>　プロットの方法は同じです。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-map21_1988ad32de4ee6b624a80da42929661d">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb100"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1"></a>Osaka_map <span class="sc">|&gt;</span></span>
 <span id="cb100-2"><a href="#cb100-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb100-3"><a href="#cb100-3"></a>  <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
@@ -2266,7 +2302,7 @@ First 10 features:
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-map21-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-map21-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -2301,7 +2337,7 @@ First 10 features:
 <span id="cb103-4"><a href="#cb103-4"></a>Osaka_map <span class="ot">&lt;-</span> <span class="fu">left_join</span>(Osaka_map, Osaka_Student, <span class="at">by =</span> <span class="st">"Code"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　最後にマッピングです。ここでは人口1万人当たり学生数を<code>Student_Ratio</code>という列として追加し、こちらの値に合わせて色塗りをしてみましょう。<code>scale_fill_gradient()</code>を使用し、人口1万人当たり学生数が少ないほど白、多いほど黒塗りします。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-map24_b26f2558ffa2ac228e02612c91208bb8">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb104"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1"></a>Osaka_map <span class="sc">|&gt;</span></span>
 <span id="cb104-2"><a href="#cb104-2"></a>  <span class="fu">mutate</span>(<span class="at">Student_Ratio =</span> Student <span class="sc">/</span> Pop <span class="sc">*</span> <span class="dv">10000</span>) <span class="sc">|&gt;</span></span>
 <span id="cb104-3"><a href="#cb104-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
@@ -2313,7 +2349,7 @@ First 10 features:
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-map24-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-map24-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -2324,11 +2360,11 @@ First 10 features:
 <section id="sec-visual4-dag" class="level2" data-number="22.12">
 <h2 data-number="22.12" class="anchored" data-anchor-id="sec-visual4-dag"><span class="header-section-number">22.12</span> 非巡回有向グラフ</h2>
 <p>　近年、因果推論の界隈でよく登場する非巡回有向グラフ（DAG）ですが、「グラフ」からも分かるように、DAGの考え方に基づく因果推論の研究には多くの図が登場します。DAGを作図するには{ggplot2}のみでも可能ですが、{dagitty}パッケージでDAGの情報を含むオブジェクトを生成し、{ggdag}で作図した方が簡単です。以下の図はDAGの一例です。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-dag1_6376f00cc86dfb6c947845045279ea6d">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-dag1-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-dag1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -2339,7 +2375,7 @@ First 10 features:
 <div class="sourceCode cell-code" id="cb105"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(dagitty, ggdag)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　つづいて、DAGの情報を含むオブジェクトを作成します。使用する関数は<code>dagify()</code>であり、ここには<code>結果 ~ 原因</code>の形式で各ノード間の関係を記述します。先ほどの図では<code>X</code>は<code>Y</code>の原因（<code>X ~ Y</code>）、<code>Z</code>は<code>X</code>と<code>Y</code>の原因（<code>X ~ Z</code>と<code>Y ~ Z</code>）です。これらの情報を<code>dagify()</code>内で指定します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-dag3_ed474099116edb69e77f87cddb1423ec">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb106"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1"></a>DAG_data1 <span class="ot">&lt;-</span> <span class="fu">dagify</span>(X <span class="sc">~</span> Z,</span>
 <span id="cb106-2"><a href="#cb106-2"></a>                    Y <span class="sc">~</span> Z,</span>
 <span id="cb106-3"><a href="#cb106-3"></a>                    Y <span class="sc">~</span> X,</span>
@@ -2359,7 +2395,7 @@ Z -&gt; Y
 </div>
 </div>
 <p>　<code>Y ~ X</code>と<code>Y ~ Z</code>は<code>Y ~ X + Z</code>とまとめることも可能です。これは「<code>Y</code>の原因は<code>X</code>と<code>Z</code>である」という意味であり、「<code>Y</code>の原因は<code>X</code>であり、<code>Y</code>の原因は<code>Z</code>である」と同じ意味です。また、DAGを作図する際、<code>dagify()</code>内に<code>exposure</code>と<code>outcome</code>は不要ですが、もし<code>adjustmentSets()</code>関数などを使って統制変数を特定したい場合は処置変数（<code>exposure</code>）と応答変数（<code>outcome</code>）にそれぞれ変数名を指定します。ちなみに、以上のコードは以下のように書くことも可能です。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-dag4_91a70dfef29f6b36fabd4bf1c6896fe2">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb108"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1"></a>DAG_data1 <span class="ot">&lt;-</span> <span class="fu">dagitty</span>(</span>
 <span id="cb108-2"><a href="#cb108-2"></a>  <span class="st">"dag{</span></span>
 <span id="cb108-3"><a href="#cb108-3"></a><span class="st">  X -&gt; Y</span></span>
@@ -2381,26 +2417,26 @@ Z -&gt; Y
 </div>
 </div>
 <p>　格納された<code>DAG_data1</code>オブジェクトのクラスは<code>"dagitty"</code>です。<code>"dagitty"</code>の可視化には{ggdag}の<code>ggdag()</code>を使用します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-dag5_bbf599255dd122cfba185551fa73d729">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb110"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1"></a>DAG_data1 <span class="sc">|&gt;</span></span>
 <span id="cb110-2"><a href="#cb110-2"></a>  <span class="fu">ggdag</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-dag5-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-dag5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　DAGにおいて背景、軸の目盛り、ラベルは不要ですので、<code>theme_dag_blank()</code>テーマを指定して全て除去します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-dag6_c04883bc05eeef1380e44aeeefd2e17a">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb111"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1"></a>DAG_data1 <span class="sc">|&gt;</span></span>
 <span id="cb111-2"><a href="#cb111-2"></a>  <span class="fu">ggdag</span>() <span class="sc">+</span></span>
 <span id="cb111-3"><a href="#cb111-3"></a>  <span class="fu">theme_dag_blank</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-dag6-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-dag6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -2408,12 +2444,12 @@ Z -&gt; Y
 <section id="ノードの位置を指定する" class="level3" data-number="22.12.1">
 <h3 data-number="22.12.1" class="anchored" data-anchor-id="ノードの位置を指定する"><span class="header-section-number">22.12.1</span> ノードの位置を指定する</h3>
 <p>　読者の多くは以上のグラフと異なるものが得られたかも知れません。ノード間の関係は同じはずですが、ノードの位置が異なるでしょう。また、同じコードを実行する度にノードの位置は変わります。以下ではノードの位置を固定する方法について紹介します。位置を指定するには<code>dagify()</code>内で<code>coords</code>引数に各ノードの情報が格納されたリスト型オブジェクトを指定する必要があります。リストの長さは2であり、それぞれの名前は<code>x</code>と<code>y</code>です。そしてリストの各要素にはベクトルが入ります。たとえば、ノード<code>X</code>の位置を (1, 1)、<code>Y</code>の位置を (3, 1)、<code>Z</code>の位置を (2, 2)に指定してみましょう。<code>dagify()</code>内で直接リストを書くことも可能ですが、コードの可読性が落ちるため、別途のオブジェクト（<code>DAG_Pos2</code>）として格納しておきます。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-dag7_29d796274f1fd23dd5759e5b24c1b929">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb112"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1"></a>DAG_Pos2  <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="at">X =</span> <span class="dv">1</span>, <span class="at">Y =</span> <span class="dv">3</span>, <span class="at">Z =</span> <span class="dv">2</span>),</span>
 <span id="cb112-2"><a href="#cb112-2"></a>                  <span class="at">y =</span> <span class="fu">c</span>(<span class="at">X =</span> <span class="dv">1</span>, <span class="at">Y =</span> <span class="dv">1</span>, <span class="at">Z =</span> <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　続いて、<code>dagify()</code>内で<code>coords</code>引数を追加し、ノードの位置情報が格納されている<code>DAG_Pos2</code>を指定します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-dag8_668be6ecee9eeb8ad4af94384207a569">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb113"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1"></a>DAG_data2 <span class="ot">&lt;-</span> <span class="fu">dagify</span>(X <span class="sc">~</span> Z,</span>
 <span id="cb113-2"><a href="#cb113-2"></a>                    Y <span class="sc">~</span> X <span class="sc">+</span> Z,</span>
 <span id="cb113-3"><a href="#cb113-3"></a>                    <span class="at">exposure =</span> <span class="st">"X"</span>,</span>
@@ -2433,20 +2469,20 @@ Z -&gt; Y
 </div>
 </div>
 <p>　可視化の方法は同じです。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-dag9_6b9581a2b0d8faa6a9508ffead3bd008">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb115"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1"></a>DAG_data2 <span class="sc">|&gt;</span></span>
 <span id="cb115-2"><a href="#cb115-2"></a>  <span class="fu">ggdag</span>() <span class="sc">+</span></span>
 <span id="cb115-3"><a href="#cb115-3"></a>  <span class="fu">theme_dag_blank</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-dag9-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-dag9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　以上の使い方だけでも、ほとんどのDAGは描けるでしょう。また、ノードを若干オシャレ（?）にするには、<code>ggdag()</code>内で<code>stylized = TRUE</code>を指定します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-dag10_1951bca7653278b76706c54055fc615f">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb116"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1"></a>DAG_Pos3  <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="at">X1 =</span> <span class="dv">3</span>, <span class="at">X2 =</span> <span class="dv">3</span>, <span class="at">X3 =</span> <span class="dv">1</span>, <span class="at">T =</span> <span class="dv">2</span>, <span class="at">Y =</span> <span class="dv">4</span>),</span>
 <span id="cb116-2"><a href="#cb116-2"></a>                  <span class="at">y =</span> <span class="fu">c</span>(<span class="at">X1 =</span> <span class="dv">1</span>, <span class="at">X2 =</span> <span class="dv">2</span>, <span class="at">X3 =</span> <span class="dv">2</span>, <span class="at">T =</span> <span class="dv">3</span>, <span class="at">Y =</span> <span class="dv">3</span>))</span>
 <span id="cb116-3"><a href="#cb116-3"></a></span>
@@ -2463,20 +2499,20 @@ Z -&gt; Y
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-dag10-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-dag10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　可視化の話ではありませんが、<code>adjustmentSets()</code>関数を用いると、処置変数<code>T</code>の総効果（total effect）を推定するためにはどの変数を統制（調整）する必要があるかを調べることも可能です。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-dag11_bc85c3247a79884395d57a048a082487">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb117"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1"></a><span class="fu">adjustmentSets</span>(DAG_data3, <span class="at">effect =</span> <span class="st">"total"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{ X3 }</code></pre>
 </div>
 </div>
 <p>　<code>X3</code>変数のみ統制すれば良いという結果が得られました。また、<code>T</code>から<code>Y</code>への直接効果（direct effect）の場合、<code>effect = "direct"</code>を指定します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-dag12_35aa63a313802bc636e61eddec4f77f9">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb119"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1"></a><span class="fu">adjustmentSets</span>(DAG_data3, <span class="at">effect =</span> <span class="st">"direct"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{ X1, X2 }</code></pre>
@@ -2494,7 +2530,7 @@ Z -&gt; Y
 <div class="sourceCode cell-code" id="cb121"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb121-1"><a href="#cb121-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggbump)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　ここではG7構成国の100万人当り新型コロナ感染者数の順位がどのように変化したのかを2020年4月から7月まで1ヶ月単位で表したデータが必要です。データは以下のようなコードで作成しますが、<a href="https://github.com/JaehyunSong/RBook">本書のサポートページ</a>からもダウンロード可能です。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-bump2_4c1298e3e4d5d5bc1c75efde5fe6ff67">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb122"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1"></a>Bump_df <span class="ot">&lt;-</span> <span class="fu">left_join</span>(COVID19_df, Country_df, <span class="at">by =</span> <span class="st">"Country"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb122-2"><a href="#cb122-2"></a>  <span class="fu">select</span>(Country, Date, Population, Confirmed_Total, G7) <span class="sc">|&gt;</span></span>
 <span id="cb122-3"><a href="#cb122-3"></a>  <span class="fu">separate</span>(Date, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"Year"</span>, <span class="st">"Month"</span>, <span class="st">"Day"</span>), <span class="at">sep =</span> <span class="st">"/"</span>) <span class="sc">|&gt;</span></span>
@@ -2507,7 +2543,7 @@ Z -&gt; Y
 <span id="cb122-10"><a href="#cb122-10"></a>            <span class="at">.groups               =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb122-11"><a href="#cb122-11"></a>  <span class="fu">select</span>(Country, Month, New_Cases_per_million)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-bump3_4d758bce8b068bc566074d025151dda7">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb123"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb123-1"><a href="#cb123-1"></a>Bump_df <span class="ot">&lt;-</span> Bump_df <span class="sc">|&gt;</span></span>
 <span id="cb123-2"><a href="#cb123-2"></a>  <span class="fu">group_by</span>(Month) <span class="sc">|&gt;</span></span>
 <span id="cb123-3"><a href="#cb123-3"></a>  <span class="fu">mutate</span>(<span class="at">Rank =</span> <span class="fu">rank</span>(New_Cases_per_million, <span class="at">ties.method =</span> <span class="st">"random"</span>)) <span class="sc">|&gt;</span></span>
@@ -2521,20 +2557,20 @@ Z -&gt; Y
 <span id="cb124-3"><a href="#cb124-3"></a>Bump_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　それでは{ggbump}が提供する<code>geom_bump()</code>幾何オブジェクトを使用し、簡単なバンプチャートを作成してみましょう。必要なマッピング要素は<code>x</code>と<code>y</code>、<code>color</code>です。<code>x</code>には時間を表す変数である<code>Month</code>を、<code>y</code>には順位を表す<code>Rank</code>をマッピングします。また、7本の線が出るため、月と順位、それぞれの値がどの国の値かを特定する必要があります。<code>groups</code>に国名である<code>Country</code>をマッピングしても線は引けますが、どの線がどの国かが分からなくなるため、<code>color</code>に<code>Country</code>をマッピングし、線の色分けをします。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-bump5_36c6e4d63eb4cf2dc06a2053dfece5a9">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb125"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb125-1"><a href="#cb125-1"></a>Bump_df <span class="sc">|&gt;</span></span>
 <span id="cb125-2"><a href="#cb125-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> Rank, <span class="at">color =</span> Country)) <span class="sc">+</span></span>
 <span id="cb125-3"><a href="#cb125-3"></a>  <span class="fu">geom_bump</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-bump5-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-bump5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　これで最低限のバンプチャートはできましたが、もう少し見やすく、可愛くしてみましょう。今は線が細いのでややぶ厚めにします。これは<code>geom_bump()</code>レイヤーの<code>size</code>引数で指定可能です。また、各月に点を付けることによって、同時期における順位の比較をよりしやすくしてみましょう。これは散布図と同じであるため、<code>geom_point()</code>幾何オブジェクトを使用します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-bump6_17ba9ad70582db704284b52c66114004">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb126"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1"></a>Bump_df <span class="sc">|&gt;</span></span>
 <span id="cb126-2"><a href="#cb126-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> Rank, <span class="at">color =</span> Country)) <span class="sc">+</span></span>
 <span id="cb126-3"><a href="#cb126-3"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">7</span>) <span class="sc">+</span></span>
@@ -2547,13 +2583,13 @@ Z -&gt; Y
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-bump6-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-bump6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>　これでだいぶ見やすくなりましたが、凡例における国名の順番がやや気になりますね。7月の時点において順位が最も高い国はアメリカ、最も低い国は日本ですが、凡例の順番はアルファベット順となっています。この凡例の順番を7月時点における<code>Rank</code>の値に合わせた方がより見やすいでしょう。ここで第<a href="factor.html#sec-factor-forcat-reorder2"><span>16.2.9</span></a>章で紹介しました<code>fct_reorder2()</code>を使って<code>Country</code>変数の水準 (level)を7月時点における<code>Rank</code>の順位に合わせます。この場合、<code>Country</code>変数 (<code>.f = Country</code>)の水準を<code>Month</code>が (<code>.x = Month</code>)最も大きい (<code>.fun = last2</code>)時点における<code>Rank</code>の順番に合わせる (<code>.y = Rank</code>)こととなります。<code>fct_reorder2()</code>内の引数の順番の既定値は<code>.f</code>、<code>.x</code>、<code>.y</code>、<code>.fun</code>となります。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-bump7_2900c55c5e446b083260b438869842c0">
+<p>　これでだいぶ見やすくなりましたが、凡例における国名の順番がやや気になりますね。7月の時点において順位が最も高い国はアメリカ、最も低い国は日本ですが、凡例の順番はアルファベット順となっています。この凡例の順番を7月時点における<code>Rank</code>の値に合わせた方がより見やすいでしょう。ここで第<a href="factor.html#sec-factor-forcat-reorder2" class="quarto-xref"><span>16.2.9</span></a>章で紹介しました<code>fct_reorder2()</code>を使って<code>Country</code>変数の水準 (level)を7月時点における<code>Rank</code>の順位に合わせます。この場合、<code>Country</code>変数 (<code>.f = Country</code>)の水準を<code>Month</code>が (<code>.x = Month</code>)最も大きい (<code>.fun = last2</code>)時点における<code>Rank</code>の順番に合わせる (<code>.y = Rank</code>)こととなります。<code>fct_reorder2()</code>内の引数の順番の既定値は<code>.f</code>、<code>.x</code>、<code>.y</code>、<code>.fun</code>となります。</p>
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb128"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb128-1"><a href="#cb128-1"></a>Bump_df <span class="sc">|&gt;</span></span>
 <span id="cb128-2"><a href="#cb128-2"></a>  <span class="fu">mutate</span>(<span class="at">Country =</span> <span class="fu">fct_reorder2</span>(Country, Month, Rank, last2)) <span class="sc">|&gt;</span></span>
 <span id="cb128-3"><a href="#cb128-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> Rank, <span class="at">color =</span> Country)) <span class="sc">+</span></span>
@@ -2563,13 +2599,13 @@ Z -&gt; Y
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-bump7-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-bump7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　最後に縦軸の目盛りラベルを付けます。上に行くほど順位が高くなりますので、1を7に、2を6に、…、7を1に変更します。また、図内のグリッドも不要ですので、<code>theme()</code>を使用し、グリッドを削除します (<code>panel.grid = element_blank()</code>)。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-bump8_5ca7bcb6980b0a7f326b0d8cbfa04f61">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb129"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb129-1"><a href="#cb129-1"></a>Bump_df <span class="sc">|&gt;</span></span>
 <span id="cb129-2"><a href="#cb129-2"></a>  <span class="fu">mutate</span>(<span class="at">Country =</span> <span class="fu">fct_reorder2</span>(Country, Month, Rank, last2)) <span class="sc">|&gt;</span></span>
 <span id="cb129-3"><a href="#cb129-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> Rank, <span class="at">color =</span> Country)) <span class="sc">+</span></span>
@@ -2581,7 +2617,7 @@ Z -&gt; Y
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-bump8-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-bump8-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -2589,7 +2625,7 @@ Z -&gt; Y
 <p>　これでバンプチャートの完成です。このままでの良いかも知れませんが、もう少し手間を掛けることでより読みやすいグラフが作れます。たとえば、今のままだと「日本のトレンド」を確認したい場合、まず凡例から日本の色を確認し、その色に該当する点と線を見つけてトレンドを見る必要がありますね。もし、ここで図の左端と右端の点の横に国名を出力すると、凡例がなくても良いですし、4月の時点から日本のトレンドを確認することも、7月の時点から遡る形で日本のトレンドを確認することも可能かも知れません。</p>
 <p>　図に文字列を追加するためには<code>geom_text()</code>幾何オブジェクトを使用します。マッピング要素は文字列の横軸上の位置 (<code>x</code>)、縦軸上の位置 (<code>y</code>)、そして出力する文字列 (<code>label</code>)です。左端に文字列を出力するのであれば、横軸上の位置は4 (= 4月)よりも若干左側が良いでしょう。ぴったり4になると、点と文字列が重なって読みにくくなりますね。縦軸上の位置は<strong>4月の時点</strong>での順位 (<code>Rank</code>)で、出力する文字列は国名 (<code>Country</code>)です。現在、使用しているデータは4月から7月までのデータですが、4月に限定したデータを使いたいので、<code>geom_text()</code>内に<code>data</code>引数を追加し、<code>Bump_df</code>から<code>Month</code>の値が4の行のみを抽出したデータを割り当てます (<code>data = filter(Bump_df, Month == 4</code>)、または<code>data = Bump_df |&gt; filter(Month == 4)</code>)。右端についても同じです。横軸上の位置は7から右方向へずらし、使用するデータは7月のデータとなります。</p>
 <p>　最後にもう一点調整が必要ですが、それは座標系です。図の座標系は<code>ggplot()</code>関数で使用するデータに基づきます。<code>Bump_df</code>の場合、横軸 (<code>Month</code>)は4から7です。しかし、文字列を追加した場合、文字列がすべて出力されないかも知れません。したがって、座標系を横方向に広める必要があります。今回は3から8までに調整します。座標系や文字列の位置調整は出力結果を見ながら、少しずつ調整していきましょう。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-bump9_357535bd7204c697f77d85391321089c">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb130"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1"></a>Bump_df <span class="sc">|&gt;</span></span>
 <span id="cb130-2"><a href="#cb130-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> Rank, <span class="at">color =</span> Country)) <span class="sc">+</span></span>
 <span id="cb130-3"><a href="#cb130-3"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">7</span>) <span class="sc">+</span></span>
@@ -2613,7 +2649,7 @@ Z -&gt; Y
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-bump9-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-bump9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -2715,7 +2751,7 @@ Z -&gt; Y
 <span id="cb136-5"><a href="#cb136-5"></a>                                            <span class="st">"その他"</span>, <span class="st">"棄権"</span>, <span class="st">"DK"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　それでは沖積図を描いてみましょう。使用する幾何オブジェクトは<code>geom_alluvium()</code>と<code>geom_stratum()</code>です。必ずこの順番でレイヤーを重ねてください。マッピングは<code>y</code>、<code>axis1</code>、<code>axis2</code>に対し、<code>y</code>には当該パターン内のケース数 (<code>Freq</code>)、<code>axis1</code>は2009年の投票先 (<code>Vote20</code>)、<code>axis2</code>は2010年の投票先 (<code>Vote21</code>)を指定します<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>。これらのマッピングは<code>geom_stratum()</code>と<code>geom_alluvim()</code>共通であるため、<code>ggplot()</code>内でマッピングした方が効率的です。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-alluvial5_1c8e1c263cdad87741e6c3bee24f240b">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb137"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb137-1"><a href="#cb137-1"></a>Vote_2021 <span class="sc">|&gt;</span></span>
 <span id="cb137-2"><a href="#cb137-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> Freq, <span class="at">axis1 =</span> Vote20, <span class="at">axis2 =</span> Vote21)) <span class="sc">+</span></span>
 <span id="cb137-3"><a href="#cb137-3"></a>    <span class="fu">geom_alluvium</span>() <span class="sc">+</span></span>
@@ -2723,13 +2759,13 @@ Z -&gt; Y
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-alluvial5-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-alluvial5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　何かの図は出てきましたが、これだけだと、それぞれの四角形がどの政党を示しているのかが分かりませんね。四角形内に政党名を出力するためには{ggplot2}内蔵の<code>geom_text()</code>を使用します。マッピング要素は<code>ggplot()</code>内でマッピングしたものに加え、<code>label</code>が必要ですが、ここでは<code>after_stat(stratum)</code>を指定します。そして、<code>aes()</code>のその側に<code>stat = "stratum"</code>を指定するだけです。もし、文字化けが生じる場合は、<code>geom_text()</code>内にフォントの指定が必要があり、<code>family</code>を使います (たとえば、<code>family = "HiraginoSans-W3"</code>など)。<code>theme_*()</code>内で<code>base_family</code>を指定した場合でも必要です。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-alluvial6_c74e75f6e17db62647ac8bd5846fa124">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb138"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb138-1"><a href="#cb138-1"></a>Vote_2021 <span class="sc">|&gt;</span></span>
 <span id="cb138-2"><a href="#cb138-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> Freq, <span class="at">axis1 =</span> Vote20, <span class="at">axis2 =</span> Vote21)) <span class="sc">+</span></span>
 <span id="cb138-3"><a href="#cb138-3"></a>    <span class="fu">geom_alluvium</span>() <span class="sc">+</span></span>
@@ -2739,13 +2775,13 @@ Z -&gt; Y
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-alluvial6-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-alluvial6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　これで沖積図はとりあえず完成ですが、少し読みやすく加工してみましょう。たとえば、2020年に政党Aに投票した回答者における2021年の投票先の割合を見たいとした場合、<code>geom_alluvium()</code>内に<code>fill = Vote20</code>をマッピングします。これで帯に2020年の投票先ごとの色付けができます。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-alluvial7_b570545ffcb9f27b31a79456d4e1d7ca">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb139"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb139-1"><a href="#cb139-1"></a>Vote_2021 <span class="sc">|&gt;</span></span>
 <span id="cb139-2"><a href="#cb139-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> Freq, <span class="at">axis1 =</span> Vote20, <span class="at">axis2 =</span> Vote21)) <span class="sc">+</span></span>
 <span id="cb139-3"><a href="#cb139-3"></a>    <span class="fu">geom_alluvium</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Vote20)) <span class="sc">+</span></span>
@@ -2755,13 +2791,13 @@ Z -&gt; Y
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-alluvial7-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-alluvial7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　<code>fill = Vote21</code>とマッピングした場合は、感覚が変わります。実際にやってみましょう。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-alluvial8_6c74b7ec23fe8f194aca5345f54682dc">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb140"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb140-1"><a href="#cb140-1"></a>Alluvial_Plot <span class="ot">&lt;-</span> Vote_2021 <span class="sc">|&gt;</span></span>
 <span id="cb140-2"><a href="#cb140-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> Freq, <span class="at">axis1 =</span> Vote20, <span class="at">axis2 =</span> Vote21)) <span class="sc">+</span></span>
 <span id="cb140-3"><a href="#cb140-3"></a>    <span class="fu">geom_alluvium</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Vote21)) <span class="sc">+</span></span>
@@ -2773,14 +2809,14 @@ Z -&gt; Y
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-alluvial8-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-alluvial8-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　この場合、2020年に政党Aに投票した人が2021年にどこに流れたかが分かりやすくなります。<code>Vote20</code>に色分けするか、<code>Vote21</code>に色分けするかは作成する人が決める問題であり、自分の主張・メッセージに適したマッピングをしましょう。</p>
 <p>　最後に、図をもう少し加工してみましょう。まず、横軸に0.8、1.2、1.6、2.0となっている目盛りを修正し、1と2の箇所に「2020年選挙」と「2021年選挙」を出力します。これは<code>scale_x_continuous()</code>で調整可能です。そして、<code>theme_minimal()</code>で余計なものを排除したテーマを適用します。最後に<code>theme()</code>内で全ての凡例を削除 (<code>legend.position = "none"</code>)し、パネルのグリッド (<code>panel.grid</code>)と縦軸・横軸のタイトル (<code>axis.title</code>)、縦軸の目盛りラベル (<code>axis.text.y</code>)を削除 (<code>element_blank()</code>)します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-alluvial9_40dfdfc460ca7c2573b2034c0138a251">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb141"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb141-1"><a href="#cb141-1"></a>Alluvial_Plot <span class="sc">+</span></span>
 <span id="cb141-2"><a href="#cb141-2"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, </span>
 <span id="cb141-3"><a href="#cb141-3"></a>                       <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"2020年選挙"</span>, <span class="st">"2021年選挙"</span>)) <span class="sc">+</span></span>
@@ -2792,7 +2828,7 @@ Z -&gt; Y
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-alluvial9-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-alluvial9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -2808,7 +2844,7 @@ Z -&gt; Y
 <div class="sourceCode cell-code" id="cb142"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb142-1"><a href="#cb142-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(treemapify)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　ここでは<code>Country_df</code>からアジア諸国の人口（<code>Population</code>）をツリーマップをして可視化したいと思います。<code>geom_treemap()</code>の場合、各長方形は面積の情報のみを持ちます。この面積の情報を<code>area</code>にマッピングします。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-tree2_5d2c9359a4091756adf037091248cc8f">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb143"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb143-1"><a href="#cb143-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb143-2"><a href="#cb143-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">"Asia"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb143-3"><a href="#cb143-3"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
@@ -2816,13 +2852,13 @@ Z -&gt; Y
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-tree2-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-tree2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　これだけだと各長方形がどの国を指しているのかが分かりませんね。長方形の上に国名（<code>Country</code>）を追加するためには<code>geom_treemap_text()</code>幾何オブジェクトを使用します。マッピングは<code>area</code>と<code>label</code>に対し、それぞれ面積を表す<code>Population</code>と国名を表す<code>Country</code>を指定します。<code>area</code>は<code>geom_treemap()</code>と<code>geom_treemap_text()</code>両方で使われるので<code>ggplot()</code>の内部でマッピングしても問題ありません<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>。また、<code>aes()</code>の外側に<code>color = "white"</code>で文字を白に指定し、<code>place = "center"</code>で長方形の真ん中にラベルが付くようにします。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-tree3_7378debe2ae31cd63c7ead75be874730">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb144"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb144-1"><a href="#cb144-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb144-2"><a href="#cb144-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">"Asia"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb144-3"><a href="#cb144-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population)) <span class="sc">+</span></span>
@@ -2831,13 +2867,13 @@ Z -&gt; Y
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-tree3-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-tree3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　これでツリーマップが完成しました。インドと中国の存在感がかなり大きいですね。更にラベルのサイズを長方形に合わせると、その存在感をより高めることができます。ラベルの大きさを長方形に合わせるには<code>geom_treepmap_text()</code>の内部に<code>grow = TRUE</code>を指定します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-tree4_3e6a5ed9878a511cf8570f503cfa45c4">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb145"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb145-1"><a href="#cb145-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb145-2"><a href="#cb145-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">"Asia"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb145-3"><a href="#cb145-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">label =</span> Country)) <span class="sc">+</span></span>
@@ -2847,13 +2883,13 @@ Z -&gt; Y
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-tree4-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-tree4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　ここで更に次元を追加するために、色塗りをしてみましょう。たとえば、G20加盟国か否かで色分けをしたい場合、<code>fill</code>に<code>G20</code>をマッピングします。ただし、今のままだと<code>G20</code>は連続変数扱いになりますので、character型、またはfactor型に変換します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-tree5_8b6b272275afdf1633fa7256abc19294">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb146"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb146-1"><a href="#cb146-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb146-2"><a href="#cb146-2"></a>  <span class="fu">mutate</span>(<span class="at">G20 =</span> <span class="fu">if_else</span>(G20 <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"Member"</span>, <span class="st">"Non-member"</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb146-3"><a href="#cb146-3"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">"Asia"</span>) <span class="sc">|&gt;</span></span>
@@ -2868,14 +2904,14 @@ Z -&gt; Y
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-tree5-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-tree5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　色塗りは連続変数に対して行うことも可能です。ここでは2018年人間開発指数（<code>HDI_2108</code>）の値に応じて色塗りをしてみます。また、<code>HDI_2018</code>が低い（<code>low</code>）と<span style="color:#CD3333;"><strong>brown3</strong></span>、高い（<code>high</code>）と<span style="color:#6495ED;"><strong>cornflowerblue</strong></span>色にします。真ん中の値（<code>midpoint</code>）は0.7とし、色（<code>mid</code>）は<span style="color:#FFF8DC;background-color:#7F7F7F;"><strong>cornsilk</strong></span>を使います。</p>
-<p>　連続変数でマッピングされた色塗り（<code>fill</code>）の調整には<code>scale_fill_gradient()</code>、または<code>scale_fill_gradient2()</code>を使います。前者は中間点なし、後者は中間点ありです。これらの使い方は第<a href="visualization3.html"><span>21</span></a>章で紹介しました<code>scale_color_gradient()</code>と同じです。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-tree6_d756cf9ea29ced807477c695626cc0f2">
+<p>　連続変数でマッピングされた色塗り（<code>fill</code>）の調整には<code>scale_fill_gradient()</code>、または<code>scale_fill_gradient2()</code>を使います。前者は中間点なし、後者は中間点ありです。これらの使い方は第<a href="visualization3.html" class="quarto-xref"><span>21</span></a>章で紹介しました<code>scale_color_gradient()</code>と同じです。</p>
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb147"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb147-1"><a href="#cb147-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb147-2"><a href="#cb147-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">"Asia"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb147-3"><a href="#cb147-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">area =</span> Population, <span class="at">fill =</span> HDI_2018,</span>
@@ -2893,13 +2929,13 @@ Z -&gt; Y
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-tree6-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-tree6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　ちなみに以上の図を円グラフにすると以下のようになります（国名は人口の割合が2.5%を超える国のみ表示）。ツリーマップと比較してかなり読みにくいことが分かります。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-tree7_926ac771958e5f55e6fe82c272e8716b">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb148"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb148-1"><a href="#cb148-1"></a>Country_df <span class="sc">|&gt;</span></span>
 <span id="cb148-2"><a href="#cb148-2"></a>  <span class="fu">filter</span>(Continent <span class="sc">==</span> <span class="st">"Asia"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb148-3"><a href="#cb148-3"></a>  <span class="fu">arrange</span>(Population) <span class="sc">|&gt;</span></span>
@@ -2926,7 +2962,7 @@ Z -&gt; Y
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-tree7-1.png" class="img-fluid figure-img" width="2100"></p>
+<p><img src="visualization4_files/figure-html/visual4-tree7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2100"></p>
 </figure>
 </div>
 </div>
@@ -2940,7 +2976,7 @@ Z -&gt; Y
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb149"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb149-1"><a href="#cb149-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggmosaic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-mosaic2_cee9ace508a6d048cb684113bec16b32">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb150"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb150-1"><a href="#cb150-1"></a>Mosaic_df <span class="ot">&lt;-</span> Country_df <span class="sc">|&gt;</span></span>
 <span id="cb150-2"><a href="#cb150-2"></a>    <span class="fu">select</span>(Country, Continent, <span class="at">Polity =</span> Polity_Type, <span class="at">PPP =</span> PPP_per_capita) <span class="sc">|&gt;</span></span>
 <span id="cb150-3"><a href="#cb150-3"></a>    <span class="fu">mutate</span>(<span class="at">Continent =</span> <span class="fu">factor</span>(Continent, </span>
@@ -2954,7 +2990,7 @@ Z -&gt; Y
 <span id="cb150-11"><a href="#cb150-11"></a>           <span class="at">PPP       =</span> <span class="fu">factor</span>(PPP, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Low PPP"</span>, <span class="st">"High PPP"</span>))) <span class="sc">|&gt;</span></span>
 <span id="cb150-12"><a href="#cb150-12"></a>    <span class="fu">drop_na</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-mosaic3_dd17993f7f287279bca8803a944677e1">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb151"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb151-1"><a href="#cb151-1"></a><span class="fu">head</span>(Mosaic_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 4
@@ -2969,7 +3005,7 @@ Z -&gt; Y
 </div>
 </div>
 <p>　クロス表を作成する内蔵関数としては<code>table()</code>があります。2つの変数が必要となり、第一引数が行、第二引数が列を表します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-mosaic4_b383f07a0ac588556384ad0334850d53">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb153"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb153-1"><a href="#cb153-1"></a>Mosaic_Tab <span class="ot">&lt;-</span> <span class="fu">table</span>(Mosaic_df<span class="sc">$</span>Continent, Mosaic_df<span class="sc">$</span>Polity)</span>
 <span id="cb153-2"><a href="#cb153-2"></a>Mosaic_Tab</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -2983,19 +3019,19 @@ Z -&gt; Y
 </div>
 </div>
 <p>　この<code>Mosaic_Tab</code>のクラスは<code>"table"</code>ですが、<code>"table"</code>クラスのオブジェクトを<code>plot()</code>に渡すと別途のパッケージを使わずモザイクプロットを作成することができます。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-mosaic6_5a2ae4961a944c69d816a5f6f5f7921f">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb155"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb155-1"><a href="#cb155-1"></a><span class="fu">plot</span>(Mosaic_Tab)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-mosaic6-1.png" class="img-fluid figure-img" width="1500"></p>
+<p><img src="visualization4_files/figure-html/visual4-mosaic6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="1500"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　やや地味ではありますが、モザイクプロットが出来ました。ここからはより読みやすいモザイクプロットを作成するために{ggmosaic}パッケージの<code>geom_mosaic()</code>関数を使います。</p>
 <p>　<code>geom_mosaic()</code>の場合、<code>x</code>のみのマッピングで十分です。ただし、特定の変数を指定するのではなく、<code>product(変数1, 変数2)</code>を<code>x</code>にマッピングする必要があります。<code>table()</code>関数同様、変数1は行、変数2は列です。また、欠損値が含まれている行がある場合は、<code>aes()</code>の外側に<code>na.rm = TRUE</code>を指定する必要があります。今回は<code>drop_na()</code>で欠損値をすべて除外しましたが、念の為に指定しておきます。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-mosaic7_b25205884c32af11bcde6a725b0bde5b">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb156"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb156-1"><a href="#cb156-1"></a>Mosaic_df <span class="sc">|&gt;</span></span>
 <span id="cb156-2"><a href="#cb156-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb156-3"><a href="#cb156-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent)), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
@@ -3011,13 +3047,13 @@ Z -&gt; Y
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-mosaic7-1.png" class="img-fluid figure-img" width="1500"></p>
+<p><img src="visualization4_files/figure-html/visual4-mosaic7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="1500"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　これで出来上がりですが、<code>"table"</code>オブジェクトを<code>plot()</code>に渡した結果とあまり変わらないですね。続いて、この図を少し改良してみましょう。まずはセルの色分けですが、これは<code>fill</code>に色分けする変数をマッピングするだけです。今回は政治体制ごとにセルを色分けしましょう。また、文字を大きめにし、横軸の目盛りラベルを回転します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-mosaic8_11308963ebc812071078397d0408c64e">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb158"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb158-1"><a href="#cb158-1"></a>Mosaic_df <span class="sc">|&gt;</span></span>
 <span id="cb158-2"><a href="#cb158-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb158-3"><a href="#cb158-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent), <span class="at">fill =</span> Polity), </span>
@@ -3030,13 +3066,13 @@ Z -&gt; Y
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-mosaic8-1.png" class="img-fluid figure-img" width="1500"></p>
+<p><img src="visualization4_files/figure-html/visual4-mosaic8-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="1500"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　次元を追加するためにはファセット分割を使います。たとえば、一人当たりPPP GDPの高低（<code>PPP</code>）でファセットを分割する場合、<code>facet_wrap(~PPP)</code>レイヤーを足すだけです。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-mosaic9_66a379733b0970205c6f46bcd45ffec1">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb159"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb159-1"><a href="#cb159-1"></a>Mosaic_df <span class="sc">|&gt;</span></span>
 <span id="cb159-2"><a href="#cb159-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb159-3"><a href="#cb159-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent), <span class="at">fill =</span> Polity), </span>
@@ -3050,13 +3086,13 @@ Z -&gt; Y
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-mosaic9-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization4_files/figure-html/visual4-mosaic9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　ただし、一つ問題があります。それは目盛りラベルの位置です。例えば、右側の横軸目盛りラベルの場合、セルの位置とラベルの位置がずれています。これは2つのファセットが同じ目盛りを共有し、左側の方に合わせられたため生じるものです。よく見ると横軸も縦軸も目盛りラベルに位置が同じであることが分かります。これを解消するためには、<code>facet_wrap()</code>の内部に<code>scale = "free"</code>を指定します<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>。これは各ファセットが独自のスケールを有することを意味します。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-mosaic10_e3e7e4fdf58bfc108d4f63d3c2fb6d01">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb160"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb160-1"><a href="#cb160-1"></a>Mosaic_df <span class="sc">|&gt;</span></span>
 <span id="cb160-2"><a href="#cb160-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb160-3"><a href="#cb160-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent), <span class="at">fill =</span> Polity), </span>
@@ -3070,13 +3106,13 @@ Z -&gt; Y
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-mosaic10-1.png" class="img-fluid figure-img" width="2400"></p>
+<p><img src="visualization4_files/figure-html/visual4-mosaic10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2400"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>　右側ファセットの横軸ラベルが重なってしまいましたが、これでとりあえず完成です。アフリカにおけるOpen AnocracyとClosed Anocracyの頻度が0であるため、これは仕方ありません。一つの対処方法としては以下のように縦軸目盛りを削除し、凡例で代替することが考えられます。</p>
-<div class="cell" data-layout-align="center" data-hash="visualization4_cache/html/visual4-mosaic11_e2a76c66d54067ddab3743a6e1de54b4">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb161"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb161-1"><a href="#cb161-1"></a>Mosaic_df <span class="sc">|&gt;</span></span>
 <span id="cb161-2"><a href="#cb161-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb161-3"><a href="#cb161-3"></a>    <span class="fu">geom_mosaic</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">product</span>(Polity, Continent), <span class="at">fill =</span> Polity), </span>
@@ -3090,7 +3126,7 @@ Z -&gt; Y
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="visualization4_files/figure-html/visual4-mosaic11-1.png" class="img-fluid figure-img" width="2700"></p>
+<p><img src="visualization4_files/figure-html/visual4-mosaic11-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-pos="H" width="2700"></p>
 </figure>
 </div>
 </div>
@@ -3102,7 +3138,7 @@ Z -&gt; Y
 <p><a href="https://www.r-graph-gallery.com/">The R Graph Gallery</a>では本書で紹介できなかった様々な図のサンプルおよびコードを見ることができます。ここまで読み終わった方なら問題なくコードの意味が理解できるでしょう。{ggplot2}では作成できないグラフ（アニメーションや3次元図、インタラクティブなグラフ）についても、他のパッケージを利用した作成方法について紹介されているので、「こんな図が作りたいけど、作り方が分からん！」の時には、まず<a href="https://www.r-graph-gallery.com/">The R Graph Gallery</a>に目を通してみましょう。</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
 <div id="ref-Hargian_Kleiner:1984" class="csl-entry" role="listitem">
 Hartigan, J. A., と Beat Kleiner. 1984. <span>「A Mosaic of Television Ratings」</span>. <em>The American Statistician</em> 38: 32–35.
 </div>
@@ -3203,10 +3239,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/www\.jaysong\.net\/RBook\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -3216,8 +3269,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -3230,6 +3292,120 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -3273,6 +3449,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -3298,8 +3475,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
-      // Handle positioning of the toggle
-      window.addEventListener(
+        // Handle positioning of the toggle
+    window.addEventListener(
       "resize",
       throttle(() => {
         elRect = undefined;
@@ -3307,23 +3484,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
           selectCodeLines(selectedAnnoteEl);
         }
       }, 10)
-      );
-      function throttle(fn, ms) {
-      let throttle = false;
-      let timer;
-        return (...args) => {
-          if(!throttle) { // first call gets through
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
               fn.apply(this, args);
-              throttle = true;
-          } else { // all the others get throttled
-              if(timer) clearTimeout(timer); // cancel #2
-              timer = setTimeout(() => {
-                fn.apply(this, args);
-                timer = throttle = false;
-              }, ms);
-          }
-        };
-      }
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
       for (let i=0; i<annoteTargets.length; i++) {
         const annoteTarget = annoteTargets[i];
@@ -3368,7 +3545,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
               options: {
                 flipVariations: false, // true by default
                 allowedAutoPlacements: ['right'],
-                fallbackPlacements: ['right', 'top', 'top-start', 'top-end'],
+                fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
               },
             },
             {
@@ -3420,31 +3597,16 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
   }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var filterRegex = new RegExp("https:\/\/www\.jaysong\.net\/RBook\/");
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-          // target, if specified
-          link.setAttribute("target", "_blank");
-      }
-    }
 });
 </script>
-
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./visualization3.html" class="pagination-link">
+      <a href="./visualization3.html" class="pagination-link  aria-label=" &lt;span="" [応用]&lt;="" span&gt;"="">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">可視化 [応用]</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./table.html" class="pagination-link">
+      <a href="./table.html" class="pagination-link" aria-label="<span class='chapter-number'>23</span>&nbsp; <span class='chapter-title'>表の作成</span>">
         <span class="nav-page-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">表の作成</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
@@ -3455,12 +3617,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">
       &nbsp;
     </div>   
-    <div class="nav-footer-center">Copyright 2023, <a href="https://www.jaysong.net">Jaehyun Song</a> and <a href="https://yukiyanai.github.io/">Yuki Yanai</a></div>
+    <div class="nav-footer-center">
+<p>Copyright 2023, <a href="https://www.jaysong.net">Jaehyun Song</a> and <a href="https://yukiyanai.github.io/">Yuki Yanai</a></p>
+</div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
+
 
 
 
