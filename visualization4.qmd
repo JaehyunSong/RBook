@@ -25,8 +25,6 @@ source("_common.R")
 * [ツリーマップ](#sec-visual4-tree)
 * [モザイクプロット](#sec-visual4-mosaic)
 
----
-
 ```{r visual4-setup}
 #| message: false
 pacman::p_load(tidyverse)
@@ -34,8 +32,6 @@ pacman::p_load(tidyverse)
 Country_df <- read_csv("Data/Countries.csv")
 COVID19_df <- read_csv("Data/COVID19_Worldwide.csv", guess_max = 10000)
 ```
-
----
 
 ## バイオリンプロット {#sec-visual4-violin}
 
@@ -149,8 +145,6 @@ Country_df |>
 
 　箱ひげ図は四分位範囲、四分位数、最小値、最大値などの情報を素早く読み取れますが、どの値当たりが分厚いかなどの情報が欠けています。これをバイオリンプロットで補うことで、よりデータの分布を的確に把握することができます。
 
----
-
 ## ラグプロット {#sec-visual4-rug}
 
 　ラグプロット（rug plot）は変数の分布を示す点ではヒストグラム、箱ひげ図、バイオリンプロットと同じ目的を持ちますが、大きな違いとしてはラグプロット単体で使われるケースがない（または、非常に稀）という点です。ラグプロットは上述しましたヒストグラムや箱ひげ図、または散布図などと組み合わせて使うのが一般的です。
@@ -255,8 +249,6 @@ Scatter_Fig1 <- Country_df |>
 
 ggExtra::ggMarginal(Scatter_Fig1, type = "boxplot")
 ```
-
----
 
 ## リッジプロット {#sec-visual4-ridge}
 
@@ -372,8 +364,6 @@ Country_df |>
   labs(x = "2018年人間開発指数", y = "大陸") +
   theme_minimal(base_size = 12)
 ```
-
----
 
 ## エラーバー付き散布図 {#sec-visual4-pointrange}
 
@@ -573,8 +563,6 @@ Pointrange_df2 |>
     theme(legend.position = "bottom")
 ```
 
----
-
 ## ロリーポップチャート {#sec-visual4-lollipop}
 
 　ロリーポップチャートは棒グラフの特殊な形態であり、棒がロリーポップ（チュッパチャップス）の形をしているものを指します。したがって、2つの図は本質的に同じですが、棒が多い場合はロリーポップチャートを使うケースがあります。棒が非常に多い棒グラフの場合、図を不適切に縮小すると[モアレ](https://ja.wikipedia.org/wiki/%E3%83%A2%E3%82%A2%E3%83%AC)が生じるケースがあるからです。
@@ -683,8 +671,6 @@ Country_df |>
         axis.ticks.y = element_blank(),
         axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ```
-
----
 
 ## 平滑化ライン {#sec-visual4-smooth}
 
@@ -810,8 +796,6 @@ Country_df |>
 
 　{ggplot2}が提供する平滑化ラインにはLOESSと回帰直線以外にも`"glm"`や`"gam"`などがります。詳細はRコンソール上で`?geom_smooth`を入力し、ヘルプを参照してください。
 
----
-
 ## 文字列の出力 {#sec-visual4-text}
 
 　ここでは図の中に文字列を追加する方法について解説します。
@@ -909,8 +893,6 @@ lm_plot +
            label = TeX("$PPP\\_per\\_capita = \\alpha + \\beta \\cdot Freedom\\_House\\_Score + \\epsilon \\ where \\ \\epsilon \\sim Normal(0, \\sigma).$"), 
            hjust = 0, size = 5)
 ```
-
----
 
 ## ヒートマップ {#sec-visual4-heatmap}
 
@@ -1017,8 +999,6 @@ Heatmap_df2 |>
         panel.grid      = element_blank())
 ```
 
----
-
 ## 等高線図 {#sec-visual4-contour}
 
 　ヒートマップを使えば、離散変数$\times$離散変数の同時分布を可視化することは出来ますが、連続変数$\times$連続変数の同時分布を可視化するには限界があります。むろん、一つ一つのタイルを小さくすることも出来ますが、効率的な方法ではないでしょう。ここで活躍するのが等高線図 (contour plot) です。
@@ -1098,8 +1078,6 @@ Country_df |>
 #| cache: true
 RColorBrewer::display.brewer.all()
 ```
-
----
 
 ## 地図 {#sec-visual4-map}
 
@@ -1375,8 +1353,6 @@ Osaka_map |>
   theme(legend.position = "bottom")
 ```
 
----
-
 ## 非巡回有向グラフ {#sec-visual4-dag}
 
 　近年、因果推論の界隈でよく登場する非巡回有向グラフ（DAG）ですが、「グラフ」からも分かるように、DAGの考え方に基づく因果推論の研究には多くの図が登場します。DAGを作図するには{ggplot2}のみでも可能ですが、{dagitty}パッケージでDAGの情報を含むオブジェクトを生成し、{ggdag}で作図した方が簡単です。以下の図はDAGの一例です。
@@ -1515,8 +1491,6 @@ adjustmentSets(DAG_data3, effect = "direct")
 
 　`X1`と`X2`を統制する必要があることが分かりますね。
 
----
-
 ## バンプチャート {#sec-visual4-bump}
 
 　バンプチャート (bump chart)は順位の変化などを示す時に有効なグラフです。たとえば、G7構成国の新型コロナ感染者数の順位の変化を示すにはどうすれば良いでしょうか。そもそもどのような形式のデータが必要でしょうか。まずは必要なデータ形式を紹介したいと思います。
@@ -1640,8 +1614,6 @@ Bump_df |>
   theme(legend.position = "none",
         panel.grid      = element_blank())
 ```
-
----
 
 ## 沖積図 {#sec-visual4-alluvial}
 
@@ -1772,8 +1744,6 @@ Alluvial_Plot +
 
 　これでだいぶスッキリした沖積図が出来上がりました。
 
----
-
 ## ツリーマップ {#sec-visual4-tree}
 
 　ツリーマップ（tree map）は変数の値の大きさを長方形の面積として表すグラフです。全体におけるシェアを示す時に使う点で、円グラフの代替案の一つになります。円グラフは項目が多すぎると読みにくいデメリットがありますが、ツリーマップは項目が多い場合でも有効です。むろん、多すぎると読みにくいことは同じですので、注意が必要です。
@@ -1889,8 +1859,6 @@ Country_df |>
 ```
 
 　ただし、ツリーマップが必ずしも円グラフより優れているとは言えません。たとえば、 @Heer_Bostock:2010 の研究では円グラフとツリーマップを含む9種類のグラフを用い、被験者に大小関係を判断してもらう実験を行いましたが、ツリーマップ（四角形の面積）は円グラフ（角度）よりも判断までの所要時間が長いことが述べています。
-
----
 
 ## モザイクプロット {#sec-visual4-mosaic}
 
@@ -2032,8 +2000,6 @@ Mosaic_df |>
           axis.text.y = element_blank(),
           axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ```
-
----
 
 ## その他のグラフ {#sec-visual4-further}
 
