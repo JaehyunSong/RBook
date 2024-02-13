@@ -713,17 +713,17 @@ pfi_df |>
 
 ### 表（複数ページ）
 
-　続いて、複数のHTMLページから表を取得してみよう。今回はJリーグ（1部から3部まで）の順位表が対象である。
+　続いて、複数のHTMLページから表を取得してみよう。今回はJリーグ（1部から3部まで）の順位表（2023年）が対象である。
 
-* J1: <https://www.jleague.jp/standings/j1/>
-* J2: <https://www.jleague.jp/standings/j2/>
-* J3: <https://www.jleague.jp/standings/j3/>
+* J1: <https://www.jleague.jp/standings/2023/>
+* J2: <https://www.jleague.jp/standings/2023/j2/>
+* J3: <https://www.jleague.jp/standings/2023/j3/>
 
 　3つのページを見ると、ページの構造は一致することが分かる。また、表を意味する`<table>`タグを見ると、いずれも`scoreTable01`クラスが付与されていること分かる（各自、開発者メニューから確認してみよう）。したがって、同じ作業を3つのページに対して繰り返すだけで良いだろう。まずは、J1リーグだけ試してみよう。まず、HTMLファイルを読み込み、`html_element(".scoreTable01")`で`scoreTalbe01`クラスの要素を抽出し、そこから`html_table()`で表を抽出してみよう。
 
 ```{r}
 #| label: scraping-j-1
-j1_url  <- "https://www.jleague.jp/standings/j1"
+j1_url  <- "https://www.jleague.jp/standings/2023/"
 j1_html <- read_html(j1_url)
 
 j1_html |> 
@@ -745,7 +745,9 @@ j1_html |>
 
 ```{r}
 #| label: scraping-j-3
-j_urls <- paste0("https://www.jleague.jp/standings/j", 1:3)
+j_urls <- c("https://www.jleague.jp/standings/2023/",
+            "https://www.jleague.jp/standings/2023/j2.html",
+            "https://www.jleague.jp/standings/2023/j3.html")
 j_urls
 ```
 
@@ -901,7 +903,7 @@ oc_html |>
   html_attr("src")
 ```
 
-　20個の画像が抽出された。URLなのに`"//"`で始まるのが不自然だと感じるかも知れないが、`"//"`で始まるURLは`"https://"`や`http://`に勝手に認識されるので問題ない。あとはこれらの作業を他のセル（ゲーム名、スコアなど）にも適用し、一つの表としてまとめるだけだ。`oc_df`という名のオブジェクトとして格納しよう。
+　20個の画像が抽出された。URLなのに`"//"`で始まるのが不自然だと感じるかも知れないが、これは`paste0()`や`str_replace()`などを使用し、`"//"`を`"https://"`や`http://`に修正すれば良い。あとはこれらの作業を他のセル（ゲーム名、スコアなど）にも適用し、一つの表としてまとめるだけだ。`oc_df`という名のオブジェクトとして格納しよう。
 
 ```{r}
 #| label: scraping-oc-single-8
@@ -930,8 +932,8 @@ oc_df <- oc_df |>
          Rank  = as.numeric(Rank),        # <2>
          Score = as.numeric(Score),       # <3>
          Date  = paste0(Date, ", 2021"),  # <4>
-         Date  = mdy(Date))               # <5>
-
+         Date  = mdy(Date),               # <5>
+         Tier  = paste0("https:", Tier))  # <6>
 oc_df
 ```
 
@@ -939,7 +941,8 @@ oc_df
 2. `Rank`列をnumeric型に変換する。
 3. `Score`列をnumeric型に変換する。
 4. `Date`列の後に`", 2021"`を付ける。
-4. `Date`列がmonth-day-yearで記述されていることを伝え、date型に変換する。
+5. `Date`列がmonth-day-yearで記述されていることを伝え、date型に変換する。
+6. `Tier`列の最初に`"https:"`を追加し、URLが`"https://"`で始まるように修正する。
 
 　最後に`oc_df`を{gt}パッケージを使って表として出力してみよう。
 
