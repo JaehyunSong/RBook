@@ -565,33 +565,34 @@ rbook_urls <- rbook_html |>
 rbook_urls
 ```
 
+　続いて箇条書きの箇所（`<li>`タグ）を抽出しよう。
+
 ```{r}
 #| label: scraping-text-4
 rbook_html |> 
-  html_element("#目次") |> 
+  html_element("#目次") |>
   html_elements("li") |> 
   html_text()
 ```
 
 　概ね問題はなさそうに見えるが、章だけでなく、部（`"第1部: Rの導入\n第1章: R?\n第2章: Rのインストール\n第3章: IDEの導入\n第4章: 分析環境のカスタマイズ\n第5章: Rパッケージ\n"`など）が書かれた`<li>`タグまで抽出されてしまった。スクレイピングする内容が今回のように少ないのであれば、自分で一つ一つ消しても良いが、ここではすべて自動化しよう。
 
-　まず、開発者メニューを開き、章の箇所（どの章でも良い）を選択する。以下は「第1章: R?」とその前後のコードである。
+　まず、開発者メニューを開き、章の箇所（どの章でも良い）を選択する。以下は「第1章: R?」とその前後のコードである（『私たちのR』は日々更新されるため、全く同じコードとは限らない）。
 
 ```{.html code-line-numbers="true"}
 <section id="目次" class="level2">
 <h2 class="anchored" data-anchor-id="目次">目次</h2>
 <p>章立ては未定。著者が書きたいものから書く予定 (全部で30~35章くらいになる見込み)。</p>
 <ul>
-  <li>第1部: Rの導入
-    <ul>
-      <li>第<a href="aboutr.html" class="quarto-xref"><span>1</span></a>章: R?</li>
-      <li>第<a href="installation.html" class="quarto-xref"><span>2</span></a>章: Rのインストール</li>
-      <li>第<a href="ide.html" class="quarto-xref"><span>3</span></a>章: IDEの導入</li>
-      <li>第<a href="r_customize.html" class="quarto-xref"><span>4</span></a>章: 分析環境のカスタマイズ</li>
-      <li>第<a href="packages.html" class="quarto-xref"><span>5</span></a>章: Rパッケージ</li>
-    </ul>
-  </li>
-  <li>第2部: Rの基礎
+<li>第1部: Rの導入
+<ul>
+<li>第<a href="https://www.jaysong.net/RBook/aboutr.html">1</a>章: R?</li>
+<li>第<a href="https://www.jaysong.net/RBook/installation.html">2</a>章: Rのインストール</li>
+<li>第<a href="https://www.jaysong.net/RBook/ide.html">3</a>章: IDEの導入</li>
+<li>第<a href="https://www.jaysong.net/RBook/r_customize.html">4</a>章: 分析環境のカスタマイズ</li>
+<li>第<a href="https://www.jaysong.net/RBook/package.qmd">5</a>章: Rパッケージ</li>
+</ul></li>
+<li>第2部: Rの基礎
 ```
 
 　「第1章: R?」は上記のコードの7行目にある。また、その親タグは`<ul>`、そしてそれの親タグは`<li>`、そして`<ul>`もある。これは第2章も、第30章も同じだ。つまり、IDが`目次`の内容（`#目次`）の中、`<ul>`の中の`<li>`の中の`<ul>`の中の`<li>`の箇所を取り出せば良い。セレクターは`"ul li ul li"`と記述する[^descendant]。
