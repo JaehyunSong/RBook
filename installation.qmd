@@ -5,11 +5,13 @@
 source("_common.R")
 ```
 
+<!--
 * 矢内が作った古い資料 ([macOS編](https://yukiyanai.github.io/jp/resources/docs/install-R_macOS.pdf)、[Linux (Ubuntu)編](https://yukiyanai.github.io/jp/resources/docs/install-R_ubuntu.pdf)、[Windows編](https://yukiyanai.github.io/jp/resources/docs/install-R_windows.pdf))
+-->
 
 ## 自分のPCにインストール
 
-　Rのバージョン、使用するOSのバージョンによってインストール方法が変更される可能性がある。したがって、最新情報はネット上の解説記事等を参照されたい。以下の内容はmacOS 13（Ventura）、Ubuntu 22.04 LTS（Jammy）、Windows 11にR 4.3.0をインストールする方法である。Rのインストールが終わったら、統合開発環境（IDE）であるRStudioのインストールを推奨する。RStudioのインストール方法については第[-@sec-ide]章を参照されたい。
+　Rのバージョン、使用するOSのバージョンによってインストール方法が変更される可能性がある。したがって、最新情報はネット上の解説記事等を参照されたい。以下の内容はmacOS 14（Sonoma）、Ubuntu 22.04 LTS（Jammy）、Windows 11にR 4.3.3をインストールする方法である。Rのインストールが終わったら、統合開発環境（IDE）であるRStudioのインストールを推奨する。RStudioのインストール方法については第[-@sec-ide]章を参照されたい。
 
 ### macOS
 
@@ -150,9 +152,9 @@ $ fc-list | grep IPAex
 
 #### Step 3: 依存パッケージのインストール
 
-　続いて、多くのRパッケージが依存するLinux側のパッケージをインストールする。こちらは必須ではないが、LinuxでRを使っていくといつかは通る道である。他にも依存パッケージは数十種類（それ以上かも）あるが、ここではよく使われるものをインストールしておく。
+　続いて、多くのRパッケージが依存するLinux側のパッケージをインストールする。こちらは必須ではないが、LinuxでRを使っていくといつかは通る道である。他にも依存パッケージは数十種類（それ以上かも）あるが、ここではよく使われるものをインストールしておく。これらをインストールしておけば、少なくとも{tidyverse} 2.0.0のインストールは問題ない。
 
-```bash
+```sh
 $ sudo apt install -y build-essential
 $ sudo apt install -y libcurl4-openssl-dev
 $ sudo apt install -y libcurl4-gnutls-dev
@@ -163,11 +165,14 @@ $ sudo apt install -y libglu1-mesa-dev
 $ sudo apt install -y libmagick++-dev
 $ sudo apt install -y libudunits2-0
 $ sudo apt install -y libudunits2-dev
-$ sudo apt install -y libgdal-dev libproj-dev
+$ sudo apt install -y libgdal-dev
+$ sudo apt install -y libproj-dev
 $ sudo apt install -y libgmp3-dev
 $ sudo apt install -y curl
 $ sudo apt install -y poppler-utils
 $ sudo apt install -y poppler-data
+$ sudo apt install -y libharfbuzz-dev
+$ sudo apt install -y libfribidi-dev
 ```
 
 　今後、Rでパッケージをインストールしようとして、「XXXがない」と表示される場合があるだろう。その場合、「ターミナルで以下のようなコマンドを入力してね」といったメッセージも表示される。メッセージをよく読んで、ターミナルで指示通りにコマンドを入力しよう。
@@ -176,14 +181,14 @@ $ sudo apt install -y poppler-data
 
 　Rのインストールには2つの選択肢がある。簡単なやり方はUbuntu公式レポジトリからインストールする方法だ。ただし、この方法だとRの最新版は使えない（2023年6月現在の最新版は4.3.1だた、R 4.2.1がインストールされる）。最新版にこだわらないなら、ターミナルで以下のように入力するだけだ。
 
-```bash
+```sh
 $ sudo apt update
 $ sudo apt install -y r-base
 ```
 
 　もう一つのやり方はやや面倒だが、最新版が使える。Ubuntuレポジトリでなく、Rの公式レポジトリからインストールするのだ。そのためには予めRのレポジトリを登録しておく必要がある。以下のコマンドを入力するが、R 5.xがリリースされるとURLも変更になるため、以下のコマンドはあくまでR 4.Xの例であることを断っておく。
 
-```bash
+```sh
 $ sudo apt update -qq
 $ sudo apt install --no-install-recommends software-properties-common dirmngr
 $ gpg --show-keys /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
@@ -195,7 +200,7 @@ $ sudo apt install -y r-base
 
 　これでRのインストールは完了だ。ターミナルで以下のように入力するとRが起動される。
 
-```bash
+```sh
 $ R
 ```
 
