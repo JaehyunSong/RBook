@@ -670,16 +670,16 @@ pfi_tbls <- pfi_html |>
 pfi_tbls
 ```
 
-　当該ページには2つの表があり、我々が欲しい表はリストの1番目の要素である。`pfi_tbls`の1番目の要素のみを抽出し、更に`2023[6]`のような列名を`Year2023`のように修正し、`pfi_df`に格納する。
+　当該ページには2つの表があり、我々が欲しい表はリストの1番目の要素である。`pfi_tbls`の1番目の要素のみを抽出し、更に`2023[5]`のような列名を`Year2023`のように修正し、`pfi_df`に格納する。
 
 ```{r}
 #| label: scraping-hdi-3
 pfi_df <- pfi_tbls[[1]] |> 
-  rename("Year2023" = "2023[6]",
-         "Year2022" = "2022[7]",
-         "Year2021" = "2021[8]",
-         "Year2020" = "2020[9]",
-         "Year2019" = "2019[10]")
+  rename("Year2023" = "2023[5]",
+         "Year2022" = "2022[6]",
+         "Year2021" = "2021[7]",
+         "Year2020" = "2020[8]",
+         "Year2019" = "2019[9]")
 
 pfi_df
 ```
@@ -689,7 +689,7 @@ pfi_df
 ```{r}
 #| label: scraping-hdi-4
 pfi_df <- pfi_df |> 
-  mutate(across(Year2023:Year2019, ~str_remove(.x, "^\\(([0-9]+)\\)")),
+  mutate(across(Year2023:Year2019, \(x) str_remove(x, "^\\(([0-9]+)\\)")),
          across(Year2023:Year2019, as.numeric))
 
 pfi_df

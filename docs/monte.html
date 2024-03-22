@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.549">
+<meta name="generator" content="quarto-1.4.551">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -603,7 +603,7 @@ window.Quarto = {
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># この場合、prob引数は省略可能</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">3</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">6</span>, <span class="dv">6</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 5 1 5</code></pre>
+<pre><code>[1] 4 1 1</code></pre>
 </div>
 </div>
 <p>　今回はサイコロを1万回振り、それぞれの目が出た回数を棒グラフとして示してみます。無作為に抽出された値であれば、各目が出る回数は等しいはずです。ベクトルに対して<code>table()</code>関数を使うと、各要素が出現した回数が出力され、このオブジェクトを<code>barplot()</code>関数に渡すと棒グラフを作成することができます。</p>
@@ -1225,6 +1225,10 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 <span id="cb58-5"><a href="#cb58-5"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
 <span id="cb58-6"><a href="#cb58-6"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb58-7"><a href="#cb58-7"></a>    <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in geom_rect(aes(xmin = -1, ymin = -1, xmax = 1, ymax = 1), fill = "white", : All aesthetics have length 1, but the data has 100 rows.
+ℹ Did you mean to use `annotate()`?</code></pre>
+</div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -1235,14 +1239,22 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 </div>
 <p>　ここに円を追加してみましょう。円を描くときには{ggforce}パッケージの<code>geom_circle()</code>幾何オブジェクトを使用します。マッピングは円の原点 (<code>x0</code>と<code>y0</code>)、円の半径 (<code>r</code>)です。原点は (0, 0)で半径は1の円を重ねます。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1"></a>pi_df <span class="sc">|&gt;</span></span>
-<span id="cb59-2"><a href="#cb59-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb59-3"><a href="#cb59-3"></a>    <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">ymin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">xmax =</span> <span class="dv">1</span>, <span class="at">ymax =</span> <span class="dv">1</span>),</span>
-<span id="cb59-4"><a href="#cb59-4"></a>              <span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb59-5"><a href="#cb59-5"></a>    <span class="fu">geom_circle</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">r =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb59-6"><a href="#cb59-6"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
-<span id="cb59-7"><a href="#cb59-7"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb59-8"><a href="#cb59-8"></a>    <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1"></a>pi_df <span class="sc">|&gt;</span></span>
+<span id="cb60-2"><a href="#cb60-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb60-3"><a href="#cb60-3"></a>    <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">ymin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">xmax =</span> <span class="dv">1</span>, <span class="at">ymax =</span> <span class="dv">1</span>),</span>
+<span id="cb60-4"><a href="#cb60-4"></a>              <span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb60-5"><a href="#cb60-5"></a>    <span class="fu">geom_circle</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">r =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb60-6"><a href="#cb60-6"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb60-7"><a href="#cb60-7"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb60-8"><a href="#cb60-8"></a>    <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in geom_rect(aes(xmin = -1, ymin = -1, xmax = 1, ymax = 1), fill = "white", : All aesthetics have length 1, but the data has 100 rows.
+ℹ Did you mean to use `annotate()`?</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in geom_circle(aes(x0 = 0, y0 = 0, r = 1)): All aesthetics have length 1, but the data has 100 rows.
+ℹ Did you mean to use `annotate()`?</code></pre>
+</div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -1253,21 +1265,29 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 </div>
 <p>　これだけだと読みづらいので、円の中か外かで点の色分けをしてみましょう。そのためには各点が円内に入っているかどうかを判定した変数<code>in_circle</code>を追加します。点(<span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span>)が、原点が(<span class="math inline">\(x^\prime\)</span>, <span class="math inline">\(y^\prime\)</span>)、かつ半径<span class="math inline">\(r\)</span>の円内に入っている場合、<span class="math inline">\((x - x^\prime)^2 + (y - y^\prime)^2 &lt; r^2\)</span>が成立します。今回は原点が (0, 0)で、半径が1であるため、<span class="math inline">\(x^2 + y^2 &lt; 1\)</span>か否かを判定します。この条件を満たしているかどうかを示す<code>in_circle</code>という変数を追加します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1"></a>pi_df <span class="ot">&lt;-</span> pi_df <span class="sc">|&gt;</span></span>
-<span id="cb60-2"><a href="#cb60-2"></a>    <span class="fu">mutate</span>(<span class="at">in_circle =</span> <span class="fu">if_else</span>(x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> y<span class="sc">^</span><span class="dv">2</span> <span class="sc">&lt;</span> <span class="dv">1</span><span class="sc">^</span><span class="dv">2</span>, <span class="st">"円内"</span>, <span class="st">"円外"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1"></a>pi_df <span class="ot">&lt;-</span> pi_df <span class="sc">|&gt;</span></span>
+<span id="cb63-2"><a href="#cb63-2"></a>    <span class="fu">mutate</span>(<span class="at">in_circle =</span> <span class="fu">if_else</span>(x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> y<span class="sc">^</span><span class="dv">2</span> <span class="sc">&lt;</span> <span class="dv">1</span><span class="sc">^</span><span class="dv">2</span>, <span class="st">"円内"</span>, <span class="st">"円外"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　散布図レイヤー (<code>geom_point()</code>)内に<code>color</code>を<code>in_circle</code>変数でマッピングします。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1"></a>pi_df <span class="sc">|&gt;</span></span>
-<span id="cb61-2"><a href="#cb61-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb61-3"><a href="#cb61-3"></a>    <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">ymin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">xmax =</span> <span class="dv">1</span>, <span class="at">ymax =</span> <span class="dv">1</span>),</span>
-<span id="cb61-4"><a href="#cb61-4"></a>              <span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb61-5"><a href="#cb61-5"></a>    <span class="co"># 円の内側か外側かで色分け</span></span>
-<span id="cb61-6"><a href="#cb61-6"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> in_circle), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb61-7"><a href="#cb61-7"></a>    <span class="fu">geom_circle</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">r =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb61-8"><a href="#cb61-8"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"X"</span>, <span class="at">y =</span> <span class="st">"Y"</span>, <span class="at">color =</span> <span class="st">""</span>) <span class="sc">+</span></span>
-<span id="cb61-9"><a href="#cb61-9"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb61-10"><a href="#cb61-10"></a>    <span class="fu">theme_void</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1"></a>pi_df <span class="sc">|&gt;</span></span>
+<span id="cb64-2"><a href="#cb64-2"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb64-3"><a href="#cb64-3"></a>    <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">ymin =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">xmax =</span> <span class="dv">1</span>, <span class="at">ymax =</span> <span class="dv">1</span>),</span>
+<span id="cb64-4"><a href="#cb64-4"></a>              <span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb64-5"><a href="#cb64-5"></a>    <span class="co"># 円の内側か外側かで色分け</span></span>
+<span id="cb64-6"><a href="#cb64-6"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> in_circle), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb64-7"><a href="#cb64-7"></a>    <span class="fu">geom_circle</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">r =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb64-8"><a href="#cb64-8"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"X"</span>, <span class="at">y =</span> <span class="st">"Y"</span>, <span class="at">color =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb64-9"><a href="#cb64-9"></a>    <span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb64-10"><a href="#cb64-10"></a>    <span class="fu">theme_void</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in geom_rect(aes(xmin = -1, ymin = -1, xmax = 1, ymax = 1), fill = "white", : All aesthetics have length 1, but the data has 100 rows.
+ℹ Did you mean to use `annotate()`?</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in geom_circle(aes(x0 = 0, y0 = 0, r = 1)): All aesthetics have length 1, but the data has 100 rows.
+ℹ Did you mean to use `annotate()`?</code></pre>
+</div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -1278,9 +1298,9 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 </div>
 <p>　実際に円内の点と円外の点の個数を数えてみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1"></a>pi_df <span class="sc">|&gt;</span></span>
-<span id="cb62-2"><a href="#cb62-2"></a>    <span class="fu">group_by</span>(in_circle) <span class="sc">|&gt;</span></span>
-<span id="cb62-3"><a href="#cb62-3"></a>    <span class="fu">summarise</span>(<span class="at">N =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1"></a>pi_df <span class="sc">|&gt;</span></span>
+<span id="cb67-2"><a href="#cb67-2"></a>    <span class="fu">group_by</span>(in_circle) <span class="sc">|&gt;</span></span>
+<span id="cb67-3"><a href="#cb67-3"></a>    <span class="fu">summarise</span>(<span class="at">N =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 2
   in_circle     N
@@ -1291,7 +1311,7 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 </div>
 <p>　円内の点は82個、円外の点は18ですね。つまり、<span class="math inline">\(\frac{\pi}{4} = 0.82\)</span>であり、<span class="math inline">\(\pi = 0.82 \times 4 = 3.28\)</span>です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1"></a><span class="dv">82</span> <span class="sc">/</span> <span class="dv">100</span> <span class="sc">*</span> <span class="dv">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1"></a><span class="dv">82</span> <span class="sc">/</span> <span class="dv">100</span> <span class="sc">*</span> <span class="dv">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3.28</code></pre>
 </div>
@@ -1315,7 +1335,7 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 </div>
 <p>　円内の点は3919個、円外の点は1081ですね。この結果から円周率を計算してみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1"></a><span class="dv">3919</span> <span class="sc">/</span> <span class="dv">5000</span> <span class="sc">*</span> <span class="dv">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1"></a><span class="dv">3919</span> <span class="sc">/</span> <span class="dv">5000</span> <span class="sc">*</span> <span class="dv">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3.1352</code></pre>
 </div>
@@ -1335,13 +1355,13 @@ p(n) = 1 - \frac{n! \times _{365}C_n}{365^n}
 \]</span></p>
 <p>　2つの標本の平均値の差分は約0.2です。この差分の不確実性はいくらでしょうか。ここでは主に使われる平均値の差の検定 (<span class="math inline">\(t\)</span>検定)をやってみましょう。回は標準誤差が同じ2つの分布から得られた標本であるため、等分散を仮定する<span class="math inline">\(t\)</span>検定を行います (<code>var.equal = TRUE</code>を追加)。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
-<span id="cb69-2"><a href="#cb69-2"></a>Data1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="fl">0.7</span>, <span class="dv">1</span>)</span>
-<span id="cb69-3"><a href="#cb69-3"></a>Data2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="fl">0.9</span>, <span class="dv">1</span>)</span>
-<span id="cb69-4"><a href="#cb69-4"></a></span>
-<span id="cb69-5"><a href="#cb69-5"></a>ttest_result <span class="ot">&lt;-</span> <span class="fu">t.test</span>(Data1, Data2, <span class="at">var.equal =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb69-6"><a href="#cb69-6"></a></span>
-<span id="cb69-7"><a href="#cb69-7"></a>ttest_result</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1"></a><span class="fu">set.seed</span>(<span class="dv">19861009</span>)</span>
+<span id="cb74-2"><a href="#cb74-2"></a>Data1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="fl">0.7</span>, <span class="dv">1</span>)</span>
+<span id="cb74-3"><a href="#cb74-3"></a>Data2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="fl">0.9</span>, <span class="dv">1</span>)</span>
+<span id="cb74-4"><a href="#cb74-4"></a></span>
+<span id="cb74-5"><a href="#cb74-5"></a>ttest_result <span class="ot">&lt;-</span> <span class="fu">t.test</span>(Data1, Data2, <span class="at">var.equal =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb74-6"><a href="#cb74-6"></a></span>
+<span id="cb74-7"><a href="#cb74-7"></a>ttest_result</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Two Sample t-test
@@ -1367,43 +1387,43 @@ mean of x mean of y
 <li>3~6の手順を1万回繰り返す。</li>
 </ol>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1"></a>n_trials   <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb71-2"><a href="#cb71-2"></a>Result_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_trials)</span>
-<span id="cb71-3"><a href="#cb71-3"></a></span>
-<span id="cb71-4"><a href="#cb71-4"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_trials) {</span>
-<span id="cb71-5"><a href="#cb71-5"></a>    Sample1 <span class="ot">&lt;-</span> <span class="fu">sample</span>(Data1, <span class="dv">100</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb71-6"><a href="#cb71-6"></a>    Sample2 <span class="ot">&lt;-</span> <span class="fu">sample</span>(Data2, <span class="dv">100</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb71-7"><a href="#cb71-7"></a>    </span>
-<span id="cb71-8"><a href="#cb71-8"></a>    Result_vec[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(Sample1) <span class="sc">-</span> <span class="fu">mean</span>(Sample2)</span>
-<span id="cb71-9"><a href="#cb71-9"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1"></a>n_trials   <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb76-2"><a href="#cb76-2"></a>Result_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n_trials)</span>
+<span id="cb76-3"><a href="#cb76-3"></a></span>
+<span id="cb76-4"><a href="#cb76-4"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_trials) {</span>
+<span id="cb76-5"><a href="#cb76-5"></a>    Sample1 <span class="ot">&lt;-</span> <span class="fu">sample</span>(Data1, <span class="dv">100</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb76-6"><a href="#cb76-6"></a>    Sample2 <span class="ot">&lt;-</span> <span class="fu">sample</span>(Data2, <span class="dv">100</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb76-7"><a href="#cb76-7"></a>    </span>
+<span id="cb76-8"><a href="#cb76-8"></a>    Result_vec[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(Sample1) <span class="sc">-</span> <span class="fu">mean</span>(Sample2)</span>
+<span id="cb76-9"><a href="#cb76-9"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　<code>Result_vec</code>には平均値の差分が10000個格納されており、これらの値の平均値をブートストラップ推定量 (bootstrap estimate)と呼ぶとします。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1"></a><span class="co"># 元のデータの平均値の差分</span></span>
-<span id="cb72-2"><a href="#cb72-2"></a>delta <span class="ot">&lt;-</span> <span class="fu">mean</span>(Data1) <span class="sc">-</span> <span class="fu">mean</span>(Data2)</span>
-<span id="cb72-3"><a href="#cb72-3"></a>delta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1"></a><span class="co"># 元のデータの平均値の差分</span></span>
+<span id="cb77-2"><a href="#cb77-2"></a>delta <span class="ot">&lt;-</span> <span class="fu">mean</span>(Data1) <span class="sc">-</span> <span class="fu">mean</span>(Data2)</span>
+<span id="cb77-3"><a href="#cb77-3"></a>delta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] -0.3066445</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1"></a><span class="co"># ブートストラップ推定量 (平均値の差分の平均値)</span></span>
-<span id="cb74-2"><a href="#cb74-2"></a>boot_delta <span class="ot">&lt;-</span> <span class="fu">mean</span>(Result_vec)</span>
-<span id="cb74-3"><a href="#cb74-3"></a>boot_delta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1"></a><span class="co"># ブートストラップ推定量 (平均値の差分の平均値)</span></span>
+<span id="cb79-2"><a href="#cb79-2"></a>boot_delta <span class="ot">&lt;-</span> <span class="fu">mean</span>(Result_vec)</span>
+<span id="cb79-3"><a href="#cb79-3"></a>boot_delta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] -0.3045563</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1"></a><span class="co"># ブートストラップ推定量のバイアス</span></span>
-<span id="cb76-2"><a href="#cb76-2"></a>boot_b <span class="ot">&lt;-</span> delta <span class="sc">-</span> boot_delta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1"></a><span class="co"># ブートストラップ推定量のバイアス</span></span>
+<span id="cb81-2"><a href="#cb81-2"></a>boot_b <span class="ot">&lt;-</span> delta <span class="sc">-</span> boot_delta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　実際の平均値の差分 (<span class="math inline">\(\delta_0\)</span>) は-0.3066445、ブートストラップ推定量 (<span class="math inline">\(\delta^*\)</span>) は -0.3045563であるため、その差は-0.0020881です。これをブートストラップ推定量のバイアス (<span class="math inline">\(b\)</span>) と呼びます。</p>
 <p>　ただし、我々に興味があるのは平均値の差分ではありません。平均値の差分はブートストラップ法を用いなくても普通に計算できるからです。ここで重要なのは平均値の差分の不確実性、つまり標準誤差でしょう。ブートストラップ推定量の標準誤差は<code>Result_vec</code>の標準偏差を計算するだけで十分です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1"></a>boot_se <span class="ot">&lt;-</span> <span class="fu">sd</span>(Result_vec) <span class="co"># ブートストラップ推定量の標準偏差</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1"></a>boot_se <span class="ot">&lt;-</span> <span class="fu">sd</span>(Result_vec) <span class="co"># ブートストラップ推定量の標準偏差</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　ブートストラップ推定量の標準偏差 (<span class="math inline">\(\mbox{se}^*\)</span>)は約0.14であり、<em>t</em>検定の結果から得られた標準誤差0.141と非常に近い値が得られました。</p>
 <p>　95%信頼区間を計算してみます。百分位数信頼区間 (Percentile CI)は<code>Result_Vec</code>の左側の領域が2.5%、右側の領域が2.5%となる区間ですので、<code>quantile()</code>関数で計算することができます。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1"></a><span class="co"># 95%信頼区間</span></span>
-<span id="cb78-2"><a href="#cb78-2"></a><span class="fu">quantile</span>(Result_vec, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1"></a><span class="co"># 95%信頼区間</span></span>
+<span id="cb83-2"><a href="#cb83-2"></a><span class="fu">quantile</span>(Result_vec, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       2.5%       97.5% 
 -0.58084484 -0.02999534 </code></pre>
@@ -1411,14 +1431,14 @@ mean of x mean of y
 </div>
 <p>　バイアスを補正しないWald信頼区間は<span class="math inline">\(\delta_0 \pm 1.96 \times \mbox{se}^*\)</span>のように計算します (1.96は標準正規分布の累積密度分布において下側領域が0.975となる点です。)。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1"></a>delta <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>)) <span class="sc">*</span> boot_se</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1"></a>delta <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>)) <span class="sc">*</span> boot_se</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] -0.58201710 -0.03127185</code></pre>
 </div>
 </div>
 <p>　バイアス修正Wald信頼区間は<span class="math inline">\((\delta_0 - b) \pm 1.96 \times \mbox{se}^*\)</span>です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1"></a>(delta <span class="sc">-</span> boot_b) <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>)) <span class="sc">*</span> boot_se</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1"></a>(delta <span class="sc">-</span> boot_b) <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>)) <span class="sc">*</span> boot_se</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] -0.57992897 -0.02918372</code></pre>
 </div>
@@ -1426,6 +1446,7 @@ mean of x mean of y
 <p>　これまでの結果を比較してみましょう。</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
+<div>
 <div id="nqkariscnw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#nqkariscnw table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -1912,6 +1933,7 @@ mean of x mean of y
 </div>
 </div>
 </div>
+</div>
 <p>　今回の例は<code>t.test()</code>関数を使えば一発で終わる問題ですが、モデルが複雑になれば推定量の不確実性の計算が難しくなるケースがあります。その時に力を発揮するのがブートストラップ方であり、{boot}、{bootstrap}、{simpleboot}など様々なパッケージが利用可能です。</p>
 
 
@@ -2019,6 +2041,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
           // target, if specified
           link.setAttribute("target", "_blank");
           if (link.getAttribute("rel") === null) {
@@ -2060,7 +2087,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');
@@ -2375,12 +2406,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./oop.html" class="pagination-link  aria-label=" &lt;span="">
+      <a href="./oop.html" class="pagination-link" aria-label="オブジェクト指向プログラミング">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">オブジェクト指向プログラミング</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./scraping.html" class="pagination-link" aria-label="<span class='chapter-number'>31</span>&nbsp; <span class='chapter-title'>スクレイピング</span>">
+      <a href="./scraping.html" class="pagination-link" aria-label="スクレイピング">
         <span class="nav-page-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">スクレイピング</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>

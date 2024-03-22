@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.549">
+<meta name="generator" content="quarto-1.4.551">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -1063,7 +1063,7 @@ X = \begin{bmatrix}
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="rmarkdown_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="504"></p>
+<p><img src="rmarkdown_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="504"></p>
 <figcaption>図の例</figcaption>
 </figure>
 </div>
@@ -1327,6 +1327,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
           // target, if specified
           link.setAttribute("target", "_blank");
           if (link.getAttribute("rel") === null) {
@@ -1368,7 +1373,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');
@@ -1683,12 +1692,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./table.html" class="pagination-link  aria-label=" &lt;span="">
+      <a href="./table.html" class="pagination-link" aria-label="表の作成">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">表の作成</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./rmarkdown2.html" class="pagination-link" aria-label="<span class='chapter-number'>25</span>&nbsp; <span class='chapter-title'>R Markdown [応用]</span>">
+      <a href="./rmarkdown2.html" class="pagination-link" aria-label="R Markdown [応用]">
         <span class="nav-page-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">R Markdown [応用]</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
