@@ -1,9 +1,15 @@
+---
+knitr: 
+  opts_chunk: 
+    eval: false
+---
+
 # Rパッケージ {#sec-packages}
 
-```{r packages-common}
+```{r}
+#| label: packages-common
 #| include: false
 source("_common.R")
-knitr::opts_chunk$set(eval = FALSE)
 ```
 
 ## パッケージとは {#sec-packages_intro}
@@ -23,7 +29,8 @@ knitr::opts_chunk$set(eval = FALSE)
 
 　何かを作るとき、素材・材料だけでなく、なんらかの道具が必要となることが多い。Rにはあらかじめいくつかの必須道具セットが用意されているが、さらに様々な道具セットを追加して使うこともできる。そして、それらの道具セットの各々には、複数の道具が含まれている。道具セット（Rのパッケージ）に含まれるひとつひとつの道具のことを、Rでは「関数 (function) 」と呼ぶ。それらの道具セットを購入し、作業台の近くの棚に収納することがパッケージをインストールすることにあたる。
 
-```{r packages-install-1}
+```{r}
+#| label: packages-install-1
 install.packages("パッケージ名")
 ```
 
@@ -35,13 +42,15 @@ install.packages("パッケージ名")
 
 　ここでは{devtools}というパッケージをインストールしてみよう。CRANからパッケージをインストールするには、`install.packages()` という関数を使う。{devtools}はCRANに登録されているので、`install.packages()`関数でインストールする。パッケージ名を`"`（引用符）で囲む必要があるので、注意されたい。
 
-```{r packages-install-2}
+```{r}
+#| label: packages-install-2
 install.packages("devtools")
 ```
 
 　[CRAN](https://cran.r-project.org)に登録されていないパッケージを[GitHub](https://github.com)からインストールするときは、{devtools}または{remotes}の`install_github()`関数を使う。
 
-```{r packages-install-3}
+```{r}
+#| label: packages-install-3
 # あらかじめ{devtools}、または{remotes}をインストールしておく
 # {remotes}をインストールした場合は、remotes::install_github()を使用する
 devtools::install_github("作成者のGitHubのID/パッケージ名")
@@ -49,7 +58,8 @@ devtools::install_github("作成者のGitHubのID/パッケージ名")
 
 　たとえば、筆者 (Song) が作成した{[BalanceR](https://github.com/JaehyunSong/BalanceR)}パッケージをインストールするために、以下のコードを入力して実行する。
 
-```{r packages-install-4}
+```{r}
+#| label: packages-install-4
 # {remotes}をインストールした場合は、
 # remotes::install_github("JaehyunSong/BalanceR")
 devtools::install_github("JaehyunSong/BalanceR")
@@ -62,13 +72,14 @@ devtools::install_github("JaehyunSong/BalanceR")
 
 　先ほど述べたように、パッケージのインストールは道具セットの購入と収納に似ている。ただし、実際に道具セットを使うためには、それを自分の作業台に乗せなければならない[^default-pacakge] [^load_direct]。この作業がパッケージの読み込み (load) である。インストールしたパッケージを読み込むには`library()`または`require()`関数を使う。`require()`は関数内に使う目的で設計された関数だが、パッケージを読み込むという点ではどちらを使っても大差ない。
 
-![Rパッケージと作業環境](Figs/Packages/Package_Workbench.jpg){#fig-packages-load-1 fig-align="center" width="800px"}
+![Rパッケージと作業環境](Figs/Packages/Package_Workbench.jpg){#fig-packages-load-1 fig-align="center" width="100%"}
 
 [^default-pacakge]: `mean()`や`sum()`、`lm()`のようによく使われる関数（=工具） はRの起動と同時に作業台の上に乗せられる。
 
 [^load_direct]: 作業台上に乗せずに、収納棚から必要なときだけ道具を取り出して使うこともできる。この場合、`パッケージ名::関数名()`のように関数を使う。頻繁に使うパッケージなら読み込む方が効率的だが、1、2回くらいしか使わないパッケージなら、このような使い方をしてもよいだろう。
 
-```{r packages-load-2}
+```{r}
+#| label: packages-load-2
 library(パッケージ名)
 #または
 require(パッケージ名)
@@ -78,7 +89,8 @@ require(パッケージ名)
 
 　もしかすると、作業の途中に読み込んだパッケージを作業台から取り除きたいときがあるかもしれない。そんなときは、`detach()`関数を使う。対象となるパッケージ名の前に `package:` と付け加える必要があることに注意されたい。
 
-```{r packages-load-3}
+```{r}
+#| label: packages-load-3
 detach("package:パッケージ名")
 ```
 
@@ -113,7 +125,8 @@ Do you want to install from sources the packages which need compilation? (Yes/no
 
 [^pack-dep]: AというパッケージがBというパッケージに依存する場合、Aをインストール際にBもインストールされる。
 
-```{r packages-pacman-1}
+```{r}
+#| label: packages-pacman-1
 install.packages("pacman")
 ```
 
@@ -123,7 +136,8 @@ install.packages("pacman")
 
 　{pacman}の関数は、通常1つのファイルのなかで1度か2度しか使わないので、わざわざ`library(pacman)`で読み込まなくてもよい。{pacman}を読み込む代わりに、`pacman::関数名()`で使うことができる。
 
-```{r packages-pacman-2}
+```{r}
+#| label: packages-pacman-2
 # CRANからインストール
 pacman::p_install(パッケージ名)
 # githubからインストール
@@ -135,13 +149,15 @@ pacman::p_install_gh("作成者のGitHubのID/パッケージ名")
 
 　パッケージの読み込みには`p_load()`関数を使う。実はこの関数が{pacman}を使う最大の利点である。`p_load()`関数の使い方は以下の通りである。
 
-```{r packages-pacman-3}
+```{r}
+#| label: packages-pacman-3
 pacman::p_load(パッケージ名)
 ```
 
 　`p_load()`の便利なところは (1) 複数のパッケージが指定可能であることと、 (2) インストールされていないパッケージを指定するとそれをCRANから自動的にインストールして読み込んでくれることだ。たとえば、{tidyverse}と{broom}、{estimatr}という3つのパッケージを読み込む場合、`library()`関数を使うと次のコードを使うことになる。
 
-```{r packages-pacman-4}
+```{r}
+#| label: packages-pacman-4
 # library() を使う場合
 library(tidyverse)
 library(broom)
@@ -150,7 +166,8 @@ library(estimatr)
 
 それに対して{pacman}の`p_load()`を使えば、以下のようになる。
 
-```{r packages-pacman-5}
+```{r}
+#| label: packages-pacman-5
 # {pacman}のp_load() を使う場合
 pacman::p_load(tidyverse,
                broom, 
@@ -161,7 +178,8 @@ pacman::p_load(tidyverse,
 
 　ただし、GitHub上のパッケージは自動的にインストールしてくれない。たとえば、GitHubのみで公開されている{BalanceR}パッケージがインストールされていない場合、`p_load(BalanceR)`を実行しても{BalanceR}はインストールされない。あらかじめ`p_install_gh()`でインストールしておく必要がある。しかし、GitHub上のパッケージを検索し、インストールしてから読み込みをする`p_load_gh()`という関数もある。ユーザー名JaehyunSongのBalanceRレポジトリーのパッケージを読み込む場合は以下のように入力する。
 
-```{r packages-pacman-6}
+```{r}
+#| label: packages-pacman-6
 pacman::p_load_gh("JaehyunSong/BalanceR")
 ```
 
@@ -178,17 +196,35 @@ pacman::p_load_gh("JaehyunSong/BalanceR")
 [^sh-tradeoff]: コードの長さとわかりやすさの間にはトレードオフがある。短いほうがタイプが楽だが何を表しているかがわかりにくい一方で、長いとタイプするのは面倒だが何を表しているかはわかりやすい。
 
 
-```{r packages-pacman-7}
+```{r}
+#| label: packages-pacman-7
 pacman::p_update()
 ```
-
-
 
 ## 必須パッケージのインストール {#sec-packages_tidyverse}
 
 　ここでは、現在Rでデータ分析をするにあたって必須のパッケージであるといえる{tidyverse}をインストールする。{tidyverse}は{dplyr}、{ggplot2}、{tidyr}など、Rにおいて不可欠なパッケージを含むパッケージ**群**である。また、上で紹介した{devtools}も今のうちにインストールしておこう。既に導入済みの読者は、以下のコードを実行しなくてよい。
 
-```{r packages-tidyverse}
+```{r}
+#| label: packages-tidyverse
 install.packages("tidyverse")
 install.packages("devtools")
+```
+
+## 名前空間の衝突
+
+名前空間（namespace）の衝突（conflict）、またはパッケージ間の衝突
+
+```
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+```
+
+とか
+
+```
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
 ```

@@ -490,7 +490,6 @@ window.Quarto = {
 </li>
       </ul>
   </li>
-        <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true">
@@ -503,31 +502,31 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./dataset.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">データセット</span></a>
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">データセット</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./filesystem.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">ファイルシステム</span></a>
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">ファイルシステム</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tips.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">R Tips</span></a>
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">R Tips</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./session.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">本書の執筆環境</span></a>
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">本書の執筆環境</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">参考文献</span></a>
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">参考文献</span></span></a>
   </div>
 </li>
       </ul>
@@ -584,22 +583,22 @@ window.Quarto = {
 <h2 data-number="28.1" class="anchored" data-anchor-id="sec-iteration-intro"><span class="header-section-number">28.1</span> <code>*apply()</code>関数群と<code>map_*()</code>関数群</h2>
 <p>まず、我らの盟友、{tidyverse}を読み込んでおきましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>それでは、<code>*apply()</code>関数群と<code>map_*()</code>関数群の動きとその仕組について調べてみましょう。まず、実習用データとして長さ5のnumericベクトル<code>num_vec</code>を用意します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>num_vec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>num_vec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>この<code>num_vec</code>の個々の要素に2を足す場合はどうすれば良いでしょうか。Rはベクトル単位での演算が行われるため、<code>num_vec + 2</code>だけで十分です。<code>+</code>の右側にある2は長さ1のベクトルですが、<code>num_vec</code>の長さに合わせてリサイクルされます（第<a href="datastructure.html#sec-datastructure_vector" class="quarto-xref"><span>10.2</span></a>章を参照）。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>num_vec <span class="sc">+</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>num_vec <span class="sc">+</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 5 4 7 6 9</code></pre>
 </div>
 </div>
 <p>賢明なRユーザーなら上のコードが正解でしょう。しかし、これからの練習のために<code>+</code>を使わずに、<code>for()</code>文を使用してみましょう（第<a href="programming.html#sec-programming_iteration" class="quarto-xref"><span>11.3</span></a>章を参照）。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="cf">for</span> (i <span class="cf">in</span> num_vec) {</span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="cf">for</span> (i <span class="cf">in</span> num_vec) {</span>
 <span id="cb5-2"><a href="#cb5-2"></a>    <span class="fu">print</span>(i <span class="sc">+</span> <span class="dv">2</span>)</span>
 <span id="cb5-3"><a href="#cb5-3"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -612,18 +611,18 @@ window.Quarto = {
 </div>
 <p>実はこれと同じ役割をする関数がRには内蔵されており、それが<code>lapply()</code>関数です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">lapply</span>(オブジェクト名, 関数名, 関数の引数)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">lapply</span>(オブジェクト名, 関数名, 関数の引数)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>以下のコードからも確認出来ますが、足し算を意味する<code>+</code>も関数です。ただし、演算子を関数として使う場合は演算子を<code>`</code>で囲む必要があり、<code>+</code>だと<code>`+`</code>と表記します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="st">`</span><span class="at">+</span><span class="st">`</span>(num_vec, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="st">`</span><span class="at">+</span><span class="st">`</span>(num_vec, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 5 4 7 6 9</code></pre>
 </div>
 </div>
 <p>したがって、<code>lapply()</code>関数を使用して<code>num_vec</code>の全要素に2を足す場合、以下のようなコードとなります。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">lapply</span>(num_vec, <span class="st">`</span><span class="at">+</span><span class="st">`</span>, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">lapply</span>(num_vec, <span class="st">`</span><span class="at">+</span><span class="st">`</span>, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
 [1] 5
@@ -643,7 +642,7 @@ window.Quarto = {
 </div>
 <p>これと同じ動きをする関数が{purrr}パッケージの<code>map()</code>です。{purrr}は{tidyverse}を読み込むと自動的に読み込まれます。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">map</span>(num_vec, <span class="st">`</span><span class="at">+</span><span class="st">`</span>, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">map</span>(num_vec, <span class="st">`</span><span class="at">+</span><span class="st">`</span>, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
 [1] 5
@@ -663,12 +662,12 @@ window.Quarto = {
 </div>
 <p>ただし、<code>lapply()</code>と<code>map()</code>の場合、戻り値はリスト型となります。もし、ベクトル型の戻り値が必要な場合は更に<code>unlist()</code>関数を使うか、<code>sapply()</code>を使います。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># unlist()を利用し、リストを解除する</span></span>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># unlist()を利用し、リストを解除する</span></span>
 <span id="cb14-2"><a href="#cb14-2"></a><span class="fu">lapply</span>(num_vec, <span class="st">`</span><span class="at">+</span><span class="st">`</span>, <span class="dv">2</span>) <span class="sc">%&gt;%</span> <span class="fu">unlist</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 5 4 7 6 9</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="co"># sapply()を利用すると戻り値はベクトルとなる</span></span>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="co"># sapply()を利用すると戻り値はベクトルとなる</span></span>
 <span id="cb16-2"><a href="#cb16-2"></a><span class="fu">sapply</span>(num_vec, <span class="st">`</span><span class="at">+</span><span class="st">`</span>, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 5 4 7 6 9</code></pre>
@@ -676,7 +675,7 @@ window.Quarto = {
 </div>
 <p><code>map()</code>関数なら<code>unlist()</code>でも良いですが、<code>sapply()</code>と同じ動きをする<code>map_dbl()</code>があります。これは戻り値がdoubleのnumericベクトルになる<code>map()</code>関数です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># map_dbl()を利用するとnumeric (double)のベクトルが返される</span></span>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># map_dbl()を利用するとnumeric (double)のベクトルが返される</span></span>
 <span id="cb18-2"><a href="#cb18-2"></a><span class="fu">map_dbl</span>(num_vec, <span class="st">`</span><span class="at">+</span><span class="st">`</span>, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 5 4 7 6 9</code></pre>
@@ -684,7 +683,7 @@ window.Quarto = {
 </div>
 <p>もし、2を足すだけでなく、更に3で割るためにはどうすれば良いでしょうか。まず考えられるのは更に<code>sapply()</code>や<code>map_dbl</code>を使うことです。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">map_dbl</span>(num_vec, <span class="st">`</span><span class="at">+</span><span class="st">`</span>, <span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">map_dbl</span>(num_vec, <span class="st">`</span><span class="at">+</span><span class="st">`</span>, <span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb20-2"><a href="#cb20-2"></a>    <span class="fu">map_dbl</span>(<span class="st">`</span><span class="at">/</span><span class="st">`</span>, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.666667 1.333333 2.333333 2.000000 3.000000</code></pre>
@@ -692,25 +691,25 @@ window.Quarto = {
 </div>
 <p>もう一つの方法は<code>sapply()</code>や<code>map_dbl()</code>の第二引数に直接関数を指定する方法です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">sapply</span>(num_vec, <span class="cf">function</span>(x){(x <span class="sc">+</span> <span class="dv">2</span>) <span class="sc">/</span> <span class="dv">3</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">sapply</span>(num_vec, <span class="cf">function</span>(x){(x <span class="sc">+</span> <span class="dv">2</span>) <span class="sc">/</span> <span class="dv">3</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.666667 1.333333 2.333333 2.000000 3.000000</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">map_dbl</span>(num_vec, <span class="cf">function</span>(x){(x <span class="sc">+</span> <span class="dv">2</span>) <span class="sc">/</span> <span class="dv">3</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">map_dbl</span>(num_vec, <span class="cf">function</span>(x){(x <span class="sc">+</span> <span class="dv">2</span>) <span class="sc">/</span> <span class="dv">3</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.666667 1.333333 2.333333 2.000000 3.000000</code></pre>
 </div>
 </div>
 <p>上のコードだと、<code>num_vec</code>の要素が第二引数で指定した関数の引数（<code>x</code>）として用いられます。関数が長くなる場合は、<code>sapply()</code>や<code>map()</code>の外側に関数を予め指定して置くことも可能です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>add_two_divide_three <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>add_two_divide_three <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
 <span id="cb26-2"><a href="#cb26-2"></a>    (x <span class="sc">+</span> <span class="dv">2</span>) <span class="sc">/</span> <span class="dv">3</span> </span>
 <span id="cb26-3"><a href="#cb26-3"></a>}</span>
 <span id="cb26-4"><a href="#cb26-4"></a><span class="fu">sapply</span>(num_vec, add_two_divide_three)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.666667 1.333333 2.333333 2.000000 3.000000</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">map_dbl</span>(num_vec, add_two_divide_three)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">map_dbl</span>(num_vec, add_two_divide_three)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.666667 1.333333 2.333333 2.000000 3.000000</code></pre>
 </div>
@@ -718,42 +717,42 @@ window.Quarto = {
 <p>ここまでの例だと<code>sapply()</code>と<code>map_dbl()</code>はほぼ同じ関数です。なぜわざわざ{purrr}パッケージを読み込んでまで<code>map_dbl()</code>関数を使う必要があるでしょうか。それは<code>map_dbl()</code>の内部にはラムダ関数（lambda function; ラムダ関数）、あるいは無名関数（anonymous function）と呼ばれるものが使用可能だからです。ラムダ関数は第<a href="datahandling2.html#sec-handling2-summarise" class="quarto-xref"><span>14.1</span></a>章でも説明しましたが、もう一回解説します。ラムダ関数は使い捨ての関数で、<code>map_dbl()</code>内部での処理が終わるとメモリ上から削除される関数です。使い捨てですので、関数の名前（オブジェクト名）も与えられておりません。</p>
 <p>このラムダ関数の作り方ですが、<code>~</code>で始まり、引数の部分には<code>.x</code>が入ります<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>。したがって、<code>~(.x + 2) / 3</code>は<code>function(x){(x + 2) / 3}</code>の簡略したものとなります。ただし、後者だと無名関数の引数に該当する<code>x</code>を<code>y</code>や<code>j</code>などに書き換えても問題ありませんが、ラムダ関数では必ず<code>.x</code>と表記する必要があります。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">map_dbl</span>(num_vec, <span class="sc">~</span>(.x <span class="sc">+</span> <span class="dv">2</span>) <span class="sc">/</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">map_dbl</span>(num_vec, <span class="sc">~</span>(.x <span class="sc">+</span> <span class="dv">2</span>) <span class="sc">/</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.666667 1.333333 2.333333 2.000000 3.000000</code></pre>
 </div>
 </div>
 <p>かなり短めなコードで「<code>num_vec</code>の全要素に2を足して3で割る」処理ができました。一方、<code>sapply()</code>や<code>lapply()</code>のような<code>*apply()</code>関数群だとラムダ関数を使うことはできません。現在のメモリ上にある関数のみしか使うことができません。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="fu">sapply</span>(num_vec, <span class="sc">~</span>(.x <span class="sc">+</span> <span class="dv">2</span>) <span class="sc">/</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="fu">sapply</span>(num_vec, <span class="sc">~</span>(.x <span class="sc">+</span> <span class="dv">2</span>) <span class="sc">/</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error in match.fun(FUN): '~(.x + 2)/3' is not a function, character or symbol</code></pre>
 </div>
 </div>
 <p>これまでの例は<strong>正しい</strong>コードではありますが、<strong>良い</strong>コードとは言えないでしょう。なぜなら<code>num_vec + 2</code>という最適解が存在するからです。<code>*apply()</code>と<code>map_*()</code>はより複雑な処理に特化しています。たとえば、リスト型データの処理です。以下の例を考えてみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>num_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">List1 =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>),</span>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>num_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">List1 =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>),</span>
 <span id="cb34-2"><a href="#cb34-2"></a>                 <span class="at">List2 =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">10</span>, <span class="dv">13</span>, <span class="dv">3</span>),</span>
 <span id="cb34-3"><a href="#cb34-3"></a>                 <span class="at">List3 =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">2</span>, <span class="cn">NA</span>, <span class="dv">5</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><code>num_list</code>は3つのnumeric型ベクトルで構成されたリスト型オブジェクトです。それぞれのベクトルの平均値を求めてみましょう。これを普通に<code>mean()</code>関数のみで済まそうとすると、リストからベクトルを一つずつ抽出し、3回の<code>mean()</code>関数を使用する必要があります、</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="fu">mean</span>(num_list[[<span class="st">"List1"</span>]], <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="fu">mean</span>(num_list[[<span class="st">"List1"</span>]], <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 5</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="fu">mean</span>(num_list[[<span class="st">"List2"</span>]], <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="fu">mean</span>(num_list[[<span class="st">"List2"</span>]], <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 6.571429</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a><span class="fu">mean</span>(num_list[[<span class="st">"List3"</span>]], <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a><span class="fu">mean</span>(num_list[[<span class="st">"List3"</span>]], <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 4.666667</code></pre>
 </div>
 </div>
 <p>もしリストの長さが大きくなると、以下のように<code>for()</code>文の方が効率的でしょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">names</span>(num_list)) {</span>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">names</span>(num_list)) {</span>
 <span id="cb41-2"><a href="#cb41-2"></a>    <span class="fu">print</span>(<span class="fu">mean</span>(num_list[[i]], <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
 <span id="cb41-3"><a href="#cb41-3"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -764,7 +763,7 @@ window.Quarto = {
 </div>
 <p>計算結果をベクトルとして出力/保存する場合は予めベクトルを用意しておく必要があります。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a><span class="co"># num_listの長さと同じ長さの空ベクトルを生成</span></span>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a><span class="co"># num_listの長さと同じ長さの空ベクトルを生成</span></span>
 <span id="cb43-2"><a href="#cb43-2"></a>Return_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(num_list))</span>
 <span id="cb43-3"><a href="#cb43-3"></a></span>
 <span id="cb43-4"><a href="#cb43-4"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(num_list)) {</span>
@@ -778,12 +777,12 @@ window.Quarto = {
 </div>
 <p>以上の例は<code>sapply()</code>、または<code>map_dbl</code>関数を使うとより短くすることができます。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a><span class="fu">sapply</span>(num_list, mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a><span class="fu">sapply</span>(num_list, mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   List1    List2    List3 
 5.000000 6.571429 4.666667 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a><span class="fu">map_dbl</span>(num_list, mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a><span class="fu">map_dbl</span>(num_list, mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   List1    List2    List3 
 5.000000 6.571429 4.666667 </code></pre>
@@ -791,7 +790,7 @@ window.Quarto = {
 </div>
 <p><code>*apply()</code>も<code>map_*()</code>も、それぞれの要素に対して同じ処理を行うことを得意とする関数です。他の応用としては、各ベクトルからn番目の要素を抽出することもできます。ベクトルからn番目の要素を抽出するには<code>ベクトル名[n]</code>と入力しますが、実はこの<code>[</code>も関数です。関数として使う場合は<code>+</code>と同様、<code>`[`</code>と表記します。<code>num_list</code>内の3つのベクトルから3番目の要素を抽出してみましょう<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1"></a><span class="fu">map_dbl</span>(num_list, <span class="st">`</span><span class="at">[</span><span class="st">`</span>, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1"></a><span class="fu">map_dbl</span>(num_list, <span class="st">`</span><span class="at">[</span><span class="st">`</span>, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>List1 List2 List3 
     5     6    NA </code></pre>
@@ -810,7 +809,7 @@ window.Quarto = {
 </div>
 <p><code>map()</code>の場合、返り値はリストとなり、<code>map_dbl()</code>の返り値はnumeric (double)型のベクトルとなります。他にも<code>map_*()</code>関数群には<code>map_int()</code>、<code>map_lgl()</code>、<code>map_chr()</code>、<code>map_df()</code>などがあり、それぞれ返り値のデータ型/データ構造を表しています。例えば、返り値がcharacter型のベクトルであれば、<code>map_chr()</code>を使います。<code>c(1, 2, 3, 4, 5)</code>のベクトルの各要素の前に<code>"ID: "</code>を付ける例だと以下のように書きます。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1"></a><span class="co"># 以下のコードでもOK</span></span>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1"></a><span class="co"># 以下のコードでもOK</span></span>
 <span id="cb51-2"><a href="#cb51-2"></a><span class="co"># map_chr(c(1, 2, 3, 4, 5), ~paste0("ID: ", .x))</span></span>
 <span id="cb51-3"><a href="#cb51-3"></a><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb51-4"><a href="#cb51-4"></a>  <span class="fu">map_chr</span>(<span class="sc">~</span><span class="fu">paste0</span>(<span class="st">"ID: "</span>, .x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -825,29 +824,29 @@ window.Quarto = {
 <p>{purrr}を使った本格的な例を紹介する前に、引数が2つ以上の場合を考えたいと思います。まずは引数が2つの場合です。この場合、<code>map2_*()</code>関数群を使用します。例えば、<code>num_vec</code>に長さ5のnumeric型ベクトル<code>num_vec2</code>をかける例を考えてみましょう。</p>
 <p>この場合、データとして<code>num_vec</code>と<code>num_vec2</code>が必要となり、ラムダ関数にも2つの引数が必要です。まず、<code>num_vec2</code>を用意します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1"></a>num_vec2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1"></a>num_vec2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>続いて<code>map2_dbl()</code>関数を使用し<code>num_vec</code>と<code>num_vec2</code>の掛け算を行います。<code>map2_*()</code>の使い方は<code>map_*()</code>とほぼ同様です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a><span class="fu">map2_dbl</span>(データ1, データ2, 関数 or ラムダ関数, 追加の引数)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a><span class="fu">map2_dbl</span>(データ1, データ2, 関数 or ラムダ関数, 追加の引数)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><code>map_*()</code>との違いとしては、(1) データが2つである、(2) 関数、またはラムダ関数に2つの引数が必要である点です。この2点目の引数ですが、データ2は<code>.y</code>と表記します。したがって、データ1とデータ2の掛け算を意味するラムダ関数は<code>~.x * .y</code>です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1"></a><span class="fu">map2_dbl</span>(num_vec, num_vec2, <span class="sc">~</span>.x <span class="sc">*</span> .y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1"></a><span class="fu">map2_dbl</span>(num_vec, num_vec2, <span class="sc">~</span>.x <span class="sc">*</span> .y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3 0 5 0 7</code></pre>
 </div>
 </div>
 <p><code>num_vec</code>と<code>num_vec2</code>が必ずしも同じデータ構造、データ型、同じ長さである必要がありません。数字の前に<code>"ID:"</code>を付ける先ほどの例を<code>map2_chr()</code>で書いてみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1"></a><span class="fu">map2_chr</span>(num_vec, <span class="st">"ID:"</span>, <span class="sc">~</span><span class="fu">paste0</span>(.y, .x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1"></a><span class="fu">map2_chr</span>(num_vec, <span class="st">"ID:"</span>, <span class="sc">~</span><span class="fu">paste0</span>(.y, .x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "ID:3" "ID:2" "ID:5" "ID:4" "ID:7"</code></pre>
 </div>
 </div>
 <p>それでは3つ以上の引数について考えてみましょう。たとえば、<code>num_vec</code>の前に<code>"ID"</code>を付けるとします。そして<code>"ID"</code>と<code>num_vec</code>の間に<code>":"</code>を入れたい場合はどうすればい良いでしょう。むろん、賢い解決方法は単純に<code>paste()</code>関数を使うだけです。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1"></a><span class="fu">paste</span>(<span class="st">"ID"</span>, num_vec, <span class="at">sep =</span> <span class="st">":"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1"></a><span class="fu">paste</span>(<span class="st">"ID"</span>, num_vec, <span class="at">sep =</span> <span class="st">":"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "ID:3" "ID:2" "ID:5" "ID:4" "ID:7"</code></pre>
 </div>
@@ -855,14 +854,14 @@ window.Quarto = {
 <p>この場合、引数は3つです<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>。この場合の書き方はどうなるでしょうか。<code>map2_*()</code>はデータを2つまでしか指定できません。3つ目以降は関数/ラムダ関数の後ろに書くこととなります。ただし、関数/ラムダ関数の後ろに指定される引数は長さ1のベクトルでなければなりません。また、ラムダ関数内の引数は<code>.x</code>と<code>.y</code>でなく、<code>..1</code>、<code>..2</code>、<code>..3</code>、…となります。</p>
 <p>今回の例だと<code>map2_chr()</code>内に<code>num_vec</code>がデータ1、<code>"ID"</code>がデータ2です。そして、期待される結果は、「“ID” + <code>sep</code>の実引数 + <code>num_vec</code>の値」となります。したがって、ラムダ関数は<code>paste(..2, ..1, sep = ..3)</code>となります。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1"></a><span class="fu">map2_chr</span>(num_vec, <span class="st">"ID"</span>, <span class="sc">~</span><span class="fu">paste</span>(..<span class="dv">2</span>, ..<span class="dv">1</span>, <span class="at">sep =</span> ..<span class="dv">3</span>), <span class="st">"-"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1"></a><span class="fu">map2_chr</span>(num_vec, <span class="st">"ID"</span>, <span class="sc">~</span><span class="fu">paste</span>(..<span class="dv">2</span>, ..<span class="dv">1</span>, <span class="at">sep =</span> ..<span class="dv">3</span>), <span class="st">"-"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "ID-3" "ID-2" "ID-5" "ID-4" "ID-7"</code></pre>
 </div>
 </div>
 <p>データ2である<code>"ID"</code>は長さ1のcharacter型ベクトルであるため、以下のように<code>map_chr()</code>を使うことも可能です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1"></a><span class="co"># データ2も長さ1なのでmap_chr()もOK</span></span>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1"></a><span class="co"># データ2も長さ1なのでmap_chr()もOK</span></span>
 <span id="cb63-2"><a href="#cb63-2"></a><span class="fu">map_chr</span>(num_vec, <span class="sc">~</span><span class="fu">paste</span>(..<span class="dv">2</span>, ..<span class="dv">1</span>, <span class="at">sep =</span> ..<span class="dv">3</span>), <span class="st">"ID"</span>, <span class="st">"-"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "ID-3" "ID-2" "ID-5" "ID-4" "ID-7"</code></pre>
@@ -870,20 +869,20 @@ window.Quarto = {
 </div>
 <p>それではデータを3つ以上使うにはどうすれば良いでしょうか。そこで登場するのが<code>pmap_*()</code>関数です。以下の3つのベクトルを利用し、「名前:数学成績」を出力してみましょう。ただし、不正行為がある場合（<code>cheat_vec</code>の値が1）は成績が0点になるようにしましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1"></a>name_vec  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Hadley"</span>, <span class="st">"Song"</span>, <span class="st">"Yanai"</span>)</span>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1"></a>name_vec  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Hadley"</span>, <span class="st">"Song"</span>, <span class="st">"Yanai"</span>)</span>
 <span id="cb65-2"><a href="#cb65-2"></a>math_vec  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">70</span>, <span class="dv">55</span>, <span class="dv">80</span>)</span>
 <span id="cb65-3"><a href="#cb65-3"></a>cheat_vec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>賢い解決法は普通に<code>paste0()</code>関数を使う方法です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1"></a><span class="fu">paste0</span>(name_vec, <span class="st">":"</span>, math_vec <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> cheat_vec))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1"></a><span class="fu">paste0</span>(name_vec, <span class="st">":"</span>, math_vec <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> cheat_vec))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Hadley:70" "Song:0"    "Yanai:80" </code></pre>
 </div>
 </div>
 <p>今回はあえて<code>pmap_*()</code>関数を使ってみましょう。<code>pmap_*()</code>の場合、第一引数であるデータはリスト型で渡す必要があります。したがって、3つのベクトルを<code>list()</code>関数を用いてリスト化します。第二引数には既存の関数やラムダ関数を入力し、各引数は<code>..1</code>、<code>..2</code>、…といった形で表記します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1"></a><span class="fu">pmap_chr</span>(<span class="fu">list</span>(name_vec, math_vec, cheat_vec), </span>
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1"></a><span class="fu">pmap_chr</span>(<span class="fu">list</span>(name_vec, math_vec, cheat_vec), </span>
 <span id="cb68-2"><a href="#cb68-2"></a>         <span class="sc">~</span><span class="fu">paste0</span>(..<span class="dv">1</span>, <span class="st">":"</span>, ..<span class="dv">2</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> ..<span class="dv">3</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Hadley:70" "Song:0"    "Yanai:80" </code></pre>
@@ -891,7 +890,7 @@ window.Quarto = {
 </div>
 <p>第一引数はデータであるため、まずリストを作成し、パイプ演算子（<code>%&gt;%</code>）で<code>pmap_*()</code>に渡すことも可能です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1"></a><span class="fu">list</span>(name_vec, math_vec, cheat_vec) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1"></a><span class="fu">list</span>(name_vec, math_vec, cheat_vec) <span class="sc">%&gt;%</span></span>
 <span id="cb70-2"><a href="#cb70-2"></a>  <span class="fu">pmap_chr</span>(<span class="sc">~</span><span class="fu">paste0</span>(..<span class="dv">1</span>, <span class="st">":"</span>, ..<span class="dv">2</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> ..<span class="dv">3</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Hadley:70" "Song:0"    "Yanai:80" </code></pre>
@@ -903,13 +902,13 @@ window.Quarto = {
 <h2 data-number="28.3" class="anchored" data-anchor-id="sec-iteration-df"><span class="header-section-number">28.3</span> データフレームと{purrr}</h2>
 <p><code>map_*()</code>関数のデータとしてデータフレームを渡すことも可能です。ここでは5行3列のデータフレームを作成してみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1"></a>Dummy_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">X =</span> <span class="fu">seq</span>(<span class="dv">1</span>,  <span class="dv">5</span>,  <span class="at">by =</span> <span class="dv">1</span>),</span>
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1"></a>Dummy_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">X =</span> <span class="fu">seq</span>(<span class="dv">1</span>,  <span class="dv">5</span>,  <span class="at">by =</span> <span class="dv">1</span>),</span>
 <span id="cb72-2"><a href="#cb72-2"></a>                       <span class="at">Y =</span> <span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">50</span>, <span class="at">by =</span> <span class="dv">10</span>),</span>
 <span id="cb72-3"><a href="#cb72-3"></a>                       <span class="at">Z =</span> <span class="fu">seq</span>(<span class="dv">2</span>,  <span class="dv">10</span>, <span class="at">by =</span> <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>各行の<code>X</code>、<code>Y</code>、<code>Z</code>の合計を計算するには{dplyr}の<code>rowwise()</code>と<code>mutate()</code>を組み合わせることで計算出来ることを第<a href="datahandling3.html#sec-handling3-rowwise" class="quarto-xref"><span>15.2</span></a>章で紹介しました。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1"></a>Dummy_df <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1"></a>Dummy_df <span class="sc">%&gt;%</span></span>
 <span id="cb73-2"><a href="#cb73-2"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb73-3"><a href="#cb73-3"></a>  <span class="fu">mutate</span>(<span class="at">Sum =</span> <span class="fu">sum</span>(X, Y, Z)) <span class="sc">%&gt;%</span></span>
 <span id="cb73-4"><a href="#cb73-4"></a>  <span class="co"># rowwise()は1行を1グループとする関数であるため、最後にグループ化を解除</span></span>
@@ -927,7 +926,7 @@ window.Quarto = {
 </div>
 <p>それでは各列の平均値を計算するにはどうすれば良いでしょうか。ここではR内蔵関数である<code>colMeans()</code>を使わないことにしましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1"></a><span class="fu">colMeans</span>(Dummy_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1"></a><span class="fu">colMeans</span>(Dummy_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> X  Y  Z 
  3 30  6 </code></pre>
@@ -935,7 +934,7 @@ window.Quarto = {
 </div>
 <p>まず、<code>mean(Dummy_df$X)</code>を3回実行する方法や、{dplyr}の<code>summarise()</code>関数を使う方法があります。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1"></a>Dummy_df <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1"></a>Dummy_df <span class="sc">%&gt;%</span></span>
 <span id="cb77-2"><a href="#cb77-2"></a>  <span class="fu">summarise</span>(<span class="at">X =</span> <span class="fu">mean</span>(X), </span>
 <span id="cb77-3"><a href="#cb77-3"></a>            <span class="at">Y =</span> <span class="fu">mean</span>(Y),</span>
 <span id="cb77-4"><a href="#cb77-4"></a>            <span class="at">Z =</span> <span class="fu">mean</span>(Z))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -946,7 +945,7 @@ window.Quarto = {
 </div>
 <p>実はこの操作、<code>map_dbl()</code>関数を使えば、より簡単です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1"></a><span class="fu">map_dbl</span>(Dummy_df, mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1"></a><span class="fu">map_dbl</span>(Dummy_df, mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> X  Y  Z 
  3 30  6 </code></pre>
@@ -954,7 +953,7 @@ window.Quarto = {
 </div>
 <p><code>map_dbl()</code>はnumeric (double) 型ベクトルを返しますが、データフレーム（具体的にはtibble）に返すなら<code>map_df()</code>を使います。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1"></a><span class="fu">map_df</span>(Dummy_df, mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1"></a><span class="fu">map_df</span>(Dummy_df, mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 3
       X     Y     Z
@@ -964,7 +963,7 @@ window.Quarto = {
 </div>
 <p>なぜこれが出来るでしょうか。これを理解するためにはデータフレームとtibbleが本質的にはリスト型と同じであることを理解する必要があります。たとえば、以下のようなリストについて考えてみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1"></a>Dummy_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">X =</span> <span class="fu">seq</span>(<span class="dv">1</span>,  <span class="dv">5</span>,  <span class="at">by =</span> <span class="dv">1</span>),</span>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1"></a>Dummy_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">X =</span> <span class="fu">seq</span>(<span class="dv">1</span>,  <span class="dv">5</span>,  <span class="at">by =</span> <span class="dv">1</span>),</span>
 <span id="cb83-2"><a href="#cb83-2"></a>                   <span class="at">Y =</span> <span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">50</span>, <span class="at">by =</span> <span class="dv">10</span>),</span>
 <span id="cb83-3"><a href="#cb83-3"></a>                   <span class="at">Z =</span> <span class="fu">seq</span>(<span class="dv">2</span>,  <span class="dv">10</span>, <span class="at">by =</span> <span class="dv">2</span>))</span>
 <span id="cb83-4"><a href="#cb83-4"></a></span>
@@ -982,7 +981,7 @@ $Z
 </div>
 <p>この<code>Dummy_list</code>を<code>as.data.frame()</code>関数を使用して強制的にデータフレームに変換してみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1"></a><span class="fu">as.data.frame</span>(Dummy_list)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1"></a><span class="fu">as.data.frame</span>(Dummy_list)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  X  Y  Z
 1 1 10  2
@@ -994,7 +993,7 @@ $Z
 </div>
 <p><code>Dummy_df</code>と同じものが出てきました。逆に<code>Dummy_df</code>を、<code>as.list()</code>を使用してリストに変換すると<code>Dummy_list</code>と同じものが返されます。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1"></a><span class="fu">as.list</span>(Dummy_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1"></a><span class="fu">as.list</span>(Dummy_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$X
 [1] 1 2 3 4 5
@@ -1008,7 +1007,7 @@ $Z
 </div>
 <p>ここまで理解できれば、<code>map_*()</code>関数のデータがデータフレームの場合、内部ではリストとして扱われることが分かるでしょう。実際、<code>Dummy_list</code>をデータとして入れても<code>Dummy_df</code>を入れた結果と同じものが得られます。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1"></a><span class="fu">map_df</span>(Dummy_list, mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1"></a><span class="fu">map_df</span>(Dummy_list, mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 3
       X     Y     Z
@@ -1021,7 +1020,7 @@ $Z
 <p>ここまで「データフレーム」と「tibble」を区別せずに説明してきましたが、これからの話しではこの2つを区別する必要があります。tibbleは{tidyverse}のコアパッケージの一つである{tibble}が提供するデータ構造であり、データフレームの上位互換です。tibbleもデータフレーム同様、本質的にはリストですが、リストの構造をより的確に表すことが出来ます。</p>
 <p>データフレームをリストとして考える場合、リストの各要素は<strong>必ずベクトル</strong>である必要があります。たとえば、<code>Dummy_list</code>には3つの要素があり、それぞれ長さ5のベクトルです。一方、リストの中にはリストを入れることも出来ます。たとえば、以下のような<code>Dummy_list2</code>について考えてみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1"></a>Dummy_list2 <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">ID   =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, </span>
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1"></a>Dummy_list2 <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">ID   =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, </span>
 <span id="cb91-2"><a href="#cb91-2"></a>                    <span class="at">Data =</span> <span class="fu">list</span>(Dummy_df, Dummy_df, Dummy_df))</span>
 <span id="cb91-3"><a href="#cb91-3"></a></span>
 <span id="cb91-4"><a href="#cb91-4"></a>Dummy_list2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1057,14 +1056,14 @@ $Data[[3]]
 </div>
 <p><code>Dummy_list2</code>には2つの要素があり、最初の要素は長さ3のベクトル、2つ目の要素は長さ3のリストです。2つ目の要素がベクトルでないため、<code>Dummy_list2</code>をデータフレームに変換することはできません。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1"></a>Dummy_df2 <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(Dummy_list2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1"></a>Dummy_df2 <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(Dummy_list2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error in (function (..., row.names = NULL, check.rows = FALSE, check.names = TRUE, : arguments imply differing number of rows: 3, 5</code></pre>
 </div>
 </div>
 <p>一方、<code>as_tibble()</code>を使用してtibble型に変換することは可能です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1"></a>Dummy_tibble <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(Dummy_list2)</span>
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1"></a>Dummy_tibble <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(Dummy_list2)</span>
 <span id="cb95-2"><a href="#cb95-2"></a></span>
 <span id="cb95-3"><a href="#cb95-3"></a>Dummy_tibble</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1078,7 +1077,7 @@ $Data[[3]]
 </div>
 <p>2列目の各セルには5行3列のデータフレーム（<code>df</code>）が格納されていることが分かります。たとえば、<code>Dummy_tibble</code>の<code>Data</code>列を抽出してみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1"></a>Dummy_tibble<span class="sc">$</span>Data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1"></a>Dummy_tibble<span class="sc">$</span>Data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
   X  Y  Z
@@ -1107,7 +1106,7 @@ $Data[[3]]
 </div>
 <p>長さ3のリスト出力されます。続いて、<code>Dummy_tibble$Data</code>の2番目のセルを抽出してみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1"></a>Dummy_tibble<span class="sc">$</span>Data[<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1"></a>Dummy_tibble<span class="sc">$</span>Data[<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
   X  Y  Z
@@ -1126,29 +1125,29 @@ $Data[[3]]
 <h2 data-number="28.4" class="anchored" data-anchor-id="sec-iteration-model1"><span class="header-section-number">28.4</span> モデルの反復推定</h2>
 <p>ここからは<code>map_*()</code>関数群を使って複数のモデルを素早く推定する方法について解説します。サンプルデータは第<a href="visualization2.html" class="quarto-xref"><span>20</span></a>章で使いました各国の政治経済データ（<code>Countries.csv</code>）を使用します。csv形式データ読み込みの際、これまではR内蔵関数である<code>read.csv()</code>と{readr}<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>の<code>read_csv()</code>を区別せずに使用してきました。しかし、ここからは<code>read_csv()</code>を使用します。2つの使い方はほぼ同じですが、<code>read_csv()</code>は各列のデータ型を自動的に指定してくれるだけではなく、tibble構造として読み込みます。<code>read.csv()</code>を使用する場合、<code>as_tibble(データフレーム名)</code>でデータフレームをtibbleに変換してください。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1"></a>Country_df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Data/Countries.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1"></a>Country_df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Data/Countries.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="sec-iteration-split1" class="level3" data-number="28.4.1">
 <h3 data-number="28.4.1" class="anchored" data-anchor-id="sec-iteration-split1"><span class="header-section-number">28.4.1</span> サンプルの分割とモデル推定（<code>split()</code>利用）</h3>
 <p>まずは、サンプルを分割し、それぞれの下位サンプルを使った分析を繰り返す方法について解説します。サンプルを分割する方法は2つありますが、最初はR内蔵関数である<code>split()</code>関数を使った方法について紹介します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1"></a><span class="co"># split()の使い方</span></span>
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1"></a><span class="co"># split()の使い方</span></span>
 <span id="cb102-2"><a href="#cb102-2"></a>新しいオブジェクト名 <span class="ot">&lt;-</span> <span class="fu">split</span>(データ名, 分割の基準となるベクトル)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>たとえば、<code>Country_df</code>を大陸ごとにサンプルを分けるとします。大陸を表すベクトルは<code>Country_df$Continent</code>です。したがって、以下のように入力します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1"></a>Split_Data <span class="ot">&lt;-</span> <span class="fu">split</span>(Country_df, Country_df<span class="sc">$</span>Continent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1"></a>Split_Data <span class="ot">&lt;-</span> <span class="fu">split</span>(Country_df, Country_df<span class="sc">$</span>Continent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>サンプルが分割された<code>Split_Data</code>のデータ構造はリスト型です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1"></a><span class="fu">class</span>(Split_Data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1"></a><span class="fu">class</span>(Split_Data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "list"</code></pre>
 </div>
 </div>
 <p>中身を見るとリストの各要素としてtibble（データフレーム）が格納されています。リストの中にはあらゆるデータ型、データ構造を入れることができることが分かります。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1"></a>Split_Data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1"></a>Split_Data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$Africa
 # A tibble: 54 × 18
@@ -1241,7 +1240,7 @@ $Oceania
 </div>
 <p>それでは分割された各サンプルに対して<code>Polity_Score</code>と<code>FH_Total</code>の相関係数を計算してみましょう。その前に相関分析の方法について調べてみましょう。Rには相関分析の関数が2つ用意されています。単純に相関係数のみを計算するなら<code>cor()</code>、係数の不確実性（標準誤差、信頼区間など）まで計算し、検定を行うなら<code>cor.test()</code>を使用します。ここではより汎用性の高い<code>cor.test()</code>の使い方について紹介します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1"></a><span class="co"># 相関分析: 方法1</span></span>
+<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1"></a><span class="co"># 相関分析: 方法1</span></span>
 <span id="cb108-2"><a href="#cb108-2"></a><span class="fu">cor.test</span>(<span class="sc">~</span> 変数名1 <span class="sc">+</span> 変数名2, <span class="at">data =</span> データ名)</span>
 <span id="cb108-3"><a href="#cb108-3"></a></span>
 <span id="cb108-4"><a href="#cb108-4"></a><span class="co"># 相関分析: 方法2</span></span>
@@ -1249,7 +1248,7 @@ $Oceania
 </div>
 <p>それでは全サンプルに対して相関分析をしてみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1"></a>Cor_fit1 <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(<span class="sc">~</span> Polity_Score <span class="sc">+</span> FH_Total, <span class="at">data =</span> Country_df)</span>
+<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1"></a>Cor_fit1 <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(<span class="sc">~</span> Polity_Score <span class="sc">+</span> FH_Total, <span class="at">data =</span> Country_df)</span>
 <span id="cb109-2"><a href="#cb109-2"></a>Cor_fit1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -1267,7 +1266,7 @@ sample estimates:
 </div>
 <p>ここから相関係数（0.8420031）のみを抽出するにはどうすれば良いでしょうか。それを確認するためには<code>Cor_fit1</code>というオブジェクトの構造を調べる必要があります。ここではR内蔵関数である<code>str()</code>を使って確認してみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1"></a><span class="fu">str</span>(Cor_fit1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1"></a><span class="fu">str</span>(Cor_fit1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>List of 9
  $ statistic  : Named num 19.5
@@ -1289,7 +1288,7 @@ sample estimates:
 </div>
 <p>相関係数は<code>$estimate</code>で抽出できそうですね。実際に<code>Cor_fit1</code>から相関係数のみ抽出してみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1"></a>Cor_fit1<span class="sc">$</span>estimate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1"></a>Cor_fit1<span class="sc">$</span>estimate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      cor 
 0.8420031 </code></pre>
@@ -1297,11 +1296,11 @@ sample estimates:
 </div>
 <p>それでは<code>map()</code>関数を利用して分割された各サンプルを対象に<code>Polity_Score</code>と<code>FH_Total</code>の相関係数を計算してみましょう。<code>map()</code>のデータは<code>Split_Data</code>とし、関数はラムダ関数を書いてみましょう。<code>cor.test()</code>内<code>data</code>引数の実引数は<code>.x</code>、または<code>..1</code>となります。最後に<code>map_dbl("estimate")</code>を利用し、相関係数を抽出、numeric (double) 型ベクトルとして出力します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1"></a>Cor_fit2 <span class="ot">&lt;-</span> Split_Data <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1"></a>Cor_fit2 <span class="ot">&lt;-</span> Split_Data <span class="sc">%&gt;%</span></span>
 <span id="cb115-2"><a href="#cb115-2"></a>  <span class="fu">map</span>(<span class="sc">~</span><span class="fu">cor.test</span>(<span class="sc">~</span> Polity_Score <span class="sc">+</span> FH_Total, <span class="at">data =</span> .x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb116"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1"></a><span class="co"># Cor_fit2から相関係数のみ出力</span></span>
+<div class="sourceCode cell-code" id="cb116"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1"></a><span class="co"># Cor_fit2から相関係数のみ出力</span></span>
 <span id="cb116-2"><a href="#cb116-2"></a><span class="fu">map_dbl</span>(Cor_fit2, <span class="st">"estimate"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Africa   America      Asia    Europe   Oceania 
@@ -1310,7 +1309,7 @@ sample estimates:
 </div>
 <p>もし、小数点3位までの<em>p</em>値が欲しい場合は以下のように入力します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb118"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1"></a><span class="co"># Cor_fit2から相関係数のp値を抽出し、小数点3位に丸める</span></span>
+<div class="sourceCode cell-code" id="cb118"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1"></a><span class="co"># Cor_fit2から相関係数のp値を抽出し、小数点3位に丸める</span></span>
 <span id="cb118-2"><a href="#cb118-2"></a><span class="fu">map_dbl</span>(Cor_fit2, <span class="st">"p.value"</span>) <span class="sc">%&gt;%</span> <span class="fu">round</span>(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> Africa America    Asia  Europe Oceania 
@@ -1322,17 +1321,17 @@ sample estimates:
 <h3 data-number="28.4.2" class="anchored" data-anchor-id="sec-iteration-split2"><span class="header-section-number">28.4.2</span> サンプルの分割とモデル推定（<code>nest()</code>利用）</h3>
 <p>それではデータフレーム内にデータフレームが格納可能なtibble構造の長所を活かした方法について解説します。ある変数に応じてデータをグループ化する方法については第<a href="datahandling2.html#sec-handling2-group" class="quarto-xref"><span>14.2</span></a>章で解説しました。{tidyr}パッケージにはグループごとにデータを分割し、分割されたデータを各セルに埋め込む<code>nest()</code>関数を提供しています。具体的な動きを見るために、とりあえず、<code>Country_df</code>を大陸（<code>Continent</code>）ごとに分割し、それぞれがデータが一つのセルに埋め込まれた新しいデータセット、<code>Nested_Data</code>を作ってみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb120"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1"></a>Nested_Data <span class="ot">&lt;-</span> Country_df <span class="sc">%&gt;%</span> </span>
+<div class="sourceCode cell-code" id="cb120"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1"></a>Nested_Data <span class="ot">&lt;-</span> Country_df <span class="sc">%&gt;%</span> </span>
 <span id="cb120-2"><a href="#cb120-2"></a>  <span class="fu">group_by</span>(Continent) <span class="sc">%&gt;%</span></span>
 <span id="cb120-3"><a href="#cb120-3"></a>  <span class="fu">nest</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>ちなみに<code>group_by()</code>と<code>nest()</code>は<code>group_nest()</code>を使って以下のようにまとめることも可能です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb121"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb121-1"><a href="#cb121-1"></a>Nested_Data <span class="ot">&lt;-</span> Country_df <span class="sc">%&gt;%</span> </span>
+<div class="sourceCode cell-code" id="cb121"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb121-1"><a href="#cb121-1"></a>Nested_Data <span class="ot">&lt;-</span> Country_df <span class="sc">%&gt;%</span> </span>
 <span id="cb121-2"><a href="#cb121-2"></a>  <span class="fu">group_nest</span>(Continent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb122"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1"></a>Nested_Data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb122"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1"></a>Nested_Data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 2
 # Groups:   Continent [5]
@@ -1347,7 +1346,7 @@ sample estimates:
 </div>
 <p>2列目の<code>data</code>変数の各セルにtibbleが埋め込まれたことがわかります。<code>Nested_Data</code>の<code>data</code>列から5つ目の要素（オセアニアのデータ）を確認してみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb124"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1"></a><span class="co"># Nested_Data$data[5]の場合、長さ1のリストが出力される</span></span>
+<div class="sourceCode cell-code" id="cb124"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1"></a><span class="co"># Nested_Data$data[5]の場合、長さ1のリストが出力される</span></span>
 <span id="cb124-2"><a href="#cb124-2"></a><span class="co"># tibble構造で出力する場合は[5]でなく、[[5]]で抽出</span></span>
 <span id="cb124-3"><a href="#cb124-3"></a>Nested_Data<span class="sc">$</span>data[[<span class="dv">5</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1365,7 +1364,7 @@ sample estimates:
 </div>
 <p><code>Continent</code>がOceaniaの行の<code>data</code>列にオセアニアのみのデータが格納されていることが分かります。このようなデータ構造を入れ子型データ（nested data）と呼びます。この入れ子型データは<code>unnest()</code>関数を使って解除することも可能です。<code>unnest()</code>関数を使う際はどの列を解除するかを指定する必要があり、今回は<code>data</code>列となります。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb126"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1"></a><span class="co"># 入れ子型データの解除</span></span>
+<div class="sourceCode cell-code" id="cb126"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1"></a><span class="co"># 入れ子型データの解除</span></span>
 <span id="cb126-2"><a href="#cb126-2"></a>Nested_Data <span class="sc">%&gt;%</span></span>
 <span id="cb126-3"><a href="#cb126-3"></a>  <span class="fu">unnest</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1402,7 +1401,7 @@ sample estimates:
 </div>
 <p>それではこの入れ子型データを使用して大陸ごとの<code>Polity_Score</code>と<code>FH_Total</code>の相関係数を計算してみましょう。<code>data</code>列をデータとした相関係数のラムダ関数はどう書けば良いでしょうか。これまでの内容が理解できましたら、答えは難しくないでしょう。<code>cor.test()</code>関数の<code>data</code>引数の実引数として<code>.x</code>を指定するだけです。この結果を<code>Cor_test</code>という列として追加し、<code>Nested_Data2</code>という名のオブジェクトとして保存します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb128"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb128-1"><a href="#cb128-1"></a>Nested_Data2 <span class="ot">&lt;-</span> Nested_Data <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb128"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb128-1"><a href="#cb128-1"></a>Nested_Data2 <span class="ot">&lt;-</span> Nested_Data <span class="sc">%&gt;%</span></span>
 <span id="cb128-2"><a href="#cb128-2"></a>  <span class="fu">mutate</span>(<span class="at">Cor_test =</span> <span class="fu">map</span>(data, <span class="sc">~</span><span class="fu">cor.test</span>(<span class="sc">~</span> Polity_Score <span class="sc">+</span> FH_Total, <span class="at">data =</span> .x)))</span>
 <span id="cb128-3"><a href="#cb128-3"></a></span>
 <span id="cb128-4"><a href="#cb128-4"></a>Nested_Data2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1420,7 +1419,7 @@ sample estimates:
 </div>
 <p><code>Cor_test</code>という列が追加され、htestというクラス（S3クラス）オブジェクトが格納されていることが分かります。ちゃんと相関分析のオブジェクトが格納されているか、確認してみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb130"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1"></a>Nested_Data2<span class="sc">$</span>Cor_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb130"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1"></a>Nested_Data2<span class="sc">$</span>Cor_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
 
@@ -1494,7 +1493,7 @@ sample estimates:
 </div>
 <p>5つの相関分析結果が格納されています。続いて、ここから相関係数のみを抽出してみましょう。相関分析オブジェクトから相関係数を抽出するには<code>オブジェクト名$estimate</code>だけで十分です。<code>mpa_*()</code>関数を使うなら第2引数として関数やラムダ関数を指定せず、<code>"estimate"</code>のみ入力するだけです。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb132"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1"></a>Nested_Data2 <span class="ot">&lt;-</span> Nested_Data2 <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb132"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1"></a>Nested_Data2 <span class="ot">&lt;-</span> Nested_Data2 <span class="sc">%&gt;%</span></span>
 <span id="cb132-2"><a href="#cb132-2"></a>  <span class="fu">mutate</span>(<span class="at">Cor_coef =</span> <span class="fu">map</span>(Cor_test, <span class="st">"estimate"</span>))</span>
 <span id="cb132-3"><a href="#cb132-3"></a></span>
 <span id="cb132-4"><a href="#cb132-4"></a>Nested_Data2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1512,7 +1511,7 @@ sample estimates:
 </div>
 <p><code>Cor_coef</code>列が追加され、それぞれのセルにnumeric型の値が格納されていることが分かります。<code>map()</code>関数はリスト型でデータを返すため、このように出力されます。この<code>Cor_coef</code>列の入れ子構造を解除してみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb134"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb134-1"><a href="#cb134-1"></a>Nested_Data2 <span class="ot">&lt;-</span> Nested_Data2 <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb134"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb134-1"><a href="#cb134-1"></a>Nested_Data2 <span class="ot">&lt;-</span> Nested_Data2 <span class="sc">%&gt;%</span></span>
 <span id="cb134-2"><a href="#cb134-2"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> Cor_coef)</span>
 <span id="cb134-3"><a href="#cb134-3"></a></span>
 <span id="cb134-4"><a href="#cb134-4"></a>Nested_Data2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1530,7 +1529,7 @@ sample estimates:
 </div>
 <p><code>Cor_coef</code>の各列に格納された値が出力されました。以上の作業を一つのコードとしてまとめることも出来ます。また、相関係数の抽出の際に<code>map()</code>でなく、<code>map_dbl()</code>を使えば、numeric型ベクトルが返されるので<code>unnest()</code>も不要となります。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb136"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb136-1"><a href="#cb136-1"></a>Country_df <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb136"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb136-1"><a href="#cb136-1"></a>Country_df <span class="sc">%&gt;%</span></span>
 <span id="cb136-2"><a href="#cb136-2"></a>  <span class="fu">group_by</span>(Continent) <span class="sc">%&gt;%</span></span>
 <span id="cb136-3"><a href="#cb136-3"></a>  <span class="fu">nest</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb136-4"><a href="#cb136-4"></a>  <span class="fu">mutate</span>(<span class="at">Cor_test =</span> <span class="fu">map</span>(data, <span class="sc">~</span><span class="fu">cor.test</span>(<span class="sc">~</span> Polity_Score <span class="sc">+</span> FH_Total, <span class="at">data =</span> .x)),</span>
@@ -1549,7 +1548,7 @@ sample estimates:
 </div>
 <p>たった5行のコードで大陸ごとの相関分析が出来ました。これを<code>map_*()</code>を使わずに処理するなら以下のようなコードとなります<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb138"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb138-1"><a href="#cb138-1"></a>Cor_Test1 <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(<span class="sc">~</span> Polity_Score <span class="sc">+</span> FH_Total, </span>
+<div class="sourceCode cell-code" id="cb138"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb138-1"><a href="#cb138-1"></a>Cor_Test1 <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(<span class="sc">~</span> Polity_Score <span class="sc">+</span> FH_Total, </span>
 <span id="cb138-2"><a href="#cb138-2"></a>                      <span class="at">data =</span> <span class="fu">subset</span>(Country_df, Country_df<span class="sc">$</span>Continent <span class="sc">==</span> <span class="st">"Asia"</span>))</span>
 <span id="cb138-3"><a href="#cb138-3"></a>Cor_Test2 <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(<span class="sc">~</span> Polity_Score <span class="sc">+</span> FH_Total, </span>
 <span id="cb138-4"><a href="#cb138-4"></a>                      <span class="at">data =</span> <span class="fu">subset</span>(Country_df, Country_df<span class="sc">$</span>Continent <span class="sc">==</span> <span class="st">"Europe"</span>))</span>
@@ -1572,7 +1571,7 @@ sample estimates:
 </div>
 <p>それでは応用例として回帰分析をしてみましょう。今回も<code>Nested_Data</code>を使用し、<code>PPP_per_capita</code>を応答変数に、<code>FH_Total</code>と<code>Population</code>を説明変数とした重回帰分析を行い、政治的自由度（<code>FH_Total</code>）の係数や標準誤差などを抽出してみましょう。まずは、ステップごとにコードを分けて説明し、最後には一つのコードとしてまとめたものをお見せします。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb140"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb140-1"><a href="#cb140-1"></a>Nested_Data <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb140"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb140-1"><a href="#cb140-1"></a>Nested_Data <span class="sc">%&gt;%</span></span>
 <span id="cb140-2"><a href="#cb140-2"></a>  <span class="fu">mutate</span>(<span class="at">Model =</span> <span class="fu">map</span>(data, </span>
 <span id="cb140-3"><a href="#cb140-3"></a>                     <span class="sc">~</span><span class="fu">lm</span>(PPP_per_capita <span class="sc">~</span> FH_Total <span class="sc">+</span> Population, </span>
 <span id="cb140-4"><a href="#cb140-4"></a>                         <span class="at">data =</span> .x)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1590,7 +1589,7 @@ sample estimates:
 </div>
 <p><code>Model</code>列からから推定結果の要約を抽出するにはどうすれば良いでしょうか。1つ目の方法は<code>summary(lmオブジェクト名)$coefficients</code>で抽出する方法です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb142"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb142-1"><a href="#cb142-1"></a>lm_fit1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(PPP_per_capita <span class="sc">~</span> FH_Total <span class="sc">+</span> Population, <span class="at">data =</span> Country_df)</span>
+<div class="sourceCode cell-code" id="cb142"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb142-1"><a href="#cb142-1"></a>lm_fit1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(PPP_per_capita <span class="sc">~</span> FH_Total <span class="sc">+</span> Population, <span class="at">data =</span> Country_df)</span>
 <span id="cb142-2"><a href="#cb142-2"></a></span>
 <span id="cb142-3"><a href="#cb142-3"></a><span class="fu">summary</span>(lm_fit1)<span class="sc">$</span>coefficients</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1602,7 +1601,7 @@ Population  -2.217793e-06 9.193256e-06 -0.2412413 8.096505e-01</code></pre>
 </div>
 <p>もっと簡単な方法は{broom}の<code>tidy()</code>関数を使う方法です。<code>tidy()</code>関数は推定値に関する様々な情報をデータフレームとして返す便利な関数です。デフォルトだと95%信頼区間は出力されませんが、<code>conf.int = TRUE</code>を指定すると信頼区間も出力されます。<code>tidy()</code>関数を提供する{broom}パッケージは{tidyverse}の一部ですが、{tidyverse}読み込みの際に一緒に読み込まれるものではないため、予め{broom}パッケージを読み込んでおくか、<code>broom::tidy()</code>で使うことができます。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb144"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb144-1"><a href="#cb144-1"></a>broom<span class="sc">::</span><span class="fu">tidy</span>(lm_fit1, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb144"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb144-1"><a href="#cb144-1"></a>broom<span class="sc">::</span><span class="fu">tidy</span>(lm_fit1, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 7
   term             estimate     std.error statistic  p.value  conf.low conf.high
@@ -1614,7 +1613,7 @@ Population  -2.217793e-06 9.193256e-06 -0.2412413 8.096505e-01</code></pre>
 </div>
 <p>それでは<code>Model</code>列にあるlmオブジェクトから推定値の情報を抽出し、<code>Model2</code>という列に格納してみましょう。今回はラムダ関数を使う必要がありません。なぜなら、<code>tidy()</code>の第一引数がデータだからです（<code>?tidy.lm</code>参照）。他にも必要な引数（<code>conf.int = TRUE</code>など）があれば、<code>map()</code>の第3引数以降で指定します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb146"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb146-1"><a href="#cb146-1"></a>Nested_Data <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb146"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb146-1"><a href="#cb146-1"></a>Nested_Data <span class="sc">%&gt;%</span></span>
 <span id="cb146-2"><a href="#cb146-2"></a>  <span class="fu">mutate</span>(<span class="at">Model  =</span> <span class="fu">map</span>(data, </span>
 <span id="cb146-3"><a href="#cb146-3"></a>                      <span class="sc">~</span><span class="fu">lm</span>(PPP_per_capita <span class="sc">~</span> FH_Total <span class="sc">+</span> Population, </span>
 <span id="cb146-4"><a href="#cb146-4"></a>                          <span class="at">data =</span> .x)),</span>
@@ -1633,7 +1632,7 @@ Population  -2.217793e-06 9.193256e-06 -0.2412413 8.096505e-01</code></pre>
 </div>
 <p><code>Model2</code>列の各セルに7列のtibbleが格納されているようです。ここからは<code>data</code>と<code>Model</code>列は不要ですので<code>select()</code>関数を使って除去し、<code>Model2</code>の入れ子構造を解除してみます。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb148"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb148-1"><a href="#cb148-1"></a>Nested_Data <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb148"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb148-1"><a href="#cb148-1"></a>Nested_Data <span class="sc">%&gt;%</span></span>
 <span id="cb148-2"><a href="#cb148-2"></a>  <span class="fu">mutate</span>(<span class="at">Model  =</span> <span class="fu">map</span>(data, </span>
 <span id="cb148-3"><a href="#cb148-3"></a>                      <span class="sc">~</span><span class="fu">lm</span>(PPP_per_capita <span class="sc">~</span> FH_Total <span class="sc">+</span> Population, </span>
 <span id="cb148-4"><a href="#cb148-4"></a>                          <span class="at">data =</span> .x)),</span>
@@ -1664,7 +1663,7 @@ Population  -2.217793e-06 9.193256e-06 -0.2412413 8.096505e-01</code></pre>
 </div>
 <p>各大陸ごとの回帰分析の推定結果が一つのデータフレームとして展開されました。ここでは<code>FH_Total</code>の推定値のみがほしいので、<code>filter()</code>関数を使用し、<code>term</code>の値が<code>"FH_Total"</code>の行のみを残します。また、<code>term</code>列も必要なくなるので除外しましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb150"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb150-1"><a href="#cb150-1"></a>Nested_Data <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb150"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb150-1"><a href="#cb150-1"></a>Nested_Data <span class="sc">%&gt;%</span></span>
 <span id="cb150-2"><a href="#cb150-2"></a>  <span class="fu">mutate</span>(<span class="at">Model  =</span> <span class="fu">map</span>(data, </span>
 <span id="cb150-3"><a href="#cb150-3"></a>                      <span class="sc">~</span><span class="fu">lm</span>(PPP_per_capita <span class="sc">~</span> FH_Total <span class="sc">+</span> Population, </span>
 <span id="cb150-4"><a href="#cb150-4"></a>                          <span class="at">data =</span> .x)),</span>
@@ -1688,7 +1687,7 @@ Population  -2.217793e-06 9.193256e-06 -0.2412413 8.096505e-01</code></pre>
 <p>これで終わりです。政治的自由度と所得水準の関係はアジアとアフリカでは連関の程度が小さく、統計的有意ではありません。オセアニアの場合、連関の程度は大きいと考えられますが、サンプルサイズが小さいため統計的有意な結果は得られませんでした。一方、ヨーロッパとアメリカでは連関の程度も大きく、統計的有意な連関が確認されました。</p>
 <p>以上のコードをよりコンパクトにまとめると以下のようなコードとなります。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb152"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb152-1"><a href="#cb152-1"></a><span class="co"># {purrr}使用</span></span>
+<div class="sourceCode cell-code" id="cb152"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb152-1"><a href="#cb152-1"></a><span class="co"># {purrr}使用</span></span>
 <span id="cb152-2"><a href="#cb152-2"></a>Nested_Data <span class="sc">%&gt;%</span></span>
 <span id="cb152-3"><a href="#cb152-3"></a>  <span class="fu">mutate</span>(<span class="at">Model =</span> <span class="fu">map</span>(data, <span class="sc">~</span><span class="fu">lm</span>(PPP_per_capita <span class="sc">~</span> FH_Total <span class="sc">+</span> Population, <span class="at">data =</span> .x)),</span>
 <span id="cb152-4"><a href="#cb152-4"></a>         <span class="at">Model =</span> <span class="fu">map</span>(Model, broom<span class="sc">::</span>tidy, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
@@ -1698,7 +1697,7 @@ Population  -2.217793e-06 9.193256e-06 -0.2412413 8.096505e-01</code></pre>
 </div>
 <p>{purrr}パッケージを使用しない例も紹介します。むろん、以下のコードは可能な限り面倒な書き方をしています。<code>for()</code>文や<code>split()</code>と<code>*apply()</code>関数を組み合わせると以下の例よりも簡潔なコードは作成できます。R上級者になるためには{tidyverse}的な書き方だけでなく、ネイティブRの書き方にも慣れる必要があります。ぜひ挑戦してみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb153"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb153-1"><a href="#cb153-1"></a><span class="co"># {purrr}を使用しない場合</span></span>
+<div class="sourceCode cell-code" id="cb153"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb153-1"><a href="#cb153-1"></a><span class="co"># {purrr}を使用しない場合</span></span>
 <span id="cb153-2"><a href="#cb153-2"></a><span class="co"># FH_Totalの係数と標準誤差のみを抽出する例</span></span>
 <span id="cb153-3"><a href="#cb153-3"></a>lm_fit1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(PPP_per_capita <span class="sc">~</span> FH_Total <span class="sc">+</span> Population, </span>
 <span id="cb153-4"><a href="#cb153-4"></a>              <span class="at">data =</span> <span class="fu">subset</span>(Country_df, Country_df<span class="sc">$</span>Continent <span class="sc">==</span> <span class="st">"Asia"</span>))</span>
@@ -1728,12 +1727,12 @@ Population  -2.217793e-06 9.193256e-06 -0.2412413 8.096505e-01</code></pre>
 <h3 data-number="28.4.3" class="anchored" data-anchor-id="sec-iteration-range"><span class="header-section-number">28.4.3</span> データの範囲を指定したモデル推定</h3>
 <p>これまでの例は名目変数でグループ化を行いましたが、連続変数を使うことも可能です。たとえば、人口1千万未満の国、1千万以上5千万未満、5千万以上1億未満、1億以上でサンプルを分割することです。まず、<code>Country_df</code>から<code>PPP_per_capita</code>、<code>FH_Total</code>、<code>Population</code>列のみを抽出し、<code>Country_df2</code>に格納します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb154"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb154-1"><a href="#cb154-1"></a>Country_df2 <span class="ot">&lt;-</span> Country_df <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb154"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb154-1"><a href="#cb154-1"></a>Country_df2 <span class="ot">&lt;-</span> Country_df <span class="sc">%&gt;%</span></span>
 <span id="cb154-2"><a href="#cb154-2"></a>  <span class="fu">select</span>(PPP_per_capita, FH_Total, Population)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>続いて、<code>case_when()</code>関数を使用し、<code>Population</code>の値を基準にケースがどの範囲内に属するかを表す変数<code>Group</code>を作成します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb155"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb155-1"><a href="#cb155-1"></a>Country_df2 <span class="ot">&lt;-</span> Country_df2 <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb155"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb155-1"><a href="#cb155-1"></a>Country_df2 <span class="ot">&lt;-</span> Country_df2 <span class="sc">%&gt;%</span></span>
 <span id="cb155-2"><a href="#cb155-2"></a>  <span class="fu">mutate</span>(<span class="at">Group =</span> <span class="fu">case_when</span>(Population <span class="sc">&lt;</span>  <span class="dv">10000000</span>  <span class="sc">~</span> <span class="st">"1千万未満"</span>,</span>
 <span id="cb155-3"><a href="#cb155-3"></a>                           Population <span class="sc">&lt;</span>  <span class="dv">50000000</span>  <span class="sc">~</span> <span class="st">"1千万以上5千万未満"</span>,</span>
 <span id="cb155-4"><a href="#cb155-4"></a>                           Population <span class="sc">&lt;</span>  <span class="dv">100000000</span> <span class="sc">~</span> <span class="st">"5千万以上1億未満"</span>,</span>
@@ -1741,7 +1740,7 @@ Population  -2.217793e-06 9.193256e-06 -0.2412413 8.096505e-01</code></pre>
 </div>
 <p>中身を確認してみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb156"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb156-1"><a href="#cb156-1"></a>Country_df2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb156"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb156-1"><a href="#cb156-1"></a>Country_df2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 186 × 4
    PPP_per_capita FH_Total Population Group             
@@ -1761,13 +1760,13 @@ Population  -2.217793e-06 9.193256e-06 -0.2412413 8.096505e-01</code></pre>
 </div>
 <p>あとはこれまでの例と同じ手順となります。まず、データを<code>Group</code>変数でグループ化し、入れ子構造に変換します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb158"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb158-1"><a href="#cb158-1"></a>Country_df2 <span class="ot">&lt;-</span> Country_df2 <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb158"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb158-1"><a href="#cb158-1"></a>Country_df2 <span class="ot">&lt;-</span> Country_df2 <span class="sc">%&gt;%</span></span>
 <span id="cb158-2"><a href="#cb158-2"></a>  <span class="fu">group_by</span>(Group) <span class="sc">%&gt;%</span></span>
 <span id="cb158-3"><a href="#cb158-3"></a>  <span class="fu">nest</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>変換後のデータを確認してみます。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb159"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb159-1"><a href="#cb159-1"></a>Country_df2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb159"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb159-1"><a href="#cb159-1"></a>Country_df2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 4 × 2
 # Groups:   Group [4]
@@ -1781,7 +1780,7 @@ Population  -2.217793e-06 9.193256e-06 -0.2412413 8.096505e-01</code></pre>
 </div>
 <p>続いて、<code>data</code>列をデータとし、<code>map()</code>関数でモデルの推定をしてみましょう。目的変数は所得水準、説明変数は政治的自由度とします。推定後、{broom}の<code>tidy()</code>変数で推定値の情報のみを抽出し、入れ子構造を解除します。最後に<code>term</code>がFH_Totalの行のみを残します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb161"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb161-1"><a href="#cb161-1"></a>Country_df2 <span class="ot">&lt;-</span> Country_df2 <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb161"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb161-1"><a href="#cb161-1"></a>Country_df2 <span class="ot">&lt;-</span> Country_df2 <span class="sc">%&gt;%</span></span>
 <span id="cb161-2"><a href="#cb161-2"></a>  <span class="fu">mutate</span>(<span class="at">Model =</span> <span class="fu">map</span>(data, <span class="sc">~</span><span class="fu">lm</span>(PPP_per_capita <span class="sc">~</span> FH_Total, <span class="at">data =</span> .x)),</span>
 <span id="cb161-3"><a href="#cb161-3"></a>         <span class="at">Est   =</span> <span class="fu">map</span>(Model, broom<span class="sc">::</span>tidy, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb161-4"><a href="#cb161-4"></a>  <span class="fu">unnest</span>(Est) <span class="sc">%&gt;%</span></span>
@@ -1802,7 +1801,7 @@ Population  -2.217793e-06 9.193256e-06 -0.2412413 8.096505e-01</code></pre>
 </div>
 <p>せっかくなので推定結果を可視化してみましょう。横軸は人口規模（<code>Group</code>）とし、縦軸は推定値とします。係数の点推定値と95%信頼区間を同時に出力するために、<code>geom_pointrange()</code>幾何オブジェクトを使用します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb163"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb163-1"><a href="#cb163-1"></a>Country_df2 <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb163"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb163-1"><a href="#cb163-1"></a>Country_df2 <span class="sc">%&gt;%</span></span>
 <span id="cb163-2"><a href="#cb163-2"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb163-3"><a href="#cb163-3"></a>    <span class="co"># 横軸の表示順番を指定するために、Group変数をfactor化する</span></span>
 <span id="cb163-4"><a href="#cb163-4"></a>    <span class="at">Group =</span> <span class="fu">factor</span>(Group, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"1千万未満"</span>, <span class="st">"1千万以上5千万未満"</span>,</span>
@@ -1837,7 +1836,7 @@ Population  -2.217793e-06 9.193256e-06 -0.2412413 8.096505e-01</code></pre>
 <p>上記の例は、ある行は一つのグループに属するケースです。しかし、ある行が複数のグループに属するケースもあるでしょう。たとえば、ある変数の値が一定値以上である行のみでグループ化する場合です。<code>FH_Score</code>が一定値以上のSub-sampleに対して回帰分析を行う場合、<code>FH_Score</code>が最大値（100）である国はすべてのSub-sampleに属することになります。この場合は<code>group_by()</code>でグループ化することが難しいかも知れません。しかし、{dplyr}の<code>filter()</code>を使えば簡単に処理することができます。</p>
 <p>ここでは人口を説明変数に、所得水準を応答変数とした単回帰分析を行います。データは政治的自由度が一定値以上の国家のみに限定します。<code>FH_Score</code>が0以上の国（すべてのケース）、10以上の国、20以上の国、…などにサンプルを分割してみましょう。まずは<code>FH_Score</code>の最小値のみを格納した<code>Rnage_df</code>を作成します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb164"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb164-1"><a href="#cb164-1"></a>Range_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Min_FH =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">80</span>, <span class="at">by =</span> <span class="dv">10</span>))</span>
+<div class="sourceCode cell-code" id="cb164"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb164-1"><a href="#cb164-1"></a>Range_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Min_FH =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">80</span>, <span class="at">by =</span> <span class="dv">10</span>))</span>
 <span id="cb164-2"><a href="#cb164-2"></a></span>
 <span id="cb164-3"><a href="#cb164-3"></a>Range_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1857,7 +1856,7 @@ Population  -2.217793e-06 9.193256e-06 -0.2412413 8.096505e-01</code></pre>
 </div>
 <p>9行1列のtibbleが出来ました。続いて、<code>Subset</code>という列を生成し、ここにデータを入れてみましょう。ある変数の値を基準にサンプルを絞るには{dplyr}の<code>filter()</code>関数を使用します。たとえば、<code>Counter_df</code>の<code>FH_Total</code>が50以上のケースに絞るには<code>filter(Country_df, FH_Total &gt;= 50)</code>となります。パイプ演算子を使った場合は<code>Country_df %&gt;% filter(FH_Total &gt;= 50)</code>になりますが、ラムダ関数とパイプ演算子の相性はあまり良くありませんので、ここではパイプ演算子なしとします。重要なのは<code>Min_FH</code>の値をデータとした<code>map()</code>関数を実行し、実行内容を「<code>Country_df</code>から<code>FH_Total</code>が<code>Min_FH</code>以上のケースのみを抽出せよ」にすることです。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb166"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb166-1"><a href="#cb166-1"></a>Range_df <span class="ot">&lt;-</span> Range_df <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb166"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb166-1"><a href="#cb166-1"></a>Range_df <span class="ot">&lt;-</span> Range_df <span class="sc">%&gt;%</span></span>
 <span id="cb166-2"><a href="#cb166-2"></a>  <span class="fu">mutate</span>(<span class="at">Subset =</span> <span class="fu">map</span>(Min_FH, <span class="sc">~</span><span class="fu">filter</span>(Country_df, FH_Total <span class="sc">&gt;=</span> .x)))</span>
 <span id="cb166-3"><a href="#cb166-3"></a></span>
 <span id="cb166-4"><a href="#cb166-4"></a>Range_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1878,7 +1877,7 @@ Population  -2.217793e-06 9.193256e-06 -0.2412413 8.096505e-01</code></pre>
 </div>
 <p>入れ子構造になっているのは確認できましたが、ちゃんとフィルタリングされているかどうかも確認してみましょう。たとえば、<code>Range_df$Subset[[9]]</code>だと<code>FH_Total</code>が80以上の国に絞られていると考えられます。18列の表ですから<code>Country</code>と<code>FH_Total</code>列のみを確認してみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb168"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb168-1"><a href="#cb168-1"></a>Range_df<span class="sc">$</span>Subset[[<span class="dv">9</span>]] <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb168"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb168-1"><a href="#cb168-1"></a>Range_df<span class="sc">$</span>Subset[[<span class="dv">9</span>]] <span class="sc">%&gt;%</span></span>
 <span id="cb168-2"><a href="#cb168-2"></a>  <span class="fu">select</span>(Country, FH_Total)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 61 × 2
@@ -1899,7 +1898,7 @@ Population  -2.217793e-06 9.193256e-06 -0.2412413 8.096505e-01</code></pre>
 </div>
 <p>問題なくフィルタリングされているようですね。ここまで出来ればあとはこれまでの内容の復習でしょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb170"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb170-1"><a href="#cb170-1"></a>Range_df <span class="ot">&lt;-</span> Range_df <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb170"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb170-1"><a href="#cb170-1"></a>Range_df <span class="ot">&lt;-</span> Range_df <span class="sc">%&gt;%</span></span>
 <span id="cb170-2"><a href="#cb170-2"></a>  <span class="fu">mutate</span>(<span class="at">Model  =</span> <span class="fu">map</span>(Subset, <span class="sc">~</span><span class="fu">lm</span>(PPP_per_capita <span class="sc">~</span> Population, <span class="at">data =</span> .x)),</span>
 <span id="cb170-3"><a href="#cb170-3"></a>         <span class="at">Model  =</span> <span class="fu">map</span>(Model,  broom<span class="sc">::</span>tidy, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb170-4"><a href="#cb170-4"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> Model) <span class="sc">%&gt;%</span></span>
@@ -1908,7 +1907,7 @@ Population  -2.217793e-06 9.193256e-06 -0.2412413 8.096505e-01</code></pre>
 </div>
 <p>今回も可視化してみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb171"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb171-1"><a href="#cb171-1"></a>Range_df <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb171"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb171-1"><a href="#cb171-1"></a>Range_df <span class="sc">%&gt;%</span></span>
 <span id="cb171-2"><a href="#cb171-2"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb171-3"><a href="#cb171-3"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
 <span id="cb171-4"><a href="#cb171-4"></a>  <span class="fu">geom_pointrange</span>(<span class="fu">aes</span>(<span class="at">x =</span> Min_FH, <span class="at">y =</span> estimate, </span>
@@ -1933,7 +1932,7 @@ Population  -2.217793e-06 9.193256e-06 -0.2412413 8.096505e-01</code></pre>
 <p>以上の例は実際の分析では多く使われる方法ではないかも知れません。しかし、ノンパラメトリック回帰不連続デザイン（Regression Discontinuity Design; RDD）の場合、感度分析を行う際、バンド幅を色々と調整しながら局所処置効果を推定します。RDDの詳細については<a href="https://yukiyanai.github.io/econometrics2/regression-discontinuity.html">矢内の授業資料</a>、および<a href="https://www.jaysong.net/post/kobe2020-qpm1/">SONGの授業資料</a>などに譲りますが、ハンド幅の調整はデータの範囲を少しずつ拡張（縮小）させながら同じ分析を繰り返すことです。以下ではアメリカ上院選挙のデータを例に、方法を紹介します。</p>
 <p>使用するデータは{rdrobust}パッケージが提供する<code>rdrobust_RDsenate</code>というデータセットです。{pacman}パッケージの<code>p_load()</code>関数を使ってパッケージのインストールと読み込みを行い、<code>data()</code>関数を使って、データを読み込みます。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb172"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb172-1"><a href="#cb172-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(rdrobust)  <span class="co"># {rdrobust}のインストール &amp; 読み込み</span></span>
+<div class="sourceCode cell-code" id="cb172"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb172-1"><a href="#cb172-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(rdrobust)  <span class="co"># {rdrobust}のインストール &amp; 読み込み</span></span>
 <span id="cb172-2"><a href="#cb172-2"></a><span class="fu">data</span>(<span class="st">"rdrobust_RDsenate"</span>) <span class="co"># rdrobust_RDsenateデータの読み込み</span></span>
 <span id="cb172-3"><a href="#cb172-3"></a></span>
 <span id="cb172-4"><a href="#cb172-4"></a><span class="co"># データをSenate_dfという名で格納</span></span>
@@ -1941,7 +1940,7 @@ Population  -2.217793e-06 9.193256e-06 -0.2412413 8.096505e-01</code></pre>
 </div>
 <p><code>Senate_df</code>の中身を確認してみます。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb173"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb173-1"><a href="#cb173-1"></a>Senate_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb173"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb173-1"><a href="#cb173-1"></a>Senate_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1,390 × 2
     margin  vote
@@ -1966,7 +1965,7 @@ Population  -2.217793e-06 9.193256e-06 -0.2412413 8.096505e-01</code></pre>
 \]</span></p>
 <p>それではまずは<span class="math inline">\(h\)</span>が100、つまり全データを使った分析を試しにやってみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb175"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb175-1"><a href="#cb175-1"></a>RDD_Fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(vote <span class="sc">~</span> margin <span class="sc">+</span> <span class="fu">I</span>(margin <span class="sc">&gt;</span> <span class="dv">0</span>), <span class="at">data =</span> Senate_df)</span>
+<div class="sourceCode cell-code" id="cb175"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb175-1"><a href="#cb175-1"></a>RDD_Fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(vote <span class="sc">~</span> margin <span class="sc">+</span> <span class="fu">I</span>(margin <span class="sc">&gt;</span> <span class="dv">0</span>), <span class="at">data =</span> Senate_df)</span>
 <span id="cb175-2"><a href="#cb175-2"></a></span>
 <span id="cb175-3"><a href="#cb175-3"></a><span class="fu">summary</span>(RDD_Fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1994,7 +1993,7 @@ F-statistic: 886.4 on 2 and 1294 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <p><code>I(margin &gt; 0)TRUE</code>の係数4.785が現職効果です。この作業を<span class="math inline">\(h = 100\)</span>から<span class="math inline">\(h = 10\)</span>まで、5ずつ変えながら分析を繰り返してみます。まずは、<code>RDD_df</code>というtibbleを作成し、<code>BW</code>列には<code>c(100, 95, 90, ... 10)</code>を入れます。続いて、<code>filter()</code>関数を利用して<code>Senate_df</code>から<code>margin</code>が<code>-BW</code>以上、<code>BW</code>以下のデータを抽出し、<code>Subset</code>という名の列として格納します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb177"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb177-1"><a href="#cb177-1"></a>RDD_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">BW =</span> <span class="fu">seq</span>(<span class="dv">100</span>, <span class="dv">10</span>, <span class="at">by =</span> <span class="sc">-</span><span class="dv">5</span>))</span>
+<div class="sourceCode cell-code" id="cb177"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb177-1"><a href="#cb177-1"></a>RDD_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">BW =</span> <span class="fu">seq</span>(<span class="dv">100</span>, <span class="dv">10</span>, <span class="at">by =</span> <span class="sc">-</span><span class="dv">5</span>))</span>
 <span id="cb177-2"><a href="#cb177-2"></a></span>
 <span id="cb177-3"><a href="#cb177-3"></a>RDD_df <span class="ot">&lt;-</span> RDD_df <span class="sc">%&gt;%</span></span>
 <span id="cb177-4"><a href="#cb177-4"></a>  <span class="fu">mutate</span>(<span class="at">Subset =</span> <span class="fu">map</span>(BW, <span class="sc">~</span><span class="fu">filter</span>(Senate_df, </span>
@@ -2027,7 +2026,7 @@ F-statistic: 886.4 on 2 and 1294 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb179"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb179-1"><a href="#cb179-1"></a>RDD_df <span class="ot">&lt;-</span> RDD_df <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb179"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb179-1"><a href="#cb179-1"></a>RDD_df <span class="ot">&lt;-</span> RDD_df <span class="sc">%&gt;%</span></span>
 <span id="cb179-2"><a href="#cb179-2"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb179-3"><a href="#cb179-3"></a>    <span class="co"># 各Subsetに対し、回帰分析を実施し、Model列に格納</span></span>
 <span id="cb179-4"><a href="#cb179-4"></a>    <span class="at">Model  =</span> <span class="fu">map</span>(Subset, <span class="sc">~</span><span class="fu">lm</span>(vote <span class="sc">~</span> margin <span class="sc">*</span> <span class="fu">I</span>(margin <span class="sc">&gt;</span> <span class="dv">0</span>), <span class="at">data =</span> .x)),</span>
@@ -2071,11 +2070,11 @@ F-statistic: 886.4 on 2 and 1294 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>以上の例は、交互作用なしの線形回帰分析による局所処置効果の推定例です。しかし、ノンパラメトリックRDDでは、割当変数（running variable）処置変数の交差項や割当変数の二乗項を入れる場合が多いです。今回の割当変数は<code>margin</code>です。また、閾値（cutpoint）に近いケースには高い重みを付けることが一般的な作法であり、多く使われるのが三角（triangular）カーネルです。上記の例はすべてのケースに同じ重みを付ける矩形（rectagular）カーネルを使った例です。</p>
 <p>以上の理由により、やはりRDDは専用のパッケージを使った方が良いかも知れません。既に読み込んである{rdrobust}も推定可能ですが、ここでは{rdd}パッケージを使ってみましょう。{rdd}パッケージによるRDDは<code>RDestimate()</code>関数を使います。実際の例を確認してみましょう。<code>map()</code>を使う前に、オブジェクトの構造を把握しておくことは重要です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb181"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb181-1"><a href="#cb181-1"></a><span class="co"># cutpoint引数の既定値は0であるため、今回の例では省略可能</span></span>
+<div class="sourceCode cell-code" id="cb181"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb181-1"><a href="#cb181-1"></a><span class="co"># cutpoint引数の既定値は0であるため、今回の例では省略可能</span></span>
 <span id="cb181-2"><a href="#cb181-2"></a><span class="fu">RDestimate</span>(応答変数 <span class="sc">~</span> 割当変数, <span class="at">data =</span> データオブジェクト, <span class="at">cutpoint =</span> 閾値, <span class="at">bw =</span> バンド幅)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb182"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb182-1"><a href="#cb182-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(rdd) <span class="co"># パッケージの読み込み</span></span>
+<div class="sourceCode cell-code" id="cb182"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb182-1"><a href="#cb182-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(rdd) <span class="co"># パッケージの読み込み</span></span>
 <span id="cb182-2"><a href="#cb182-2"></a></span>
 <span id="cb182-3"><a href="#cb182-3"></a><span class="co"># バンド幅を指定したRDD推定</span></span>
 <span id="cb182-4"><a href="#cb182-4"></a>RDD_Fit <span class="ot">&lt;-</span> <span class="fu">RDestimate</span>(vote <span class="sc">~</span> margin, <span class="at">data =</span> Senate_df, <span class="at">bw =</span> <span class="dv">100</span>)</span>
@@ -2111,7 +2110,7 @@ Double-BW  506.0  3         1293        0</code></pre>
 </div>
 <p>現職効果は5.637、その標準誤差は0.884です。これらの情報はどこから抽出できるか確認してみます。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb184"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb184-1"><a href="#cb184-1"></a><span class="co"># 推定値の情報がどこに格納されているかを確認</span></span>
+<div class="sourceCode cell-code" id="cb184"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb184-1"><a href="#cb184-1"></a><span class="co"># 推定値の情報がどこに格納されているかを確認</span></span>
 <span id="cb184-2"><a href="#cb184-2"></a><span class="fu">str</span>(RDD_Fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>List of 12
@@ -2133,13 +2132,13 @@ Double-BW  506.0  3         1293        0</code></pre>
 </div>
 <p><code>$est</code>と<code>$se</code>に私たちが探している数値が入っていますね。それぞれ抽出してみると長さ3のnumericベクトルが出力され、その中で1番目の要素がLATEということが分かります。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb186"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb186-1"><a href="#cb186-1"></a><span class="co"># est要素の1番目の要素がLATE</span></span>
+<div class="sourceCode cell-code" id="cb186"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb186-1"><a href="#cb186-1"></a><span class="co"># est要素の1番目の要素がLATE</span></span>
 <span id="cb186-2"><a href="#cb186-2"></a>RDD_Fit<span class="sc">$</span>est</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     LATE   Half-BW Double-BW 
  5.637474  6.480344  5.842049 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb188"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb188-1"><a href="#cb188-1"></a><span class="co"># se要素の1番目の要素がLATEの標準誤差</span></span>
+<div class="sourceCode cell-code" id="cb188"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb188-1"><a href="#cb188-1"></a><span class="co"># se要素の1番目の要素がLATEの標準誤差</span></span>
 <span id="cb188-2"><a href="#cb188-2"></a>RDD_Fit<span class="sc">$</span>se</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.8844541 1.0039734 0.8568150</code></pre>
@@ -2147,11 +2146,11 @@ Double-BW  506.0  3         1293        0</code></pre>
 </div>
 <p>それでは分析に入ります。今回も<span class="math inline">\(h\)</span>を予め<code>BW</code>という名の列で格納した<code>RDD_df</code>を作成します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb190"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb190-1"><a href="#cb190-1"></a>RDD_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">BW =</span> <span class="fu">seq</span>(<span class="dv">100</span>, <span class="dv">10</span>, <span class="at">by =</span> <span class="sc">-</span><span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb190"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb190-1"><a href="#cb190-1"></a>RDD_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">BW =</span> <span class="fu">seq</span>(<span class="dv">100</span>, <span class="dv">10</span>, <span class="at">by =</span> <span class="sc">-</span><span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>今回はラムダ関数を使わず、事前に関数を定義しておきましょう。関数の自作については第<a href="functions.html" class="quarto-xref"><span>12</span></a>章を参照してください。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb191"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb191-1"><a href="#cb191-1"></a><span class="co"># 引数をxとするRDD_Func()の定義</span></span>
+<div class="sourceCode cell-code" id="cb191"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb191-1"><a href="#cb191-1"></a><span class="co"># 引数をxとするRDD_Func()の定義</span></span>
 <span id="cb191-2"><a href="#cb191-2"></a>RDD_Func <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
 <span id="cb191-3"><a href="#cb191-3"></a>  <span class="co"># バンド幅をxにしたRDD推定</span></span>
 <span id="cb191-4"><a href="#cb191-4"></a>  Temp_Est <span class="ot">&lt;-</span> <span class="fu">RDestimate</span>(vote <span class="sc">~</span> margin, <span class="at">data =</span> Senate_df, <span class="at">bw =</span> x)</span>
@@ -2162,7 +2161,7 @@ Double-BW  506.0  3         1293        0</code></pre>
 </div>
 <p>問題なく動くかを確認してみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb192"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb192-1"><a href="#cb192-1"></a><span class="fu">RDD_Func</span>(<span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb192"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb192-1"><a href="#cb192-1"></a><span class="fu">RDD_Func</span>(<span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 2
    LATE    SE
@@ -2172,7 +2171,7 @@ Double-BW  506.0  3         1293        0</code></pre>
 </div>
 <p>それでは分析をやってみましょう。今回の場合、<code>map()</code>の第二引数はラムダ関数ではないため<code>~</code>で始める必要ありません。関数名だけで十分です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb194"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb194-1"><a href="#cb194-1"></a>RDD_df <span class="ot">&lt;-</span> RDD_df <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb194"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb194-1"><a href="#cb194-1"></a>RDD_df <span class="ot">&lt;-</span> RDD_df <span class="sc">%&gt;%</span></span>
 <span id="cb194-2"><a href="#cb194-2"></a>  <span class="fu">mutate</span>(<span class="at">RDD  =</span> <span class="fu">map</span>(BW, RDD_Func)) <span class="sc">%&gt;%</span></span>
 <span id="cb194-3"><a href="#cb194-3"></a>  <span class="fu">unnest</span>(RDD)</span>
 <span id="cb194-4"><a href="#cb194-4"></a></span>
@@ -2204,7 +2203,7 @@ Double-BW  506.0  3         1293        0</code></pre>
 </div>
 <p>せっかくなので可視化してみましょう。今回は<code>geom_pointrange()</code>を使わず、<code>geom_line()</code>と<code>geom_ribbon()</code>を組み合わせます。<code>geom_line()</code>はLATEを、<code>geom_ribbion()</code>は95%信頼区間を表します。作図の前に95%信頼区間を計算しておきます。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb196"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb196-1"><a href="#cb196-1"></a>RDD_df <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb196"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb196-1"><a href="#cb196-1"></a>RDD_df <span class="sc">%&gt;%</span></span>
 <span id="cb196-2"><a href="#cb196-2"></a>  <span class="fu">mutate</span>(<span class="at">CI_lwr =</span> LATE <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.025</span>) <span class="sc">*</span> SE,</span>
 <span id="cb196-3"><a href="#cb196-3"></a>         <span class="at">CI_upr =</span> LATE <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>) <span class="sc">*</span> SE) <span class="sc">%&gt;%</span></span>
 <span id="cb196-4"><a href="#cb196-4"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
@@ -2235,7 +2234,7 @@ Double-BW  506.0  3         1293        0</code></pre>
 <h3 data-number="28.4.4" class="anchored" data-anchor-id="sec-iteration-variables"><span class="header-section-number">28.4.4</span> 説明・応答変数を指定したモデル推定</h3>
 <p>続いて、同じデータに対して推定式のみを変えた反復推定をやってみましょう。たとえば、応答変数は固定し、グループ変数のみを変えながらt検定を繰り返すケースを考えてみましょう。たとえば、OECDに加盟しているかどうか（<code>OECD</code>）で購買力平価GDP（<code>PPP</code>）の差があるかを検定してみましょう。使用する関数は<code>t.test()</code>です。第一引数には<code>応答変数 ~ 説明変数</code>とし、<code>data</code>引数にはデータフレームやtibbleオブジェクトを指定します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb198"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb198-1"><a href="#cb198-1"></a>Diff_test <span class="ot">&lt;-</span> <span class="fu">t.test</span>(PPP <span class="sc">~</span> G20, <span class="at">data =</span> Country_df)</span>
+<div class="sourceCode cell-code" id="cb198"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb198-1"><a href="#cb198-1"></a>Diff_test <span class="ot">&lt;-</span> <span class="fu">t.test</span>(PPP <span class="sc">~</span> G20, <span class="at">data =</span> Country_df)</span>
 <span id="cb198-2"><a href="#cb198-2"></a></span>
 <span id="cb198-3"><a href="#cb198-3"></a>Diff_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -2254,7 +2253,7 @@ mean in group 0 mean in group 1
 </div>
 <p>ここからいくつかの情報が読み取れます。まず、OECD加盟国のPPPは4957943、非加盟国は211287です。その差分は-4746656です。また、t値は-3.4136、p値は0.003です。これらの情報を効率よく抽出するには<code>broom::tidy()</code>が便利です。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb200"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb200-1"><a href="#cb200-1"></a>broom<span class="sc">::</span><span class="fu">tidy</span>(Diff_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb200"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb200-1"><a href="#cb200-1"></a>broom<span class="sc">::</span><span class="fu">tidy</span>(Diff_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 10
    estimate estimate1 estimate2 statistic p.value parameter  conf.low conf.high
@@ -2266,7 +2265,7 @@ mean in group 0 mean in group 1
 <p>差分、t値、p値、95%信頼区間などが抽出できます。これをOECDだけでなく、G7やG20に対しても同じ検定を繰り返してみましょう。</p>
 <p><code>t.test()</code>の第一引数だけを変えながら推定をすれば良いでしょう。この第一引数、たとえば<code>PPP ~ G20</code>の方はformula型と呼ばれるRにおけるデータ型の一つです。これはcharacter型でないことに注意してください。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb202"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb202-1"><a href="#cb202-1"></a>Formula1 <span class="ot">&lt;-</span> <span class="st">"PPP ~ G20"</span></span>
+<div class="sourceCode cell-code" id="cb202"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb202-1"><a href="#cb202-1"></a>Formula1 <span class="ot">&lt;-</span> <span class="st">"PPP ~ G20"</span></span>
 <span id="cb202-2"><a href="#cb202-2"></a><span class="fu">t.test</span>(Formula1, <span class="at">data =</span> Country_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in mean.default(x): argument is not numeric or logical: returning NA</code></pre>
@@ -2280,7 +2279,7 @@ mean in group 0 mean in group 1
 </div>
 <p>このようにエラーが出ます。この<code>Formula</code>を<code>as.formula()</code>関数を使ってformula型に変換し、推定をやってみると問題なく推定できることが分かります。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb206"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb206-1"><a href="#cb206-1"></a>Formula2 <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(Formula1)</span>
+<div class="sourceCode cell-code" id="cb206"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb206-1"><a href="#cb206-1"></a>Formula2 <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(Formula1)</span>
 <span id="cb206-2"><a href="#cb206-2"></a><span class="fu">t.test</span>(Formula2, <span class="at">data =</span> Country_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -2299,7 +2298,7 @@ mean in group 0 mean in group 1
 <p>これから私たちがやるのは<code>"PPP ~ "</code>の次に<code>"G7"</code>、<code>"G20"</code>、<code>"OECD"</code>を<code>paste()</code>や<code>paste0()</code>関数を結合し、formula型に変換することです。formula型の列さえ生成できれば、あとは<code>map()</code>関数にformulaを渡し、データは<code>Country_df</code>に固定するだけです。</p>
 <p>まずはどの変数を説明変数にするかを<code>Group</code>列として格納した<code>Diff_df</code>を作成します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb208"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb208-1"><a href="#cb208-1"></a>Diff_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Group =</span> <span class="fu">c</span>(<span class="st">"G7"</span>, <span class="st">"G20"</span>, <span class="st">"OECD"</span>))</span>
+<div class="sourceCode cell-code" id="cb208"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb208-1"><a href="#cb208-1"></a>Diff_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Group =</span> <span class="fu">c</span>(<span class="st">"G7"</span>, <span class="st">"G20"</span>, <span class="st">"OECD"</span>))</span>
 <span id="cb208-2"><a href="#cb208-2"></a></span>
 <span id="cb208-3"><a href="#cb208-3"></a>Diff_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -2313,7 +2312,7 @@ mean in group 0 mean in group 1
 </div>
 <p>続いて、<code>Formula</code>列を作成し、<code>"PPP ~ "</code>の次に<code>Group</code>列の文字列を結合します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb210"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb210-1"><a href="#cb210-1"></a>Diff_df <span class="ot">&lt;-</span> Diff_df <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb210"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb210-1"><a href="#cb210-1"></a>Diff_df <span class="ot">&lt;-</span> Diff_df <span class="sc">%&gt;%</span></span>
 <span id="cb210-2"><a href="#cb210-2"></a>  <span class="fu">mutate</span>(<span class="at">Formula =</span> <span class="fu">paste0</span>(<span class="st">"PPP ~ "</span>, Group))</span>
 <span id="cb210-3"><a href="#cb210-3"></a></span>
 <span id="cb210-4"><a href="#cb210-4"></a>Diff_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2328,14 +2327,14 @@ mean in group 0 mean in group 1
 </div>
 <p>今の<code>Formula</code>列のデータ型を確認してみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb212"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb212-1"><a href="#cb212-1"></a><span class="fu">class</span>(Diff_df<span class="sc">$</span>Formula[[<span class="dv">1</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb212"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb212-1"><a href="#cb212-1"></a><span class="fu">class</span>(Diff_df<span class="sc">$</span>Formula[[<span class="dv">1</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "character"</code></pre>
 </div>
 </div>
 <p>character型ですね。続いて、<code>map()</code>関数を使用してFormula列をformula型に変換します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb214"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb214-1"><a href="#cb214-1"></a>Diff_df <span class="ot">&lt;-</span> Diff_df <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb214"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb214-1"><a href="#cb214-1"></a>Diff_df <span class="ot">&lt;-</span> Diff_df <span class="sc">%&gt;%</span></span>
 <span id="cb214-2"><a href="#cb214-2"></a>  <span class="fu">mutate</span>(<span class="at">Formula =</span> <span class="fu">map</span>(Formula, as.formula))</span>
 <span id="cb214-3"><a href="#cb214-3"></a></span>
 <span id="cb214-4"><a href="#cb214-4"></a>Diff_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2350,14 +2349,14 @@ mean in group 0 mean in group 1
 </div>
 <p>データ型も確認してみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb216"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb216-1"><a href="#cb216-1"></a><span class="fu">class</span>(Diff_df<span class="sc">$</span>Formula[[<span class="dv">1</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb216"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb216-1"><a href="#cb216-1"></a><span class="fu">class</span>(Diff_df<span class="sc">$</span>Formula[[<span class="dv">1</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "formula"</code></pre>
 </div>
 </div>
 <p>formula型になっていることが分かります。それではt検定を行います。ここでもラムダ関数を使います。式が入る場所には<code>.x</code>を指定し、データは<code>Country_df</code>に固定します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb218"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb218-1"><a href="#cb218-1"></a>Diff_df <span class="ot">&lt;-</span> Diff_df <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb218"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb218-1"><a href="#cb218-1"></a>Diff_df <span class="ot">&lt;-</span> Diff_df <span class="sc">%&gt;%</span></span>
 <span id="cb218-2"><a href="#cb218-2"></a>  <span class="fu">mutate</span>(<span class="at">Model =</span> <span class="fu">map</span>(Formula, <span class="sc">~</span><span class="fu">t.test</span>(.x, <span class="at">data =</span> Country_df)))</span>
 <span id="cb218-3"><a href="#cb218-3"></a></span>
 <span id="cb218-4"><a href="#cb218-4"></a>Diff_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2372,7 +2371,7 @@ mean in group 0 mean in group 1
 </div>
 <p><code>broom::tidy()</code>で推定値の要約を抽出し、入れ子構造を解除します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb220"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb220-1"><a href="#cb220-1"></a>Diff_df <span class="ot">&lt;-</span> Diff_df <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb220"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb220-1"><a href="#cb220-1"></a>Diff_df <span class="ot">&lt;-</span> Diff_df <span class="sc">%&gt;%</span></span>
 <span id="cb220-2"><a href="#cb220-2"></a>  <span class="fu">mutate</span>(<span class="at">Tidy =</span> <span class="fu">map</span>(Model, broom<span class="sc">::</span>tidy)) <span class="sc">%&gt;%</span></span>
 <span id="cb220-3"><a href="#cb220-3"></a>  <span class="fu">unnest</span>(Tidy)</span>
 <span id="cb220-4"><a href="#cb220-4"></a></span>
@@ -2390,7 +2389,7 @@ mean in group 0 mean in group 1
 </div>
 <p>いくつか使用しない情報もあるので、適宜列を削除します。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb222"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb222-1"><a href="#cb222-1"></a>Diff_df <span class="ot">&lt;-</span> Diff_df <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb222"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb222-1"><a href="#cb222-1"></a>Diff_df <span class="ot">&lt;-</span> Diff_df <span class="sc">%&gt;%</span></span>
 <span id="cb222-2"><a href="#cb222-2"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(Formula, Model, estimate1, estimate2, </span>
 <span id="cb222-3"><a href="#cb222-3"></a>            p.value, method, alternative))</span>
 <span id="cb222-4"><a href="#cb222-4"></a></span>
@@ -2406,7 +2405,7 @@ mean in group 0 mean in group 1
 </div>
 <p>以上のコードをパイプ演算子を使用し、簡潔にまとめると以下のようになります。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb224"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb224-1"><a href="#cb224-1"></a>Diff_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Group =</span> <span class="fu">c</span>(<span class="st">"G7"</span>, <span class="st">"G20"</span>, <span class="st">"OECD"</span>))</span>
+<div class="sourceCode cell-code" id="cb224"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb224-1"><a href="#cb224-1"></a>Diff_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Group =</span> <span class="fu">c</span>(<span class="st">"G7"</span>, <span class="st">"G20"</span>, <span class="st">"OECD"</span>))</span>
 <span id="cb224-2"><a href="#cb224-2"></a></span>
 <span id="cb224-3"><a href="#cb224-3"></a>Diff_df <span class="ot">&lt;-</span> Diff_df <span class="sc">%&gt;%</span></span>
 <span id="cb224-4"><a href="#cb224-4"></a>  <span class="fu">mutate</span>(<span class="at">Formula =</span> <span class="fu">paste0</span>(<span class="st">"PPP ~ "</span>, Group),</span>
@@ -2419,7 +2418,7 @@ mean in group 0 mean in group 1
 </div>
 <p>推定結果を可視化してみましょう。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb225"><pre class="sourceCode numberSource r numberLines code-with-copy"><code class="sourceCode r"><span id="cb225-1"><a href="#cb225-1"></a>Diff_df <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb225"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb225-1"><a href="#cb225-1"></a>Diff_df <span class="sc">%&gt;%</span></span>
 <span id="cb225-2"><a href="#cb225-2"></a>  <span class="fu">mutate</span>(<span class="at">Group =</span> <span class="fu">fct_inorder</span>(Group),</span>
 <span id="cb225-3"><a href="#cb225-3"></a>         <span class="at">Sig   =</span> <span class="fu">if_else</span>(conf.low <span class="sc">*</span> conf.high <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="st">"統計的有意"</span>,</span>
 <span id="cb225-4"><a href="#cb225-4"></a>                         <span class="st">"統計的非有意"</span>)) <span class="sc">%&gt;%</span></span>

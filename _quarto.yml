@@ -73,14 +73,12 @@ book:
         - oop.qmd
         - monte.qmd
         - scraping.qmd
-    - text: "---"
-    - part: "付録"
-      chapters:
-        - dataset.qmd
-        - filesystem.qmd
-        - tips.qmd
-        - session.qmd
-        - references.qmd
+  appendices:
+    - dataset.qmd # PDF renderingの際はコメントアウト
+    - filesystem.qmd
+    - tips.qmd
+    - session.qmd # PDF renderingの際はコメントアウト
+    - references.qmd # PDF renderingの際はコメントアウト
   cover-image: "Figs/Cover.png"
   favicon: "Figs/favicon.png"
   google-analytics: 
@@ -96,6 +94,13 @@ book:
     description: "R Not for Everyone: An Esoteric Guide"
     image: "Figs/favicon.png"
 
+knitr:
+  opts_chunk: 
+    dev: "ragg_png"
+    fig.align: "center"
+    dpi: 300
+    fig.pos: "H"
+
 format:
   html:
     theme: 
@@ -104,6 +109,7 @@ format:
     grid:
       sidebar-width: 375px
     number-sections: true
+    code-line-numbers: true
     highlight-style: a11y
     html-math-method: mathjax
     toc: true
@@ -115,15 +121,31 @@ format:
       <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mono&display=swap" rel="stylesheet"> 
     mainfont: "Noto Sans JP"
     monofont: "Noto Sans Mono"
-  #pdf:
-  #  latex-auto-mk: false
-  #  pdf-engine: latexmk
-  #  pdf-engine-opt: -outdir=output
-  #  documentclass: ltjsbook
-  #  classoption:
-  #    - 11pt
-  #    - a4paer
-  #  cite-method: natbib
+  pdf:
+    keep-tex: true
+    latex-auto-mk: false
+    pdf-engine: latexmk
+    pdf-engine-opts: 
+      - -lualatex
+      - -outdir=output
+      - -f
+    documentclass: ltjsbook
+    classoption:
+      - 10pt
+      - a4paper
+    include-in-header: 
+      text: |
+        \usepackage[nomarginpar]{geometry}
+        %verbatim環境における自動改行
+        %\usepackage{fvextra}
+        %\DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+        %\DefineVerbatimEnvironment{OutputCode}{Verbatim}{breaklines,commandchars=\\\{\}}
+    cite-method: natbib
+    code-line-numbers: true
+    mainfont: "Noto Serif JP"
+    sansfont: "Noto Sans JP"
+    monofont: "Noto Sans Mono"
+    #highlight-style: a11y # 個人的にはこのスタイルは好みだが、PDFの場合、背景が白になる
 
 bibliography: tex/references.bib
 biblio-style: tex/jecon.bst

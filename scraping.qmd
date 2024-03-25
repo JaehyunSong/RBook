@@ -637,8 +637,36 @@ print(rbook_df, n = Inf)
 　最後に`rbook_df`を{gt}パッケージを使って表にする。`sub_missing()`関数を使って、欠損値の箇所を`"付録"`に置換し、`fmt_url()`を使って、URL列をリンクボタン化する。
 
 ```{r}
-#| label: scraping-text-8
-rbook_df |>   
+#| eval: false
+rbook_df |>
+  mutate(URL = str_replace(URL, "_", "\\\\_")) |> 
+  gt() |> 
+  cols_label("Section" = "章",
+             "Title"   = "タイトル",
+             "URL"     = "リンク") |> 
+  sub_missing(columns = Section, missing_text = "付録") |> 
+  fmt_url(columns = URL, as_button = TRUE, label = "Link")
+```
+
+```{r}
+#| echo: false
+#| eval: !expr knitr::is_html_output()
+#| label: scraping-text-8a
+rbook_df |>
+  gt() |> 
+  cols_label("Section" = "章",
+             "Title"   = "タイトル",
+             "URL"     = "リンク") |> 
+  sub_missing(columns = Section, missing_text = "付録") |> 
+  fmt_url(columns = URL, as_button = TRUE, label = "Link")
+```
+
+```{r}
+#| echo: false
+#| eval: !expr knitr::is_latex_output()
+#| label: scraping-text-8b
+rbook_df |>
+  mutate(URL = str_replace(URL, "_", "\\\\_")) |> 
   gt() |> 
   cols_label("Section" = "章",
              "Title"   = "タイトル",

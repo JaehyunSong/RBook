@@ -79,7 +79,7 @@ df5
 
 　{gt}では、表がタイトル、列ラベル、ホディ―などの要素で構成されている考え（ @fig-gt-structure ）、それぞれの要素を追加したり、修正する形で表を作成する。
 
-![{gt}テーブルの構成要素](https://gt.rstudio.com/reference/figures/gt_parts_of_a_table.svg){#fig-gt-structure}
+![{gt}テーブルの構成要素](Figs/table/gt_parts_of_a_table.png){#fig-gt-structure}
 
 　まず、これまで使ってきた`df1`を使ってHTML形式の表を出力してみよう。使用する関数は`gt()`であり、data.frameまたはtibbleオブジェクト名が第1引数である。
 
@@ -301,37 +301,36 @@ df3_tbl <- df3 |>
 df3_tbl
 ```
 
-　まずは、特定の**行**を色塗りする方法を紹介する。使用する関数は{gtExtras}の`gt_highlight_rows()`関数である。必須引数は`rows`であり、ここにハイライトしたい行の位置を指定する。たとえば、3行目をハイライトしたい場合は`rows = 3`とする。
+　まずは、特定の**行**を色塗りする方法を紹介する。使用する関数は`data_color()`関数である。`rows`引数でハイライトしたい行の位置を指定する。たとえば、3行目をハイライトしたい場合は`rows = 3`とする。
 
 ```{r}
 #| label: table-highlight-2
 df3_tbl |>
-  gt_highlight_rows(rows = 3)
+  data_color(rows = 3)
 ```
 
-　ハイライトの色と文字の太さはそれぞれ`fill`（既定値は`"#80BCD8"`）と`font_weight`（既定値は`"bold"`）引数で指摘できる。`font_weight`は`"normal"`、`"bold"`、`"lighter"`、`"bolder"`のように指定することも、1以上1000以下の数値で指定することもできる。
+　ハイライトの色は`palette`引数で指定できる。
 
 ```{r}
 #| label: table-highlight-3
 df3_tbl |>
-  gt_highlight_rows(rows = 3, fill = "gray80", font_weight = "normal")
+  data_color(rows = 3, palette = "royalblue")
 ```
 
-　また、`rows`引数は行の番号でなく、条件式を使うこともできる。たとえば、`HDI`列の値が0.75以上の行をハイライトしたい場合は`rows = (HID >= 0.75)`のように指定する。`()`はなくても良いが、可読性が落ちるので入れておこう。
+　また、`rows`引数は行の番号でなく、条件式を使うこともできる。たとえば、`HDI`列の値が0.75以上の行をハイライトしたい場合は`rows = (HID >= 0.75)`のように指定する。`()`はなくても良いが、可読性が落ちるので入れておこう。複数の行をハイライトする目的で`data_color()`を使う場合、`palette`引数で色を必ず指定する。後ほど紹介するが、実は`data_color()`はセルの値に応じて色が変わる。`palette`引数はその色のバリエーションを指定する関数だが、特定の色（`"red"`とか`"#000000"`など）を指定するとすべてのセルがその色に固定される。ここでは特定の行をハイライトするだけなので、`palette = "色"`で色を固定しよう。
 
 ```{r}
 #| label: table-highlight-4
 df3_tbl |>
-  gt_highlight_rows(rows = (HDI >= 0.75))
+  data_color(rows = (HDI >= 0.75), palette = "royalblue")
 ```
 
-　続いて列のハイライト方法を紹介する。使用する関数は`gt_hightlight_cols()`であり、これは以上にて紹介した`gt_highlight_rows()`と使い方は同じである。ただし、列を指定する引数が`rows`でなく、`columns`であることに注意すること。また、`columns`実引数として条件式は使用できない。以下は`df3_tbl`の`Polity`列から`FH`列までを`"#ACB3CC"`色にハイライトした例である。
+　続いて列のハイライト方法を紹介する。ここでも同じく`data_color()`を使用する。ただし、列を指定する引数が`rows`でなく、`columns`であることに注意すること。また、`columns`実引数として条件式は使用できない。以下は`df3_tbl`の`Polity`列から`FH`列までを`"#ACB3CC"`色にハイライトした例である。
 
 ```{r}
 #| label: table-highlight-5
 df3_tbl |>
-  gt_highlight_cols(columns = Polity:FH,
-                    fill    = "#ACB3CC")
+  data_color(columns = Polity:FH, palette = "#ACB3CC")
 ```
 
 ### セルの色分け
@@ -432,8 +431,49 @@ df4_grouped |>
 
 　それではこの`PPP`列をプロットにしてみよう。ここで使うのが{gtExtras}の`gt_plt_dist()`だ。引数はプロットにする列名で十分だ。
 
+```r
+df4_grouped |> 
+  gt() |> 
+  fmt_number(columns = Mean:Max, decimals = 1) |> 
+  cols_label("Continent" = "大陸",
+             "Mean"      = "平均値",
+             "SD"        = "標準偏差",
+             "Min"       = "最小値",
+             "Max"       = "最大値",
+             "N"         = "国家数",
+             "PPP"       = "分布") |> 
+  tab_header(title = "大陸別一人あたり購買力平価GDP") |> 
+  gt_plt_dist(PPP)
+```
+
 ```{r}
-#| label: table-plot-density-3
+#| label: table-plot-density-3-pdf
+#| eval: !expr knitr::is_latex_output()
+#| echo: false
+#| fig-width: 7
+if (!("plot_density_3.png" %in% dir("Figs/Table"))) {
+  temp_tbl <- df4_grouped |> 
+    gt() |> 
+    fmt_number(columns = Mean:Max, decimals = 1) |> 
+    cols_label("Continent" = "大陸",
+               "Mean"      = "平均値",
+               "SD"        = "標準偏差",
+               "Min"       = "最小値",
+               "Max"       = "最大値",
+               "N"         = "国家数",
+               "PPP"       = "分布") |> 
+    tab_header(title = "大陸別一人あたり購買力平価GDP") |> 
+    gt_plt_dist(PPP)
+  gtsave_extra(temp_tbl, "Figs/Table/plot_density_3.png")
+}
+
+knitr::include_graphics("Figs/Table/plot_density_3.png")
+```
+
+```{r}
+#| label: table-plot-density-3-html
+#| eval: !expr knitr::is_html_output()
+#| echo: false
 df4_grouped |> 
   gt() |> 
   fmt_number(columns = Mean:Max, decimals = 1) |> 
@@ -450,8 +490,49 @@ df4_grouped |>
 
 　このように密度曲線が生成される。もし、密度曲線ではなく、ヒストグラムにしたい場合は`type`引数を追加し、`"histogram"`を指定すれば良い。
 
+```r
+df4_grouped |> 
+  gt() |> 
+  fmt_number(columns = Mean:Max, decimals = 1) |> 
+  cols_label("Continent" = "大陸",
+             "Mean"      = "平均値",
+             "SD"        = "標準偏差",
+             "Min"       = "最小値",
+             "Max"       = "最大値",
+             "N"         = "国家数",
+             "PPP"       = "分布") |> 
+  tab_header(title = "大陸別一人あたり購買力平価GDP") |> 
+  gt_plt_dist(PPP, type = "histogram")
+```
+
 ```{r}
-#| label: table-plot-density-4
+#| label: table-plot-density-4-pdf
+#| eval: !expr knitr::is_latex_output()
+#| echo: false
+#| fig-width: 7
+if (!("plot_density_4.png" %in% dir("Figs/Table"))) {
+  temp_tbl <- df4_grouped |> 
+    gt() |> 
+    fmt_number(columns = Mean:Max, decimals = 1) |> 
+    cols_label("Continent" = "大陸",
+               "Mean"      = "平均値",
+               "SD"        = "標準偏差",
+               "Min"       = "最小値",
+               "Max"       = "最大値",
+               "N"         = "国家数",
+               "PPP"       = "分布") |> 
+    tab_header(title = "大陸別一人あたり購買力平価GDP") |> 
+    gt_plt_dist(PPP, type = "histogram") 
+  gtsave_extra(temp_tbl, "Figs/Table/plot_density_4.png")
+}
+
+knitr::include_graphics("Figs/Table/plot_density_4.png")
+```
+
+```{r}
+#| label: table-plot-density-4-html
+#| eval: !expr knitr::is_html_output()
+#| echo: false
 df4_grouped |> 
   gt() |> 
   fmt_number(columns = Mean:Max, decimals = 1) |> 
@@ -505,8 +586,37 @@ df5 |>
 
 　ここで更に`Download`列を棒グラフに変えてみよう。棒グラフの作成は`gt_plt_bar()`を使用する。第1引数は棒グラフにしたい列名だ。
 
+```r
+df5 |> 
+  gt() |> 
+  gt_img_rows(Hex, height = 50) |> 
+  cols_label("Name" = "Package",
+             "Hex"  = "Logo") |> 
+  gt_plt_bar(Download)
+```
+
 ```{r}
-#| label: table-plot-image-5
+#| label: table-plot-image-5-pdf
+#| eval: !expr knitr::is_latex_output()
+#| echo: false
+#| fig-width: 7
+if (!("plot_image_5.png" %in% dir("Figs/Table"))) {
+  temp_tbl <- df5 |> 
+    gt() |> 
+    gt_img_rows(Hex, height = 50) |> 
+    cols_label("Name" = "Package",
+               "Hex"  = "Logo") |> 
+    gt_plt_bar(Download)
+    gtsave_extra(temp_tbl, "Figs/Table/plot_image_5.png")
+}
+
+knitr::include_graphics("Figs/Table/plot_image_5.png")
+```
+
+```{r}
+#| label: table-plot-image-5-html
+#| eval: !expr knitr::is_html_output()
+#| echo: false
 df5 |> 
   gt() |> 
   gt_img_rows(Hex, height = 50) |> 
@@ -517,8 +627,37 @@ df5 |>
 
 　棒グラフにすることで相対的な比較がしやすくなった。しかし、元々あった数字がなくなったので、具体的に何回ダウンロードされたかに関する情報を消えている。もし、元の列を残したい場合は`keep_column = TRUE`を指定する。
 
+```r
+df5 |> 
+  gt() |> 
+  gt_img_rows(Hex, height = 50) |> 
+  cols_label("Name" = "Package",
+             "Hex"  = "Logo") |> 
+  gt_plt_bar(Download, keep_column = TRUE)
+```
+
 ```{r}
-#| label: table-plot-image-6
+#| label: table-plot-image-6-pdf
+#| eval: !expr knitr::is_latex_output()
+#| echo: false
+#| fig-width: 7
+if (!("plot_image_6.png" %in% dir("Figs/Table"))) {
+  temp_tbl <- df5 |> 
+    gt() |> 
+    gt_img_rows(Hex, height = 50) |> 
+    cols_label("Name" = "Package",
+               "Hex"  = "Logo") |> 
+    gt_plt_bar(Download, keep_column = TRUE)
+  gtsave_extra(temp_tbl, "Figs/Table/plot_image_6.png")
+}
+
+knitr::include_graphics("Figs/Table/plot_image_6.png")
+```
+
+```{r}
+#| label: table-plot-image-6-html
+#| eval: !expr knitr::is_html_output()
+#| echo: false
 df5 |> 
   gt() |> 
   gt_img_rows(Hex, height = 50) |> 
@@ -529,8 +668,41 @@ df5 |>
 
 　最後にタイトルを付け、棒グラフの色を`"royalblue"`にしてみよう。棒の色は`color`引数で指定できる。また、`df5`を`gt()`に渡す前に`arrange()`を使って、パッケージの表示順番もダウンロード数の多いものからに並べ替えてみよう。
 
+```r
+df5 |> 
+  arrange(desc(Download)) |> 
+  gt() |> 
+  gt_img_rows(Hex, height = 50) |> 
+  cols_label("Name" = "Package",
+             "Hex"  = "Logo") |> 
+  gt_plt_bar(Download, keep_column = TRUE, color = "royalblue") |> 
+  tab_header(title = "Number of packages downloaded on May 9, 2023")
+```
+
 ```{r}
-#| label: table-plot-image-7
+#| label: table-plot-image-7-pdf
+#| eval: !expr knitr::is_latex_output()
+#| echo: false
+#| fig-width: 7
+if (!("plot_image_7.png" %in% dir("Figs/Table"))) {
+  temp_tbl <- df5 |> 
+    arrange(desc(Download)) |> 
+    gt() |> 
+    gt_img_rows(Hex, height = 50) |> 
+    cols_label("Name" = "Package",
+               "Hex"  = "Logo") |> 
+    gt_plt_bar(Download, keep_column = TRUE, color = "royalblue") |> 
+    tab_header(title = "Number of packages downloaded on May 9, 2023")
+  gtsave_extra(temp_tbl, "Figs/Table/plot_image_7.png")
+}
+
+knitr::include_graphics("Figs/Table/plot_image_7.png")
+```
+
+```{r}
+#| label: table-plot-image-7-html
+#| eval: !expr knitr::is_html_output()
+#| echo: false
 df5 |> 
   arrange(desc(Download)) |> 
   gt() |> 
@@ -631,7 +803,10 @@ df1_tbl |>
 
 ## 表の書き出し {#sec-gt-export}
 
-　{gt}で作成した表は様々なフォーマットで出力することができる。現在（`r format(Sys.Date(), "%Y年%m月%d日")`; {gt} `r packageVersion("gt")`）、Microsoft Word（`.docx`）、$\LaTeX$（`.tex`）、ハイパーテキスト（`.html`）、リッチテキスト（`.rtf`）、画像（`.png`）形式で出力可能だ。ここでは簡単な例を紹介する。
+　{gt}で作成した表は様々なフォーマットで出力することができる。現在（`r format(Sys.Date(), "%Y年%m月%d日")`; {gt} `r packageVersion("gt")`）、Microsoft Word（`.docx`）、
+[$\LaTeX$]{.content-visible when-format="html"}
+[\LaTeX]{.content-visible when-format="pdf"}
+（`.tex`）、ハイパーテキスト（`.html`）、リッチテキスト（`.rtf`）、画像（`.png`）形式で出力可能だ。ここでは簡単な例を紹介する。
 
 　まず、{gt}を使って表を作成し、オブジェクトとして作業環境内に格納する。ここでは`gt_table`と名付けた。
 
@@ -660,7 +835,10 @@ gtsave(gt_table, "my_table.rtf")  # リッチテキスト
 gtsave(gt_table, "my_table.png")  # 画像（PNG）
 ```
 
-　たとえば、`.tex`形式で書き出したファイルを開いてみると、以下のような$\LaTeX$コードが書かれていることが確認できる。
+　たとえば、`.tex`形式で書き出したファイルを開いてみると、以下のような
+[$\LaTeX$]{.content-visible when-format="html"}
+[\LaTeX]{.content-visible when-format="pdf"}
+コードが書かれていることが確認できる。
 
 ```tex
 \setlength{\LTpost}{0mm}
@@ -730,49 +908,68 @@ df6_df
 
 　ここで便利なのが{DT}パッケージの`datatable()`関数だ。全ての行と列を読みやすい形式で出力してくれる。
 
+```r
+datatable(df2)
+```
+
 ```{r}
-#| label: table-df-print-5
-#| include: false
+#| label: table-df-print-5-pdf
+#| eval: !expr knitr::is_latex_output()
+#| echo: false
+#| fig-width: 7
 if (!("DT_1.png" %in% dir("Figs/Table"))) {
-  library(webshot2)
-  datatable(df2) |>
+  datatable(df2) |> 
     saveWidget(widget = _, file = "Figs/Table/DT_1.html")
-  webshot(url = "Figs/Table/DT_1.html",
+  webshot(url  = "Figs/Table/DT_1.html",
           file = "Figs/Table/DT_1.png")
 }
 
 unlink("Figs/Table/DT_1.html")
 unlink("Figs/Table/DT_1_files", recursive = TRUE) 
+
+knitr::include_graphics("Figs/Table/DT_1.png")
 ```
-
-```r
-datatable(df2)
-```
-
-![](Figs/Table/DT_1.png)
-
-　このように情報が損失されることなく、非常に読みやすい表になった。これで十分かも知れないが、小数点を丸めたい人もいるかも知れないので、その方法を紹介する。具体的には`dataframe()`で作成した表を`formatRound()`関数に渡すだけだ。`formatRound()`関数の引数は`columns`と`digits`があり、それぞれ適用する列と小数点を桁数を指定すればよい。
 
 ```{r}
-#| label: table-df-print-6
-#| include: false
-if (!("DT_2.png" %in% dir("Figs/Table"))) {
-  datatable(df2) |>
-    formatRound(columns = 3:6, digits = 3) |> 
-    saveWidget(widget = _, file = "Figs/Table/DT_2.html")
-  webshot(url = "Figs/Table/DT_2.html",
-          file = "Figs/Table/DT_2.png")
-}
-
-unlink("Figs/Table/DT_2.html")
-unlink("Figs/Table/DT_2_files", recursive = TRUE) 
+#| label: table-df-print-5-html
+#| eval: !expr knitr::is_html_output()
+#| echo: false
+datatable(df2) |>
+    formatRound(columns = 3:6, digits = 3)
 ```
+
+　このように情報が損失されることなく、非常に読みやすい表になった。これで十分かも知れないが、小数点を丸めたい人もいるかも知れないので、その方法を紹介する。具体的には`dataframe()`で作成した表を`formatRound()`関数に渡すだけだ。`formatRound()`関数の引数は`columns`と`digits`があり、それぞれ適用する列と小数点を桁数を指定すればよい。
 
 ```r
 datatable(df2) |>
     formatRound(columns = 3:6, digits = 3)
 ```
 
-![](Figs/Table/DT_2.png)
+```{r}
+#| label: table-df-print-6-pdf
+#| eval: !expr knitr::is_latex_output()
+#| echo: false
+#| fig-width: 7
+if (!("DT_2.png" %in% dir("Figs/Table"))) {
+  datatable(df2) |>
+    formatRound(columns = 3:6, digits = 3) |> 
+    saveWidget(widget = _, file = "Figs/Table/DT_2.html")
+  webshot(url  = "Figs/Table/DT_2.html",
+          file = "Figs/Table/DT_2.png")
+}
+
+unlink("Figs/Table/DT_2.html")
+unlink("Figs/Table/DT_2_files", recursive = TRUE) 
+
+knitr::include_graphics("Figs/Table/DT_2.png")
+```
+
+```{r}
+#| label: table-df-print-6-html
+#| eval: !expr knitr::is_html_output()
+#| echo: false
+datatable(df2) |>
+    formatRound(columns = 3:6, digits = 3)
+```
 
 　しかし、情報の損失がないということは、生データ内の全ての値がHTMLファイルに埋め込まれることを意味する。CSVフォーマットの生データの大きさが10MBなら生成されるHTMLファイルのサイズは必然的に10MBよりも大きくなる。大きい表は別途のファイルとして提供する方が良いだろう。

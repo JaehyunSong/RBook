@@ -362,10 +362,14 @@ str_extract_all(eg_Wilde, pattern = "\\bi[tn]\\b")
 str_extract_all(eg_Wilde, pattern = "\\bi[^t]\\b")
 ```
 
-　これらの例からわかるように、正規表現を使えば様々な条件にあった文字列を探し出すことができる。 @tbl-regex1 に、よく使う正規表現のパタンを示す。
+　これらの例からわかるように、正規表現を使えば様々な条件にあった文字列を探し出すことができる。
+[@tbl-regex1-html]{.content-visible when-format="html"}
+[@tbl-regex1-pdf]{.content-visible when-format="pdf"}
+に、よく使う正規表現のパタンを示す。
 
 ```{r}
-#| label: tbl-regex1
+#| label: tbl-regex1-html
+#| eval: !expr knitr::is_html_output()
 #| echo: false
 #| message: false
 #| tbl-cap: "よく使う正規表現"
@@ -393,6 +397,43 @@ data.frame(正規表現 =
   tab_style(style     = cell_text(align = "center"),
             locations = cells_column_labels()) |> 
   gt_theme_espn()
+```
+
+```{r}
+#| label: tbl-regex1-pdf
+#| eval: !expr knitr::is_latex_output()
+#| echo: false
+#| message: false
+#| tbl-cap: "よく使う正規表現"
+if (!("regex1.png" %in% dir("Figs/String"))) {
+  temp_tbl <- data.frame(正規表現 = 
+             c("[:digit:]",
+               "[:lower:]",
+               "[:upper:]",
+               "[:alpha:]",
+               "[:alnum:]",
+               "[:punct:]",
+               "[:blank:]",
+               "[:space:]",
+               "[:print:]"),
+           意味 = 
+             c("数字（0, 1, 2, ..., 9）",
+               "小文字（a, b, c, ..., z）",
+               "大文字（A, B, C, ..., Z）",
+               "アルファベット (a, b, ..., z と A, B, ..., Z",
+               "アルファベットと数字（a, ..., z, A, ..., Z, 0, ..., 9）",
+               "パンクチュエーション文字（! \" # $ % & ’ ( ) * + , - . /）",
+               "空白文字（スペースとタブ）",
+               "スペース文字（スペース、タブ、改行など）",
+               "印刷可能な文字 ([:alnum:], [:punct:], [:space:])")) |> 
+  gt() |> 
+  tab_style(style     = cell_text(align = "center"),
+            locations = cells_column_labels()) |> 
+  gt_theme_espn()
+  gtsave_extra(temp_tbl, "Figs/String/regex1.png")
+}
+
+knitr::include_graphics("Figs/String/regex1.png")
 ```
 
 また、特別な意味をもつ記号を @tbl-regex2 に示す。
@@ -441,7 +482,7 @@ data.frame(正規表現 =
 str_extract_all(eg_Wilde, pattern = "\\b[:alpha:]{5}\\b")
 ```
 
-数を指定するときは、 @tbl-regex1 に示す限量詞 (quantifier) を登場回数を指定したい表現の直後につける。
+数を指定するときは、 @tbl-regex3 に示す限量詞 (quantifier) を登場回数を指定したい表現の直後につける。
 
 ```{r}
 #| label: tbl-regex3
