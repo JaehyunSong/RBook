@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.551">
+<meta name="generator" content="quarto-1.4.553">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -662,14 +662,359 @@ Do you want to install from sources the packages which need compilation? (Yes/no
 </section>
 <section id="名前空間の衝突" class="level2" data-number="5.7">
 <h2 data-number="5.7" class="anchored" data-anchor-id="名前空間の衝突"><span class="header-section-number">5.7</span> 名前空間の衝突</h2>
-<p>名前空間（namespace）の衝突（conflict）、またはパッケージ間の衝突</p>
-<pre><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+<p>　Rパッケージは各種関数、データセット、ドキュメント（ヘルプ、ヴィネット）などを一つにまとめたものであり、Rユーザーであれば誰でもパッケージを開発し、配布することができる。「誰でも」Rパッケージ開発に関われることはRが持つ最大の利点ではあるが、統一された生態系を維持することが難しいことも事実だ。たとえば宋が開発した{mycat}というパッケージと矢内が開発した{myKitty}パッケージがあるとしよう。猫好きにはたまらないパッケージなので、両方インストールし、両方読み込みもするだろう。もし、この2つのパッケージで同じ名前を持つ、異なる構造・機能をする関数、<code>nya()</code>があればどうなるだろう。<code>nya()</code>関数を使用する場合、それが{mycat}の<code>nya()</code>なのか、{myKitty}の<code>nya()</code>なのかの問題が発生する。これが名前空間（namespace）の衝突（conflict）、またはパッケージ間の衝突と呼ばれるものである。</p>
+<p>　一つの例を確認してみよう。Rを起動した直後、<code>print(.packages())</code>を入力すると、現在、読み込み済みのパッケージが確認できる。</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">print</span>(<span class="fu">.packages</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>[1] "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
+[7] "base"     </code></pre>
+<p>Rにはいくつかのコア・パッケージが存在し、これらはR起動と同時に読み込まれる。続きて、この状態で{tidyverse}パッケージを読み込んでみよう。</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>── Attaching core tidyverse packages ───────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ─────────────────────────────────────── tidyverse_conflicts() ──
 ✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package to force all conflicts to become errors</code></pre>
+<p>ここで注目するしたいのは「Conflicts」の箇所だ。</p>
+<pre><code>✖ dplyr::filter() masks stats::filter()
 ✖ dplyr::lag()    masks stats::lag()</code></pre>
-<p>とか</p>
-<pre><code>## The following objects are masked from 'package:stats':
-## 
-##     filter, lag</code></pre>
+<p>関数名は場合によって<code>パッケージ名::関数名()</code>と表記される。以上の例は{dplyr}の<code>filter()</code>と<code>lag()</code>関数が{stats}の<code>filter()</code>、<code>lag()</code>関数を上書きしたことを意味する。{stats}パッケージはRのコア・パッケージの1つであり、R起動と同時に読み込まれるパッケージだ。このメッセージは現在の作業環境内に読み込まれているパッケージに同じ名前の関数が複数ある場合に表示される。もう一度、読み込み済みのパッケージのリストが出してみよう。</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+私は{dplyr}パッケージを読み込んだ覚えがございません。
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>　{tidyverse}を読み込むと{dplyr}パッケージが読み込まれる。この{tidyverse}は{dplyr}、{readr}、{ggplot2}など「今どき」のRのおける必須級パッケージを一気に読み込むパッケージに過ぎない。</p>
+</div>
+</div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">print</span>(<span class="fu">.packages</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code> [1] "lubridate" "forcats"   "stringr"   "dplyr"     "purrr"     "readr"    
+ [7] "tidyr"     "tibble"    "ggplot2"   "tidyverse" "stats"     "graphics" 
+[13] "grDevices" "utils"     "datasets"  "methods"   "base"     </code></pre>
+<p>たしかに{dplyr}と{stats}が読み込まれている。この2つのパッケージには<code>filter()</code>という名前の関数があるようだが、パッケージ内の関数の目録は<code>ls("package:パッケージ名")</code>で確認できる。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">ls</span>(<span class="st">"package:stats"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] "acf"                  "acf2AR"               "add.scope"           
+  [4] "add1"                 "addmargins"           "aggregate"           
+  [7] "aggregate.data.frame" "aggregate.ts"         "AIC"                 
+ [10] "alias"                "anova"                "ansari.test"         
+ [13] "aov"                  "approx"               "approxfun"           
+ [16] "ar"                   "ar.burg"              "ar.mle"              
+ [19] "ar.ols"               "ar.yw"                "arima"               
+ [22] "arima.sim"            "arima0"               "arima0.diag"         
+ [25] "ARMAacf"              "ARMAtoMA"             "as.dendrogram"       
+ [28] "as.dist"              "as.formula"           "as.hclust"           
+ [31] "as.stepfun"           "as.ts"                "asOneSidedFormula"   
+ [34] "ave"                  "bandwidth.kernel"     "bartlett.test"       
+ [37] "BIC"                  "binom.test"           "binomial"            
+ [40] "biplot"               "Box.test"             "bw.bcv"              
+ [43] "bw.nrd"               "bw.nrd0"              "bw.SJ"               
+ [46] "bw.ucv"               "C"                    "cancor"              
+ [49] "case.names"           "ccf"                  "chisq.test"          
+ [52] "cmdscale"             "coef"                 "coefficients"        
+ [55] "complete.cases"       "confint"              "confint.default"     
+ [58] "confint.lm"           "constrOptim"          "contr.helmert"       
+ [61] "contr.poly"           "contr.SAS"            "contr.sum"           
+ [64] "contr.treatment"      "contrasts"            "contrasts&lt;-"         
+ [67] "convolve"             "cooks.distance"       "cophenetic"          
+ [70] "cor"                  "cor.test"             "cov"                 
+ [73] "cov.wt"               "cov2cor"              "covratio"            
+ [76] "cpgram"               "cutree"               "cycle"               
+ [79] "D"                    "dbeta"                "dbinom"              
+ [82] "dcauchy"              "dchisq"               "decompose"           
+ [85] "delete.response"      "deltat"               "dendrapply"          
+ [88] "density"              "density.default"      "deriv"               
+ [91] "deriv3"               "deviance"             "dexp"                
+ [94] "df"                   "df.kernel"            "df.residual"         
+ [97] "DF2formula"           "dfbeta"               "dfbetas"             
+[100] "dffits"               "dgamma"               "dgeom"               
+[103] "dhyper"               "diffinv"              "dist"                
+[106] "dlnorm"               "dlogis"               "dmultinom"           
+[109] "dnbinom"              "dnorm"                "dpois"               
+[112] "drop.scope"           "drop.terms"           "drop1"               
+[115] "dsignrank"            "dt"                   "dummy.coef"          
+[118] "dummy.coef.lm"        "dunif"                "dweibull"            
+[121] "dwilcox"              "ecdf"                 "eff.aovlist"         
+[124] "effects"              "embed"                "end"                 
+[127] "estVar"               "expand.model.frame"   "extractAIC"          
+[130] "factanal"             "factor.scope"         "family"              
+[133] "fft"                  "filter"               "fisher.test"         
+[136] "fitted"               "fitted.values"        "fivenum"             
+[139] "fligner.test"         "formula"              "frequency"           
+[142] "friedman.test"        "ftable"               "Gamma"               
+[145] "gaussian"             "get_all_vars"         "getCall"             
+[148] "getInitial"           "glm"                  "glm.control"         
+[151] "glm.fit"              "hasTsp"               "hat"                 
+[154] "hatvalues"            "hclust"               "heatmap"             
+[157] "HoltWinters"          "influence"            "influence.measures"  
+[160] "integrate"            "interaction.plot"     "inverse.gaussian"    
+[163] "IQR"                  "is.empty.model"       "is.leaf"             
+[166] "is.mts"               "is.stepfun"           "is.ts"               
+[169] "is.tskernel"          "isoreg"               "KalmanForecast"      
+[172] "KalmanLike"           "KalmanRun"            "KalmanSmooth"        
+[175] "kernapply"            "kernel"               "kmeans"              
+[178] "knots"                "kruskal.test"         "ks.test"             
+[181] "ksmooth"              "lag"                  "lag.plot"            
+[184] "line"                 "lm"                   "lm.fit"              
+[187] "lm.influence"         "lm.wfit"              "loadings"            
+[190] "loess"                "loess.control"        "loess.smooth"        
+[193] "logLik"               "loglin"               "lowess"              
+[196] "ls.diag"              "ls.print"             "lsfit"               
+[199] "mad"                  "mahalanobis"          "make.link"           
+[202] "makeARIMA"            "makepredictcall"      "manova"              
+[205] "mantelhaen.test"      "mauchly.test"         "mcnemar.test"        
+[208] "median"               "median.default"       "medpolish"           
+[211] "model.extract"        "model.frame"          "model.frame.default" 
+[214] "model.matrix"         "model.matrix.default" "model.matrix.lm"     
+[217] "model.offset"         "model.response"       "model.tables"        
+[220] "model.weights"        "monthplot"            "mood.test"           
+[223] "mvfft"                "na.action"            "na.contiguous"       
+[226] "na.exclude"           "na.fail"              "na.omit"             
+[229] "na.pass"              "napredict"            "naprint"             
+[232] "naresid"              "nextn"                "nlm"                 
+[235] "nlminb"               "nls"                  "nls.control"         
+[238] "NLSstAsymptotic"      "NLSstClosestX"        "NLSstLfAsymptote"    
+[241] "NLSstRtAsymptote"     "nobs"                 "numericDeriv"        
+[244] "offset"               "oneway.test"          "optim"               
+[247] "optimHess"            "optimise"             "optimize"            
+[250] "order.dendrogram"     "p.adjust"             "p.adjust.methods"    
+[253] "pacf"                 "Pair"                 "pairwise.prop.test"  
+[256] "pairwise.t.test"      "pairwise.table"       "pairwise.wilcox.test"
+[259] "pbeta"                "pbinom"               "pbirthday"           
+[262] "pcauchy"              "pchisq"               "pexp"                
+[265] "pf"                   "pgamma"               "pgeom"               
+[268] "phyper"               "plclust"              "plnorm"              
+[271] "plogis"               "plot.ecdf"            "plot.spec.coherency" 
+[274] "plot.spec.phase"      "plot.stepfun"         "plot.ts"             
+[277] "pnbinom"              "pnorm"                "poisson"             
+[280] "poisson.test"         "poly"                 "polym"               
+[283] "power"                "power.anova.test"     "power.prop.test"     
+[286] "power.t.test"         "PP.test"              "ppoints"             
+[289] "ppois"                "ppr"                  "prcomp"              
+[292] "predict"              "predict.glm"          "predict.lm"          
+[295] "preplot"              "princomp"             "printCoefmat"        
+[298] "profile"              "proj"                 "promax"              
+[301] "prop.test"            "prop.trend.test"      "psignrank"           
+[304] "psmirnov"             "pt"                   "ptukey"              
+[307] "punif"                "pweibull"             "pwilcox"             
+[310] "qbeta"                "qbinom"               "qbirthday"           
+[313] "qcauchy"              "qchisq"               "qexp"                
+[316] "qf"                   "qgamma"               "qgeom"               
+[319] "qhyper"               "qlnorm"               "qlogis"              
+[322] "qnbinom"              "qnorm"                "qpois"               
+[325] "qqline"               "qqnorm"               "qqplot"              
+[328] "qsignrank"            "qsmirnov"             "qt"                  
+[331] "qtukey"               "quade.test"           "quantile"            
+[334] "quasi"                "quasibinomial"        "quasipoisson"        
+[337] "qunif"                "qweibull"             "qwilcox"             
+[340] "r2dtable"             "rbeta"                "rbinom"              
+[343] "rcauchy"              "rchisq"               "read.ftable"         
+[346] "rect.hclust"          "reformulate"          "relevel"             
+[349] "reorder"              "replications"         "reshape"             
+[352] "resid"                "residuals"            "residuals.glm"       
+[355] "residuals.lm"         "rexp"                 "rf"                  
+[358] "rgamma"               "rgeom"                "rhyper"              
+[361] "rlnorm"               "rlogis"               "rmultinom"           
+[364] "rnbinom"              "rnorm"                "rpois"               
+[367] "rsignrank"            "rsmirnov"             "rstandard"           
+[370] "rstudent"             "rt"                   "runif"               
+[373] "runmed"               "rweibull"             "rwilcox"             
+[376] "rWishart"             "scatter.smooth"       "screeplot"           
+[379] "sd"                   "se.contrast"          "selfStart"           
+[382] "setNames"             "shapiro.test"         "sigma"               
+[385] "simulate"             "smooth"               "smooth.spline"       
+[388] "smoothEnds"           "sortedXyData"         "spec.ar"             
+[391] "spec.pgram"           "spec.taper"           "spectrum"            
+[394] "spline"               "splinefun"            "splinefunH"          
+[397] "SSasymp"              "SSasympOff"           "SSasympOrig"         
+[400] "SSbiexp"              "SSD"                  "SSfol"               
+[403] "SSfpl"                "SSgompertz"           "SSlogis"             
+[406] "SSmicmen"             "SSweibull"            "start"               
+[409] "stat.anova"           "step"                 "stepfun"             
+[412] "stl"                  "StructTS"             "summary.aov"         
+[415] "summary.glm"          "summary.lm"           "summary.manova"      
+[418] "summary.stepfun"      "supsmu"               "symnum"              
+[421] "t.test"               "termplot"             "terms"               
+[424] "terms.formula"        "time"                 "toeplitz"            
+[427] "toeplitz2"            "ts"                   "ts.intersect"        
+[430] "ts.plot"              "ts.union"             "tsdiag"              
+[433] "tsp"                  "tsp&lt;-"                "tsSmooth"            
+[436] "TukeyHSD"             "uniroot"              "update"              
+[439] "update.default"       "update.formula"       "var"                 
+[442] "var.test"             "variable.names"       "varimax"             
+[445] "vcov"                 "weighted.mean"        "weighted.residuals"  
+[448] "weights"              "wilcox.test"          "window"              
+[451] "window&lt;-"             "write.ftable"         "xtabs"               </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">ls</span>(<span class="st">"package:dplyr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] "%&gt;%"                   "across"                "add_count"            
+  [4] "add_count_"            "add_row"               "add_rownames"         
+  [7] "add_tally"             "add_tally_"            "all_equal"            
+ [10] "all_of"                "all_vars"              "anti_join"            
+ [13] "any_of"                "any_vars"              "arrange"              
+ [16] "arrange_"              "arrange_all"           "arrange_at"           
+ [19] "arrange_if"            "as_data_frame"         "as_label"             
+ [22] "as_tibble"             "as.tbl"                "auto_copy"            
+ [25] "band_instruments"      "band_instruments2"     "band_members"         
+ [28] "bench_tbls"            "between"               "bind_cols"            
+ [31] "bind_rows"             "c_across"              "case_match"           
+ [34] "case_when"             "changes"               "check_dbplyr"         
+ [37] "coalesce"              "collapse"              "collect"              
+ [40] "combine"               "common_by"             "compare_tbls"         
+ [43] "compare_tbls2"         "compute"               "consecutive_id"       
+ [46] "contains"              "copy_to"               "count"                
+ [49] "count_"                "cross_join"            "cumall"               
+ [52] "cumany"                "cume_dist"             "cummean"              
+ [55] "cur_column"            "cur_data"              "cur_data_all"         
+ [58] "cur_group"             "cur_group_id"          "cur_group_rows"       
+ [61] "current_vars"          "data_frame"            "db_analyze"           
+ [64] "db_begin"              "db_commit"             "db_create_index"      
+ [67] "db_create_indexes"     "db_create_table"       "db_data_type"         
+ [70] "db_desc"               "db_drop_table"         "db_explain"           
+ [73] "db_has_table"          "db_insert_into"        "db_list_tables"       
+ [76] "db_query_fields"       "db_query_rows"         "db_rollback"          
+ [79] "db_save_query"         "db_write_table"        "dense_rank"           
+ [82] "desc"                  "dim_desc"              "distinct"             
+ [85] "distinct_"             "distinct_all"          "distinct_at"          
+ [88] "distinct_if"           "distinct_prepare"      "do"                   
+ [91] "do_"                   "dplyr_col_modify"      "dplyr_reconstruct"    
+ [94] "dplyr_row_slice"       "ends_with"             "enexpr"               
+ [97] "enexprs"               "enquo"                 "enquos"               
+[100] "ensym"                 "ensyms"                "eval_tbls"            
+[103] "eval_tbls2"            "everything"            "explain"              
+[106] "expr"                  "failwith"              "filter"               
+[109] "filter_"               "filter_all"            "filter_at"            
+[112] "filter_if"             "first"                 "full_join"            
+[115] "funs"                  "funs_"                 "glimpse"              
+[118] "group_by"              "group_by_"             "group_by_all"         
+[121] "group_by_at"           "group_by_drop_default" "group_by_if"          
+[124] "group_by_prepare"      "group_cols"            "group_data"           
+[127] "group_indices"         "group_indices_"        "group_keys"           
+[130] "group_map"             "group_modify"          "group_nest"           
+[133] "group_rows"            "group_size"            "group_split"          
+[136] "group_trim"            "group_vars"            "group_walk"           
+[139] "grouped_df"            "groups"                "id"                   
+[142] "ident"                 "if_all"                "if_any"               
+[145] "if_else"               "inner_join"            "intersect"            
+[148] "is_grouped_df"         "is.grouped_df"         "is.src"               
+[151] "is.tbl"                "join_by"               "lag"                  
+[154] "last"                  "last_col"              "last_dplyr_warnings"  
+[157] "lead"                  "left_join"             "location"             
+[160] "lst"                   "make_tbl"              "matches"              
+[163] "min_rank"              "mutate"                "mutate_"              
+[166] "mutate_all"            "mutate_at"             "mutate_each"          
+[169] "mutate_each_"          "mutate_if"             "n"                    
+[172] "n_distinct"            "n_groups"              "na_if"                
+[175] "near"                  "nest_by"               "nest_join"            
+[178] "new_grouped_df"        "new_rowwise_df"        "nth"                  
+[181] "ntile"                 "num_range"             "one_of"               
+[184] "order_by"              "percent_rank"          "pick"                 
+[187] "progress_estimated"    "pull"                  "quo"                  
+[190] "quo_name"              "quos"                  "recode"               
+[193] "recode_factor"         "reframe"               "relocate"             
+[196] "rename"                "rename_"               "rename_all"           
+[199] "rename_at"             "rename_if"             "rename_vars"          
+[202] "rename_vars_"          "rename_with"           "right_join"           
+[205] "row_number"            "rows_append"           "rows_delete"          
+[208] "rows_insert"           "rows_patch"            "rows_update"          
+[211] "rows_upsert"           "rowwise"               "same_src"             
+[214] "sample_frac"           "sample_n"              "select"               
+[217] "select_"               "select_all"            "select_at"            
+[220] "select_if"             "select_var"            "select_vars"          
+[223] "select_vars_"          "semi_join"             "setdiff"              
+[226] "setequal"              "show_query"            "slice"                
+[229] "slice_"                "slice_head"            "slice_max"            
+[232] "slice_min"             "slice_sample"          "slice_tail"           
+[235] "sql"                   "sql_escape_ident"      "sql_escape_string"    
+[238] "sql_join"              "sql_select"            "sql_semi_join"        
+[241] "sql_set_op"            "sql_subquery"          "sql_translate_env"    
+[244] "src"                   "src_df"                "src_local"            
+[247] "src_mysql"             "src_postgres"          "src_sqlite"           
+[250] "src_tbls"              "starts_with"           "starwars"             
+[253] "storms"                "summarise"             "summarise_"           
+[256] "summarise_all"         "summarise_at"          "summarise_each"       
+[259] "summarise_each_"       "summarise_if"          "summarize"            
+[262] "summarize_"            "summarize_all"         "summarize_at"         
+[265] "summarize_each"        "summarize_each_"       "summarize_if"         
+[268] "sym"                   "symdiff"               "syms"                 
+[271] "tally"                 "tally_"                "tbl"                  
+[274] "tbl_df"                "tbl_nongroup_vars"     "tbl_ptype"            
+[277] "tbl_vars"              "tibble"                "top_frac"             
+[280] "top_n"                 "transmute"             "transmute_"           
+[283] "transmute_all"         "transmute_at"          "transmute_if"         
+[286] "tribble"               "type_sum"              "ungroup"              
+[289] "union"                 "union_all"             "validate_grouped_df"  
+[292] "validate_rowwise_df"   "vars"                  "where"                
+[295] "with_groups"           "with_order"            "wrap_dbplyr_obj"      </code></pre>
+</div>
+</div>
+<p>いずれも<code>filter()</code>という関数があることが分かる。これを名前空間の衝突と呼ぶ。それでは<code>filter()</code>関数を実行すると、どのパッケージの<code>filter()</code>関数が呼ばれるだろうか。正解は「あとに読み込んだパッケージの<code>filter()</code>関数」だ。{stats}はR起動と同時に読み込まれ、{dplyr}を含む{tidyverse}は起動後に読み込んだため、{dplyr}の<code>filter()</code>の優先順位が高くなる。</p>
+<p>　ここで更に{MASS}パッケージを読み込んでみよう。</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="fu">library</span>(MASS)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>Attaching package: ‘MASS’
+
+The following object is masked from ‘package:dplyr’:
+
+    select</code></pre>
+<p>ここでは{MASS}の<code>select()</code>関数が{dplyr}の<code>select()</code>関数を上書きしたとのメッセージが表示される。実際、{dplyr}にも、{MASS}にも<code>select()</code>関数が存在する。また、{MASS}を{tidyverse}より後に読み込んだため、{MASS}の<code>select()</code>の優先順位が高い。以下のコードは<code>iris</code>というデータセットから<code>Sepal.Length</code>、<code>Sepal.Width</code>、<code>Species</code>列を抽出し、最初の6行を出力するコードであるが、エラーが出る。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>iris <span class="sc">|&gt;</span> </span>
+<span id="cb29-2"><a href="#cb29-2"></a>  <span class="fu">select</span>(Sepal.Length, Sepal.Width, Species) <span class="sc">|&gt;</span> </span>
+<span id="cb29-3"><a href="#cb29-3"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in select(iris, Sepal.Length, Sepal.Width, Species): unused arguments (Sepal.Length, Sepal.Width, Species)</code></pre>
+</div>
+</div>
+<p>もし、この<code>select()</code>関数が{dplyr}の<code>select()</code>関数であれば、以上のコードは正しいコードだ。しかし、{MASS}の<code>select()</code>が呼ばれたので、エラーが生じた。</p>
+<p>　データハンドリングの際、よく使われるのは{dpylr}の<code>select()</code>である。しかし、{MASS}も{dplyr}もよく使われるパッケージである。{dplyr}の<code>select()</code>を優先したい場合は、{dplyr}を{MASS}より後に読み込んでも良いが、確実な方法は「どのパッケージの関数か」を明記することだ。パッケージ名を指定した関数を書き方が<code>パッケージ名::関数名()</code>である。以下のコードは{dplyr}パッケージの<code>select()</code>関数を使うことを明記したコードであり、問題なく動くことが分かる。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>iris <span class="sc">|&gt;</span> </span>
+<span id="cb31-2"><a href="#cb31-2"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(Sepal.Length, Sepal.Width, Species) <span class="sc">|&gt;</span> </span>
+<span id="cb31-3"><a href="#cb31-3"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Sepal.Length Sepal.Width Species
+1          5.1         3.5  setosa
+2          4.9         3.0  setosa
+3          4.7         3.2  setosa
+4          4.6         3.1  setosa
+5          5.0         3.6  setosa
+6          5.4         3.9  setosa</code></pre>
+</div>
+</div>
+<p>現在の作業環境における名前空間の衝突は<code>conflicts()</code>関数で確認できる。</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="fu">conflicts</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "%&gt;%"           "%&gt;%"           "intersect"     "select"       
+ [5] "setdiff"       "union"         "%&gt;%"           "%&gt;%"          
+ [9] "all_of"        "any_of"        "as_tibble"     "contains"     
+[13] "ends_with"     "everything"    "last_col"      "matches"      
+[17] "num_range"     "one_of"        "starts_with"   "tibble"       
+[21] "tribble"       "%&gt;%"           "add_row"       "as_data_frame"
+[25] "as_tibble"     "data_frame"    "glimpse"       "lst"          
+[29] "tibble"        "tribble"       "type_sum"      "as_label"     
+[33] "enexpr"        "enexprs"       "enquo"         "enquos"       
+[37] "ensym"         "ensyms"        "expr"          "quo"          
+[41] "quo_name"      "quos"          "sym"           "syms"         
+[45] "vars"          "filter"        "lag"           "npk"          
+[49] "Arith"         "Compare"       "show"          "%||%"         
+[53] "as.difftime"   "body&lt;-"        "date"          "intersect"    
+[57] "kronecker"     "plot"          "Position"      "setdiff"      
+[61] "setequal"      "union"        </code></pre>
+</div>
+</div>
+<p>一部の関数は全く同じ機能をする関数なので来にしなくても良いが、<code>select()</code>関数などは{dplyr}の<code>select()</code>と{MASS}の<code>select()</code>は全く別物なので注意が必要である。</p>
 
 
 </section>

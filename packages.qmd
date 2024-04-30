@@ -213,18 +213,128 @@ install.packages("devtools")
 
 ## 名前空間の衝突
 
-名前空間（namespace）の衝突（conflict）、またはパッケージ間の衝突
+```{r}
+#| eval: true
+#| echo: false
+#| message: false
+library(tidyverse)
+```
+
+　Rパッケージは各種関数、データセット、ドキュメント（ヘルプ、ヴィネット）などを一つにまとめたものであり、Rユーザーであれば誰でもパッケージを開発し、配布することができる。「誰でも」Rパッケージ開発に関われることはRが持つ最大の利点ではあるが、統一された生態系を維持することが難しいことも事実だ。たとえば宋が開発した{mycat}というパッケージと矢内が開発した{myKitty}パッケージがあるとしよう。猫好きにはたまらないパッケージなので、両方インストールし、両方読み込みもするだろう。もし、この2つのパッケージで同じ名前を持つ、異なる構造・機能をする関数、`nya()`があればどうなるだろう。`nya()`関数を使用する場合、それが{mycat}の`nya()`なのか、{myKitty}の`nya()`なのかの問題が発生する。これが名前空間（namespace）の衝突（conflict）、またはパッケージ間の衝突と呼ばれるものである。
+
+　一つの例を確認してみよう。Rを起動した直後、`print(.packages())`を入力すると、現在、読み込み済みのパッケージが確認できる。
+
+```r
+print(.packages())
+```
 
 ```
-── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+[1] "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
+[7] "base"     
+```
+
+Rにはいくつかのコア・パッケージが存在し、これらはR起動と同時に読み込まれる。続きて、この状態で{tidyverse}パッケージを読み込んでみよう。
+
+```r
+library(tidyverse)
+```
+
+```
+── Attaching core tidyverse packages ───────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ─────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package to force all conflicts to become errors
+```
+
+ここで注目するしたいのは「Conflicts」の箇所だ。
+
+```
 ✖ dplyr::filter() masks stats::filter()
 ✖ dplyr::lag()    masks stats::lag()
 ```
 
-とか
+関数名は場合によって`パッケージ名::関数名()`と表記される。以上の例は{dplyr}の`filter()`と`lag()`関数が{stats}の`filter()`、`lag()`関数を上書きしたことを意味する。{stats}パッケージはRのコア・パッケージの1つであり、R起動と同時に読み込まれるパッケージだ。このメッセージは現在の作業環境内に読み込まれているパッケージに同じ名前の関数が複数ある場合に表示される。もう一度、読み込み済みのパッケージのリストが出してみよう。
+
+:::{.callout-note}
+## 私は{dplyr}パッケージを読み込んだ覚えがございません。
+
+　{tidyverse}を読み込むと{dplyr}パッケージが読み込まれる。この{tidyverse}は{dplyr}、{readr}、{ggplot2}など「今どき」のRのおける必須級パッケージを一気に読み込むパッケージに過ぎない。
+:::
+
+```r
+print(.packages())
+```
 
 ```
-## The following objects are masked from 'package:stats':
-## 
-##     filter, lag
+ [1] "lubridate" "forcats"   "stringr"   "dplyr"     "purrr"     "readr"    
+ [7] "tidyr"     "tibble"    "ggplot2"   "tidyverse" "stats"     "graphics" 
+[13] "grDevices" "utils"     "datasets"  "methods"   "base"     
 ```
+
+たしかに{dplyr}と{stats}が読み込まれている。この2つのパッケージには`filter()`という名前の関数があるようだが、パッケージ内の関数の目録は`ls("package:パッケージ名")`で確認できる。
+
+```{r}
+#| eval: true
+ls("package:stats")
+ls("package:dplyr")
+```
+
+いずれも`filter()`という関数があることが分かる。これを名前空間の衝突と呼ぶ。それでは`filter()`関数を実行すると、どのパッケージの`filter()`関数が呼ばれるだろうか。正解は「あとに読み込んだパッケージの`filter()`関数」だ。{stats}はR起動と同時に読み込まれ、{dplyr}を含む{tidyverse}は起動後に読み込んだため、{dplyr}の`filter()`の優先順位が高くなる。
+
+　ここで更に{MASS}パッケージを読み込んでみよう。
+
+```{r}
+#| eval: true
+#| echo: false
+#| message: false
+library(MASS)
+```
+
+```r
+library(MASS)
+```
+
+```
+Attaching package: ‘MASS’
+
+The following object is masked from ‘package:dplyr’:
+
+    select
+```
+
+ここでは{MASS}の`select()`関数が{dplyr}の`select()`関数を上書きしたとのメッセージが表示される。実際、{dplyr}にも、{MASS}にも`select()`関数が存在する。また、{MASS}を{tidyverse}より後に読み込んだため、{MASS}の`select()`の優先順位が高い。以下のコードは`iris`というデータセットから`Sepal.Length`、`Sepal.Width`、`Species`列を抽出し、最初の6行を出力するコードであるが、エラーが出る。
+
+```{r}
+#| eval: true
+#| error: true
+iris |> 
+  select(Sepal.Length, Sepal.Width, Species) |> 
+  head()
+```
+
+もし、この`select()`関数が{dplyr}の`select()`関数であれば、以上のコードは正しいコードだ。しかし、{MASS}の`select()`が呼ばれたので、エラーが生じた。
+
+　データハンドリングの際、よく使われるのは{dpylr}の`select()`である。しかし、{MASS}も{dplyr}もよく使われるパッケージである。{dplyr}の`select()`を優先したい場合は、{dplyr}を{MASS}より後に読み込んでも良いが、確実な方法は「どのパッケージの関数か」を明記することだ。パッケージ名を指定した関数を書き方が`パッケージ名::関数名()`である。以下のコードは{dplyr}パッケージの`select()`関数を使うことを明記したコードであり、問題なく動くことが分かる。
+
+```{r}
+#| eval: true
+#| error: true
+iris |> 
+  dplyr::select(Sepal.Length, Sepal.Width, Species) |> 
+  head()
+```
+
+現在の作業環境における名前空間の衝突は`conflicts()`関数で確認できる。
+
+```{r}
+#| eval: true
+conflicts()
+```
+
+一部の関数は全く同じ機能をする関数なので来にしなくても良いが、`select()`関数などは{dplyr}の`select()`と{MASS}の`select()`は全く別物なので注意が必要である。
