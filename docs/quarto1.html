@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.554">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>私たちのR - 付録 F — Quarto [基礎]</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./quarto2.html" rel="next">
+<link href="./references.html" rel="prev">
+<link href="./Figs/favicon.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "サーチ"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-CEHS4C056W"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-CEHS4C056W', { 'anonymize_ip': false});
+</script>
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&amp;display=swap" rel="stylesheet"> 
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mono&amp;display=swap" rel="stylesheet"> 
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="私たちのR: ベストプラクティスの探求">
+<meta property="og:description" content="R Not for Everyone: An Esoteric Guide">
+<meta property="og:image" content="https://www.jaysong.net/RBook/Figs/favicon.png">
+<meta property="og:site_name" content="私たちのR">
+<meta property="og:image:height" content="260">
+<meta property="og:image:width" content="260">
+<meta name="twitter:title" content="私たちのR: ベストプラクティスの探求">
+<meta name="twitter:description" content="R Not for Everyone: An Esoteric Guide">
+<meta name="twitter:image" content="https://www.jaysong.net/RBook/Figs/favicon.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image-height" content="260">
+<meta name="twitter:image-width" content="260">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="サイドバーを切り替える" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dataset.html">付録</a></li><li class="breadcrumb-item"><a href="./quarto1.html"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">Quarto [基礎]</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="サイドバーを切り替える" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">私たちのR</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/JaehyunSong/RBook/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <div class="dropdown">
+      <a href="" title="Share" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Share"><i class="bi bi-share"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+              <i class="bi bi-bi-twitter pe-1"></i>
+            Twitter
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://www.facebook.com/sharer/sharer.php?u=|url|">
+              <i class="bi bi-bi-facebook pe-1"></i>
+            Facebook
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="サーチ"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">紹介</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Rの導入</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="セクションを切り替え">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./aboutr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R?</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./installation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Rのインストール</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ide.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">IDEの導入</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r_customize.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">分析環境のカスタマイズ</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./packages.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Rパッケージ</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Rの基礎</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="セクションを切り替え">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">プロジェクト管理</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r_basic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">基本的な操作</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./io.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">データの入出力</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./datatype.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">データ型</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./datastructure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">データ構造</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./programming.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Rプログラミングの基礎</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">関数の自作</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">データハンドリング</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="セクションを切り替え">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./datahandling1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">データハンドリング [抽出]</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./datahandling2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">データハンドリング [要約]</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./datahandling3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">データハンドリング [拡張]</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./factor.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">データハンドリング [factor型]</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tidydata.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">整然データ構造</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./string.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">文字列の処理</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">可視化</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="セクションを切り替え">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./visualization1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">可視化 [理論]</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./visualization2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">可視化 [基礎]</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./visualization3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">可視化 [応用]</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./visualization4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">可視化 [発展]</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./table.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">表の作成</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+ <span class="menu-text">再現可能な研究</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="セクションを切り替え">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rmarkdown.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">R Markdown [基礎]</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rmarkdown2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">R Markdown [応用]</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Quarto入門</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./renv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">分析環境の管理</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">
+ <span class="menu-text">中級者向け</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="セクションを切り替え">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./iteration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">反復処理</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./oop.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">オブジェクト指向プログラミング</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./monte.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">モンテカルロ・シミュレーション</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./scraping.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">スクレイピング</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true">
+ <span class="menu-text">付録</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true" aria-label="セクションを切り替え">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dataset.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">データセット</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./filesystem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">ファイルシステム</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tips.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">R Tips</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./session.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">本書の執筆環境</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">参考文献</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./quarto1.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">Quarto [基礎]</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./quarto2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">G</span>&nbsp; <span class="chapter-title">Quarto [文書]</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./quarto3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">H</span>&nbsp; <span class="chapter-title">Quarto [スライド]</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./quarto4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">I</span>&nbsp; <span class="chapter-title">Quarto [発展]</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">目次</h2>
+   
+  <ul>
+  <li><a href="#sec-quarto-intro" id="toc-sec-quarto-intro" class="nav-link active" data-scroll-target="#sec-quarto-intro"><span class="header-section-number">F.1</span> Quartoとは</a>
+  <ul class="collapse">
+  <li><a href="#r-markdownとの違い" id="toc-r-markdownとの違い" class="nav-link" data-scroll-target="#r-markdownとの違い"><span class="header-section-number">F.1.1</span> R Markdownとの違い</a></li>
+  </ul></li>
+  <li><a href="#はじめてのquarto" id="toc-はじめてのquarto" class="nav-link" data-scroll-target="#はじめてのquarto"><span class="header-section-number">F.2</span> はじめてのQuarto</a>
+  <ul class="collapse">
+  <li><a href="#事前準備" id="toc-事前準備" class="nav-link" data-scroll-target="#事前準備"><span class="header-section-number">F.2.1</span> 事前準備</a></li>
+  <li><a href="#とりあえずrender" id="toc-とりあえずrender" class="nav-link" data-scroll-target="#とりあえずrender"><span class="header-section-number">F.2.2</span> とりあえずRender</a></li>
+  </ul></li>
+  <li><a href="#markdown" id="toc-markdown" class="nav-link" data-scroll-target="#markdown"><span class="header-section-number">F.3</span> Markdown</a>
+  <ul class="collapse">
+  <li><a href="#markdownとは" id="toc-markdownとは" class="nav-link" data-scroll-target="#markdownとは"><span class="header-section-number">F.3.1</span> Markdownとは</a></li>
+  <li><a href="#markdown記法" id="toc-markdown記法" class="nav-link" data-scroll-target="#markdown記法"><span class="header-section-number">F.3.2</span> Markdown記法</a></li>
+  </ul></li>
+  <li><a href="#rコードの挿入" id="toc-rコードの挿入" class="nav-link" data-scroll-target="#rコードの挿入"><span class="header-section-number">F.4</span> Rコードの挿入</a>
+  <ul class="collapse">
+  <li><a href="#チャンク" id="toc-チャンク" class="nav-link" data-scroll-target="#チャンク"><span class="header-section-number">F.4.1</span> チャンク</a></li>
+  <li><a href="#チャンクオプション" id="toc-チャンクオプション" class="nav-link" data-scroll-target="#チャンクオプション"><span class="header-section-number">F.4.2</span> チャンクオプション</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dataset.html">付録</a></li><li class="breadcrumb-item"><a href="./quarto1.html"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">Quarto [基礎]</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">付録 F — Quarto [基礎]</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+本項目は執筆途中です！
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>本章は完成後、既存のR MarkdownとQuartoの内容の一部を代替しますが、現時点では参考程度にしてください。</p>
+</div>
+</div>
+<section id="sec-quarto-intro" class="level2" data-number="F.1">
+<h2 data-number="F.1" class="anchored" data-anchor-id="sec-quarto-intro"><span class="header-section-number">F.1</span> Quartoとは</h2>
+<p>　Quartoは<a href="https://pandoc.org/">Pandoc</a>ベースのオープンソース科学/技術出版システムであり、Rコードと結果、文章を一つの文書としてまとめてくれるものだ。Rのコードと実行結果、そしてテキストなどが一つの文書でまとまったもの、そうだ、『私たちのR』もまたQuartoで作成されている。『私たちのR』のようにHTML形式でWebサイトとして公開することもでき、他のもPDFやMicrosoft Wordのようなスタンドアロンのドキュメントファイルとして公開することもできる。</p>
+<p>　また、本書の読者であればPython、JuliaといったR以外の言語も使用する（予定がある）可能性が高いが、Rコードだけでなく、PythonやJuliaのコードも文書内に入れることができる。</p>
+<p>　Quartoで作成された文書のソースコードを見ると、大きく3つの領域に分けられる。それはYAMLヘッダー、チャンク、それ以外の領域（テキスト）だ。YAMLヘッダーは文書のタイトル、著者、作成日などのメタ情報と文書全体のフォーマットやスタイルを指定する内容でJSONに類似したYAML形式で書き、メタ情報を除き、コンパイルした文書には表示されない。チャンクはR（他にもPython、Julia、Mermaid、Observable等）コードが入る領域で、コンパイルするとコードとその実行結果が表示される。これら2つは明確に領域を宣言する必要があり、具体的にYAMLヘッダーは<code>---</code>と<code>---</code>の間に、チャンクは<code>```{r}</code>と<code>```</code>の間に書く必要がある。以下のコードはQuartoで作成された文書のコードであるが、1行目から7行目までがYAMLヘッダー、13〜15行目と19〜21行目がチャンクだ。この2つの領域外の内容はテキストであり、Markdown文法に則って書く。</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">コード</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">コンパイル後</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="an">title:</span><span class="co"> 2083年では数学落ちこぼれだった私が1777年に生まれ変わり数学天才と称えられた件について</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="an">author:</span><span class="co"> カール・フリードリヒ・ガウス</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="an">date:</span><span class="co"> 1855/2/23</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="an">format:</span><span class="co"> html</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="an">lang:</span><span class="co"> ja</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">---</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="fu">## R万歳！</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a></span>
+<span id="cb1-11"><a href="#cb1-11"></a>**面倒な作業はRに任せれば良い。**たとえば、1+1のように人間が解くには非常に面倒な計算もRを使えば一瞬だ。</span>
+<span id="cb1-12"><a href="#cb1-12"></a></span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="in">```{r}</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="in">1 + 1</span></span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="in">```</span></span>
+<span id="cb1-16"><a href="#cb1-16"></a></span>
+<span id="cb1-17"><a href="#cb1-17"></a>人間であれば数日かかる1+1の計算が一瞬で終わった。もちろん、人間であれば秒で終わる13897294812894の素因数分解を任せても良いが、これくらいは自分で手で解こう。</span>
+<span id="cb1-18"><a href="#cb1-18"></a></span>
+<span id="cb1-19"><a href="#cb1-19"></a><span class="in">```{r}</span></span>
+<span id="cb1-20"><a href="#cb1-20"></a><span class="in">gmp::factorize(13897294812894)</span></span>
+<span id="cb1-21"><a href="#cb1-21"></a><span class="in">```</span></span>
+<span id="cb1-22"><a href="#cb1-22"></a></span>
+<span id="cb1-23"><a href="#cb1-23"></a>~~簡単すぎて草生えるわ。~~</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p><img src="Figs/Quarto/after_compile.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>　文書全体のフォーマット、スタイルを指定するだけのYAMLヘッダーを除けば、QuartoはRコードとMarkdown文法で作成されたテキストで構成されたものと言える。</p>
+<section id="r-markdownとの違い" class="level3" data-number="F.1.1">
+<h3 data-number="F.1.1" class="anchored" data-anchor-id="r-markdownとの違い"><span class="header-section-number">F.1.1</span> R Markdownとの違い</h3>
+<p>　以上の話を考えると、「なんだ、R Markdownと同じじゃないか！」と思う読者もいるだろう。その判断は7割くらいは正しく、QuartoとR Markdownはほぼ同じ目的のために開発されたものだ。目的が同じである以上、R Markdownを問題なく使いこなしているのであれば、Quartoの学習はさほど難しくないし、そもそもQuartoに乗り換える必要もあまりない（かも知れない）。ただし、筆者（宋）は今後、QuartoがR Markdownに代わる主流になると考えているため（そうでないと考えている方も大勢にいる）、本書ではR Markdownでなく、Quartoを紹介する。むろん、別の名前が付いてある以上、Quarto = R Markdownではない。文法などの違いは本章の中盤以降に説明するとして、まず両者の技術的な面での違いを紹介する。</p>
+<p>　一点目は使用可能なエンジンだ。たとえば、R Markdownは<code>.Rmd</code>をknitrエンジンを経由し、コードとその結果物が含まれた<code>.md</code>ファイルを生成する。ここで生成された<code>.md</code>ファイルはPandocを経由して最終的にはHTML、PDF、Microsoft Wordファイルに変換される（ <a href="#fig-rmd" class="quarto-xref">図&nbsp;<span>F.1 (a)</span></a> ）。Quartoも基本的に同じである。ただし、knitrエンジン以外にもPython、Juliaで多用されるJupyterやJavaScripベースのObservableもエンジンとして使用可能という特徴がある（ <a href="#fig-qmd" class="quarto-xref">図&nbsp;<span>F.1 (b)</span></a> ）。使用可能なエンジンが多いということはRコード以外にもPyhton、Julia、Observable JSのコードも使えるといったメリットがある。また、使用可能なエンジンは今後のアップデートで追加される可能性もある。ちなみにQuartoには<a href="https://mermaid.js.org/">Mermaid</a>、<a href="https://graphviz.org/">GraphViz</a>が実装されており、以下のようなダイアグラム作成も別途の設定なしで簡単にできる。</p>
+<div id="fig-rmd-qud" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rmd-qud-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-rmd-qud" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="cell-output-display quarto-layout-cell-subref" data-ref-parent="fig-rmd-qud">
+<div id="fig-rmd" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-rmd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<pre class="mermaid mermaid-js" data-label="fig-rmd">flowchart LR
+  A[.Rmd] --&gt; B[knitr]
+  B --&gt; C[.md]
+  C --&gt; D{Pandoc}
+  D --&gt; E(HTML)
+  D --&gt; F(PDF)
+  D --&gt; G(Microsoft Word)
+  D --&gt; H(Etc.)
+</pre>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-rmd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) R Markdownの場合
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-rmd-qud" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="cell-output-display quarto-layout-cell-subref" data-ref-parent="fig-rmd-qud">
+<div id="fig-qmd" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-qmd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<pre class="mermaid mermaid-js" data-label="fig-qmd">flowchart LR
+  A[.qmd] --&gt; B[knitr]
+  A --&gt; C[Jupyter]
+  A --&gt; D[Observable JS]
+  A --&gt; E[Etc]
+  B --&gt; F[.md]
+  C --&gt; F
+  D --&gt; F
+  E --&gt; F
+  F --&gt; G{Pandoc}
+  G --&gt; H(HTML)
+  G --&gt; I(PDF)
+  G --&gt; J(Microsoft Word)
+  G --&gt; K(Etc.)
+</pre>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-qmd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Quartoの場合
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rmd-qud-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+図&nbsp;F.1: R Markdown/Quartoから文書が生成されるまで
+</figcaption>
+</figure>
+</div>
+<p>　二点目は様々なフォーマットが統合されている点だ。R Markdownだと文書を作成する場合は{rmarkdown}パッケージ、ホームページを作成するなら{blogdown}パッケージ、スライドを作成するなら{xaringan}等のパッケージを使うことになる。しかし、Quartoはプラスアルファのパッケージを使わず、Quarto単体で様々なフォーマットが作成できる<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>。ここまで聞くとR Markdownの方がより拡張性に優れているように見えるが、QuartoもまたQuarto Extensionを通じて様々な拡張機能が導入できる<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>。また、<a href="https://www.lua.org/">Lua</a>言語の知識があれば、自分で拡張機能を作成することができる。</p>
+<p>　三点目はIDEだ。R Markdownの場合、ほぼRStudio一度（他のIDEでももちろん出来る）であったが、QuartoだとVisual Studio CodeやJupyter、NeoVim、Emacs、SublimeTextも使用可能であり、RStudioとほぼ変わらない使用経験を提供する（ <a href="#fig-ides" class="quarto-xref">図&nbsp;<span>F.2</span></a> ）。</p>
+<div id="fig-ides" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ides-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 56.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://quarto.org/docs/get-started/hello/images/rstudio-hello.png" class="lightbox" data-glightbox="description: .lightbox-desc-1" data-gallery="ide" title="RStudio"><img src="https://quarto.org/docs/get-started/hello/images/rstudio-hello.png" height="200" class="figure-img"></a></p>
+<figcaption>RStudio</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 2.0%;justify-content: flex-start;">
+<p>&nbsp;</p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 42.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://quarto.org/docs/tools/images/vscode-render.png" class="lightbox" data-glightbox="description: .lightbox-desc-2" data-gallery="ide" title="VS Code"><img src="https://quarto.org/docs/tools/images/vscode-render.png" height="200" class="figure-img"></a></p>
+<figcaption>VS Code</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 41.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://quarto.org/docs/get-started/hello/images/jupyter-quarto-preview.png" class="lightbox" data-glightbox="description: .lightbox-desc-3" data-gallery="ide" title="Jupyter"><img src="https://quarto.org/docs/get-started/hello/images/jupyter-quarto-preview.png" height="200" class="figure-img"></a></p>
+<figcaption>Jupyter</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 2.0%;justify-content: flex-start;">
+<p>&nbsp;</p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 57.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://quarto.org/docs/get-started/hello/images/neovim-overview.png" class="lightbox" data-glightbox="description: .lightbox-desc-4" data-gallery="ide" title="NeoVim"><img src="https://quarto.org/docs/get-started/hello/images/neovim-overview.png" height="200" class="figure-img"></a></p>
+<figcaption>NeoVim</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ides-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+図&nbsp;F.2: 各種IDE（出典はQuarto公式ホームページ）
+</figcaption>
+</figure>
+</div>
+<p>　しかし、QuartoはR Markdownの上位互換でもなく、R Markdownを代替するものでもないことには注意されたい（<a href="https://yihui.org/en/2022/04/quarto-r-markdown/">参考</a>）。つまり、既存のR Markdownを問題なく使っているのであれば、Quartoへの移行は不要だろう。現在のところ、QuartoはR Markdown生態系を一つに統合したものに近く、文法などもほぼ同じであるため、移行のために新しい事をゼロベースから勉強する必要はほぼない。</p>
+</section>
+</section>
+<section id="はじめてのquarto" class="level2" data-number="F.2">
+<h2 data-number="F.2" class="anchored" data-anchor-id="はじめてのquarto"><span class="header-section-number">F.2</span> はじめてのQuarto</h2>
+<section id="事前準備" class="level3" data-number="F.2.1">
+<h3 data-number="F.2.1" class="anchored" data-anchor-id="事前準備"><span class="header-section-number">F.2.1</span> 事前準備</h3>
+<p>　Quartoを使う前に以下の3つの項目を確認する必要がある。</p>
+<p>　1つ目はQuarto CLIのインストールだ。Quarto CLIは<a href="https://quarto.org/docs/get-started/">公式ホームページ</a>からダウンロードできる（<a href="https://quarto.org/docs/get-started/" class="uri">https://quarto.org/docs/get-started/</a>）。macOS、Linux、Windows版が提供されているため、自分のOSに合わせてダウンロードし、インストールしておこう。最新のRStudioにはQuartoが内蔵されているが、最新版が内蔵されているわけではない。むろん、新機能にこだわりがないのであれば、最新のRStudioをインストールするだけでも十分だ。</p>
+<p>　2つ目はRStudioを最新バージョンにアップデートすることだ。RStudioで本格的にQuartoが使えるようになったのはRStudio 2022.07からである。基本的に現時点での最新版をインストールしておけば問題ないだろう。</p>
+<p>　3つ目はRパッケージ{quarto}のインストールだ。こちらはインストールするだけで十分で、別途読み込む必要がない。</p>
+</section>
+<section id="とりあえずrender" class="level3" data-number="F.2.2">
+<h3 data-number="F.2.2" class="anchored" data-anchor-id="とりあえずrender"><span class="header-section-number">F.2.2</span> とりあえずRender</h3>
+<p>　それではQuartoがどんなものか味わってみよう。まず、メニューのFile &gt; New File &gt; Quarto Documentを選択する。以下のような画面が表示されるが、Use visual markdown editorの<strong>チェックを外し</strong>、Createをクリックする。</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Figs/Quarto/first_quarto_1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="500"></p>
+</figure>
+</div>
+<p>　テンプレのようなファイルが生成されるが、適当な名前を付けて保存し、Sourceペイン上段のRenderボタン<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>をクリックする（ショートカットキーはmacOSはCmd + Shift + K、その他のOSはCtrl + Shift + K）。</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Figs/Quarto/first_quarto_2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="400"></p>
+</figure>
+</div>
+<p>　クリック数回で以下のような綺麗な文章が作成される。</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Figs/Quarto/first_quarto_3.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+<p>　<code>---</code>と<code>---</code>の間の領域がYAMLヘッダーであり、ここでは文書のタイトル（<code>title:</code>）と出力フォーマット（<code>format:</code>）が指定されている。YAMLヘッダーは1つの<code>.qmd</code>ファイルにおいて1箇所のみ、しかもファイルの最上段に位置する。続いて、<code>```{r}</code>と<code>```</code>の間の領域がチャンクであり、このファイルには2つのチャンクがある。最初のチャンクは<code>1 + 1</code>の演算を行うチャンクであり、2つ目のチャンクでは<code>2 * 2</code>の演算を行う。ただし、2つ目のチャンクはコードは表示せず（<code>#| echo: false</code>）、結果のみを出力する。YAMLヘッダー、チャンク以外の領域はテキストであり、Markdown文法で記入される。たとえば、<code>##</code>が付いていれば見出し、<code>&lt;</code>と<code>&gt;</code>で囲まれたURLはクリック可能なURLに、<code>**</code>と<code>**</code>の間の文字は太字になる。</p>
+</section>
+</section>
+<section id="markdown" class="level2" data-number="F.3">
+<h2 data-number="F.3" class="anchored" data-anchor-id="markdown"><span class="header-section-number">F.3</span> Markdown</h2>
+<section id="markdownとは" class="level3" data-number="F.3.1">
+<h3 data-number="F.3.1" class="anchored" data-anchor-id="markdownとは"><span class="header-section-number">F.3.1</span> Markdownとは</h3>
+<p>　これまで頑張って無視してきたものがある。それがMarkdown（<i class="bi bi-markdown"></i>）だ。<a href="https://daringfireball.net/">John Gruber</a>と<a href="http://www.aaronsw.com/">Aaron Swartz</a>が2004年提案した軽量Markup言語だが、そもそもMarkup言語とはなんだろう。</p>
+<p>　Markup言語を知るためにはプレーンテキスト（plain text）とリッチテキスト（rich text、またはマルチスタイルテキスト）の違いについて知る必要がある。プレーンテキストとは書式情報などが一切含まれていない純粋なテキストのみで構成された文書だ。書式情報とは文書の余白、文字の大きさ、文字の色、図表などがある。これまでRStudio上で書いてきたRコードもプレーンテキストだ。コードに色が自動的に付けられるが、これはRStudioが色付けをしてくれただけで、ファイル自体はテキストのみで構成されている。macOSのTextEdit、Windowsのメモ帳、Linux GUI環境の<a href="https://wiki.gnome.org/Apps/Gedit">gedit</a>や<a href="https://kate-editor.org">KATE</a>、CLI環境下の<a href="https://www.vim.org">vim</a>、<a href="https://www.gnu.org/software/emacs/">Emacs</a>、<a href="https://www.nano-editor.org">nano</a>などで作成したファイルは全てプレーンテキストだ。これらのテキストエディターには書式設定や図表の挿入などの機能は付いておらず、文字しか書けない。</p>
+<p>　一方、リッチテキストとは書式情報だけでなく、図表なども含まれる文書を指す。<a href="www.microsoft.com/microsoft-365/microsoft-office">Microsoft Word</a>や<a href="https://www.apple.com/jp/iwork/">Pages</a>、<a href="https://www.libreoffice.org">LibreOffice Writer</a>から作成したファイルなどが代表的な例だ。これらのワードプロセッサーソフトウェアは書式の設定や図表・リンクの挿入などができる。そして、Markup言語とは<strong>プレーンテキストのみでリッチテキストを作成するための言語</strong>です。</p>
+<p>　Markup言語の代表格の言語がHyperText <strong>Markup Language</strong>、略してHTMLだ。読者の皆さんがウェブブラウザから見る画面のほとんどはHTMLで書かれている。この『私たちのR』もHTMLだ。この文書には図表があり、太字、見出し、水平線など、テキスト以外の情報が含まれている。しかし、HTMLは純粋なテキストのみで書かれており、ウェブブラウザ（<a href="https://www.mozilla.org/firefox/">Firefox</a>、<a href="https://www.google.com/chrome/">Chrome</a>、<a href="https://www.microsoft.com/edge">Edge</a>など）がテキストファイルを読み込み、解釈して書式が付いている画面を出力してくれているだけだ。例えば、リンク（hyperlink）について考えてみよう。「<a href="https://www.jaysong.net">SONGのHP</a>」をクリックすると宋のホームページに移動する。ある単語をクリックすることで、他のウェブサイトへ飛ばす機能を付けるためにはHTMLファイルの中に、以下のように記入する必要がある。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1"></a><span class="dt">&lt;</span><span class="kw">a</span><span class="ot"> href</span><span class="op">=</span><span class="st">"https://www.jaysong.net"</span><span class="dt">&gt;</span>SONGのHP<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>　これをウェブブラウザが自動的に「<a href="https://www.jaysong.net">SONGのHP</a>」と変換し、画面に出力してくれるわけだ。これは、書式情報などが必要な箇所にコードを埋め込むことによって実現される。そして、このMark<em>up</em>言語をより単純な文法で再構成したものがMark<em>down</em>だ。例えば、以上のHTMLはMarkdownでは以下のように書く。</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">[</span><span class="ot">SONGのHP</span><span class="co">](https://www.jaysong.net)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>　同じ意味のコードだが、Markdownの方がより簡潔に書けることが分かるだろう。このMarkdownは最終的にHTMLやMicrosoft Word、PDF形式で変換される。一般的にはHTML出力を使うが、自分のPCに<span class="math inline">\(\LaTeX\)</span>環境が構築されている場合はPDF形式で出力することも可能であり、個人的には推奨しないが、Microsoft Word文書ファイルへ変換することも可能だ。また、HTML（+ JavaScript）へ出力可能であることを利用し、スライドショー、e-Book、ホームページの作成にもMarkdownが使える。</p>
+<p>　Markdown記法は一つだけではない。<a href="https://pandoc.org/">Pandoc</a>の開発者で有名な<a href="https://johnmacfarlane.net/">John MacFarlane</a>が主導して制定した<a href="https://commonmark.org/">CommonMark</a>が多くのMarkdown記法のベースとなるが、機能に制約がある（たとえば、表が作れないなど）。他にもいくつかの流派があり、Markdown編集ソフトウェア独自の使用が追加されているケースもある。Markdownが流行るほど生態系の断片化は避けられないが、<a href="https://github.github.com/gfm/">GFM（GitHub Flavored Markdown）</a>と呼ばれる書き方であり、 こちらが現在の主流である。本書で紹介するMarkdown記法もGFMと「ほぼ」一致しており、どのMarkdown編集ソフトウェアでも同じ動作をするだろう。他にもQuartoはGFMでは作成できないコールアウトやタブセットのような便利な機能も提供しているが、これらの内容は次章以降で紹介する。</p>
+</section>
+<section id="markdown記法" class="level3" data-number="F.3.2">
+<h3 data-number="F.3.2" class="anchored"><span class="header-section-number">F.3.2</span> Markdown記法</h3>
+<p>　まずは、Markdownの文法について解説します。ここではMarkdown文書内に以下のようなことを作成する方法を実際の書き方と、出力画面を対比しながら解説していきます。</p>
+<ul>
+<li>改行</li>
+<li>強調: 太字、イタリック、アンダーライン、取り消し線</li>
+<li>箇条書き</li>
+<li>見出し</li>
+<li>区切り線</li>
+<li>表</li>
+<li>画像</li>
+<li>リンク</li>
+<li>脚注</li>
+<li>数式</li>
+<li>引用</li>
+<li>コメント</li>
+<li>Rコード</li>
+</ul>
+<section id="改行" class="level4" data-number="F.3.2.1">
+<h4 data-number="F.3.2.1" class="anchored" data-anchor-id="改行"><span class="header-section-number">F.3.2.1</span> 改行</h4>
+<p>　Markdownにおける改行はやや特殊です。特殊といっても難しいことはありません。普段よりもう一行改行するだけです。Markdownの場合、1回の改行は改行として判定されず、同じ行の連続と認識します。たとえば、<strong>Input</strong>のように入力すると<strong>Output</strong>のように文章1と文章2が繋がります。</p>
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1"></a>文章1</span>
+<span id="cb4-2"><a href="#cb4-2"></a>文章2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<p>文章1 文章2</p>
+<p>　文章1と文章2を改行するためにはもう一行、改行する必要があります。以下の例を見てください。</p>
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1"></a>文章1</span>
+<span id="cb5-2"><a href="#cb5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3"></a>文章2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<p>文章1</p>
+<p>文章2</p>
+<p>　こうすることで段落間の間隔を強制的に入れることとなり、作成者側にも読みやすい文書構造になります<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>。</p>
+</section>
+<section id="強調" class="level4" data-number="F.3.2.2">
+<h4 data-number="F.3.2.2" class="anchored" data-anchor-id="強調"><span class="header-section-number">F.3.2.2</span> 強調</h4>
+<p>文章の一部を強調する方法として<strong>太字</strong>、<em>イタリック</em><a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>、<u>アンダーライン</u>があり、強調ではありませんが、ついでに<del>取り消し線</del>についても紹介します。いずれも強調したい箇所を記号で囲むだけです。</p>
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1"></a>文章の一部を**太字**にしてみましょう。</span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a>*イタリック*もいいですね。</span>
+<span id="cb6-4"><a href="#cb6-4"></a></span>
+<span id="cb6-5"><a href="#cb6-5"></a>~~取り消し線~~はあまり使わないかも。</span>
+<span id="cb6-6"><a href="#cb6-6"></a></span>
+<span id="cb6-7"><a href="#cb6-7"></a>&lt;u&gt;アンダーライン&lt;/u&gt;はHTMLタグを使います。</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<p>文章の一部を<strong>太字</strong>にしてみましょう。</p>
+<p><em>イタリック</em>もいいですね。</p>
+<p><del>取り消し線</del>はあまり使わないかも。</p>
+<p><u>アンダーライン</u>はHTMLタグを使います。</p>
+</section>
+<section id="箇条書き" class="level4" data-number="F.3.2.3">
+<h4 data-number="F.3.2.3" class="anchored" data-anchor-id="箇条書き"><span class="header-section-number">F.3.2.3</span> 箇条書き</h4>
+<p>箇条書きには順序なしと順序付きがあります。順序なしの場合<code>*</code>または<code>-</code>の後に半角スペースを1つ入れるだけです。また、2文字以上の字下げで下位項目を追加することもできます。</p>
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1"></a><span class="ss">- </span>項目1</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="ss">  - </span>項目1-1</span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="ss">  - </span>項目1-2</span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="ss">    - </span>項目1-2-1</span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="ss">      - </span>項目1-2-1-1</span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="ss">    - </span>項目1-2-2</span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="ss">- </span>項目2</span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="ss">- </span>項目3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<ul>
+<li>項目1
+<ul>
+<li>項目1-1</li>
+<li>項目1-2
+<ul>
+<li>項目1-2-1
+<ul>
+<li>項目1-2-1-1</li>
+</ul></li>
+<li>項目1-2-2</li>
+</ul></li>
+</ul></li>
+<li>項目2</li>
+<li>項目3</li>
+</ul>
+<p>　続きまして順序付き箇条書きですが、これは<code>-</code>（または<code>*</code>）を<code>数字.</code>に換えるだけです。順序なしの場合と違って数字の後にピリオド（<code>.</code>）が付くことに注意してください。また、下位項目を作成する際、順序なしはスペース2つ以上が必要でしたが、順序付きの場合、少なくとも3つが必要です。</p>
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1"></a><span class="ss">1. </span>項目1</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="ss">   1. </span>項目1-1</span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="ss">   2. </span>項目1-2</span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="ss">2. </span>項目2</span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="ss">   * </span>項目2-1</span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="ss">   * </span>項目2-2</span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="ss">3. </span>項目3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<ol type="1">
+<li>項目1
+<ol type="1">
+<li>項目1-1</li>
+<li>項目1-2</li>
+</ol></li>
+<li>項目2
+<ul>
+<li>項目2-1</li>
+<li>項目2-2</li>
+</ul></li>
+<li>項目3</li>
+</ol>
+</section>
+<section id="見出し" class="level4" data-number="F.3.2.4">
+<h4 data-number="F.3.2.4" class="anchored"><span class="header-section-number">F.3.2.4</span> 見出し</h4>
+<p>　章、節、段落のタイトルを付ける際は<code>#</code>を使います。<code>#</code>の数が多いほど文字が小さくなります。章の見出しを<code>##</code>にするなら節は<code>###</code>、小節または段落は<code>####</code>が適切でしょう。見出しは<code>####</code>まで使えます。</p>
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu"># 見出し1</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="fu">## 見出し2</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="fu">### 見出し3</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="fu">#### 見出し4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<h1>
+見出し1
+</h1>
+<h2 class="anchored" data-anchor-id="見出し">
+見出し2
+</h2>
+<h3 class="anchored">
+見出し3
+</h3>
+<h4 class="anchored">
+見出し4
+</h4>
+</section>
+<section id="区切り線" class="level4" data-number="F.3.2.5">
+<h4 data-number="F.3.2.5" class="anchored" data-anchor-id="区切り線"><span class="header-section-number">F.3.2.5</span> 区切り線</h4>
+<p>区切り線は<code>---</code>または<code>***</code>を使います。</p>
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb10-1"><a href="#cb10-1"></a><span class="co">---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<hr>
+</section>
+<section id="表" class="level4" data-number="F.3.2.6">
+<h4 data-number="F.3.2.6" class="anchored" data-anchor-id="表"><span class="header-section-number">F.3.2.6</span> 表</h4>
+<p>　Markdownの表は非常にシンプルな書き方をしています。行は改行で、列は<code>|</code>で区切られます。ただ、表の第1行はヘッダー（変数名や列名が表示される行）扱いとなり、ヘッダーと内容の区分は<code>|---|</code>で行います。以下はMarkdownを利用した簡単な表の書き方です。ここでは可読性のためにスペースを適宜入れましたが、スペースの有無は結果に影響を与えません。</p>
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb11-1"><a href="#cb11-1"></a>|ID   |Name     |Math    |English |Favorite food|</span>
+<span id="cb11-2"><a href="#cb11-2"></a>|:---:|---------|-------:|-------:|-------------|</span>
+<span id="cb11-3"><a href="#cb11-3"></a>|1    |SONG     |15      |10      |Ramen        |</span>
+<span id="cb11-4"><a href="#cb11-4"></a>|2    |Yanai    |100     |100     |Cat food     |</span>
+<span id="cb11-5"><a href="#cb11-5"></a>|3    |Shigemura|80      |50      |Raw chicken  |</span>
+<span id="cb11-6"><a href="#cb11-6"></a>|4    |Wickham  |80      |90      |Lamb         |</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">ID</th>
+<th>Name</th>
+<th style="text-align: right;">Math</th>
+<th style="text-align: right;">English</th>
+<th>Favorite food</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td>SONG</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">10</td>
+<td>Ramen</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td>Yanai</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">100</td>
+<td>Cat food</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td>Shigemura</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">50</td>
+<td>Raw chicken</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td>Wickham</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">90</td>
+<td>Lamb</td>
+</tr>
+</tbody>
+</table>
+<p>　1行目はヘッダーであり、太字かつ中央揃えになります。2行目以降はデフォルトでは左揃えになりますが。ただし。<code>|---|</code>をいじることによって当該列の揃えを調整できます。<code>|:---|</code>は左 (デフォルト)、<code>|---:|</code>は右、<code>|:---:|</code>は中央となります。また<code>-</code>の個数は1個以上なら問題ありません。つまり、<code>|-|</code>も<code>|---|</code>も同じです。</p>
+</section>
+<section id="画像" class="level4" data-number="F.3.2.7">
+<h4 data-number="F.3.2.7" class="anchored" data-anchor-id="画像"><span class="header-section-number">F.3.2.7</span> 画像</h4>
+<p>　R Markdownに画像を入れるには<code>![代替テキスト](ファイル名)</code>と入力します。当たり前ですが、画像ファイルがワーキングディレクトリにない場合はパスを指定する必要があります。<code>[代替テキスト]</code>は画像を読み込めなかった場合のテキストを意味します。これは画像が読み込めなかった場合の代替テキストでもありますが、視覚障害者用のウェブブラウザーのためにも使われます。これらのウェブブラウザーはテキストのみ出力されるものが多く、画像の代わりには代替テキストが読み込まれます。</p>
+<p>　例えば、<code>Figs</code>フォルダー内の<code>favicon.png</code>というファイルを読み込むとしたら以下のように書きます。</p>
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb12-1"><a href="#cb12-1"></a><span class="al">![『私たちのR』ロゴ](Figs/favicon.png)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Figs/favicon.png" class="img-fluid figure-img" style="width:25.0%"></p>
+<figcaption>『私たちのR』ロゴ</figcaption>
+</figure>
+</div>
+</section>
+<section id="リンク" class="level4" data-number="F.3.2.8">
+<h4 data-number="F.3.2.8" class="anchored" data-anchor-id="リンク"><span class="header-section-number">F.3.2.8</span> リンク</h4>
+<p>　ハイパーリンクは<code>[テキスト](URL)</code>のような形式で書きます。<code>[]</code>内は実際に表示されるテキストであり、<code>()</code>は飛ばすURLになります。</p>
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb13-1"><a href="#cb13-1"></a>毎日1回は<span class="co">[</span><span class="ot">SONGのホームページ</span><span class="co">](https://www.jaysong.net)</span>へアクセスしましょう。</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<p>毎日1回は<a href="https://www.jaysong.net">SONGのホームページ</a>へアクセスしましょう。</p>
+</section>
+<section id="脚注" class="level4" data-number="F.3.2.9">
+<h4 data-number="F.3.2.9" class="anchored" data-anchor-id="脚注"><span class="header-section-number">F.3.2.9</span> 脚注</h4>
+<p>　脚注は<code>[^固有識別子]</code>と<code>[^固有識別子]: 脚注内容</code>の2つの要素が必要です。まず、文末脚注を入れる箇所に<code>[^xxxx]</code>を挿入します。<code>xxxx</code>は任意の文字列れ構いません。しかし、同じR Markdown内においてこの識別子は被らないように注意してください。実際の脚注の内容は<code>[^xxxx]: 内容</code>のように入力します。これはどこに位置しても構いません。文書の途中でも、最後に入れても、脚注の内容は文末に位置します。ただし、脚注を入れる段落のすぐ後の方が作成する側としては読みやすいでしょう。</p>
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb14-1"><a href="#cb14-1"></a>これは普通の文章です<span class="ot">[^foot1]</span>。</span>
+<span id="cb14-2"><a href="#cb14-2"></a></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="ot">[^foot1]: </span>これは普通の脚注です。</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<p>これは普通の文章です<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>。</p>
+</section>
+<section id="数式" class="level4" data-number="F.3.2.10">
+<h4 data-number="F.3.2.10" class="anchored" data-anchor-id="数式"><span class="header-section-number">F.3.2.10</span> 数式</h4>
+<p>　インライン数式は<code>$数式$</code>で埋め込むことができます。数式はLaTeXの書き方とほぼ同じです。ちなみに、R Markdownの数式は<a href="https://www.mathjax.org">MathJax</a>によってレンダリングされます。このMathJaxライブラリはHTMLに埋め込まれているのではないため、インターネットに接続せずにHTMLファイルを開くと数式が正しく出力されません。</p>
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb15-1"><a href="#cb15-1"></a>アインシュタインと言えば、$e = mc^2$でしょう。</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<p>アインシュタインと言えば、<span class="math inline">\(e = mc^2\)</span>でしょう。</p>
+<p>　数式を独立した行として出力する場合は、<code>$</code>の代わりに<code>$$</code>を使用します。</p>
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb16-1"><a href="#cb16-1"></a>独立した数式の書き方</span>
+<span id="cb16-2"><a href="#cb16-2"></a></span>
+<span id="cb16-3"><a href="#cb16-3"></a>$$</span>
+<span id="cb16-4"><a href="#cb16-4"></a>y_i \sim \text{Normal}(\mathbf{X} \boldsymbol{\beta}, \sigma).</span>
+<span id="cb16-5"><a href="#cb16-5"></a>$$</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<p>独立した数式の書き方</p>
+<p><span class="math display">\[
+y_i \sim \text{Normal}(\mathbf{X} \boldsymbol{\beta}, \sigma).
+\]</span></p>
+<p>　もし数式が複数の行で構成されている場合は<code>$$</code>内にaligned環境（<code>\begin{aligned}</code>〜<code>\end{aligned}</code>）を使用します。むろん、LaTeXと使い方は同じです。</p>
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb17-1"><a href="#cb17-1"></a>複数の行にわたる数式の書き方</span>
+<span id="cb17-2"><a href="#cb17-2"></a></span>
+<span id="cb17-3"><a href="#cb17-3"></a>$$</span>
+<span id="cb17-4"><a href="#cb17-4"></a>\begin{aligned}</span>
+<span id="cb17-5"><a href="#cb17-5"></a>  Y_i      &amp; \sim \text{Bernoulli}(\theta_i), <span class="sc">\\</span></span>
+<span id="cb17-6"><a href="#cb17-6"></a>  \theta_i &amp; = \text{logit}^{-1}(y_i^*), <span class="sc">\\</span></span>
+<span id="cb17-7"><a href="#cb17-7"></a>  y_i^*    &amp; = \beta_0 + \beta_1 x_1 + \beta_2 z_1.</span>
+<span id="cb17-8"><a href="#cb17-8"></a>\end{aligned}</span>
+<span id="cb17-9"><a href="#cb17-9"></a>$$</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<p>複数の行にわたる数式の書き方</p>
+<p><span class="math display">\[
+\begin{aligned}
+  Y_i      &amp; \sim \text{Bernoulli}(\theta_i), \\
+  \theta_i &amp; = \text{logit}^{-1}(y_i^*), \\
+  y_i^*    &amp; = \beta_0 + \beta_1 x_1 + \beta_2 z_1.
+\end{aligned}
+\]</span></p>
+<p>　ここまで見ればお分かりかと思いますが、<code>$$</code>の中にはLaTeXコマンドが使用可能です。たとえば、行列を作成する際は以下のように<code>\begin{bmatrix}</code>環境を使います。</p>
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb18-1"><a href="#cb18-1"></a>行列の書き方</span>
+<span id="cb18-2"><a href="#cb18-2"></a></span>
+<span id="cb18-3"><a href="#cb18-3"></a>$$</span>
+<span id="cb18-4"><a href="#cb18-4"></a>X = \begin{bmatrix}</span>
+<span id="cb18-5"><a href="#cb18-5"></a>  x_{11} &amp; x_{12} <span class="sc">\\</span></span>
+<span id="cb18-6"><a href="#cb18-6"></a>  x_{21} &amp; x_{22} <span class="sc">\\</span></span>
+<span id="cb18-7"><a href="#cb18-7"></a>  x_{31} &amp; x_{32}</span>
+<span id="cb18-8"><a href="#cb18-8"></a>\end{bmatrix}.</span>
+<span id="cb18-9"><a href="#cb18-9"></a>$$</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<p>行列の書き方</p>
+<p><span class="math display">\[
+X = \begin{bmatrix}
+  x_{11} &amp; x_{12} \\
+  x_{21} &amp; x_{22} \\
+  x_{31} &amp; x_{32}
+\end{bmatrix}.
+\]</span></p>
+</section>
+<section id="引用" class="level4" data-number="F.3.2.11">
+<h4 data-number="F.3.2.11" class="anchored" data-anchor-id="引用"><span class="header-section-number">F.3.2.11</span> 引用</h4>
+<p>　引用の際は文章の最初に<code>&gt;</code>を入れるだけです。<code>&gt;</code>の後に半角のスペースが1つ入ります。</p>
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb19-1"><a href="#cb19-1"></a>「政治とは何か」についてイーストンは以下のように定義しました。</span>
+<span id="cb19-2"><a href="#cb19-2"></a></span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="at">&gt; </span><span class="co">[</span><span class="ot">A</span><span class="co">]</span><span class="at"> political system can be designated as those interactions through which values are authoritatively allocated for a society.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<p>「政治とは何か」についてイーストンは以下のように定義しました。</p>
+<blockquote class="blockquote">
+<p>[A] political system can be designated as those interactions through which values are authoritatively allocated for a society.</p>
+</blockquote>
+</section>
+<section id="コメント" class="level4" data-number="F.3.2.12">
+<h4 data-number="F.3.2.12" class="anchored" data-anchor-id="コメント"><span class="header-section-number">F.3.2.12</span> コメント</h4>
+<p>　R Markdownにもコメントを付けることができます。とりあえず書いたが要らなくなった段落や文章があって、消すことがもったいない場合はコメントアウトするのも1つの方法です。ただし、コメントアウトの方法はRは<code>#</code>でしたが、これはR Markdownでは見出しの記号です。R Markdownのコメントは<code>&lt;!--</code>と<code>--&gt;</code>で囲みます。</p>
+<p><strong>Input:</strong></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb20-1"><a href="#cb20-1"></a>文章1</span>
+<span id="cb20-2"><a href="#cb20-2"></a></span>
+<span id="cb20-3"><a href="#cb20-3"></a><span class="co">&lt;!--</span></span>
+<span id="cb20-4"><a href="#cb20-4"></a><span class="co">ここはコメントです。</span></span>
+<span id="cb20-5"><a href="#cb20-5"></a><span class="co">--&gt;</span></span>
+<span id="cb20-6"><a href="#cb20-6"></a></span>
+<span id="cb20-7"><a href="#cb20-7"></a>文章2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<p>文章1</p>
+<!--
+ここはコメントです。
+-->
+<p>文章2</p>
+</section>
+</section>
+</section>
+<section id="rコードの挿入" class="level2" data-number="F.4">
+<h2 data-number="F.4" class="anchored" data-anchor-id="rコードの挿入"><span class="header-section-number">F.4</span> Rコードの挿入</h2>
+<section id="チャンク" class="level3" data-number="F.4.1">
+<h3 data-number="F.4.1" class="anchored" data-anchor-id="チャンク"><span class="header-section-number">F.4.1</span> チャンク</h3>
+</section>
+<section id="チャンクオプション" class="level3" data-number="F.4.2">
+<h3 data-number="F.4.2" class="anchored" data-anchor-id="チャンクオプション"><span class="header-section-number">F.4.2</span> チャンクオプション</h3>
+
+
+<div class="hidden" aria-hidden="true">
+<span class="glightbox-desc lightbox-desc-1">RStudio</span>
+<span class="glightbox-desc lightbox-desc-2">VS Code</span>
+<span class="glightbox-desc lightbox-desc-3">Jupyter</span>
+<span class="glightbox-desc lightbox-desc-4">NeoVim</span>
+</div>
+</section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>今後、Quartoユーザーが拡大すると別途のパッケージを要求するようになるかも知れない。たとえば、QuartoでCV（Curriculum Vitae）作成のための<a href="https://github.com/kazuyanagimoto/quarto-awesomecv-typst">awesomecv-typst</a>という拡張機能があるが、これには{<a href="http://kazuyanagimoto.com/typstcv/">typstcv</a>}という専用パッケージが必要である。<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>現時点（2023年2月27日）において拡張機能の追加はCLIを使ってQuartoプロジェクトフォルダーに追加する方法のみとなっているので、楽とまでは言えないが…<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>R Markdownを使用したことのある読者なら「knit（ニット）」という表現に馴染みがあるかも知れないが、Quartoでは{knitr}以外のエンジンも使用可能であるため、knitでなく、renderと言う。<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>HTMLに慣れている読者なら<code>&lt;br/&gt;</code>を使った改行もできます。ただし、一般的なMarkdownの改行よりも行間が短めです。HTMLに慣れている読者さんならお分かりかと思いますが、これはMarkdownの改行 （2行改行）はHTMLの<code>&lt;p&gt;&lt;/p&gt;</code>に相当するからです。<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>ただし、イタリックの場合、日本語には使わないのが鉄則です。強調の意味としてイタリックを使うのはローマ字くらいです。<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>これは普通の脚注です。<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/www\.jaysong\.net\/RBook\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+      for (let i=0; i<annoteTargets.length; i++) {
+        const annoteTarget = annoteTargets[i];
+        const targetCell = annoteTarget.getAttribute("data-target-cell");
+        const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+        const contentFn = () => {
+          const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          if (content) {
+            const tipContent = content.cloneNode(true);
+            tipContent.classList.add("code-annotation-tip-content");
+            return tipContent.outerHTML;
+          }
+        }
+        const config = {
+          allowHTML: true,
+          content: contentFn,
+          onShow: (instance) => {
+            selectCodeLines(instance.reference);
+            instance.reference.classList.add('code-annotation-active');
+            window.tippy.hideAll();
+          },
+          onHide: (instance) => {
+            unselectCodeLines();
+            instance.reference.classList.remove('code-annotation-active');
+          },
+          maxWidth: 300,
+          delay: [50, 0],
+          duration: [200, 0],
+          offset: [5, 10],
+          arrow: true,
+          appendTo: function(el) {
+            return el.parentElement.parentElement.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'quarto',
+          placement: 'right',
+          popperOptions: {
+            modifiers: [
+            {
+              name: 'flip',
+              options: {
+                flipVariations: false, // true by default
+                allowedAutoPlacements: ['right'],
+                fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+              },
+            },
+            {
+              name: 'preventOverflow',
+              options: {
+                mainAxis: false,
+                altAxis: false
+              }
+            }
+            ]        
+          }      
+        };
+        window.tippy(annoteTarget, config); 
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./references.html" class="pagination-link" aria-label="参考文献">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">参考文献</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./quarto2.html" class="pagination-link" aria-label="Quarto [文書]">
+        <span class="nav-page-text"><span class="chapter-number">G</span>&nbsp; <span class="chapter-title">Quarto [文書]</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2024, <a href="https://www.jaysong.net">Jaehyun Song</a> and <a href="https://yukiyanai.github.io/">Yuki Yanai</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+<script>var lightboxQuarto = GLightbox({"loop":false,"openEffect":"zoom","closeEffect":"zoom","selector":".lightbox","descPosition":"bottom"});
+window.onload = () => {
+  lightboxQuarto.on('slide_before_load', (data) => {
+    const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+    const href = trigger.getAttribute('href');
+    if (href !== null) {
+      const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+      if (imgEl !== null) {
+        const srcAttr = imgEl.getAttribute("src");
+        if (srcAttr && srcAttr.startsWith("data:")) {
+          slideConfig.href = srcAttr;
+        }
+      }
+    } 
+  });
+
+  lightboxQuarto.on('slide_after_load', (data) => {
+    const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+    if (window.Quarto?.typesetMath) {
+      window.Quarto.typesetMath(slideNode);
+    }
+  });
+
+};
+          </script>
+
+
+
+
+</body></html>

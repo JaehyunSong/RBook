@@ -1,0 +1,555 @@
+# Quarto [基礎]
+
+:::{.callout-important}
+## 本項目は執筆途中です！
+
+本章は完成後、既存のR MarkdownとQuartoの内容の一部を代替しますが、現時点では参考程度にしてください。
+:::
+
+## Quartoとは {#sec-quarto-intro}
+
+　Quartoは[Pandoc](https://pandoc.org/)ベースのオープンソース科学/技術出版システムであり、Rコードと結果、文章を一つの文書としてまとめてくれるものだ。Rのコードと実行結果、そしてテキストなどが一つの文書でまとまったもの、そうだ、『私たちのR』もまたQuartoで作成されている。『私たちのR』のようにHTML形式でWebサイトとして公開することもでき、他のもPDFやMicrosoft Wordのようなスタンドアロンのドキュメントファイルとして公開することもできる。
+
+　また、本書の読者であればPython、JuliaといったR以外の言語も使用する（予定がある）可能性が高いが、Rコードだけでなく、PythonやJuliaのコードも文書内に入れることができる。
+
+　Quartoで作成された文書のソースコードを見ると、大きく3つの領域に分けられる。それはYAMLヘッダー、チャンク、それ以外の領域（テキスト）だ。YAMLヘッダーは文書のタイトル、著者、作成日などのメタ情報と文書全体のフォーマットやスタイルを指定する内容でJSONに類似したYAML形式で書き、メタ情報を除き、コンパイルした文書には表示されない。チャンクはR（他にもPython、Julia、Mermaid、Observable等）コードが入る領域で、コンパイルするとコードとその実行結果が表示される。これら2つは明確に領域を宣言する必要があり、具体的にYAMLヘッダーは`---`と`---`の間に、チャンクは```` ```{r} ````と```` ``` ````の間に書く必要がある。以下のコードはQuartoで作成された文書のコードであるが、1行目から7行目までがYAMLヘッダー、13〜15行目と19〜21行目がチャンクだ。この2つの領域外の内容はテキストであり、Markdown文法に則って書く。
+
+:::{.panel-tabset}
+## コード
+
+````
+---
+title: 2083年では数学落ちこぼれだった私が1777年に生まれ変わり数学天才と称えられた件について
+author: カール・フリードリヒ・ガウス
+date: 1855/2/23
+format: html
+lang: ja
+---
+
+## R万歳！
+
+**面倒な作業はRに任せれば良い。**たとえば、1+1のように人間が解くには非常に面倒な計算もRを使えば一瞬だ。
+
+```{{r}}
+1 + 1
+```
+
+人間であれば数日かかる1+1の計算が一瞬で終わった。もちろん、人間であれば秒で終わる13897294812894の素因数分解を任せても良いが、これくらいは自分で手で解こう。
+
+```{{r}}
+gmp::factorize(13897294812894)
+```
+
+~~簡単すぎて草生えるわ。~~
+
+````
+
+## コンパイル後
+
+![](Figs/Quarto/after_compile.png)
+:::
+
+　文書全体のフォーマット、スタイルを指定するだけのYAMLヘッダーを除けば、QuartoはRコードとMarkdown文法で作成されたテキストで構成されたものと言える。
+
+### R Markdownとの違い
+
+　以上の話を考えると、「なんだ、R Markdownと同じじゃないか！」と思う読者もいるだろう。その判断は7割くらいは正しく、QuartoとR Markdownはほぼ同じ目的のために開発されたものだ。目的が同じである以上、R Markdownを問題なく使いこなしているのであれば、Quartoの学習はさほど難しくないし、そもそもQuartoに乗り換える必要もあまりない（かも知れない）。ただし、筆者（宋）は今後、QuartoがR Markdownに代わる主流になると考えているため（そうでないと考えている方も大勢にいる）、本書ではR Markdownでなく、Quartoを紹介する。むろん、別の名前が付いてある以上、Quarto = R Markdownではない。文法などの違いは本章の中盤以降に説明するとして、まず両者の技術的な面での違いを紹介する。
+
+　一点目は使用可能なエンジンだ。たとえば、R Markdownは`.Rmd`をknitrエンジンを経由し、コードとその結果物が含まれた`.md`ファイルを生成する。ここで生成された`.md`ファイルはPandocを経由して最終的にはHTML、PDF、Microsoft Wordファイルに変換される（ @fig-rmd ）。Quartoも基本的に同じである。ただし、knitrエンジン以外にもPython、Juliaで多用されるJupyterやJavaScripベースのObservableもエンジンとして使用可能という特徴がある（ @fig-qmd ）。使用可能なエンジンが多いということはRコード以外にもPyhton、Julia、Observable JSのコードも使えるといったメリットがある。また、使用可能なエンジンは今後のアップデートで追加される可能性もある。ちなみにQuartoには[Mermaid](https://mermaid.js.org/)、[GraphViz](https://graphviz.org/)が実装されており、以下のようなダイアグラム作成も別途の設定なしで簡単にできる。
+
+:::{#fig-rmd-qud layout-ncol=2}
+```{mermaid}
+%%| label: fig-rmd
+%%| fig-cap: R Markdownの場合
+flowchart LR
+  A[.Rmd] --> B[knitr]
+  B --> C[.md]
+  C --> D{Pandoc}
+  D --> E(HTML)
+  D --> F(PDF)
+  D --> G(Microsoft Word)
+  D --> H(Etc.)
+```
+
+```{mermaid}
+%%| label: fig-qmd
+%%| fig-cap: Quartoの場合
+%%| fig-align: center
+flowchart LR
+  A[.qmd] --> B[knitr]
+  A --> C[Jupyter]
+  A --> D[Observable JS]
+  A --> E[Etc]
+  B --> F[.md]
+  C --> F
+  D --> F
+  E --> F
+  F --> G{Pandoc}
+  G --> H(HTML)
+  G --> I(PDF)
+  G --> J(Microsoft Word)
+  G --> K(Etc.)
+```
+
+R Markdown/Quartoから文書が生成されるまで
+:::
+
+　二点目は様々なフォーマットが統合されている点だ。R Markdownだと文書を作成する場合は{rmarkdown}パッケージ、ホームページを作成するなら{blogdown}パッケージ、スライドを作成するなら{xaringan}等のパッケージを使うことになる。しかし、Quartoはプラスアルファのパッケージを使わず、Quarto単体で様々なフォーマットが作成できる[^awesomecv]。ここまで聞くとR Markdownの方がより拡張性に優れているように見えるが、QuartoもまたQuarto Extensionを通じて様々な拡張機能が導入できる[^quarto-ext]。また、[Lua](https://www.lua.org/)言語の知識があれば、自分で拡張機能を作成することができる。
+
+[^awesomecv]: 今後、Quartoユーザーが拡大すると別途のパッケージを要求するようになるかも知れない。たとえば、QuartoでCV（Curriculum Vitae）作成のための[awesomecv-typst](https://github.com/kazuyanagimoto/quarto-awesomecv-typst)という拡張機能があるが、これには{[typstcv](http://kazuyanagimoto.com/typstcv/)}という専用パッケージが必要である。
+
+[^quarto-ext]: 現時点（2023年2月27日）において拡張機能の追加はCLIを使ってQuartoプロジェクトフォルダーに追加する方法のみとなっているので、楽とまでは言えないが...
+
+　三点目はIDEだ。R Markdownの場合、ほぼRStudio一度（他のIDEでももちろん出来る）であったが、QuartoだとVisual Studio CodeやJupyter、NeoVim、Emacs、SublimeTextも使用可能であり、RStudioとほぼ変わらない使用経験を提供する（ @fig-ides ）。
+
+:::{#fig-ides layout="[[56,-2,42], [41,-2,57]]"}
+![RStudio](https://quarto.org/docs/get-started/hello/images/rstudio-hello.png){.lightbox group="ide" height=200px}
+
+![VS Code](https://quarto.org/docs/tools/images/vscode-render.png){.lightbox group="ide" height=200px}
+
+![Jupyter](https://quarto.org/docs/get-started/hello/images/jupyter-quarto-preview.png){.lightbox group="ide" height=200px}
+
+![NeoVim](https://quarto.org/docs/get-started/hello/images/neovim-overview.png){.lightbox group="ide" height=200px}
+
+各種IDE（出典はQuarto公式ホームページ）
+:::
+
+　しかし、QuartoはR Markdownの上位互換でもなく、R Markdownを代替するものでもないことには注意されたい（[参考](https://yihui.org/en/2022/04/quarto-r-markdown/)）。つまり、既存のR Markdownを問題なく使っているのであれば、Quartoへの移行は不要だろう。現在のところ、QuartoはR Markdown生態系を一つに統合したものに近く、文法などもほぼ同じであるため、移行のために新しい事をゼロベースから勉強する必要はほぼない。
+
+## はじめてのQuarto
+
+### 事前準備
+
+　Quartoを使う前に以下の3つの項目を確認する必要がある。
+
+　1つ目はQuarto CLIのインストールだ。Quarto CLIは[公式ホームページ](https://quarto.org/docs/get-started/)からダウンロードできる（<https://quarto.org/docs/get-started/>）。macOS、Linux、Windows版が提供されているため、自分のOSに合わせてダウンロードし、インストールしておこう。最新のRStudioにはQuartoが内蔵されているが、最新版が内蔵されているわけではない。むろん、新機能にこだわりがないのであれば、最新のRStudioをインストールするだけでも十分だ。
+
+　2つ目はRStudioを最新バージョンにアップデートすることだ。RStudioで本格的にQuartoが使えるようになったのはRStudio 2022.07からである。基本的に現時点での最新版をインストールしておけば問題ないだろう。
+
+　3つ目はRパッケージ{quarto}のインストールだ。こちらはインストールするだけで十分で、別途読み込む必要がない。
+
+### とりあえずRender
+
+　それではQuartoがどんなものか味わってみよう。まず、メニューのFile > New File > Quarto Documentを選択する。以下のような画面が表示されるが、Use visual markdown editorの**チェックを外し**、Createをクリックする。
+
+![](Figs/Quarto/first_quarto_1.png){width="500px" fig-align="center"}
+
+　テンプレのようなファイルが生成されるが、適当な名前を付けて保存し、Sourceペイン上段のRenderボタン[^render]をクリックする（ショートカットキーはmacOSはCmd + Shift + K、その他のOSはCtrl + Shift + K）。
+
+[^render]: R Markdownを使用したことのある読者なら「knit（ニット）」という表現に馴染みがあるかも知れないが、Quartoでは{knitr}以外のエンジンも使用可能であるため、knitでなく、renderと言う。
+
+![](Figs/Quarto/first_quarto_2.png){width="400px" fig-align="center"}
+
+　クリック数回で以下のような綺麗な文章が作成される。
+
+![](Figs/Quarto/first_quarto_3.png){width="100%" fig-align="center"}
+
+　`---`と`---`の間の領域がYAMLヘッダーであり、ここでは文書のタイトル（`title:`）と出力フォーマット（`format:`）が指定されている。YAMLヘッダーは1つの`.qmd`ファイルにおいて1箇所のみ、しかもファイルの最上段に位置する。続いて、```` ```{r} ````と```` ``` ````の間の領域がチャンクであり、このファイルには2つのチャンクがある。最初のチャンクは`1 + 1`の演算を行うチャンクであり、2つ目のチャンクでは`2 * 2`の演算を行う。ただし、2つ目のチャンクはコードは表示せず（`#| echo: false`）、結果のみを出力する。YAMLヘッダー、チャンク以外の領域はテキストであり、Markdown文法で記入される。たとえば、`##`が付いていれば見出し、`<`と`>`で囲まれたURLはクリック可能なURLに、`**`と`**`の間の文字は太字になる。
+
+## Markdown
+
+### Markdownとは
+
+　これまで頑張って無視してきたものがある。それがMarkdown（<i class="bi bi-markdown"></i>）だ。[John Gruber](https://daringfireball.net/)と[Aaron Swartz](http://www.aaronsw.com/)が2004年提案した軽量Markup言語だが、そもそもMarkup言語とはなんだろう。
+
+　Markup言語を知るためにはプレーンテキスト（plain text）とリッチテキスト（rich text、またはマルチスタイルテキスト）の違いについて知る必要がある。プレーンテキストとは書式情報などが一切含まれていない純粋なテキストのみで構成された文書だ。書式情報とは文書の余白、文字の大きさ、文字の色、図表などがある。これまでRStudio上で書いてきたRコードもプレーンテキストだ。コードに色が自動的に付けられるが、これはRStudioが色付けをしてくれただけで、ファイル自体はテキストのみで構成されている。macOSのTextEdit、Windowsのメモ帳、Linux GUI環境の[gedit](https://wiki.gnome.org/Apps/Gedit)や[KATE](https://kate-editor.org)、CLI環境下の[vim](https://www.vim.org)、[Emacs](https://www.gnu.org/software/emacs/)、[nano](https://www.nano-editor.org)などで作成したファイルは全てプレーンテキストだ。これらのテキストエディターには書式設定や図表の挿入などの機能は付いておらず、文字しか書けない。
+
+　一方、リッチテキストとは書式情報だけでなく、図表なども含まれる文書を指す。[Microsoft Word](www.microsoft.com/microsoft-365/microsoft-office)や[Pages](https://www.apple.com/jp/iwork/)、[LibreOffice Writer](https://www.libreoffice.org)から作成したファイルなどが代表的な例だ。これらのワードプロセッサーソフトウェアは書式の設定や図表・リンクの挿入などができる。そして、Markup言語とは**プレーンテキストのみでリッチテキストを作成するための言語**です。
+
+　Markup言語の代表格の言語がHyperText **Markup Language**、略してHTMLだ。読者の皆さんがウェブブラウザから見る画面のほとんどはHTMLで書かれている。この『私たちのR』もHTMLだ。この文書には図表があり、太字、見出し、水平線など、テキスト以外の情報が含まれている。しかし、HTMLは純粋なテキストのみで書かれており、ウェブブラウザ（[Firefox](https://www.mozilla.org/firefox/)、[Chrome](https://www.google.com/chrome/)、[Edge](https://www.microsoft.com/edge)など）がテキストファイルを読み込み、解釈して書式が付いている画面を出力してくれているだけだ。例えば、リンク（hyperlink）について考えてみよう。「[SONGのHP](https://www.jaysong.net)」をクリックすると宋のホームページに移動する。ある単語をクリックすることで、他のウェブサイトへ飛ばす機能を付けるためにはHTMLファイルの中に、以下のように記入する必要がある。
+
+```html
+<a href="https://www.jaysong.net">SONGのHP</a>
+```
+
+　これをウェブブラウザが自動的に「[SONGのHP](https://www.jaysong.net)」と変換し、画面に出力してくれるわけだ。これは、書式情報などが必要な箇所にコードを埋め込むことによって実現される。そして、このMark*up*言語をより単純な文法で再構成したものがMark*down*だ。例えば、以上のHTMLはMarkdownでは以下のように書く。
+
+```markdown
+[SONGのHP](https://www.jaysong.net)
+```
+
+　同じ意味のコードだが、Markdownの方がより簡潔に書けることが分かるだろう。このMarkdownは最終的にHTMLやMicrosoft Word、PDF形式で変換される。一般的にはHTML出力を使うが、自分のPCに$\LaTeX$環境が構築されている場合はPDF形式で出力することも可能であり、個人的には推奨しないが、Microsoft Word文書ファイルへ変換することも可能だ。また、HTML（+ JavaScript）へ出力可能であることを利用し、スライドショー、e-Book、ホームページの作成にもMarkdownが使える。
+
+　Markdown記法は一つだけではない。[Pandoc](https://pandoc.org/)の開発者で有名な[John MacFarlane](https://johnmacfarlane.net/)が主導して制定した[CommonMark](https://commonmark.org/)が多くのMarkdown記法のベースとなるが、機能に制約がある（たとえば、表が作れないなど）。他にもいくつかの流派があり、Markdown編集ソフトウェア独自の使用が追加されているケースもある。Markdownが流行るほど生態系の断片化は避けられないが、[GFM（GitHub Flavored Markdown）](https://github.github.com/gfm/)と呼ばれる書き方であり、
+こちらが現在の主流である。本書で紹介するMarkdown記法もGFMと「ほぼ」一致しており、どのMarkdown編集ソフトウェアでも同じ動作をするだろう。他にもQuartoはGFMでは作成できないコールアウトやタブセットのような便利な機能も提供しているが、これらの内容は次章以降で紹介する。
+
+### Markdown記法
+
+
+　まずは、Markdownの文法について解説します。ここではMarkdown文書内に以下のようなことを作成する方法を実際の書き方と、出力画面を対比しながら解説していきます。
+
+* 改行
+* 強調: 太字、イタリック、アンダーライン、取り消し線
+* 箇条書き
+* 見出し
+* 区切り線
+* 表
+* 画像
+* リンク
+* 脚注
+* 数式
+* 引用
+* コメント
+* Rコード
+
+#### 改行
+
+　Markdownにおける改行はやや特殊です。特殊といっても難しいことはありません。普段よりもう一行改行するだけです。Markdownの場合、1回の改行は改行として判定されず、同じ行の連続と認識します。たとえば、**Input**のように入力すると**Output**のように文章1と文章2が繋がります。
+
+**Input:**
+```markdown
+文章1
+文章2
+```
+
+**Output:**
+
+文章1
+文章2
+
+　文章1と文章2を改行するためにはもう一行、改行する必要があります。以下の例を見てください。
+
+**Input:**
+```markdown
+文章1
+
+文章2
+```
+
+**Output:**
+
+文章1
+
+文章2
+
+　こうすることで段落間の間隔を強制的に入れることとなり、作成者側にも読みやすい文書構造になります[^linebreak]。
+
+[^linebreak]: HTMLに慣れている読者なら`<br/>`を使った改行もできます。ただし、一般的なMarkdownの改行よりも行間が短めです。HTMLに慣れている読者さんならお分かりかと思いますが、これはMarkdownの改行 （2行改行）はHTMLの`<p></p>`に相当するからです。
+
+#### 強調
+
+文章の一部を強調する方法として**太字**、*イタリック*[^markdown-italic]、<u>アンダーライン</u>があり、強調ではありませんが、ついでに~~取り消し線~~についても紹介します。いずれも強調したい箇所を記号で囲むだけです。
+
+[^markdown-italic]: ただし、イタリックの場合、日本語には使わないのが鉄則です。強調の意味としてイタリックを使うのはローマ字くらいです。
+
+**Input:**
+```markdown
+文章の一部を**太字**にしてみましょう。
+
+*イタリック*もいいですね。
+
+~~取り消し線~~はあまり使わないかも。
+
+<u>アンダーライン</u>はHTMLタグを使います。
+```
+
+**Output:**
+
+文章の一部を**太字**にしてみましょう。
+
+*イタリック*もいいですね。
+
+~~取り消し線~~はあまり使わないかも。
+
+<u>アンダーライン</u>はHTMLタグを使います。
+
+
+#### 箇条書き
+
+箇条書きには順序なしと順序付きがあります。順序なしの場合`*`または`-`の後に半角スペースを1つ入れるだけです。また、2文字以上の字下げで下位項目を追加することもできます。
+
+**Input:**
+```markdown
+- 項目1
+  - 項目1-1
+  - 項目1-2
+    - 項目1-2-1
+      - 項目1-2-1-1
+    - 項目1-2-2
+- 項目2
+- 項目3
+```
+
+**Output:**
+
+- 項目1
+  - 項目1-1
+  - 項目1-2
+    - 項目1-2-1
+      - 項目1-2-1-1
+    - 項目1-2-2
+- 項目2
+- 項目3
+
+　続きまして順序付き箇条書きですが、これは`-`（または`*`）を`数字.`に換えるだけです。順序なしの場合と違って数字の後にピリオド（`.`）が付くことに注意してください。また、下位項目を作成する際、順序なしはスペース2つ以上が必要でしたが、順序付きの場合、少なくとも3つが必要です。
+
+**Input:**
+```markdown
+1. 項目1
+   1. 項目1-1
+   2. 項目1-2
+2. 項目2
+   * 項目2-1
+   * 項目2-2
+3. 項目3
+```
+
+**Output:**
+
+1. 項目1
+   1. 項目1-1
+   2. 項目1-2
+2. 項目2
+   * 項目2-1
+   * 項目2-2
+3. 項目3
+
+#### 見出し
+
+　章、節、段落のタイトルを付ける際は`#`を使います。`#`の数が多いほど文字が小さくなります。章の見出しを`##`にするなら節は`###`、小節または段落は`####`が適切でしょう。見出しは`####`まで使えます。
+
+**Input:**
+```markdown
+# 見出し1
+## 見出し2
+### 見出し3
+#### 見出し4
+```
+
+**Output:**
+
+<h1>見出し1</h1>
+
+<h2>見出し2</h2>
+
+<h3>見出し3</h3>
+
+<h4>見出し4</h4>
+
+#### 区切り線
+
+区切り線は`---`または`***`を使います。
+
+**Input:**
+```markdown
+---
+```
+
+**Output:**
+
+---
+
+#### 表
+
+　Markdownの表は非常にシンプルな書き方をしています。行は改行で、列は`|`で区切られます。ただ、表の第1行はヘッダー（変数名や列名が表示される行）扱いとなり、ヘッダーと内容の区分は`|---|`で行います。以下はMarkdownを利用した簡単な表の書き方です。ここでは可読性のためにスペースを適宜入れましたが、スペースの有無は結果に影響を与えません。
+
+**Input:**
+
+```markdown
+|ID   |Name     |Math    |English |Favorite food|
+|:---:|---------|-------:|-------:|-------------|
+|1    |SONG     |15      |10      |Ramen        |
+|2    |Yanai    |100     |100     |Cat food     |
+|3    |Shigemura|80      |50      |Raw chicken  |
+|4    |Wickham  |80      |90      |Lamb         |
+```
+
+**Output:**
+
+|ID   |Name     |Math    |English |Favorite food|
+|:---:|---------|-------:|-------:|-------------|
+|1    |SONG     |15      |10      |Ramen        |
+|2    |Yanai    |100     |100     |Cat food     |
+|3    |Shigemura|80      |50      |Raw chicken  |
+|4    |Wickham  |80      |90      |Lamb         |
+
+　1行目はヘッダーであり、太字かつ中央揃えになります。2行目以降はデフォルトでは左揃えになりますが。ただし。`|---|`をいじることによって当該列の揃えを調整できます。`|:---|`は左 (デフォルト)、`|---:|`は右、`|:---:|`は中央となります。また`-`の個数は1個以上なら問題ありません。つまり、`|-|`も`|---|`も同じです。
+
+#### 画像
+
+　R Markdownに画像を入れるには`![代替テキスト](ファイル名)`と入力します。当たり前ですが、画像ファイルがワーキングディレクトリにない場合はパスを指定する必要があります。`[代替テキスト]`は画像を読み込めなかった場合のテキストを意味します。これは画像が読み込めなかった場合の代替テキストでもありますが、視覚障害者用のウェブブラウザーのためにも使われます。これらのウェブブラウザーはテキストのみ出力されるものが多く、画像の代わりには代替テキストが読み込まれます。
+
+　例えば、`Figs`フォルダー内の`favicon.png`というファイルを読み込むとしたら以下のように書きます。
+
+**Input:**
+```markdown
+![『私たちのR』ロゴ](Figs/favicon.png)
+```
+
+**Output:**
+
+![『私たちのR』ロゴ](Figs/favicon.png){width="25%"}
+
+#### リンク
+
+　ハイパーリンクは`[テキスト](URL)`のような形式で書きます。`[]`内は実際に表示されるテキストであり、`()`は飛ばすURLになります。
+
+**Input:**
+
+```markdown
+毎日1回は[SONGのホームページ](https://www.jaysong.net)へアクセスしましょう。
+```
+
+**Output:**
+
+毎日1回は[SONGのホームページ](https://www.jaysong.net)へアクセスしましょう。
+
+#### 脚注
+
+　脚注は`[^固有識別子]`と`[^固有識別子]: 脚注内容`の2つの要素が必要です。まず、文末脚注を入れる箇所に`[^xxxx]`を挿入します。`xxxx`は任意の文字列れ構いません。しかし、同じR Markdown内においてこの識別子は被らないように注意してください。実際の脚注の内容は`[^xxxx]: 内容`のように入力します。これはどこに位置しても構いません。文書の途中でも、最後に入れても、脚注の内容は文末に位置します。ただし、脚注を入れる段落のすぐ後の方が作成する側としては読みやすいでしょう。
+
+**Input:**
+
+```markdown
+これは普通の文章です[^foot1]。
+
+[^foot1]: これは普通の脚注です。
+```
+
+**Output:**
+
+これは普通の文章です[^foot1]。
+
+[^foot1]: これは普通の脚注です。
+
+#### 数式
+
+　インライン数式は`$数式$`で埋め込むことができます。数式はLaTeXの書き方とほぼ同じです。ちなみに、R Markdownの数式は[MathJax](https://www.mathjax.org)によってレンダリングされます。このMathJaxライブラリはHTMLに埋め込まれているのではないため、インターネットに接続せずにHTMLファイルを開くと数式が正しく出力されません。
+
+**Input:**
+
+```markdown
+アインシュタインと言えば、$e = mc^2$でしょう。
+```
+
+**Output:**
+
+アインシュタインと言えば、$e = mc^2$でしょう。
+
+　数式を独立した行として出力する場合は、`$`の代わりに`$$`を使用します。
+
+**Input:**
+
+```markdown
+独立した数式の書き方
+
+$$
+y_i \sim \text{Normal}(\mathbf{X} \boldsymbol{\beta}, \sigma).
+$$
+```
+
+**Output:**
+
+独立した数式の書き方
+
+$$
+y_i \sim \text{Normal}(\mathbf{X} \boldsymbol{\beta}, \sigma).
+$$
+
+　もし数式が複数の行で構成されている場合は`$$`内にaligned環境（`\begin{aligned}`〜`\end{aligned}`）を使用します。むろん、LaTeXと使い方は同じです。
+
+**Input:**
+
+```markdown
+複数の行にわたる数式の書き方
+
+$$
+\begin{aligned}
+  Y_i      & \sim \text{Bernoulli}(\theta_i), \\
+  \theta_i & = \text{logit}^{-1}(y_i^*), \\
+  y_i^*    & = \beta_0 + \beta_1 x_1 + \beta_2 z_1.
+\end{aligned}
+$$
+```
+
+**Output:**
+
+複数の行にわたる数式の書き方
+
+$$
+\begin{aligned}
+  Y_i      & \sim \text{Bernoulli}(\theta_i), \\
+  \theta_i & = \text{logit}^{-1}(y_i^*), \\
+  y_i^*    & = \beta_0 + \beta_1 x_1 + \beta_2 z_1.
+\end{aligned}
+$$
+
+　ここまで見ればお分かりかと思いますが、`$$`の中にはLaTeXコマンドが使用可能です。たとえば、行列を作成する際は以下のように`\begin{bmatrix}`環境を使います。
+
+**Input:**
+
+```markdown
+行列の書き方
+
+$$
+X = \begin{bmatrix}
+  x_{11} & x_{12} \\
+  x_{21} & x_{22} \\
+  x_{31} & x_{32}
+\end{bmatrix}.
+$$
+```
+
+**Output:**
+
+行列の書き方
+
+$$
+X = \begin{bmatrix}
+  x_{11} & x_{12} \\
+  x_{21} & x_{22} \\
+  x_{31} & x_{32}
+\end{bmatrix}.
+$$
+
+
+#### 引用
+
+　引用の際は文章の最初に`> `を入れるだけです。`>`の後に半角のスペースが1つ入ります。
+
+**Input:**
+
+```markdown
+「政治とは何か」についてイーストンは以下のように定義しました。
+
+> [A] political system can be designated as those interactions through which values are authoritatively allocated for a society.
+```
+
+**Output:**
+
+「政治とは何か」についてイーストンは以下のように定義しました。
+
+> [A] political system can be designated as those interactions through which values are authoritatively allocated for a society.
+
+#### コメント
+
+　R Markdownにもコメントを付けることができます。とりあえず書いたが要らなくなった段落や文章があって、消すことがもったいない場合はコメントアウトするのも1つの方法です。ただし、コメントアウトの方法はRは`#`でしたが、これはR Markdownでは見出しの記号です。R Markdownのコメントは`<!--`と`-->`で囲みます。
+
+**Input:**
+
+```md
+文章1
+
+<!--
+ここはコメントです。
+-->
+
+文章2
+```
+
+**Output:**
+
+文章1
+
+<!--
+ここはコメントです。
+-->
+
+文章2
+
+
+## Rコードの挿入
+
+### チャンク
+
+### チャンクオプション

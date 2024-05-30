@@ -1,0 +1,155 @@
+# Quarto [文書]
+
+:::{.callout-important}
+## 本項目は執筆途中です！
+
+本章は完成後、既存のR MarkdownとQuartoの内容の一部を代替しますが、現時点では参考程度にしてください。
+:::
+
+## YAML header
+
+## Render foramt
+
+　Quartoは様々なフォーマットに対応しており、PDF出力も可能だ。
+
+### HTML
+
+### PDF
+
+Quartoで作成した`.qmd`ファイルがPDFフォーマットになるまでの過程は以下の通りであり、$\LaTeX$の知識も要求される。複雑に見えるが、単にPDFファイルを出力したいだけなら、そこまで難しくはない。
+
+```{mermaid}
+flowchart LR
+  A[.qmd] --> B{Quarto}
+  B --> C[.md]
+  C --> D{Pandoc}
+  D --> E[.tex]
+  E --> F{LaTeX}
+  F --> G[.pdf]
+```
+
+　まず、{tinytex}パッケージをインストールする。この作業はすぐ終わる。本講義の履修者であればインストール済みのため、「Code 03」から始めよう。
+
+```{r}
+#| filename: "Code 01"
+#| eval: false
+install.packages("tinytex")
+```
+
+　続いて、{tinytex}パッケージの`install_tinytex()`関数を実行する。この作業はインターネット環境によって数分かかる可能性がある。
+
+```{r}
+#| filename: "Code 02"
+#| eval: false
+tinytex::install_tinytex()
+```
+
+　ただし、以下のようなメッセージ（`/home/jovyan/.TinyTeX/bin/x86_64-linux/tlmgr`の箇所は自分の環境によって異なるだろう）が出力されたら既にTinyTeXがインストールされていることを意味するため、コンソールに「N」を入力し、Enter / Returnを押す。
+
+```{r}
+#| echo: false
+cat("Found '/home/jovyan/.TinyTeX/bin/x86_64-linux/tlmgr', which indicates a LaTeX distribution may have existed in the system.
+Continue the installation anyway? (Y/N) ")
+```
+
+### Docx
+
+### Etc.
+
+* website
+* book
+* dashboard
+* manuscript
+* extensions（発展編参照）
+
+## 日本語が含まれたPDF
+
+### LaTeX
+
+　Quartoで文書を作成する際、出力フォーマットはHTMLかPDFだろう。いずれもYAMLヘッダーの`format:`を`html`か`pdf`にすることで簡単に出力フォーマットが指定できるが、日本語が含まれたPDFの場合、文字化けが生じる可能性が高い。
+
+　PDFで出力する場合、{tinytex}パッケージと`tinytex::install_tinytex()`で$\LaTeX$環境はインストール済みであろう。日本語が含まれたPDFを作成する場合、以上の作業に加え、日本語フォントもインストールする必要がある[^haranoaji]。$\LaTeX$デフォルトの和文フォントである原ノ味（Haranoaji）をインストールする。ここでも数分かかる可能性がある。
+
+[^haranoaji]: 原ノ味フォントでなく、NotoやIPAexフォントを使用する場合でもなぜか原ノ味フォントが要求されるので、原ノ味フォントを使用する予定がなくてもインストールしておこう。
+
+```{r}
+#| filename: "Code 03"
+#| eval: false
+tinytex::tlmgr_install("haranoaji")
+```
+
+　以上の作業はRの再インストール、またはメジャーアップデートをしない限り、1回だけで良い。つまり、通常のパッケージ同様、別のプロジェクトであっても以上の作業は不要だ。これで日本語PDFの準備はバッチリだ。`.qmd`ファイルのYAMLヘッダーを以下のように修正してみよう。
+
+```yaml
+---
+title: "私たちのR"
+subtitle: "ベストプラクティスの探求"
+author:
+  - name: 宋財泫
+    url: https://www.jaysong.net
+    affiliation: 関西大学
+  - name: 矢内勇生
+    url: https://yukiyanai.github.io/
+    affiliation: 高知工科大学
+    attributes:
+      corresponding: true
+date: today
+lang: ja
+# PDF設定
+format:
+  pdf:
+    pdf-engine: lualatex
+    documentclass: ltjsarticle
+# チャンクのオプション
+knitr: 
+  opts_chunk: 
+    dev: "ragg_png"     # <1>
+    fig.align: "center" # <2>
+    dpi: 300            # <3>
+    warning: false      # <4>
+    message: false      # <5>
+---
+```
+
+```yaml
+---
+title: "私たちのR"
+subtitle: "ベストプラクティスの探求"
+author:
+  - name: 宋財泫
+    url: https://www.jaysong.net
+    affiliation: 関西大学
+  - name: 矢内勇生
+    url: https://yukiyanai.github.io/
+    affiliation: 高知工科大学
+    attributes:
+      corresponding: true
+date: today
+lang: ja
+# PDF設定
+format:
+  pdf:
+    pdf-engine: lualatex
+    documentclass: ltjsarticle
+    classoption:
+      - a4paper
+      - 10pt
+    toc: false
+    toc-depth: 3
+    number-sections: true
+# チャンクのオプション
+knitr: 
+  opts_chunk: 
+    dev: "ragg_png"     # <1>
+    fig.align: "center" # <2>
+    dpi: 300            # <3>
+    warning: false      # <4>
+    message: false      # <5>
+---
+```
+
+　以上の例ではLuaLaTeXとltjsarticleクラスを組み合わせた紹介したが、ltjsbookなどのクラスも使用可能であり、エンジンもまたLuaLaTeX以外のエンジンを使用しても良い。日本語PDFを作成する際、よく使われるエンジンとしてLuaLaTeX以外にもXeLaTeXがある。
+
+### 参考文献の話
+
+### Typst
