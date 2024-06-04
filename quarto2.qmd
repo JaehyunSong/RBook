@@ -1,4 +1,4 @@
-# Quarto [文書]
+# Quarto [2]
 
 :::{.callout-important}
 ## 本項目は執筆途中です！
@@ -6,61 +6,164 @@
 本章は完成後、既存のR MarkdownとQuartoの内容の一部を代替しますが、現時点では参考程度にしてください。
 :::
 
-## YAML header
+## 出力フォーマット
 
-## Render foramt
+　[前章](quarto1.qmd)の例ではrender後の出力フォーマットはHTML形式のドキュメントだったが、Quartoは様々なフォーマットに対応しており、Microsoft WordフォーマットやPDFフォーマット出力も可能だ。フォーマットはYAMLヘッダー内で指定するため、具体的な内容は次節で紹介するとし、ここではPDFフォーマット出力のための準備だけ紹介しておこう。もし、PDF出力を使う予定がなければ本節は読み飛ばしても良い。
 
-　Quartoは様々なフォーマットに対応しており、PDF出力も可能だ。
+### PDF出力の準備
 
-### HTML
-
-### PDF
-
-Quartoで作成した`.qmd`ファイルがPDFフォーマットになるまでの過程は以下の通りであり、$\LaTeX$の知識も要求される。複雑に見えるが、単にPDFファイルを出力したいだけなら、そこまで難しくはない。
-
-```{mermaid}
-flowchart LR
-  A[.qmd] --> B{Quarto}
-  B --> C[.md]
-  C --> D{Pandoc}
-  D --> E[.tex]
-  E --> F{LaTeX}
-  F --> G[.pdf]
-```
-
-　まず、{tinytex}パッケージをインストールする。この作業はすぐ終わる。本講義の履修者であればインストール済みのため、「Code 03」から始めよう。
+　まず、{tinytex}パッケージをインストールする。この作業はすぐ終わる。
 
 ```{r}
-#| filename: "Code 01"
 #| eval: false
 install.packages("tinytex")
 ```
 
-　続いて、{tinytex}パッケージの`install_tinytex()`関数を実行する。この作業はインターネット環境によって数分かかる可能性がある。
+　続いて、{tinytex}パッケージの`install_tinytex()`関数を実行する。これは自分のPCに$\LaTeX$の最低限の環境をインストールする関数である。通常の$\LaTeX$環境ならサイズが非常に大きく、ダウンロードを含め、1時間以上かかる。しかし、{tinytex}はQuarto/R Markdownに必要な最低限の機能のみ[^tinytex]を提供するため比較的にすぐ終わる。すぐ終わると言っても、数分はかかるだろう。
+
+[^tinytex]: 最低限の機能といっても、言い換えれば「あまり使わないパッケージをインストールしない」だけである。`tinytex::tlmgr_install()`を使えばパッケージの追加もできるため、通常の$\LaTeX$環境でできるものが{tinytex}だとできないことはない。
 
 ```{r}
-#| filename: "Code 02"
 #| eval: false
 tinytex::install_tinytex()
 ```
 
-　ただし、以下のようなメッセージ（`/home/jovyan/.TinyTeX/bin/x86_64-linux/tlmgr`の箇所は自分の環境によって異なるだろう）が出力されたら既にTinyTeXがインストールされていることを意味するため、コンソールに「N」を入力し、Enter / Returnを押す。
+　ただし、以下のようなメッセージ（`/Library/TeX/texbin/tlmgr`の箇所は自分の環境によって異なるだろう）が出力されたら既に$\LaTeX$環境がインストールされていることを意味するため、コンソールに「N」を入力し、Enter / Returnを押す。
 
 ```{r}
 #| echo: false
-cat("Found '/home/jovyan/.TinyTeX/bin/x86_64-linux/tlmgr', which indicates a LaTeX distribution may have existed in the system.
+cat("Found '/Library/TeX/texbin/tlmgr', which indicates a LaTeX distribution may have existed in the system.
 Continue the installation anyway? (Y/N) ")
 ```
 
-### Docx
+## YAMLヘッダー
 
-### Etc.
+　YAMLヘッダーでは文書のタイトル、作成者、作成日のようなメタ情報に加え、出力フォーマット（HTML、PDF、Microsoft Word）、出力タイプ（文書、本、ウェブサイト、ダッシュボードなど）、チャンクオプションの指定ができる。YAMLヘッダーはYAML（**Y**AML **A**in't **M**arkup **L**anguage）という言語の表記法に則って書く必要がある。
 
-* website
-* book
-* dashboard
-* manuscript
-* extensions（発展編参照）
+　YAMLヘッダーは`.qmd`文書最上段の`---`と`---`間の領域内に指定するが[^yaml-pos]、順番は関係ない。しかし、多くの場合、メタ情報、フォーマット、タイプ、チャンクオプションの順になることが多い。ここではよく使う機能を中心にYAMLヘッダーの書き方を紹介する。
+
+[^yaml-pos]: `.qmd`ファイルの最上段でなく、別途のファイル（たとえば、`_quarto.yml`）で指定する場合もある。YAMLヘッダーの内容が長かったり、複数の`.qmd`ファイルが同じYAMLヘッダーを共有したりする場合に使う。
+
+### メタ情報
+
+　まずはメタ情報について解説する。最低限のものとしてはタイトル（`title`）、作成者（`author`）、作成日（`date`）があるが[^minimum-meta-info]、なるべく多くの内容を解説したいので、適当なQuarto文書を作成し、YAMLヘッダーを以下の内容に置き換え、renderしてみよう。
+
+[^minimum-meta-info]: 実はこれらすらなくても良い。
+
+```{.yaml filename="メタ情報指定の例"}
+---
+title: なぜ私がヘルムシュテット大学に...?
+subtitle: 2083年では数学落ちこぼれだった私が1777年に生まれ変わり数学天才と称えられた件について
+author: 
+  - name: カール・フリードリヒ・ガウス
+    affiliation: ヘルムシュテット大学
+    email: gauss@herumushutetto-u.ac.jp
+    url: https://www.jaysong.net/
+    attributes:
+      corresponding: true
+  - name: ベルンハルト・リーマン
+    affiliation: ゲッティンゲン大学
+    email: reimann@gettingen-u.ac.jp
+    url: https://yukiyanai.github.io/
+date: 1855/2/23
+date-modified: today
+lang: ja
+abstract: |
+   算数すらまともにできなかった私が1777年のドイツに生まれ変わり、
+   適当なこと喋ったら、なぜかみんな私のことを天才と称え始めた。
+   マジで訳わからんわ。なんか、私の名前をちなんだソフトもあるらしいね。
+format: html
+---
+```
+
+　まず、タイトルは`title`、サブタイトルは`subtitle`で指定する。`:`の後ろには必ず半角スペースを入れること。タイトルは文字列なので`"`で囲んでも良いが、YAML文法の場合、囲まなくても良い。
+
+　作成者名は作成者が一人、かつ氏名のみ出力するだけなら`author: 作成者名`だけでよい。しかし、作成者が二人以上の場合、以下のように書く必要がある（`author`以外の箇所は全て省略）。
+
+```{.yaml}
+author:
+  - name: 作成者1
+  - name: 作成者2
+```
+
+　以上のように`author:`後に改行し、2文字以上半角スペースで字下げを入れた上で、`- name: 作成者名`と書く。`-`の後ろにも半角スペースを忘れないこと。Markdownにおける箇条書き（順序なし）と同じだと考えても良いだろう。また、`author`には作成者に関する様々な情報を与えることができる。たとえば、作成者の所属機関、ホームページアドレス、メールアドレス、責任著者の有無などがある。最初に見せた例は二人の所属機関（`affiliation`）、メールアドレス（`email`）、ホームページ（`url`）を追加し、更にベルンハルト・リーマンは責任著者（`attributes` > `corresponding`）という情報を追加した（全員の貢献度が同じである場合、`attributes`内に`equal-contributor`も指定できる。）。
+
+　`date`は文書の作成日であり、`date-modified`は文書の修正（更新）日である。`2024/06/04`のような表記法で良い。もし、render日を自動的に入れたい場合は`today`にすれば良い。これは`date-modified`と相性が良い。
+
+　`lang`は文書の言語である。これによって文書が大きく変わることは内が、自動生成される内容、なとえば「References」が自動的に「参考文献」に変わったりする。デフォルトは英語（`lang: en`）であるが、日本語にしたい場合は`lang: ja`に変更しよう。
+
+　最後に`abstract`は文書の概要である。ここで注目したいのは`abstract:`の後に内容が来るのではなく、`|`が入り、内容は次の行になっている点だ。YAMLの場合、値が長くなりそうだと、`|`の次の行に書くことが多い。この中では普通のMarkdown文法が使用可能である。たとえば、`**`を使った強調はむろん、二行改行を入れることで概要内の改行もできる。`|`でなく、`>`を使うケースもあるが、この場合は概要内において改行が適用されない。
+
+### フォーマット
+
+　先ほどの「メタ情報指定の例」の最後を見ると`format: html`と書かれた行がある。ここが出力フォーマットを指定する箇所であり、よく使われるフォーマットはHTML（`format: html`）とPDF（`format: pdf`）、そして[次章](quarto3.qmd)で解説する[reveal.js](https://revealjs.com/)のスライド（`format: revealjs`）などがある。他にもあまり推奨はしないが、Microsoft Word（`format:docx`）もある。
+
+　RStudioから`.qmd`文書を作成すると、既定値は`format: html`になっているが、ここを適当に`pdf`や`docx`に変えると別フォーマットとして出力されるため、非常に便利だ。もし、一つの`.qmd`ファイルをHTMLとPDF版、両方用意する場合、その都度`format:`をいじるのは面倒だろう。実はこの`format:`は複数のフォーマットを指定することもできる。たとえば、HTMLとPDFなら以下のように指定する。
+
+```yaml
+format: 
+  html: default
+  pdf: default
+```
+
+　この状態でrenderを行うとHTML版で出力される。PDF版にしたい場合は、renderボタンの右にある小さい三角（▼）をクリックし、「Render PDF」を選択しよう。既定値がHTMLである理由は`format:`内に`html`を先に指定したからに過ぎない。`pdf`を先に書いておくと、PDFが既定値になる。
+
+　それでは細かい設定について紹介する。量が膨大になるため、以下では筆者（宋）がよくいじる箇所のみ紹介する。詳細はQuartoの公式ホームページを参照されたい。
+
+```{.yaml filename="フォーマット指定の例"}
+format: 
+  html:
+    grid: 
+      body-width: 1024px
+    theme: "lumen"
+    toc: true
+    toc-location: "right"
+    toc-depth: 3
+    number-sections: true
+    self-contained: false
+    code-fold: false
+```
+
+### チャンクオプション
+
+```{.yaml filename="チャンクオプション指定の例"}
+knitr: 
+  opts_chunk: 
+    dev: "ragg_png"
+    fig-align: "center"
+    dpi: 300
+    warning: false
+    message: false
+```
+
+### YAML文法
+
+　以上の内容だけでも大体のことはできるだろう。しかし、YAMLヘッダーで指定可能な内容はこれまで紹介してきた内容の数（十）倍だ。詳細はQuarto公式ホームページの[Reference](https://quarto.org/docs/reference/)を参照されたい。しかし、この場合、これから紹介するYAMLの書き方を知っておくと良い。
+
+* `#`でコメントOK（JSONはコメント不可）
+* オブジェクトは字下げで + `:`
+* 配列内のエレメントは`-`（1行で各なら`[]`でOK）
+* `|`で長い文章もOK（abstractなど）
+
+```yaml
+# format = {html = {theme = [theme1, theme2], highlight-style = a11y}}
+format:
+   html:
+      theme: 
+        - theme1
+        - theme2
+      highlight-style: a11y
+```
+
+```yaml
+# author = [[{name = JS}, {age = 81}], [{name = YY}, {age = 17}]]
+author:
+   - name: JS
+     age: 81
+   - name: YY
+     age: 17
+```
+
 
 ## 日本語が含まれたPDF
 
@@ -73,7 +176,6 @@ Continue the installation anyway? (Y/N) ")
 [^haranoaji]: 原ノ味フォントでなく、NotoやIPAexフォントを使用する場合でもなぜか原ノ味フォントが要求されるので、原ノ味フォントを使用する予定がなくてもインストールしておこう。
 
 ```{r}
-#| filename: "Code 03"
 #| eval: false
 tinytex::tlmgr_install("haranoaji")
 ```
