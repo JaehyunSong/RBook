@@ -1,5 +1,10 @@
 # Quarto [2]
 
+```{r}
+#| include: false
+source("_common.R")
+```
+
 :::{.callout-important}
 ## 本項目は執筆途中です！
 
@@ -40,9 +45,11 @@ Continue the installation anyway? (Y/N) ")
 
 　YAMLヘッダーでは文書のタイトル、作成者、作成日のようなメタ情報に加え、出力フォーマット（HTML、PDF、Microsoft Word）、出力タイプ（文書、本、ウェブサイト、ダッシュボードなど）、チャンクオプションの指定ができる。YAMLヘッダーはYAML（**Y**AML **A**in't **M**arkup **L**anguage）という言語の表記法に則って書く必要がある。
 
-　YAMLヘッダーは`.qmd`文書最上段の`---`と`---`間の領域内に指定するが[^yaml-pos]、順番は関係ない。しかし、多くの場合、メタ情報、フォーマット、タイプ、チャンクオプションの順になることが多い。ここではよく使う機能を中心にYAMLヘッダーの書き方を紹介する。
+　YAMLヘッダーは`.qmd`文書最上段の`---`と`---`間の領域内に指定するが[^yaml-pos]、順番は関係ない。しかし、多くの場合、メタ情報、フォーマット、タイプ[^yaml-type]、チャンクオプションの順になることが多い。ここではよく使う機能を中心にYAMLヘッダーの書き方を紹介する。
 
 [^yaml-pos]: `.qmd`ファイルの最上段でなく、別途のファイル（たとえば、`_quarto.yml`）で指定する場合もある。YAMLヘッダーの内容が長かったり、複数の`.qmd`ファイルが同じYAMLヘッダーを共有したりする場合に使う。
+
+[^yaml-type]: 書籍やウェブサイトなどの特殊なタイプでないのであれば、ここは省略されるケースが多い。
 
 ### メタ情報
 
@@ -86,7 +93,7 @@ author:
   - name: 作成者2
 ```
 
-　以上のように`author:`後に改行し、2文字以上半角スペースで字下げを入れた上で、`- name: 作成者名`と書く。`-`の後ろにも半角スペースを忘れないこと。Markdownにおける箇条書き（順序なし）と同じだと考えても良いだろう。また、`author`には作成者に関する様々な情報を与えることができる。たとえば、作成者の所属機関、ホームページアドレス、メールアドレス、責任著者の有無などがある。最初に見せた例は二人の所属機関（`affiliation`）、メールアドレス（`email`）、ホームページ（`url`）を追加し、更にベルンハルト・リーマンは責任著者（`attributes` > `corresponding`）という情報を追加した（全員の貢献度が同じである場合、`attributes`内に`equal-contributor`も指定できる。）。
+　以上のように`author:`後に改行し、2文字以上半角スペースで字下げを入れた上で、`- name: 作成者名`と書く。`-`の後ろにも半角スペースを忘れないこと。Markdownにおける箇条書き（順序なし）と同じだと考えても良いだろう。また、`author`には作成者に関する様々な情報を与えることができる。たとえば、作成者の所属機関、ホームページアドレス、メールアドレス、責任著者の有無などがある。最初に見せた例は二人の所属機関（`affiliation`）、メールアドレス（`email`）、ホームページ（`url`）を追加し、更にガウスには責任著者（`attributes` > `corresponding`）という情報を追加した（全員の貢献度が同じである場合、`attributes`内に`equal-contributor`も指定できる。）。
 
 　`date`は文書の作成日であり、`date-modified`は文書の修正（更新）日である。`2024/06/04`のような表記法で良い。もし、render日を自動的に入れたい場合は`today`にすれば良い。これは`date-modified`と相性が良い。
 
@@ -124,17 +131,22 @@ format:
     code-fold: false
 ```
 
+あ
+
 ### チャンクオプション
+
+　[前章](quarto1.qmd)で説明した通り、チャンク内には`#| オプション名: 値`でオプションの指定ができる。もし、全て（ほとんど）のチャンクに共通するオプションがあれば、個別のチャンクに指定することは非効率的だろう。全てのチャンクに適用されるオプション`knitr:` > `opts_chunk:`で指定できる。ここではチャンクオプションであれば何でも使えると思っても良い。たとえば以下の例を見てみよう。
 
 ```{.yaml filename="チャンクオプション指定の例"}
 knitr: 
   opts_chunk: 
-    dev: "ragg_png"
-    fig-align: "center"
-    dpi: 300
-    warning: false
+    dev: ragg_png
+    fig-align: center
+    dpi: 144
     message: false
 ```
+
+　以上の例だと、図の文字化けを未然に防ぐために図のエンジンは{ragg}のPNG（`dev: "ragg_png"`）、図は中央揃え（`fig-align: center`）、図の解像度は144DPI（`dpi: 144`）、コード実行から表示されるメッセージの非表示（`message: false`）を指定している。他にも様々なオプションが指定できる。たとえば、エラーが生じても強制的にレンダリングを続行させるために`error: true`を指定することもできる。
 
 ### YAML文法
 
@@ -164,6 +176,657 @@ author:
      age: 17
 ```
 
+## Markdown
+
+### 相互参照ついて
+
+　図表の相互参照には`@`を使用する。たとえば、チャンクのラベルが`fig-scatter1`という図がある場合、`@fig-scatter1`だけで十分である。以下の例を見てみよう。
+
+**Input:**
+
+````md
+以下の @fig-scatter1 は萼片の長さと幅を品種ごとに分けて示した散布図である。
+
+```{{r}}
+#| label: fig-scatter1
+#| echo: false
+#| fig-cap: "萼片の長さと幅の関係（品種別）"
+iris |>
+  mutate(Species2 = recode(Species,
+                           "setosa"     = "セトナ",
+                           "versicolor" = "バーシクル",
+                           "virginica"  = "バージニカ")) |>
+  ggplot() +
+  geom_point(aes(x = Sepal.Length, y = Sepal.Width, color = Species2)) +
+  labs(x = "萼片の長さ (cm)", y = "萼片の幅 (cm)", color = "品種")
+```
+````
+
+**Output:**
+
+　以下の @fig-scatter1 は萼片の長さと幅を品種ごとに分けて示した散布図である。
+
+```{r}
+#| label: fig-scatter1
+#| echo: false
+#| fig-cap: "萼片の長さと幅の関係（品種別）"
+iris |>
+  mutate(Species2 = recode(Species,
+                           "setosa"     = "セトナ",
+                           "versicolor" = "バーシクル",
+                           "virginica"  = "バージニカ")) |>
+  ggplot() +
+  geom_point(aes(x = Sepal.Length, y = Sepal.Width, color = Species2)) +
+  labs(x = "萼片の長さ (cm)", y = "萼片の幅 (cm)", color = "品種")
+```
+
+　図だけでなく、表や章でも同じやり方で相互参照ができる。ただし、一点注意が必要である。相互参照に使うチャンクのラベルに制約があることだ。相互参照の対象となるチャンクのラベルは`sec-`（章・節など）、`fig-`（図）、`tbl-`（表）で始まる必要がある。図表はチャンクラベルで指定できるが、章や節などの見出しの場合、以下のようにラベルを指定する。この書き方はチャンク以外の図表にラベルを付ける時も同様だ（後述）。
+
+```md
+## Rの素晴らしさについて {#sec-aboutR}
+```
+
+　また、Quartoの既定値のままだと「Figure X」と出力される。これを「図 X」の形式にしたい場合はYAMLヘッダーに`lang: ja`を追加するか、`language:`で別途指定する必要がある[^lang-sec]。
+
+　続いて、チャンクでなく、Markdownで作成した図表のラベルの付け方について。うおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおお。
+
+[^lang-sec]: 一つややこしいのが見出しの相互参照である。英語のままだと「Section 1」のように出力されるが、`lang:ja`で日本語化すると「セクション 1」のように表示される。これを「第1章」にしたい場合は、`第[-@sec-aboutR]章`のように書く必要がある。`[-@ラベル名]`にすると「Section」、「セクション」、「Figure」、「図」などを出力せず番号のみが出力される。
+
+### コールアウト
+
+　Quartoでは5種類のコールアウト（callout）が提供される。以下はコールアウト作成のコードとその結果である。`:::{.callout-*}`と`:::`間の内容が一つのブロック（コールアウト）となり、`##`でブロックのタイトルを指定する。また、`{}`内の`*`の箇所にはブロックの見た目を指定し、現在、`note`、`warning`、`important`、`tip`、`caution`の5種類がある。
+
+:::{.panel-tabset}
+## note
+::::{.columns}
+:::{.column width=49%}
+**Input:**
+
+```md
+:::{.callout-note}
+## Rはみんなの友達!
+
+末永くよろしくね!
+:::
+```
+:::
+
+:::{.column width=2%}
+:::
+
+:::{.column width=49%}
+**Output:**
+
+:::{.callout-note}
+## Rはみんなの友達!
+
+末永くよろしくね!
+:::
+:::
+::::
+
+## warning
+
+::::{.columns}
+:::{.column width=49%}
+**Input:**
+
+```md
+:::{.callout-warning}
+## Rはみんなの友達!
+
+末永くよろしくね!
+:::
+```
+:::
+
+:::{.column width=2%}
+:::
+
+:::{.column width=49%}
+**Output:**
+
+:::{.callout-warning}
+## Rはみんなの友達!
+
+末永くよろしくね!
+:::
+:::
+::::
+
+## important
+
+::::{.columns}
+:::{.column width=49%}
+**Input:**
+
+```md
+:::{.callout-important}
+## Rはみんなの友達!
+
+末永くよろしくね!
+:::
+```
+:::
+
+:::{.column width=2%}
+:::
+
+:::{.column width=49%}
+**Output:**
+
+:::{.callout-important}
+## Rはみんなの友達!
+
+末永くよろしくね!
+:::
+:::
+::::
+
+## tip
+
+::::{.columns}
+:::{.column width=49%}
+**Input:**
+
+```md
+:::{.callout-tip}
+## Rはみんなの友達!
+
+末永くよろしくね!
+:::
+```
+:::
+
+:::{.column width=2%}
+:::
+
+:::{.column width=49%}
+**Output:**
+
+:::{.callout-tip}
+## Rはみんなの友達!
+
+末永くよろしくね!
+:::
+:::
+::::
+
+## caution
+
+::::{.columns}
+:::{.column width=49%}
+**Input:**
+
+```md
+:::{.callout-caution}
+## Rはみんなの友達!
+
+末永くよろしくね!
+:::
+```
+:::
+
+:::{.column width=2%}
+:::
+
+:::{.column width=49%}
+**Output:**
+
+:::{.callout-caution}
+## Rはみんなの友達!
+
+末永くよろしくね!
+:::
+:::
+::::
+:::
+
+　`.callout-*`の後に`collapse="true"`を付けるとコールアウトの本文を隠すことができる（見出しをクリックすると本文が表示される）。
+
+::::{.columns}
+:::{.column width=49%}
+**Input:**
+
+```md
+:::{.callout-note collapse="true"}
+## Rはみんなの友達!（クリック）
+
+末永くよろしくね!
+:::
+```
+:::
+
+:::{.column width=2%}
+:::
+
+:::{.column width=49%}
+**Output:**
+
+:::{.callout-note collapse="true"}
+## Rはみんなの友達!（クリック）
+
+末永くよろしくね!
+:::
+:::
+::::
+
+　また、`.callout-*`の後に`icon="false"`を付けると見出しの左にあるアイコンを消すことができる。
+
+::::{.columns}
+:::{.column width=49%}
+**Input:**
+
+```md
+:::{.callout-warning icon="false"}
+## Rはみんなの友達!
+
+末永くよろしくね!
+:::
+```
+:::
+
+:::{.column width=2%}
+:::
+
+:::{.column width=49%}
+**Output:**
+
+:::{.callout-warning icon="false"}
+## Rはみんなの友達!
+
+末永くよろしくね!
+:::
+:::
+::::
+
+### 段組み
+
+　Quartoの段組みは非常に簡単だ。`::::{.columns}`と`::::`で囲まれた領域内の内容が段組みの対象となり、`:::{.column}`と`:::`で囲まれた領域が一つ一つの段となる。また、`.column`の次に`width`引数を追加することで、段の幅を指定することもできる。以下はコードのその結果を2段構成で示した例だ。
+
+**Input:**
+
+````md
+::::{.columns}
+:::{.column width=56%}
+**コード:**
+
+```{{r}}
+#| eval: false
+x <- c(1, 2, 3, 1, 2)
+y <- c("A", "A", "A", "B", "B")
+
+paste0(x, y)
+```
+:::
+
+:::{.column width=2%}
+:::
+
+:::{.column width=42%}
+**結果:**
+
+```{{r}}
+#| echo: false
+x <- c(1, 2, 3, 1, 2)
+y <- c("A", "A", "A", "B", "B")
+
+paste0(x, y)
+```
+:::
+::::
+````
+
+**Output:**
+
+::::{.columns}
+:::{.column width=56%}
+**コード**
+
+```{r}
+#| eval: false
+x <- c(1, 2, 3, 1, 2)
+y <- c("A", "A", "A", "B", "B")
+
+paste0(x, y)
+```
+:::
+
+:::{.column width=2%}
+:::
+
+:::{.column width=42%}
+**結果**
+
+```{r}
+#| echo: false
+x <- c(1, 2, 3, 1, 2)
+y <- c("A", "A", "A", "B", "B")
+
+paste0(x, y)
+```
+:::
+::::
+
+### パネル
+
+　パネルは段組みのように複数の内容を同じ行に出力する機能であるが、段組みは左右に並べる一方、パネルが異なるページへ出力する。たとえば、データセットの作成と、そのデータを使った作図のコードを示す場合、2つのチャンクを横に並べるには幅が狭いかも知れない。この場合、使えるのがパネル機能だ。使い方は段組みより簡単で、`:::{.panel-tabset}`と`:::`間に入力された内容がパネル内容になる。各パネルのタイトルは`##`見出しで指定でき、これが各パネルの区切りにもなる。
+
+**Input:**
+
+````md
+:::{.panel-tabset}
+## データ
+
+```{{r}}
+library(tidyverse)
+
+my_data <- tibble(City = c("東京", "北京", "ソウル"),
+                  Pop  = c(1396, 2154, 978))
+
+my_data
+```
+
+## プロット
+
+```{{r}}
+#| fig-width: 8
+#| fig-height: 4
+my_data |>
+  mutate(City = fct_inorder(City)) |>
+  ggplot(aes(x = City, y = Pop)) +
+  geom_col() + # geom_bar(stat = "identity") もOK
+  labs(x = "都市", y = "人口（万人）") +
+  theme_bw(base_size = 14)
+```
+
+:::
+````
+
+**Output:**
+
+:::{.panel-tabset}
+## データ
+
+```{r}
+library(tidyverse)
+
+my_data <- tibble(City = c("東京", "北京", "ソウル"),
+                  Pop  = c(1396, 2154, 978))
+
+my_data
+```
+
+## プロット
+
+```{r}
+#| label: fig-barplot
+#| fig-width: 8
+#| fig-height: 4
+my_data |>
+  mutate(City = fct_inorder(City)) |>
+  ggplot(aes(x = City, y = Pop)) +
+  geom_col() + # geom_bar(stat = "identity") もOK
+  labs(x = "都市", y = "人口（万人）") +
+  theme_bw(base_size = 14)
+```
+
+:::
+
+### 図表について
+
+　R Markdown/Quarto関係なく多くの図は{ggplot2}、{lattice}、Base Rなどで作成され、表は{knitr} + {kableExtra}、{gt}などで作成される。しかし、通常のMarkdown文法で表を作ったり、図を挿入したりするケースも多いだろう。QuartoはMarkdown文法の作成/挿入された図表のカスタマイズもより柔軟だ。
+
+　たとえば、図の大きさは`![]()`の後ろに`{}`を付け、`width`や`height`引数を指定することで修正できる。たとえば、図の幅を100ピクセルにする場合は`width=100px`で良い。サイズの指定方法はピクセル（`px`; 省略可）以外にも画面の幅に対する割合（例：`50%`）、インチ（例：`4in`）もできる。
+
+:::{.panel-tabset}
+## サイズ調整前
+
+**Input:**
+
+```md
+![『私たちのR』ロゴ](http://www.jaysong.net/RBook/Figs/favicon.png)
+```
+
+**Output:**
+
+![『私たちのR』ロゴ](http://www.jaysong.net/RBook/Figs/favicon.png)
+
+## サイズ調整後
+
+**Input:**
+
+```md
+![『私たちのR』ロゴ](http://www.jaysong.net/RBook/Figs/favicon.png){width=100px}
+```
+
+**Output:**
+
+![『私たちのR』ロゴ](http://www.jaysong.net/RBook/Figs/favicon.png){width=100px}
+:::
+
+　他にも、`![Alt Text](Image Path)`で挿入される図の場合、R Markdownでは大きさの調整や中央揃えが面倒だ。しかし、Quartoの場合、後ろに`{}`を入れることでいくつかの修正ができる。
+
+:::{.panel-tabset}
+## 左揃え
+
+**Input:**
+
+```md
+![『私たちのR』ロゴ（左揃え）](http://www.jaysong.net/RBook/Figs/favicon.png){fig-align="left"}
+```
+
+**Output:**
+
+![『私たちのR』ロゴ（左揃え）](http://www.jaysong.net/RBook/Figs/favicon.png){fig-align="left"}
+
+## 中央揃え
+
+**Input:**
+
+```md
+![『私たちのR』ロゴ（中央揃え）](http://www.jaysong.net/RBook/Figs/favicon.png){fig-align="center"}
+```
+
+**Output:**
+
+![『私たちのR』ロゴ（中央揃え）](http://www.jaysong.net/RBook/Figs/favicon.png){fig-align="center"}
+
+## 右揃え
+
+**Input:**
+
+```md
+![『私たちのR』ロゴ（右揃え）](http://www.jaysong.net/RBook/Figs/favicon.png){fig-align="right"}
+```
+
+**Output:**
+
+![『私たちのR』ロゴ（右揃え）](http://www.jaysong.net/RBook/Figs/favicon.png){fig-align="right"}
+:::
+
+　他にも複数のグラフを並べることもR Markdownに比べ、簡単にできる。横に並べるなら段組みでもよいが、`:::{layout-ncol}`がより楽だ。`ncol`の代わりに`nrow`も指定できる。以下のコードは図を3列配置する例だ（モバイルデバイスの場合、縦に並ぶように表示される）。
+
+**Input:**
+
+```md
+:::{layout-ncol=3}
+![左の猫](http://www.jaysong.net/RBook/Figs/favicon.png)
+
+![中央の猫](http://www.jaysong.net/RBook/Figs/favicon.png)
+
+![右の猫](http://www.jaysong.net/RBook/Figs/favicon.png)
+:::
+```
+
+**Output:**
+
+:::{layout-ncol=3}
+![左の猫](http://www.jaysong.net/RBook/Figs/favicon.png)
+
+![中央の猫](http://www.jaysong.net/RBook/Figs/favicon.png)
+
+![右の猫](http://www.jaysong.net/RBook/Figs/favicon.png)
+:::
+
+　図の相互参照とためのラベルは`![]()`の後ろの`{}`内に`#fig-`で指定できる。並べた図にラベルを付けることもできる。
+
+**Input:**
+
+```md
+* 複数の図の相互参照: @fig-three-cats
+* 個別の図の相互参照: @fig-cat1
+
+:::{#fig-three-cats layout-ncol=3}
+![左の猫](http://www.jaysong.net/RBook/Figs/favicon.png){#fig-cat1}
+
+![中央の猫](http://www.jaysong.net/RBook/Figs/favicon.png){#fig-cat2}
+
+![右の猫](http://www.jaysong.net/RBook/Figs/favicon.png){#fig-cat3}
+
+3匹の猫
+:::
+```
+
+**Output:**
+
+* 複数の図の相互参照: @fig-three-cats
+* 個別の図の相互参照: @fig-cat1
+
+:::{#fig-three-cats layout-ncol=3}
+![左の猫](http://www.jaysong.net/RBook/Figs/favicon.png){#fig-cat1}
+
+![中央の猫](http://www.jaysong.net/RBook/Figs/favicon.png){#fig-cat2}
+
+![右の猫](http://www.jaysong.net/RBook/Figs/favicon.png){#fig-cat3}
+
+3匹の猫
+:::
+
+　`:::{layout-ncol}`を使えば、複数の表を並べることもできる。相互参照についても同じだが、ラベル名は`#fig-`の代わりに`#tbl-`を使う必要がある。
+
+**Input:**
+
+```md
+　@tbl-two-tables は、東アジアとヨーロッパ主要都市の人口、面積、人口密度の一覧である。ただし、 @tbl-east-asia の東京は23区でなく、東京都全域であることに注意されたい。
+
+::: {#tbl-two-tables layout-ncol=2}
+| Name    | Pop.  | Area   | Density |
+|:--------|------:|-------:|--------:|
+| Tokyo   | 1,403 |  2,194 |  6,397  |
+| Beijing | 2,170 | 16,410 |  1,323  |
+| Seoul   |   949 |    605 | 15,688  |
+
+: East Asia {#tbl-east-asia}
+
+| Name   | Pop.  | Area  | Density |
+|:-------|------:|------:|--------:|
+| London | 943   | 1,569 |  5,354  |
+| Berlin | 367   |   892 |  4,114  |
+| Paris  | 215   |   105 | 20,382  |
+
+: Europe {#tbl-europe}
+
+首都の人口（万人）、面積（km<sup>2</sup>）、人口密度（人/km<sup>2</sup>）
+:::
+```
+
+**Output:**
+
+　@tbl-two-tables は、東アジアとヨーロッパ主要都市の人口、面積、人口密度の一覧である。ただし、 @tbl-east-asia の東京は23区でなく、東京都全域であることに注意されたい。
+
+::: {#tbl-two-tables layout-ncol=2}
+| Name    | Pop.  | Area   | Density |
+|:--------|------:|-------:|--------:|
+| Tokyo   | 1,403 |  2,194 |  6,397  |
+| Beijing | 2,170 | 16,410 |  1,323  |
+| Seoul   |   949 |    605 | 15,688  |
+
+: East Asia {#tbl-east-asia}
+
+| Name   | Pop.  | Area  | Density |
+|:-------|------:|------:|--------:|
+| London | 943   | 1,569 |  5,354  |
+| Berlin | 367   |   892 |  4,114  |
+| Paris  | 215   |   105 | 20,382  |
+
+: Europe {#tbl-europe}
+
+首都の人口（万人）、面積（km<sup>2</sup>）、人口密度（人/km<sup>2</sup>）
+:::
+
+　また、この機能はチャンクで生成された図についても使用可能だ。チャンクオプションに`#| layout-ncol: 2`を追加すると、2つの図が横に並ぶことになる。ただし、相互参照の際、個別の図のラベルはこちら側では指定できず、自動生成される。たとえば、プロット群のラベルが`fig-two-plots`なら1つ目の図のラベルは`fig-two-plots-1`、2つ目は`fig-two-plots-2`となる。
+
+**Input:**
+
+````md
+
+　@fig-two-plots は2つの散布図であり、 @fig-two-plots-1 は速度と停止距離との関係、 @fig-two-plots-2 は気温と気圧の関係を示す。
+
+```{{r}}
+#| label: fig-two-plots
+#| echo: false
+#| layout-ncol: 2
+#| fig-cap: "散布図の例"
+#| fig-subcap: 
+#|   - "速度と停止距離"
+#|   - "気温と気圧"
+cars |>
+  ggplot(aes(x = speed, y = dist)) +
+  geom_point() +
+  labs(x = "Speed (mph)", y = "Stopping distance (ft)")
+
+pressure |>
+  ggplot(aes(x = temperature, y = pressure)) +
+  geom_point() +
+  labs(x = "Temperature (Celsious)", y = "Pressure (mm)")
+```
+````
+
+**Output:**
+
+　@fig-two-plots は2つの散布図であり、 @fig-two-plots-1 は速度と停止距離との関係、 @fig-two-plots-2 は気温と気圧の関係を示す。
+
+```{r}
+#| label: fig-two-plots
+#| echo: false
+#| layout-ncol: 2
+#| fig-cap: "散布図の例"
+#| fig-subcap: 
+#|   - "速度と停止距離"
+#|   - "気温と気圧"
+cars |>
+  ggplot(aes(x = speed, y = dist)) +
+  geom_point() +
+  labs(x = "Speed (mph)", y = "Stopping distance (ft)")
+
+pressure |>
+  ggplot(aes(x = temperature, y = pressure)) +
+  geom_point() +
+  labs(x = "Temperature (Celsious)", y = "Pressure (mm)")
+```
+
+### ハイパーリンクのターゲット
+
+　Markdownのハイパーリンクは以下のように書く。
+
+```md
+[ここ](https://www.jaysong.net)をクリックすると宋のホームページへ移動します。
+```
+
+　「ここ」の文字をクリックすると宋のホームページへ飛ばされるコードである、R Markdownも、Quartoもデフォルトではそのウィンドウ/タブを使うことになる[^new-window]。これを新しいウィンドウ/タブで開かせるためにはやむを得ずHTMLタグを使う必要がある。
+
+[^new-window]: むろん、QuartoだとYAMLヘッダーに`link-external-newwindow: true`追加することで**外部**ページは新しいウィンドウ/タブで開くように設定できる。
+
+```html
+<a href="https://www.jaysong.net" target="_blank">ここ</a>をクリックすると宋のホームページへ移動します。
+```
+
+　しかし、Quartoだと通常のMarkdown記法を使うことができる。`[]()`の後ろに`{target="_blank"}`を付けるだけだ。実は書く手間としては若干軽減された程度であるが、地味に嬉しい機能だ。
+
+```md
+[ここ](https://www.jaysong.net){target="_blank"}をクリックすると宋のホームページへ移動します。
+```
 
 ## 日本語が含まれたPDF
 
@@ -205,11 +868,11 @@ format:
 # チャンクのオプション
 knitr: 
   opts_chunk: 
-    dev: "ragg_png"     # <1>
-    fig.align: "center" # <2>
-    dpi: 300            # <3>
-    warning: false      # <4>
-    message: false      # <5>
+    dev: ragg_png
+    fig-align: center
+    dpi: 300
+    warning: false
+    message: false
 ---
 ```
 
@@ -242,11 +905,11 @@ format:
 # チャンクのオプション
 knitr: 
   opts_chunk: 
-    dev: "ragg_png"     # <1>
-    fig.align: "center" # <2>
-    dpi: 300            # <3>
-    warning: false      # <4>
-    message: false      # <5>
+    dev: ragg_png
+    fig-align: center
+    dpi: 300
+    warning: false
+    message: false
 ---
 ```
 
