@@ -115,7 +115,7 @@ format:
 
 　この状態でrenderを行うとHTML版で出力されるが、出力フォーマットを変更したい場合は、renderボタンの右にある小さい三角（▼）をクリックし、「Render PDF」を選択しよう。これ以降、ショートカットキーやrenderボタンを押すとPDFが出力される。HTMLに戻したい場合は、renderボタンの右にある小さい三角（▼）をもう一度選択してみよう。
 
-　それでは細かい設定について紹介する。量が膨大になるため、HTMLに限定し、以下では筆者（宋）がよくいじる箇所のみ紹介する。詳細はQuartoの公式ホームページを参照されたい。PDFについては本章後半にて簡単に解説する。
+　それでは細かい設定について紹介する。量が膨大になるため、HTMLに限定し、以下では筆者（宋）がよくいじる箇所のみ紹介する。詳細は[Quartoの公式ホームページ](https://prerelease.quarto.org/docs/reference/formats/html.html)を参照されたい。PDFについては本章後半にて簡単に解説する。
 
 ```{.yaml filename="フォーマット指定の例"}
 format: 
@@ -128,11 +128,60 @@ format:
     toc-location: right
     toc-depth: 3
     number-sections: true
-    self-contained: false
+    embed-resources: false
     code-fold: false
 ```
 
-あ
+　`grid`ではサイドバー（`sidebar-width`）、本文（`body-width`）、右側の余白（`margin-width`）の幅が指定できる。それぞれ既定値は250、800、250であるが（単位はピクセル）、本文の幅が800だとやや窮屈に感じるので、1024くらいが良いかも知れない。また、サイドバーと本文、右側の余白の間の空間はガター（gutter）と呼ばれ、`gutter-width`で指定できる。既定値はデフォルトのフォントサイズの1.5倍（`1.5em`）となっている。
+
+　つづく`theme`と`highlight-style`は文書の見た目と関係する。`theme`は文書全体、`highlight-style`はコードのハイライトに関わる。Quartoは10種類以上の[テーマ](https://prerelease.quarto.org/docs/output-formats/html-themes.html)と[コードハイライト](https://prerelease.quarto.org/docs/output-formats/html-code.html#highlighting)を提供するので、色々試しながら好みのテーマを見つけてみよう。
+
+　つづいて、文書内目次に関連する`toc`、`toc-location`、`toc-depth`についてた。`toc`は文書内目次の有無、`toc-location`は目次の位置（既定値は右側）、`toc-depth`は目次の深度（既定値は3）だ。既定値のままが最もスタンダードがフォーマットとなるので、そもそもこちらは省略するケースも多い。
+
+　他にもよく使うものとしては`number-sections`がある。これは章・節の見出し（`##`や`###`など）の前に番号を付けるかを指定するものであり、既定値は`false`になっている。`embed-resources`は図、JavaScriptライブラリー、CSSなどHTMLファイル**外**のファイルを結果物のHTMLファイル内にすべて埋め込むものである。既定値は`false`だが、他人にHTMLファイルを共有するためには`true`にしておくことを推奨する。しかし、様々なファイルがHTML内に埋め込まれるのでファイルのサイズが劇的に大きくなる。図表多めのHTMLファイルなら数十MBも普通にあるくらいだ。ただ、`embed-resources: false`でも埋め込まれないJavaScriptライブラリーがある。数式のレンダリングを担当するMathJaxなどのライブラリーは非常に重いので、これをHTML内に埋め込みたい場合は`self-contained-math: true`を別途指定する必要がある。最後に`code-fold`はコードが多めであるものの、「コードよりも文章と結果がメインとなる文書、しかしコードを無くしたくはない」場合に有用なオプションだ。以下の例を見れば違いが分かるだろう。
+
+::::{.columns}
+:::{.column width=49%}
+**Input：**
+
+````md
+`code-fold: false`の場合
+
+```{{r}}
+1 + 1
+```
+
+`code-fold: true`の場合
+
+```{{r}}
+#| code-fold: true
+1 + 1
+```
+````
+:::
+
+:::{.column width=2%}
+:::
+
+:::{.column width=49%}
+**Output：**
+
+`code-fold: false`の場合
+
+```{r}
+1 + 1
+```
+
+`code-fold: true`の場合
+
+```{r}
+#| code-fold: true
+1 + 1
+```
+:::
+::::
+
+　YAMLヘッダー内に`code-fold: ture`を指定すると、全チャンクに`code-fold: true`が適用されることになる。
 
 ### チャンクオプション
 
@@ -856,7 +905,7 @@ $$ {#eq-poisson}
 tinytex::tlmgr_install("haranoaji")
 ```
 
-[^haranoaji-chunk]: 最初のチャンクに`if (!("haranoaji" %in% tinytex::tl_pkgs()))  tinytex::tlmgr_install("haranoaji")`を入れておき、`#| include: false`で非表示にしておくのも良いかも知れない。これは原ノ味フォントのインストール有無をチェックし、未インストールの場合のみインストールするコードだ。使用するR環境が複数であれなら、こちらの方が安全かも知れない。
+[^haranoaji-chunk]: 最初のチャンクに`if (!("haranoaji" %in% tinytex::tl_pkgs()))  tinytex::tlmgr_install("haranoaji")`を入れておき、`#| include: false`で非表示にしておくのも良いかも知れない。これは原ノ味フォントのインストール有無をチェックし、未インストールの場合のみインストールするコードだ。使用するR環境が複数であれなら、こちらの方が安全かも知れない。ただし、`tinytex::tl_pkgs()`関数はやや重いのでレンダリング時間が若干長くなる。
 
 　以上の作業はRの再インストール、またはメジャーアップデートをしない限り、1回だけで良い。つまり、通常のパッケージ同様、別のプロジェクトであっても以上の作業は不要だ。これで日本語PDFの準備はバッチリだ。`.qmd`ファイルのYAMLヘッダーを以下のように修正してみよう。
 
@@ -864,15 +913,7 @@ tinytex::tlmgr_install("haranoaji")
 ---
 title: "私たちのR"
 subtitle: "ベストプラクティスの探求"
-author:
-  - name: 宋財泫
-    url: https://www.jaysong.net
-    affiliation: 関西大学
-  - name: 矢内勇生
-    url: https://yukiyanai.github.io/
-    affiliation: 高知工科大学
-    attributes:
-      corresponding: true
+author: "土佐の猛猫"
 date: today
 lang: ja
 # PDF設定
@@ -884,12 +925,14 @@ format:
 knitr: 
   opts_chunk: 
     dev: ragg_png
-    fig-align: center
-    dpi: 300
-    warning: false
-    message: false
 ---
 ```
+
+　デフォルト設定との違いはPDFエンジンがLuaLaTeXであること、そしてドキュメントクラスがltjsarticleであることだ。pLaTeXやupLaTeXを使ってきた読者ならお馴染みのjsarticleのLuaLaTeXバージョンがltjsarticleである。
+
+　以上のオプション2つだけでの日本語の出力は問題ないが、図が含まれる場合、図内の日本語が文字化けする可能性もある。簡単な解決方法は画像エンジンをAGGにし、PNGフォーマットにすることだ。`knitr:` > `opts_chunk:` > `dev: ragg_png`にすると図の文字化けの悩みから開放される。ただし、印刷する時に解像度が気になるので、解像度（`dpi`）に高めにすることをおすすめする。最低でも300は欲しいが、筆者（宋）の推奨は450だ（`dpi: 450`）。
+
+　以下の例は筆者（宋）がよく使うYAMLヘッダーのベースである。
 
 ```yaml
 ---
@@ -917,18 +960,17 @@ format:
     toc: false
     toc-depth: 3
     number-sections: true
-# チャンクのオプション
 knitr: 
   opts_chunk: 
-    dev: ragg_png
-    fig-align: center
-    dpi: 300
-    warning: false
-    message: false
+    dev: ragg_png     # 文字化け防止
+    dpi: 450          # 高解像度の図を使用（サイズ大きめ）
+    fig-align: center # 図は中央揃え
+    warning: false    # 警告メッセージを消す
+    message: false    # 通常メッセージを消す
 ---
 ```
 
-　以上の例ではLuaLaTeXとltjsarticleクラスを組み合わせた紹介したが、ltjsbookなどのクラスも使用可能であり、エンジンもまたLuaLaTeX以外のエンジンを使用しても良い。日本語PDFを作成する際、よく使われるエンジンとしてLuaLaTeX以外にもXeLaTeXがある。
+　以上の例ではLuaLaTeXとltjsarticleクラスを組み合わせた紹介したが、ltjsbookなどのクラスも使用可能であり、エンジンもまたLuaLaTeX以外のエンジンを使用しても良い。日本語PDFを作成する際、よく使われるエンジンとしてLuaLaTeX以外にもXeLaTeX（`xelatex`）、Latexmk（`latexmk`）などがある。ただ、こちらはLuaLaTeXよりもやや面倒であるため、LaTeXの知識があまりない読者であれば、本章で紹介したLuaLaTeXで十分だろう。
 
 ### 参考文献の話
 

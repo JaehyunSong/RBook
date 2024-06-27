@@ -685,7 +685,7 @@ Continue the installation anyway? (Y/N) </code></pre>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="at">  </span><span class="fu">html</span><span class="kw">:</span><span class="at"> default</span></span>
 <span id="cb6-3"><a href="#cb6-3"></a><span class="at">  </span><span class="fu">pdf</span><span class="kw">:</span><span class="at"> default</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>　この状態でrenderを行うとHTML版で出力されるが、出力フォーマットを変更したい場合は、renderボタンの右にある小さい三角（▼）をクリックし、「Render PDF」を選択しよう。これ以降、ショートカットキーやrenderボタンを押すとPDFが出力される。HTMLに戻したい場合は、renderボタンの右にある小さい三角（▼）をもう一度選択してみよう。</p>
-<p>　それでは細かい設定について紹介する。量が膨大になるため、HTMLに限定し、以下では筆者（宋）がよくいじる箇所のみ紹介する。詳細はQuartoの公式ホームページを参照されたい。PDFについては本章後半にて簡単に解説する。</p>
+<p>　それでは細かい設定について紹介する。量が膨大になるため、HTMLに限定し、以下では筆者（宋）がよくいじる箇所のみ紹介する。詳細は<a href="https://prerelease.quarto.org/docs/reference/formats/html.html">Quartoの公式ホームページ</a>を参照されたい。PDFについては本章後半にて簡単に解説する。</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>フォーマット指定の例</strong></pre>
@@ -700,10 +700,52 @@ Continue the installation anyway? (Y/N) </code></pre>
 <span id="cb7-8"><a href="#cb7-8"></a><span class="at">    </span><span class="fu">toc-location</span><span class="kw">:</span><span class="at"> right</span></span>
 <span id="cb7-9"><a href="#cb7-9"></a><span class="at">    </span><span class="fu">toc-depth</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
 <span id="cb7-10"><a href="#cb7-10"></a><span class="at">    </span><span class="fu">number-sections</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
-<span id="cb7-11"><a href="#cb7-11"></a><span class="at">    </span><span class="fu">self-contained</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="at">    </span><span class="fu">embed-resources</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
 <span id="cb7-12"><a href="#cb7-12"></a><span class="at">    </span><span class="fu">code-fold</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>あ</p>
+<p>　<code>grid</code>ではサイドバー（<code>sidebar-width</code>）、本文（<code>body-width</code>）、右側の余白（<code>margin-width</code>）の幅が指定できる。それぞれ既定値は250、800、250であるが（単位はピクセル）、本文の幅が800だとやや窮屈に感じるので、1024くらいが良いかも知れない。また、サイドバーと本文、右側の余白の間の空間はガター（gutter）と呼ばれ、<code>gutter-width</code>で指定できる。既定値はデフォルトのフォントサイズの1.5倍（<code>1.5em</code>）となっている。</p>
+<p>　つづく<code>theme</code>と<code>highlight-style</code>は文書の見た目と関係する。<code>theme</code>は文書全体、<code>highlight-style</code>はコードのハイライトに関わる。Quartoは10種類以上の<a href="https://prerelease.quarto.org/docs/output-formats/html-themes.html">テーマ</a>と<a href="https://prerelease.quarto.org/docs/output-formats/html-code.html#highlighting">コードハイライト</a>を提供するので、色々試しながら好みのテーマを見つけてみよう。</p>
+<p>　つづいて、文書内目次に関連する<code>toc</code>、<code>toc-location</code>、<code>toc-depth</code>についてた。<code>toc</code>は文書内目次の有無、<code>toc-location</code>は目次の位置（既定値は右側）、<code>toc-depth</code>は目次の深度（既定値は3）だ。既定値のままが最もスタンダードがフォーマットとなるので、そもそもこちらは省略するケースも多い。</p>
+<p>　他にもよく使うものとしては<code>number-sections</code>がある。これは章・節の見出し（<code>##</code>や<code>###</code>など）の前に番号を付けるかを指定するものであり、既定値は<code>false</code>になっている。<code>embed-resources</code>は図、JavaScriptライブラリー、CSSなどHTMLファイル<strong>外</strong>のファイルを結果物のHTMLファイル内にすべて埋め込むものである。既定値は<code>false</code>だが、他人にHTMLファイルを共有するためには<code>true</code>にしておくことを推奨する。しかし、様々なファイルがHTML内に埋め込まれるのでファイルのサイズが劇的に大きくなる。図表多めのHTMLファイルなら数十MBも普通にあるくらいだ。ただ、<code>embed-resources: false</code>でも埋め込まれないJavaScriptライブラリーがある。数式のレンダリングを担当するMathJaxなどのライブラリーは非常に重いので、これをHTML内に埋め込みたい場合は<code>self-contained-math: true</code>を別途指定する必要がある。最後に<code>code-fold</code>はコードが多めであるものの、「コードよりも文章と結果がメインとなる文書、しかしコードを無くしたくはない」場合に有用なオプションだ。以下の例を見れば違いが分かるだろう。</p>
+<div class="columns">
+<div class="column" style="width:49%;">
+<p><strong>Input：</strong></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource markdown md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1"></a><span class="in">`code-fold: false`</span>の場合</span>
+<span id="cb8-2"><a href="#cb8-2"></a></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="in">```{r}</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="in">1 + 1</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="in">```</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="in">`code-fold: true`</span>の場合</span>
+<span id="cb8-8"><a href="#cb8-8"></a></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="in">```{r}</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="in">#| code-fold: true</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="in">1 + 1</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column" style="width:2%;">
+
+</div><div class="column" style="width:49%;">
+<p><strong>Output：</strong></p>
+<p><code>code-fold: false</code>の場合</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2</code></pre>
+</div>
+</div>
+<p><code>code-fold: true</code>の場合</p>
+<div class="cell" data-layout-align="center">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2</code></pre>
+</div>
+</div>
+</div>
+</div>
+<p>　YAMLヘッダー内に<code>code-fold: ture</code>を指定すると、全チャンクに<code>code-fold: true</code>が適用されることになる。</p>
 </section>
 <section id="チャンクオプション" class="level3" data-number="G.2.3">
 <h3 data-number="G.2.3" class="anchored" data-anchor-id="チャンクオプション"><span class="header-section-number">G.2.3</span> チャンクオプション</h3>
@@ -712,12 +754,12 @@ Continue the installation anyway? (Y/N) </code></pre>
 <div class="code-with-filename-file">
 <pre><strong>チャンクオプション指定の例</strong></pre>
 </div>
-<div class="sourceCode" id="cb8" data-filename="チャンクオプション指定の例"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">knitr</span><span class="kw">:</span><span class="at"> </span></span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="at">  </span><span class="fu">opts_chunk</span><span class="kw">:</span><span class="at"> </span></span>
-<span id="cb8-3"><a href="#cb8-3"></a><span class="at">    </span><span class="fu">dev</span><span class="kw">:</span><span class="at"> ragg_png</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a><span class="at">    </span><span class="fu">fig-align</span><span class="kw">:</span><span class="at"> center</span></span>
-<span id="cb8-5"><a href="#cb8-5"></a><span class="at">    </span><span class="fu">dpi</span><span class="kw">:</span><span class="at"> </span><span class="dv">144</span></span>
-<span id="cb8-6"><a href="#cb8-6"></a><span class="at">    </span><span class="fu">message</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb13" data-filename="チャンクオプション指定の例"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">knitr</span><span class="kw">:</span><span class="at"> </span></span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="at">  </span><span class="fu">opts_chunk</span><span class="kw">:</span><span class="at"> </span></span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="at">    </span><span class="fu">dev</span><span class="kw">:</span><span class="at"> ragg_png</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="at">    </span><span class="fu">fig-align</span><span class="kw">:</span><span class="at"> center</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="at">    </span><span class="fu">dpi</span><span class="kw">:</span><span class="at"> </span><span class="dv">144</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="at">    </span><span class="fu">message</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　以上の例だと、図の文字化けを未然に防ぐために図のエンジンは{ragg}のPNG（<code>dev: "ragg_png"</code>）、図は中央揃え（<code>fig-align: center</code>）、図の解像度は144DPI（<code>dpi: 144</code>）、コード実行から表示されるメッセージの非表示（<code>message: false</code>）を指定している。他にも様々なオプションが指定できる。たとえば、エラーが生じても強制的にレンダリングを続行させるために<code>error: true</code>を指定することもできる。</p>
 </section>
@@ -730,19 +772,19 @@ Continue the installation anyway? (Y/N) </code></pre>
 <li>配列内のエレメントは<code>-</code>（1行で各なら<code>[]</code>でOK）</li>
 <li><code>|</code>で長い文章もOK（abstractなど）</li>
 </ul>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># format = {html = {theme = [theme1, theme2], highlight-style = a11y}}</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a><span class="fu">format</span><span class="kw">:</span></span>
-<span id="cb9-3"><a href="#cb9-3"></a><span class="at">   </span><span class="fu">html</span><span class="kw">:</span></span>
-<span id="cb9-4"><a href="#cb9-4"></a><span class="at">      </span><span class="fu">theme</span><span class="kw">:</span><span class="at"> </span></span>
-<span id="cb9-5"><a href="#cb9-5"></a><span class="at">        </span><span class="kw">-</span><span class="at"> theme1</span></span>
-<span id="cb9-6"><a href="#cb9-6"></a><span class="at">        </span><span class="kw">-</span><span class="at"> theme2</span></span>
-<span id="cb9-7"><a href="#cb9-7"></a><span class="at">      </span><span class="fu">highlight-style</span><span class="kw">:</span><span class="at"> a11y</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># author = [[{name = JS}, {age = 81}], [{name = YY}, {age = 17}]]</span></span>
-<span id="cb10-2"><a href="#cb10-2"></a><span class="fu">author</span><span class="kw">:</span></span>
-<span id="cb10-3"><a href="#cb10-3"></a><span class="at">   </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> JS</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a><span class="at">     </span><span class="fu">age</span><span class="kw">:</span><span class="at"> </span><span class="dv">81</span></span>
-<span id="cb10-5"><a href="#cb10-5"></a><span class="at">   </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> YY</span></span>
-<span id="cb10-6"><a href="#cb10-6"></a><span class="at">     </span><span class="fu">age</span><span class="kw">:</span><span class="at"> </span><span class="dv">17</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># format = {html = {theme = [theme1, theme2], highlight-style = a11y}}</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="fu">format</span><span class="kw">:</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="at">   </span><span class="fu">html</span><span class="kw">:</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="at">      </span><span class="fu">theme</span><span class="kw">:</span><span class="at"> </span></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="at">        </span><span class="kw">-</span><span class="at"> theme1</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="at">        </span><span class="kw">-</span><span class="at"> theme2</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a><span class="at">      </span><span class="fu">highlight-style</span><span class="kw">:</span><span class="at"> a11y</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># author = [[{name = JS}, {age = 81}], [{name = YY}, {age = 17}]]</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="fu">author</span><span class="kw">:</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="at">   </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> JS</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a><span class="at">     </span><span class="fu">age</span><span class="kw">:</span><span class="at"> </span><span class="dv">81</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="at">   </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> YY</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a><span class="at">     </span><span class="fu">age</span><span class="kw">:</span><span class="at"> </span><span class="dv">17</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </section>
 <section id="quartoにおけるmarkdown" class="level2" data-number="G.3">
@@ -751,21 +793,21 @@ Continue the installation anyway? (Y/N) </code></pre>
 <h3 data-number="G.3.1" class="anchored" data-anchor-id="相互参照ついて"><span class="header-section-number">G.3.1</span> 相互参照ついて</h3>
 <p>　図表の相互参照には<code>@</code>を使用する。たとえば、チャンクのラベルが<code>fig-scatter1</code>という図がある場合、<code>@fig-scatter1</code>だけで十分である。以下の例を見てみよう。</p>
 <p><strong>Input:</strong></p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource markdown md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb11-1"><a href="#cb11-1"></a>以下の @fig-scatter1 は萼片の長さと幅を品種ごとに分けて示した散布図である。</span>
-<span id="cb11-2"><a href="#cb11-2"></a></span>
-<span id="cb11-3"><a href="#cb11-3"></a><span class="in">```{r}</span></span>
-<span id="cb11-4"><a href="#cb11-4"></a><span class="in">#| label: fig-scatter1</span></span>
-<span id="cb11-5"><a href="#cb11-5"></a><span class="in">#| echo: false</span></span>
-<span id="cb11-6"><a href="#cb11-6"></a><span class="in">#| fig-cap: "萼片の長さと幅の関係（品種別）"</span></span>
-<span id="cb11-7"><a href="#cb11-7"></a><span class="in">iris |&gt;</span></span>
-<span id="cb11-8"><a href="#cb11-8"></a><span class="in">  mutate(Species2 = recode(Species,</span></span>
-<span id="cb11-9"><a href="#cb11-9"></a><span class="in">                           "setosa"     = "セトナ",</span></span>
-<span id="cb11-10"><a href="#cb11-10"></a><span class="in">                           "versicolor" = "バーシクル",</span></span>
-<span id="cb11-11"><a href="#cb11-11"></a><span class="in">                           "virginica"  = "バージニカ")) |&gt;</span></span>
-<span id="cb11-12"><a href="#cb11-12"></a><span class="in">  ggplot() +</span></span>
-<span id="cb11-13"><a href="#cb11-13"></a><span class="in">  geom_point(aes(x = Sepal.Length, y = Sepal.Width, color = Species2)) +</span></span>
-<span id="cb11-14"><a href="#cb11-14"></a><span class="in">  labs(x = "萼片の長さ (cm)", y = "萼片の幅 (cm)", color = "品種")</span></span>
-<span id="cb11-15"><a href="#cb11-15"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource markdown md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb16-1"><a href="#cb16-1"></a>以下の @fig-scatter1 は萼片の長さと幅を品種ごとに分けて示した散布図である。</span>
+<span id="cb16-2"><a href="#cb16-2"></a></span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="in">```{r}</span></span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="in">#| label: fig-scatter1</span></span>
+<span id="cb16-5"><a href="#cb16-5"></a><span class="in">#| echo: false</span></span>
+<span id="cb16-6"><a href="#cb16-6"></a><span class="in">#| fig-cap: "萼片の長さと幅の関係（品種別）"</span></span>
+<span id="cb16-7"><a href="#cb16-7"></a><span class="in">iris |&gt;</span></span>
+<span id="cb16-8"><a href="#cb16-8"></a><span class="in">  mutate(Species2 = recode(Species,</span></span>
+<span id="cb16-9"><a href="#cb16-9"></a><span class="in">                           "setosa"     = "セトナ",</span></span>
+<span id="cb16-10"><a href="#cb16-10"></a><span class="in">                           "versicolor" = "バーシクル",</span></span>
+<span id="cb16-11"><a href="#cb16-11"></a><span class="in">                           "virginica"  = "バージニカ")) |&gt;</span></span>
+<span id="cb16-12"><a href="#cb16-12"></a><span class="in">  ggplot() +</span></span>
+<span id="cb16-13"><a href="#cb16-13"></a><span class="in">  geom_point(aes(x = Sepal.Length, y = Sepal.Width, color = Species2)) +</span></span>
+<span id="cb16-14"><a href="#cb16-14"></a><span class="in">  labs(x = "萼片の長さ (cm)", y = "萼片の幅 (cm)", color = "品種")</span></span>
+<span id="cb16-15"><a href="#cb16-15"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Output:</strong></p>
 <p>　以下の <a href="#fig-scatter1" class="quarto-xref">図&nbsp;<span>G.1</span></a> は萼片の長さと幅を品種ごとに分けて示した散布図である。</p>
 <div class="cell" data-layout-align="center">
@@ -783,7 +825,7 @@ Continue the installation anyway? (Y/N) </code></pre>
 </div>
 </div>
 <p>　図だけでなく、表や章でも同じやり方で相互参照ができる。ただし、一点注意が必要である。相互参照に使うチャンクのラベルに制約があることだ。相互参照の対象となるチャンクのラベルは<code>sec-</code>（章・節など）、<code>fig-</code>（図）、<code>tbl-</code>（表）、<code>eq-</code>（数式）で始まる必要がある。図表はチャンクラベルで指定できるが、章や節などの見出しの場合、以下のようにラベルを指定する。この書き方はチャンク以外の図表にラベルを付ける時も同様だ（後述）。</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">## Rの素晴らしさについて {#sec-aboutR}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">## Rの素晴らしさについて {#sec-aboutR}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>　また、Quartoの既定値のままだと「Figure X」と出力される。これを「図 X」の形式にしたい場合はYAMLヘッダーに<code>lang: ja</code>を追加するか、<code>language:</code>で別途指定する必要がある<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>。</p>
 <p>　続いて、Markdownで挿入した図（<code>![]()</code>）や表のラベルの付け方については後ほど解説する。</p>
 </section>
@@ -797,11 +839,11 @@ Continue the installation anyway? (Y/N) </code></pre>
 <div class="columns">
 <div class="column" style="width:49%;">
 <p><strong>Input:</strong></p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb13-1"><a href="#cb13-1"></a>:::{.callout-note}</span>
-<span id="cb13-2"><a href="#cb13-2"></a><span class="fu">## Rはみんなの友達!</span></span>
-<span id="cb13-3"><a href="#cb13-3"></a></span>
-<span id="cb13-4"><a href="#cb13-4"></a>末永くよろしくね!</span>
-<span id="cb13-5"><a href="#cb13-5"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb18-1"><a href="#cb18-1"></a>:::{.callout-note}</span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="fu">## Rはみんなの友達!</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a></span>
+<span id="cb18-4"><a href="#cb18-4"></a>末永くよろしくね!</span>
+<span id="cb18-5"><a href="#cb18-5"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:2%;">
 
 </div><div class="column" style="width:49%;">
@@ -826,11 +868,11 @@ Rはみんなの友達!
 <div class="columns">
 <div class="column" style="width:49%;">
 <p><strong>Input:</strong></p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb14-1"><a href="#cb14-1"></a>:::{.callout-warning}</span>
-<span id="cb14-2"><a href="#cb14-2"></a><span class="fu">## Rはみんなの友達!</span></span>
-<span id="cb14-3"><a href="#cb14-3"></a></span>
-<span id="cb14-4"><a href="#cb14-4"></a>末永くよろしくね!</span>
-<span id="cb14-5"><a href="#cb14-5"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb19-1"><a href="#cb19-1"></a>:::{.callout-warning}</span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="fu">## Rはみんなの友達!</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a></span>
+<span id="cb19-4"><a href="#cb19-4"></a>末永くよろしくね!</span>
+<span id="cb19-5"><a href="#cb19-5"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:2%;">
 
 </div><div class="column" style="width:49%;">
@@ -855,11 +897,11 @@ Rはみんなの友達!
 <div class="columns">
 <div class="column" style="width:49%;">
 <p><strong>Input:</strong></p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb15-1"><a href="#cb15-1"></a>:::{.callout-important}</span>
-<span id="cb15-2"><a href="#cb15-2"></a><span class="fu">## Rはみんなの友達!</span></span>
-<span id="cb15-3"><a href="#cb15-3"></a></span>
-<span id="cb15-4"><a href="#cb15-4"></a>末永くよろしくね!</span>
-<span id="cb15-5"><a href="#cb15-5"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb20-1"><a href="#cb20-1"></a>:::{.callout-important}</span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="fu">## Rはみんなの友達!</span></span>
+<span id="cb20-3"><a href="#cb20-3"></a></span>
+<span id="cb20-4"><a href="#cb20-4"></a>末永くよろしくね!</span>
+<span id="cb20-5"><a href="#cb20-5"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:2%;">
 
 </div><div class="column" style="width:49%;">
@@ -884,11 +926,11 @@ Rはみんなの友達!
 <div class="columns">
 <div class="column" style="width:49%;">
 <p><strong>Input:</strong></p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb16-1"><a href="#cb16-1"></a>:::{.callout-tip}</span>
-<span id="cb16-2"><a href="#cb16-2"></a><span class="fu">## Rはみんなの友達!</span></span>
-<span id="cb16-3"><a href="#cb16-3"></a></span>
-<span id="cb16-4"><a href="#cb16-4"></a>末永くよろしくね!</span>
-<span id="cb16-5"><a href="#cb16-5"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb21-1"><a href="#cb21-1"></a>:::{.callout-tip}</span>
+<span id="cb21-2"><a href="#cb21-2"></a><span class="fu">## Rはみんなの友達!</span></span>
+<span id="cb21-3"><a href="#cb21-3"></a></span>
+<span id="cb21-4"><a href="#cb21-4"></a>末永くよろしくね!</span>
+<span id="cb21-5"><a href="#cb21-5"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:2%;">
 
 </div><div class="column" style="width:49%;">
@@ -913,11 +955,11 @@ Rはみんなの友達!
 <div class="columns">
 <div class="column" style="width:49%;">
 <p><strong>Input:</strong></p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb17-1"><a href="#cb17-1"></a>:::{.callout-caution}</span>
-<span id="cb17-2"><a href="#cb17-2"></a><span class="fu">## Rはみんなの友達!</span></span>
-<span id="cb17-3"><a href="#cb17-3"></a></span>
-<span id="cb17-4"><a href="#cb17-4"></a>末永くよろしくね!</span>
-<span id="cb17-5"><a href="#cb17-5"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb22-1"><a href="#cb22-1"></a>:::{.callout-caution}</span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="fu">## Rはみんなの友達!</span></span>
+<span id="cb22-3"><a href="#cb22-3"></a></span>
+<span id="cb22-4"><a href="#cb22-4"></a>末永くよろしくね!</span>
+<span id="cb22-5"><a href="#cb22-5"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:2%;">
 
 </div><div class="column" style="width:49%;">
@@ -944,11 +986,11 @@ Rはみんなの友達!
 <div class="columns">
 <div class="column" style="width:49%;">
 <p><strong>Input:</strong></p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb18-1"><a href="#cb18-1"></a>:::{.callout-note collapse="true"}</span>
-<span id="cb18-2"><a href="#cb18-2"></a><span class="fu">## Rはみんなの友達!（クリック）</span></span>
-<span id="cb18-3"><a href="#cb18-3"></a></span>
-<span id="cb18-4"><a href="#cb18-4"></a>末永くよろしくね!</span>
-<span id="cb18-5"><a href="#cb18-5"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb23-1"><a href="#cb23-1"></a>:::{.callout-note collapse="true"}</span>
+<span id="cb23-2"><a href="#cb23-2"></a><span class="fu">## Rはみんなの友達!（クリック）</span></span>
+<span id="cb23-3"><a href="#cb23-3"></a></span>
+<span id="cb23-4"><a href="#cb23-4"></a>末永くよろしくね!</span>
+<span id="cb23-5"><a href="#cb23-5"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:2%;">
 
 </div><div class="column" style="width:49%;">
@@ -975,11 +1017,11 @@ Rはみんなの友達!（クリック）
 <div class="columns">
 <div class="column" style="width:49%;">
 <p><strong>Input:</strong></p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb19-1"><a href="#cb19-1"></a>:::{.callout-warning icon="false"}</span>
-<span id="cb19-2"><a href="#cb19-2"></a><span class="fu">## Rはみんなの友達!</span></span>
-<span id="cb19-3"><a href="#cb19-3"></a></span>
-<span id="cb19-4"><a href="#cb19-4"></a>末永くよろしくね!</span>
-<span id="cb19-5"><a href="#cb19-5"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb24-1"><a href="#cb24-1"></a>:::{.callout-warning icon="false"}</span>
+<span id="cb24-2"><a href="#cb24-2"></a><span class="fu">## Rはみんなの友達!</span></span>
+<span id="cb24-3"><a href="#cb24-3"></a></span>
+<span id="cb24-4"><a href="#cb24-4"></a>末永くよろしくね!</span>
+<span id="cb24-5"><a href="#cb24-5"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:2%;">
 
 </div><div class="column" style="width:49%;">
@@ -1004,43 +1046,43 @@ Rはみんなの友達!
 <h3 data-number="G.3.3" class="anchored" data-anchor-id="段組み"><span class="header-section-number">G.3.3</span> 段組み</h3>
 <p>　Quartoの段組みは非常に簡単だ。<code>::::{.columns}</code>と<code>::::</code>で囲まれた領域内の内容が段組みの対象となり、<code>:::{.column}</code>と<code>:::</code>で囲まれた領域が一つ一つの段となる。また、<code>.column</code>の次に<code>width</code>引数を追加することで、段の幅を指定することもできる。以下はコードのその結果を2段構成で示した例だ。</p>
 <p><strong>Input:</strong></p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource markdown md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb20-1"><a href="#cb20-1"></a>::::{.columns}</span>
-<span id="cb20-2"><a href="#cb20-2"></a>:::{.column width=56%}</span>
-<span id="cb20-3"><a href="#cb20-3"></a>**コード:**</span>
-<span id="cb20-4"><a href="#cb20-4"></a></span>
-<span id="cb20-5"><a href="#cb20-5"></a><span class="in">```{r}</span></span>
-<span id="cb20-6"><a href="#cb20-6"></a><span class="in">#| eval: false</span></span>
-<span id="cb20-7"><a href="#cb20-7"></a><span class="in">x &lt;- c(1, 2, 3, 1, 2)</span></span>
-<span id="cb20-8"><a href="#cb20-8"></a><span class="in">y &lt;- c("A", "A", "A", "B", "B")</span></span>
-<span id="cb20-9"><a href="#cb20-9"></a></span>
-<span id="cb20-10"><a href="#cb20-10"></a><span class="in">paste0(x, y)</span></span>
-<span id="cb20-11"><a href="#cb20-11"></a><span class="in">```</span></span>
-<span id="cb20-12"><a href="#cb20-12"></a>:::</span>
-<span id="cb20-13"><a href="#cb20-13"></a></span>
-<span id="cb20-14"><a href="#cb20-14"></a>:::{.column width=2%}</span>
-<span id="cb20-15"><a href="#cb20-15"></a>:::</span>
-<span id="cb20-16"><a href="#cb20-16"></a></span>
-<span id="cb20-17"><a href="#cb20-17"></a>:::{.column width=42%}</span>
-<span id="cb20-18"><a href="#cb20-18"></a>**結果:**</span>
-<span id="cb20-19"><a href="#cb20-19"></a></span>
-<span id="cb20-20"><a href="#cb20-20"></a><span class="in">```{r}</span></span>
-<span id="cb20-21"><a href="#cb20-21"></a><span class="in">#| echo: false</span></span>
-<span id="cb20-22"><a href="#cb20-22"></a><span class="in">x &lt;- c(1, 2, 3, 1, 2)</span></span>
-<span id="cb20-23"><a href="#cb20-23"></a><span class="in">y &lt;- c("A", "A", "A", "B", "B")</span></span>
-<span id="cb20-24"><a href="#cb20-24"></a></span>
-<span id="cb20-25"><a href="#cb20-25"></a><span class="in">paste0(x, y)</span></span>
-<span id="cb20-26"><a href="#cb20-26"></a><span class="in">```</span></span>
-<span id="cb20-27"><a href="#cb20-27"></a>:::</span>
-<span id="cb20-28"><a href="#cb20-28"></a>::::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode numberSource markdown md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb25-1"><a href="#cb25-1"></a>::::{.columns}</span>
+<span id="cb25-2"><a href="#cb25-2"></a>:::{.column width=56%}</span>
+<span id="cb25-3"><a href="#cb25-3"></a>**コード:**</span>
+<span id="cb25-4"><a href="#cb25-4"></a></span>
+<span id="cb25-5"><a href="#cb25-5"></a><span class="in">```{r}</span></span>
+<span id="cb25-6"><a href="#cb25-6"></a><span class="in">#| eval: false</span></span>
+<span id="cb25-7"><a href="#cb25-7"></a><span class="in">x &lt;- c(1, 2, 3, 1, 2)</span></span>
+<span id="cb25-8"><a href="#cb25-8"></a><span class="in">y &lt;- c("A", "A", "A", "B", "B")</span></span>
+<span id="cb25-9"><a href="#cb25-9"></a></span>
+<span id="cb25-10"><a href="#cb25-10"></a><span class="in">paste0(x, y)</span></span>
+<span id="cb25-11"><a href="#cb25-11"></a><span class="in">```</span></span>
+<span id="cb25-12"><a href="#cb25-12"></a>:::</span>
+<span id="cb25-13"><a href="#cb25-13"></a></span>
+<span id="cb25-14"><a href="#cb25-14"></a>:::{.column width=2%}</span>
+<span id="cb25-15"><a href="#cb25-15"></a>:::</span>
+<span id="cb25-16"><a href="#cb25-16"></a></span>
+<span id="cb25-17"><a href="#cb25-17"></a>:::{.column width=42%}</span>
+<span id="cb25-18"><a href="#cb25-18"></a>**結果:**</span>
+<span id="cb25-19"><a href="#cb25-19"></a></span>
+<span id="cb25-20"><a href="#cb25-20"></a><span class="in">```{r}</span></span>
+<span id="cb25-21"><a href="#cb25-21"></a><span class="in">#| echo: false</span></span>
+<span id="cb25-22"><a href="#cb25-22"></a><span class="in">x &lt;- c(1, 2, 3, 1, 2)</span></span>
+<span id="cb25-23"><a href="#cb25-23"></a><span class="in">y &lt;- c("A", "A", "A", "B", "B")</span></span>
+<span id="cb25-24"><a href="#cb25-24"></a></span>
+<span id="cb25-25"><a href="#cb25-25"></a><span class="in">paste0(x, y)</span></span>
+<span id="cb25-26"><a href="#cb25-26"></a><span class="in">```</span></span>
+<span id="cb25-27"><a href="#cb25-27"></a>:::</span>
+<span id="cb25-28"><a href="#cb25-28"></a>::::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Output:</strong></p>
 <div class="columns">
 <div class="column" style="width:56%;">
 <p><strong>コード</strong></p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">2</span>)</span>
-<span id="cb21-2"><a href="#cb21-2"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"B"</span>)</span>
-<span id="cb21-3"><a href="#cb21-3"></a></span>
-<span id="cb21-4"><a href="#cb21-4"></a><span class="fu">paste0</span>(x, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb26-2"><a href="#cb26-2"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"B"</span>)</span>
+<span id="cb26-3"><a href="#cb26-3"></a></span>
+<span id="cb26-4"><a href="#cb26-4"></a><span class="fu">paste0</span>(x, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:2%;">
 
@@ -1058,44 +1100,44 @@ Rはみんなの友達!
 <h3 data-number="G.3.4" class="anchored" data-anchor-id="パネル"><span class="header-section-number">G.3.4</span> パネル</h3>
 <p>　パネルは段組みのように複数の内容を同じ行に出力する機能であるが、段組みは左右に並べる一方、パネルが異なるページへ出力する。たとえば、データセットの作成と、そのデータを使った作図のコードを示す場合、2つのチャンクを横に並べるには幅が狭いかも知れない。この場合、使えるのがパネル機能だ。使い方は段組みより簡単で、<code>:::{.panel-tabset}</code>と<code>:::</code>間に入力された内容がパネル内容になる。各パネルのタイトルは<code>##</code>見出しで指定でき、これが各パネルの区切りにもなる。</p>
 <p><strong>Input:</strong></p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode numberSource markdown md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb23-1"><a href="#cb23-1"></a>:::{.panel-tabset}</span>
-<span id="cb23-2"><a href="#cb23-2"></a><span class="fu">## データ</span></span>
-<span id="cb23-3"><a href="#cb23-3"></a></span>
-<span id="cb23-4"><a href="#cb23-4"></a><span class="in">```{r}</span></span>
-<span id="cb23-5"><a href="#cb23-5"></a><span class="in">library(tidyverse)</span></span>
-<span id="cb23-6"><a href="#cb23-6"></a></span>
-<span id="cb23-7"><a href="#cb23-7"></a><span class="in">my_data &lt;- tibble(City = c("東京", "北京", "ソウル"),</span></span>
-<span id="cb23-8"><a href="#cb23-8"></a><span class="in">                  Pop  = c(1396, 2154, 978))</span></span>
-<span id="cb23-9"><a href="#cb23-9"></a></span>
-<span id="cb23-10"><a href="#cb23-10"></a><span class="in">my_data</span></span>
-<span id="cb23-11"><a href="#cb23-11"></a><span class="in">```</span></span>
-<span id="cb23-12"><a href="#cb23-12"></a></span>
-<span id="cb23-13"><a href="#cb23-13"></a><span class="fu">## プロット</span></span>
-<span id="cb23-14"><a href="#cb23-14"></a></span>
-<span id="cb23-15"><a href="#cb23-15"></a><span class="in">```{r}</span></span>
-<span id="cb23-16"><a href="#cb23-16"></a><span class="in">#| fig-width: 8</span></span>
-<span id="cb23-17"><a href="#cb23-17"></a><span class="in">#| fig-height: 4</span></span>
-<span id="cb23-18"><a href="#cb23-18"></a><span class="in">my_data |&gt;</span></span>
-<span id="cb23-19"><a href="#cb23-19"></a><span class="in">  mutate(City = fct_inorder(City)) |&gt;</span></span>
-<span id="cb23-20"><a href="#cb23-20"></a><span class="in">  ggplot(aes(x = City, y = Pop)) +</span></span>
-<span id="cb23-21"><a href="#cb23-21"></a><span class="in">  geom_col() + # geom_bar(stat = "identity") もOK</span></span>
-<span id="cb23-22"><a href="#cb23-22"></a><span class="in">  labs(x = "都市", y = "人口（万人）") +</span></span>
-<span id="cb23-23"><a href="#cb23-23"></a><span class="in">  theme_bw(base_size = 14)</span></span>
-<span id="cb23-24"><a href="#cb23-24"></a><span class="in">```</span></span>
-<span id="cb23-25"><a href="#cb23-25"></a></span>
-<span id="cb23-26"><a href="#cb23-26"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode numberSource markdown md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb28-1"><a href="#cb28-1"></a>:::{.panel-tabset}</span>
+<span id="cb28-2"><a href="#cb28-2"></a><span class="fu">## データ</span></span>
+<span id="cb28-3"><a href="#cb28-3"></a></span>
+<span id="cb28-4"><a href="#cb28-4"></a><span class="in">```{r}</span></span>
+<span id="cb28-5"><a href="#cb28-5"></a><span class="in">library(tidyverse)</span></span>
+<span id="cb28-6"><a href="#cb28-6"></a></span>
+<span id="cb28-7"><a href="#cb28-7"></a><span class="in">my_data &lt;- tibble(City = c("東京", "北京", "ソウル"),</span></span>
+<span id="cb28-8"><a href="#cb28-8"></a><span class="in">                  Pop  = c(1396, 2154, 978))</span></span>
+<span id="cb28-9"><a href="#cb28-9"></a></span>
+<span id="cb28-10"><a href="#cb28-10"></a><span class="in">my_data</span></span>
+<span id="cb28-11"><a href="#cb28-11"></a><span class="in">```</span></span>
+<span id="cb28-12"><a href="#cb28-12"></a></span>
+<span id="cb28-13"><a href="#cb28-13"></a><span class="fu">## プロット</span></span>
+<span id="cb28-14"><a href="#cb28-14"></a></span>
+<span id="cb28-15"><a href="#cb28-15"></a><span class="in">```{r}</span></span>
+<span id="cb28-16"><a href="#cb28-16"></a><span class="in">#| fig-width: 8</span></span>
+<span id="cb28-17"><a href="#cb28-17"></a><span class="in">#| fig-height: 4</span></span>
+<span id="cb28-18"><a href="#cb28-18"></a><span class="in">my_data |&gt;</span></span>
+<span id="cb28-19"><a href="#cb28-19"></a><span class="in">  mutate(City = fct_inorder(City)) |&gt;</span></span>
+<span id="cb28-20"><a href="#cb28-20"></a><span class="in">  ggplot(aes(x = City, y = Pop)) +</span></span>
+<span id="cb28-21"><a href="#cb28-21"></a><span class="in">  geom_col() + # geom_bar(stat = "identity") もOK</span></span>
+<span id="cb28-22"><a href="#cb28-22"></a><span class="in">  labs(x = "都市", y = "人口（万人）") +</span></span>
+<span id="cb28-23"><a href="#cb28-23"></a><span class="in">  theme_bw(base_size = 14)</span></span>
+<span id="cb28-24"><a href="#cb28-24"></a><span class="in">```</span></span>
+<span id="cb28-25"><a href="#cb28-25"></a></span>
+<span id="cb28-26"><a href="#cb28-26"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Output:</strong></p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">データ</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">プロット</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb24-2"><a href="#cb24-2"></a></span>
-<span id="cb24-3"><a href="#cb24-3"></a>my_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">City =</span> <span class="fu">c</span>(<span class="st">"東京"</span>, <span class="st">"北京"</span>, <span class="st">"ソウル"</span>),</span>
-<span id="cb24-4"><a href="#cb24-4"></a>                  <span class="at">Pop  =</span> <span class="fu">c</span>(<span class="dv">1396</span>, <span class="dv">2154</span>, <span class="dv">978</span>))</span>
-<span id="cb24-5"><a href="#cb24-5"></a></span>
-<span id="cb24-6"><a href="#cb24-6"></a>my_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb29-2"><a href="#cb29-2"></a></span>
+<span id="cb29-3"><a href="#cb29-3"></a>my_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">City =</span> <span class="fu">c</span>(<span class="st">"東京"</span>, <span class="st">"北京"</span>, <span class="st">"ソウル"</span>),</span>
+<span id="cb29-4"><a href="#cb29-4"></a>                  <span class="at">Pop  =</span> <span class="fu">c</span>(<span class="dv">1396</span>, <span class="dv">2154</span>, <span class="dv">978</span>))</span>
+<span id="cb29-5"><a href="#cb29-5"></a></span>
+<span id="cb29-6"><a href="#cb29-6"></a>my_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
   City     Pop
@@ -1108,14 +1150,14 @@ Rはみんなの友達!
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb26-2"><a href="#cb26-2"></a>  <span class="fu">mutate</span>(<span class="at">City =</span> <span class="fu">fct_inorder</span>(City)) <span class="sc">|&gt;</span></span>
-<span id="cb26-3"><a href="#cb26-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> City, <span class="at">y =</span> Pop)) <span class="sc">+</span></span>
-<span id="cb26-4"><a href="#cb26-4"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> <span class="co"># geom_bar(stat = "identity") もOK</span></span>
-<span id="cb26-5"><a href="#cb26-5"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"都市"</span>, <span class="at">y =</span> <span class="st">"人口（万人）"</span>) <span class="sc">+</span></span>
-<span id="cb26-6"><a href="#cb26-6"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>my_data <span class="sc">|&gt;</span></span>
+<span id="cb31-2"><a href="#cb31-2"></a>  <span class="fu">mutate</span>(<span class="at">City =</span> <span class="fu">fct_inorder</span>(City)) <span class="sc">|&gt;</span></span>
+<span id="cb31-3"><a href="#cb31-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> City, <span class="at">y =</span> Pop)) <span class="sc">+</span></span>
+<span id="cb31-4"><a href="#cb31-4"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> <span class="co"># geom_bar(stat = "identity") もOK</span></span>
+<span id="cb31-5"><a href="#cb31-5"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"都市"</span>, <span class="at">y =</span> <span class="st">"人口（万人）"</span>) <span class="sc">+</span></span>
+<span id="cb31-6"><a href="#cb31-6"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="fig-barplot" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-pos="H" width="2400">
+<div id="fig-barplot" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" width="2400" data-fig-pos="H">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-barplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="quarto2_files/figure-html/fig-barplot-1.png" id="fig-barplot" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" data-fig-pos="H" width="2400">
@@ -1139,7 +1181,7 @@ Rはみんなの友達!
 <div class="tab-content">
 <div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
 <p><strong>Input:</strong></p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb27-1"><a href="#cb27-1"></a><span class="al">![『私たちのR』ロゴ](http://www.jaysong.net/RBook/Figs/favicon.png)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb32-1"><a href="#cb32-1"></a><span class="al">![『私たちのR』ロゴ](http://www.jaysong.net/RBook/Figs/favicon.png)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Output:</strong></p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -1150,7 +1192,7 @@ Rはみんなの友達!
 </div>
 <div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
 <p><strong>Input:</strong></p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb28-1"><a href="#cb28-1"></a><span class="al">![『私たちのR』ロゴ](http://www.jaysong.net/RBook/Figs/favicon.png)</span>{width=100px}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb33-1"><a href="#cb33-1"></a><span class="al">![『私たちのR』ロゴ](http://www.jaysong.net/RBook/Figs/favicon.png)</span>{width=100px}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Output:</strong></p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -1167,7 +1209,7 @@ Rはみんなの友達!
 <div class="tab-content">
 <div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
 <p><strong>Input:</strong></p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb29-1"><a href="#cb29-1"></a><span class="al">![『私たちのR』ロゴ（左揃え）](http://www.jaysong.net/RBook/Figs/favicon.png)</span>{fig-align="left"}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb34-1"><a href="#cb34-1"></a><span class="al">![『私たちのR』ロゴ（左揃え）](http://www.jaysong.net/RBook/Figs/favicon.png)</span>{fig-align="left"}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Output:</strong></p>
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
@@ -1178,7 +1220,7 @@ Rはみんなの友達!
 </div>
 <div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
 <p><strong>Input:</strong></p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb30-1"><a href="#cb30-1"></a><span class="al">![『私たちのR』ロゴ（中央揃え）](http://www.jaysong.net/RBook/Figs/favicon.png)</span>{fig-align="center"}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb35-1"><a href="#cb35-1"></a><span class="al">![『私たちのR』ロゴ（中央揃え）](http://www.jaysong.net/RBook/Figs/favicon.png)</span>{fig-align="center"}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Output:</strong></p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -1189,7 +1231,7 @@ Rはみんなの友達!
 </div>
 <div id="tabset-4-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-3-tab">
 <p><strong>Input:</strong></p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb31-1"><a href="#cb31-1"></a><span class="al">![『私たちのR』ロゴ（右揃え）](http://www.jaysong.net/RBook/Figs/favicon.png)</span>{fig-align="right"}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb36-1"><a href="#cb36-1"></a><span class="al">![『私たちのR』ロゴ（右揃え）](http://www.jaysong.net/RBook/Figs/favicon.png)</span>{fig-align="right"}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Output:</strong></p>
 <div class="quarto-figure quarto-figure-right">
 <figure class="figure">
@@ -1202,13 +1244,13 @@ Rはみんなの友達!
 </div>
 <p>　他にも複数のグラフを並べることもR Markdownに比べ、簡単にできる。横に並べるなら段組みでもよいが、<code>:::{layout-ncol}</code>がより楽だ。<code>ncol</code>の代わりに<code>nrow</code>も指定できる。以下のコードは図を3列配置する例だ（モバイルデバイスの場合、縦に並ぶように表示される）。</p>
 <p><strong>Input:</strong></p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb32-1"><a href="#cb32-1"></a>:::{layout-ncol=3}</span>
-<span id="cb32-2"><a href="#cb32-2"></a><span class="al">![左の猫](http://www.jaysong.net/RBook/Figs/favicon.png)</span></span>
-<span id="cb32-3"><a href="#cb32-3"></a></span>
-<span id="cb32-4"><a href="#cb32-4"></a><span class="al">![中央の猫](http://www.jaysong.net/RBook/Figs/favicon.png)</span></span>
-<span id="cb32-5"><a href="#cb32-5"></a></span>
-<span id="cb32-6"><a href="#cb32-6"></a><span class="al">![右の猫](http://www.jaysong.net/RBook/Figs/favicon.png)</span></span>
-<span id="cb32-7"><a href="#cb32-7"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb37-1"><a href="#cb37-1"></a>:::{layout-ncol=3}</span>
+<span id="cb37-2"><a href="#cb37-2"></a><span class="al">![左の猫](http://www.jaysong.net/RBook/Figs/favicon.png)</span></span>
+<span id="cb37-3"><a href="#cb37-3"></a></span>
+<span id="cb37-4"><a href="#cb37-4"></a><span class="al">![中央の猫](http://www.jaysong.net/RBook/Figs/favicon.png)</span></span>
+<span id="cb37-5"><a href="#cb37-5"></a></span>
+<span id="cb37-6"><a href="#cb37-6"></a><span class="al">![右の猫](http://www.jaysong.net/RBook/Figs/favicon.png)</span></span>
+<span id="cb37-7"><a href="#cb37-7"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Output:</strong></p>
 <div>
 
@@ -1243,18 +1285,18 @@ Rはみんなの友達!
 </div>
 <p>　図の相互参照とためのラベルは<code>![]()</code>の後ろの<code>{}</code>内に<code>#fig-</code>で指定できる。並べた図にラベルを付けることもできる。</p>
 <p><strong>Input:</strong></p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb33-1"><a href="#cb33-1"></a><span class="ss">* </span>複数の図の相互参照: @fig-three-cats</span>
-<span id="cb33-2"><a href="#cb33-2"></a><span class="ss">* </span>個別の図の相互参照: @fig-cat1</span>
-<span id="cb33-3"><a href="#cb33-3"></a></span>
-<span id="cb33-4"><a href="#cb33-4"></a>:::{#fig-three-cats layout-ncol=3}</span>
-<span id="cb33-5"><a href="#cb33-5"></a><span class="al">![左の猫](http://www.jaysong.net/RBook/Figs/favicon.png)</span>{#fig-cat1}</span>
-<span id="cb33-6"><a href="#cb33-6"></a></span>
-<span id="cb33-7"><a href="#cb33-7"></a><span class="al">![中央の猫](http://www.jaysong.net/RBook/Figs/favicon.png)</span>{#fig-cat2}</span>
-<span id="cb33-8"><a href="#cb33-8"></a></span>
-<span id="cb33-9"><a href="#cb33-9"></a><span class="al">![右の猫](http://www.jaysong.net/RBook/Figs/favicon.png)</span>{#fig-cat3}</span>
-<span id="cb33-10"><a href="#cb33-10"></a></span>
-<span id="cb33-11"><a href="#cb33-11"></a>3匹の猫</span>
-<span id="cb33-12"><a href="#cb33-12"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb38-1"><a href="#cb38-1"></a><span class="ss">* </span>複数の図の相互参照: @fig-three-cats</span>
+<span id="cb38-2"><a href="#cb38-2"></a><span class="ss">* </span>個別の図の相互参照: @fig-cat1</span>
+<span id="cb38-3"><a href="#cb38-3"></a></span>
+<span id="cb38-4"><a href="#cb38-4"></a>:::{#fig-three-cats layout-ncol=3}</span>
+<span id="cb38-5"><a href="#cb38-5"></a><span class="al">![左の猫](http://www.jaysong.net/RBook/Figs/favicon.png)</span>{#fig-cat1}</span>
+<span id="cb38-6"><a href="#cb38-6"></a></span>
+<span id="cb38-7"><a href="#cb38-7"></a><span class="al">![中央の猫](http://www.jaysong.net/RBook/Figs/favicon.png)</span>{#fig-cat2}</span>
+<span id="cb38-8"><a href="#cb38-8"></a></span>
+<span id="cb38-9"><a href="#cb38-9"></a><span class="al">![右の猫](http://www.jaysong.net/RBook/Figs/favicon.png)</span>{#fig-cat3}</span>
+<span id="cb38-10"><a href="#cb38-10"></a></span>
+<span id="cb38-11"><a href="#cb38-11"></a>3匹の猫</span>
+<span id="cb38-12"><a href="#cb38-12"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Output:</strong></p>
 <ul>
 <li>複数の図の相互参照: <a href="#fig-three-cats" class="quarto-xref">図&nbsp;<span>G.3</span></a></li>
@@ -1309,27 +1351,27 @@ Rはみんなの友達!
 </div>
 <p>　<code>:::{layout-ncol}</code>を使えば、複数の表を並べることもできる。相互参照についても同じだが、ラベル名は<code>#fig-</code>の代わりに<code>#tbl-</code>を使う必要がある。</p>
 <p><strong>Input:</strong></p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb34-1"><a href="#cb34-1"></a>　@tbl-two-tables は、東アジアとヨーロッパ主要都市の人口、面積、人口密度の一覧である。ただし、 @tbl-east-asia の東京は23区でなく、東京都全域であることに注意されたい。</span>
-<span id="cb34-2"><a href="#cb34-2"></a></span>
-<span id="cb34-3"><a href="#cb34-3"></a>::: {#tbl-two-tables layout-ncol=2}</span>
-<span id="cb34-4"><a href="#cb34-4"></a>| Name    | Pop.  | Area   | Density |</span>
-<span id="cb34-5"><a href="#cb34-5"></a>|:--------|------:|-------:|--------:|</span>
-<span id="cb34-6"><a href="#cb34-6"></a>| Tokyo   | 1,403 |  2,194 |  6,397  |</span>
-<span id="cb34-7"><a href="#cb34-7"></a>| Beijing | 2,170 | 16,410 |  1,323  |</span>
-<span id="cb34-8"><a href="#cb34-8"></a>| Seoul   |   949 |    605 | 15,688  |</span>
-<span id="cb34-9"><a href="#cb34-9"></a></span>
-<span id="cb34-10"><a href="#cb34-10"></a>: East Asia {#tbl-east-asia}</span>
-<span id="cb34-11"><a href="#cb34-11"></a></span>
-<span id="cb34-12"><a href="#cb34-12"></a>| Name   | Pop.  | Area  | Density |</span>
-<span id="cb34-13"><a href="#cb34-13"></a>|:-------|------:|------:|--------:|</span>
-<span id="cb34-14"><a href="#cb34-14"></a>| London | 943   | 1,569 |  5,354  |</span>
-<span id="cb34-15"><a href="#cb34-15"></a>| Berlin | 367   |   892 |  4,114  |</span>
-<span id="cb34-16"><a href="#cb34-16"></a>| Paris  | 215   |   105 | 20,382  |</span>
-<span id="cb34-17"><a href="#cb34-17"></a></span>
-<span id="cb34-18"><a href="#cb34-18"></a>: Europe {#tbl-europe}</span>
-<span id="cb34-19"><a href="#cb34-19"></a></span>
-<span id="cb34-20"><a href="#cb34-20"></a>首都の人口（万人）、面積（km&lt;sup&gt;2&lt;/sup&gt;）、人口密度（人/km&lt;sup&gt;2&lt;/sup&gt;）</span>
-<span id="cb34-21"><a href="#cb34-21"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb39-1"><a href="#cb39-1"></a>　@tbl-two-tables は、東アジアとヨーロッパ主要都市の人口、面積、人口密度の一覧である。ただし、 @tbl-east-asia の東京は23区でなく、東京都全域であることに注意されたい。</span>
+<span id="cb39-2"><a href="#cb39-2"></a></span>
+<span id="cb39-3"><a href="#cb39-3"></a>::: {#tbl-two-tables layout-ncol=2}</span>
+<span id="cb39-4"><a href="#cb39-4"></a>| Name    | Pop.  | Area   | Density |</span>
+<span id="cb39-5"><a href="#cb39-5"></a>|:--------|------:|-------:|--------:|</span>
+<span id="cb39-6"><a href="#cb39-6"></a>| Tokyo   | 1,403 |  2,194 |  6,397  |</span>
+<span id="cb39-7"><a href="#cb39-7"></a>| Beijing | 2,170 | 16,410 |  1,323  |</span>
+<span id="cb39-8"><a href="#cb39-8"></a>| Seoul   |   949 |    605 | 15,688  |</span>
+<span id="cb39-9"><a href="#cb39-9"></a></span>
+<span id="cb39-10"><a href="#cb39-10"></a>: East Asia {#tbl-east-asia}</span>
+<span id="cb39-11"><a href="#cb39-11"></a></span>
+<span id="cb39-12"><a href="#cb39-12"></a>| Name   | Pop.  | Area  | Density |</span>
+<span id="cb39-13"><a href="#cb39-13"></a>|:-------|------:|------:|--------:|</span>
+<span id="cb39-14"><a href="#cb39-14"></a>| London | 943   | 1,569 |  5,354  |</span>
+<span id="cb39-15"><a href="#cb39-15"></a>| Berlin | 367   |   892 |  4,114  |</span>
+<span id="cb39-16"><a href="#cb39-16"></a>| Paris  | 215   |   105 | 20,382  |</span>
+<span id="cb39-17"><a href="#cb39-17"></a></span>
+<span id="cb39-18"><a href="#cb39-18"></a>: Europe {#tbl-europe}</span>
+<span id="cb39-19"><a href="#cb39-19"></a></span>
+<span id="cb39-20"><a href="#cb39-20"></a>首都の人口（万人）、面積（km&lt;sup&gt;2&lt;/sup&gt;）、人口密度（人/km&lt;sup&gt;2&lt;/sup&gt;）</span>
+<span id="cb39-21"><a href="#cb39-21"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Output:</strong></p>
 <p>　<a href="#tbl-two-tables" class="quarto-xref">表&nbsp;<span>G.1</span></a> は、東アジアとヨーロッパ主要都市の人口、面積、人口密度の一覧である。ただし、 <a href="#tbl-east-asia" class="quarto-xref">表&nbsp;<span>G.1 (a)</span></a> の東京は23区でなく、東京都全域であることに注意されたい。</p>
 <div id="tbl-two-tables" class="quarto-layout-panel anchored">
@@ -1427,27 +1469,27 @@ Rはみんなの友達!
 </div>
 <p>　また、この機能はチャンクで生成された図についても使用可能だ。チャンクオプションに<code>#| layout-ncol: 2</code>を追加すると、2つの図が横に並ぶことになる。ただし、相互参照の際、個別の図のラベルはこちら側では指定できず、自動生成される。たとえば、プロット群のラベルが<code>fig-two-plots</code>なら1つ目の図のラベルは<code>fig-two-plots-1</code>、2つ目は<code>fig-two-plots-2</code>となる。</p>
 <p><strong>Input:</strong></p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode numberSource markdown md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb35-1"><a href="#cb35-1"></a></span>
-<span id="cb35-2"><a href="#cb35-2"></a>　@fig-two-plots は2つの散布図であり、 @fig-two-plots-1 は速度と停止距離との関係、 @fig-two-plots-2 は気温と気圧の関係を示す。</span>
-<span id="cb35-3"><a href="#cb35-3"></a></span>
-<span id="cb35-4"><a href="#cb35-4"></a><span class="in">```{r}</span></span>
-<span id="cb35-5"><a href="#cb35-5"></a><span class="in">#| label: fig-two-plots</span></span>
-<span id="cb35-6"><a href="#cb35-6"></a><span class="in">#| echo: false</span></span>
-<span id="cb35-7"><a href="#cb35-7"></a><span class="in">#| layout-ncol: 2</span></span>
-<span id="cb35-8"><a href="#cb35-8"></a><span class="in">#| fig-cap: "散布図の例"</span></span>
-<span id="cb35-9"><a href="#cb35-9"></a><span class="in">#| fig-subcap: </span></span>
-<span id="cb35-10"><a href="#cb35-10"></a><span class="in">#|   - "速度と停止距離"</span></span>
-<span id="cb35-11"><a href="#cb35-11"></a><span class="in">#|   - "気温と気圧"</span></span>
-<span id="cb35-12"><a href="#cb35-12"></a><span class="in">cars |&gt;</span></span>
-<span id="cb35-13"><a href="#cb35-13"></a><span class="in">  ggplot(aes(x = speed, y = dist)) +</span></span>
-<span id="cb35-14"><a href="#cb35-14"></a><span class="in">  geom_point() +</span></span>
-<span id="cb35-15"><a href="#cb35-15"></a><span class="in">  labs(x = "Speed (mph)", y = "Stopping distance (ft)")</span></span>
-<span id="cb35-16"><a href="#cb35-16"></a></span>
-<span id="cb35-17"><a href="#cb35-17"></a><span class="in">pressure |&gt;</span></span>
-<span id="cb35-18"><a href="#cb35-18"></a><span class="in">  ggplot(aes(x = temperature, y = pressure)) +</span></span>
-<span id="cb35-19"><a href="#cb35-19"></a><span class="in">  geom_point() +</span></span>
-<span id="cb35-20"><a href="#cb35-20"></a><span class="in">  labs(x = "Temperature (Celsious)", y = "Pressure (mm)")</span></span>
-<span id="cb35-21"><a href="#cb35-21"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode numberSource markdown md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb40-1"><a href="#cb40-1"></a></span>
+<span id="cb40-2"><a href="#cb40-2"></a>　@fig-two-plots は2つの散布図であり、 @fig-two-plots-1 は速度と停止距離との関係、 @fig-two-plots-2 は気温と気圧の関係を示す。</span>
+<span id="cb40-3"><a href="#cb40-3"></a></span>
+<span id="cb40-4"><a href="#cb40-4"></a><span class="in">```{r}</span></span>
+<span id="cb40-5"><a href="#cb40-5"></a><span class="in">#| label: fig-two-plots</span></span>
+<span id="cb40-6"><a href="#cb40-6"></a><span class="in">#| echo: false</span></span>
+<span id="cb40-7"><a href="#cb40-7"></a><span class="in">#| layout-ncol: 2</span></span>
+<span id="cb40-8"><a href="#cb40-8"></a><span class="in">#| fig-cap: "散布図の例"</span></span>
+<span id="cb40-9"><a href="#cb40-9"></a><span class="in">#| fig-subcap: </span></span>
+<span id="cb40-10"><a href="#cb40-10"></a><span class="in">#|   - "速度と停止距離"</span></span>
+<span id="cb40-11"><a href="#cb40-11"></a><span class="in">#|   - "気温と気圧"</span></span>
+<span id="cb40-12"><a href="#cb40-12"></a><span class="in">cars |&gt;</span></span>
+<span id="cb40-13"><a href="#cb40-13"></a><span class="in">  ggplot(aes(x = speed, y = dist)) +</span></span>
+<span id="cb40-14"><a href="#cb40-14"></a><span class="in">  geom_point() +</span></span>
+<span id="cb40-15"><a href="#cb40-15"></a><span class="in">  labs(x = "Speed (mph)", y = "Stopping distance (ft)")</span></span>
+<span id="cb40-16"><a href="#cb40-16"></a></span>
+<span id="cb40-17"><a href="#cb40-17"></a><span class="in">pressure |&gt;</span></span>
+<span id="cb40-18"><a href="#cb40-18"></a><span class="in">  ggplot(aes(x = temperature, y = pressure)) +</span></span>
+<span id="cb40-19"><a href="#cb40-19"></a><span class="in">  geom_point() +</span></span>
+<span id="cb40-20"><a href="#cb40-20"></a><span class="in">  labs(x = "Temperature (Celsious)", y = "Pressure (mm)")</span></span>
+<span id="cb40-21"><a href="#cb40-21"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Output:</strong></p>
 <p>　<a href="#fig-two-plots" class="quarto-xref">図&nbsp;<span>G.4</span></a> は2つの散布図であり、 <a href="#fig-two-plots-1" class="quarto-xref">図&nbsp;<span>G.4 (a)</span></a> は速度と停止距離との関係、 <a href="#fig-two-plots-2" class="quarto-xref">図&nbsp;<span>G.4 (b)</span></a> は気温と気圧の関係を示す。</p>
 <div id="fig-two-plots" class="quarto-layout-panel">
@@ -1489,11 +1531,11 @@ Rはみんなの友達!
 <section id="数式のラベル" class="level3" data-number="G.3.6">
 <h3 data-number="G.3.6" class="anchored" data-anchor-id="数式のラベル"><span class="header-section-number">G.3.6</span> 数式のラベル</h3>
 <p><strong>Input：</strong></p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb36-1"><a href="#cb36-1"></a>　ポアソン分布の確率密度関数（@eq-poisson）は美しいぞ。</span>
-<span id="cb36-2"><a href="#cb36-2"></a></span>
-<span id="cb36-3"><a href="#cb36-3"></a>$$</span>
-<span id="cb36-4"><a href="#cb36-4"></a>p(x) = \frac{e^{-\lambda} \lambda^{x}}{x !}</span>
-<span id="cb36-5"><a href="#cb36-5"></a>$$ {#eq-poisson}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb41-1"><a href="#cb41-1"></a>　ポアソン分布の確率密度関数（@eq-poisson）は美しいぞ。</span>
+<span id="cb41-2"><a href="#cb41-2"></a></span>
+<span id="cb41-3"><a href="#cb41-3"></a>$$</span>
+<span id="cb41-4"><a href="#cb41-4"></a>p(x) = \frac{e^{-\lambda} \lambda^{x}}{x !}</span>
+<span id="cb41-5"><a href="#cb41-5"></a>$$ {#eq-poisson}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Output：</strong></p>
 <p>　ポアソン分布の確率密度関数（<a href="#eq-poisson" class="quarto-xref">式&nbsp;<span>G.1</span></a>）は美しいぞ。</p>
 <p><span id="eq-poisson"><span class="math display">\[
@@ -1503,9 +1545,9 @@ p(x) = \frac{e^{-\lambda} \lambda^{x}}{x !}
 <section id="ハイパーリンクのターゲット" class="level3" data-number="G.3.7">
 <h3 data-number="G.3.7" class="anchored" data-anchor-id="ハイパーリンクのターゲット"><span class="header-section-number">G.3.7</span> ハイパーリンクのターゲット</h3>
 <p>　Markdownのハイパーリンクは以下のように書く。</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb37-1"><a href="#cb37-1"></a><span class="co">[</span><span class="ot">ここ</span><span class="co">](https://www.jaysong.net)</span>をクリックすると宋のホームページへ移動します。</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb42-1"><a href="#cb42-1"></a><span class="co">[</span><span class="ot">ここ</span><span class="co">](https://www.jaysong.net)</span>をクリックすると宋のホームページへ移動します。</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>　「ここ」の文字をクリックすると宋のホームページへ飛ばされるコードだが、デフォルト状態では、既存のウィンドウ/タブを使うことになる。これを新しいウィンドウ/タブで開かせるためには、<code>[]()</code>の後ろに<code>{target="_blank"}</code>を付ければ良い。</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb38-1"><a href="#cb38-1"></a><span class="co">[</span><span class="ot">ここ</span><span class="co">](https://www.jaysong.net)</span>{target="_blank"}をクリックすると宋のホームページへ移動します。</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb43-1"><a href="#cb43-1"></a><span class="co">[</span><span class="ot">ここ</span><span class="co">](https://www.jaysong.net)</span>{target="_blank"}をクリックすると宋のホームページへ移動します。</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </section>
 <section id="日本語が含まれたpdf" class="level2" data-number="G.4">
@@ -1515,72 +1557,62 @@ p(x) = \frac{e^{-\lambda} \lambda^{x}}{x !}
 <p>　Quartoで文書を作成する際、出力フォーマットはHTMLかPDFだろう。いずれもYAMLヘッダーの<code>format:</code>を<code>html</code>か<code>pdf</code>にすることで簡単に出力フォーマットが指定できるが、日本語が含まれたPDFの場合、文字化けが生じる可能性が高い。</p>
 <p>　PDFで出力する場合、{tinytex}パッケージと<code>tinytex::install_tinytex()</code>で<span class="math inline">\(\LaTeX\)</span>環境はインストール済みであろう。日本語が含まれたPDFを作成する場合、以上の作業に加え、日本語フォントもインストールする必要がある<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>。<span class="math inline">\(\LaTeX\)</span>デフォルトの和文フォントである原ノ味（Haranoaji）をインストールする。ここでも数分かかる可能性がある<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>。</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>tinytex<span class="sc">::</span><span class="fu">tlmgr_install</span>(<span class="st">"haranoaji"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a>tinytex<span class="sc">::</span><span class="fu">tlmgr_install</span>(<span class="st">"haranoaji"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>　以上の作業はRの再インストール、またはメジャーアップデートをしない限り、1回だけで良い。つまり、通常のパッケージ同様、別のプロジェクトであっても以上の作業は不要だ。これで日本語PDFの準備はバッチリだ。<code>.qmd</code>ファイルのYAMLヘッダーを以下のように修正してみよう。</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb40-1"><a href="#cb40-1"></a><span class="pp">---</span></span>
-<span id="cb40-2"><a href="#cb40-2"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"私たちのR"</span></span>
-<span id="cb40-3"><a href="#cb40-3"></a><span class="fu">subtitle</span><span class="kw">:</span><span class="at"> </span><span class="st">"ベストプラクティスの探求"</span></span>
-<span id="cb40-4"><a href="#cb40-4"></a><span class="fu">author</span><span class="kw">:</span></span>
-<span id="cb40-5"><a href="#cb40-5"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> 宋財泫</span></span>
-<span id="cb40-6"><a href="#cb40-6"></a><span class="at">    </span><span class="fu">url</span><span class="kw">:</span><span class="at"> https://www.jaysong.net</span></span>
-<span id="cb40-7"><a href="#cb40-7"></a><span class="at">    </span><span class="fu">affiliation</span><span class="kw">:</span><span class="at"> 関西大学</span></span>
-<span id="cb40-8"><a href="#cb40-8"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> 矢内勇生</span></span>
-<span id="cb40-9"><a href="#cb40-9"></a><span class="at">    </span><span class="fu">url</span><span class="kw">:</span><span class="at"> https://yukiyanai.github.io/</span></span>
-<span id="cb40-10"><a href="#cb40-10"></a><span class="at">    </span><span class="fu">affiliation</span><span class="kw">:</span><span class="at"> 高知工科大学</span></span>
-<span id="cb40-11"><a href="#cb40-11"></a><span class="at">    </span><span class="fu">attributes</span><span class="kw">:</span></span>
-<span id="cb40-12"><a href="#cb40-12"></a><span class="at">      </span><span class="fu">corresponding</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
-<span id="cb40-13"><a href="#cb40-13"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> today</span></span>
-<span id="cb40-14"><a href="#cb40-14"></a><span class="fu">lang</span><span class="kw">:</span><span class="at"> ja</span></span>
-<span id="cb40-15"><a href="#cb40-15"></a><span class="co"># PDF設定</span></span>
-<span id="cb40-16"><a href="#cb40-16"></a><span class="fu">format</span><span class="kw">:</span></span>
-<span id="cb40-17"><a href="#cb40-17"></a><span class="at">  </span><span class="fu">pdf</span><span class="kw">:</span></span>
-<span id="cb40-18"><a href="#cb40-18"></a><span class="at">    </span><span class="fu">pdf-engine</span><span class="kw">:</span><span class="at"> lualatex</span></span>
-<span id="cb40-19"><a href="#cb40-19"></a><span class="at">    </span><span class="fu">documentclass</span><span class="kw">:</span><span class="at"> ltjsarticle</span></span>
-<span id="cb40-20"><a href="#cb40-20"></a><span class="co"># チャンクのオプション</span></span>
-<span id="cb40-21"><a href="#cb40-21"></a><span class="fu">knitr</span><span class="kw">:</span><span class="at"> </span></span>
-<span id="cb40-22"><a href="#cb40-22"></a><span class="at">  </span><span class="fu">opts_chunk</span><span class="kw">:</span><span class="at"> </span></span>
-<span id="cb40-23"><a href="#cb40-23"></a><span class="at">    </span><span class="fu">dev</span><span class="kw">:</span><span class="at"> ragg_png</span></span>
-<span id="cb40-24"><a href="#cb40-24"></a><span class="at">    </span><span class="fu">fig-align</span><span class="kw">:</span><span class="at"> center</span></span>
-<span id="cb40-25"><a href="#cb40-25"></a><span class="at">    </span><span class="fu">dpi</span><span class="kw">:</span><span class="at"> </span><span class="dv">300</span></span>
-<span id="cb40-26"><a href="#cb40-26"></a><span class="at">    </span><span class="fu">warning</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
-<span id="cb40-27"><a href="#cb40-27"></a><span class="at">    </span><span class="fu">message</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
-<span id="cb40-28"><a href="#cb40-28"></a><span class="pp">---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb41"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb41-1"><a href="#cb41-1"></a><span class="pp">---</span></span>
-<span id="cb41-2"><a href="#cb41-2"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"私たちのR"</span></span>
-<span id="cb41-3"><a href="#cb41-3"></a><span class="fu">subtitle</span><span class="kw">:</span><span class="at"> </span><span class="st">"ベストプラクティスの探求"</span></span>
-<span id="cb41-4"><a href="#cb41-4"></a><span class="fu">author</span><span class="kw">:</span></span>
-<span id="cb41-5"><a href="#cb41-5"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> 宋財泫</span></span>
-<span id="cb41-6"><a href="#cb41-6"></a><span class="at">    </span><span class="fu">url</span><span class="kw">:</span><span class="at"> https://www.jaysong.net</span></span>
-<span id="cb41-7"><a href="#cb41-7"></a><span class="at">    </span><span class="fu">affiliation</span><span class="kw">:</span><span class="at"> 関西大学</span></span>
-<span id="cb41-8"><a href="#cb41-8"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> 矢内勇生</span></span>
-<span id="cb41-9"><a href="#cb41-9"></a><span class="at">    </span><span class="fu">url</span><span class="kw">:</span><span class="at"> https://yukiyanai.github.io/</span></span>
-<span id="cb41-10"><a href="#cb41-10"></a><span class="at">    </span><span class="fu">affiliation</span><span class="kw">:</span><span class="at"> 高知工科大学</span></span>
-<span id="cb41-11"><a href="#cb41-11"></a><span class="at">    </span><span class="fu">attributes</span><span class="kw">:</span></span>
-<span id="cb41-12"><a href="#cb41-12"></a><span class="at">      </span><span class="fu">corresponding</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
-<span id="cb41-13"><a href="#cb41-13"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> today</span></span>
-<span id="cb41-14"><a href="#cb41-14"></a><span class="fu">lang</span><span class="kw">:</span><span class="at"> ja</span></span>
-<span id="cb41-15"><a href="#cb41-15"></a><span class="co"># PDF設定</span></span>
-<span id="cb41-16"><a href="#cb41-16"></a><span class="fu">format</span><span class="kw">:</span></span>
-<span id="cb41-17"><a href="#cb41-17"></a><span class="at">  </span><span class="fu">pdf</span><span class="kw">:</span></span>
-<span id="cb41-18"><a href="#cb41-18"></a><span class="at">    </span><span class="fu">pdf-engine</span><span class="kw">:</span><span class="at"> lualatex</span></span>
-<span id="cb41-19"><a href="#cb41-19"></a><span class="at">    </span><span class="fu">documentclass</span><span class="kw">:</span><span class="at"> ltjsarticle</span></span>
-<span id="cb41-20"><a href="#cb41-20"></a><span class="at">    </span><span class="fu">classoption</span><span class="kw">:</span></span>
-<span id="cb41-21"><a href="#cb41-21"></a><span class="at">      </span><span class="kw">-</span><span class="at"> a4paper</span></span>
-<span id="cb41-22"><a href="#cb41-22"></a><span class="at">      </span><span class="kw">-</span><span class="at"> 10pt</span></span>
-<span id="cb41-23"><a href="#cb41-23"></a><span class="at">    </span><span class="fu">toc</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
-<span id="cb41-24"><a href="#cb41-24"></a><span class="at">    </span><span class="fu">toc-depth</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
-<span id="cb41-25"><a href="#cb41-25"></a><span class="at">    </span><span class="fu">number-sections</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
-<span id="cb41-26"><a href="#cb41-26"></a><span class="co"># チャンクのオプション</span></span>
-<span id="cb41-27"><a href="#cb41-27"></a><span class="fu">knitr</span><span class="kw">:</span><span class="at"> </span></span>
-<span id="cb41-28"><a href="#cb41-28"></a><span class="at">  </span><span class="fu">opts_chunk</span><span class="kw">:</span><span class="at"> </span></span>
-<span id="cb41-29"><a href="#cb41-29"></a><span class="at">    </span><span class="fu">dev</span><span class="kw">:</span><span class="at"> ragg_png</span></span>
-<span id="cb41-30"><a href="#cb41-30"></a><span class="at">    </span><span class="fu">fig-align</span><span class="kw">:</span><span class="at"> center</span></span>
-<span id="cb41-31"><a href="#cb41-31"></a><span class="at">    </span><span class="fu">dpi</span><span class="kw">:</span><span class="at"> </span><span class="dv">300</span></span>
-<span id="cb41-32"><a href="#cb41-32"></a><span class="at">    </span><span class="fu">warning</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
-<span id="cb41-33"><a href="#cb41-33"></a><span class="at">    </span><span class="fu">message</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
-<span id="cb41-34"><a href="#cb41-34"></a><span class="pp">---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>　以上の例ではLuaLaTeXとltjsarticleクラスを組み合わせた紹介したが、ltjsbookなどのクラスも使用可能であり、エンジンもまたLuaLaTeX以外のエンジンを使用しても良い。日本語PDFを作成する際、よく使われるエンジンとしてLuaLaTeX以外にもXeLaTeXがある。</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb45-1"><a href="#cb45-1"></a><span class="pp">---</span></span>
+<span id="cb45-2"><a href="#cb45-2"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"私たちのR"</span></span>
+<span id="cb45-3"><a href="#cb45-3"></a><span class="fu">subtitle</span><span class="kw">:</span><span class="at"> </span><span class="st">"ベストプラクティスの探求"</span></span>
+<span id="cb45-4"><a href="#cb45-4"></a><span class="fu">author</span><span class="kw">:</span><span class="at"> </span><span class="st">"土佐の猛猫"</span></span>
+<span id="cb45-5"><a href="#cb45-5"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> today</span></span>
+<span id="cb45-6"><a href="#cb45-6"></a><span class="fu">lang</span><span class="kw">:</span><span class="at"> ja</span></span>
+<span id="cb45-7"><a href="#cb45-7"></a><span class="co"># PDF設定</span></span>
+<span id="cb45-8"><a href="#cb45-8"></a><span class="fu">format</span><span class="kw">:</span></span>
+<span id="cb45-9"><a href="#cb45-9"></a><span class="at">  </span><span class="fu">pdf</span><span class="kw">:</span></span>
+<span id="cb45-10"><a href="#cb45-10"></a><span class="at">    </span><span class="fu">pdf-engine</span><span class="kw">:</span><span class="at"> lualatex</span></span>
+<span id="cb45-11"><a href="#cb45-11"></a><span class="at">    </span><span class="fu">documentclass</span><span class="kw">:</span><span class="at"> ltjsarticle</span></span>
+<span id="cb45-12"><a href="#cb45-12"></a><span class="co"># チャンクのオプション</span></span>
+<span id="cb45-13"><a href="#cb45-13"></a><span class="fu">knitr</span><span class="kw">:</span><span class="at"> </span></span>
+<span id="cb45-14"><a href="#cb45-14"></a><span class="at">  </span><span class="fu">opts_chunk</span><span class="kw">:</span><span class="at"> </span></span>
+<span id="cb45-15"><a href="#cb45-15"></a><span class="at">    </span><span class="fu">dev</span><span class="kw">:</span><span class="at"> ragg_png</span></span>
+<span id="cb45-16"><a href="#cb45-16"></a><span class="pp">---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>　デフォルト設定との違いはPDFエンジンがLuaLaTeXであること、そしてドキュメントクラスがltjsarticleであることだ。pLaTeXやupLaTeXを使ってきた読者ならお馴染みのjsarticleのLuaLaTeXバージョンがltjsarticleである。</p>
+<p>　以上のオプション2つだけでの日本語の出力は問題ないが、図が含まれる場合、図内の日本語が文字化けする可能性もある。簡単な解決方法は画像エンジンをAGGにし、PNGフォーマットにすることだ。<code>knitr:</code> &gt; <code>opts_chunk:</code> &gt; <code>dev: ragg_png</code>にすると図の文字化けの悩みから開放される。ただし、印刷する時に解像度が気になるので、解像度（<code>dpi</code>）に高めにすることをおすすめする。最低でも300は欲しいが、筆者（宋）の推奨は450だ（<code>dpi: 450</code>）。</p>
+<p>　以下の例は筆者（宋）がよく使うYAMLヘッダーのベースである。</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb46-1"><a href="#cb46-1"></a><span class="pp">---</span></span>
+<span id="cb46-2"><a href="#cb46-2"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"私たちのR"</span></span>
+<span id="cb46-3"><a href="#cb46-3"></a><span class="fu">subtitle</span><span class="kw">:</span><span class="at"> </span><span class="st">"ベストプラクティスの探求"</span></span>
+<span id="cb46-4"><a href="#cb46-4"></a><span class="fu">author</span><span class="kw">:</span></span>
+<span id="cb46-5"><a href="#cb46-5"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> 宋財泫</span></span>
+<span id="cb46-6"><a href="#cb46-6"></a><span class="at">    </span><span class="fu">url</span><span class="kw">:</span><span class="at"> https://www.jaysong.net</span></span>
+<span id="cb46-7"><a href="#cb46-7"></a><span class="at">    </span><span class="fu">affiliation</span><span class="kw">:</span><span class="at"> 関西大学</span></span>
+<span id="cb46-8"><a href="#cb46-8"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> 矢内勇生</span></span>
+<span id="cb46-9"><a href="#cb46-9"></a><span class="at">    </span><span class="fu">url</span><span class="kw">:</span><span class="at"> https://yukiyanai.github.io/</span></span>
+<span id="cb46-10"><a href="#cb46-10"></a><span class="at">    </span><span class="fu">affiliation</span><span class="kw">:</span><span class="at"> 高知工科大学</span></span>
+<span id="cb46-11"><a href="#cb46-11"></a><span class="at">    </span><span class="fu">attributes</span><span class="kw">:</span></span>
+<span id="cb46-12"><a href="#cb46-12"></a><span class="at">      </span><span class="fu">corresponding</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb46-13"><a href="#cb46-13"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> today</span></span>
+<span id="cb46-14"><a href="#cb46-14"></a><span class="fu">lang</span><span class="kw">:</span><span class="at"> ja</span></span>
+<span id="cb46-15"><a href="#cb46-15"></a><span class="co"># PDF設定</span></span>
+<span id="cb46-16"><a href="#cb46-16"></a><span class="fu">format</span><span class="kw">:</span></span>
+<span id="cb46-17"><a href="#cb46-17"></a><span class="at">  </span><span class="fu">pdf</span><span class="kw">:</span></span>
+<span id="cb46-18"><a href="#cb46-18"></a><span class="at">    </span><span class="fu">pdf-engine</span><span class="kw">:</span><span class="at"> lualatex</span></span>
+<span id="cb46-19"><a href="#cb46-19"></a><span class="at">    </span><span class="fu">documentclass</span><span class="kw">:</span><span class="at"> ltjsarticle</span></span>
+<span id="cb46-20"><a href="#cb46-20"></a><span class="at">    </span><span class="fu">classoption</span><span class="kw">:</span></span>
+<span id="cb46-21"><a href="#cb46-21"></a><span class="at">      </span><span class="kw">-</span><span class="at"> a4paper</span></span>
+<span id="cb46-22"><a href="#cb46-22"></a><span class="at">      </span><span class="kw">-</span><span class="at"> 10pt</span></span>
+<span id="cb46-23"><a href="#cb46-23"></a><span class="at">    </span><span class="fu">toc</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb46-24"><a href="#cb46-24"></a><span class="at">    </span><span class="fu">toc-depth</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
+<span id="cb46-25"><a href="#cb46-25"></a><span class="at">    </span><span class="fu">number-sections</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb46-26"><a href="#cb46-26"></a><span class="fu">knitr</span><span class="kw">:</span><span class="at"> </span></span>
+<span id="cb46-27"><a href="#cb46-27"></a><span class="at">  </span><span class="fu">opts_chunk</span><span class="kw">:</span><span class="at"> </span></span>
+<span id="cb46-28"><a href="#cb46-28"></a><span class="at">    </span><span class="fu">dev</span><span class="kw">:</span><span class="at"> ragg_png</span><span class="co">     # 文字化け防止</span></span>
+<span id="cb46-29"><a href="#cb46-29"></a><span class="at">    </span><span class="fu">dpi</span><span class="kw">:</span><span class="at"> </span><span class="dv">450</span><span class="co">          # 高解像度の図を使用（サイズ大きめ）</span></span>
+<span id="cb46-30"><a href="#cb46-30"></a><span class="at">    </span><span class="fu">fig-align</span><span class="kw">:</span><span class="at"> center</span><span class="co"> # 図は中央揃え</span></span>
+<span id="cb46-31"><a href="#cb46-31"></a><span class="at">    </span><span class="fu">warning</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span><span class="co">    # 警告メッセージを消す</span></span>
+<span id="cb46-32"><a href="#cb46-32"></a><span class="at">    </span><span class="fu">message</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span><span class="co">    # 通常メッセージを消す</span></span>
+<span id="cb46-33"><a href="#cb46-33"></a><span class="pp">---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>　以上の例ではLuaLaTeXとltjsarticleクラスを組み合わせた紹介したが、ltjsbookなどのクラスも使用可能であり、エンジンもまたLuaLaTeX以外のエンジンを使用しても良い。日本語PDFを作成する際、よく使われるエンジンとしてLuaLaTeX以外にもXeLaTeX（<code>xelatex</code>）、Latexmk（<code>latexmk</code>）などがある。ただ、こちらはLuaLaTeXよりもやや面倒であるため、LaTeXの知識があまりない読者であれば、本章で紹介したLuaLaTeXで十分だろう。</p>
 </section>
 <section id="参考文献の話" class="level3" data-number="G.4.2">
 <h3 data-number="G.4.2" class="anchored" data-anchor-id="参考文献の話"><span class="header-section-number">G.4.2</span> 参考文献の話</h3>
@@ -1600,11 +1632,11 @@ p(x) = \frac{e^{-\lambda} \lambda^{x}}{x !}
 <li>ただ、タイトル、概要などには適用されない。typst公式ページから設定方法を確認すること。</li>
 </ul></li>
 </ul>
-<div class="sourceCode" id="cb42"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb42-1"><a href="#cb42-1"></a><span class="in">```{=typst}</span></span>
-<span id="cb42-2"><a href="#cb42-2"></a><span class="in">#set text(font: "Hiragino Mincho ProN")</span></span>
-<span id="cb42-3"><a href="#cb42-3"></a><span class="in">#set text(cjk-latin-spacing: auto)</span></span>
-<span id="cb42-4"><a href="#cb42-4"></a><span class="in">#set par(leading: 1.15em)</span></span>
-<span id="cb42-5"><a href="#cb42-5"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode numberSource md number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb47-1"><a href="#cb47-1"></a><span class="in">```{=typst}</span></span>
+<span id="cb47-2"><a href="#cb47-2"></a><span class="in">#set text(font: "Hiragino Mincho ProN")</span></span>
+<span id="cb47-3"><a href="#cb47-3"></a><span class="in">#set text(cjk-latin-spacing: auto)</span></span>
+<span id="cb47-4"><a href="#cb47-4"></a><span class="in">#set par(leading: 1.15em)</span></span>
+<span id="cb47-5"><a href="#cb47-5"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
 </section>
@@ -1618,7 +1650,7 @@ p(x) = \frac{e^{-\lambda} \lambda^{x}}{x !}
 <li id="fn4"><p>実はこれらすらなくても良い。<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn5"><p>一つややこしいのが見出しの相互参照である。英語のままだと「Section 1」のように出力されるが、<code>lang:ja</code>で日本語化すると「セクション 1」のように表示される。これを「第1章」にしたい場合は、<code>第[-@sec-aboutR]章</code>のように書く必要がある。<code>[-@ラベル名]</code>にすると「Section」、「セクション」、「Figure」、「図」などを出力せず番号のみが出力される。<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn6"><p>原ノ味フォントでなく、NotoやIPAexフォントを使用する場合でもなぜか原ノ味フォントが要求されるので、原ノ味フォントを使用する予定がなくてもインストールしておこう。<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn7"><p>最初のチャンクに<code>if (!("haranoaji" %in% tinytex::tl_pkgs()))  tinytex::tlmgr_install("haranoaji")</code>を入れておき、<code>#| include: false</code>で非表示にしておくのも良いかも知れない。これは原ノ味フォントのインストール有無をチェックし、未インストールの場合のみインストールするコードだ。使用するR環境が複数であれなら、こちらの方が安全かも知れない。<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>最初のチャンクに<code>if (!("haranoaji" %in% tinytex::tl_pkgs()))  tinytex::tlmgr_install("haranoaji")</code>を入れておき、<code>#| include: false</code>で非表示にしておくのも良いかも知れない。これは原ノ味フォントのインストール有無をチェックし、未インストールの場合のみインストールするコードだ。使用するR環境が複数であれなら、こちらの方が安全かも知れない。ただし、<code>tinytex::tl_pkgs()</code>関数はやや重いのでレンダリング時間が若干長くなる。<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
