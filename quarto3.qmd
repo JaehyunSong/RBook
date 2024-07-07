@@ -8,42 +8,7 @@
 
 ## YAML header
 
-### HTML（reveal.js）
-
 `format: revealjs`
-
-### PDF（Beamer）
-
-```yaml
----
-title: "討論：社会的動乱と分極化のメカニズムを探る"
-subtitle: "日本比較政治学会2024年度大会"
-date: "2024/6/22"
-author: "\\ltjruby{宋財泫}{そん じぇひょん}"
-institute: "関西大学　総合情報学部"
-knitr: 
-  opts_chunk: 
-    dev: "ragg_png"
-    dpi: 300
-    fig.align: "center"
-    echo: false
-    message: false
-    warning: false
-format: 
-  beamer:
-    pdf-engine: lualatex
-    theme: metropolis
-    classoption:
-      - 10pt
-    mainfont: "Noto Sans JP"
-    CJKmainfont: "Noto Sans JP"
-    include-in-header: 
-      text: |
-        \usepackage{luatexja-ruby}
----
-```
-
-`mainfont`と`CJKmainfont`のフォント名は適宜修正。UbuntuでNotoフォントを入れた場合、高確率で`"Noto Sans CJK JP"`。macOSなら`"Hiragino Sans"`でOK。
 
 ## スライドの作り方
 
@@ -57,9 +22,30 @@ format:
 
 ## 各種機能
 
+* 行の強調
 * ホワイトボード
 * ペン機能
-* スピーカービュー
+* スピーカービュー（`S`キー）
+
+```{.markdown}
+## 高知のおすすめラーメン（順不同）
+
+宋が訪問したことのある店のみ紹介（**太字**は大阪支店あり）
+
+1. 蔵木（牛モツつけ麺）
+2. **まんしゅう**（じゃんめん+白ご飯）
+3. 鶏と魚（メニューがよく変わる）
+4. チョンマゲ（ラーメン零）
+5. **とさの家**（ラーメン+のり多め+硬め濃いめ少なめ）
+6. 呑兵衛屋台（しじみラーメン）
+7. 谷口食堂（鍋焼きラーメン）
+
+::: {.notes}
+* 鶏と魚はドライトマトが乗っているやつがあれば間違いない
+* チョンマゲはラーメンよりも玉子焼き飯がうまいことも言っておく
+* 谷口食堂は鍋焼きラーメン発祥の店だが、宋の好みではない
+:::
+```
 
 ## スライドの配付
 
@@ -79,7 +65,7 @@ format:
     embed-resources: true
 ```
 
-数式をレンダリングする数式ライブラリ（MathJaxとKaTeX）がサイズが大きいため、`embed-resources: true`でも自己完結型HTMLに含まれず、ネット経由で取得することになる。しかし、インターネットが使えない環境になるとせっかくの数式がレンダリングされない。この場合、`self-contained-math: true`を追加すると、数式ライブラリもHTMLファイルに保存される。
+数式をレンダリングする数式ライブラリ（MathJaxとKaTeX）がサイズが大きいため、`embed-resources: true`でも自己完結型HTMLに含まれず、ネット経由で取得することになる。しかし、インターネットが使えない環境になるとせっかくの数式がレンダリングされない。この場合、`self-contained-math: true`を追加すると、数式ライブラリもHTMLファイルに保存される。ただ、この場合、スライドとは思えないサイズのHTMLになるため、注意が必要だ。
 
 ```yaml
 format:
@@ -109,7 +95,43 @@ format:
 
 　このやり方だと最後に余計な白紙のページが現れるが、これは手動で消そう（無害なのでほっといてもOK）。
 
+### Beamer
+
+　以上の方法は「HTMLファイルをPDFに変換する」方法だ。HTML上で見やすいスライドをPDFに変換したからといってそのスライドが見やすいとは限らない。ベストは最初からスライドをPDFで作ることだろう。
+
+```yaml
+---
+title: "ほとんど無害な『私たちのR』"
+subtitle: "『私たちのR』をR教の聖典にすべき"
+date: "2024/6/22"
+author: "\\ltjruby{羽鳥}{ハドリー}ウィッカム"
+institute: "整然大学"
+format: 
+  beamer:
+    pdf-engine: lualatex
+    theme: metropolis
+    classoption:
+      - 10pt
+    mainfont: "Noto Sans JP"
+    CJKmainfont: "Noto Sans JP"
+    include-in-header: 
+      text: |
+        \usepackage{luatexja-ruby}
+knitr: 
+  opts_chunk: 
+    dev: "ragg_png"
+    dpi: 300
+    fig.align: "center"
+    echo: false
+    message: false
+    warning: false
+---
+```
+
+　日本語フォントは`mainfont`と`CJKmainfont`で指定できるため、適宜修正すること。UbuntuでNotoフォントを入れた場合、高確率で`"Noto Sans CJK JP"`になるし、macOSならヒラギノ（`"Hiragino Sans"`）、Windowsなら游ゴシック（`"Yu Gothic"`）で良いだろう。また、ルビを使いたい場合は`luatexja-ruby`パッケージの読み込みも忘れないこと。テーマは[Metroplis](https://github.com/matze/mtheme)を指定したが（ちなみに`Metroplis`にするとエラーが発生する。）、省略した場合デフォルトテーマになる。他にも`CambridgeUS`、`Singapore`など様々なテーマが使える。
+
 ### まとめ
 
 * PDF形式にこだわりたい：最初からBeamer
-* 
+* HTMLのまま配りたい：全てのリソースを格納する
+* とりあえず印刷がしたい：Chromeで印刷
