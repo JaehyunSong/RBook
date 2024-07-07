@@ -200,33 +200,81 @@ knitr:
 
 ### YAML文法
 
-　以上の内容だけでも大体のことはできるだろう。しかし、YAMLヘッダーで指定可能な内容はこれまで紹介してきた内容の数（十）倍だ。詳細はQuarto公式ホームページの[Reference](https://quarto.org/docs/reference/)を参照されたい。しかし、この場合、これから紹介するYAMLの書き方を知っておくと良い。
+　以上の内容だけでも大体のことはできるだろう。しかし、YAMLヘッダーで指定可能な内容はこれまで紹介してきた内容の数十倍だ（もしかしたら数百倍かも知れない）。詳細はQuarto公式ホームページの[Reference](https://quarto.org/docs/reference/)を参照されたい。ただし、公式ホームページには指定可能なオプションと取りうる値、その役割について記載されているだけである。これで足りるかも知れないが、YAMLの文法が分からない人はこの場合、戸惑うかも知れないので、これから紹介するYAMLの書き方を知っておくと良い。
 
-* `#`でコメントOK（JSONはコメント不可）
-* オブジェクトは字下げで + `:`
-* 配列内のエレメントは`-`（1行で各なら`[]`でOK）
-* `|`で長い文章もOK（abstractなど）
+　YAMLの基本的な書き方は`キー: 値`だ。`format: html`の場合、キー（key）が`format`、値（value）が`html`（または`"html"`）となる。YAMLの場合、値が文字列でも`"`が強制されない。また、階層構造を示すためには字下げを使うことも覚えておこう。決まった基準はないが、半角スペース2〜3個が無難だろう。
 
-```yaml
-# format = {html = {theme = [theme1, theme2], highlight-style = a11y}}
-format:
-   html:
-      theme: 
-        - theme1
-        - theme2
-      highlight-style: a11y
+　一つのキーに対し、値が2つ以上の場合、`[]`で囲み、`,`で区切る。たとえば、`author`の値が`Jaehyun`と`Yuki`なら`author: ["Jaehyun", "Yuki"]`となる。リストのもう一つの書き方は`-`である。`author:`の後に改行し、2〜3文字字下げをした上で各要素の前に`-`を付ける。つまり、以下のYAMLは`author: ["Jaehyun", "Yuki"]`と同じ内容だ。
+
+```{.yaml}
+author:
+  - "Jaehyun"
+  - "Yuki"
 ```
 
-```yaml
-# author = [[{name = JS}, {age = 81}], [{name = YY}, {age = 17}]]
-author:
-   - name: JS
-     age: 81
-   - name: YY
-     age: 17
+　YAMLの場合、値として`キー: 値`を使うこともできる。つまり、`author`の値として`name: "Jaehyun"`を与えることもできる。しかし`author: name: "Jaehyun"`の書き方は通常ない。値の中にキーがあるということは、キーが複数ある時が一般的だろう。つまり、`author`の値として`name: "Jaehyun"`と`affiliation: "Kansai University"`両方を与えることが多いだろう。このように2つ以上の`プロパティ: 値`をブロックとしてまとめる場合は以下のように`{}`を使用する。
+
+```{.yaml}
+author: {name: "Jaeyun", affiliation: "Kansai University"}
+```
+
+　もし、著者が二人以上であれば、これらを更に`[]`でまとめれば良い。
+
+```{.yaml}
+author: [{name: "Jaeyun", affiliation: "Kansai University"}, {name: "Yuki", affiliation: "Kochi University of Technology"}]
+```
+
+　しかし、一行が非常に長くなるので、`-`で改行しても良いだろう。
+
+```{.yaml}
+author: 
+  - {name: "Jaeyun", affiliation: "Kansai University"}
+  - {name: "Yuki", affiliation: "Kochi University of Technology"}
+```
+
+　また、`{}`内の要素も改行することができる。複数の`キー: 値`ペアをブロックとして扱う場合は、同じ階層で字下げをすれば良い。
+
+```{.yaml}
+author: 
+  - name: "Jaeyun"
+    affiliation: "Kansai University"
+  - name: "Yuki"
+    affiliation: "Kochi University of Technology"
+```
+
+　この`[]`と`{}`、改行と字下げを組み合わせることで構造化されたメタ情報を記述できる。
+
+　以上の内容だけでも、YAMLヘッダーは書けるが、いくつか便利な機能も紹介しよう。まず、値が長い時には`|`か`>`を使用する。この2つは似たような役割を果たすが、微妙に異なる。
+
+```{.yaml}
+key1: >
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    Quisque dictum lorem a tempor feugiat. Cras sit amet semper mi.
+
+    Phasellus dignissim lobortis nisl, id varius metus.
+key2: |
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    Quisque dictum lorem a tempor feugiat. Cras sit amet semper mi.
+
+    Phasellus dignissim lobortis nisl, id varius metus.
+```
+
+　`key1`には`>`が、`key2`には`|`が使われているが、`>`を使用する場合、全ての改行が無視され、一行扱いとなる。一方、`|`を使用する場合、改行も全て認識される。
+
+　また、YAMLの場合、`#`を用いたコメント機能が付いている。メタ情報記述のためにも幅広く使われてきたJSON形式の致命的なデメリットがコメント機能の不在だったが、YAMLには以下のように`#`で説明を付けたり、コメントアウトができる。
+
+```{.yaml}
+author: 
+  # 第一著者が夜逃げしたので、著者から消す
+  #- name: "Jaeyun"
+  #  affiliation: "Kansai University"
+  - name: "Yuki"                                  # 土佐の猛猫
+    affiliation: "Kochi University of Technology" # a.k.a KUT
 ```
 
 ## QuartoにおけるMarkdown
+
+　[前章](quarto1.qmd)で紹介したMarkdownの文法は現存する多くのMarkdown文法の最大公約数である[GFM（GitHub Flavored Markdown）](https://github.github.com/gfm/)である。ただし、QuartoのMarkdownにはより多くの機能が備わっている。以下ではQuartoのMarkdownで出来る様々な便利なものを紹介する。
 
 ### 相互参照ついて
 
@@ -810,7 +858,6 @@ my_data |>
 **Input:**
 
 ````md
-
 　@fig-two-plots は2つの散布図であり、 @fig-two-plots-1 は速度と停止距離との関係、 @fig-two-plots-2 は気温と気圧の関係を示す。
 
 ```{{r}}
@@ -890,9 +937,82 @@ $$ {#eq-poisson}
 [ここ](https://www.jaysong.net){target="_blank"}をクリックすると宋のホームページへ移動します。
 ```
 
+### 参考文献
+
+　「宋・矢内（2020）」のように参考文献を「著者名（年）」で出力し、その書誌情報を文末にまとめるためには2つを準備する必要がある。1つ目は書誌情報が記録されているファイルを作成することであり、2つ目はYAMLヘッダーの修正だ。書誌情報は`.bib`拡張子のファイルで管理される。たとえば、`reference.bib`という名のファイルが`.qmd`ファイルと同じフォルダーに位置し、`reference.bib`の中身は以下の通りであるとする。
+
+```{.bib filename="references.bibの中身"}
+@book{Grolemund_Wickham:2016,
+  title     = {R for Data Science},
+  author    = {Grolemund, Garrett and Wickham, Hadley},
+  year      = {2016},
+  publisher = {O'Reilly}
+}
+
+@article{Wickham:2014,
+  title     = {Tidy Data},
+  author    = {Wickham, Hadley},
+  year      = {2014},
+  journal   = {Journal of Statistical Software},
+  volume    = {59},
+  issue     = {10},
+  pages     = {1-23}
+}
+```
+
+　$\LaTeX$ユーザーなら以上の書き方に違和感はないだろうが、初めての方はGoogle等で「bibtex 書き方」で検索してみよう。ちなみに`{`の直後に出る文字列（ここでは`Grolemund_Wickham:2016`と`Wickham:2014`）がラベルであり、当該文献を呼び出す時のキーとなる。
+
+　`.bib`ファイルの準備ができたら、`.qmd`ファイルのYAMLヘッダーを修正する必要がある。書き方は簡単であり、`bibliography`フィールドに書誌情報が格納されている`.bib`ファイルのパスを書けば良い。`reference.bib`ファイルが`.qmd`ファイルが同じフォルダーに保存されているなら、`bibliography: references.bib`で良い。もし、`bib_folder`という下位フォルダーに保存されているなら、`bibliography: bib_folder/references.bib`のように書く。
+
+```{.yaml}
+---
+title: なぜ私がヘルムシュテット大学に...?
+author: カール・フリードリヒ・ガウス
+date: 1855/2/23
+format: html
+bibliography: references.bib
+---
+```
+
+　これで参考文献の挿入の準備はできた。後は「著者名（年）」を入れる箇所に`@ラベル`を入れるだけだ。たとえば、`@Grolemund_Wickham:2016`は「@Grolemund_Wickham:2016」のように出力される。他にも以下のような書き方もあり、`[@ラベル]`のような書き方や`[@ラベル1; @ラベル2]`はよく使うことになるだろう。
+
+::::{.columns}
+:::{.column width=55%}
+**Input**
+
+````{.markdown}
+@Grolemund_Wickham:2016
+
+[@Grolemund_Wickham:2016]
+
+[@Grolemund_Wickham:2016; @Wickham:2014]
+
+[see @Wickham:2014, pp. 11-12]
+````
+:::
+
+:::{.column width=1%}
+
+:::
+
+:::{.column width=44%}
+**Output**
+
+@Grolemund_Wickham:2016
+
+[@Grolemund_Wickham:2016]
+
+[@Grolemund_Wickham:2016; @Wickham:2014]
+
+[see @Wickham:2014, pp. 11-12]
+:::
+::::
+
+　ちなみに、`lang: ja`にすると、「Grolemund and Wickham 2016」が「GrolemundとWickham 2016」になる。余計な翻訳だが、これが気になる場合はYAMLヘッダーから`lang:ja`を駆逐しよう。
+
 ## 日本語が含まれたPDF
 
-### LaTeX
+### 日本語PDFの生成
 
 　Quartoで文書を作成する際、出力フォーマットはHTMLかPDFだろう。いずれもYAMLヘッダーの`format:`を`html`か`pdf`にすることで簡単に出力フォーマットが指定できるが、日本語が含まれたPDFの場合、文字化けが生じる可能性が高い。
 
@@ -970,10 +1090,109 @@ knitr:
 
 　以上の例ではLuaLaTeXとltjsarticleクラスを組み合わせた紹介したが、ltjsbookなどのクラスも使用可能であり、エンジンもまたLuaLaTeX以外のエンジンを使用しても良い。日本語PDFを作成する際、よく使われるエンジンとしてLuaLaTeX以外にもXeLaTeX（`xelatex`）、Latexmk（`latexmk`）などがある。ただ、こちらはLuaLaTeXよりもやや面倒であるため、LaTeXの知識があまりない読者であれば、本章で紹介したLuaLaTeXで十分だろう。
 
+　`.qmd`ファイル内にはMarkdown文法だけでなく、$\LaTeX$文法も使える。たとえば、文字をイタリックにするために`*Italic*`でも、`\emph{italic}`でも良い。$\LaTeX$の方がMarkdownよりも機能が豊富なので、Markdownで対応されない機能は$\LaTeX$を使えば良いだろう。
+
+　この場合、いくつかの$\LaTeX$パッケージが必要になるかも知れない。$\LaTeX$の場合、`.tex`ファイルのヘッダーの方に`\usepackage{パッケージ名}`と書く必要があるが、これをYAMLヘッダー内で指定するためには`include-in-header:`キーを使う必要がある。ここにはパッケージの読み込みだけでなく、ヘッダーに入れておきたいあらゆる$\LaTeX$コードが使える。
+
+````{.yaml}
+format:
+  pdf:
+    pdf-engine: lualatex
+    documentclass: ltjsarticle
+    classoption:[a4paper, 10pt]
+    include-in-header:
+      - text: |
+          \usepackage{luatexja-fontspec}
+          \usepackage[ipa]{luatexja-preset}
+          \setmainfont[Ligatures=TeX]{Times New Roman}
+    keep-tex: true
+````
+
+　もし、`|`以降の内容が長い場合、別途の`.tex`ファイルにパッケージ読み込みの内容を記録して保存し、`- text: | ...`の代わりに、`- file: ファイル名.tex`を使った方が良いだろう。
+
 ### 参考文献の話
 
-日本語参考文献スタイルの定番`jecon.bst`を使う方法
+　$\LaTeX$で文書を作成する際、参考文献の管理・挿入はBibTeXを使うケースがほとんどだろう。`.bib`ファイルに各種文献の書誌情報が構造化された形で記録されており、自動的に文末に参考文献一覧を作成してくれるすぐれものだ。また、スタイルファイル（`.bst`）を変更すれば様々なジャーナルに適した形式の参考文献目録に変換される。
 
+　日本語の参考文献の場合、日本語の参考文献に適したスタイルファイルを使用する必要があるが、社会科学における定番が[`jecon.bst`（経済学用のBibTeX style file）というスタイル](https://github.com/ShiroTakeda/jecon-bst)である。しかし、Quartoにおいてこの`jecon.bst`がうまく動かないため、裏技を使う必要がある。以下の内容は（1）`.latexmkrc`の修正ができ、かつ（2）これまで`jecon.bst`を使ったことがある読者のための内容である。
+
+　以下はYAMLヘッダーの`format`箇所の中で`jecon.bst`の仕様に関わる箇所のみ抜粋した例である。
+
+```{.yaml}
+format: 
+  pdf:
+    pdf-engine: latexmk
+    latex-auto-mk: false
+    pdf-engine-opts: 
+      - -lualatex
+      - -outdir=
+      - -jobname=output
+    documentclass: ltjsarticle
+    cite-method: natbib
+    biblio-style: jecon.bst
+bibliography: references.bib
+```
+
+　まず、`pdf-engine: latexmk`：使用するエンジンをLatexmkにする。しかし、デフォルトの設定ではQuarto側（厳密にはTinyTeX側）が自動的にLatexmkの設定を行う。これをQuartoに任せず、予め自分が設定したLatexmkを使わせるためには`latex-auto-mk: false`を指定する必要がある。Latexmkの設定は`.latexmkrc`ファイルに記載されているが、以下は筆者（宋）の`.latexmkrc`である。
+
+:::{.callout-note collapse="true"}
+## 宋の`.latexmkrc`
+
+```{.bash}
+#!/usr/bin/env perl
+if ($^O eq 'MSWin32') {
+  $latex = 'uplatex %O -kanji=utf8 -no-guess-input-enc -synctex=1 %S';
+  $pdflatex = 'pdflatex %O -synctex=1 %S';
+  $lualatex = 'lualatex %O -synctex=1 %S';
+  $xelatex = 'xelatex %O -synctex=1 %S';
+  $biber = 'biber %O --bblencoding=utf8 -u -U --output_safechars %B';
+  $bibtex = 'upbibtex %O %B';
+  $makeindex = 'upmendex %O -o %D %S';
+  $dvipdf = 'dvipdfmx %O -o %D %S';
+  $dvips = 'dvips %O -z -f %S | convbkmk -u > %D';
+  $ps2pdf = 'ps2pdf.exe %O %S %D';
+  $pdf_mode = 3;
+  if (-f 'C:/Program Files/SumatraPDF/SumatraPDF.exe') {
+    $pdf_previewer = '"C:/Program Files/SumatraPDF/SumatraPDF.exe" -reuse-instance';
+  } elsif (-f 'C:/Program Files (x86)/SumatraPDF/SumatraPDF.exe') {
+    $pdf_previewer = '"C:/Program Files (x86)/SumatraPDF/SumatraPDF.exe" -reuse-instance';
+  } else {
+    $pdf_previewer = 'texworks';
+  }
+} else {
+  $texoption = ' %O -interaction=nonstopmode -file-line-error -synctex=1 %S';
+  $latex = 'uplatex'.$texoption;
+  $pdflatex = 'pdflatex'.$texoption;
+  $lualatex = 'lualatex %O -synctex=1 %S';
+  $lualatex = 'lualatex'.$texoption;
+  $xelatex = 'xelatex'.$texoption;
+  $biber = 'biber %O --bblencoding=utf8 -u -U --output_safechars %B';
+  $bibtex = 'upbibtex %O %B';
+  $makeindex = 'upmendex %O -o %D %S';
+  $dvipdf = 'dvipdfmx %O -o %D %S';
+  $dvips = 'dvips %O -z -f %S | convbkmk -u > %D';
+  $ps2pdf = 'ps2pdf %O %S %D';
+  $max_repeat = 5;
+  $pvc_view_file_via_temporary = 0;
+  $pdf_mode = 1;
+  $pvc_view_file_via_temporary = 0;
+  if ($^O eq 'darwin') {
+    $pvc_view_file_via_temporary = 0;
+    $pdf_previewer = 'open -ga /Applications/Preview.app';
+  } else {
+    $pdf_previewer = 'xdg-open';
+  }
+}
+```
+:::
+
+　つづいて、`pdf-engine-opts`でLatexmkのオプションを設定する。使用エンジンをLuaLaTeXにし（`-lualatex`）、生成されたPDFを`.qmd`ファイルと同じ箇所に保存する（`-outdir=`）ように設定した。`-outdir=out`などにすると、`out`というフォルダーにPDFが保存される。それでは`.qmd`と同じ箇所に保存するならそもそも`-outdir=`が不要なのではないかと思うかも知れないが、これを省略するとPDFファイルが生成されない（理由は不明）。最後に`-jobname=output`は、生成されるPDF名を`output.pdf`という意味だ。好きな名前を付けよう。もし、`-jobname=`を省略した場合、`input.pdf`という名のPDFが生成される（理由は不明）。
+
+　ドキュメンののクラス（`documentclass`）はltjsクラスなら何でも良い。論文なら`ltjsarticle`、書籍なら`ltjsreport`か`ltjsbook`で良いだろう。参考文献のスタイルのキーは`biblio-style`であり、スタイルファイル（`.bst`）のパスを書く。`jecon.bst`の場合、natbibという$\LaTeX$のパッケージを必要とするため、`cite-method: natbib`を加える。最後に参考文献の書誌情報が記録されている`.bib`ファイルを`bibliography`で指定するが、こちらは上記の例のように`format`と同じ階層でも良いし、`biblio-style`と同じ階層でも良い。
+
+　以上の設定でレンダーすると`output`というフォルダー内にPDFが生成される。しかし、この方法はレンダー時、時々エラーが表示され気持ち悪かったり、生成されたPDFファイルがRStudioのViewerペインに表示されなかったりなどいくつかの短所がある。以上の内容は現時点での筆者（宋）の使い方であり、今後、より簡単な方法が提案されるかも知れない。
+
+<!--
 ### Typst
 
 $\LaTeX$にインスパイアされた新しい組版エンジン[typst](https://typst.app/)
@@ -986,10 +1205,11 @@ $\LaTeX$にインスパイアされた新しい組版エンジン[typst](https:/
    * YAMLヘッダーのすぐ下に（1行開ける）以下のようなチャンクを入れておくと少しはマシになる。フォントは好きなフォントを指定しよう。
    * ただ、タイトル、概要などには適用されない。typst公式ページから設定方法を確認すること。
 
-````md
+````{.markdown}
 ```{=typst}
 #set text(font: "Hiragino Mincho ProN")
 #set text(cjk-latin-spacing: auto)
 #set par(leading: 1.15em)
 ```
 ````
+-->
