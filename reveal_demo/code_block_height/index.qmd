@@ -1,0 +1,31 @@
+---
+format:
+  revealjs: 
+    width: 1200
+    height: 675
+    slide-number: true
+    theme: white
+    embed-resources: true
+    code-block-height: 150px
+knitr:
+  opts_chunk: 
+    echo: true
+    error: true
+---
+
+## 高さ150pxの例
+
+```{r}
+#| eval: false
+#| code-line-numbers: "3"
+Country_df |>
+  filter(Continent == "Europe") |>
+  drop_na(PPP_per_capita) |>
+  mutate(Country = fct_reorder(Country, PPP_per_capita)) |> 
+  ggplot() +
+  geom_segment(aes(y = Country, yend = Country,
+                   x = 0, xend = PPP_per_capita)) +
+  geom_point(aes(y = Country, x = PPP_per_capita), color = "orange") +
+  labs(x = "一人あたり購買力平価GDP (USD)", y = "国") +
+  theme_bw(base_size = 12)
+```

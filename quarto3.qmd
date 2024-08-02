@@ -1,4 +1,4 @@
-# Quarto [3]
+# Quarto [スライド]
 
 :::{.callout-important}
 ## 本項目は執筆途中です！
@@ -126,7 +126,7 @@ format:
 
 ## 各種機能
 
-全体的には[Advanced Reveal](https://quarto.org/docs/presentations/revealjs/advanced.html)の機能
+　Quartoで作成するHTML形式スライドには本書で紹介しきれないほど、たくさんの機能を提供している。公式ホームページの[Advanced Revealページ](https://quarto.org/docs/presentations/revealjs/advanced.html)からも確認できるが、ここではよく使う機能をいくつか紹介する。
 
 ### コードのハイライト
 
@@ -147,24 +147,78 @@ Country_df |>
   theme_bw(base_size = 12)
 ```
 
-　複数の行は`,`で区切り、連続している行なら`-`で表記する。また、クリックするたびに強調する行を変えたい場合は`|`で区切る。以下はその例だ。
+　複数の行は`,`で区切り、連続している行なら`-`で表記する。また、クリックするたびに強調する行を変えたい場合は`|`で区切る。以下はその例だ。授業用スライドを作成する際、重宝する機能だ。
 
 ```{=html}
 <iframe class="slide-deck" src="reveal_demo/highlight/index.html" width="100%" style="aspect-ratio: 16 / 9.5;"></iframe>
 ```
 
-### コードブロックの最大高さ
+:::{.callout-note}
+## スライドでRコードが表示されない場合
 
-既定値は`500px`
+　Quartoスライドの場合、**チャンク内コードの非表示が既定値**になっている。実際、R教育用のスライドを除き、スライド内でコードを見せることは滅多にないだろう。コードを表示したいチャンクに`#| echo: true`オプションを付けるか、全チャンクのコードを出力するなら以下の例のようにYAMLヘッダーで指定した方が効率的だろう。
 
 ```{.yaml}
 ---
-format:
-  revealjs: 
-    code-block-height: 300px
+title: "タイトル"
+format: revealjs
+knitr: 
+  opts_chunk: 
+    echo: false
 ---
 ```
+:::
 
+### コードブロックの最大高さ
+
+　Quartoスライドのコードチャンクは基本的には非表示であるが、表示する場合、コードブロックの最大高さは500pxだ。Quartoスライドのデフォルトサイズが横1050px、縦700pxだから、画面の最大7割までコードブロックになる。ここでコードが長すぎる場合、どうなるだろうか。500pxを超える内容であれば、コードブロック内でスクロール可能な状態になる。この最大高さを調整するためにはYAMLヘッダーを以下のようにする必要がある。既定値は500pxだが、これを150pxに修正するためには以下のようにYAMLヘッダーを修正する。
+
+:::{.panel-tabset}
+## コード
+
+````{.yaml}
+---
+format:
+  revealjs: 
+    width: 1200
+    height: 675
+    slide-number: true
+    theme: white
+    embed-resources: true
+    code-block-height: 150px
+knitr:
+  opts_chunk: 
+    echo: true
+    error: true
+---
+
+## 高さ150pxの例
+
+```{r}
+#| eval: false
+#| code-line-numbers: "3"
+Country_df |>
+  filter(Continent == "Europe") |>
+  drop_na(PPP_per_capita) |>
+  mutate(Country = fct_reorder(Country, PPP_per_capita)) |> 
+  ggplot() +
+  geom_segment(aes(y = Country, yend = Country,
+                   x = 0, xend = PPP_per_capita)) +
+  geom_point(aes(y = Country, x = PPP_per_capita), color = "orange") +
+  labs(x = "一人あたり購買力平価GDP (USD)", y = "国") +
+  theme_bw(base_size = 12)
+```
+````
+
+## 結果
+
+```{=html}
+<iframe class="slide-deck" src="reveal_demo/code_block_height/index.html" width="100%" style="aspect-ratio: 16 / 9.5;"></iframe>
+```
+
+:::
+
+　コードと出力結果を1画面に表示させたい場合、コードが長すぎると結果を別のページに載せざるをえないケースがしばしばあるが、この機能で多少は緩和できよう。ただし、これはあくまでもHTML形式スライドならではの機能であるため、PDFやPowerpointでは使えない。
 
 ### 箇条書きのアニメーション
 
