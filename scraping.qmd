@@ -5,6 +5,12 @@
 source("_common.R")
 ```
 
+:::{.callout-important}
+## 本章の内容について
+
+　本章の内容は今後、大きく変更される予定です。スクレイピング先の仕様や構造が頻繁に変更され、またサーバーへの負担をなるべく軽減するために、今後、実習用のページを別途提供する予定です。
+:::
+
 　まず、本章で使用するパッケージを読み込んでおく。
 
 ```{r}
@@ -940,8 +946,6 @@ oc_html |>
 #| label: scraping-oc-single-8
 oc_df <- tibble(Rank      = html_elements(oc_html, "div.rank") |> 
                   html_text2(),
-                Tier      = html_elements(oc_html, "div.tier img") |> 
-                  html_attr("src"),
                 Score     = html_elements(oc_html, "div.score") |> 
                   html_text2(),
                 Name      = html_elements(oc_html, "div.game-name") |>
@@ -963,8 +967,7 @@ oc_df <- oc_df |>
          Rank  = as.numeric(Rank),        # <2>
          Score = as.numeric(Score),       # <3>
          Date  = paste0(Date, ", 2021"),  # <4>
-         Date  = mdy(Date),               # <5>
-         Tier  = paste0("https:", Tier))  # <6>
+         Date  = mdy(Date))               # <5>
 oc_df
 ```
 
@@ -973,7 +976,6 @@ oc_df
 3. `Score`列をnumeric型に変換する。
 4. `Date`列の後に`", 2021"`を付ける。
 5. `Date`列がmonth-day-yearで記述されていることを伝え、date型に変換する。
-6. `Tier`列の最初に`"https:"`を追加し、URLが`"https://"`で始まるように修正する。
 
 　最後に`oc_df`を{gt}パッケージを使って表として出力してみよう。
 
@@ -981,7 +983,6 @@ oc_df
 #| label: scraping-oc-single-10
 oc_df |> 
   gt() |> 
-  gt_img_rows(Tier) |> 
   cols_label("Date" = "First release date")
 ```
 

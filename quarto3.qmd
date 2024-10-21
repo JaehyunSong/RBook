@@ -1,10 +1,4 @@
-# Quarto [スライド]
-
-:::{.callout-important}
-## 本項目は執筆途中です！
-
-本章は完成後、既存のR MarkdownとQuartoの内容の一部を代替しますが、現時点では参考程度にしてください。
-:::
+# Quarto [スライド] {#sec-quarto3}
 
 ## YAMLヘッダー
 
@@ -255,9 +249,11 @@ YAMLヘッダーの箇所は省略
 
 :::
 
-　より高度な操作をしたい場合はフラグメント（fragment）機能を使う必要がある。詳細は[Quarto公式ホームページ](https://quarto.org/docs/presentations/revealjs/advanced.html#fragments)から確認できるが、ここでは簡単な使い方だけ紹介しよう。
+　より高度な操作をしたい場合はフラグメント（fragment）機能を使う必要があり、詳細は[Quarto公式ホームページ](https://quarto.org/docs/presentations/revealjs/advanced.html#fragments)を参照されたい。
 
 ### 右下のロゴ
+
+　スライド右下に所属機関などのロゴを入れることもできる。YAMLヘッダーの`revealjs:`の下位オプションとして`logo:`を追加し、ロゴファイルのパスを指定するだけだ。もし、`.qmd`ファイルと同じフォルダーならファイル名のみで良いが、`fig`フォルダー内であれば`fig/ファイル名`のようにパスを指定する必要がある。
 
 ```{.yaml}
 ---
@@ -380,32 +376,32 @@ format:
 
 ## スライドの配付
 
-　Quartoで作成可能なスライドのフォーマットは[reveal.js](https://revealjs.com/)ベースの`.html`、$\LaTeX$（Beamer）ベースの`.pdf`、Microsoft Powerpointの`.pptx`である。`.pdf`や`.pptx`は図表を含む全ての内容が一つのファイルに保存されているため、そのファイルだけ共有すれば良い。しかし、多くの人が利用するであろう`.html`ファイルを他の人に共有したり、学会発表のためにUSBメモリに入れる際は注意が必要だ。
+　Quartoで作成可能なスライドのフォーマットは[reveal.js](https://revealjs.com/)ベースの`.html`、$\LaTeX$（Beamer）ベースの`.pdf`、Microsoft Powerpointの`.pptx`である。`.pdf`や`.pptx`は図表を含む全ての内容が一つのファイルに保存されているため、そのファイルだけ共有すれば良い。しかし、多くの人が利用するであろう`.html`ファイルを他の人に共有したり、学会発表のためにUSBメモリに入れる際は注意が必要だ。なぜなら、`.html`ファイルにはスライドのテキスト情報と書式の指定のみが残っている。つまり、「この文字は強調する」といった書式の指定は`.html`ファイル内に残っているが、強調の仕方、つまり文字の太さや大きさ、色など、通常、CSS内で指定されているものは`.html`ファイル内に含まれていない。したがって、`.html`ファイル**だけ**を共有したら、白い背景に文字しかない文書（$\neq$スライド）が表示される。
 
-`ほにゃほにゃ_files`フォルダーも忘れずに共有する
+　解決方法は簡単だ。書式の具体的な内容や画像なども一緒に配布すれば良い。テキストを除く全ての情報、ファイルは`スライドのファイル名_files`フォルダーに格納されるため、このフォルダーも`.html`ファイルと一緒に共有する必要がある。
 
-ネットにアップロードして共有する（Quarto Pub、GitHub Pagesなど）。
+　他にも[GitHub Pages](https://docs.github.com/ja/pages/getting-started-with-github-pages/about-github-pages)や[Quarto Pub](https://quarto.org/docs/publishing/quarto-pub.html)などのサービスを使用し、ネット上にアップロードして共有することもできるが、詳細は各サービスの公式HPを参照されたい。。
 
 ### 一つのHTMLファイルに統合する
 
-自己完結型（self-contained）HTML
+　もし、**一つ**のファイルとしてスライドを配布したい場合、自己完結型（self-contained）HTMLを作成することも一つの選択肢だ。これはスライド内の画像などをすべて一つのHTMLファイルに埋め込まれた形式であり、`revealjs:`の下位オプションとして`embed-resources: true`を追加するだけだ。
 
 ```yaml
 format:
-  html:
+  revealjs:
     embed-resources: true
 ```
 
-数式をレンダリングする数式ライブラリ（MathJaxとKaTeX）がサイズが大きいため、`embed-resources: true`でも自己完結型HTMLに含まれず、ネット経由で取得することになる。しかし、インターネットが使えない環境になるとせっかくの数式がレンダリングされない。この場合、`self-contained-math: true`を追加すると、数式ライブラリもHTMLファイルに保存される。ただ、この場合、スライドとは思えないサイズのHTMLになるため、注意が必要だ。
+　ただ、`embed-resources: true`を指定しても数式は埋め込まれない。数式をレンダリングする数式ライブラリ（MathJaxとKaTeX）がサイズが大きいため、`embed-resources: true`でも自己完結型HTMLに含まれず、ネット経由で取得することになる。しかし、インターネットが使えない環境になるとせっかくの数式がレンダリングされない。この場合、`self-contained-math: true`を追加すると、数式ライブラリもHTMLファイルに保存される。ただ、この場合、スライドとは思えないサイズのHTMLになるため、注意が必要だ。場合によってはほぼ使い物にならなら程度のサイズになる可能性もある。
 
 ```yaml
 format:
-  html:
+  revealjs:
     embed-resources: true
     self-contained-math: true
 ```
 
-`chalkboard: true`だとエラーが発生する。
+　一つ注意点としては`chalkboard: true`と併用してはいけないだということだ。`chalkboard: true`と`embed-resources: true`が同時に指定されるとレンダリングの際、エラーが発生する。自己完結型HTMLでスライドを作成する際、ホワイトボード機能は諦めよう（もし出来るとしてもファイルサイズが非常に大きくなり、実用性がほぼないだろう）。
 
 ### PDF出力
 
@@ -413,7 +409,7 @@ format:
 
 [^pdf-tabset]: 2つ以上のタブで構成されたタブセットの場合、最初のタブのみが印刷される。
 
-　しかし、残念ながら2024年5月現在、HTML形式スライドをPDFに変換する方法は限られており、見た目もお世辞でも綺麗とは言えない。むろん、内容が変わったり、本来見えたものが見えなくなったりすることはない。それでも構わないという読者は以下のやり方でHTMLスライドをPDFに変換できる。用意するものはBlinkベースのウェブブラウザーだ。代表的にはGoogle社のChromeとChromiumがあり、Microsoft EdgeやOperaもBlinkエンジンを使用している。
+　しかし、残念ながら2024年5月現在（最新の事情は[公式HP](https://quarto.org/docs/presentations/revealjs/presenting.html#print-to-pdf)を参照されたい）、HTML形式スライドをPDFに変換する方法は限られており、見た目もお世辞でも綺麗とは言えない。むろん、内容が変わったり、本来見えたものが見えなくなったりすることはない。それでも構わないという読者は以下のやり方でHTMLスライドをPDFに変換できる。用意するものはBlinkベースのウェブブラウザーだ。代表的にはGoogle社のChromeとChromiumがあり、Microsoft EdgeやOperaもBlinkエンジンを使用している。
 
 　HTMLファイルのPDF変換は言い換えれば、PDF形式で印刷することを意味する。
 
@@ -432,11 +428,14 @@ format:
 
 　以上の方法は「HTMLファイルをPDFに変換する」方法だ。HTML上で見やすいスライドをPDFに変換したからといってそのスライドが見やすいとは限らない。ベストは最初からスライドをPDFで作ることだろう。
 
-```yaml
+:::{.panel-tabset}
+## コード
+
+```{.yaml}
 ---
 title: "ほとんど無害な『私たちのR』"
 subtitle: "『私たちのR』をR教の聖典にすべき"
-date: "2024/6/22"
+date: today
 author: "\\ltjruby{羽鳥}{ハドリー}ウィッカム"
 institute: "整然大学"
 format: 
@@ -459,12 +458,61 @@ knitr:
     message: false
     warning: false
 ---
+
+
+## 概要
+
+::::{.columns}
+:::{.column width=30%}
+![](https://jaysong.net/RBook/Figs/Cover.png)
+:::
+
+:::{.column width=70%}
+- 近年、爆発的に売り上げを伸ばした『私たちR』の紹介
+   - 2.7秒に1冊売れているらしい。
+- メリットとデメリットの紹介
+:::
+::::
+
+# 『私たちのR』のここがすごい!
+
+## ネコが書いた本格R入門書
+
+::: {.incremental}
+- 世界人口を8割を占めているネコのための本格R入門書
+- ネコの、ネコによる、ネコのためのR入門書
+:::
+
+## ふざけた例が満載
+
+::: {.incremental}
+- 世界各国の社会経済的データなどふざけた例が多い
+- ラーメン屋データのような真面目な例も少なめではあるが、一応ある。
+:::
+
+# 『私たちのR』のここがダメ!
+
+## ネコしか読めない
+
+- にゃーにゃにゃーにゃーにゃーにゃにゃにゃ
+- にゃーにゃーにゃーにゃにゃーにゃにゃ
+- にゃーにゃにゃーにゃーにゃーにゃにゃ
+
+## ふざけた例しかない
+
+- にゃーにゃにゃーにゃーにゃーわん！わん！わん！
+- にゃーにゃーわんーにゃにゃーにゃにゃ
+- にゃーにゃにゃーにゃーわんーにゃにゃ
 ```
 
-　日本語フォントは`mainfont`と`CJKmainfont`で指定できるため、適宜修正すること。UbuntuでNotoフォントを入れた場合、高確率で`"Noto Sans CJK JP"`になるし、macOSならヒラギノ（`"Hiragino Sans"`）、Windowsなら游ゴシック（`"Yu Gothic"`）で良いだろう。また、ルビを使いたい場合は`luatexja-ruby`パッケージの読み込みも忘れないこと。テーマは[Metroplis](https://github.com/matze/mtheme)を指定したが（ちなみに`Metroplis`にするとエラーが発生する。）、省略した場合デフォルトテーマになる。他にも`CambridgeUS`、`Singapore`など様々なテーマが使える。
+## 結果
 
-### まとめ
+```{=html}
+<iframe class="pdf" src="reveal_demo/beamer/index.pdf#toolbar=0&navpanes=0&scrollbar=0" width="100%" style="aspect-ratio: 16 / 9.5;"></iframe>
+```
 
-* PDF形式にこだわりたい：最初からBeamer
-* HTMLのまま配りたい：全てのリソースを格納する
-* とりあえず印刷がしたい：Chromeで印刷
+:::
+
+　日本語フォントは`mainfont`と`CJKmainfont`で指定できるため、適宜修正すること。UbuntuでNotoフォントを入れた場合、高確率で`"Noto Sans CJK JP"`になるし、macOSならヒラギノ（`"Hiragino Sans"`）、Windowsなら游ゴシック（`"Yu Gothic"`）で良いだろう。また、ルビを使いたい場合は`luatexja-ruby`パッケージの読み込みも忘れないこと。テーマは[Metroplis](https://github.com/matze/mtheme)を指定したが（ちなみに`Metropolis`にするとエラーが発生する。）、省略した場合デフォルトテーマになる。他にも`CambridgeUS`、`Singapore`など様々なテーマが使える。
+
+　まとめると、PDF形式にこだわりたいなら最初からRevealJSでなく、Beamerフォーマットでスライドを作成すべきだろう。一方、柔軟でありががら、スクロールやアニメーション、タブなどの動的な機能を活用したい場合はreveal.jsを使用し、GitHub等で配布するか、全てのリソースを格納した自己完結型HTMLを使うことを推奨する。とりあえずスライドを印刷がしたい場合はWebブラウザでPDFに変換し印刷する必要があるが、動的コンテンツは一部しか出力されないので、最初のスライド作成の段階から動的コンテンツ使用は極力控えるべきであろう（本書で紹介しなかったPowerpoint形式は筆者が使ったことがないため、なんとも言えない）。
